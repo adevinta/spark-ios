@@ -28,6 +28,6 @@ jobs:
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
         with:
-          name: xcresult
+          name: Spark.xcresult
           path: out/Spark.xcresult
           retention-days: 15
