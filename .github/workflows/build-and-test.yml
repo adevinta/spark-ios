@@ -15,7 +15,8 @@ jobs:
     needs: build
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        submodules: true
       - uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
