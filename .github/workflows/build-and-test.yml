@@ -25,9 +25,11 @@ jobs:
           spec: project.yml
           version: '2.33.0'
       - run: fastlane unit_tests
+      - name: Tar files
+        run: tar -cvf xcresult.tar out/Spark.xcresult
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
         with:
           name: Spark.xcresult
-          path: out/Spark.xcresult
+          path: xcresult.tar
           retention-days: 15
