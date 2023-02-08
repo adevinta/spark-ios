@@ -15,7 +15,9 @@
 		4823797777A321399E3CADAD /* SparkDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD46F3AD3519339B7EE6329 /* SparkDemoApp.swift */; };
 		A03ECD4B6EB31264337DF080 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B321CBE818B017FD8E795B3B /* Preview Assets.xcassets */; };
 		A217A0A60EF9CEAC6291C637 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F011AD645DFE6E88B06EC4 /* ContentView.swift */; };
+		A540227F82F00C01C65987F2 /* SparkTestsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001AD7C90D6630F7EE4169A /* SparkTestsUtils.swift */; };
 		CB0D5D809AD769C13AC5FEC3 /* SparkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50322900BD7FBE1F80C3727 /* SparkTests.swift */; };
+		DB73B6634FED6DDBE46B2B39 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 574FAD2A0051013CE64311DE /* SnapshotTesting */; };
 		FC1E94E3853709855641B813 /* Spark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32F169EF1CB8E8E172FA8193 /* Spark.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +53,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1001AD7C90D6630F7EE4169A /* SparkTestsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkTestsUtils.swift; sourceTree = "<group>"; };
 		11FFFDEF2682FB2BC9025443 /* SparkDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkDemoUITests.swift; sourceTree = "<group>"; };
 		12F011AD645DFE6E88B06EC4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2C935446C923B86895F09ECF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -75,6 +78,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC1E94E3853709855641B813 /* Spark.framework in Frameworks */,
+				DB73B6634FED6DDBE46B2B39 /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				B50322900BD7FBE1F80C3727 /* SparkTests.swift */,
+				1001AD7C90D6630F7EE4169A /* SparkTestsUtils.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -251,6 +256,9 @@
 				31BFE0222D3FFC92EA09B82F /* PBXTargetDependency */,
 			);
 			name = SparkTests;
+			packageProductDependencies = (
+				574FAD2A0051013CE64311DE /* SnapshotTesting */,
+			);
 			productName = SparkTests;
 			productReference = 8066DE0FCE569DFBA806F45A /* SparkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -292,6 +300,9 @@
 				en,
 			);
 			mainGroup = 3389F4D949ECD1C4C7A3FC0B;
+			packageReferences = (
+				5A10FEAC37947D1939CA51AA /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -337,6 +348,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB0D5D809AD769C13AC5FEC3 /* SparkTests.swift in Sources */,
+				A540227F82F00C01C65987F2 /* SparkTestsUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -677,6 +689,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5A10FEAC37947D1939CA51AA /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.11.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		574FAD2A0051013CE64311DE /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A10FEAC37947D1939CA51AA /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B892AFA3F6F32DFDE1F2917B /* Project object */;
 }
