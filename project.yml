@@ -1,0 +1,68 @@
+name: Spark
+configs:
+  Debug: debug
+  Release: release
+options:
+  defaultConfig: Release
+  groupSortPosition: top
+  useBaseInternationalization: false
+  groupOrdering:
+    - order: [framework, unit-tests, demo, ui-tests, resources]
+targets:
+  Spark:
+    platform: iOS
+    type: framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark"
+    info:
+      path: framework/Info.plist
+    sources:
+      - path: framework
+    scheme:
+      testTargets:
+        - name: SparkTests
+      gatherCoverageData: true
+
+  SparkTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.tests"
+    info:
+      path: unit-tests/Info.plist
+    sources:
+      - path: unit-tests
+    dependencies:
+      - target: Spark
+
+  SparkDemo:
+    type: application
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo"
+    info:
+      path: demo/Info.plist
+    sources:
+      - path: demo
+    scheme:
+      testTargets:
+        - name: SparkDemoUITests
+      language: fr
+      region: FR
+
+  SparkDemoUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    info:
+      path: ui-tests/Info.plist
+    sources:
+      - path: ui-tests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo.uitests"
+        TEST_TARGET_NAME: SparkDemo
+    dependencies:
+      - target: SparkDemo

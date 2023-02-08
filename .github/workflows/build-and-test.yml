@@ -1,0 +1,33 @@
+name: build-framework
+on:
+  push
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
+      - run: fastlane build_framework
+  unit_tests:
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
+      - run: fastlane unit_tests
+  ui_tests:
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
+      - run: fastlane ui_tests
