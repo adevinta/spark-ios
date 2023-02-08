@@ -15,6 +15,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark"
+        BUILD_LIBRARY_FOR_DISTRIBUTION: YES
     info:
       path: framework/Info.plist
     sources:
