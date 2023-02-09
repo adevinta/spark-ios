@@ -3,7 +3,7 @@ include:
   - SparkShared.yml
 
 targetTemplates:
-  BrandConfiguration:
+  KleinanzeigenBrandConfiguration:
     templateAttributes:
       brand_name: Kleinanzeigen
 
@@ -11,14 +11,14 @@ targets:
   KleinanzeigenSpark:
     templates:
       - Framework
-      - BrandConfiguration
+      - KleinanzeigenBrandConfiguration
 
   KleinanzeigenSparkTests:
     templates:
       - FrameworkTests
-      - BrandConfiguration
+      - KleinanzeigenBrandConfiguration
 
   KleinanzeigenSparkDemo:
     templates:
       - FrameworkDemo
-      - BrandConfiguration
+      - KleinanzeigenBrandConfiguration

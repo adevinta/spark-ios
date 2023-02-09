@@ -3,7 +3,7 @@ include:
   - SparkShared.yml
 
 targetTemplates:
-  BrandConfiguration:
+  LeboncoinBrandConfiguration:
     templateAttributes:
       brand_name: Leboncoin
 
@@ -11,14 +11,14 @@ targets:
   LeboncoinSpark:
     templates:
       - Framework
-      - BrandConfiguration
+      - LeboncoinBrandConfiguration
 
   LeboncoinSparkTests:
     templates:
       - FrameworkTests
-      - BrandConfiguration
+      - LeboncoinBrandConfiguration
 
   LeboncoinSparkDemo:
     templates:
       - FrameworkDemo
-      - BrandConfiguration
+      - LeboncoinBrandConfiguration

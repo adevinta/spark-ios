@@ -31,7 +31,7 @@ targetTemplates:
     sources:
       - path: framework
       - path: brands/${brand_name}
-        group: brands
+        createIntermediateGroups: true
     scheme:
       environmentVariables:
         - variable: SNAPSHOT_REFERENCE_DIR
