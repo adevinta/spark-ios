@@ -26,9 +26,9 @@ jobs:
           version: '2.33.0'
       - name: run fastlane lane unit_tests
         run: fastlane unit_tests
-        continue-on-error: true
       - name: Tar files
         run: tar -cvf xcresult.tar out/Spark.xcresult
+        continue-on-error: true
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
         with:
