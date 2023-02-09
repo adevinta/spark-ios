@@ -2,3 +2,4 @@ name: Spark
 include:
   - SparkShared.yml
   - LeboncoinSpark.yml
+  - KleinanzeigenSpark.yml

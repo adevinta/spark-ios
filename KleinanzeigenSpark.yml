@@ -1,0 +1,24 @@
+name: Spark
+include:
+  - SparkShared.yml
+
+targetTemplates:
+  BrandConfiguration:
+    templateAttributes:
+      brand_name: Kleinanzeigen
+
+targets:
+  KleinanzeigenSpark:
+    templates:
+      - Framework
+      - BrandConfiguration
+
+  KleinanzeigenSparkTests:
+    templates:
+      - FrameworkTests
+      - BrandConfiguration
+
+  KleinanzeigenSparkDemo:
+    templates:
+      - FrameworkDemo
+      - BrandConfiguration
