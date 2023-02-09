@@ -91,3 +91,12 @@ iOSInjectionProject/
 
 #macOS
 .DS_Store
+
+#xcodeproj
+Spark.xcodeproj
+
+#fastlane
+fastlane/README.md
+
+#output folder
+out
