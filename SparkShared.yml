@@ -1,0 +1,75 @@
+name: Spark
+configs:
+  Debug: debug
+  Release: release
+options:
+  defaultConfig: Release
+  groupSortPosition: top
+  deploymentTarget:
+    iOS: 14.0
+  useBaseInternationalization: false
+  groupOrdering:
+    - order: [framework, unit-tests, demo, ui-tests, resources]
+packages:
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: 1.11.0
+targetTemplates:
+  Framework:
+    platform: iOS
+    type: framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark"
+        BUILD_LIBRARY_FOR_DISTRIBUTION: YES
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        PRODUCT_NAME: Spark
+    info:
+      path: framework/Info.plist
+    sources:
+      - path: framework
+      - path: brands/${brand_name}
+        createIntermediateGroups: true
+    scheme:
+      environmentVariables:
+        - variable: SNAPSHOT_REFERENCE_DIR
+          value: "$(SRCROOT)/spark-ios-snapshots"
+          isEnabled: true
+      testTargets:
+        - name: ${brand_name}SparkTests
+      gatherCoverageData: true
+
+  FrameworkTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.tests"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    info:
+      path: unit-tests/Info.plist
+    sources:
+      - path: unit-tests
+    dependencies:
+      - target: ${brand_name}Spark
+      - package: SnapshotTesting
+
+  FrameworkDemo:
+    type: application
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    info:
+      path: demo/Info.plist
+    sources:
+      - path: demo
+    dependencies:
+      - target: ${brand_name}Spark
