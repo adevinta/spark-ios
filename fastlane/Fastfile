@@ -20,7 +20,7 @@ platform :ios do
   lane :build_framework do
     gym(
       clean: true,
-      scheme: "Spark",
+      scheme: "LeboncoinSpark",
       project: "Spark.xcodeproj",
       skip_package_ipa: true,
     )
