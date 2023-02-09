@@ -5,6 +5,8 @@ configs:
 options:
   defaultConfig: Release
   groupSortPosition: top
+  deploymentTarget:
+    iOS: 14.0
   useBaseInternationalization: false
   groupOrdering:
     - order: [framework, unit-tests, demo, ui-tests, resources]
@@ -16,6 +18,9 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark"
         BUILD_LIBRARY_FOR_DISTRIBUTION: YES
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     info:
       path: framework/Info.plist
     sources:
@@ -31,6 +36,9 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.tests"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     info:
       path: unit-tests/Info.plist
     sources:
@@ -44,6 +52,9 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     info:
       path: demo/Info.plist
     sources:
@@ -65,5 +76,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo.uitests"
         TEST_TARGET_NAME: SparkDemo
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     dependencies:
       - target: SparkDemo
