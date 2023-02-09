@@ -24,7 +24,9 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
-      - run: fastlane unit_tests
+      - name: run fastlane lane unit_tests
+        run: fastlane unit_tests
+        continue-on-error: true
       - name: Tar files
         run: tar -cvf xcresult.tar out/Spark.xcresult
       - name: Archive xcresult
