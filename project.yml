@@ -10,6 +10,10 @@ options:
   useBaseInternationalization: false
   groupOrdering:
     - order: [framework, unit-tests, demo, ui-tests, resources]
+packages:
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: 1.11.0
 targets:
   Spark:
     platform: iOS
@@ -26,6 +30,10 @@ targets:
     sources:
       - path: framework
     scheme:
+      environmentVariables:
+        - variable: SNAPSHOT_REFERENCE_DIR
+          value: "$(SRCROOT)/spark-ios-snapshots"
+          isEnabled: true
       testTargets:
         - name: SparkTests
       gatherCoverageData: true
@@ -45,6 +53,7 @@ targets:
       - path: unit-tests
     dependencies:
       - target: Spark
+      - package: SnapshotTesting
 
   SparkDemo:
     type: application
