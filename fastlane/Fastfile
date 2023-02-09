@@ -28,17 +28,7 @@ platform :ios do
   lane :unit_tests do
     scan(
       clean: true,
-      scheme: "Spark",
-      project: "Spark.xcodeproj",
-      output_directory: "out",
-      result_bundle: true,
-      device: "iPhone 14 Pro",
-    )
-  end
-  lane :ui_tests do
-    scan(
-      clean: true,
-      scheme: "SparkDemo",
+      scheme: "LeboncoinSpark",
       project: "Spark.xcodeproj",
       output_directory: "out",
       result_bundle: true,
