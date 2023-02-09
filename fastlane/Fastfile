@@ -30,6 +30,8 @@ platform :ios do
       clean: true,
       scheme: "Spark",
       project: "Spark.xcodeproj",
+      output_directory: "out",
+      result_bundle: true,
     )
   end
   lane :ui_tests do
@@ -37,6 +39,8 @@ platform :ios do
       clean: true,
       scheme: "SparkDemo",
       project: "Spark.xcodeproj",
+      output_directory: "out",
+      result_bundle: true,
     )
   end
 end
