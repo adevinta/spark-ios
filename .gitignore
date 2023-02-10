@@ -100,3 +100,6 @@ fastlane/README.md
 
 #output folder
 out
+
+#snapshots
+spark-ios-snapshots
