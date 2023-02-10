@@ -35,7 +35,7 @@ targetTemplates:
     scheme:
       environmentVariables:
         - variable: SNAPSHOT_REFERENCE_DIR
-          value: "$(SRCROOT)/../spark-ios-snapshots"
+          value: "$(SRCROOT)/spark-ios-snapshots"
           isEnabled: true
       testTargets:
         - name: ${brand_name}SparkTests
