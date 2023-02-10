@@ -1,6 +1,7 @@
 name: build-framework
 on:
-  push
+  pull_request:
+    types: [ opened, edited, synchronize ]
 jobs:
   build:
     runs-on: macos-latest
