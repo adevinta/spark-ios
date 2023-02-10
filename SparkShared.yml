@@ -69,6 +69,10 @@ targetTemplates:
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     info:
       path: demo/Info.plist
+      properties:
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations: {}
     sources:
       - path: demo
     dependencies:
