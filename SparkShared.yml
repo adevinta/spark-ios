@@ -35,7 +35,7 @@ targetTemplates:
     scheme:
       environmentVariables:
         - variable: SNAPSHOT_REFERENCE_DIR
-          value: "$(SRCROOT)/spark-ios-snapshots"
+          value: "$(SRCROOT)/../spark-ios-snapshots"
           isEnabled: true
       testTargets:
         - name: ${brand_name}SparkTests
@@ -69,6 +69,10 @@ targetTemplates:
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     info:
       path: demo/Info.plist
+      properties:
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations: {}
     sources:
       - path: demo
     dependencies:
