@@ -3,7 +3,16 @@ on:
   pull_request:
     types: [ opened, edited, synchronize ]
 jobs:
+  install_dependencies:
+    runs-on: macos-latest
+    steps:
+      - name: Install SwiftGen
+        run: |
+            brew update
+            brew install swiftgen
+
   build:
+    needs: install_dependencies
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -11,6 +20,7 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
+      - run: swiftgen
       - run: fastlane build_framework
   unit_tests:
     needs: build

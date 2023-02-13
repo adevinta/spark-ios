@@ -32,7 +32,6 @@ targetTemplates:
       - path: framework
         excludes: # excludes some files
         - "**/*Tests*.swift"
-
       - path: brands/${brand_name}
         createIntermediateGroups: true
     scheme:

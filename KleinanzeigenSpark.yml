@@ -9,6 +9,12 @@ targetTemplates:
 
 targets:
   KleinanzeigenSpark:
+    settings:
+      base:
+        BRAND_NAME: Kleinanzeigen
+    preBuildScripts:
+      - path: scripts/swiftgen.sh
+        name: SwiftGen
     templates:
       - Framework
       - KleinanzeigenBrandConfiguration
