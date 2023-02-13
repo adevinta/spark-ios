@@ -11,12 +11,11 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
-      - name: Install SwiftGen
-        run: |
-            brew update
-            brew install swiftgen
-      - run: fastlane build_framework
-  unit_tests:
+      - name: run install swiftgen
+        run: brew install swiftgen
+      - name: run fastlane build_framework
+        run: fastlane build_framework
+  unit_tests_Leboncoin:
     needs: build
     runs-on: macos-latest
     steps:
@@ -29,8 +28,36 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
+      - name: run install swiftgen
+        run: brew install swiftgen
       - name: run fastlane lane unit_tests
-        run: fastlane unit_tests
+        run: fastlane unit_tests TARGET_NAME:LeboncoinSpark
+      - name: Tar files
+        run: tar -cvf xcresult.tar out/Spark.xcresult
+        continue-on-error: true
+      - name: Archive xcresult
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult
+          path: xcresult.tar
+          retention-days: 15
+  unit_tests_Kleinanzeigen:
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          repository: adevinta/spark-ios-snapshots
+          path: spark-ios-snapshots
+      - uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
+      - name: run install swiftgen
+        run: brew install swiftgen
+      - name: run fastlane lane unit_tests
+        run: fastlane unit_tests TARGET_NAME:KleinanzeigenSpark
       - name: Tar files
         run: tar -cvf xcresult.tar out/Spark.xcresult
         continue-on-error: true

@@ -25,10 +25,10 @@ platform :ios do
       skip_package_ipa: true,
     )
   end
-  lane :unit_tests do
+  lane :unit_tests do |options|
     scan(
       clean: true,
-      scheme: "LeboncoinSpark",
+      scheme: options[:TARGET_NAME],
       project: "Spark.xcodeproj",
       output_directory: "out",
       result_bundle: true,

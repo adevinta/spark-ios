@@ -7,12 +7,12 @@ xcassets:
       - templateName: swift5
         output: Colors+Generated.swift
         params:
-          enumName: SparkColor
+          enumName: SparkColorAsset
           publicAccess: true
   - inputs: Images.xcassets
     outputs:
       - templateName: swift5
         output: Images+Generated.swift
         params:
-          enumName: SparkImage
+          enumName: SparkImageAsset
           publicAccess: true
