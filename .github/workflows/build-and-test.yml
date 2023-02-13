@@ -12,7 +12,7 @@ jobs:
             brew install swiftgen
 
   build:
-    needs: install_dependencies
+    # needs: install_dependencies
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,6 +20,10 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
+      - name: Install SwiftGen
+        run: |
+            brew update
+            brew install swiftgen
       - run: swiftgen
       - run: fastlane build_framework
   unit_tests:
