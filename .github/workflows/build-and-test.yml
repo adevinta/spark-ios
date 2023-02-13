@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [ opened, edited, synchronize ]
 jobs:
-  build:
+  build_Leboncoin:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,10 +13,22 @@ jobs:
           version: '2.33.0'
       - name: run install swiftgen
         run: brew install swiftgen
-      - name: run fastlane build_framework
-        run: fastlane build_framework
+      - name: run fastlane build_framework TARGET_NAME:LeboncoinSpark
+        run: fastlane build_framework TARGET_NAME:LeboncoinSpark
+  build_Kleinanzeigen:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
+      - name: run install swiftgen
+        run: brew install swiftgen
+      - name: run fastlane build_framework TARGET_NAME:LeboncoinSpark
+        run: fastlane build_framework TARGET_NAME:LeboncoinSpark
   unit_tests_Leboncoin:
-    needs: build
+    needs: [ build_Kleinanzeigen, build_Leboncoin ]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -42,7 +54,7 @@ jobs:
           path: xcresult.tar
           retention-days: 15
   unit_tests_Kleinanzeigen:
-    needs: build
+    needs: [ build_Kleinanzeigen, build_Leboncoin ]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
