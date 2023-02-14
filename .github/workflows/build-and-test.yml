@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [ opened, edited, synchronize ]
 jobs:
-  build:
+  build_Leboncoin:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -11,9 +11,24 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
-      - run: fastlane build_framework
-  unit_tests:
-    needs: build
+      - name: run install swiftgen
+        run: brew install swiftgen
+      - name: run fastlane build_framework TARGET_NAME:LeboncoinSpark
+        run: fastlane build_framework TARGET_NAME:LeboncoinSpark
+  build_Kleinanzeigen:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
+      - name: run install swiftgen
+        run: brew install swiftgen
+      - name: run fastlane build_framework TARGET_NAME:LeboncoinSpark
+        run: fastlane build_framework TARGET_NAME:LeboncoinSpark
+  unit_tests_Leboncoin:
+    needs: [ build_Kleinanzeigen, build_Leboncoin ]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -25,8 +40,36 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
+      - name: run install swiftgen
+        run: brew install swiftgen
       - name: run fastlane lane unit_tests
-        run: fastlane unit_tests
+        run: fastlane unit_tests TARGET_NAME:LeboncoinSpark
+      - name: Tar files
+        run: tar -cvf xcresult.tar out/Spark.xcresult
+        continue-on-error: true
+      - name: Archive xcresult
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult
+          path: xcresult.tar
+          retention-days: 15
+  unit_tests_Kleinanzeigen:
+    needs: [ build_Kleinanzeigen, build_Leboncoin ]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          repository: adevinta/spark-ios-snapshots
+          path: spark-ios-snapshots
+      - uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
+      - name: run install swiftgen
+        run: brew install swiftgen
+      - name: run fastlane lane unit_tests
+        run: fastlane unit_tests TARGET_NAME:KleinanzeigenSpark
       - name: Tar files
         run: tar -cvf xcresult.tar out/Spark.xcresult
         continue-on-error: true

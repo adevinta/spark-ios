@@ -30,6 +30,8 @@ targetTemplates:
       path: framework/Info.plist
     sources:
       - path: framework
+        excludes: # excludes some files
+        - "**/*Tests*.swift"
       - path: brands/${brand_name}
         createIntermediateGroups: true
     scheme:
@@ -54,6 +56,10 @@ targetTemplates:
       path: unit-tests/Info.plist
     sources:
       - path: unit-tests
+      - path: framework
+        includes: # includes some files from framework folder
+        - "**/*Tests.swift"
+
     dependencies:
       - target: ${brand_name}Spark
       - package: SnapshotTesting

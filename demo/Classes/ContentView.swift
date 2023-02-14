@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Spark
 
 struct ContentView: View {
     var body: some View {
         VStack {
+            SparkColor.test.swiftUIColor
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
