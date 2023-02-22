@@ -6,7 +6,6 @@
 //
 
 import XCTest
-@testable import Spark
 import SnapshotTesting
 
 final class SparkTests: XCTestCase {
