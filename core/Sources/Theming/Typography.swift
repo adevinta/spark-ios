@@ -9,12 +9,9 @@ import UIKit
 
 public struct SparkFont {
     public let font: UIFont
-    public let lineHeight: CGFloat
 
-    public init(font: UIFont,
-                lineHeight: CGFloat) {
+    public init(font: UIFont) {
         self.font = font
-        self.lineHeight = lineHeight
     }
 }
 
