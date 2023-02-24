@@ -1,5 +1,5 @@
-input_dir: ${PROJECT_DIR}/spark/dev/resources
-output_dir: ${PROJECT_DIR}/spark/dev/resources/generated
+input_dir: ${PROJECT_DIR}/spark/Sources/Resources
+output_dir: ${PROJECT_DIR}/spark/Sources/Resources/Generated
 
 xcassets:
   - inputs: Colors.xcassets

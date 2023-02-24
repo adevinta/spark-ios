@@ -19,9 +19,9 @@ targetTemplates:
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
         PRODUCT_NAME: SparkCore
     info:
-      path: core/dev/Info.plist
+      path: core/Sources/Info.plist
     sources:
-      - path: core/dev
+      - path: core/Sources
         excludes:
         - "**/*Tests.swift"
     scheme:
@@ -43,10 +43,10 @@ targetTemplates:
         SUPPORTS_MACCATALYST: NO
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     info:
-      path: core/unit-tests/Info.plist
+      path: core/Unit-tests/Info.plist
     sources:
-      - path: core/unit-tests
-      - path: core/dev
+      - path: core/Unit-tests
+      - path: core/Sources
         includes: # includes some files from theme folder
         - "**/*Tests.swift"
 
@@ -64,13 +64,13 @@ targetTemplates:
         SUPPORTS_MACCATALYST: NO
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     info:
-      path: core/demo/Info.plist
+      path: core/Demo/Info.plist
       properties:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations: {}
     sources:
-      - path: core/demo
+      - path: core/Demo
     dependencies:
       - target: SparkCore
 
