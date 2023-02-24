@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [ opened, edited, synchronize ]
 jobs:
-  build_Leboncoin:
+  core_build:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -11,24 +11,10 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
-      - name: run install swiftgen
-        run: brew install swiftgen
-      - name: run fastlane build_framework TARGET_NAME:LeboncoinSpark
-        run: fastlane build_framework TARGET_NAME:LeboncoinSpark
-  build_Kleinanzeigen:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: xavierLowmiller/xcodegen-action@1.1.2
-        with:
-          spec: project.yml
-          version: '2.33.0'
-      - name: run install swiftgen
-        run: brew install swiftgen
-      - name: run fastlane build_framework TARGET_NAME:LeboncoinSpark
-        run: fastlane build_framework TARGET_NAME:LeboncoinSpark
-  unit_tests_Leboncoin:
-    needs: [ build_Kleinanzeigen, build_Leboncoin ]
+      - name: run fastlane build_framework TARGET_NAME:SparkCore
+        run: fastlane build_framework TARGET_NAME:SparkCore
+  core_unit_tests:
+    needs: [ core_build ]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -40,12 +26,10 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
-      - name: run install swiftgen
-        run: brew install swiftgen
-      - name: run fastlane lane unit_tests
-        run: fastlane unit_tests TARGET_NAME:LeboncoinSpark
+      - name: fastlane unit_tests TARGET_NAME:SparkCore
+        run: fastlane unit_tests TARGET_NAME:SparkCore
       - name: Tar files
-        run: tar -cvf xcresult.tar out/Spark.xcresult
+        run: tar -cvf xcresult.tar out/SparkCore.xcresult
         continue-on-error: true
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
@@ -53,23 +37,31 @@ jobs:
           name: xcresult
           path: xcresult.tar
           retention-days: 15
-  unit_tests_Kleinanzeigen:
-    needs: [ build_Kleinanzeigen, build_Leboncoin ]
+
+  build:
+    needs: [ core_build ]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
-        with:
-          repository: adevinta/spark-ios-snapshots
-          path: spark-ios-snapshots
       - uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
           version: '2.33.0'
       - name: run install swiftgen
         run: brew install swiftgen
-      - name: run fastlane lane unit_tests
-        run: fastlane unit_tests TARGET_NAME:KleinanzeigenSpark
+      - name: run fastlane build_framework TARGET_NAME:Spark
+        run: fastlane build_framework TARGET_NAME:Spark
+  unit_tests:
+    needs: [ build ]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
+      - name: run fastlane lane unit_tests TARGET_NAME:Spark
+        run: fastlane unit_tests TARGET_NAME:Spark
       - name: Tar files
         run: tar -cvf xcresult.tar out/Spark.xcresult
         continue-on-error: true

@@ -1,0 +1,82 @@
+name: Spark
+include:
+  - SparkShared.yml
+
+targetTemplates:
+  SparkTemplate:
+    platform: iOS
+    type: framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark"
+        BUILD_LIBRARY_FOR_DISTRIBUTION: YES
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        PRODUCT_NAME: Spark
+    info:
+      path: spark/Sources/Info.plist
+    sources:
+      - path: spark/Sources
+        excludes:
+        - "**/*Tests.swift"
+    scheme:
+      testTargets:
+        - name: SparkTests
+      gatherCoverageData: true
+
+  SparkTestsTemplate:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.tests"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    info:
+      path: spark/Unit-tests/Info.plist
+    sources:
+      - path: spark/Unit-tests
+      - path: spark/Sources
+        includes: # includes some files from theme folder
+        - "**/*Tests.swift"
+
+    dependencies:
+      - target: Spark
+
+  SparkDemoTemplate:
+    type: application
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    info:
+      path: spark/Demo/Info.plist
+      properties:
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations: {}
+    sources:
+      - path: spark/Demo
+    dependencies:
+      - target: Spark
+
+targets:
+  Spark:
+    templates:
+      - SparkTemplate
+    preBuildScripts:
+      - path: scripts/swiftgen.sh
+        name: SwiftGen
+
+  SparkTests:
+    templates:
+      - SparkTestsTemplate
+
+  SparkDemo:
+    templates:
+      - SparkDemoTemplate

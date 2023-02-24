@@ -1,5 +1,5 @@
-input_dir: ${PROJECT_DIR}/brands/${BRAND_NAME}/
-output_dir: ${PROJECT_DIR}/brands/${BRAND_NAME}/Generated
+input_dir: ${PROJECT_DIR}/spark/Sources/Resources
+output_dir: ${PROJECT_DIR}/spark/Sources/Resources/Generated
 
 xcassets:
   - inputs: Colors.xcassets
@@ -8,11 +8,4 @@ xcassets:
         output: Colors+Generated.swift
         params:
           enumName: SparkColorAsset
-          publicAccess: true
-  - inputs: Images.xcassets
-    outputs:
-      - templateName: swift5
-        output: Images+Generated.swift
-        params:
-          enumName: SparkImageAsset
           publicAccess: true
