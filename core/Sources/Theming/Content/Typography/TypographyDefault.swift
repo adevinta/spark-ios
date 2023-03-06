@@ -5,6 +5,9 @@
 //  Created by louis.borlee on 23/02/2023.
 //
 
+import SwiftUI
+import UIKit
+
 public struct TypographyDefault: Typography {
 
     // MARK: - Properties
@@ -64,5 +67,23 @@ public struct TypographyDefault: Typography {
         self.small = small
         self.smallHighlight = smallHighlight
         self.callout = callout
+    }
+}
+
+// MARK: - Font
+
+public struct TypographyFontDefault: TypographyFont {
+
+    // MARK: - Properties
+
+    public let font: UIFont
+    public let swiftUIFont: Font
+
+    // MARK: - Initialization
+
+    public init(font: UIFont,
+                swiftUIFont: Font) {
+        self.font = font
+        self.swiftUIFont = swiftUIFont
     }
 }

@@ -5,6 +5,9 @@
 //  Created by louis.borlee on 23/02/2023.
 //
 
+import SwiftUI
+import UIKit
+
 public struct ColorsDefault: Colors {
 
     // MARK: - Properties
@@ -74,5 +77,47 @@ public struct ColorsDefault: Colors {
         self.errorContainer = errorContainer
         self.infoContainer = infoContainer
         self.neutralContainer = neutralContainer
+    }
+}
+
+// MARK: - Token
+
+public struct ColorTokenDefault: ColorToken {
+
+    // MARK: - Properties
+
+    public let enabled: ColorTokenValue
+    public let pressed: ColorTokenValue
+    public let disabled: ColorTokenValue
+    public let on: ColorTokenValue
+
+    // MARK: - Initialization
+
+    public init(enabled: ColorTokenValue,
+                pressed: ColorTokenValue,
+                disabled: ColorTokenValue,
+                on: ColorTokenValue) {
+        self.enabled = enabled
+        self.pressed = pressed
+        self.disabled = disabled
+        self.on = on
+    }
+}
+
+// MARK: - Value
+
+public struct ColorTokenValueDefault: ColorTokenValue {
+
+    // MARK: - Properties
+
+    public let uiColor: UIColor
+    public let swiftUIcolor: Color
+
+    // MARK: - Initialization
+
+    public init(uiColor: UIColor,
+                swiftUIcolor: Color) {
+        self.uiColor = uiColor
+        self.swiftUIcolor = swiftUIcolor
     }
 }

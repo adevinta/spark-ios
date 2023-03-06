@@ -14,44 +14,26 @@ public protocol Border {
 
 // MARK: - Width
 
-public struct BorderWidth {
+public protocol BorderWidth {
+    var none: CGFloat { get }
+    var small: CGFloat { get }
+    var medium: CGFloat { get }
+}
 
-    // MARK: - Properties
-
-    public let none: CGFloat = 0
-    public let small: CGFloat
-    public let medium: CGFloat
-
-    // MARK: - Initialization
-
-    public init(small: CGFloat,
-                medium: CGFloat) {
-        self.small = small
-        self.medium = medium
-    }
+public extension BorderWidth {
+    var none: CGFloat { 0 }
 }
 
 // MARK: - Radius
 
-public struct BorderRadius {
+public protocol BorderRadius {
+    var none: CGFloat { get }
+    var small: CGFloat { get }
+    var medium: CGFloat { get }
+    var large: CGFloat { get }
+    var xLarge: CGFloat { get }
+}
 
-    // MARK: - Properties
-
-    public let none: CGFloat = 0
-    public let small: CGFloat
-    public let medium: CGFloat
-    public let large: CGFloat
-    public let xLarge: CGFloat
-
-    // MARK: - Initialization
-
-    public init(small: CGFloat,
-                medium: CGFloat,
-                large: CGFloat,
-                xLarge: CGFloat) {
-        self.small = small
-        self.medium = medium
-        self.large = large
-        self.xLarge = xLarge
-    }
+public extension BorderRadius {
+    var none: CGFloat { 0 }
 }

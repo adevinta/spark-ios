@@ -35,18 +35,7 @@ public protocol Typography {
 
 // MARK: - Font
 
-public struct TypographyFont {
-
-    // MARK: - Properties
-
-    public let font: UIFont
-    public let swiftUIFont: Font
-
-    // MARK: - Initialization
-
-    public init(font: UIFont,
-                swiftUIFont: Font) {
-        self.font = font
-        self.swiftUIFont = swiftUIFont
-    }
+public protocol TypographyFont {
+    var font: UIFont { get }
+    var swiftUIFont: Font { get }
 }

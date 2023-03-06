@@ -35,44 +35,18 @@ public protocol Colors {
     var neutralContainer: ColorToken { get }
 }
 
-// MARK: - ColorToken
+// MARK: - Token
 
-public struct ColorToken {
-
-    // MARK: - Properties
-
-    public let enabled: ColorsValue
-    public let pressed: ColorsValue
-    public let disabled: ColorsValue
-    public let on: ColorsValue
-
-    // MARK: - Initialization
-
-    public init(enabled: ColorsValue,
-                pressed: ColorsValue,
-                disabled: ColorsValue,
-                on: ColorsValue) {
-        self.enabled = enabled
-        self.pressed = pressed
-        self.disabled = disabled
-        self.on = on
-    }
+public protocol ColorToken {
+    var enabled: ColorTokenValue { get }
+    var pressed: ColorTokenValue { get }
+    var disabled: ColorTokenValue { get }
+    var on: ColorTokenValue { get }
 }
 
 // MARK: - Value
 
-public struct ColorsValue {
-
-    // MARK: - Properties
-
-    public let uiColor: UIColor
-    public let swiftUIcolor: Color
-
-    // MARK: - Initialization
-
-    public init(uiColor: UIColor,
-                swiftUIcolor: Color) {
-        self.uiColor = uiColor
-        self.swiftUIcolor = swiftUIcolor
-    }
+public protocol ColorTokenValue {
+    var uiColor: UIColor { get }
+    var swiftUIcolor: Color { get }
 }
