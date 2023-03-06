@@ -16,6 +16,10 @@ targetTemplates:
         PRODUCT_NAME: Spark
     info:
       path: spark/Sources/Info.plist
+      properties:
+        UIAppFonts:
+         - "NunitoSans-Bold.ttf"
+         - "NunitoSans-Regular.ttf"
     sources:
       - path: spark/Sources
         excludes:
@@ -57,6 +61,8 @@ targetTemplates:
     info:
       path: spark/Demo/Info.plist
       properties:
+        UILaunchScreen: []
+
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations: {}
