@@ -28,6 +28,8 @@ targetTemplates:
       testTargets:
         - name: SparkTests
       gatherCoverageData: true
+    dependencies:
+      - target: SparkCore
 
   SparkTestsTemplate:
     type: bundle.unit-test
