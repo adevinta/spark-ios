@@ -14,63 +14,63 @@ struct SparkTypography: Typography {
     
     // MARK: - Properties
     
-    let display1: TypographyFont = .init(size: 40,
-                                         isHighlight: true,
-                                         textStyle: .largeTitle)
-    let display2: TypographyFont = .init(size: 32,
-                                         isHighlight: true,
-                                         textStyle: .largeTitle)
-    let display3: TypographyFont = .init(size: 24,
-                                         isHighlight: true,
-                                         textStyle: .largeTitle)
+    let display1: TypographyFont = TypographyFontDefault(size: 40,
+                                                         isHighlight: true,
+                                                         textStyle: .largeTitle)
+    let display2: TypographyFont = TypographyFontDefault(size: 32,
+                                                         isHighlight: true,
+                                                         textStyle: .largeTitle)
+    let display3: TypographyFont = TypographyFontDefault(size: 24,
+                                                         isHighlight: true,
+                                                         textStyle: .largeTitle)
     
-    let headline1: TypographyFont = .init(size: 20,
-                                          isHighlight: true,
-                                          textStyle: .headline)
-    let headline2: TypographyFont = .init(size: 18,
-                                          isHighlight: true,
-                                          textStyle: .headline)
+    let headline1: TypographyFont = TypographyFontDefault(size: 20,
+                                                          isHighlight: true,
+                                                          textStyle: .headline)
+    let headline2: TypographyFont = TypographyFontDefault(size: 18,
+                                                          isHighlight: true,
+                                                          textStyle: .headline)
     
-    let subhead: TypographyFont = .init(size: 16,
-                                        isHighlight: true,
-                                        textStyle: .subheadline)
+    let subhead: TypographyFont = TypographyFontDefault(size: 16,
+                                                        isHighlight: true,
+                                                        textStyle: .subheadline)
     
-    let body1: TypographyFont = .init(size: 16,
-                                      isHighlight: false,
-                                      textStyle: .body)
-    let body1Highlight: TypographyFont = .init(size: 16,
-                                               isHighlight: true,
-                                               textStyle: .body)
+    let body1: TypographyFont = TypographyFontDefault(size: 16,
+                                                      isHighlight: false,
+                                                      textStyle: .body)
+    let body1Highlight: TypographyFont = TypographyFontDefault(size: 16,
+                                                               isHighlight: true,
+                                                               textStyle: .body)
     
-    let body2: TypographyFont = .init(size: 14,
-                                      isHighlight: false,
-                                      textStyle: .body)
-    let body2Highlight: TypographyFont = .init(size: 14,
-                                               isHighlight: true,
-                                               textStyle: .body)
+    let body2: TypographyFont = TypographyFontDefault(size: 14,
+                                                      isHighlight: false,
+                                                      textStyle: .body)
+    let body2Highlight: TypographyFont = TypographyFontDefault(size: 14,
+                                                               isHighlight: true,
+                                                               textStyle: .body)
     
-    let caption: TypographyFont = .init(size: 12,
-                                        isHighlight: false,
-                                        textStyle: .caption)
-    let captionHighlight: TypographyFont = .init(size: 12,
-                                                 isHighlight: true,
-                                                 textStyle: .caption)
+    let caption: TypographyFont = TypographyFontDefault(size: 12,
+                                                        isHighlight: false,
+                                                        textStyle: .caption)
+    let captionHighlight: TypographyFont = TypographyFontDefault(size: 12,
+                                                                 isHighlight: true,
+                                                                 textStyle: .caption)
     
-    let small: TypographyFont = .init(size: 10,
-                                      isHighlight: false,
-                                      textStyle: .footnote)
-    let smallHighlight: TypographyFont = .init(size: 10,
-                                               isHighlight: true,
-                                               textStyle: .footnote)
+    let small: TypographyFont = TypographyFontDefault(size: 10,
+                                                      isHighlight: false,
+                                                      textStyle: .footnote)
+    let smallHighlight: TypographyFont = TypographyFontDefault(size: 10,
+                                                               isHighlight: true,
+                                                               textStyle: .footnote)
     
-    let callout: TypographyFont = .init(size: 16,
-                                        isHighlight: true,
-                                        textStyle: .callout)
+    let callout: TypographyFont = TypographyFontDefault(size: 16,
+                                                        isHighlight: true,
+                                                        textStyle: .callout)
 }
 
 // MARK: - TypographyFont Extension
 
-private extension TypographyFont {
+private extension TypographyFontDefault {
     
     // MARK: - Constants
     

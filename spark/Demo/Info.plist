@@ -25,5 +25,7 @@
 		<key>UISceneConfigurations</key>
 		<dict/>
 	</dict>
+	<key>UILaunchScreen</key>
+	<array/>
 </dict>
 </plist>

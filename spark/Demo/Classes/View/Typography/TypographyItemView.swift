@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SparkCore
 
 struct TypographyItemView: View {
 
@@ -30,7 +31,7 @@ struct TypographyItemView: View {
 struct TypographyItemView_Previews: PreviewProvider {
     static var previews: some View {
         TypographyItemView(viewModel: .init(name: "Title",
-                                            typographyFont: .init(font: .systemFont(ofSize: 12),
-                                                                  swiftUIFont: .body)))
+                                            typographyFont: TypographyFontDefault(font: .systemFont(ofSize: 12),
+                                                                                  swiftUIFont: .body)))
     }
 }

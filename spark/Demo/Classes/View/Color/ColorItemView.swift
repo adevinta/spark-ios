@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import SparkCore
 
 struct ColorItemView: View {
-
+    
     // MARK: - Properties
-
+    
     let viewModel: ColorItemViewModel
-
+    
     // MARK: - View
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(self.viewModel.name)
@@ -29,7 +30,7 @@ struct ColorItemView: View {
                         .cornerRadius(8)
                 }
             }
-
+            
         }
     }
 }
@@ -37,9 +38,9 @@ struct ColorItemView: View {
 struct ColorItemView_Previews: PreviewProvider {
     static var previews: some View {
         ColorItemView(viewModel: .init(name: "Name",
-                                       colorToken: .init(enabled: .init(uiColor: .blue, swiftUIcolor: .orange),
-                                                         pressed: .init(uiColor: .green, swiftUIcolor: .blue),
-                                                         disabled: .init(uiColor: .yellow, swiftUIcolor: .green),
-                                                         on: .init(uiColor: .purple, swiftUIcolor: .yellow))))
+                                       colorToken: ColorTokenDefault(enabled: ColorTokenValueDefault(uiColor: .blue, swiftUIcolor: .orange),
+                                                                     pressed: ColorTokenValueDefault(uiColor: .green, swiftUIcolor: .blue),
+                                                                     disabled: ColorTokenValueDefault(uiColor: .yellow, swiftUIcolor: .green),
+                                                                     on: ColorTokenValueDefault(uiColor: .purple, swiftUIcolor: .yellow))))
     }
 }
