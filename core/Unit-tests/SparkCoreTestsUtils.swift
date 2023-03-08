@@ -1,6 +1,6 @@
 //
-//  SparkTestsUtils.swift
-//  SparkTests
+//  SparkCoreTestsUtils.swift
+//  SparkCoreTests
 //
 //  Created by luis.figueiredo-ext on 08/02/2023.
 //
