@@ -16,6 +16,10 @@ targetTemplates:
         PRODUCT_NAME: Spark
     info:
       path: spark/Sources/Info.plist
+      properties:
+        UIAppFonts:
+         - "NunitoSans-Bold.ttf"
+         - "NunitoSans-Regular.ttf"
     sources:
       - path: spark/Sources
         excludes:
@@ -24,6 +28,8 @@ targetTemplates:
       testTargets:
         - name: SparkTests
       gatherCoverageData: true
+    dependencies:
+      - target: SparkCore
 
   SparkTestsTemplate:
     type: bundle.unit-test
@@ -57,6 +63,8 @@ targetTemplates:
     info:
       path: spark/Demo/Info.plist
       properties:
+        UILaunchScreen: []
+
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations: {}
