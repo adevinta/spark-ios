@@ -44,13 +44,20 @@ public struct IconographyImageDefault: IconographyImage {
 
     // MARK: - Properties
 
-    public let image: UIImage
-    public let swiftUIImage: Image
+    private let imageName: String
+    private let bundle: Bundle?
+
+    public var image: UIImage? {
+        return UIImage(named: self.imageName, in: self.bundle, with: nil)
+    }
+    public var swiftUIImage: Image {
+        return Image(self.imageName, bundle: self.bundle)
+    }
 
     // MARK: - Initialization
 
-    public init(image: UIImage, swiftUIImage: Image) {
-        self.image = image
-        self.swiftUIImage = swiftUIImage
+    public init(named imageName: String, in bundle: Bundle?) {
+        self.imageName = imageName
+        self.bundle = bundle
     }
 }

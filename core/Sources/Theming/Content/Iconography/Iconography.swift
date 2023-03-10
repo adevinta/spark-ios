@@ -25,6 +25,6 @@ public protocol IconographyOutlined {
 // MARK: - Image
 
 public protocol IconographyImage {
-    var image: UIImage { get }
+    var image: UIImage? { get }
     var swiftUIImage: Image { get }
 }
