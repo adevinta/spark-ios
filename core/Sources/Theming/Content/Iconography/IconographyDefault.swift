@@ -21,24 +21,6 @@ public struct IconographyDefault: Iconography {
     }
 }
 
-// MARK: - Sections
-
-public struct IconographyAccountDefault: IconographyAccount {
-
-    // MARK: - Properties
-
-    public let bank: IconographyFill & IconographyOutlined
-    public let holiday: IconographyFill & IconographyOutlined
-
-    // MARK: - Initialization
-
-    public init(bank: IconographyFill & IconographyOutlined,
-         holiday: IconographyFill & IconographyOutlined) {
-        self.bank = bank
-        self.holiday = holiday
-    }
-}
-
 // MARK: - Style
 
 public struct IconographyFillDefault: IconographyFill {
