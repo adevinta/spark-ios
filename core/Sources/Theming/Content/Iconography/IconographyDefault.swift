@@ -8,7 +8,36 @@
 import UIKit
 import SwiftUI
 
-public struct IconographyDefault: Iconography {}
+public struct IconographyDefault: Iconography {
+
+    // MARK: - Properties
+
+    public let account: IconographyAccount
+
+    // MARK: - Initialization
+
+    public init(account: IconographyAccount) {
+        self.account = account
+    }
+}
+
+// MARK: - Sections
+
+public struct IconographyAccountDefault: IconographyAccount {
+
+    // MARK: - Properties
+
+    public let bank: IconographyFill & IconographyOutlined
+    public let holiday: IconographyFill & IconographyOutlined
+
+    // MARK: - Initialization
+
+    public init(bank: IconographyFill & IconographyOutlined,
+         holiday: IconographyFill & IconographyOutlined) {
+        self.bank = bank
+        self.holiday = holiday
+    }
+}
 
 // MARK: - Style
 
@@ -47,7 +76,7 @@ public struct IconographyImageDefault: IconographyImage {
     private let imageName: String
     private let bundle: Bundle?
 
-    public var image: UIImage? {
+    public var uiImage: UIImage? {
         return UIImage(named: self.imageName, in: self.bundle, with: nil)
     }
     public var swiftUIImage: Image {
@@ -56,7 +85,7 @@ public struct IconographyImageDefault: IconographyImage {
 
     // MARK: - Initialization
 
-    public init(named imageName: String, in bundle: Bundle?) {
+    public init(named imageName: String, in bundle: Bundle) {
         self.imageName = imageName
         self.bundle = bundle
     }
