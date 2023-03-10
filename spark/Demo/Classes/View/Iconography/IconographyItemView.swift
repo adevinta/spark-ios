@@ -17,7 +17,7 @@ struct IconographyItemView: View {
     // MARK: - View
 
     var body: some View {
-        VStack(alignment: .leading) {
+        HStack(spacing: 10) {
             self.viewModel.image
                 .foregroundColor(.orange)
             Text(self.viewModel.name)

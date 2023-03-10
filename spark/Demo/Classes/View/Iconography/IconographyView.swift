@@ -17,10 +17,8 @@ struct IconographyView: View {
     
     var body: some View {
         List(self.viewModel.sectionViewModels, id: \.self) { sectionViewModel in
-            Section(header: Text(sectionViewModel.name)) {
-                ForEach(sectionViewModel.itemViewModels, id: \.self) { itemViewModel in
-                    IconographyItemView(viewModel: itemViewModel)
-                }
+            NavigationLink(sectionViewModel.name) {
+                IconographySectionView(viewModel: sectionViewModel)
             }
         }
         .navigationBarTitle(Text("Iconography"))

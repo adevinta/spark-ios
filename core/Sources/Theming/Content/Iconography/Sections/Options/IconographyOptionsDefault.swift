@@ -20,7 +20,7 @@ public struct IconographyOptionsDefault: IconographyOptions {
 
     // MARK: - Init
 
-    internal init(clock: IconographyFill & IconographyOutlined,
+    public init(clock: IconographyFill & IconographyOutlined,
                   flash: IconographyFill & IconographyOutlined,
                   bookmark: IconographyFill & IconographyOutlined,
                   star: IconographyFill & IconographyOutlined,
@@ -33,6 +33,4 @@ public struct IconographyOptionsDefault: IconographyOptions {
         self.clockArrow = clockArrow
         self.moveUp = moveUp
     }
-
-
 }

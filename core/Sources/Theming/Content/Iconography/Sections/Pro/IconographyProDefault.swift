@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct IconographyProDefault: IconographyPro {
+public struct IconographyProDefault: IconographyPro {
 
     // MARK: - Properties
 

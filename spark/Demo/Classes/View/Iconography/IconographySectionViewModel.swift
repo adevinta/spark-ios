@@ -10,5 +10,5 @@ struct IconographySectionViewModel: Hashable {
     // MARK: - Properties
 
     let name: String
-    let itemViewModels: [IconographyItemViewModel]
+    let itemViewModels: [[IconographyItemViewModel]]
 }

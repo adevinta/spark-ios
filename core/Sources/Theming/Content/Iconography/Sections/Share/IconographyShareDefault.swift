@@ -7,24 +7,24 @@
 
 import Foundation
 
-struct IconographyShareDefault: IconographyShare {
+public struct IconographyShareDefault: IconographyShare {
 
     // MARK: - Properties
 
-    let `import`: IconographyImage
-    let export: IconographyImage
-    let facebook: IconographyFill & IconographyOutlined
-    let twitter: IconographyFill & IconographyOutlined
-    let share: IconographyFill & IconographyOutlined
-    let attachFile: IconographyImage
-    let link: IconographyImage
-    let forward: IconographyFill & IconographyOutlined
-    let instagram: IconographyFill & IconographyOutlined
-    let messenger: IconographyImage
-    let pinterest: IconographyImage
-    let whastapp: IconographyImage
-    let expand: IconographyImage
-    let shareIOS: IconographyImage
+    public let `import`: IconographyImage
+    public let export: IconographyImage
+    public let facebook: IconographyFill & IconographyOutlined
+    public let twitter: IconographyFill & IconographyOutlined
+    public let share: IconographyFill & IconographyOutlined
+    public let attachFile: IconographyImage
+    public let link: IconographyImage
+    public let forward: IconographyFill & IconographyOutlined
+    public let instagram: IconographyFill & IconographyOutlined
+    public let messenger: IconographyImage
+    public let pinterest: IconographyImage
+    public let whastapp: IconographyImage
+    public let expand: IconographyImage
+    public let shareIOS: IconographyImage
 
     // MARK: - Init
 
