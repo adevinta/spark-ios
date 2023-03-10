@@ -10,13 +10,27 @@ import SwiftUI
 
 public protocol Iconography {
     var account: IconographyAccount { get }
-    // TODO: UI question: Accout Images ?
+    // TODO: UI question: Account Images?
     var actions: IconographyActions { get }
     var arrows: IconographyArrows { get }
     var calendar: IconographyCalendar { get }
     var contact: IconographyContact { get }
     var categories: IconographyCategories { get }
     var flags: IconographyFlags { get }
+    var images: IconographyImages { get }
+    var alert: IconographyAlert { get }
+    var security: IconographySecurity { get }
+    var delivery: IconographyDelivery { get }
+    var map: IconographyMap { get }
+    var others: IconographyOthers { get }
+    // TODO: dev question: Alarm styles?
+    var options: IconographyOptions { get }
+    var transaction: IconographyTransaction { get }
+    var crm: IconographyCRM { get }
+    var pro: IconographyPro { get }
+    var share: IconographyShare { get }
+    var toggle: IconographyToggle { get }
+    var user: IconographyUser { get }
 }
 
 // MARK: - Style

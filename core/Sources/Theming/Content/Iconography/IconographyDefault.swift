@@ -19,16 +19,42 @@ public struct IconographyDefault: Iconography {
     public let contact: IconographyContact
     public let categories: IconographyCategories
     public let flags: IconographyFlags
+    public let images: IconographyImages
+    public let alert: IconographyAlert
+    public let security: IconographySecurity
+    public let delivery: IconographyDelivery
+    public let map: IconographyMap
+    public let others: IconographyOthers
+    public let options: IconographyOptions
+    public let transaction: IconographyTransaction
+    public let crm: IconographyCRM
+    public let pro: IconographyPro
+    public let share: IconographyShare
+    public let toggle: IconographyToggle
+    public let user: IconographyUser
 
     // MARK: - Initialization
 
     public init(account: IconographyAccount,
-        actions: IconographyActions,
-        arrows: IconographyArrows,
-        calendar: IconographyCalendar,
-        contact: IconographyContact,
-        categories: IconographyCategories,
-                flags: IconographyFlags) {
+                actions: IconographyActions,
+                arrows: IconographyArrows,
+                calendar: IconographyCalendar,
+                contact: IconographyContact,
+                categories: IconographyCategories,
+                flags: IconographyFlags,
+                images: IconographyImages,
+                alert: IconographyAlert,
+                security: IconographySecurity,
+                delivery: IconographyDelivery,
+                map: IconographyMap,
+                others: IconographyOthers,
+                options: IconographyOptions,
+                transaction: IconographyTransaction,
+                crm: IconographyCRM,
+                pro: IconographyPro,
+                share: IconographyShare,
+                toggle: IconographyToggle,
+                user: IconographyUser) {
         self.account = account
         self.actions = actions
         self.arrows = arrows
@@ -36,6 +62,19 @@ public struct IconographyDefault: Iconography {
         self.contact = contact
         self.categories = categories
         self.flags = flags
+        self.images = images
+        self.alert = alert
+        self.security = security
+        self.delivery = delivery
+        self.map = map
+        self.others = others
+        self.options = options
+        self.transaction = transaction
+        self.crm = crm
+        self.pro = pro
+        self.share = share
+        self.toggle = toggle
+        self.user = user
     }
 }
 
