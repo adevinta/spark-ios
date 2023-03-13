@@ -3,6 +3,7 @@
 //  SparkCoreTests
 //
 //  Created by luis.figueiredo-ext on 08/02/2023.
+//  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import XCTest

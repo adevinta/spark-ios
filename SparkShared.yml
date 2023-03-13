@@ -11,3 +11,4 @@ options:
   useBaseInternationalization: false
   groupOrdering:
     - order: [core, spark]
+  postGenCommand: sh postGenCommand.sh
