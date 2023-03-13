@@ -36,6 +36,6 @@ public protocol Typography {
 // MARK: - Font
 
 public protocol TypographyFont {
-    var font: UIFont { get }
+    var uiFont: UIFont { get }
     var swiftUIFont: Font { get }
 }

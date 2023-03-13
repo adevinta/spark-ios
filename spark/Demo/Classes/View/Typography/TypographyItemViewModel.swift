@@ -21,7 +21,7 @@ struct TypographyItemViewModel: Hashable {
     init(name: String,
          typographyFont: TypographyFont) {
         self.name = name
-        self.description = typographyFont.font.fontName + "\(Int(typographyFont.font.pointSize))"
+        self.description = typographyFont.uiFont.fontName + "\(Int(typographyFont.uiFont.pointSize))"
         self.font = typographyFont.swiftUIFont
     }
 }
