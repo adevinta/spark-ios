@@ -10,7 +10,6 @@ import SwiftUI
 
 public protocol Iconography {
     var account: IconographyAccount { get }
-    // TODO: UI question: Account Images?
     var actions: IconographyActions { get }
     var arrows: IconographyArrows { get }
     var calendar: IconographyCalendar { get }
@@ -23,7 +22,7 @@ public protocol Iconography {
     var delivery: IconographyDelivery { get }
     var map: IconographyMap { get }
     var others: IconographyOthers { get }
-    // TODO: dev question: Alarm styles?
+    var notifications: IconographyNotifications { get }
     var options: IconographyOptions { get }
     var transaction: IconographyTransaction { get }
     var crm: IconographyCRM { get }

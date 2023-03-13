@@ -13,7 +13,6 @@ public protocol IconographyContact {
     var typing: IconographyFill & IconographyOutlined { get }
     var message: IconographyFill & IconographyOutlined { get }
     var conversation: IconographyFill & IconographyOutlined { get }
-    // TODO: UI question: france ? three convesation image
     var phone: IconographyImage { get }
     var call: IconographyImage { get }
     var support: IconographyImage { get }

@@ -17,6 +17,7 @@ public struct IconographyUserDefault: IconographyUser {
     public let profile: IconographyFill & IconographyOutlined
     public let securityProfile: IconographyFill & IconographyOutlined
     public let userCheck: IconographyFill & IconographyOutlined
+    public let securityProfile2: IconographyFill & IconographyOutlined
     public let account: IconographyFill & IconographyOutlined
     public let pro: IconographyFill & IconographyOutlined
     public let group: IconographyFill & IconographyOutlined
@@ -29,6 +30,7 @@ public struct IconographyUserDefault: IconographyUser {
                 profile: IconographyFill & IconographyOutlined,
                 securityProfile: IconographyFill & IconographyOutlined,
                 userCheck: IconographyFill & IconographyOutlined,
+                securityProfile2: IconographyFill & IconographyOutlined,
                 account: IconographyFill & IconographyOutlined,
                 pro: IconographyFill & IconographyOutlined,
                 group: IconographyFill & IconographyOutlined) {
@@ -38,6 +40,7 @@ public struct IconographyUserDefault: IconographyUser {
         self.profile = profile
         self.securityProfile = securityProfile
         self.userCheck = userCheck
+        self.securityProfile2 = securityProfile2
         self.account = account
         self.pro = pro
         self.group = group

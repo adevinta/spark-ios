@@ -25,6 +25,7 @@ public struct IconographyDefault: Iconography {
     public let delivery: IconographyDelivery
     public let map: IconographyMap
     public let others: IconographyOthers
+    public let notifications: IconographyNotifications
     public let options: IconographyOptions
     public let transaction: IconographyTransaction
     public let crm: IconographyCRM
@@ -48,6 +49,7 @@ public struct IconographyDefault: Iconography {
                 delivery: IconographyDelivery,
                 map: IconographyMap,
                 others: IconographyOthers,
+                notifications: IconographyNotifications,
                 options: IconographyOptions,
                 transaction: IconographyTransaction,
                 crm: IconographyCRM,
@@ -68,6 +70,7 @@ public struct IconographyDefault: Iconography {
         self.delivery = delivery
         self.map = map
         self.others = others
+        self.notifications = notifications
         self.options = options
         self.transaction = transaction
         self.crm = crm

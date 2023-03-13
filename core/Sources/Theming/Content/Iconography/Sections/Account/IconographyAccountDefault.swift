@@ -11,6 +11,7 @@ public struct IconographyAccountDefault: IconographyAccount {
 
     public let bank: IconographyFill & IconographyOutlined
     public let holiday: IconographyFill & IconographyOutlined
+    public let country: IconographyFill & IconographyOutlined
     public let home: IconographyFill & IconographyOutlined
     public let identity: IconographyFill & IconographyOutlined
     public let key: IconographyFill & IconographyOutlined
@@ -31,6 +32,7 @@ public struct IconographyAccountDefault: IconographyAccount {
 
     public init(bank: IconographyFill & IconographyOutlined,
                 holiday: IconographyFill & IconographyOutlined,
+                country: IconographyFill & IconographyOutlined,
                 home: IconographyFill & IconographyOutlined,
                 identity: IconographyFill & IconographyOutlined,
                 key: IconographyFill & IconographyOutlined,
@@ -48,6 +50,7 @@ public struct IconographyAccountDefault: IconographyAccount {
                 mobileCheck: IconographyImage) {
         self.bank = bank
         self.holiday = holiday
+        self.country = country
         self.home = home
         self.identity = identity
         self.key = key

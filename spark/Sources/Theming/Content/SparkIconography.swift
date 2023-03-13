@@ -14,6 +14,7 @@ struct SparkIconography: Iconography {
 
     let account: IconographyAccount = IconographyAccountDefault(bank: FillAndOutlined(),
                                                                 holiday: FillAndOutlined(),
+                                                                country: FillAndOutlined(),
                                                                 home: FillAndOutlined(),
                                                                 identity: FillAndOutlined(),
                                                                 key: FillAndOutlined(),
@@ -150,6 +151,10 @@ struct SparkIconography: Iconography {
                                                              euro: IconographySparkImage.image1,
                                                              refund: IconographySparkImage.image1,
                                                              sun: IconographySparkImage.image1)
+    let notifications: IconographyNotifications = IconographyNotificationsDefault(alarmOn: FillAndOutlined(),
+                                                                                  alarmOff: FillAndOutlined(),
+                                                                                  alarm: FillAndOutlined(),
+                                                                                  notification: FillAndOutlined())
     let options: IconographyOptions = IconographyOptionsDefault(clock: FillAndOutlined(),
                                                                 flash: FillAndOutlined(),
                                                                 bookmark: FillAndOutlined(),
@@ -190,6 +195,7 @@ struct SparkIconography: Iconography {
                                                        profile: FillAndOutlined(),
                                                        securityProfile: FillAndOutlined(),
                                                        userCheck: FillAndOutlined(),
+                                                       securityProfile2: FillAndOutlined(),
                                                        account: FillAndOutlined(),
                                                        pro: FillAndOutlined(),
                                                        group: FillAndOutlined())

@@ -15,6 +15,7 @@ public struct IconographyContactDefault: IconographyContact {
     public let mailActif: IconographyFill & IconographyOutlined
     public let typing: IconographyFill & IconographyOutlined
     public let message: IconographyFill & IconographyOutlined
+    // TODO: - Mutliple conversations?
     public let conversation: IconographyFill & IconographyOutlined
     public let phone: IconographyImage
     public let call: IconographyImage

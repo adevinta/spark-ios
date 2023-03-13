@@ -8,7 +8,7 @@
 public protocol IconographyAccount {
     var bank: IconographyFill & IconographyOutlined { get }
     var holiday: IconographyFill & IconographyOutlined { get }
-    // TODO: // TODO: UI question: france ?
+    var country: IconographyFill & IconographyOutlined { get }
     var home: IconographyFill & IconographyOutlined { get }
     var identity: IconographyFill & IconographyOutlined { get }
     var key: IconographyFill & IconographyOutlined { get }

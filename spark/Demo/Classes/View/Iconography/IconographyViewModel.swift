@@ -31,6 +31,11 @@ struct IconographyViewModel {
                     ],
 
                     [
+                        .init(name: "country - fill", iconographyImage: iconographies.account.country.fill),
+                        .init(name: "country - outlined", iconographyImage: iconographies.account.country.outlined)
+                    ],
+
+                    [
                         .init(name: "home - fill", iconographyImage: iconographies.account.home.fill),
                         .init(name: "home - outlined", iconographyImage: iconographies.account.home.outlined)
                     ],
@@ -531,6 +536,29 @@ struct IconographyViewModel {
                         ]
                       ]),
 
+                .init(name: "notifications",
+                      itemViewModels: [
+                        [
+                            .init(name: "alarmOn - fill", iconographyImage: iconographies.notifications.alarmOn.fill),
+                            .init(name: "alarmOn - outlined", iconographyImage: iconographies.notifications.alarmOn.outlined)
+                        ],
+
+                        [
+                            .init(name: "alarmOff - fill", iconographyImage: iconographies.notifications.alarmOff.fill),
+                            .init(name: "alarmOff - outlined", iconographyImage: iconographies.notifications.alarmOff.outlined)
+                        ],
+
+                        [
+                            .init(name: "alarm - fill", iconographyImage: iconographies.notifications.alarm.fill),
+                            .init(name: "alarm - outlined", iconographyImage: iconographies.notifications.alarm.outlined)
+                        ],
+
+                        [
+                            .init(name: "notification - fill", iconographyImage: iconographies.notifications.notification.fill),
+                            .init(name: "notification - outlined", iconographyImage: iconographies.notifications.notification.outlined)
+                        ],
+                      ]),
+
                 .init(name: "options",
                       itemViewModels: [
                         [
@@ -711,6 +739,11 @@ struct IconographyViewModel {
                         [
                             .init(name: "userCheck - fill", iconographyImage: iconographies.user.userCheck.fill),
                             .init(name: "userCheck - outlined", iconographyImage: iconographies.user.userCheck.outlined)
+                        ],
+
+                        [
+                            .init(name: "securityProfile2 - fill", iconographyImage: iconographies.user.securityProfile2.fill),
+                            .init(name: "securityProfile2 - outlined", iconographyImage: iconographies.user.securityProfile2.outlined)
                         ],
 
                         [
