@@ -12,14 +12,14 @@ struct IconographySectionFlagsViewModel: IconographySectionViewModelable {
     // MARK: - Type Alias
 
     private typealias Helper = IconographySectionViewModelHelper
-    
+
     // MARK: - Properties
-    
+
     let name: String
     let itemViewModels: [[IconographyItemViewModel]]
-    
+
     // MARK: - Initialization
-    
+
     init(iconography: IconographyFlags) {
         self.name = "flags"
         self.itemViewModels = [

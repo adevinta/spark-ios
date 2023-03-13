@@ -12,14 +12,14 @@ struct IconographySectionCRMViewModel: IconographySectionViewModelable {
     // MARK: - Type Alias
 
     private typealias Helper = IconographySectionViewModelHelper
-    
+
     // MARK: - Properties
-    
+
     let name: String
     let itemViewModels: [[IconographyItemViewModel]]
-    
+
     // MARK: - Initialization
-    
+
     init(iconography: IconographyCRM) {
         self.name = "crm"
         self.itemViewModels = [

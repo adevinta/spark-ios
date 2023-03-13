@@ -12,14 +12,14 @@ struct IconographySectionShareViewModel: IconographySectionViewModelable {
     // MARK: - Type Alias
 
     private typealias Helper = IconographySectionViewModelHelper
-    
+
     // MARK: - Properties
-    
+
     let name: String
     let itemViewModels: [[IconographyItemViewModel]]
-    
+
     // MARK: - Initialization
-    
+
     init(iconography: IconographyShare) {
         self.name = "share"
         self.itemViewModels = [
@@ -27,7 +27,7 @@ struct IconographySectionShareViewModel: IconographySectionViewModelable {
                 .init(name: "import", iconographyImage: iconography.import),
                 .init(name: "export", iconographyImage: iconography.export)
             ],
-            
+
             Helper.makeFillAndOutlineViewModels(name: "facebook", iconography: iconography.facebook),
             Helper.makeFillAndOutlineViewModels(name: "twitter", iconography: iconography.twitter),
             Helper.makeFillAndOutlineViewModels(name: "share", iconography: iconography.share),
