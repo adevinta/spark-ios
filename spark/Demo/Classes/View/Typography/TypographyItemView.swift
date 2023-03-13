@@ -31,7 +31,9 @@ struct TypographyItemView: View {
 struct TypographyItemView_Previews: PreviewProvider {
     static var previews: some View {
         TypographyItemView(viewModel: .init(name: "Title",
-                                            typographyFont: TypographyFontDefault(font: .systemFont(ofSize: 12),
-                                                                                  swiftUIFont: .body)))
+                                            typographyFont: TypographyFontDefault(named: "Roboto",
+                                                                                  size: 12,
+                                                                                  weight: .regular,
+                                                                                  textStyle: .body)))
     }
 }

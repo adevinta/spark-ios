@@ -87,12 +87,10 @@ private extension TypographyFontDefault {
         // Properties
         let fontName = isHighlight ? Constants.boldFontName : Constants.regularFontName
         let fontWeight: UIFont.Weight = isHighlight ? .bold : .regular
-        
-        // Fonts
-        let font = UIFont(name: fontName, size: size) ?? .systemFont(ofSize: size, weight: fontWeight)
-        let swiftUIFont = Font.custom(fontName, size: size, relativeTo: textStyle)
-        
-        self.init(font: font,
-                  swiftUIFont: swiftUIFont)
+
+        self.init(named: fontName,
+                  size: size,
+                  weight: fontWeight,
+                  textStyle: textStyle)
     }
 }
