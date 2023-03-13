@@ -9,20 +9,20 @@ public struct IconographyActionsDefault: IconographyActions {
 
     // MARK: - Properties
 
-    public let calculate: IconographyFill & IconographyOutlined
-    public let copy: IconographyFill & IconographyOutlined
-    public let eye: IconographyFill & IconographyOutlined
-    public let eyeOff: IconographyFill & IconographyOutlined
-    public let like: IconographyFill & IconographyOutlined
+    public let calculate: IconographyFilled & IconographyOutlined
+    public let copy: IconographyFilled & IconographyOutlined
+    public let eye: IconographyFilled & IconographyOutlined
+    public let eyeOff: IconographyFilled & IconographyOutlined
+    public let like: IconographyFilled & IconographyOutlined
     public let moreMenu: IconographyVertical & IconographyHorizontal
-    public let pen: IconographyFill & IconographyOutlined
-    public let print: IconographyFill & IconographyOutlined
-    public let trash: IconographyFill & IconographyOutlined
-    public let trashClose: IconographyFill & IconographyOutlined
-    public let wheel: IconographyFill & IconographyOutlined
-    public let flashlight: IconographyFill & IconographyOutlined
-    public let pause: IconographyFill & IconographyOutlined
-    public let play: IconographyFill & IconographyOutlined
+    public let pen: IconographyFilled & IconographyOutlined
+    public let print: IconographyFilled & IconographyOutlined
+    public let trash: IconographyFilled & IconographyOutlined
+    public let trashClose: IconographyFilled & IconographyOutlined
+    public let wheel: IconographyFilled & IconographyOutlined
+    public let flashlight: IconographyFilled & IconographyOutlined
+    public let pause: IconographyFilled & IconographyOutlined
+    public let play: IconographyFilled & IconographyOutlined
     public let refresh: IconographyImage
     public let search: IconographyImage
     public let scan: IconographyImage
@@ -30,20 +30,20 @@ public struct IconographyActionsDefault: IconographyActions {
 
     // MARK: - Initialization
 
-    public init(calculate: IconographyFill & IconographyOutlined,
-                copy: IconographyFill & IconographyOutlined,
-                eye: IconographyFill & IconographyOutlined,
-                eyeOff: IconographyFill & IconographyOutlined,
-                like: IconographyFill & IconographyOutlined,
+    public init(calculate: IconographyFilled & IconographyOutlined,
+                copy: IconographyFilled & IconographyOutlined,
+                eye: IconographyFilled & IconographyOutlined,
+                eyeOff: IconographyFilled & IconographyOutlined,
+                like: IconographyFilled & IconographyOutlined,
                 moreMenu: IconographyVertical & IconographyHorizontal,
-                pen: IconographyFill & IconographyOutlined,
-                print: IconographyFill & IconographyOutlined,
-                trash: IconographyFill & IconographyOutlined,
-                trashClose: IconographyFill & IconographyOutlined,
-                wheel: IconographyFill & IconographyOutlined,
-                flashlight: IconographyFill & IconographyOutlined,
-                pause: IconographyFill & IconographyOutlined,
-                play: IconographyFill & IconographyOutlined,
+                pen: IconographyFilled & IconographyOutlined,
+                print: IconographyFilled & IconographyOutlined,
+                trash: IconographyFilled & IconographyOutlined,
+                trashClose: IconographyFilled & IconographyOutlined,
+                wheel: IconographyFilled & IconographyOutlined,
+                flashlight: IconographyFilled & IconographyOutlined,
+                pause: IconographyFilled & IconographyOutlined,
+                play: IconographyFilled & IconographyOutlined,
                 refresh: IconographyImage,
                 search: IconographyImage,
                 scan: IconographyImage,

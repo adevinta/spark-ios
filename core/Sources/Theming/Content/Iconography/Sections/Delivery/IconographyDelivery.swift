@@ -8,13 +8,13 @@
 import Foundation
 
 public protocol IconographyDelivery {
-    var deliveryFast: IconographyFill & IconographyOutlined { get }
-    var deliveryHands: IconographyFill & IconographyOutlined { get }
-    var box: IconographyFill & IconographyOutlined { get }
-    var deliveryTruck: IconographyFill & IconographyOutlined { get }
-    var mailClose: IconographyFill & IconographyOutlined { get }
-    var mailOpen: IconographyFill & IconographyOutlined { get }
-    var delivery: IconographyFill & IconographyOutlined { get }
+    var deliveryFast: IconographyFilled & IconographyOutlined { get }
+    var deliveryHands: IconographyFilled & IconographyOutlined { get }
+    var box: IconographyFilled & IconographyOutlined { get }
+    var deliveryTruck: IconographyFilled & IconographyOutlined { get }
+    var mailClose: IconographyFilled & IconographyOutlined { get }
+    var mailOpen: IconographyFilled & IconographyOutlined { get }
+    var delivery: IconographyFilled & IconographyOutlined { get }
     var mondialRelay: IconographyImage { get }
     var colissimo: IconographyImage { get }
     var shop2Shop: IconographyImage { get }

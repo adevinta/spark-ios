@@ -23,9 +23,9 @@ struct IconographySectionSecurityViewModel: IconographySectionViewModelable {
     init(iconography: IconographySecurity) {
         self.name = "security"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "idea", iconography: iconography.idea),
-            Helper.makeFillAndOutlineViewModels(name: "lock", iconography: iconography.lock),
-            Helper.makeFillAndOutlineViewModels(name: "unlock", iconography: iconography.unlock)
+            Helper.makeFilledAndOutlineViewModels(name: "idea", iconography: iconography.idea),
+            Helper.makeFilledAndOutlineViewModels(name: "lock", iconography: iconography.lock),
+            Helper.makeFilledAndOutlineViewModels(name: "unlock", iconography: iconography.unlock)
         ]
     }
 }

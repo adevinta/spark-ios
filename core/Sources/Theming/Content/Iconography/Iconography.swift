@@ -34,8 +34,8 @@ public protocol Iconography {
 
 // MARK: - Style
 
-public protocol IconographyFill {
-    var fill: IconographyImage { get }
+public protocol IconographyFilled {
+    var filled: IconographyImage { get }
 }
 
 public protocol IconographyOutlined {

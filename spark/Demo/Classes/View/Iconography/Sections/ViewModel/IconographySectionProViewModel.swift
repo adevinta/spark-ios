@@ -23,10 +23,10 @@ struct IconographySectionProViewModel: IconographySectionViewModelable {
     init(iconography: IconographyPro) {
         self.name = "pro"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "cursor", iconography: iconography.cursor),
-            Helper.makeFillAndOutlineViewModels(name: "download", iconography: iconography.download),
-            Helper.makeFillAndOutlineViewModels(name: "graph", iconography: iconography.graph),
-            Helper.makeFillAndOutlineViewModels(name: "rocket", iconography: iconography.rocket)
+            Helper.makeFilledAndOutlineViewModels(name: "cursor", iconography: iconography.cursor),
+            Helper.makeFilledAndOutlineViewModels(name: "download", iconography: iconography.download),
+            Helper.makeFilledAndOutlineViewModels(name: "graph", iconography: iconography.graph),
+            Helper.makeFilledAndOutlineViewModels(name: "rocket", iconography: iconography.rocket)
         ]
     }
 }

@@ -11,15 +11,15 @@ public struct IconographySecurityDefault: IconographySecurity {
 
     // MARK: - Properties
 
-    public let idea: IconographyFill & IconographyOutlined
-    public let lock: IconographyFill & IconographyOutlined
-    public let unlock: IconographyFill & IconographyOutlined
+    public let idea: IconographyFilled & IconographyOutlined
+    public let lock: IconographyFilled & IconographyOutlined
+    public let unlock: IconographyFilled & IconographyOutlined
 
     // MARK: - Init
 
-    public init(idea: IconographyFill & IconographyOutlined,
-                lock: IconographyFill & IconographyOutlined,
-                unlock: IconographyFill & IconographyOutlined) {
+    public init(idea: IconographyFilled & IconographyOutlined,
+                lock: IconographyFilled & IconographyOutlined,
+                unlock: IconographyFilled & IconographyOutlined) {
         self.idea = idea
         self.lock = lock
         self.unlock = unlock

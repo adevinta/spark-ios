@@ -28,17 +28,17 @@ struct IconographySectionShareViewModel: IconographySectionViewModelable {
                 .init(name: "export", iconographyImage: iconography.export)
             ],
 
-            Helper.makeFillAndOutlineViewModels(name: "facebook", iconography: iconography.facebook),
-            Helper.makeFillAndOutlineViewModels(name: "twitter", iconography: iconography.twitter),
-            Helper.makeFillAndOutlineViewModels(name: "share", iconography: iconography.share),
+            Helper.makeFilledAndOutlineViewModels(name: "facebook", iconography: iconography.facebook),
+            Helper.makeFilledAndOutlineViewModels(name: "twitter", iconography: iconography.twitter),
+            Helper.makeFilledAndOutlineViewModels(name: "share", iconography: iconography.share),
 
             [
                 .init(name: "attachFile", iconographyImage: iconography.attachFile),
                 .init(name: "link", iconographyImage: iconography.link)
             ],
 
-            Helper.makeFillAndOutlineViewModels(name: "forward", iconography: iconography.forward),
-            Helper.makeFillAndOutlineViewModels(name: "instagram", iconography: iconography.instagram),
+            Helper.makeFilledAndOutlineViewModels(name: "forward", iconography: iconography.forward),
+            Helper.makeFilledAndOutlineViewModels(name: "instagram", iconography: iconography.instagram),
 
             [
                 .init(name: "messenger", iconographyImage: iconography.messenger),

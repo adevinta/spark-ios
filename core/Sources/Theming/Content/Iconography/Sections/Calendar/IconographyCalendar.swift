@@ -6,7 +6,7 @@
 //
 
 public protocol IconographyCalendar {
-    var calendar: IconographyFill & IconographyOutlined { get }
-    var calendar2: IconographyFill & IconographyOutlined { get }
-    var calendarValid: IconographyFill & IconographyOutlined { get }
+    var calendar: IconographyFilled & IconographyOutlined { get }
+    var calendar2: IconographyFilled & IconographyOutlined { get }
+    var calendarValid: IconographyFilled & IconographyOutlined { get }
 }

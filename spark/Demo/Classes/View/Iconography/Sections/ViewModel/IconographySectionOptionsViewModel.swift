@@ -23,10 +23,10 @@ struct IconographySectionOptionsViewModel: IconographySectionViewModelable {
     init(iconography: IconographyOptions) {
         self.name = "options"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "clock", iconography: iconography.clock),
-            Helper.makeFillAndOutlineViewModels(name: "flash", iconography: iconography.flash),
-            Helper.makeFillAndOutlineViewModels(name: "bookmark", iconography: iconography.bookmark),
-            Helper.makeFillAndOutlineViewModels(name: "star", iconography: iconography.star),
+            Helper.makeFilledAndOutlineViewModels(name: "clock", iconography: iconography.clock),
+            Helper.makeFilledAndOutlineViewModels(name: "flash", iconography: iconography.flash),
+            Helper.makeFilledAndOutlineViewModels(name: "bookmark", iconography: iconography.bookmark),
+            Helper.makeFilledAndOutlineViewModels(name: "star", iconography: iconography.star),
             Helper.makeUpAndDownViewModels(name: "clockArrow", iconography: iconography.clockArrow),
             [
                 .init(name: "moveUp", iconographyImage: iconography.moveUp)

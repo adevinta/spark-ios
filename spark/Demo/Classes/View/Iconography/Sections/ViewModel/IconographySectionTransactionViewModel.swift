@@ -23,9 +23,9 @@ struct IconographySectionTransactionViewModel: IconographySectionViewModelable {
     init(iconography: IconographyTransaction) {
         self.name = "transaction"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "carWarranty", iconography: iconography.carWarranty),
-            Helper.makeFillAndOutlineViewModels(name: "piggyBank", iconography: iconography.piggyBank),
-            Helper.makeFillAndOutlineViewModels(name: "money", iconography: iconography.money)
+            Helper.makeFilledAndOutlineViewModels(name: "carWarranty", iconography: iconography.carWarranty),
+            Helper.makeFilledAndOutlineViewModels(name: "piggyBank", iconography: iconography.piggyBank),
+            Helper.makeFilledAndOutlineViewModels(name: "money", iconography: iconography.money)
         ]
     }
 }

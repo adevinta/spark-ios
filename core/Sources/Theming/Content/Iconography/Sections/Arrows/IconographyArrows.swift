@@ -10,7 +10,7 @@ public protocol IconographyArrows {
     var arrowDouble: IconographyLeft & IconographyRight { get }
     var arrowVertical: IconographyLeft & IconographyRight { get }
     var arrowHorizontal: IconographyUp & IconographyDown { get }
-    var delete: IconographyFill & IconographyOutlined { get }
+    var delete: IconographyFilled & IconographyOutlined { get }
     var graphArrow: IconographyUp & IconographyDown { get }
     var close: IconographyImage { get }
     var plus: IconographyImage { get }

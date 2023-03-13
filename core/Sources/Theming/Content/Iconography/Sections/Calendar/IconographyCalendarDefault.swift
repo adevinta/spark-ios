@@ -9,15 +9,15 @@ public struct IconographyCalendarDefault: IconographyCalendar {
 
     // MARK: - Properties
 
-    public let calendar: IconographyFill & IconographyOutlined
-    public let calendar2: IconographyFill & IconographyOutlined
-    public let calendarValid: IconographyFill & IconographyOutlined
+    public let calendar: IconographyFilled & IconographyOutlined
+    public let calendar2: IconographyFilled & IconographyOutlined
+    public let calendarValid: IconographyFilled & IconographyOutlined
 
     // MARK: - Initialization
 
-    public init(calendar: IconographyFill & IconographyOutlined,
-                calendar2: IconographyFill & IconographyOutlined,
-                calendarValid: IconographyFill & IconographyOutlined) {
+    public init(calendar: IconographyFilled & IconographyOutlined,
+                calendar2: IconographyFilled & IconographyOutlined,
+                calendarValid: IconographyFilled & IconographyOutlined) {
         self.calendar = calendar
         self.calendar2 = calendar2
         self.calendarValid = calendarValid

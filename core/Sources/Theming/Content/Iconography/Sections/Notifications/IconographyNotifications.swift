@@ -8,8 +8,8 @@
 import Foundation
 
 public protocol IconographyNotifications {
-    var alarmOn: IconographyFill & IconographyOutlined { get }
-    var alarmOff: IconographyFill & IconographyOutlined { get }
-    var alarm: IconographyFill & IconographyOutlined { get }
-    var notification: IconographyFill & IconographyOutlined { get }
+    var alarmOn: IconographyFilled & IconographyOutlined { get }
+    var alarmOff: IconographyFilled & IconographyOutlined { get }
+    var alarm: IconographyFilled & IconographyOutlined { get }
+    var notification: IconographyFilled & IconographyOutlined { get }
 }

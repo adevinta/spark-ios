@@ -11,17 +11,17 @@ public struct IconographyToggleDefault: IconographyToggle {
 
     // MARK: - Properties
 
-    public let valid: IconographyFill & IconographyOutlined
-    public let add: IconographyFill & IconographyOutlined
-    public let remove: IconographyFill & IconographyOutlined
+    public let valid: IconographyFilled & IconographyOutlined
+    public let add: IconographyFilled & IconographyOutlined
+    public let remove: IconographyFilled & IconographyOutlined
     public let check: IconographyImage
     public let doubleCheck: IconographyImage
 
     // MARK: - Init
 
-    public init(valid: IconographyFill & IconographyOutlined,
-                add: IconographyFill & IconographyOutlined,
-                remove: IconographyFill & IconographyOutlined,
+    public init(valid: IconographyFilled & IconographyOutlined,
+                add: IconographyFilled & IconographyOutlined,
+                remove: IconographyFilled & IconographyOutlined,
                 check: IconographyImage,
                 doubleCheck: IconographyImage) {
         self.valid = valid

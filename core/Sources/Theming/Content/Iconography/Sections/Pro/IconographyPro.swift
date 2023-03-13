@@ -8,8 +8,8 @@
 import Foundation
 
 public protocol IconographyPro {
-    var cursor: IconographyFill & IconographyOutlined { get }
-    var download: IconographyFill & IconographyOutlined { get }
-    var graph: IconographyFill & IconographyOutlined { get }
-    var rocket: IconographyFill & IconographyOutlined { get }
+    var cursor: IconographyFilled & IconographyOutlined { get }
+    var download: IconographyFilled & IconographyOutlined { get }
+    var graph: IconographyFilled & IconographyOutlined { get }
+    var rocket: IconographyFilled & IconographyOutlined { get }
 }

@@ -27,7 +27,7 @@ struct IconographySectionArrowsViewModel: IconographySectionViewModelable {
             Helper.makeLeftAndRightViewModels(name: "arrowDouble", iconography: iconography.arrowDouble),
             Helper.makeLeftAndRightViewModels(name: "arrowVertical", iconography: iconography.arrowVertical),
             Helper.makeUpAndDownViewModels(name: "arrowHorizontal", iconography: iconography.arrowHorizontal),
-            Helper.makeFillAndOutlineViewModels(name: "delete", iconography: iconography.delete),
+            Helper.makeFilledAndOutlineViewModels(name: "delete", iconography: iconography.delete),
             Helper.makeUpAndDownViewModels(name: "graphArrow", iconography: iconography.graphArrow),
             [
                 .init(name: "close", iconographyImage: iconography.close),

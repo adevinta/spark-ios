@@ -6,20 +6,20 @@
 //
 
 public protocol IconographyActions {
-    var calculate: IconographyFill & IconographyOutlined { get }
-    var copy: IconographyFill & IconographyOutlined { get }
-    var eye: IconographyFill & IconographyOutlined { get }
-    var eyeOff: IconographyFill & IconographyOutlined { get }
-    var like: IconographyFill & IconographyOutlined { get }
+    var calculate: IconographyFilled & IconographyOutlined { get }
+    var copy: IconographyFilled & IconographyOutlined { get }
+    var eye: IconographyFilled & IconographyOutlined { get }
+    var eyeOff: IconographyFilled & IconographyOutlined { get }
+    var like: IconographyFilled & IconographyOutlined { get }
     var moreMenu: IconographyVertical & IconographyHorizontal { get }
-    var pen: IconographyFill & IconographyOutlined { get }
-    var print: IconographyFill & IconographyOutlined { get }
-    var trash: IconographyFill & IconographyOutlined { get }
-    var trashClose: IconographyFill & IconographyOutlined { get }
-    var wheel: IconographyFill & IconographyOutlined { get }
-    var flashlight: IconographyFill & IconographyOutlined { get }
-    var pause: IconographyFill & IconographyOutlined { get }
-    var play: IconographyFill & IconographyOutlined { get }
+    var pen: IconographyFilled & IconographyOutlined { get }
+    var print: IconographyFilled & IconographyOutlined { get }
+    var trash: IconographyFilled & IconographyOutlined { get }
+    var trashClose: IconographyFilled & IconographyOutlined { get }
+    var wheel: IconographyFilled & IconographyOutlined { get }
+    var flashlight: IconographyFilled & IconographyOutlined { get }
+    var pause: IconographyFilled & IconographyOutlined { get }
+    var play: IconographyFilled & IconographyOutlined { get }
     var refresh: IconographyImage { get }
     var search: IconographyImage { get }
     var scan: IconographyImage { get }

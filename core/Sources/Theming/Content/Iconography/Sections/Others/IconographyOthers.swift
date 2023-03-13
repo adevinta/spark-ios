@@ -8,14 +8,14 @@
 import Foundation
 
 public protocol IconographyOthers {
-    var megaphone: IconographyFill & IconographyOutlined { get }
-    var speedmeter: IconographyFill & IconographyOutlined { get }
-    var dissatisfied: IconographyFill & IconographyOutlined { get }
-    var flag: IconographyFill & IconographyOutlined { get }
-    var satisfied: IconographyFill & IconographyOutlined { get }
-    var neutral: IconographyFill & IconographyOutlined { get }
-    var sad: IconographyFill & IconographyOutlined { get }
-    var fire: IconographyFill & IconographyOutlined { get }
+    var megaphone: IconographyFilled & IconographyOutlined { get }
+    var speedmeter: IconographyFilled & IconographyOutlined { get }
+    var dissatisfied: IconographyFilled & IconographyOutlined { get }
+    var flag: IconographyFilled & IconographyOutlined { get }
+    var satisfied: IconographyFilled & IconographyOutlined { get }
+    var neutral: IconographyFilled & IconographyOutlined { get }
+    var sad: IconographyFilled & IconographyOutlined { get }
+    var fire: IconographyFilled & IconographyOutlined { get }
     var euro: IconographyImage { get }
     var refund: IconographyImage { get }
     var sun: IconographyImage { get }

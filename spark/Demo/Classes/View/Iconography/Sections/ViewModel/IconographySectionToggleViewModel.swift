@@ -23,9 +23,9 @@ struct IconographySectionToggleViewModel: IconographySectionViewModelable {
     init(iconography: IconographyToggle) {
         self.name = "toggle"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "valid", iconography: iconography.valid),
-            Helper.makeFillAndOutlineViewModels(name: "add", iconography: iconography.add),
-            Helper.makeFillAndOutlineViewModels(name: "remove", iconography: iconography.remove),
+            Helper.makeFilledAndOutlineViewModels(name: "valid", iconography: iconography.valid),
+            Helper.makeFilledAndOutlineViewModels(name: "add", iconography: iconography.add),
+            Helper.makeFilledAndOutlineViewModels(name: "remove", iconography: iconography.remove),
 
             [
                 .init(name: "check", iconographyImage: iconography.check),

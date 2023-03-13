@@ -23,13 +23,13 @@ struct IconographySectionDeliveryViewModel: IconographySectionViewModelable {
     init(iconography: IconographyDelivery) {
         self.name = "delivery"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "deliveryFast", iconography: iconography.deliveryFast),
-            Helper.makeFillAndOutlineViewModels(name: "deliveryHands", iconography: iconography.deliveryHands),
-            Helper.makeFillAndOutlineViewModels(name: "box", iconography: iconography.box),
-            Helper.makeFillAndOutlineViewModels(name: "deliveryTruck", iconography: iconography.deliveryTruck),
-            Helper.makeFillAndOutlineViewModels(name: "mailClose", iconography: iconography.mailClose),
-            Helper.makeFillAndOutlineViewModels(name: "mailOpen", iconography: iconography.mailOpen),
-            Helper.makeFillAndOutlineViewModels(name: "delivery", iconography: iconography.delivery),
+            Helper.makeFilledAndOutlineViewModels(name: "deliveryFast", iconography: iconography.deliveryFast),
+            Helper.makeFilledAndOutlineViewModels(name: "deliveryHands", iconography: iconography.deliveryHands),
+            Helper.makeFilledAndOutlineViewModels(name: "box", iconography: iconography.box),
+            Helper.makeFilledAndOutlineViewModels(name: "deliveryTruck", iconography: iconography.deliveryTruck),
+            Helper.makeFilledAndOutlineViewModels(name: "mailClose", iconography: iconography.mailClose),
+            Helper.makeFilledAndOutlineViewModels(name: "mailOpen", iconography: iconography.mailOpen),
+            Helper.makeFilledAndOutlineViewModels(name: "delivery", iconography: iconography.delivery),
             [
                 .init(name: "mondialRelay", iconographyImage: iconography.mondialRelay),
                 .init(name: "colissimo", iconographyImage: iconography.colissimo),

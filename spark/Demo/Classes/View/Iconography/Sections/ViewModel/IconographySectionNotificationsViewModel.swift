@@ -23,10 +23,10 @@ struct IconographySectionNotificationsViewModel: IconographySectionViewModelable
     init(iconography: IconographyNotifications) {
         self.name = "notifications"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "alarmOn", iconography: iconography.alarmOn),
-            Helper.makeFillAndOutlineViewModels(name: "alarmOff", iconography: iconography.alarmOff),
-            Helper.makeFillAndOutlineViewModels(name: "alarm", iconography: iconography.alarm),
-            Helper.makeFillAndOutlineViewModels(name: "notification", iconography: iconography.notification)
+            Helper.makeFilledAndOutlineViewModels(name: "alarmOn", iconography: iconography.alarmOn),
+            Helper.makeFilledAndOutlineViewModels(name: "alarmOff", iconography: iconography.alarmOff),
+            Helper.makeFilledAndOutlineViewModels(name: "alarm", iconography: iconography.alarm),
+            Helper.makeFilledAndOutlineViewModels(name: "notification", iconography: iconography.notification)
         ]
     }
 }

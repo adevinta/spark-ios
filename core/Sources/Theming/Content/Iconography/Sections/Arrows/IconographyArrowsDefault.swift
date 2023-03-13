@@ -13,7 +13,7 @@ public struct IconographyArrowsDefault: IconographyArrows {
     public let arrowDouble: IconographyLeft & IconographyRight
     public let arrowVertical: IconographyLeft & IconographyRight
     public let arrowHorizontal: IconographyUp & IconographyDown
-    public let delete: IconographyFill & IconographyOutlined
+    public let delete: IconographyFilled & IconographyOutlined
     public let graphArrow: IconographyUp & IconographyDown
     public let close: IconographyImage
     public let plus: IconographyImage
@@ -24,7 +24,7 @@ public struct IconographyArrowsDefault: IconographyArrows {
                 arrowDouble: IconographyLeft & IconographyRight,
                 arrowVertical: IconographyLeft & IconographyRight,
                 arrowHorizontal: IconographyUp & IconographyDown,
-                delete: IconographyFill & IconographyOutlined,
+                delete: IconographyFilled & IconographyOutlined,
                 graphArrow: IconographyUp & IconographyDown,
                 close: IconographyImage,
                 plus: IconographyImage) {

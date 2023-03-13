@@ -23,13 +23,13 @@ struct IconographySectionContactViewModel: IconographySectionViewModelable {
     init(iconography: IconographyContact) {
         self.name = "contact"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "voice", iconography: iconography.voice),
-            Helper.makeFillAndOutlineViewModels(name: "voiceOff", iconography: iconography.voiceOff),
-            Helper.makeFillAndOutlineViewModels(name: "mail", iconography: iconography.mail),
-            Helper.makeFillAndOutlineViewModels(name: "mailActif", iconography: iconography.mailActif),
-            Helper.makeFillAndOutlineViewModels(name: "typing", iconography: iconography.typing),
-            Helper.makeFillAndOutlineViewModels(name: "message", iconography: iconography.message),
-            Helper.makeFillAndOutlineViewModels(name: "conversation", iconography: iconography.conversation),
+            Helper.makeFilledAndOutlineViewModels(name: "voice", iconography: iconography.voice),
+            Helper.makeFilledAndOutlineViewModels(name: "voiceOff", iconography: iconography.voiceOff),
+            Helper.makeFilledAndOutlineViewModels(name: "mail", iconography: iconography.mail),
+            Helper.makeFilledAndOutlineViewModels(name: "mailActif", iconography: iconography.mailActif),
+            Helper.makeFilledAndOutlineViewModels(name: "typing", iconography: iconography.typing),
+            Helper.makeFilledAndOutlineViewModels(name: "message", iconography: iconography.message),
+            Helper.makeFilledAndOutlineViewModels(name: "conversation", iconography: iconography.conversation),
             [
                 .init(name: "phone", iconographyImage: iconography.phone),
                 .init(name: "call", iconographyImage: iconography.call),

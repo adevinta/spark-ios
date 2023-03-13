@@ -11,21 +11,21 @@ public struct IconographyImagesDefault: IconographyImages {
 
     // MARK: - Properties
 
-    public let camera: IconographyFill & IconographyOutlined
-    public let addImage: IconographyFill & IconographyOutlined
-    public let gallery: IconographyFill & IconographyOutlined
-    public let add: IconographyFill & IconographyOutlined
-    public let image: IconographyFill & IconographyOutlined
+    public let camera: IconographyFilled & IconographyOutlined
+    public let addImage: IconographyFilled & IconographyOutlined
+    public let gallery: IconographyFilled & IconographyOutlined
+    public let add: IconographyFilled & IconographyOutlined
+    public let image: IconographyFilled & IconographyOutlined
     public let noPhoto: IconographyImage
     public let rotateImage: IconographyImage
 
     // MARK: - Init
 
-    public init(camera: IconographyFill & IconographyOutlined,
-                addImage: IconographyFill & IconographyOutlined,
-                gallery: IconographyFill & IconographyOutlined,
-                add: IconographyFill & IconographyOutlined,
-                image: IconographyFill & IconographyOutlined,
+    public init(camera: IconographyFilled & IconographyOutlined,
+                addImage: IconographyFilled & IconographyOutlined,
+                gallery: IconographyFilled & IconographyOutlined,
+                add: IconographyFilled & IconographyOutlined,
+                image: IconographyFilled & IconographyOutlined,
                 noPhoto: IconographyImage,
                 rotateImage: IconographyImage) {
         self.camera = camera

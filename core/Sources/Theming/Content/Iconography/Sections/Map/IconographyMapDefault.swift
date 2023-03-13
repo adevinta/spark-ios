@@ -15,13 +15,13 @@ public struct IconographyMapDefault: IconographyMap {
     public let bike: IconographyImage
     public let allDirections: IconographyImage
     public let expand: IconographyImage
-    public let target: IconographyFill & IconographyOutlined
-    public let pin: IconographyFill & IconographyOutlined
-    public let cursor: IconographyFill & IconographyOutlined
-    public let train: IconographyFill & IconographyOutlined
-    public let hotel: IconographyFill & IconographyOutlined
-    public let walker: IconographyFill & IconographyOutlined
-    public let car: IconographyFill & IconographyOutlined
+    public let target: IconographyFilled & IconographyOutlined
+    public let pin: IconographyFilled & IconographyOutlined
+    public let cursor: IconographyFilled & IconographyOutlined
+    public let train: IconographyFilled & IconographyOutlined
+    public let hotel: IconographyFilled & IconographyOutlined
+    public let walker: IconographyFilled & IconographyOutlined
+    public let car: IconographyFilled & IconographyOutlined
 
     // MARK: - Init
 
@@ -29,13 +29,13 @@ public struct IconographyMapDefault: IconographyMap {
                 bike: IconographyImage,
                 allDirections: IconographyImage,
                 expand: IconographyImage,
-                target: IconographyFill & IconographyOutlined,
-                pin: IconographyFill & IconographyOutlined,
-                cursor: IconographyFill & IconographyOutlined,
-                train: IconographyFill & IconographyOutlined,
-                hotel: IconographyFill & IconographyOutlined,
-                walker: IconographyFill & IconographyOutlined,
-                car: IconographyFill & IconographyOutlined) {
+                target: IconographyFilled & IconographyOutlined,
+                pin: IconographyFilled & IconographyOutlined,
+                cursor: IconographyFilled & IconographyOutlined,
+                train: IconographyFilled & IconographyOutlined,
+                hotel: IconographyFilled & IconographyOutlined,
+                walker: IconographyFilled & IconographyOutlined,
+                car: IconographyFilled & IconographyOutlined) {
         self.threeSixty = threeSixty
         self.bike = bike
         self.allDirections = allDirections

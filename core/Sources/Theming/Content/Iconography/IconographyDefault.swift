@@ -83,16 +83,16 @@ public struct IconographyDefault: Iconography {
 
 // MARK: - Style
 
-public struct IconographyFillDefault: IconographyFill {
+public struct IconographyFilledDefault: IconographyFilled {
 
     // MARK: - Properties
 
-    public let fill: IconographyImage
+    public let filled: IconographyImage
 
     // MARK: - Initialization
 
-    public init(fill: IconographyImage) {
-        self.fill = fill
+    public init(filled: IconographyImage) {
+        self.filled = filled
     }
 }
 

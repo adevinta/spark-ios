@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol IconographySecurity {
-    var idea: IconographyFill & IconographyOutlined { get }
-    var lock: IconographyFill & IconographyOutlined { get }
-    var unlock: IconographyFill & IconographyOutlined { get }
+    var idea: IconographyFilled & IconographyOutlined { get }
+    var lock: IconographyFilled & IconographyOutlined { get }
+    var unlock: IconographyFilled & IconographyOutlined { get }
 }

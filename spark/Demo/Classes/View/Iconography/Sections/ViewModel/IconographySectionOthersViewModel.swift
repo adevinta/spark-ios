@@ -23,14 +23,14 @@ struct IconographySectionOthersViewModel: IconographySectionViewModelable {
     init(iconography: IconographyOthers) {
         self.name = "others"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "megaphone", iconography: iconography.megaphone),
-            Helper.makeFillAndOutlineViewModels(name: "speedmeter", iconography: iconography.speedmeter),
-            Helper.makeFillAndOutlineViewModels(name: "dissatisfied", iconography: iconography.dissatisfied),
-            Helper.makeFillAndOutlineViewModels(name: "flag", iconography: iconography.flag),
-            Helper.makeFillAndOutlineViewModels(name: "satisfied", iconography: iconography.satisfied),
-            Helper.makeFillAndOutlineViewModels(name: "neutral", iconography: iconography.neutral),
-            Helper.makeFillAndOutlineViewModels(name: "sad", iconography: iconography.sad),
-            Helper.makeFillAndOutlineViewModels(name: "fire", iconography: iconography.fire),
+            Helper.makeFilledAndOutlineViewModels(name: "megaphone", iconography: iconography.megaphone),
+            Helper.makeFilledAndOutlineViewModels(name: "speedmeter", iconography: iconography.speedmeter),
+            Helper.makeFilledAndOutlineViewModels(name: "dissatisfied", iconography: iconography.dissatisfied),
+            Helper.makeFilledAndOutlineViewModels(name: "flag", iconography: iconography.flag),
+            Helper.makeFilledAndOutlineViewModels(name: "satisfied", iconography: iconography.satisfied),
+            Helper.makeFilledAndOutlineViewModels(name: "neutral", iconography: iconography.neutral),
+            Helper.makeFilledAndOutlineViewModels(name: "sad", iconography: iconography.sad),
+            Helper.makeFilledAndOutlineViewModels(name: "fire", iconography: iconography.fire),
             [
                 .init(name: "euro", iconographyImage: iconography.euro),
                 .init(name: "refund", iconographyImage: iconography.refund),

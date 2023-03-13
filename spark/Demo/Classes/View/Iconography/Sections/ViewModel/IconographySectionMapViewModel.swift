@@ -29,13 +29,13 @@ struct IconographySectionMapViewModel: IconographySectionViewModelable {
                 .init(name: "allDirections", iconographyImage: iconography.allDirections),
                 .init(name: "expand", iconographyImage: iconography.expand)
             ],
-            Helper.makeFillAndOutlineViewModels(name: "target", iconography: iconography.target),
-            Helper.makeFillAndOutlineViewModels(name: "pin", iconography: iconography.pin),
-            Helper.makeFillAndOutlineViewModels(name: "cursor", iconography: iconography.cursor),
-            Helper.makeFillAndOutlineViewModels(name: "train", iconography: iconography.train),
-            Helper.makeFillAndOutlineViewModels(name: "hotel", iconography: iconography.hotel),
-            Helper.makeFillAndOutlineViewModels(name: "walker", iconography: iconography.walker),
-            Helper.makeFillAndOutlineViewModels(name: "car", iconography: iconography.car)
+            Helper.makeFilledAndOutlineViewModels(name: "target", iconography: iconography.target),
+            Helper.makeFilledAndOutlineViewModels(name: "pin", iconography: iconography.pin),
+            Helper.makeFilledAndOutlineViewModels(name: "cursor", iconography: iconography.cursor),
+            Helper.makeFilledAndOutlineViewModels(name: "train", iconography: iconography.train),
+            Helper.makeFilledAndOutlineViewModels(name: "hotel", iconography: iconography.hotel),
+            Helper.makeFilledAndOutlineViewModels(name: "walker", iconography: iconography.walker),
+            Helper.makeFilledAndOutlineViewModels(name: "car", iconography: iconography.car)
         ]
     }
 }

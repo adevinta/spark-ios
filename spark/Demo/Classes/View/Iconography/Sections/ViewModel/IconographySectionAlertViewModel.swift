@@ -24,22 +24,22 @@ struct IconographySectionAlertViewModel: IconographySectionViewModelable {
         self.name = "alert"
         self.itemViewModels = [
             [
-                .init(name: "alert - fill", iconographyImage: iconography.alert.fill),
+                .init(name: "alert - filled", iconographyImage: iconography.alert.filled),
                 .init(name: "alert - outlined", iconographyImage: iconography.alert.outlined)
             ],
 
             [
-                .init(name: "question - fill", iconographyImage: iconography.question.fill),
+                .init(name: "question - filled", iconographyImage: iconography.question.filled),
                 .init(name: "question - outlined", iconographyImage: iconography.question.outlined)
             ],
 
             [
-                .init(name: "info - fill", iconographyImage: iconography.info.fill),
+                .init(name: "info - filled", iconographyImage: iconography.info.filled),
                 .init(name: "info - outlined", iconographyImage: iconography.info.outlined)
             ],
 
             [
-                .init(name: "warning - fill", iconographyImage: iconography.warning.fill),
+                .init(name: "warning - filled", iconographyImage: iconography.warning.filled),
                 .init(name: "warning - outlined", iconographyImage: iconography.warning.outlined)
             ],
 

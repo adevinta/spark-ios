@@ -11,15 +11,15 @@ public struct IconographyTransactionDefault: IconographyTransaction {
 
     // MARK: - Properties
 
-    public let carWarranty: IconographyFill & IconographyOutlined
-    public let piggyBank: IconographyFill & IconographyOutlined
-    public let money: IconographyFill & IconographyOutlined
+    public let carWarranty: IconographyFilled & IconographyOutlined
+    public let piggyBank: IconographyFilled & IconographyOutlined
+    public let money: IconographyFilled & IconographyOutlined
 
     // MARK: - Init
 
-    public init(carWarranty: IconographyFill & IconographyOutlined,
-                piggyBank: IconographyFill & IconographyOutlined,
-                money: IconographyFill & IconographyOutlined) {
+    public init(carWarranty: IconographyFilled & IconographyOutlined,
+                piggyBank: IconographyFilled & IconographyOutlined,
+                money: IconographyFilled & IconographyOutlined) {
         self.carWarranty = carWarranty
         self.piggyBank = piggyBank
         self.money = money

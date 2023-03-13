@@ -6,20 +6,20 @@
 //
 
 public protocol IconographyAccount {
-    var bank: IconographyFill & IconographyOutlined { get }
-    var holiday: IconographyFill & IconographyOutlined { get }
-    var country: IconographyFill & IconographyOutlined { get }
-    var home: IconographyFill & IconographyOutlined { get }
-    var identity: IconographyFill & IconographyOutlined { get }
-    var key: IconographyFill & IconographyOutlined { get }
-    var favorite: IconographyFill & IconographyOutlined { get }
-    var shoppingCart: IconographyFill & IconographyOutlined { get }
-    var store: IconographyFill & IconographyOutlined { get }
-    var cv: IconographyFill & IconographyOutlined { get }
-    var fileOff: IconographyFill & IconographyOutlined { get }
-    var work: IconographyFill & IconographyOutlined { get }
-    var card: IconographyFill & IconographyOutlined { get }
-    var offer: IconographyFill & IconographyOutlined { get }
+    var bank: IconographyFilled & IconographyOutlined { get }
+    var holiday: IconographyFilled & IconographyOutlined { get }
+    var country: IconographyFilled & IconographyOutlined { get }
+    var home: IconographyFilled & IconographyOutlined { get }
+    var identity: IconographyFilled & IconographyOutlined { get }
+    var key: IconographyFilled & IconographyOutlined { get }
+    var favorite: IconographyFilled & IconographyOutlined { get }
+    var shoppingCart: IconographyFilled & IconographyOutlined { get }
+    var store: IconographyFilled & IconographyOutlined { get }
+    var cv: IconographyFilled & IconographyOutlined { get }
+    var fileOff: IconographyFilled & IconographyOutlined { get }
+    var work: IconographyFilled & IconographyOutlined { get }
+    var card: IconographyFilled & IconographyOutlined { get }
+    var offer: IconographyFilled & IconographyOutlined { get }
     var burgerMenu: IconographyImage { get }
     var activity: IconographyImage { get }
     var listing: IconographyImage { get }

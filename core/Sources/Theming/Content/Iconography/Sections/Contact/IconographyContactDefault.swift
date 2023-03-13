@@ -9,14 +9,14 @@ public struct IconographyContactDefault: IconographyContact {
 
     // MARK: - Properties
 
-    public let voice: IconographyFill & IconographyOutlined
-    public let voiceOff: IconographyFill & IconographyOutlined
-    public let mail: IconographyFill & IconographyOutlined
-    public let mailActif: IconographyFill & IconographyOutlined
-    public let typing: IconographyFill & IconographyOutlined
-    public let message: IconographyFill & IconographyOutlined
+    public let voice: IconographyFilled & IconographyOutlined
+    public let voiceOff: IconographyFilled & IconographyOutlined
+    public let mail: IconographyFilled & IconographyOutlined
+    public let mailActif: IconographyFilled & IconographyOutlined
+    public let typing: IconographyFilled & IconographyOutlined
+    public let message: IconographyFilled & IconographyOutlined
     // TODO: - Mutliple conversations?
-    public let conversation: IconographyFill & IconographyOutlined
+    public let conversation: IconographyFilled & IconographyOutlined
     public let phone: IconographyImage
     public let call: IconographyImage
     public let support: IconographyImage
@@ -24,13 +24,13 @@ public struct IconographyContactDefault: IconographyContact {
 
     // MARK: - Initialization
 
-    public init(voice: IconographyFill & IconographyOutlined,
-                voiceOff: IconographyFill & IconographyOutlined,
-                mail: IconographyFill & IconographyOutlined,
-                mailActif: IconographyFill & IconographyOutlined,
-                typing: IconographyFill & IconographyOutlined,
-                message: IconographyFill & IconographyOutlined,
-                conversation: IconographyFill & IconographyOutlined,
+    public init(voice: IconographyFilled & IconographyOutlined,
+                voiceOff: IconographyFilled & IconographyOutlined,
+                mail: IconographyFilled & IconographyOutlined,
+                mailActif: IconographyFilled & IconographyOutlined,
+                typing: IconographyFilled & IconographyOutlined,
+                message: IconographyFilled & IconographyOutlined,
+                conversation: IconographyFilled & IconographyOutlined,
                 phone: IconographyImage, call: IconographyImage,
                 support: IconographyImage,
                 support2: IconographyImage) {

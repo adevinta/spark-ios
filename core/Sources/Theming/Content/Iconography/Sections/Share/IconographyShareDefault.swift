@@ -13,13 +13,13 @@ public struct IconographyShareDefault: IconographyShare {
 
     public let `import`: IconographyImage
     public let export: IconographyImage
-    public let facebook: IconographyFill & IconographyOutlined
-    public let twitter: IconographyFill & IconographyOutlined
-    public let share: IconographyFill & IconographyOutlined
+    public let facebook: IconographyFilled & IconographyOutlined
+    public let twitter: IconographyFilled & IconographyOutlined
+    public let share: IconographyFilled & IconographyOutlined
     public let attachFile: IconographyImage
     public let link: IconographyImage
-    public let forward: IconographyFill & IconographyOutlined
-    public let instagram: IconographyFill & IconographyOutlined
+    public let forward: IconographyFilled & IconographyOutlined
+    public let instagram: IconographyFilled & IconographyOutlined
     public let messenger: IconographyImage
     public let pinterest: IconographyImage
     public let whastapp: IconographyImage
@@ -30,13 +30,13 @@ public struct IconographyShareDefault: IconographyShare {
 
     public init(import: IconographyImage,
                 export: IconographyImage,
-                facebook: IconographyFill & IconographyOutlined,
-                twitter: IconographyFill & IconographyOutlined,
-                share: IconographyFill & IconographyOutlined,
+                facebook: IconographyFilled & IconographyOutlined,
+                twitter: IconographyFilled & IconographyOutlined,
+                share: IconographyFilled & IconographyOutlined,
                 attachFile: IconographyImage,
                 link: IconographyImage,
-                forward: IconographyFill & IconographyOutlined,
-                instagram: IconographyFill & IconographyOutlined,
+                forward: IconographyFilled & IconographyOutlined,
+                instagram: IconographyFilled & IconographyOutlined,
                 messenger: IconographyImage,
                 pinterest: IconographyImage,
                 whastapp: IconographyImage,

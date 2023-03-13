@@ -8,9 +8,9 @@
 import Foundation
 
 public protocol IconographyToggle {
-    var valid: IconographyFill & IconographyOutlined { get }
-    var add: IconographyFill & IconographyOutlined { get }
-    var remove: IconographyFill & IconographyOutlined { get }
+    var valid: IconographyFilled & IconographyOutlined { get }
+    var add: IconographyFilled & IconographyOutlined { get }
+    var remove: IconographyFilled & IconographyOutlined { get }
     var check: IconographyImage { get }
     var doubleCheck: IconographyImage { get }
 }

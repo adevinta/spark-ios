@@ -11,13 +11,13 @@ public struct IconographyDeliveryDefault: IconographyDelivery {
 
     // MARK: - Properties
 
-    public let deliveryFast: IconographyFill & IconographyOutlined
-    public let deliveryHands: IconographyFill & IconographyOutlined
-    public let box: IconographyFill & IconographyOutlined
-    public let deliveryTruck: IconographyFill & IconographyOutlined
-    public let mailClose: IconographyFill & IconographyOutlined
-    public let mailOpen: IconographyFill & IconographyOutlined
-    public let delivery: IconographyFill & IconographyOutlined
+    public let deliveryFast: IconographyFilled & IconographyOutlined
+    public let deliveryHands: IconographyFilled & IconographyOutlined
+    public let box: IconographyFilled & IconographyOutlined
+    public let deliveryTruck: IconographyFilled & IconographyOutlined
+    public let mailClose: IconographyFilled & IconographyOutlined
+    public let mailOpen: IconographyFilled & IconographyOutlined
+    public let delivery: IconographyFilled & IconographyOutlined
     public let mondialRelay: IconographyImage
     public let colissimo: IconographyImage
     public let shop2Shop: IconographyImage
@@ -25,13 +25,13 @@ public struct IconographyDeliveryDefault: IconographyDelivery {
 
     // MARK: - Init
 
-    public init(deliveryFast: IconographyFill & IconographyOutlined,
-                deliveryHands: IconographyFill & IconographyOutlined,
-                box: IconographyFill & IconographyOutlined,
-                deliveryTruck: IconographyFill & IconographyOutlined,
-                mailClose: IconographyFill & IconographyOutlined,
-                mailOpen: IconographyFill & IconographyOutlined,
-                delivery: IconographyFill & IconographyOutlined,
+    public init(deliveryFast: IconographyFilled & IconographyOutlined,
+                deliveryHands: IconographyFilled & IconographyOutlined,
+                box: IconographyFilled & IconographyOutlined,
+                deliveryTruck: IconographyFilled & IconographyOutlined,
+                mailClose: IconographyFilled & IconographyOutlined,
+                mailOpen: IconographyFilled & IconographyOutlined,
+                delivery: IconographyFilled & IconographyOutlined,
                 mondialRelay: IconographyImage,
                 colissimo: IconographyImage,
                 shop2Shop: IconographyImage,

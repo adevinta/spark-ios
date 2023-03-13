@@ -8,9 +8,9 @@
 import Foundation
 
 public protocol IconographyAlert {
-    var alert: IconographyFill & IconographyOutlined { get }
-    var question: IconographyFill & IconographyOutlined { get }
-    var info: IconographyFill & IconographyOutlined { get }
-    var warning: IconographyFill & IconographyOutlined { get }
+    var alert: IconographyFilled & IconographyOutlined { get }
+    var question: IconographyFilled & IconographyOutlined { get }
+    var info: IconographyFilled & IconographyOutlined { get }
+    var warning: IconographyFilled & IconographyOutlined { get }
     var block: IconographyImage { get }
 }

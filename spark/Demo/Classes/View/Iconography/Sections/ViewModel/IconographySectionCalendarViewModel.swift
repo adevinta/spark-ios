@@ -23,9 +23,9 @@ struct IconographySectionCalendarViewModel: IconographySectionViewModelable {
     init(iconography: IconographyCalendar) {
         self.name = "calendar"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "calendar", iconography: iconography.calendar),
-            Helper.makeFillAndOutlineViewModels(name: "calendar2", iconography: iconography.calendar2),
-            Helper.makeFillAndOutlineViewModels(name: "calendarValid", iconography: iconography.calendarValid)
+            Helper.makeFilledAndOutlineViewModels(name: "calendar", iconography: iconography.calendar),
+            Helper.makeFilledAndOutlineViewModels(name: "calendar2", iconography: iconography.calendar2),
+            Helper.makeFilledAndOutlineViewModels(name: "calendarValid", iconography: iconography.calendarValid)
         ]
     }
 }

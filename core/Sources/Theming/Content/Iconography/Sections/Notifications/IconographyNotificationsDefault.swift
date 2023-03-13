@@ -11,17 +11,17 @@ public struct IconographyNotificationsDefault: IconographyNotifications {
 
     // MARK: - Properties
 
-    public let alarmOn: IconographyFill & IconographyOutlined
-    public let alarmOff: IconographyFill & IconographyOutlined
-    public let alarm: IconographyFill & IconographyOutlined
-    public let notification: IconographyFill & IconographyOutlined
+    public let alarmOn: IconographyFilled & IconographyOutlined
+    public let alarmOff: IconographyFilled & IconographyOutlined
+    public let alarm: IconographyFilled & IconographyOutlined
+    public let notification: IconographyFilled & IconographyOutlined
 
     // MARK: - Init
 
-    public init(alarmOn: IconographyFill & IconographyOutlined,
-                alarmOff: IconographyFill & IconographyOutlined,
-                alarm: IconographyFill & IconographyOutlined,
-                notification: IconographyFill & IconographyOutlined) {
+    public init(alarmOn: IconographyFilled & IconographyOutlined,
+                alarmOff: IconographyFilled & IconographyOutlined,
+                alarm: IconographyFilled & IconographyOutlined,
+                notification: IconographyFilled & IconographyOutlined) {
         self.alarmOn = alarmOn
         self.alarmOff = alarmOff
         self.alarm = alarm

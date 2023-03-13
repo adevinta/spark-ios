@@ -8,14 +8,14 @@
 import Foundation
 
 public protocol IconographyUser {
-    var verified: IconographyFill & IconographyOutlined { get }
-    var warningSecurity: IconographyFill & IconographyOutlined { get }
-    var security: IconographyFill & IconographyOutlined { get }
-    var profile: IconographyFill & IconographyOutlined { get }
-    var securityProfile: IconographyFill & IconographyOutlined { get }
-    var securityProfile2: IconographyFill & IconographyOutlined { get }
-    var userCheck: IconographyFill & IconographyOutlined { get }
-    var account: IconographyFill & IconographyOutlined { get }
-    var pro: IconographyFill & IconographyOutlined { get }
-    var group: IconographyFill & IconographyOutlined { get }
+    var verified: IconographyFilled & IconographyOutlined { get }
+    var warningSecurity: IconographyFilled & IconographyOutlined { get }
+    var security: IconographyFilled & IconographyOutlined { get }
+    var profile: IconographyFilled & IconographyOutlined { get }
+    var securityProfile: IconographyFilled & IconographyOutlined { get }
+    var securityProfile2: IconographyFilled & IconographyOutlined { get }
+    var userCheck: IconographyFilled & IconographyOutlined { get }
+    var account: IconographyFilled & IconographyOutlined { get }
+    var pro: IconographyFilled & IconographyOutlined { get }
+    var group: IconographyFilled & IconographyOutlined { get }
 }

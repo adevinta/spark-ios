@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol IconographyTransaction {
-    var carWarranty: IconographyFill & IconographyOutlined { get }
-    var piggyBank: IconographyFill & IconographyOutlined { get }
-    var money: IconographyFill & IconographyOutlined { get }
+    var carWarranty: IconographyFilled & IconographyOutlined { get }
+    var piggyBank: IconographyFilled & IconographyOutlined { get }
+    var money: IconographyFilled & IconographyOutlined { get }
 }

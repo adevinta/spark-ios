@@ -11,17 +11,17 @@ public struct IconographyProDefault: IconographyPro {
 
     // MARK: - Properties
 
-    public let cursor: IconographyFill & IconographyOutlined
-    public let download: IconographyFill & IconographyOutlined
-    public let graph: IconographyFill & IconographyOutlined
-    public let rocket: IconographyFill & IconographyOutlined
+    public let cursor: IconographyFilled & IconographyOutlined
+    public let download: IconographyFilled & IconographyOutlined
+    public let graph: IconographyFilled & IconographyOutlined
+    public let rocket: IconographyFilled & IconographyOutlined
 
     // MARK: - Init
 
-    public init(cursor: IconographyFill & IconographyOutlined,
-                download: IconographyFill & IconographyOutlined,
-                graph: IconographyFill & IconographyOutlined,
-                rocket: IconographyFill & IconographyOutlined) {
+    public init(cursor: IconographyFilled & IconographyOutlined,
+                download: IconographyFilled & IconographyOutlined,
+                graph: IconographyFilled & IconographyOutlined,
+                rocket: IconographyFilled & IconographyOutlined) {
         self.cursor = cursor
         self.download = download
         self.graph = graph

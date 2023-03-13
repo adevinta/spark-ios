@@ -9,11 +9,11 @@ import SparkCore
 
 enum IconographySectionViewModelHelper {
 
-    static func makeFillAndOutlineViewModels(name: String,
-                                             iconography: IconographyFill & IconographyOutlined) -> [IconographyItemViewModel] {
+    static func makeFilledAndOutlineViewModels(name: String,
+                                             iconography: IconographyFilled & IconographyOutlined) -> [IconographyItemViewModel] {
         return [
-            .init(name: Self.makeNameViewModel(from: name, typeName: "fill"),
-                  iconographyImage: iconography.fill),
+            .init(name: Self.makeNameViewModel(from: name, typeName: "filled"),
+                  iconographyImage: iconography.filled),
             .init(name:  Self.makeNameViewModel(from: name, typeName: "outlined"),
                   iconographyImage: iconography.outlined)
         ]

@@ -8,11 +8,11 @@
 import Foundation
 
 public protocol IconographyImages {
-    var camera: IconographyFill & IconographyOutlined { get }
-    var addImage: IconographyFill & IconographyOutlined { get }
-    var gallery: IconographyFill & IconographyOutlined { get }
-    var add: IconographyFill & IconographyOutlined { get }
-    var image: IconographyFill & IconographyOutlined { get }
+    var camera: IconographyFilled & IconographyOutlined { get }
+    var addImage: IconographyFilled & IconographyOutlined { get }
+    var gallery: IconographyFilled & IconographyOutlined { get }
+    var add: IconographyFilled & IconographyOutlined { get }
+    var image: IconographyFilled & IconographyOutlined { get }
     var noPhoto: IconographyImage { get }
     var rotateImage: IconographyImage { get }
 }

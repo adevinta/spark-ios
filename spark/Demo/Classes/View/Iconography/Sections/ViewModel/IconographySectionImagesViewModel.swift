@@ -23,11 +23,11 @@ struct IconographySectionImagesViewModel: IconographySectionViewModelable {
     init(iconography: IconographyImages) {
         self.name = "images"
         self.itemViewModels = [
-            Helper.makeFillAndOutlineViewModels(name: "camera", iconography: iconography.camera),
-            Helper.makeFillAndOutlineViewModels(name: "addImage", iconography: iconography.addImage),
-            Helper.makeFillAndOutlineViewModels(name: "gallery", iconography: iconography.gallery),
-            Helper.makeFillAndOutlineViewModels(name: "add", iconography: iconography.add),
-            Helper.makeFillAndOutlineViewModels(name: "image", iconography: iconography.image),
+            Helper.makeFilledAndOutlineViewModels(name: "camera", iconography: iconography.camera),
+            Helper.makeFilledAndOutlineViewModels(name: "addImage", iconography: iconography.addImage),
+            Helper.makeFilledAndOutlineViewModels(name: "gallery", iconography: iconography.gallery),
+            Helper.makeFilledAndOutlineViewModels(name: "add", iconography: iconography.add),
+            Helper.makeFilledAndOutlineViewModels(name: "image", iconography: iconography.image),
             [
                 .init(name: "noPhoto", iconographyImage: iconography.noPhoto),
                 .init(name: "rotateImage", iconographyImage: iconography.rotateImage)

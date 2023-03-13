@@ -8,10 +8,10 @@
 import Foundation
 
 public protocol IconographyOptions {
-    var clock: IconographyFill & IconographyOutlined { get }
-    var flash: IconographyFill & IconographyOutlined { get }
-    var bookmark: IconographyFill & IconographyOutlined { get }
-    var star: IconographyFill & IconographyOutlined { get }
+    var clock: IconographyFilled & IconographyOutlined { get }
+    var flash: IconographyFilled & IconographyOutlined { get }
+    var bookmark: IconographyFilled & IconographyOutlined { get }
+    var star: IconographyFilled & IconographyOutlined { get }
     var clockArrow: IconographyUp & IconographyDown { get }
     var moveUp: IconographyImage { get }
 }

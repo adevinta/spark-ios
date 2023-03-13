@@ -11,29 +11,29 @@ public struct IconographyUserDefault: IconographyUser {
 
     // MARK: - Properties
 
-    public let verified: IconographyFill & IconographyOutlined
-    public let warningSecurity: IconographyFill & IconographyOutlined
-    public let security: IconographyFill & IconographyOutlined
-    public let profile: IconographyFill & IconographyOutlined
-    public let securityProfile: IconographyFill & IconographyOutlined
-    public let userCheck: IconographyFill & IconographyOutlined
-    public let securityProfile2: IconographyFill & IconographyOutlined
-    public let account: IconographyFill & IconographyOutlined
-    public let pro: IconographyFill & IconographyOutlined
-    public let group: IconographyFill & IconographyOutlined
+    public let verified: IconographyFilled & IconographyOutlined
+    public let warningSecurity: IconographyFilled & IconographyOutlined
+    public let security: IconographyFilled & IconographyOutlined
+    public let profile: IconographyFilled & IconographyOutlined
+    public let securityProfile: IconographyFilled & IconographyOutlined
+    public let userCheck: IconographyFilled & IconographyOutlined
+    public let securityProfile2: IconographyFilled & IconographyOutlined
+    public let account: IconographyFilled & IconographyOutlined
+    public let pro: IconographyFilled & IconographyOutlined
+    public let group: IconographyFilled & IconographyOutlined
 
     // MARK: - Init
 
-    public init(verified: IconographyFill & IconographyOutlined,
-                warningSecurity: IconographyFill & IconographyOutlined,
-                security: IconographyFill & IconographyOutlined,
-                profile: IconographyFill & IconographyOutlined,
-                securityProfile: IconographyFill & IconographyOutlined,
-                userCheck: IconographyFill & IconographyOutlined,
-                securityProfile2: IconographyFill & IconographyOutlined,
-                account: IconographyFill & IconographyOutlined,
-                pro: IconographyFill & IconographyOutlined,
-                group: IconographyFill & IconographyOutlined) {
+    public init(verified: IconographyFilled & IconographyOutlined,
+                warningSecurity: IconographyFilled & IconographyOutlined,
+                security: IconographyFilled & IconographyOutlined,
+                profile: IconographyFilled & IconographyOutlined,
+                securityProfile: IconographyFilled & IconographyOutlined,
+                userCheck: IconographyFilled & IconographyOutlined,
+                securityProfile2: IconographyFilled & IconographyOutlined,
+                account: IconographyFilled & IconographyOutlined,
+                pro: IconographyFilled & IconographyOutlined,
+                group: IconographyFilled & IconographyOutlined) {
         self.verified = verified
         self.warningSecurity = warningSecurity
         self.security = security

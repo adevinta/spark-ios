@@ -12,11 +12,11 @@ public protocol IconographyMap {
     var bike: IconographyImage { get }
     var allDirections: IconographyImage { get }
     var expand: IconographyImage { get }
-    var target: IconographyFill & IconographyOutlined { get }
-    var pin: IconographyFill & IconographyOutlined { get }
-    var cursor: IconographyFill & IconographyOutlined { get }
-    var train: IconographyFill & IconographyOutlined { get }
-    var hotel: IconographyFill & IconographyOutlined { get }
-    var walker: IconographyFill & IconographyOutlined { get }
-    var car: IconographyFill & IconographyOutlined { get }
+    var target: IconographyFilled & IconographyOutlined { get }
+    var pin: IconographyFilled & IconographyOutlined { get }
+    var cursor: IconographyFilled & IconographyOutlined { get }
+    var train: IconographyFilled & IconographyOutlined { get }
+    var hotel: IconographyFilled & IconographyOutlined { get }
+    var walker: IconographyFilled & IconographyOutlined { get }
+    var car: IconographyFilled & IconographyOutlined { get }
 }
