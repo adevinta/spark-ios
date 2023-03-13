@@ -11,7 +11,7 @@ struct IconographySectionView: View {
 
     // MARK: - Properties
 
-    let viewModel: IconographySectionViewModel
+    let viewModel: any IconographySectionViewModelable
 
     // MARK: - View
 
@@ -29,6 +29,6 @@ struct IconographySectionView: View {
 
 struct IconographySectionView_Previews: PreviewProvider {
     static var previews: some View {
-        IconographySectionView(viewModel: .init(name: "Name", itemViewModels: []))
+        IconographySectionView(viewModel: IconographySectionType.account.viewModel)
     }
 }

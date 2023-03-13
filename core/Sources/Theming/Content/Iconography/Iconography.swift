@@ -11,24 +11,24 @@ import SwiftUI
 public protocol Iconography {
     var account: IconographyAccount { get }
     var actions: IconographyActions { get }
+    var alert: IconographyAlert { get }
     var arrows: IconographyArrows { get }
     var calendar: IconographyCalendar { get }
-    var contact: IconographyContact { get }
     var categories: IconographyCategories { get }
+    var contact: IconographyContact { get }
+    var crm: IconographyCRM { get }
+    var delivery: IconographyDelivery { get }
     var flags: IconographyFlags { get }
     var images: IconographyImages { get }
-    var alert: IconographyAlert { get }
-    var security: IconographySecurity { get }
-    var delivery: IconographyDelivery { get }
     var map: IconographyMap { get }
-    var others: IconographyOthers { get }
     var notifications: IconographyNotifications { get }
     var options: IconographyOptions { get }
-    var transaction: IconographyTransaction { get }
-    var crm: IconographyCRM { get }
+    var others: IconographyOthers { get }
     var pro: IconographyPro { get }
+    var security: IconographySecurity { get }
     var share: IconographyShare { get }
     var toggle: IconographyToggle { get }
+    var transaction: IconographyTransaction { get }
     var user: IconographyUser { get }
 }
 

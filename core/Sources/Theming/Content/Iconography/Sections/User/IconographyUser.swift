@@ -13,8 +13,8 @@ public protocol IconographyUser {
     var security: IconographyFill & IconographyOutlined { get }
     var profile: IconographyFill & IconographyOutlined { get }
     var securityProfile: IconographyFill & IconographyOutlined { get }
-    var userCheck: IconographyFill & IconographyOutlined { get }
     var securityProfile2: IconographyFill & IconographyOutlined { get }
+    var userCheck: IconographyFill & IconographyOutlined { get }
     var account: IconographyFill & IconographyOutlined { get }
     var pro: IconographyFill & IconographyOutlined { get }
     var group: IconographyFill & IconographyOutlined { get }

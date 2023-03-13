@@ -14,69 +14,69 @@ public struct IconographyDefault: Iconography {
 
     public let account: IconographyAccount
     public let actions: IconographyActions
+    public let alert: IconographyAlert
     public let arrows: IconographyArrows
     public let calendar: IconographyCalendar
-    public let contact: IconographyContact
     public let categories: IconographyCategories
+    public let contact: IconographyContact
+    public let crm: IconographyCRM
+    public let delivery: IconographyDelivery
     public let flags: IconographyFlags
     public let images: IconographyImages
-    public let alert: IconographyAlert
-    public let security: IconographySecurity
-    public let delivery: IconographyDelivery
     public let map: IconographyMap
-    public let others: IconographyOthers
     public let notifications: IconographyNotifications
     public let options: IconographyOptions
-    public let transaction: IconographyTransaction
-    public let crm: IconographyCRM
+    public let others: IconographyOthers
     public let pro: IconographyPro
+    public let security: IconographySecurity
     public let share: IconographyShare
     public let toggle: IconographyToggle
+    public let transaction: IconographyTransaction
     public let user: IconographyUser
 
     // MARK: - Initialization
 
     public init(account: IconographyAccount,
                 actions: IconographyActions,
+                alert: IconographyAlert,
                 arrows: IconographyArrows,
                 calendar: IconographyCalendar,
-                contact: IconographyContact,
                 categories: IconographyCategories,
+                contact: IconographyContact,
+                crm: IconographyCRM,
+                delivery: IconographyDelivery,
                 flags: IconographyFlags,
                 images: IconographyImages,
-                alert: IconographyAlert,
-                security: IconographySecurity,
-                delivery: IconographyDelivery,
                 map: IconographyMap,
-                others: IconographyOthers,
                 notifications: IconographyNotifications,
                 options: IconographyOptions,
-                transaction: IconographyTransaction,
-                crm: IconographyCRM,
+                others: IconographyOthers,
                 pro: IconographyPro,
+                security: IconographySecurity,
                 share: IconographyShare,
                 toggle: IconographyToggle,
+                transaction: IconographyTransaction,
                 user: IconographyUser) {
         self.account = account
         self.actions = actions
+        self.alert = alert
         self.arrows = arrows
         self.calendar = calendar
-        self.contact = contact
         self.categories = categories
+        self.contact = contact
+        self.crm = crm
+        self.delivery = delivery
         self.flags = flags
         self.images = images
-        self.alert = alert
-        self.security = security
-        self.delivery = delivery
         self.map = map
-        self.others = others
         self.notifications = notifications
         self.options = options
-        self.transaction = transaction
-        self.crm = crm
+        self.others = others
         self.pro = pro
+        self.security = security
         self.share = share
         self.toggle = toggle
+        self.transaction = transaction
         self.user = user
     }
 }

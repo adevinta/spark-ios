@@ -16,7 +16,7 @@ struct IconographyView: View {
     // MARK: - View
     
     var body: some View {
-        List(self.viewModel.sectionViewModels, id: \.self) { sectionViewModel in
+        List(self.viewModel.sectionViewModels, id: \.name) { sectionViewModel in
             NavigationLink(sectionViewModel.name) {
                 IconographySectionView(viewModel: sectionViewModel)
             }
