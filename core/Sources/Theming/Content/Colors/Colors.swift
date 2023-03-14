@@ -48,5 +48,5 @@ public protocol ColorToken {
 
 public protocol ColorTokenValue {
     var uiColor: UIColor { get }
-    var swiftUIcolor: Color { get }
+    var swiftUIColor: Color { get }
 }

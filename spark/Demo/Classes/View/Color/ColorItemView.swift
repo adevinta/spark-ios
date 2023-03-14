@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SparkCore
+@testable import Spark
 
 struct ColorItemView: View {
     
@@ -37,10 +38,13 @@ struct ColorItemView: View {
 
 struct ColorItemView_Previews: PreviewProvider {
     static var previews: some View {
-        ColorItemView(viewModel: .init(name: "Name",
-                                       colorToken: ColorTokenDefault(enabled: ColorTokenValueDefault(uiColor: .blue, swiftUIcolor: .orange),
-                                                                     pressed: ColorTokenValueDefault(uiColor: .green, swiftUIcolor: .blue),
-                                                                     disabled: ColorTokenValueDefault(uiColor: .yellow, swiftUIcolor: .green),
-                                                                     on: ColorTokenValueDefault(uiColor: .purple, swiftUIcolor: .yellow))))
+        ColorItemView(viewModel: .init(
+            name: "Name",
+            colorToken: ColorTokenDefault(
+                enabled: ColorTokenValueCustom(uiColor: .blue, swiftUIColor: .orange),
+                pressed: ColorTokenValueCustom(uiColor: .green, swiftUIColor: .blue),
+                disabled: ColorTokenValueCustom(uiColor: .yellow, swiftUIColor: .green),
+                on: ColorTokenValueCustom(uiColor: .purple, swiftUIColor: .yellow))
+        ))
     }
 }

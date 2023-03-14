@@ -40,6 +40,6 @@ struct ColorItemStateViewModel: Hashable {
 
     init(name: String, colorValue: ColorTokenValue) {
         self.name = name
-        self.color = colorValue.swiftUIcolor
+        self.color = colorValue.swiftUIColor
     }
 }
