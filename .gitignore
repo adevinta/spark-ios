@@ -106,3 +106,4 @@ spark-ios-snapshots
 
 #plists
 *.plist
+!IDETemplateMacros.plist
