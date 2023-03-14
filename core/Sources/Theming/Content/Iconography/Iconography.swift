@@ -69,6 +69,6 @@ public protocol IconographyHorizontal {
 // MARK: - Image
 
 public protocol IconographyImage {
-    var uiImage: UIImage? { get }
+    var uiImage: UIImage { get }
     var swiftUIImage: Image { get }
 }

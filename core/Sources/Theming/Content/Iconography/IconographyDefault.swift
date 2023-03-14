@@ -194,10 +194,13 @@ public struct IconographyImageDefault: IconographyImage {
     // MARK: - Properties
 
     private let imageName: String
-    private let bundle: Bundle?
+    private let bundle: Bundle
 
-    public var uiImage: UIImage? {
-        return UIImage(named: self.imageName, in: self.bundle, with: nil)
+    public var uiImage: UIImage {
+        guard let uiImage = UIImage(named: self.imageName, in: self.bundle, with: nil) else {
+            fatalError("Missing image asset named \(self.imageName) in bundle \(self.bundle.bundleIdentifier ?? self.bundle.description)")
+        }
+        return uiImage
     }
     public var swiftUIImage: Image {
         return Image(self.imageName, bundle: self.bundle)
