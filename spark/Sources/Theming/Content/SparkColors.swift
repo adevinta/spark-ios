@@ -12,7 +12,7 @@ import SwiftUI
 // TODO:
 struct ColorTokenValueCustom: ColorTokenValue {
 
-    let uiColor: UIColor?
+    let uiColor: UIColor
     let swiftUIColor: Color
 
     init(uiColor: UIColor,

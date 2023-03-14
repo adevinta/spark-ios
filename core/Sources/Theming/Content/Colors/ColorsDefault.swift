@@ -113,8 +113,11 @@ public struct ColorTokenValueDefault: ColorTokenValue {
     private let colorName: String
     private let bundle: Bundle
 
-    public var uiColor: UIColor? {
-        return UIColor(named: self.colorName, in: self.bundle, compatibleWith: nil)
+    public var uiColor: UIColor {
+        guard let uiColor = UIColor(named: self.colorName, in: self.bundle, compatibleWith: nil) else {
+            fatalError("Missing color asset named \(self.colorName) in bundle \(self.bundle.bundleIdentifier ?? self.bundle.description)")
+        }
+        return uiColor
     }
     public var swiftUIColor: Color {
         return Color(self.colorName, bundle: self.bundle)
