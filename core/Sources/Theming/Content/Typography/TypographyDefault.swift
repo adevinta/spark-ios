@@ -77,14 +77,30 @@ public struct TypographyFontDefault: TypographyFont {
 
     // MARK: - Properties
 
-    public let font: UIFont
-    public let swiftUIFont: Font
+    private let fontName: String
+    private let fontSize: CGFloat
+    private let fontWeight: UIFont.Weight
+    private let fontTextStyle: Font.TextStyle
+
+    public var uiFont: UIFont {
+        return UIFont(name: self.fontName, size: self.fontSize) ?? .systemFont(ofSize: self.fontSize, weight: self.fontWeight)
+    }
+    
+    public var swiftUIFont: Font {
+        return Font.custom(self.fontName,
+                           size: self.fontSize,
+                           relativeTo: self.fontTextStyle)
+    }
 
     // MARK: - Initialization
 
-    public init(font: UIFont,
-                swiftUIFont: Font) {
-        self.font = font
-        self.swiftUIFont = swiftUIFont
+    public init(named fontName: String,
+                size: CGFloat,
+                weight: UIFont.Weight,
+                textStyle: Font.TextStyle) {
+        self.fontName = fontName
+        self.fontSize = size
+        self.fontWeight = weight
+        self.fontTextStyle = textStyle
     }
 }
