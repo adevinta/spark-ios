@@ -15,37 +15,23 @@ struct ColorItemView: View {
     // MARK: - Properties
     
     let viewModel: ColorItemViewModel
-    
+
     // MARK: - View
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        ZStack {
+            self.viewModel.color
+                .frame(height: 60)
+                .cornerRadius(10)
             Text(self.viewModel.name)
-            VStack(alignment: .leading, spacing: 8) {
-                ForEach(self.viewModel.states, id: \.self) { stateViewModel in
-                    Text(stateViewModel.name)
-                        .font(Font.caption2)
-                        .foregroundColor(.gray).contrast(-5)
-                        .padding(16)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(stateViewModel.color)
-                        .cornerRadius(8)
-                }
-            }
-            
+                .foregroundColor(.white).contrast(-10)
         }
     }
 }
 
 struct ColorItemView_Previews: PreviewProvider {
     static var previews: some View {
-        ColorItemView(viewModel: .init(
-            name: "Name",
-            colorToken: ColorTokenDefault(
-                enabled: ColorTokenValueCustom(uiColor: .blue, swiftUIColor: .orange),
-                pressed: ColorTokenValueCustom(uiColor: .green, swiftUIColor: .blue),
-                disabled: ColorTokenValueCustom(uiColor: .yellow, swiftUIColor: .green),
-                on: ColorTokenValueCustom(uiColor: .purple, swiftUIColor: .yellow))
-        ))
+        ColorItemView(viewModel: .init(name: "Title",
+                                            colorToken: ColorTokenDefault(named: "red", in: Bundle())))
     }
 }
