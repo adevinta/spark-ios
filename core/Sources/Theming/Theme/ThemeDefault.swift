@@ -15,7 +15,7 @@ public struct ThemeDefault: Theme {
     public let iconography: Iconography
     public let layout: Layout
     public let typography: Typography
-    public let dim: Dim
+    public let dims: Dims
 
     // MARK: - Initialization
 
@@ -24,12 +24,12 @@ public struct ThemeDefault: Theme {
                 iconography: Iconography,
                 layout: Layout,
                 typography: Typography,
-                dim: Dim) {
+                dims: Dims) {
         self.border = border
         self.colors = colors
         self.iconography = iconography
         self.layout = layout
         self.typography = typography
-        self.dim = dim
+        self.dims = dims
     }
 }

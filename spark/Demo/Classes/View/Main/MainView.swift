@@ -31,8 +31,8 @@ struct MainView: View {
                 NavigationLink("Typography") {
                     TypographyView()
                 }
-                NavigationLink("Dim") {
-                    DimView()
+                NavigationLink("Dims") {
+                    DimsView()
                 }
             }
             .navigationBarTitle(Text("Spark"))

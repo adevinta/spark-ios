@@ -14,5 +14,5 @@ public protocol Theme {
     var iconography: Iconography { get }
     var layout: Layout { get }
     var typography: Typography { get }
-    var dim: Dim { get }
+    var dims: Dims { get }
 }

@@ -1,5 +1,5 @@
 //
-//  Dim.swift
+//  Dims.swift
 //  Spark
 //
 //  Created by louis.borlee on 22/03/2023.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol Dim {
+public protocol Dims {
     var dim1: CGFloat { get }
     var dim2: CGFloat { get }
     var dim3: CGFloat { get }

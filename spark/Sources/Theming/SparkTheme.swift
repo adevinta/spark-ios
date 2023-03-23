@@ -18,7 +18,7 @@ struct SparkTheme: Theme {
     let iconography: Iconography = SparkIconography()
     let layout: Layout = SparkLayout()
     let typography: Typography = SparkTypography()
-    let dim: Dim = DimDefault(dim1: 0.72,
+    let dims: Dims = DimsDefault(dim1: 0.72,
                               dim2: 0.56,
                               dim3: 0.40,
                               dim4: 0.16,

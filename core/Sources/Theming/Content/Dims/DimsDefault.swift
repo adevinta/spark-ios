@@ -1,5 +1,5 @@
 //
-//  DimDefault.swift
+//  DimsDefault.swift
 //  Spark
 //
 //  Created by louis.borlee on 22/03/2023.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct DimDefault: Dim {
+public struct DimsDefault: Dims {
 
     // MARK: - Properties
 
