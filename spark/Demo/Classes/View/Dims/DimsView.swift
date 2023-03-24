@@ -18,7 +18,7 @@ struct DimsView: View {
 
     var body: some View {
         List(self.viewModel.dimItemViewModels, id: \.self) {
-            DimsItemView(viewModel: $0)
+            DimItemView(viewModel: $0)
         }
         .navigationBarTitle(Text("Dims"))
     }

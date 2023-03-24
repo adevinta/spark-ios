@@ -17,11 +17,9 @@ struct ColorView: View {
     // MARK: - View
     
     var body: some View {
-        List(self.viewModel.itemViewModels, id: \.self) { itemViewModels in
-            Section {
-                ForEach(itemViewModels, id: \.self) { itemViewModel in
-                    ColorItemView(viewModel: itemViewModel)
-                }
+        List(self.viewModel.sectionViewModels, id: \.name) { sectionViewModel in
+            NavigationLink(sectionViewModel.name) {
+                ColorSectionView(viewModel: sectionViewModel)
             }
         }
         .navigationBarTitle(Text("Color"))

@@ -12,7 +12,7 @@ struct DimsViewModel {
 
     // MARK: - Properties
 
-    let dimItemViewModels: [DimsItemViewModel]
+    let dimItemViewModels: [DimItemViewModel]
 
     // MARK: - Initialization
 
