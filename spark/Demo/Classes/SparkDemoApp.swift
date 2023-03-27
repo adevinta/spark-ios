@@ -18,10 +18,6 @@ struct SparkDemoApp: App {
     init() {
         // Configuration
         SparkConfiguration.load()
-
-        // Set themes
-        CurrentTheme.part = SparkCurrentTheme.theme
-        CurrentTheme.pro = SparkCurrentTheme.theme
     }
 
     // MARK: - Scene

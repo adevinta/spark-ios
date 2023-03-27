@@ -9,17 +9,19 @@
 import SparkCore
 import Foundation
 
-struct SparkTheme: Theme {
+public struct SparkTheme: Theme {
 
     // MARK: - Properties
 
-    let border: Border = SparkBorder()
-    let colors: Colors = SparkColors()
-    let layout: Layout = SparkLayout()
-    let typography: Typography = SparkTypography()
-    let dims: Dims = DimsDefault(dim1: 0.72,
-                              dim2: 0.56,
-                              dim3: 0.40,
-                              dim4: 0.16,
-                              dim5: 0.08)
+    public static let shared = Self()
+
+    public let border: Border = SparkBorder()
+    public let colors: Colors = SparkColors()
+    public let layout: Layout = SparkLayout()
+    public let typography: Typography = SparkTypography()
+    public let dims: Dims = DimsDefault(dim1: 0.72,
+                                        dim2: 0.56,
+                                        dim3: 0.40,
+                                        dim4: 0.16,
+                                        dim5: 0.08)
 }

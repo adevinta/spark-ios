@@ -5,7 +5,7 @@
 //  Created by robin.lemaire on 13/03/2023.
 //
 
-import SparkCore
+import Spark
 
 enum ColorSectionType: CaseIterable {
     case primary
@@ -17,7 +17,7 @@ enum ColorSectionType: CaseIterable {
     // MARK: - Properties
 
     var viewModel: any ColorSectionViewModelable {
-        let colors = CurrentTheme.part.colors
+        let colors = SparkTheme.shared.colors
         switch self {
         case .primary:
             return ColorSectionPrimaryViewModel(color: colors.primary)

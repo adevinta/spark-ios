@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SparkCore
+import Spark
 
 struct TypographyViewModel {
 
@@ -17,7 +17,7 @@ struct TypographyViewModel {
     // MARK: - Initialization
 
     init() {
-        let typographies = CurrentTheme.part.typography
+        let typographies = SparkTheme.shared.typography
         self.itemViewModels = [
             [
                 .init(name: "display1", typographyFont: typographies.display1),

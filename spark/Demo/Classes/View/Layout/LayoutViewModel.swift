@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SparkCore
+import Spark
 
 struct LayoutViewModel {
 
@@ -17,7 +17,7 @@ struct LayoutViewModel {
     // MARK: - Initialization
 
     init() {
-        let layout = CurrentTheme.part.layout
+        let layout = SparkTheme.shared.layout
 
         self.spacingItemViewModels = [
             .init(name: "none", value: layout.spacing.none),
