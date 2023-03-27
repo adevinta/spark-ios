@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SparkCore
+import Spark
 
 struct BorderViewModel {
 
@@ -17,7 +17,7 @@ struct BorderViewModel {
     // MARK: - Initialization
 
     init() {
-        let border = CurrentTheme.part.border
+        let border = SparkTheme.shared.border
         self.sectionViewModels = [
             .init(name: "none width",
                   itemViewModels: [

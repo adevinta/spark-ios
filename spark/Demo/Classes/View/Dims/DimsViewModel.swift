@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SparkCore
+import Spark
 
 struct DimsViewModel {
 
@@ -17,7 +17,7 @@ struct DimsViewModel {
     // MARK: - Initialization
 
     init() {
-        let dims = CurrentTheme.part.dims
+        let dims = SparkTheme.shared.dims
 
         self.dimItemViewModels = [
             .init(name: "dim1", value: dims.dim1),
