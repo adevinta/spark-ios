@@ -20,10 +20,6 @@ struct MainView: View {
                     ColorView()
                 }
 
-                NavigationLink("Iconography") {
-                    IconographyView()
-                }
-
                 NavigationLink("Layout") {
                     LayoutView()
                 }
