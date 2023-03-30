@@ -9,7 +9,7 @@
 import SwiftUI
 
 public extension View {
-    func shadow(_ shadow: ElevationShadow) -> any View {
+    func shadow(_ shadow: ElevationShadow) -> some View {
         return self.shadow(color: shadow.color.swiftUIColor.opacity(Double(shadow.opacity)),
                            radius: shadow.blur,
                            x: shadow.offset.x,
