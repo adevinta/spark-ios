@@ -17,6 +17,7 @@ public struct SparkTheme: Theme {
 
     public let border: Border = SparkBorder()
     public let colors: Colors = SparkColors()
+    public let elevation: Elevation = SparkElevation()
     public let layout: Layout = SparkLayout()
     public let typography: Typography = SparkTypography()
     public let dims: Dims = DimsDefault(dim1: 0.72,

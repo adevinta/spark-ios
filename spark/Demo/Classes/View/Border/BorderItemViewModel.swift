@@ -7,23 +7,27 @@
 //
 
 import SwiftUI
+import SparkCore
 
 struct BorderItemViewModel: Hashable {
 
     // MARK: - Properties
 
+    let contentHeight: CGFloat
     let name: String
     let description: String
-    let width: CGFloat
-    let radius: CGFloat
+    let width: BorderWidthValue
+    let radius: BorderRadiusValue
 
     // MARK: - Initialization
 
     init(name: String,
          width: CGFloat,
          radius: CGFloat) {
+        self.contentHeight = radius.isFinite && !radius.isZero ? radius * 4 : 50
         self.name = name + " radius"
-        self.description = "width: \(Int(width))px - radius: \(Int(radius))px"
+        let radiusValueDescription = radius.isFinite ? "\(Int(radius))px" : "half"
+        self.description = "width: \(Int(width))px - radius: \(radiusValueDescription)"
         self.width = width
         self.radius = radius
     }

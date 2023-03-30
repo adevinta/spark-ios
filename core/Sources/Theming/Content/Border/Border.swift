@@ -8,6 +8,9 @@
 
 import Foundation
 
+public typealias BorderWidthValue = CGFloat
+public typealias BorderRadiusValue = CGFloat
+
 public protocol Border {
     var width: BorderWidth { get }
     var radius: BorderRadius { get }
@@ -16,25 +19,27 @@ public protocol Border {
 // MARK: - Width
 
 public protocol BorderWidth {
-    var none: CGFloat { get }
-    var small: CGFloat { get }
-    var medium: CGFloat { get }
+    var none: BorderWidthValue { get }
+    var small: BorderWidthValue { get }
+    var medium: BorderWidthValue { get }
 }
 
 public extension BorderWidth {
-    var none: CGFloat { 0 }
+    var none: BorderWidthValue { 0 }
 }
 
 // MARK: - Radius
 
 public protocol BorderRadius {
-    var none: CGFloat { get }
-    var small: CGFloat { get }
-    var medium: CGFloat { get }
-    var large: CGFloat { get }
-    var xLarge: CGFloat { get }
+    var none: BorderRadiusValue { get }
+    var small: BorderRadiusValue { get }
+    var medium: BorderRadiusValue { get }
+    var large: BorderRadiusValue { get }
+    var xLarge: BorderRadiusValue { get }
+    var full: BorderRadiusValue { get }
 }
 
 public extension BorderRadius {
-    var none: CGFloat { 0 }
+    var none: BorderRadiusValue { 0 }
+    var full: BorderRadiusValue { .infinity }
 }

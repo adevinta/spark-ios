@@ -20,6 +20,10 @@ struct MainView: View {
                     ColorView()
                 }
 
+                NavigationLink("Elevation") {
+                    ElevationView()
+                }
+
                 NavigationLink("Layout") {
                     LayoutView()
                 }
