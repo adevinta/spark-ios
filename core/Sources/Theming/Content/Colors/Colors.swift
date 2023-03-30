@@ -25,3 +25,14 @@ public protocol ColorToken {
     var uiColor: UIColor { get }
     var swiftUIColor: Color { get }
 }
+
+public extension ColorToken {
+    static var clear: ColorToken {
+        return ColorTokenClear()
+    }
+}
+
+fileprivate struct ColorTokenClear: ColorToken {
+    var uiColor: UIColor { .clear }
+    var swiftUIColor: Color { .clear }
+}
