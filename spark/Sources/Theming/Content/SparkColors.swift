@@ -132,7 +132,7 @@ struct SparkColorToken: ColorToken {
     // MARK: - Properties
 
     let uiColor: UIColor
-    let swiftUIColor: Color
+    let color: Color
 
     // MARK: - Initialization
 
@@ -143,6 +143,6 @@ struct SparkColorToken: ColorToken {
                             alpha: 1.0)
 
         self.uiColor = color
-        self.swiftUIColor = Color(color)
+        self.color = Color(color)
     }
 }

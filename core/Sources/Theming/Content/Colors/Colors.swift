@@ -23,7 +23,7 @@ public protocol Colors {
 
 public protocol ColorToken {
     var uiColor: UIColor { get }
-    var swiftUIColor: Color { get }
+    var color: Color { get }
 }
 
 public extension ColorToken {
@@ -34,5 +34,5 @@ public extension ColorToken {
 
 fileprivate struct ColorTokenClear: ColorToken {
     var uiColor: UIColor { .clear }
-    var swiftUIColor: Color { .clear }
+    var color: Color { .clear }
 }
