@@ -10,33 +10,33 @@ import UIKit
 import SwiftUI
 
 public protocol Typography {
-    var display1: TypographyFont { get }
-    var display2: TypographyFont { get }
-    var display3: TypographyFont { get }
+    var display1: TypographyFontToken { get }
+    var display2: TypographyFontToken { get }
+    var display3: TypographyFontToken { get }
 
-    var headline1: TypographyFont { get }
-    var headline2: TypographyFont { get }
+    var headline1: TypographyFontToken { get }
+    var headline2: TypographyFontToken { get }
 
-    var subhead: TypographyFont { get }
+    var subhead: TypographyFontToken { get }
 
-    var body1: TypographyFont { get }
-    var body1Highlight: TypographyFont { get }
+    var body1: TypographyFontToken { get }
+    var body1Highlight: TypographyFontToken { get }
 
-    var body2: TypographyFont { get }
-    var body2Highlight: TypographyFont { get }
+    var body2: TypographyFontToken { get }
+    var body2Highlight: TypographyFontToken { get }
 
-    var caption: TypographyFont { get }
-    var captionHighlight: TypographyFont { get }
+    var caption: TypographyFontToken { get }
+    var captionHighlight: TypographyFontToken { get }
 
-    var small: TypographyFont { get }
-    var smallHighlight: TypographyFont { get }
+    var small: TypographyFontToken { get }
+    var smallHighlight: TypographyFontToken { get }
 
-    var callout: TypographyFont { get }
+    var callout: TypographyFontToken { get }
 }
 
 // MARK: - Font
 
-public protocol TypographyFont {
+public protocol TypographyFontToken {
     var uiFont: UIFont { get }
-    var swiftUIFont: Font { get }
+    var font: Font { get }
 }
