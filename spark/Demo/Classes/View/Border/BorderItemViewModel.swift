@@ -16,8 +16,8 @@ struct BorderItemViewModel: Hashable {
     let contentHeight: CGFloat
     let name: String
     let description: String
-    let width: BorderWidthValue
-    let radius: BorderRadiusValue
+    let width: CGFloat
+    let radius: CGFloat
 
     // MARK: - Initialization
 

@@ -10,8 +10,8 @@ import SwiftUI
 
 public extension View {
 
-    func border(width: BorderWidthValue,
-                radius: BorderRadiusValue,
+    func border(width: CGFloat,
+                radius: CGFloat,
                 color: ColorToken) -> some View {
         self.modifier(BorderViewModifier(width: width,
                                          radius: radius,
