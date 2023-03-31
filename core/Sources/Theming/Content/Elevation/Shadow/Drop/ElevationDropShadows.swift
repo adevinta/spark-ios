@@ -18,7 +18,7 @@ public extension ElevationDropShadows {
     var none: ElevationShadow {
         ElevationShadowDefault(offset: .zero,
                                blur: 0,
-                               color: ColorTokenDefault.clear,
+                               colorToken: ColorTokenDefault.clear,
                                opacity: 0)
     }
 }

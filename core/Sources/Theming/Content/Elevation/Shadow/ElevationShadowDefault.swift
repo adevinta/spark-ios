@@ -14,18 +14,18 @@ public struct ElevationShadowDefault: ElevationShadow {
 
     public let offset: CGPoint
     public let blur: CGFloat
-    public let color: ColorToken
+    public let colorToken: ColorToken
     public let opacity: Float
 
     // MARK: - Init
 
     public init(offset: CGPoint,
                 blur: CGFloat,
-                color: ColorToken,
+                colorToken: ColorToken,
                 opacity: Float) {
         self.offset = offset
         self.blur = blur
-        self.color = color
+        self.colorToken = colorToken
         self.opacity = opacity
     }
 }
