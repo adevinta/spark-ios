@@ -13,46 +13,46 @@ public struct TypographyDefault: Typography {
 
     // MARK: - Properties
 
-    public let display1: TypographyFont
-    public let display2: TypographyFont
-    public let display3: TypographyFont
+    public let display1: TypographyFontToken
+    public let display2: TypographyFontToken
+    public let display3: TypographyFontToken
 
-    public let headline1: TypographyFont
-    public let headline2: TypographyFont
+    public let headline1: TypographyFontToken
+    public let headline2: TypographyFontToken
 
-    public let subhead: TypographyFont
+    public let subhead: TypographyFontToken
 
-    public let body1: TypographyFont
-    public let body1Highlight: TypographyFont
+    public let body1: TypographyFontToken
+    public let body1Highlight: TypographyFontToken
 
-    public let body2: TypographyFont
-    public let body2Highlight: TypographyFont
+    public let body2: TypographyFontToken
+    public let body2Highlight: TypographyFontToken
 
-    public let caption: TypographyFont
-    public let captionHighlight: TypographyFont
+    public let caption: TypographyFontToken
+    public let captionHighlight: TypographyFontToken
 
-    public let small: TypographyFont
-    public let smallHighlight: TypographyFont
+    public let small: TypographyFontToken
+    public let smallHighlight: TypographyFontToken
 
-    public let callout: TypographyFont
+    public let callout: TypographyFontToken
 
     // MARK: - Initialization
 
-    public init(display1: TypographyFont,
-                display2: TypographyFont,
-                display3: TypographyFont,
-                headline1: TypographyFont,
-                headline2: TypographyFont,
-                subhead: TypographyFont,
-                body1: TypographyFont,
-                body1Highlight: TypographyFont,
-                body2: TypographyFont,
-                body2Highlight: TypographyFont,
-                caption: TypographyFont,
-                captionHighlight: TypographyFont,
-                small: TypographyFont,
-                smallHighlight: TypographyFont,
-                callout: TypographyFont) {
+    public init(display1: TypographyFontToken,
+                display2: TypographyFontToken,
+                display3: TypographyFontToken,
+                headline1: TypographyFontToken,
+                headline2: TypographyFontToken,
+                subhead: TypographyFontToken,
+                body1: TypographyFontToken,
+                body1Highlight: TypographyFontToken,
+                body2: TypographyFontToken,
+                body2Highlight: TypographyFontToken,
+                caption: TypographyFontToken,
+                captionHighlight: TypographyFontToken,
+                small: TypographyFontToken,
+                smallHighlight: TypographyFontToken,
+                callout: TypographyFontToken) {
         self.display1 = display1
         self.display2 = display2
         self.display3 = display3
@@ -73,7 +73,7 @@ public struct TypographyDefault: Typography {
 
 // MARK: - Font
 
-public struct TypographyFontDefault: TypographyFont {
+public struct TypographyFontTokenDefault: TypographyFontToken {
 
     // MARK: - Properties
 
@@ -86,7 +86,7 @@ public struct TypographyFontDefault: TypographyFont {
         return UIFont(name: self.fontName, size: self.fontSize) ?? .systemFont(ofSize: self.fontSize, weight: self.fontWeight)
     }
     
-    public var swiftUIFont: Font {
+    public var font: Font {
         return Font.custom(self.fontName,
                            size: self.fontSize,
                            relativeTo: self.fontTextStyle)

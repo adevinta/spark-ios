@@ -20,33 +20,33 @@ struct TypographyViewModel {
         let typographies = SparkTheme.shared.typography
         self.itemViewModels = [
             [
-                .init(name: "display1", typographyFont: typographies.display1),
-                .init(name: "display2", typographyFont: typographies.display2),
-                .init(name: "display3", typographyFont: typographies.display3)
+                .init(name: "display1", token: typographies.display1),
+                .init(name: "display2", token: typographies.display2),
+                .init(name: "display3", token: typographies.display3)
             ],
             [
-                .init(name: "headline1", typographyFont: typographies.headline1),
-                .init(name: "headline2", typographyFont: typographies.headline2)
+                .init(name: "headline1", token: typographies.headline1),
+                .init(name: "headline2", token: typographies.headline2)
             ],
             [
-                .init(name: "subhead", typographyFont: typographies.subhead)
+                .init(name: "subhead", token: typographies.subhead)
             ],
             [
-                .init(name: "body1", typographyFont: typographies.body1),
-                .init(name: "body1Highlight", typographyFont: typographies.body1Highlight),
-                .init(name: "body2", typographyFont: typographies.body2),
-                .init(name: "body2Highlight", typographyFont: typographies.body2Highlight)
+                .init(name: "body1", token: typographies.body1),
+                .init(name: "body1Highlight", token: typographies.body1Highlight),
+                .init(name: "body2", token: typographies.body2),
+                .init(name: "body2Highlight", token: typographies.body2Highlight)
             ],
             [
-                .init(name: "caption", typographyFont: typographies.caption),
-                .init(name: "captionHighlight", typographyFont: typographies.captionHighlight)
+                .init(name: "caption", token: typographies.caption),
+                .init(name: "captionHighlight", token: typographies.captionHighlight)
             ],
             [
-                .init(name: "small", typographyFont: typographies.small),
-                .init(name: "smallHighlight", typographyFont: typographies.smallHighlight)
+                .init(name: "small", token: typographies.small),
+                .init(name: "smallHighlight", token: typographies.smallHighlight)
             ],
             [
-                .init(name: "callout", typographyFont: typographies.callout)
+                .init(name: "callout", token: typographies.callout)
             ]
         ]
     }
