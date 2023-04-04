@@ -11,6 +11,7 @@ import Foundation
 public protocol Theme {
     var border: Border { get }
     var colors: Colors { get }
+    var elevation: Elevation { get }
     var layout: Layout { get }
     var typography: Typography { get }
     var dims: Dims { get }

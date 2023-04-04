@@ -12,6 +12,7 @@ public struct ThemeDefault: Theme {
 
     public let border: Border
     public let colors: Colors
+    public let elevation: Elevation
     public let layout: Layout
     public let typography: Typography
     public let dims: Dims
@@ -20,11 +21,13 @@ public struct ThemeDefault: Theme {
 
     public init(border: Border,
                 colors: Colors,
+                elevation: Elevation,
                 layout: Layout,
                 typography: Typography,
                 dims: Dims) {
         self.border = border
         self.colors = colors
+        self.elevation = elevation
         self.layout = layout
         self.typography = typography
         self.dims = dims
