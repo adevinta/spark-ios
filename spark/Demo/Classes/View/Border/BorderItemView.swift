@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Spark
 
 struct BorderItemView: View {
 
@@ -25,12 +26,10 @@ struct BorderItemView: View {
                 .foregroundColor(.gray)
 
             Color.gray
-                .cornerRadius(self.viewModel.radius)
-                .frame(width: 200, height: 50)
-                .overlay(
-                    RoundedRectangle(cornerRadius: self.viewModel.radius)
-                        .stroke(Color.black, lineWidth: self.viewModel.width)
-                )
+                .frame(width: 200, height: self.viewModel.contentHeight)
+                .border(width: self.viewModel.width,
+                        radius: self.viewModel.radius,
+                        color: SparkTheme.shared.colors.base.surfaceInverse)
         }
     }
 }
