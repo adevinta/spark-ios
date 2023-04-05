@@ -34,6 +34,10 @@ struct MainView: View {
                 NavigationLink("Dims") {
                     DimsView()
                 }
+
+                NavigationLink("Checkbox") {
+                    CheckboxView()
+                }
             }
             .navigationBarTitle(Text("Spark"))
         }

@@ -54,6 +54,7 @@ public struct SparkTagView: View {
         self.iconImage = iconImage
         self.text = text
         self.colorsUseCase = colorsUseCase
+        self.colors = colorsUseCase.execute(from: theming)
     }
 
     // MARK: - View
