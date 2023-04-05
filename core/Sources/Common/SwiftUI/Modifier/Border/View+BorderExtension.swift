@@ -12,7 +12,7 @@ public extension View {
 
     func border(width: CGFloat,
                 radius: CGFloat,
-                colorToken: ColorToken) -> some View {
+                colorToken: ColorToken?) -> some View {
         self.modifier(BorderViewModifier(width: width,
                                          radius: radius,
                                          colorToken: colorToken))
