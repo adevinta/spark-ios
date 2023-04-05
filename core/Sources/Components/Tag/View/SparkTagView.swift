@@ -8,10 +8,7 @@
 
 import SwiftUI
 
-
-
 // TODO: add documentation for all public struct/properties/func...
-
 public struct SparkTagView: View {
 
     // MARK: - Type Alias
@@ -22,18 +19,26 @@ public struct SparkTagView: View {
 
     public var theming: SparkTagTheming {
         didSet {
-            self.colors = colorsUseCase.execute(from: self.theming)
+            self._colors = self.getColorsFromUseCase()
         }
     }
-    public var iconImage: Image?
     public var text: String
+    public var iconImage: Image?
 
     public var accessibilityIdentifier: String?
     public var accessibilityLabel: String?
 
     // MARK: - Private Properties
 
-    private var colors: SparkTagColorables
+    private var spacing: LayoutSpacing {
+        return self.theming.theme.layout.spacing
+    }
+
+    private var _colors: SparkTagColorables?
+    private var colors: SparkTagColorables {
+        return self._colors ?? self.getColorsFromUseCase()
+    }
+
     private let colorsUseCase: SparkTagColorsUseCaseable
 
     // MARK: - Initialization
@@ -43,6 +48,7 @@ public struct SparkTagView: View {
                 iconImage: Image? = nil) {
         self.init(theming: theming,
                   text: text,
+                  iconImage: iconImage,
                   colorsUseCase: SparkTagColorsUseCase())
     }
 
@@ -59,74 +65,36 @@ public struct SparkTagView: View {
     // MARK: - View
 
     public var body: some View {
-        HStack(spacing: self.theming.theme.layout.spacing.small) {
+        HStack(spacing: self.spacing.small) {
             // Optional icon image
             self.iconImage?
-                .foregroundColor(self.colors.foregroundColor.swiftUIColor)
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(self.colors.foregroundColor.color)
                 .accessibilityIdentifier(AccessibilityIdentifier.iconImage)
 
             // Text
             Text(self.text)
-                .font(self.theming.theme.typography.captionHighlight.swiftUIFont)
-                .foregroundColor(self.colors.foregroundColor.swiftUIColor)
+                .font(self.theming.theme.typography.captionHighlight.font)
+                .truncationMode(.tail)
+                .foregroundColor(self.colors.foregroundColor.color)
                 .accessibilityIdentifier(AccessibilityIdentifier.text)
         }
+        .frame(height: 10)
+        .padding(.init(vertical: 0, horizontal: self.spacing.medium))
         .frame(height: 20)
+        .background(self.colors.backgroundColor.color)
+        .border(width: self.theming.theme.border.width.small,
+                radius: self.theming.theme.border.radius.full,
+                colorToken: self.colors.borderColor)
         .accessibility(identifier: self.accessibilityIdentifier,
                        label: self.accessibilityLabel,
                        text: self.text)
     }
-}
 
+    // MARK: - Getter
 
-
-
-
-
-
-// TODO: déplacer
-// TODO: essayer que ça se modifie bien à la volé
-
-public extension View {
-
-    func accessibility(identifier: String?,
-                       label: String?,
-                       text: String?) -> some View {
-        self.modifier(AccessibilityViewModifier(identifier: identifier,
-                                                label: label ?? text))
+    private func getColorsFromUseCase() -> SparkTagColorables {
+        return self.colorsUseCase.execute(from: self.theming)
     }
 }
-
-struct AccessibilityViewModifier: ViewModifier {
-
-    // MARK: - Properties
-
-    let identifier: String?
-    let label: String?
-
-    // MARK: - Initialization
-
-    init(identifier: String?,
-         label: String?) {
-        self.identifier = identifier
-        self.label = label
-    }
-
-    // MARK: - View
-
-    func body(content: Content) -> some View {
-        if let identifier = self.identifier {
-            content.accessibilityIdentifier(identifier)
-        }
-        if let label = self.label {
-            content.accessibilityLabel(label)
-        }
-    }
-}
-
-// TODO: déplacer
-// TODO: essayer que ça se modifie bien à la volé
-
-
-
-
