@@ -26,10 +26,10 @@ struct BorderItemView: View {
                 .foregroundColor(.gray)
 
             Color.gray
-                .frame(width: 200, height: self.viewModel.contentHeight)
+                .frame(height: self.viewModel.contentHeight)
                 .border(width: self.viewModel.width,
                         radius: self.viewModel.radius,
-                        color: SparkTheme.shared.colors.base.surfaceInverse)
+                        colorToken: SparkTheme.shared.colors.base.surfaceInverse)
         }
     }
 }
