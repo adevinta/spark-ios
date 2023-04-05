@@ -55,7 +55,7 @@ public struct SparkCheckboxView: View {
     }
 
     @ViewBuilder private var checkboxView: some View {
-        let tintColor = colors.checkboxTintColor.swiftUIColor
+        let tintColor = colors.checkboxTintColor.color
         switch viewModel.selectionState {
         case .selected:
             RoundedRectangle(cornerRadius: 5)
@@ -75,8 +75,8 @@ public struct SparkCheckboxView: View {
     public var body: some View {
         HStack {
             Text(viewModel.text)
-                .font(self.theming.theme.typography.body1.swiftUIFont)
-                .foregroundColor(self.colors.textColor.swiftUIColor)
+                .font(self.theming.theme.typography.body1.font)
+                .foregroundColor(self.colors.textColor.color)
                 .accessibilityIdentifier(AccessibilityIdentifier.text)
 
             Spacer()

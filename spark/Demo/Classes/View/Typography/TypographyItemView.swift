@@ -32,9 +32,9 @@ struct TypographyItemView: View {
 struct TypographyItemView_Previews: PreviewProvider {
     static var previews: some View {
         TypographyItemView(viewModel: .init(name: "Title",
-                                            typographyFont: TypographyFontDefault(named: "Roboto",
-                                                                                  size: 12,
-                                                                                  weight: .regular,
-                                                                                  textStyle: .body)))
+                                            token: TypographyFontTokenDefault(named: "Roboto",
+                                                                              size: 12,
+                                                                              weight: .regular,
+                                                                              textStyle: .body)))
     }
 }

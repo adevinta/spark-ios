@@ -63,13 +63,13 @@ public struct SparkTagView: View {
         HStack(spacing: self.theming.theme.layout.spacing.small) {
             // Optional icon image
             self.iconImage?
-                .foregroundColor(self.colors.foregroundColor.swiftUIColor)
+                .foregroundColor(self.colors.foregroundColor.color)
                 .accessibilityIdentifier(AccessibilityIdentifier.iconImage)
 
             // Text
             Text(self.text)
-                .font(self.theming.theme.typography.captionHighlight.swiftUIFont)
-                .foregroundColor(self.colors.foregroundColor.swiftUIColor)
+                .font(self.theming.theme.typography.captionHighlight.font)
+                .foregroundColor(self.colors.foregroundColor.color)
                 .accessibilityIdentifier(AccessibilityIdentifier.text)
         }
         .frame(height: 20)

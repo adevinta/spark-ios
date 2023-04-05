@@ -49,7 +49,7 @@ public struct ColorTokenDefault: ColorToken {
         }
         return uiColor
     }
-    public var swiftUIColor: Color {
+    public var color: Color {
         return Color(self.colorName, bundle: self.bundle)
     }
 
