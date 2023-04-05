@@ -33,8 +33,10 @@ public protocol BorderRadius {
     var medium: CGFloat { get }
     var large: CGFloat { get }
     var xLarge: CGFloat { get }
+    var full: CGFloat { get }
 }
 
 public extension BorderRadius {
     var none: CGFloat { 0 }
+    var full: CGFloat { .infinity }
 }
