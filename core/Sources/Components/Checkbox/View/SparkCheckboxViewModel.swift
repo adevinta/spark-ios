@@ -8,15 +8,44 @@
 
 import Foundation
 
-public final class SparkCheckboxViewModel: ObservableObject {
+final class SparkCheckboxViewModel: ObservableObject {
     public var text: String
-    @Published public var selectionState: SparkCheckboxSelectionState
 
-    public init(
+    @Published public var theming: SparkCheckboxTheming
+    @Published public var state: SparkCheckboxState
+
+    @Published private(set) var colors: SparkCheckboxColorables
+    private let colorsUseCase: SparkCheckboxColorsUseCaseable
+
+    init(
         text: String,
-        selectionState: SparkCheckboxSelectionState
+        theming: SparkCheckboxTheming,
+        colorsUseCase: SparkCheckboxColorsUseCaseable = SparkCheckboxColorsUseCase(),
+        state: SparkCheckboxState = .enabled
     ) {
         self.text = text
-        self.selectionState = selectionState
+        self.theming = theming
+        self.state = state
+
+        self.colorsUseCase = colorsUseCase
+        self.colors = colorsUseCase.execute(from: theming, state: state)
+    }
+
+    var interactionEnabled: Bool {
+        switch state {
+        case .disabled:
+            return false
+        default:
+            return true
+        }
+    }
+
+    var opacity: CGFloat {
+        switch state {
+        case .disabled:
+            return theming.theme.dims.dim3
+        default:
+            return 1.0
+        }
     }
 }

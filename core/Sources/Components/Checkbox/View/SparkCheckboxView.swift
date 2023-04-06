@@ -17,83 +17,110 @@ public struct SparkCheckboxView: View {
     // MARK: - Public Properties
 
     public var theming: SparkCheckboxTheming {
-        didSet {
-            self.colors = colorsUseCase.execute(from: self.theming)
-        }
+        viewModel.theming
     }
-    public var iconImage: Image?
+    var colors: SparkCheckboxColorables {
+        viewModel.colors
+    }
 
     public var accessibilityIdentifier: String?
     public var accessibilityLabel: String?
 
-    // MARK: - Private Properties
+    @Binding public var selectionState: SparkCheckboxSelectionState
 
-    private var colors: SparkCheckboxColorables
-    private let colorsUseCase: SparkCheckboxColorsUseCaseable
+    // MARK: - Private Properties
 
     @ObservedObject var viewModel: SparkCheckboxViewModel
 
     // MARK: - Initialization
 
-    public init(theming: SparkCheckboxTheming,
-                iconImage: Image? = nil,
-                viewModel: SparkCheckboxViewModel) {
-        self.init(theming: theming,
-                  colorsUseCase: SparkCheckboxColorsUseCase(),
-                  viewModel: viewModel)
+    init(
+        text: String,
+        theming: SparkCheckboxTheming,
+        colorsUseCase: SparkCheckboxColorsUseCaseable = SparkCheckboxColorsUseCase(),
+        state: SparkCheckboxState = .enabled,
+        selectionState: Binding<SparkCheckboxSelectionState>
+    ) {
+        self._selectionState = selectionState
+        self.viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
     }
 
-    init(theming: SparkCheckboxTheming,
-         iconImage: Image? = nil,
-         colorsUseCase: SparkCheckboxColorsUseCaseable,
-         viewModel: SparkCheckboxViewModel) {
-        self.theming = theming
-        self.iconImage = iconImage
-        self.colorsUseCase = colorsUseCase
-        self.colors = colorsUseCase.execute(from: theming)
-        self.viewModel = viewModel
+    public init(
+        text: String,
+        theming: SparkCheckboxTheming,
+        state: SparkCheckboxState = .enabled,
+        selectionState: Binding<SparkCheckboxSelectionState>
+    ) {
+        self.init(
+            text: text,
+            theming: theming,
+            colorsUseCase: SparkCheckboxColorsUseCase(),
+            state: state,
+            selectionState: selectionState
+        )
     }
 
     @ViewBuilder private var checkboxView: some View {
         let tintColor = colors.checkboxTintColor.color
-        switch viewModel.selectionState {
+        let iconColor = colors.checkboxIconColor.color
+        switch selectionState {
         case .selected:
-            RoundedRectangle(cornerRadius: 5)
-                .fill(tintColor)
-                .frame(width: 15, height: 15)
+            ZStack {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(tintColor)
+                    .frame(width: 20, height: 20)
+
+                Image(systemName: "globe")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(iconColor)
+                    .frame(width: 14, height: 14)
+            }
         case .unselected:
-            RoundedRectangle(cornerRadius: 5)
+            RoundedRectangle(cornerRadius: 4)
                 .strokeBorder(tintColor, lineWidth: 2)
-                .frame(width: 15, height: 15)
+                .frame(width: 20, height: 20)
         case .indeterminate:
-            RoundedRectangle(cornerRadius: 5)
-                .fill(tintColor)
-                .frame(width: 15, height: 15)
+            ZStack {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(tintColor)
+                    .frame(width: 20, height: 20)
+
+                Capsule()
+                    .fill(iconColor)
+                    .frame(width: 12, height: 2)
+            }
         }
     }
 
     public var body: some View {
-        HStack {
+        HStack(alignment: .top) {
+            checkboxView
+
             Text(viewModel.text)
                 .font(self.theming.theme.typography.body1.font)
                 .foregroundColor(self.colors.textColor.color)
                 .accessibilityIdentifier(AccessibilityIdentifier.text)
-
-            Spacer()
-
-            checkboxView
         }
+        .opacity(viewModel.opacity)
+        .allowsHitTesting(viewModel.interactionEnabled)
         .contentShape(Rectangle())
         .onTapGesture {
             print("tapped", viewModel.text)
-            switch viewModel.selectionState {
-            case .selected:
-                viewModel.selectionState = .unselected
-            case .unselected:
-                viewModel.selectionState = .selected
-            case .indeterminate:
-                break
-            }
+            tapped()
+        }
+    }
+
+    func tapped() {
+        guard viewModel.interactionEnabled else { return }
+
+        switch selectionState {
+        case .selected:
+            selectionState = .unselected
+        case .unselected:
+            selectionState = .selected
+        case .indeterminate:
+            break
         }
     }
 }
