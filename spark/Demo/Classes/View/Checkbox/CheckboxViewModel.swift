@@ -12,9 +12,7 @@ import SparkCore
 struct CheckboxViewModel {
 
     // MARK: - Properties
-
-    let variants: [SparkTagVariant] = [.filled, .outlined, .tinted]
-    let colors: [SparkCheckboxIntentColor] = [.neutral]
+    let states: [SparkCheckboxState] = [.enabled, .disabled, .focused, .hover, .pressed, .success, .warning, .error]
 
     // MARK: - Initialization
 

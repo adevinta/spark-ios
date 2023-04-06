@@ -18,48 +18,66 @@ struct CheckboxView: View {
 
     // MARK: - View
 
-    private func title(for variant: SparkTagVariant) -> String {
-        switch variant {
-        case .tinted:
-            return "Tinted"
-        case .outlined:
-            return "Outlined"
-        case .filled:
-            return "Filled"
+    private func title(for state: SparkCheckboxState) -> String {
+        switch state {
+        case .enabled:
+            return "Enabled"
+        case .disabled:
+            return "Disabled"
+        case .focused:
+            return "Focused"
+        case .pressed:
+            return "Pressed"
+        case .hover:
+            return "Hover"
+        case .success:
+            return "Success"
+        case .warning:
+            return "Warning"
+        case .error:
+            return "Error"
+        @unknown default:
+            return "Unknown"
         }
     }
 
+    @State private var selection1: SparkCheckboxSelectionState = .selected
+    @State private var selection2: SparkCheckboxSelectionState = .unselected
+    @State private var selection3: SparkCheckboxSelectionState = .indeterminate
+    @State private var selection4: SparkCheckboxSelectionState = .selected
+
+
     var body: some View {
-        List(viewModel.variants, id: \.self) { variant in
-            Section(header: Text("Variant \(title(for: variant))")) {
-                ForEach(viewModel.colors, id: \.self) { color in
-                    let theming = SparkCheckboxTheming.init(
-                        theme: SparkTheme.shared,
-                        intentColor: color,
-                        variant: variant
-                    )
-                    SparkCheckboxView(
-                        theming: theming,
-                        viewModel: .init(
-                            text: "Selected",
-                            selectionState: .selected
-                        )
-                    )
-                    SparkCheckboxView(
-                        theming: theming,
-                        viewModel: .init(
-                            text: "Unselected",
-                            selectionState: .unselected
-                        )
-                    )
-                    SparkCheckboxView(
-                        theming: theming,
-                        viewModel: .init(
-                            text: "Indeterminate",
-                            selectionState: .indeterminate
-                        )
-                    )
-                }
+        List(viewModel.states, id: \.self) { state in
+            Section(header: Text("State \(title(for: state))")) {
+                let theming = SparkCheckboxTheming.init(
+                    theme: SparkTheme.shared,
+                    variant: .filled
+                )
+                SparkCheckboxView(
+                    text: "Selected",
+                    theming: theming,
+                    state: state,
+                    selectionState: $selection1
+                )
+                SparkCheckboxView(
+                    text: "Unselected",
+                    theming: theming,
+                    state: state,
+                    selectionState: $selection2
+                )
+                SparkCheckboxView(
+                    text: "Indeterminate",
+                    theming: theming,
+                    state: state,
+                    selectionState: $selection3
+                )
+                SparkCheckboxView(
+                    text: "Long text lorem ipsum dolor sit et amet abcdefghjijkl",
+                    theming: theming,
+                    state: state,
+                    selectionState: $selection4
+                )
             }
         }
         .navigationBarTitle(Text("Checkbox"))
