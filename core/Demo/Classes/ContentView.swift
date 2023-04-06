@@ -9,12 +9,16 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    private let theme = SparkTheme()
+
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
             Text("Hello, Spark Core Demo!")
+                .font(theme.typography.display1.font)
         }
         .padding()
     }

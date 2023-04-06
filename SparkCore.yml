@@ -71,6 +71,10 @@ targetTemplates:
           UISceneConfigurations: {}
     sources:
       - path: core/Demo
+      - path: spark/Sources/Resources
+        excludes:
+        - "Generated/"
+      - path: spark/Sources/Theming
     dependencies:
       - target: SparkCore
 
