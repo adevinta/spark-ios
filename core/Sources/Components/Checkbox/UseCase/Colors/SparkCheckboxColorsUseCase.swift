@@ -7,7 +7,7 @@
 //
 
 protocol SparkCheckboxColorsUseCaseable {
-    func execute(from theming: SparkCheckboxTheming) -> SparkCheckboxColorables
+    func execute(from theming: SparkCheckboxTheming, state: SparkCheckboxState) -> SparkCheckboxColorables
 }
 
 struct SparkCheckboxColorsUseCase: SparkCheckboxColorsUseCaseable {
@@ -24,31 +24,25 @@ struct SparkCheckboxColorsUseCase: SparkCheckboxColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(from theming: SparkCheckboxTheming) -> SparkCheckboxColorables {
-        let intentColors = self.intentColorsUseCase.execute(for: theming.intentColor,
+    func execute(from theming: SparkCheckboxTheming, state: SparkCheckboxState) -> SparkCheckboxColorables {
+        let intentColors = self.intentColorsUseCase.execute(for: state,
                                                             on: theming.theme.colors)
 
         switch theming.variant {
         case .filled:
-            return SparkCheckboxColors(backgroundColor: intentColors.color,
-                                       borderColor: nil,
-                                       foregroundColor: intentColors.onColor,
-                                       textColor: intentColors.textColor,
-                                       checkboxTintColor: intentColors.onColor)
+            return SparkCheckboxColors(textColor: intentColors.textColor,
+                                       checkboxTintColor: intentColors.checkboxColor,
+                                       checkboxIconColor: intentColors.checkboxIconColor)
 
         case .outlined:
-            return SparkCheckboxColors(backgroundColor: intentColors.surfaceColor,
-                                       borderColor: intentColors.color,
-                                       foregroundColor: intentColors.color,
-                                       textColor: intentColors.textColor,
-                                       checkboxTintColor: intentColors.onColor)
+            return SparkCheckboxColors(textColor: intentColors.textColor,
+                                       checkboxTintColor: intentColors.checkboxColor,
+                                       checkboxIconColor: intentColors.checkboxIconColor)
 
         case .tinted:
-            return SparkCheckboxColors(backgroundColor: intentColors.containerColor,
-                                       borderColor: nil,
-                                       foregroundColor: intentColors.onContainerColor,
-                                       textColor: intentColors.textColor,
-                                       checkboxTintColor: intentColors.onColor)
+            return SparkCheckboxColors(textColor: intentColors.textColor,
+                                       checkboxTintColor: intentColors.checkboxColor,
+                                       checkboxIconColor: intentColors.checkboxIconColor)
         }
     }
 }

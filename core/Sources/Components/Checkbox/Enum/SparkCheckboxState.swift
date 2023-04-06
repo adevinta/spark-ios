@@ -8,10 +8,14 @@
 
 import Foundation
 
-enum SparkCheckboxState {
+public enum SparkCheckboxState {
     case enabled
     case disabled
     case hover // probably not needed
     case focused
     case pressed
+
+    case success
+    case warning
+    case error
 }

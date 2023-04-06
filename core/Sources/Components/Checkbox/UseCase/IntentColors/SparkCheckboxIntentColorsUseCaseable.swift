@@ -7,27 +7,41 @@
 //
 
 protocol SparkCheckboxIntentColorsUseCaseable {
-    func execute(for intentColor: SparkCheckboxIntentColor,
-                 on colors: Colors) -> SparkCheckboxIntentColorables
+    func execute(for intentColor: SparkCheckboxState,
+                 on colors: Colors) -> SparkCheckboxStateColorables
 }
 
 struct SparkCheckboxIntentColorsUseCase: SparkCheckboxIntentColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for intentColor: SparkCheckboxIntentColor,
-                 on colors: Colors) -> SparkCheckboxIntentColorables {
+    func execute(for intentColor: SparkCheckboxState,
+                 on colors: Colors) -> SparkCheckboxStateColorables {
         let surfaceColor = colors.base.surface
         let textColor = colors.base.onSurface
+        let iconColor = colors.primary.onPrimary
 
         switch intentColor {
-        case .neutral:
-            return SparkCheckboxIntentColors(color: colors.feedback.alert,
-                                        onColor: colors.feedback.onAlert,
-                                        containerColor: colors.feedback.alertContainer,
-                                        onContainerColor: colors.feedback.onAlertContainer,
-                                        surfaceColor: surfaceColor,
-                                             textColor: textColor)
+        case .enabled:
+            return SparkCheckboxStateColors(textColor: textColor,
+                                             checkboxColor: surfaceColor,
+            checkboxIconColor: iconColor)
+        case .success:
+            return SparkCheckboxStateColors(textColor: textColor,
+                                             checkboxColor: colors.feedback.success,
+            checkboxIconColor: iconColor)
+        case .warning:
+            return SparkCheckboxStateColors(textColor: textColor,
+                                             checkboxColor: colors.feedback.neutral,
+            checkboxIconColor: iconColor)
+        case .error:
+            return SparkCheckboxStateColors(textColor: textColor,
+                                             checkboxColor: colors.feedback.error,
+            checkboxIconColor: iconColor)
+        default:
+            return SparkCheckboxStateColors(textColor: textColor,
+                                             checkboxColor: surfaceColor,
+            checkboxIconColor: iconColor)
         }
     }
 }

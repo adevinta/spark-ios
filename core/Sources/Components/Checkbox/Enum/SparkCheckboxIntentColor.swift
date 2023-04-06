@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxIntentColor.swift
+//  SparkCheckboxState.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 04.04.23.
