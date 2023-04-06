@@ -10,6 +10,12 @@ import SwiftUI
 
 @main
 struct SparkDemoApp: App {
+
+    init() {
+        // Configuration
+        SparkConfiguration.load()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

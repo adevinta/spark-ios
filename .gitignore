@@ -89,6 +89,9 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+# Sourcery
+core/Unit-tests/Sourcery
+
 #macOS
 .DS_Store
 
