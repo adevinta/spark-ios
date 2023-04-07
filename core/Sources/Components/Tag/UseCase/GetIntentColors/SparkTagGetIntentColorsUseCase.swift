@@ -1,17 +1,18 @@
 //
-//  SparkTagIntentColorsUseCase.swift
+//  SparkTagGetIntentColorsUseCase.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 29/03/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-protocol SparkTagIntentColorsUseCaseable {
+// sourcery: AutoMockable
+protocol SparkTagGetIntentColorsUseCaseable {
     func execute(for intentColor: SparkTagIntentColor,
                  on colors: Colors) -> SparkTagIntentColorables
 }
 
-struct SparkTagIntentColorsUseCase: SparkTagIntentColorsUseCaseable {
+struct SparkTagGetIntentColorsUseCase: SparkTagGetIntentColorsUseCaseable {
 
     // MARK: - Methods
 

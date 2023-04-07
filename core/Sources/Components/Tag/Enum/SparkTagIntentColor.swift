@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-public enum SparkTagIntentColor {
+public enum SparkTagIntentColor: CaseIterable {
     case alert
     case danger
     case info

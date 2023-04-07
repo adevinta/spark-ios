@@ -32,8 +32,16 @@ struct BorderViewModifier: ViewModifier {
         content
             .cornerRadius(self.radius)
             .overlay(
-                RoundedRectangle(cornerRadius: self.radius)
-                    .stroke(self.colorToken.color, lineWidth: self.width)
+                self.shape
             )
+    }
+
+    // MARK: - Builder
+
+    @ViewBuilder var shape: some View {
+        if let color = self.colorToken?.color {
+            RoundedRectangle(cornerRadius: self.radius)
+                .stroke(color, lineWidth: self.width)
+        }
     }
 }

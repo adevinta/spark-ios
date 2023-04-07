@@ -22,7 +22,7 @@ public struct SparkTagView: View {
             self._colors = self.getColorsFromUseCase()
         }
     }
-    public var text: String
+    public var text: String?
     public var iconImage: Image?
 
     public var accessibilityIdentifier: String?
@@ -30,8 +30,22 @@ public struct SparkTagView: View {
 
     // MARK: - Private Properties
 
+    @Environment(\.sizeCategory) private var sizeCategory
+
+    private var height: CGFloat {
+        self.getHeightUseCase.execute(from: self.sizeCategory)
+    }
+
     private var spacing: LayoutSpacing {
         return self.theming.theme.layout.spacing
+    }
+
+    private var border: Border {
+        return self.theming.theme.border
+    }
+
+    private var typography: Typography {
+        self.theming.theme.typography
     }
 
     private var _colors: SparkTagColorables?
@@ -39,27 +53,43 @@ public struct SparkTagView: View {
         return self._colors ?? self.getColorsFromUseCase()
     }
 
-    private let colorsUseCase: SparkTagColorsUseCaseable
+    private let getColorsUseCase: SparkTagGetColorsUseCaseable
+    private let getHeightUseCase: SparkTagGetHeightUseCaseable
 
     // MARK: - Initialization
 
     public init(theming: SparkTagTheming,
-                text: String,
-                iconImage: Image? = nil) {
-        self.init(theming: theming,
+                text: String) {
+        self.init(theming,
                   text: text,
-                  iconImage: iconImage,
-                  colorsUseCase: SparkTagColorsUseCase())
+                  iconImage: nil)
     }
 
-    init(theming: SparkTagTheming,
-         text: String,
-         iconImage: Image? = nil,
-         colorsUseCase: SparkTagColorsUseCaseable) {
+    public init(theming: SparkTagTheming,
+                iconImage: Image) {
+        self.init(theming,
+                  text: nil,
+                  iconImage: iconImage)
+    }
+
+    public init(theming: SparkTagTheming,
+                text: String,
+                iconImage: Image) {
+        self.init(theming,
+                  text: text,
+                  iconImage: iconImage)
+    }
+
+    init(_ theming: SparkTagTheming,
+         text: String?,
+         iconImage: Image?,
+         getColorsUseCase: SparkTagGetColorsUseCaseable = SparkTagGetColorsUseCase(),
+         getHeightUseCase: SparkTagGetHeightUseCaseable = SparkTagGetHeightUseCase()) {
         self.theming = theming
         self.iconImage = iconImage
         self.text = text
-        self.colorsUseCase = colorsUseCase
+        self.getColorsUseCase = getColorsUseCase
+        self.getHeightUseCase = getHeightUseCase
     }
 
     // MARK: - View
@@ -73,19 +103,22 @@ public struct SparkTagView: View {
                 .foregroundColor(self.colors.foregroundColor.color)
                 .accessibilityIdentifier(AccessibilityIdentifier.iconImage)
 
-            // Text
-            Text(self.text)
-                .font(self.theming.theme.typography.captionHighlight.font)
-                .truncationMode(.tail)
-                .foregroundColor(self.colors.foregroundColor.color)
-                .accessibilityIdentifier(AccessibilityIdentifier.text)
+            // Optional Text
+            if let text = self.text {
+                Text(text)
+                    .lineLimit(1)
+                    .font(self.typography.captionHighlight.font)
+                    .truncationMode(.tail)
+                    .foregroundColor(self.colors.foregroundColor.color)
+                    .accessibilityIdentifier(AccessibilityIdentifier.text)
+            }
         }
-        .frame(height: 10)
-        .padding(.init(vertical: 0, horizontal: self.spacing.medium))
-        .frame(height: 20)
+        .frame(height: self.height / 2)
+        .padding(.init(vertical: self.spacing.none, horizontal: self.spacing.medium))
+        .frame(height: self.height)
         .background(self.colors.backgroundColor.color)
-        .border(width: self.theming.theme.border.width.small,
-                radius: self.theming.theme.border.radius.full,
+        .border(width: self.border.width.small,
+                radius: self.border.radius.full,
                 colorToken: self.colors.borderColor)
         .accessibility(identifier: self.accessibilityIdentifier,
                        label: self.accessibilityLabel,
@@ -95,6 +128,6 @@ public struct SparkTagView: View {
     // MARK: - Getter
 
     private func getColorsFromUseCase() -> SparkTagColorables {
-        return self.colorsUseCase.execute(from: self.theming)
+        return self.getColorsUseCase.execute(from: self.theming)
     }
 }

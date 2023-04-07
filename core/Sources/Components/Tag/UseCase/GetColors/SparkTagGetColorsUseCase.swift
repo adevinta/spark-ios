@@ -1,32 +1,33 @@
 //
-//  SparkTagColorsUseCase.swift
+//  SparkTagGetColorsUseCase.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 29/03/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-protocol SparkTagColorsUseCaseable {
+// sourcery: AutoMockable
+protocol SparkTagGetColorsUseCaseable {
     func execute(from theming: SparkTagTheming) -> SparkTagColorables
 }
 
-struct SparkTagColorsUseCase: SparkTagColorsUseCaseable {
+struct SparkTagGetColorsUseCase: SparkTagGetColorsUseCaseable {
 
     // MARK: - Properties
 
-    private let intentColorsUseCase: SparkTagIntentColorsUseCaseable
+    private let getIntentColorsUseCase: SparkTagGetIntentColorsUseCaseable
 
     // MARK: - Initialization
 
-    init(intentColorsUseCase: SparkTagIntentColorsUseCaseable = SparkTagIntentColorsUseCase()) {
-        self.intentColorsUseCase = intentColorsUseCase
+    init(getIntentColorsUseCase: SparkTagGetIntentColorsUseCaseable = SparkTagGetIntentColorsUseCase()) {
+        self.getIntentColorsUseCase = getIntentColorsUseCase
     }
 
     // MARK: - Methods
 
     func execute(from theming: SparkTagTheming) -> SparkTagColorables {
-        let intentColors = self.intentColorsUseCase.execute(for: theming.intentColor,
-                                                            on: theming.theme.colors)
+        let intentColors = self.getIntentColorsUseCase.execute(for: theming.intentColor,
+                                                               on: theming.theme.colors)
 
         switch theming.variant {
         case .filled:
