@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // sourcery: AutoMockable
 public protocol Theme {
@@ -16,4 +17,9 @@ public protocol Theme {
     var layout: Layout { get }
     var typography: Typography { get }
     var dims: Dims { get }
+    var iconography: Iconography { get }
+}
+
+public protocol Iconography {
+    var checkmark: Image { get }
 }
