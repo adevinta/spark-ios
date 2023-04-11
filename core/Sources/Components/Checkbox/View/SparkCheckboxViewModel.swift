@@ -12,7 +12,7 @@ final class SparkCheckboxViewModel: ObservableObject {
     public var text: String
 
     @Published public var theming: SparkCheckboxTheming
-    @Published public var state: SparkCheckboxState
+    @Published public var state: SparkSelectButtonState
 
     @Published private(set) var colors: SparkCheckboxColorables
     private let colorsUseCase: SparkCheckboxColorsUseCaseable
@@ -21,7 +21,7 @@ final class SparkCheckboxViewModel: ObservableObject {
         text: String,
         theming: SparkCheckboxTheming,
         colorsUseCase: SparkCheckboxColorsUseCaseable = SparkCheckboxColorsUseCase(),
-        state: SparkCheckboxState = .enabled
+        state: SparkSelectButtonState = .enabled
     ) {
         self.text = text
         self.theming = theming
@@ -46,6 +46,15 @@ final class SparkCheckboxViewModel: ObservableObject {
             return theming.theme.dims.dim3
         default:
             return 1.0
+        }
+    }
+
+    var supplementaryMessage: String? {
+        switch state {
+        case .error(let message), .success(let message), .warning(let message):
+            return message
+        default:
+            return nil
         }
     }
 }
