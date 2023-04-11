@@ -7,7 +7,7 @@
 //
 
 protocol SparkCheckboxIntentColorsUseCaseable {
-    func execute(for intentColor: SparkCheckboxState,
+    func execute(for intentColor: SparkSelectButtonState,
                  on colors: Colors) -> SparkCheckboxStateColorables
 }
 
@@ -15,33 +15,39 @@ struct SparkCheckboxIntentColorsUseCase: SparkCheckboxIntentColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for intentColor: SparkCheckboxState,
+    func execute(for intentColor: SparkSelectButtonState,
                  on colors: Colors) -> SparkCheckboxStateColorables {
         let surfaceColor = colors.base.surface
         let textColor = colors.base.onSurface
         let iconColor = colors.primary.onPrimary
+        let pressedBorderColor = colors.primary.primaryContainer
 
         switch intentColor {
         case .enabled:
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: surfaceColor,
-            checkboxIconColor: iconColor)
+            checkboxIconColor: iconColor,
+            pressedBorderColor: pressedBorderColor)
         case .success:
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: colors.feedback.success,
-            checkboxIconColor: iconColor)
+            checkboxIconColor: iconColor,
+            pressedBorderColor: pressedBorderColor)
         case .warning:
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: colors.feedback.neutral,
-            checkboxIconColor: iconColor)
+            checkboxIconColor: iconColor,
+            pressedBorderColor: pressedBorderColor)
         case .error:
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: colors.feedback.error,
-            checkboxIconColor: iconColor)
+            checkboxIconColor: iconColor,
+            pressedBorderColor: pressedBorderColor)
         default:
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: surfaceColor,
-            checkboxIconColor: iconColor)
+            checkboxIconColor: iconColor,
+            pressedBorderColor: pressedBorderColor)
         }
     }
 }

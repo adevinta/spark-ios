@@ -12,6 +12,7 @@ protocol SparkCheckboxStateColorables {
     var textColor: ColorToken { get }
     var checkboxColor: ColorToken { get }
     var checkboxIconColor: ColorToken { get }
+    var pressedBorderColor: ColorToken { get }
 }
 
 struct SparkCheckboxStateColors: SparkCheckboxStateColorables {
@@ -21,4 +22,5 @@ struct SparkCheckboxStateColors: SparkCheckboxStateColorables {
     let textColor: ColorToken
     let checkboxColor: ColorToken
     let checkboxIconColor: ColorToken
+    let pressedBorderColor: ColorToken
 }

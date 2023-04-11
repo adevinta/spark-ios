@@ -7,7 +7,7 @@
 //
 
 protocol SparkCheckboxColorsUseCaseable {
-    func execute(from theming: SparkCheckboxTheming, state: SparkCheckboxState) -> SparkCheckboxColorables
+    func execute(from theming: SparkCheckboxTheming, state: SparkSelectButtonState) -> SparkCheckboxColorables
 }
 
 struct SparkCheckboxColorsUseCase: SparkCheckboxColorsUseCaseable {
@@ -24,7 +24,7 @@ struct SparkCheckboxColorsUseCase: SparkCheckboxColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(from theming: SparkCheckboxTheming, state: SparkCheckboxState) -> SparkCheckboxColorables {
+    func execute(from theming: SparkCheckboxTheming, state: SparkSelectButtonState) -> SparkCheckboxColorables {
         let intentColors = self.intentColorsUseCase.execute(for: state,
                                                             on: theming.theme.colors)
 
@@ -32,17 +32,20 @@ struct SparkCheckboxColorsUseCase: SparkCheckboxColorsUseCaseable {
         case .filled:
             return SparkCheckboxColors(textColor: intentColors.textColor,
                                        checkboxTintColor: intentColors.checkboxColor,
-                                       checkboxIconColor: intentColors.checkboxIconColor)
+                                       checkboxIconColor: intentColors.checkboxIconColor,
+                                       pressedBorderColor: intentColors.pressedBorderColor)
 
         case .outlined:
             return SparkCheckboxColors(textColor: intentColors.textColor,
                                        checkboxTintColor: intentColors.checkboxColor,
-                                       checkboxIconColor: intentColors.checkboxIconColor)
+                                       checkboxIconColor: intentColors.checkboxIconColor,
+                                       pressedBorderColor: intentColors.pressedBorderColor)
 
         case .tinted:
             return SparkCheckboxColors(textColor: intentColors.textColor,
                                        checkboxTintColor: intentColors.checkboxColor,
-                                       checkboxIconColor: intentColors.checkboxIconColor)
+                                       checkboxIconColor: intentColors.checkboxIconColor,
+                                       pressedBorderColor: intentColors.pressedBorderColor)
         }
     }
 }
