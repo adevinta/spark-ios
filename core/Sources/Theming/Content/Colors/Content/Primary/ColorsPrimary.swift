@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+// sourcery: AutoMockable
 public protocol ColorsPrimary {
     var primary: ColorToken { get }
     var onPrimary: ColorToken { get }

@@ -14,13 +14,13 @@ struct BorderViewModifier: ViewModifier {
 
     let width: CGFloat
     let radius: CGFloat
-    let colorToken: ColorToken
+    let colorToken: ColorToken?
 
     // MARK: - Initialization
 
     init(width: CGFloat,
          radius: CGFloat,
-         colorToken: ColorToken) {
+         colorToken: ColorToken?) {
         self.width = width
         self.radius = radius
         self.colorToken = colorToken
@@ -32,8 +32,16 @@ struct BorderViewModifier: ViewModifier {
         content
             .cornerRadius(self.radius)
             .overlay(
-                RoundedRectangle(cornerRadius: self.radius)
-                    .stroke(self.colorToken.color, lineWidth: self.width)
+                self.shape
             )
+    }
+
+    // MARK: - Builder
+
+    @ViewBuilder var shape: some View {
+        if let color = self.colorToken?.color {
+            RoundedRectangle(cornerRadius: self.radius)
+                .stroke(color, lineWidth: self.width)
+        }
     }
 }

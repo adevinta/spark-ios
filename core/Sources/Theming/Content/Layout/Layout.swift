@@ -8,12 +8,14 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 public protocol Layout {
     var spacing: LayoutSpacing { get }
 }
 
 // MARK: - Spacing
 
+// sourcery: AutoMockable
 public protocol LayoutSpacing {
     var none: CGFloat { get }
     var small: CGFloat { get }

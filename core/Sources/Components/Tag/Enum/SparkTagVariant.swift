@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-public enum SparkTagVariant {
+public enum SparkTagVariant: CaseIterable {
     case filled
     case outlined
     case tinted

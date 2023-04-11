@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 public protocol Theme {
     var border: Border { get }
     var colors: Colors { get }

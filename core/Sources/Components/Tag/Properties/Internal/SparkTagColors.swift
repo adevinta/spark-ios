@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+// sourcery: AutoMockable
 protocol SparkTagColorables {
     var backgroundColor: ColorToken { get }
     var borderColor: ColorToken? { get }
