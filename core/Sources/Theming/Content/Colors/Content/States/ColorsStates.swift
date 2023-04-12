@@ -6,7 +6,6 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-// sourcery: AutoMockable
 public protocol ColorsStates {
 
     // MARK: - Primary
