@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 public protocol Theme {
     var border: SparkCore.Border { get }
     var colors: SparkCore.Colors { get }
