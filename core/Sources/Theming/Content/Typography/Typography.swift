@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 
+// sourcery: AutoMockable
 public protocol Typography {
     var display1: TypographyFontToken { get }
     var display2: TypographyFontToken { get }
@@ -36,6 +37,7 @@ public protocol Typography {
 
 // MARK: - Font
 
+// sourcery: AutoMockable
 public protocol TypographyFontToken {
     var uiFont: UIFont { get }
     var font: Font { get }
