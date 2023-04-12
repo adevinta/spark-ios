@@ -18,18 +18,12 @@ struct CheckboxView: View {
 
     // MARK: - View
 
-    private func title(for state: SparkCheckboxState) -> String {
+    private func title(for state: SparkSelectButtonState) -> String {
         switch state {
         case .enabled:
             return "Enabled"
         case .disabled:
             return "Disabled"
-        case .focused:
-            return "Focused"
-        case .pressed:
-            return "Pressed"
-        case .hover:
-            return "Hover"
         case .success:
             return "Success"
         case .warning:
