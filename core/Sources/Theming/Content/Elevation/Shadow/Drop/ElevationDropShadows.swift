@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+// sourcery: AutoMockable
 public protocol ElevationDropShadows {
     var small: ElevationShadow { get }
     var medium: ElevationShadow { get }
