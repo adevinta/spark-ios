@@ -16,11 +16,11 @@ struct CheckboxGroupView: View {
 
     private let viewModel = CheckboxViewModel()
 
-    var checkmarkIcon: Image = {
-        SparkTheme.shared.iconography.checkmark
-    }()
-
     // MARK: - View
+
+    @State private var layout: SparkCheckboxGroupLayout = .vertical
+
+    @State private var checkboxPosition: SparkCheckboxView.CheckboxPosition = .left
 
     @State private var items: [any SparkCheckboxItemProtocol] = [
         CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
@@ -34,7 +34,6 @@ struct CheckboxGroupView: View {
     ]
 
     var body: some View {
-        let items = ["A"]
         VStack(alignment: .leading) {
             HStack {
                 Text("Selection:\n\(selectedItemsText)")
@@ -43,6 +42,18 @@ struct CheckboxGroupView: View {
 
             Button("Shuffle states") {
                 shuffleAction()
+            }
+
+            Button("Change layout") {
+                withAnimation {
+                    layout = layout == .horizontal ? .vertical : .horizontal
+                }
+            }
+
+            Button("Change position") {
+                withAnimation {
+                    checkboxPosition = checkboxPosition == .left ? .right : .left
+                }
             }
 
             Button("Add checkbox") {
@@ -55,7 +66,7 @@ struct CheckboxGroupView: View {
         }
         .padding(.horizontal, 16)
 
-        ScrollView {
+        ScrollView(layout == .horizontal ? .horizontal : .vertical) {
             HStack {
                 let theming = SparkCheckboxTheming.init(
                     theme: SparkTheme.shared,
@@ -63,6 +74,8 @@ struct CheckboxGroupView: View {
                 )
                 SparkCheckboxGroupView(
                     items: $items,
+                    layout: layout,
+                    checkboxPosition: checkboxPosition,
                     theming: theming
                 )
                 Spacer()
@@ -70,6 +83,8 @@ struct CheckboxGroupView: View {
             .padding(.horizontal)
         }
         .navigationBarTitle(Text("Checkbox"))
+
+        Spacer()
     }
 
     func shuffleAction() {
