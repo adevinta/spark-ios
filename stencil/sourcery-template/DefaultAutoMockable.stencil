@@ -9,7 +9,7 @@ import {{ import }}
 {% endfor %}
 {% for import in argument.autoMockableTestableImports %}
 @testable import {{ import }}
-
+{% endfor %}
 {% macro GenericTestedParam GenericList paramName %}{% set paramV2 %}"{{paramName}}"{% endset %}{% if GenericList | contains: paramV2 %}Any{% else %}{{paramName}}{%endif%}{% endmacro %}
 {% macro swiftifyMethodName name %}{{ name | replace:"(","_" | replace:")","" | replace:":","_" | replace:"`","" | snakeToCamelCase | lowerFirstWord }}{% endmacro %}
 {% macro removeGenericContentInMethodName name %}{% if method.shortName| hasSuffix:">" %}{% for element in name|split:"<" %}{% if forloop.first %}{{ element }}{% endif %}{% endfor %}{% else %}{{name}}{% endif %}{% endmacro %}
@@ -154,7 +154,7 @@ import {{ import }}
 {% endmacro %}
 {% macro initEmptyClosureForClosureWithVoidReturnType variable %}{% if variable.typeName.closure.returnTypeName.isVoid%} = { {% for param in variable.typeName.closure.parameters %} _{% if not forloop.last %},{% endif %}{% endfor %} in }{% else %}!{% endif %}
 {% endmacro %}
-{% macro underlyingVariableDefaultValueMacro typeName %}{% if typeName.name == "Int" or typeName.name == "UInt" or typeName.name == "Double" or typeName.name == "Float" or typeName.name == "CGFloat" %} = 0{% elif typeName.name == "Bool" %} = false{% elif typeName.name == "String" %} = ""{% elif typeName.name == "UIViewController" or typeName.name == "UINavigationController" or typeName.name == "UIView" or typeName.name|hasPrefix:"PassthroughSubject<" or typeName.name|hasPrefix:"PassthroughRelay<" %} = .init(){% elif typeName.name == "URL" %} = .init(fileURLWithPath: ""){% elif typeName.name == "URLRequest" %} = .init(url: .init(fileURLWithPath: "")){% elif typeName.name|hasPrefix:"AnyPublisher<" %} = Empty().eraseToAnyPublisher(){% elif typeName.isArray %} = []{% elif typeName.isDictionary %} = [:]{% elif typeName.name == "UIColor" %} = .clear{% elif typeName.name == "Color" %} = .clear{% elif typeName.name == "UIFont" %} = .init(){% elif typeName.name == "Font" %} = .body{% else %}!{% endif %}
+{% macro underlyingVariableDefaultValueMacro typeName %}{% if typeName.name == "Int" or typeName.name == "UInt" or typeName.name == "Double" or typeName.name == "Float" or typeName.name == "CGFloat" %} = 0{% elif typeName.name == "Bool" %} = false{% elif typeName.name == "String" %} = ""{% elif typeName.name == "UIViewController" or typeName.name == "UINavigationController" or typeName.name == "UIView" or typeName.name|hasPrefix:"PassthroughSubject<" or typeName.name|hasPrefix:"PassthroughRelay<" %} = .init(){% elif typeName.name == "URL" %} = .init(fileURLWithPath: ""){% elif typeName.name == "URLRequest" %} = .init(url: .init(fileURLWithPath: "")){% elif typeName.name|hasPrefix:"AnyPublisher<" %} = Empty().eraseToAnyPublisher(){% elif typeName.isArray %} = []{% elif typeName.isDictionary %} = [:]{% else %}!{% endif %}
 {% endmacro %}
 {% macro underlyingVariableValue variable %}
     open var {% call underlyingMockedVariableName variable %}: {{ variable.typeName }}{% if variable.typeName.closure.returnTypeName.isVoid%} = { {% for param in variable.typeName.closure.parameters %}_{% if not forloop.last %}, {% endif %}{% endfor %}{% if not variable.typeName.closure.parameters.count == 0%} in{% endif %} }{% else %}{% call underlyingVariableDefaultValueMacro variable.actualTypeName %}{% endif %}
@@ -170,7 +170,7 @@ import {{ import }}
 {% macro mockedVariableName variable %}{{ variable.name }}{% endmacro %}
 {% for type in types.protocols where type.based.AutoMockable or type|annotated:"AutoMockable" %}{% if type.name != "AutoMockable" %}
 
-open class {{ type.name }}GeneratedMock: {{ import }}.{{ type.name }} {
+open class {{ type.name }}GeneratedMock: {{ type.name }} {
 
 {% for variable in type.allVariables|!definedInExtension %}
     {% if variable.isOptional %}{% call mockOptionalVariable variable %}{% elif variable.isArray or variable.isDictionary %}{% call mockNonOptionalArrayOrDictionaryVariable variable %}{% else %}{% call mockNonOptionalVariable variable %}{% endif %}
@@ -182,5 +182,3 @@ open class {{ type.name }}GeneratedMock: {{ import }}.{{ type.name }} {
 {% endfor %}
 }
 {% endif %}{% endfor %}
-
-{% endfor %}

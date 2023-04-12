@@ -1,6 +1,6 @@
 //
 //  Theme.swift
-//  SparkCore
+//  Spark
 //
 //  Created by louis.borlee on 23/02/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
@@ -8,12 +8,11 @@
 
 import Foundation
 
-// sourcery: AutoMockable
 public protocol Theme {
-    var border: SparkCore.Border { get }
-    var colors: SparkCore.Colors { get }
-    var elevation: SparkCore.Elevation { get }
-    var layout: SparkCore.Layout { get }
-    var typography: SparkCore.Typography { get }
-    var dims: SparkCore.Dims { get }
+    var border: Border { get }
+    var colors: Colors { get }
+    var elevation: Elevation { get }
+    var layout: Layout { get }
+    var typography: Typography { get }
+    var dims: Dims { get }
 }

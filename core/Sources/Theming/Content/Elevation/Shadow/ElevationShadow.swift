@@ -8,7 +8,6 @@
 
 import Foundation
 
-// sourcery: AutoMockable
 public protocol ElevationShadow {
     var offset: CGPoint { get }
     var blur: CGFloat { get }

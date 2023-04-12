@@ -11,7 +11,6 @@ import SwiftUI
 
 // MARK: - Colors
 
-// sourcery: AutoMockable
 public protocol Colors {
     var primary: ColorsPrimary { get }
     var secondary: ColorsSecondary { get }
@@ -22,7 +21,6 @@ public protocol Colors {
 
 // MARK: - Token
 
-// sourcery: AutoMockable
 public protocol ColorToken {
     var uiColor: UIColor { get }
     var color: Color { get }
