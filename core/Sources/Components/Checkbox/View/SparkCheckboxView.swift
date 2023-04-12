@@ -34,16 +34,22 @@ public struct SparkCheckboxView: View {
 
     @ObservedObject var viewModel: SparkCheckboxViewModel
 
+    @Namespace private var namespace
+
+    private let checkboxPosition: CheckboxPosition
+
     // MARK: - Initialization
 
     init(
         text: String,
+        checkboxPosition: CheckboxPosition = .left,
         theming: SparkCheckboxTheming,
         colorsUseCase: SparkCheckboxColorsUseCaseable = SparkCheckboxColorsUseCase(),
         state: SparkSelectButtonState = .enabled,
         selectionState: Binding<SparkCheckboxSelectionState>
     ) {
         _selectionState = selectionState
+        self.checkboxPosition = checkboxPosition
         viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
     }
 
@@ -100,6 +106,9 @@ public struct SparkCheckboxView: View {
                 .frame(width: 20, height: 20)
                 .animation(.easeInOut(duration: 0.1), value: isPressed)
         }
+        .if(selectionState == .selected) {
+            $0.accessibilityAddTraits(.isSelected)
+        }
     }
 
     public var body: some View {
@@ -117,25 +126,44 @@ public struct SparkCheckboxView: View {
 
     @ViewBuilder private var contentView: some View {
         HStack(alignment: .top) {
-            checkboxView
+            switch checkboxPosition {
+            case .left:
+                checkboxView
+                    .id(Identifier.checkbox.rawValue)
+                    .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: namespace)
 
-            VStack(alignment: .leading, spacing: 0) {
-                Text(viewModel.text)
-                    .font(theming.theme.typography.body1.font)
-                    .foregroundColor(colors.textColor.color)
-                    .accessibilityIdentifier(AccessibilityIdentifier.text)
+                labelView
+            case .right:
+                labelView
 
-                if let message = viewModel.supplementaryMessage {
-                    Text(message)
-                        .font(theming.theme.typography.caption.font)
-                        .foregroundColor(colors.checkboxTintColor.color)
-                }
+                Spacer()
+
+                checkboxView
+                    .id(Identifier.checkbox.rawValue)
+                    .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: namespace)
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 4)
         .opacity(viewModel.opacity)
         .allowsHitTesting(viewModel.interactionEnabled)
         .contentShape(Rectangle())
+    }
+
+    private var labelView: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(viewModel.text)
+                .font(theming.theme.typography.body1.font)
+                .foregroundColor(colors.textColor.color)
+                .accessibilityIdentifier(AccessibilityIdentifier.text)
+
+            if let message = viewModel.supplementaryMessage {
+                Text(message)
+                    .font(theming.theme.typography.caption.font)
+                    .foregroundColor(colors.checkboxTintColor.color)
+            }
+        }
+        .id(Identifier.content.rawValue)
+        .matchedGeometryEffect(id: Identifier.content.rawValue, in: namespace)
     }
 
     func tapped() {
@@ -150,27 +178,27 @@ public struct SparkCheckboxView: View {
             break
         }
     }
+
+    public enum CheckboxPosition {
+        case left
+        case right
+    }
+
+    private enum Identifier: String {
+        case checkbox
+        case content
+    }
 }
 
-struct SparkCheckboxStyle: ButtonStyle
-{
+struct SparkCheckboxStyle: ButtonStyle {
     @Binding var isPressed: Bool
 
     init(isPressed: Binding<Bool>) {
         _isPressed = isPressed
     }
 
-    func makeBody(configuration: Self.Configuration) -> some View
-    {
+    func makeBody(configuration: Self.Configuration) -> some View {
         if configuration.isPressed != isPressed {
-                if configuration.isPressed
-                {
-                    print("Button is pressed")
-                }
-                else
-                {
-                    print("Button released")
-                }
             DispatchQueue.main.async {
                 isPressed = configuration.isPressed
             }
