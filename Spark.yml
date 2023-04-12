@@ -77,9 +77,6 @@ targets:
   Spark:
     templates:
       - SparkTemplate
-    preBuildScripts:
-      - path: scripts/swiftgen.sh
-        name: SwiftGen
 
   SparkTests:
     templates:

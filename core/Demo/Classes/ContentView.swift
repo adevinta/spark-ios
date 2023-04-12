@@ -16,7 +16,7 @@ struct ContentView: View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
-                .foregroundColor(.accentColor)
+                .foregroundColor(theme.colors.secondary.secondary.color)
             Text("Hello, Spark Core Demo!")
                 .font(theme.typography.display1.font)
         }
