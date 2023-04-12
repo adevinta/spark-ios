@@ -3,7 +3,7 @@ configurations:
       include:
         - core/Sources
     templates:
-      - stencil/sourcery-template/DefaultAutoMockable.stencil
+      - stencil/sourcery-template/SparkCoreAutoMockable.stencil
     output: core/Unit-tests/Sourcery/Generated/AutoMockable.generated.swift
     args:
       autoMockableImports: [Combine]
