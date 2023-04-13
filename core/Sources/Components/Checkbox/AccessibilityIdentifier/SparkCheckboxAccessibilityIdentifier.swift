@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+public enum SparkCheckboxAccessibilityIdentifier {
+    public static let checkboxGroup = "checkbox-group"
+}

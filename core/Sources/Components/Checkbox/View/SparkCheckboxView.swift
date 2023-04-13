@@ -12,7 +12,7 @@ public struct SparkCheckboxView: View {
 
     // MARK: - Type Alias
 
-    private typealias AccessibilityIdentifier = SparkTagAccessibilityIdentifier
+    private typealias AccessibilityIdentifier = SparkCheckboxAccessibilityIdentifier
 
     // MARK: - Public Properties
 
@@ -38,6 +38,15 @@ public struct SparkCheckboxView: View {
 
     private let checkboxPosition: CheckboxPosition
 
+    @ScaledMetric private var checkboxWidth: CGFloat = 20
+    @ScaledMetric private var checkboxHeight: CGFloat = 20
+
+    @ScaledMetric private var checkboxSelectedWidth: CGFloat = 14
+    @ScaledMetric private var checkboxSelectedHeight: CGFloat = 14
+
+    @ScaledMetric private var checkboxIndeterminateWidth: CGFloat = 12
+    @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = 2
+
     // MARK: - Initialization
 
     init(
@@ -46,25 +55,31 @@ public struct SparkCheckboxView: View {
         theming: SparkCheckboxTheming,
         colorsUseCase: SparkCheckboxColorsUseCaseable = SparkCheckboxColorsUseCase(),
         state: SparkSelectButtonState = .enabled,
-        selectionState: Binding<SparkCheckboxSelectionState>
+        selectionState: Binding<SparkCheckboxSelectionState>,
+        accessibilityIdentifier: String? = nil
     ) {
         _selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 
     public init(
         text: String,
+        checkboxPosition: CheckboxPosition = .left,
         theming: SparkCheckboxTheming,
         state: SparkSelectButtonState = .enabled,
-        selectionState: Binding<SparkCheckboxSelectionState>
+        selectionState: Binding<SparkCheckboxSelectionState>,
+        accessibilityIdentifier: String? = nil
     ) {
         self.init(
             text: text,
+            checkboxPosition: checkboxPosition,
             theming: theming,
             colorsUseCase: SparkCheckboxColorsUseCase(),
             state: state,
-            selectionState: selectionState
+            selectionState: selectionState,
+            accessibilityIdentifier: accessibilityIdentifier
         )
     }
 
@@ -72,56 +87,57 @@ public struct SparkCheckboxView: View {
         let tintColor = colors.checkboxTintColor.color
         let iconColor = colors.checkboxIconColor.color
         ZStack {
+            RoundedRectangle(cornerRadius: 4)
+                .if(selectionState == .selected || selectionState == .indeterminate) {
+                    $0.fill(tintColor)
+                } else: {
+                    $0.strokeBorder(tintColor, lineWidth: 2)
+                }
+                .frame(width: checkboxWidth, height: checkboxHeight)
+
             switch selectionState {
             case .selected:
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(tintColor)
-                    .frame(width: 20, height: 20)
-
                 theming.theme.iconography.checkmark
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)
-                    .frame(width: 14, height: 14)
+                    .frame(width: checkboxSelectedWidth, height: checkboxSelectedHeight)
 
             case .unselected:
-                RoundedRectangle(cornerRadius: 4)
-                    .strokeBorder(tintColor, lineWidth: 2)
-                    .frame(width: 20, height: 20)
-
+                EmptyView()
             case .indeterminate:
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(tintColor)
-                    .frame(width: 20, height: 20)
-
                 Capsule()
                     .fill(iconColor)
-                    .frame(width: 12, height: 2)
+                    .frame(width: checkboxIndeterminateWidth, height: checkboxIndeterminateHeight)
             }
 
             let lineWidth: CGFloat = isPressed ? 4 : 0
             RoundedRectangle(cornerRadius: 4)
                 .inset(by: -lineWidth / 2)
                 .stroke(colors.pressedBorderColor.color, lineWidth: lineWidth)
-                .frame(width: 20, height: 20)
+                .frame(width: checkboxWidth, height: checkboxHeight)
                 .animation(.easeInOut(duration: 0.1), value: isPressed)
         }
         .if(selectionState == .selected) {
             $0.accessibilityAddTraits(.isSelected)
         }
+        .id(Identifier.checkbox.rawValue)
+        .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: namespace)
     }
 
     public var body: some View {
         Button(
             action: {
-                print("tapped", viewModel.text)
                 tapped()
             },
             label: {
                 contentView
             }
         )
-        .buttonStyle(SparkCheckboxStyle(isPressed: $isPressed))
+        .buttonStyle(SparkCheckboxButtonStyle(isPressed: $isPressed))
+        .if(accessibilityIdentifier != nil) {
+            $0.accessibility(identifier: accessibilityIdentifier!)
+        }
     }
 
     @ViewBuilder private var contentView: some View {
@@ -129,18 +145,16 @@ public struct SparkCheckboxView: View {
             switch checkboxPosition {
             case .left:
                 checkboxView
-                    .id(Identifier.checkbox.rawValue)
-                    .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: namespace)
 
                 labelView
+
+                Spacer()
             case .right:
                 labelView
 
                 Spacer()
 
                 checkboxView
-                    .id(Identifier.checkbox.rawValue)
-                    .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: namespace)
             }
         }
         .padding(.vertical, 4)
@@ -154,7 +168,6 @@ public struct SparkCheckboxView: View {
             Text(viewModel.text)
                 .font(theming.theme.typography.body1.font)
                 .foregroundColor(colors.textColor.color)
-                .accessibilityIdentifier(AccessibilityIdentifier.text)
 
             if let message = viewModel.supplementaryMessage {
                 Text(message)
@@ -187,24 +200,5 @@ public struct SparkCheckboxView: View {
     private enum Identifier: String {
         case checkbox
         case content
-    }
-}
-
-struct SparkCheckboxStyle: ButtonStyle {
-    @Binding var isPressed: Bool
-
-    init(isPressed: Binding<Bool>) {
-        _isPressed = isPressed
-    }
-
-    func makeBody(configuration: Self.Configuration) -> some View {
-        if configuration.isPressed != isPressed {
-            DispatchQueue.main.async {
-                isPressed = configuration.isPressed
-            }
-        }
-
-        return configuration.label
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
 }

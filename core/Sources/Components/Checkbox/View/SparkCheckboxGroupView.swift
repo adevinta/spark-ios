@@ -10,21 +10,32 @@ import SwiftUI
 
 public struct SparkCheckboxGroupView: View {
 
-    @Binding var items: [any SparkCheckboxItemProtocol]
-    var theming: SparkCheckboxTheming
-    var layout: SparkCheckboxGroupLayout
-    var checkboxPosition: SparkCheckboxView.CheckboxPosition
+    // MARK: - Type Alias
+
+    private typealias AccessibilityIdentifier = SparkCheckboxAccessibilityIdentifier
+
+    // MARK: - Private properties
+
+    @Binding private var items: [any SparkCheckboxGroupItemProtocol]
+    private var theming: SparkCheckboxTheming
+    private var layout: SparkCheckboxGroupLayout
+    private var checkboxPosition: SparkCheckboxView.CheckboxPosition
+    private var accessibilityIdentifierPrefix: String
+
+    // MARK: - Initialization
 
     public init(
-        items: Binding<[any SparkCheckboxItemProtocol]>,
+        items: Binding<[any SparkCheckboxGroupItemProtocol]>,
         layout: SparkCheckboxGroupLayout = .vertical,
         checkboxPosition: SparkCheckboxView.CheckboxPosition,
-        theming: SparkCheckboxTheming
+        theming: SparkCheckboxTheming,
+        accessibilityIdentifierPrefix: String
     ) {
         self._items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
         self.theming = theming
+        self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
     }
 
     public var body: some View {
@@ -42,21 +53,15 @@ public struct SparkCheckboxGroupView: View {
 
     private var contentView: some View {
         ForEach($items, id: \.id) { item in
+            let identifier = "\(accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
             SparkCheckboxView(
                 text: item.title.wrappedValue,
                 checkboxPosition: checkboxPosition,
                 theming: theming,
                 state: item.state.wrappedValue,
-                selectionState: item.selectionState
+                selectionState: item.selectionState,
+                accessibilityIdentifier: identifier
             )
         }
     }
-}
-
-public protocol SparkCheckboxItemProtocol: Hashable {
-    var title: String { get set }
-    var id: String { get }
-
-    var selectionState: SparkCheckboxSelectionState { get set }
-    var state: SparkSelectButtonState { get set }
 }

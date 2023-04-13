@@ -16,4 +16,15 @@ public extension View {
             return AnyView(self)
         }
     }
+
+    func `if`<Content: View, Content2: View>(
+        _ conditional: Bool,
+        then ifHandler: (Self) -> Content,
+        else elseHandler: (Self) -> Content2) -> some View {
+        if conditional {
+            return AnyView(ifHandler(self))
+        } else {
+            return AnyView(elseHandler(self))
+        }
+    }
 }
