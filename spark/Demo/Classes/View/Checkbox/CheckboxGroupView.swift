@@ -22,7 +22,7 @@ struct CheckboxGroupView: View {
 
     @State private var checkboxPosition: SparkCheckboxView.CheckboxPosition = .left
 
-    @State private var items: [any SparkCheckboxItemProtocol] = [
+    @State private var items: [any SparkCheckboxGroupItemProtocol] = [
         CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
         CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
@@ -76,7 +76,8 @@ struct CheckboxGroupView: View {
                     items: $items,
                     layout: layout,
                     checkboxPosition: checkboxPosition,
-                    theming: theming
+                    theming: theming,
+                    accessibilityIdentifierPrefix: "checkbox-group"
                 )
                 Spacer()
             }
@@ -106,7 +107,7 @@ struct CheckboxGroupView: View {
         }
     }
 
-    var selectedItems: [any SparkCheckboxItemProtocol] {
+    var selectedItems: [any SparkCheckboxGroupItemProtocol] {
         items.filter { $0.selectionState == .selected }
     }
 
@@ -115,13 +116,13 @@ struct CheckboxGroupView: View {
     }
 }
 
-struct CheckboxGrouüView_Previews: PreviewProvider {
+struct CheckboxGroupView_Previews: PreviewProvider {
     static var previews: some View {
         CheckboxView()
     }
 }
 
-class CheckboxGroupItem: SparkCheckboxItemProtocol, Hashable {
+class CheckboxGroupItem: SparkCheckboxGroupItemProtocol, Hashable {
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
         lhs.id == rhs.id
     }
