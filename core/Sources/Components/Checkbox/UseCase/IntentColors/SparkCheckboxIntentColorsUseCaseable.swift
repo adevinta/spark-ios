@@ -17,7 +17,7 @@ struct SparkCheckboxIntentColorsUseCase: SparkCheckboxIntentColorsUseCaseable {
 
     func execute(for intentColor: SparkSelectButtonState,
                  on colors: Colors) -> SparkCheckboxStateColorables {
-        let surfaceColor = colors.base.surface
+        let surfaceColor = colors.primary.primary
         let textColor = colors.base.onSurface
         let iconColor = colors.primary.onPrimary
         let pressedBorderColor = colors.primary.primaryContainer
@@ -35,7 +35,7 @@ struct SparkCheckboxIntentColorsUseCase: SparkCheckboxIntentColorsUseCaseable {
             pressedBorderColor: pressedBorderColor)
         case .warning:
             return SparkCheckboxStateColors(textColor: textColor,
-                                             checkboxColor: colors.feedback.neutral,
+                                             checkboxColor: colors.feedback.alert,
             checkboxIconColor: iconColor,
             pressedBorderColor: pressedBorderColor)
         case .error:

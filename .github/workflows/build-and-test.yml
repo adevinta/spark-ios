@@ -14,6 +14,7 @@ jobs:
       - name: run fastlane build_framework TARGET_NAME:SparkCore
         run: fastlane build_framework TARGET_NAME:SparkCore
   core_unit_tests:
+    name: core_unit_tests
     needs: [ core_build ]
     runs-on: macos-latest
     steps:
@@ -52,6 +53,7 @@ jobs:
       - name: run fastlane build_framework TARGET_NAME:Spark
         run: fastlane build_framework TARGET_NAME:Spark
   unit_tests:
+    name: unit_tests
     needs: [ build ]
     runs-on: macos-latest
     steps:
