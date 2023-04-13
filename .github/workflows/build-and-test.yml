@@ -20,31 +20,24 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: run install dependencies
-        run: |
-          echo "LOGSPARK"
-          ls
-          echo "LOGSPARK 2"
-          brew install sourcery
-          ls
-          echo "LOGSPARK 3"
-          brew install swiftgen
-          ls
-          echo "LOGSPARK 4"
-
       # TODO: just for testing - to remove asap
-      - name: run fastlane test_fastlane
-        run: fastlane test_fastlane
+      # - name: run fastlane test_fastlane
+      #   run: fastlane test_fastlane
 
-      # - uses: xavierLowmiller/xcodegen-action@1.1.2
-      #   with:
-      #     spec: project.yml
-      #     version: '2.33.0'
+
+      - name: Run sourcery
+        with:
+          url: https://github.com/krzysztofzablocki/Sourcery
+          version: '*'
+
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.33.0'
 
       - name: run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
-
-
 
       - uses: actions/checkout@v3
         with:

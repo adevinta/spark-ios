@@ -32,11 +32,7 @@ platform :ios do
 
   desc "Lane for unit testing"
   lane :unit_tests do |options|
-    puts "LOGSPARK UNIT TEST P1"
     generate_sourcery_files
-    puts "LOGSPARK UNIT TEST P2"
-    generate_xcodeproj
-    puts "LOGSPARK UNIT TEST P3"
 
     scan(
       clean: true,
@@ -48,22 +44,8 @@ platform :ios do
     )
   end
 
-  desc "Lane to generate xcodegen"
-  lane :generate_xcodeproj do
-    puts "LOGSPARK XCODEPROJ P1"
-    sh(ENV["SCRIPTS_PATH"] + "generate-swiftgen.sh")
-    puts "LOGSPARK XCODEPROJ P2"
-  end
-
   desc "Lane to generate sourcery"
   lane :generate_sourcery_files do
-    puts "LOGSPARK SOURCERY P1"
     sh(ENV["SCRIPTS_PATH"] + "generate-sourcery-files.sh")
-    puts "LOGSPARK SOURCERY P2"
-  end
-
-  desc "Lane to generate sourcery"
-  lane :test_fastlane do
-    puts "LOGSPARK TEST P1"
   end
 end
