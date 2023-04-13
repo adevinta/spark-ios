@@ -22,10 +22,12 @@ jobs:
         with:
           repository: adevinta/spark-ios-snapshots
           path: spark-ios-snapshots
-      - uses: ./
-        with:
-          url: https://github.com/krzysztofzablocki/Sourcery
-          version: '*'
+
+      - name: Install Sourcery
+        run: |
+          brew update
+          brew install sourcery
+
       - uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
