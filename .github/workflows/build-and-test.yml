@@ -30,14 +30,14 @@ jobs:
 
 
       # TODO: just for testing - to remove asap
-      - name: run fastlane generate_xcodeproj
-        run: fastlane generate_xcodeproj
+      - name: run fastlane test_fastlane
+        run: fastlane test_fastlane
 
       # - uses: xavierLowmiller/xcodegen-action@1.1.2
       #   with:
       #     spec: project.yml
       #     version: '2.33.0'
-      
+
       - name: run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
       - name: Tar files

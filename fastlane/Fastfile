@@ -61,4 +61,9 @@ platform :ios do
     sh(ENV["SCRIPTS_PATH"] + "generate-sourcery-files.sh")
     puts "LOGSPARK SOURCERY P2"
   end
+
+  desc "Lane to generate sourcery"
+  lane :test_fastlane do
+    puts "LOGSPARK TEST P1"
+  end
 end
