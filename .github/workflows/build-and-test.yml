@@ -23,15 +23,15 @@ jobs:
           repository: adevinta/spark-ios-snapshots
           path: spark-ios-snapshots
 
-      - name: Install Sourcery
+      - name: run install dependencies
         run: |
-          brew update
           brew install sourcery
+          brew install swiftgen
 
-      - uses: xavierLowmiller/xcodegen-action@1.1.2
-        with:
-          spec: project.yml
-          version: '2.33.0'
+      # - uses: xavierLowmiller/xcodegen-action@1.1.2
+      #   with:
+      #     spec: project.yml
+      #     version: '2.33.0'
       - name: run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
       - name: Tar files
@@ -53,6 +53,7 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
+          # TODO: not sure if we needed this run install 
       - name: run install swiftgen
         run: brew install swiftgen
       - name: run fastlane build_framework TARGET_NAME:Spark
