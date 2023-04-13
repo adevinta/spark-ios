@@ -25,9 +25,15 @@ jobs:
 
       - name: run install dependencies
         run: |
+          echo "LOGSPARK"
+          ls
+          echo "LOGSPARK 2"
           brew install sourcery
+          ls
+          echo "LOGSPARK 3"
           brew install swiftgen
-
+          ls
+          echo "LOGSPARK 4"
 
       # TODO: just for testing - to remove asap
       - name: run fastlane test_fastlane
