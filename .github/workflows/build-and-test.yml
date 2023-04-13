@@ -22,6 +22,10 @@ jobs:
         with:
           repository: adevinta/spark-ios-snapshots
           path: spark-ios-snapshots
+      - uses: ./
+        with:
+          url: https://github.com/krzysztofzablocki/Sourcery
+          version: '*'
       - uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
