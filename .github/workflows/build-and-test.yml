@@ -24,12 +24,11 @@ jobs:
       # - name: run fastlane test_fastlane
       #   run: fastlane test_fastlane
 
-
-      - name: Run sourcery
-        with:
-          url: https://github.com/krzysztofzablocki/Sourcery
-          version: '*'
-
+      - name: run install dependencies
+        run: |
+          brew install sourcery
+          sourcery
+        
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
@@ -43,8 +42,6 @@ jobs:
         with:
           repository: adevinta/spark-ios-snapshots
           path: spark-ios-snapshots
-
-
 
       - name: Tar files
         run: tar -cvf xcresult.tar out/SparkCore.xcresult
