@@ -25,6 +25,7 @@ platform :ios do
       skip_package_ipa: true,
     )
   end
+  desc "Lane for unit testing"
   lane :unit_tests do |options|
     scan(
       clean: true,

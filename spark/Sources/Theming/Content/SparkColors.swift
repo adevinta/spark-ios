@@ -12,137 +12,80 @@ import SwiftUI
 
 struct SparkColors: Colors {
 
-    // MARK: - Properties
+    private class ClassForBundle {}
 
-    let primary: ColorsPrimary = SparkColorPrimary()
-    let secondary: ColorsSecondary = SparkColorSecondary()
-    let base: ColorsBase = SparkColorBase()
-    let feedback: ColorsFeedback = SparkColorFeedback()
-    let states: ColorsStates = SparkColorStates()
-}
+    let primary: ColorsPrimary = ColorsPrimaryDefault(
+        primary: ColorTokenDefault(named: "primary", in: Bundle(for: ClassForBundle.self)),
+        onPrimary: ColorTokenDefault(named: "on-primary", in: Bundle(for: ClassForBundle.self)),
+        primaryVariant: ColorTokenDefault(named: "primary-variant", in: Bundle(for: ClassForBundle.self)),
+        onPrimaryVariant: ColorTokenDefault(named: "on-primary-variant", in: Bundle(for: ClassForBundle.self)),
+        primaryContainer: ColorTokenDefault(named: "primary-container", in: Bundle(for: ClassForBundle.self)),
+        onPrimaryContainer: ColorTokenDefault(named: "on-primary-container", in: Bundle(for: ClassForBundle.self)))
 
-// MARK: - Primary
+    let secondary: ColorsSecondary = ColorsSecondaryDefault(
+        secondary: ColorTokenDefault(named: "secondary", in: Bundle(for: ClassForBundle.self)),
+        onSecondary: ColorTokenDefault(named: "on-secondary", in: Bundle(for: ClassForBundle.self)),
+        secondaryVariant: ColorTokenDefault(named: "secondary-variant", in: Bundle(for: ClassForBundle.self)),
+        onSecondaryVariant: ColorTokenDefault(named: "on-secondary-variant", in: Bundle(for: ClassForBundle.self)),
+        secondaryContainer: ColorTokenDefault(named: "secondary-container", in: Bundle(for: ClassForBundle.self)),
+        onSecondaryContainer: ColorTokenDefault(named: "on-secondary-container", in: Bundle(for: ClassForBundle.self)))
 
-struct SparkColorPrimary: ColorsPrimary {
+    let base: ColorsBase = ColorsBaseDefault(
+        background: ColorTokenDefault(named: "background", in: Bundle(for: ClassForBundle.self)),
+        onBackground: ColorTokenDefault(named: "on-background", in: Bundle(for: ClassForBundle.self)),
+        backgroundVariant: ColorTokenDefault(named: "background-variant", in: Bundle(for: ClassForBundle.self)),
+        onBackgroundVariant: ColorTokenDefault(named: "on-background-variant", in: Bundle(for: ClassForBundle.self)),
+        surface: ColorTokenDefault(named: "surface", in: Bundle(for: ClassForBundle.self)),
+        onSurface: ColorTokenDefault(named: "on-surface", in: Bundle(for: ClassForBundle.self)),
+        surfaceInverse: ColorTokenDefault(named: "surface-inverse", in: Bundle(for: ClassForBundle.self)),
+        onSurfaceInverse: ColorTokenDefault(named: "on-surface-inverse", in: Bundle(for: ClassForBundle.self)),
+        outline: ColorTokenDefault(named: "outline", in: Bundle(for: ClassForBundle.self)),
+        outlineHigh: ColorTokenDefault(named: "outline-high", in: Bundle(for: ClassForBundle.self)),
+        overlay: ColorTokenDefault(named: "overlay", in: Bundle(for: ClassForBundle.self)),
+        onOverlay: ColorTokenDefault(named: "on-overlay", in: Bundle(for: ClassForBundle.self)))
 
-    // MARK: - Properties
+    let feedback: ColorsFeedback = ColorsFeedbackDefault(
+        success: ColorTokenDefault(named: "success", in: Bundle(for: ClassForBundle.self)),
+        onSuccess: ColorTokenDefault(named: "on-success", in: Bundle(for: ClassForBundle.self)),
+        successContainer: ColorTokenDefault(named: "success-container", in: Bundle(for: ClassForBundle.self)),
+        onSuccessContainer: ColorTokenDefault(named: "on-success-container", in: Bundle(for: ClassForBundle.self)),
+        alert: ColorTokenDefault(named: "alert", in: Bundle(for: ClassForBundle.self)),
+        onAlert: ColorTokenDefault(named: "on-alert", in: Bundle(for: ClassForBundle.self)),
+        alertContainer: ColorTokenDefault(named: "alert-container", in: Bundle(for: ClassForBundle.self)),
+        onAlertContainer: ColorTokenDefault(named: "on-alert-container", in: Bundle(for: ClassForBundle.self)),
+        error: ColorTokenDefault(named: "error", in: Bundle(for: ClassForBundle.self)),
+        onError: ColorTokenDefault(named: "on-error", in: Bundle(for: ClassForBundle.self)),
+        errorContainer: ColorTokenDefault(named: "error-container", in: Bundle(for: ClassForBundle.self)),
+        onErrorContainer: ColorTokenDefault(named: "on-error-container", in: Bundle(for: ClassForBundle.self)),
+        info: ColorTokenDefault(named: "info", in: Bundle(for: ClassForBundle.self)),
+        onInfo: ColorTokenDefault(named: "info", in: Bundle(for: ClassForBundle.self)),
+        infoContainer: ColorTokenDefault(named: "on-info-container", in: Bundle(for: ClassForBundle.self)),
+        onInfoContainer: ColorTokenDefault(named: "on-info-container", in: Bundle(for: ClassForBundle.self)),
+        neutral: ColorTokenDefault(named: "neutral", in: Bundle(for: ClassForBundle.self)),
+        onNeutral: ColorTokenDefault(named: "on-neutral", in: Bundle(for: ClassForBundle.self)),
+        neutralContainer: ColorTokenDefault(named: "neutral-container", in: Bundle(for: ClassForBundle.self)),
+        onNeutralContainer: ColorTokenDefault(named: "on-neutral-container", in: Bundle(for: ClassForBundle.self))
+    )
 
-    let primary: ColorToken = SparkColorToken()
-    let onPrimary: ColorToken = SparkColorToken()
-    let primaryVariant: ColorToken = SparkColorToken()
-    let onPrimaryVariant: ColorToken = SparkColorToken()
-    let primaryContainer: ColorToken = SparkColorToken()
-    let onPrimaryContainer: ColorToken = SparkColorToken()
-}
-
-// MARK: - Secondary
-
-struct SparkColorSecondary: ColorsSecondary {
-
-    // MARK: - Properties
-
-    let secondary: ColorToken = SparkColorToken()
-    let onSecondary: ColorToken = SparkColorToken()
-    let secondaryVariant: ColorToken = SparkColorToken()
-    let onSecondaryVariant: ColorToken = SparkColorToken()
-    let secondaryContainer: ColorToken = SparkColorToken()
-    let onSecondaryContainer: ColorToken = SparkColorToken()
-}
-
-// MARK: - Base
-
-struct SparkColorBase: ColorsBase {
-
-    // MARK: - Properties
-
-    let background: ColorToken = SparkColorToken()
-    let onBackground: ColorToken = SparkColorToken()
-    let backgroundVariant: ColorToken = SparkColorToken()
-    let onBackgroundVariant: ColorToken = SparkColorToken()
-    let surface: ColorToken = SparkColorToken()
-    let onSurface: ColorToken = SparkColorToken()
-    let surfaceInverse: ColorToken = SparkColorToken()
-    let onSurfaceInverse: ColorToken = SparkColorToken()
-    let outline: ColorToken = SparkColorToken()
-    let outlineHigh: ColorToken = SparkColorToken()
-    let overlay: ColorToken = SparkColorToken()
-    let onOverlay: ColorToken = SparkColorToken()
-}
-
-// MARK: - Feedback
-
-struct SparkColorFeedback: ColorsFeedback {
-
-    // MARK: - Properties
-
-    let success: ColorToken = SparkColorToken()
-    let onSuccess: ColorToken = SparkColorToken()
-    let successContainer: ColorToken = SparkColorToken()
-    let onSuccessContainer: ColorToken = SparkColorToken()
-    let alert: ColorToken = SparkColorToken()
-    let onAlert: ColorToken = SparkColorToken()
-    let alertContainer: ColorToken = SparkColorToken()
-    let onAlertContainer: ColorToken = SparkColorToken()
-    let error: ColorToken = SparkColorToken()
-    let onError: ColorToken = SparkColorToken()
-    let errorContainer: ColorToken = SparkColorToken()
-    let onErrorContainer: ColorToken = SparkColorToken()
-    let info: ColorToken = SparkColorToken()
-    let onInfo: ColorToken = SparkColorToken()
-    let infoContainer: ColorToken = SparkColorToken()
-    let onInfoContainer: ColorToken = SparkColorToken()
-    let neutral: ColorToken = SparkColorToken()
-    let onNeutral: ColorToken = SparkColorToken()
-    let neutralContainer: ColorToken = SparkColorToken()
-    let onNeutralContainer: ColorToken = SparkColorToken()
-}
-
-// MARK: - States
-
-struct SparkColorStates: ColorsStates {
-
-    // MARK: - Properties
-
-    let primaryPressed: ColorToken = SparkColorToken()
-    let primaryVariantPressed: ColorToken = SparkColorToken()
-    let primaryContainerPressed: ColorToken = SparkColorToken()
-    let secondaryPressed: ColorToken = SparkColorToken()
-    let secondaryVariantPressed: ColorToken = SparkColorToken()
-    let secondaryContainerPressed: ColorToken = SparkColorToken()
-    let backgroundPressed: ColorToken = SparkColorToken()
-    let surfacePressed: ColorToken = SparkColorToken()
-    let surfaceInversePressed: ColorToken = SparkColorToken()
-    let outlinePressed: ColorToken = SparkColorToken()
-    let successPressed: ColorToken = SparkColorToken()
-    let successContainerPressed: ColorToken = SparkColorToken()
-    let alertPressed: ColorToken = SparkColorToken()
-    let alertContainerPressed: ColorToken = SparkColorToken()
-    let errorPressed: ColorToken = SparkColorToken()
-    let errorContainerPressed: ColorToken = SparkColorToken()
-    let infoPressed: ColorToken = SparkColorToken()
-    let infoContainerPressed: ColorToken = SparkColorToken()
-    let neutralPressed: ColorToken = SparkColorToken()
-    let neutralContainerPressed: ColorToken = SparkColorToken()
-}
-
-// MARK: - SparkColorToken
-
-struct SparkColorToken: ColorToken {
-
-    // MARK: - Properties
-
-    let uiColor: UIColor
-    let color: Color
-
-    // MARK: - Initialization
-
-    init() {
-        let color = UIColor(red: .random(in: 0...1),
-                            green: .random(in: 0...1),
-                            blue:  .random(in: 0...1),
-                            alpha: 1.0)
-
-        self.uiColor = color
-        self.color = Color(color)
-    }
+    let states: ColorsStates = ColorsStatesDefault(
+        primaryPressed: ColorTokenDefault(named: "primary-pressed", in: Bundle(for: ClassForBundle.self)),
+        primaryVariantPressed: ColorTokenDefault(named: "primary-variant-pressed", in: Bundle(for: ClassForBundle.self)),
+        primaryContainerPressed: ColorTokenDefault(named: "prinary-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        secondaryPressed: ColorTokenDefault(named: "secondary-pressed", in: Bundle(for: ClassForBundle.self)),
+        secondaryVariantPressed: ColorTokenDefault(named: "secondary-variant-pressed", in: Bundle(for: ClassForBundle.self)),
+        secondaryContainerPressed: ColorTokenDefault(named: "secondary-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        backgroundPressed: ColorTokenDefault(named: "background-pressed", in: Bundle(for: ClassForBundle.self)),
+        surfacePressed: ColorTokenDefault(named: "surface-pressed", in: Bundle(for: ClassForBundle.self)),
+        surfaceInversePressed: ColorTokenDefault(named: "surface-inverse-pressed", in: Bundle(for: ClassForBundle.self)),
+        outlinePressed: ColorTokenDefault(named: "outline-pressed", in: Bundle(for: ClassForBundle.self)),
+        successPressed: ColorTokenDefault(named: "success-pressed", in: Bundle(for: ClassForBundle.self)),
+        successContainerPressed: ColorTokenDefault(named: "success-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        alertPressed: ColorTokenDefault(named: "alert-pressed", in: Bundle(for: ClassForBundle.self)),
+        alertContainerPressed: ColorTokenDefault(named: "alert-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        errorPressed: ColorTokenDefault(named: "error-pressed", in: Bundle(for: ClassForBundle.self)),
+        errorContainerPressed: ColorTokenDefault(named: "error-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        infoPressed: ColorTokenDefault(named: "info-pressed", in: Bundle(for: ClassForBundle.self)),
+        infoContainerPressed: ColorTokenDefault(named: "info-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        neutralPressed: ColorTokenDefault(named: "neutral-pressed", in: Bundle(for: ClassForBundle.self)),
+        neutralContainerPressed: ColorTokenDefault(named: "neutral-container-pressed", in: Bundle(for: ClassForBundle.self)))
 }
