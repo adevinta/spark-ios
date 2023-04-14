@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 public protocol Border {
     var width: BorderWidth { get }
     var radius: BorderRadius { get }
@@ -15,6 +16,7 @@ public protocol Border {
 
 // MARK: - Width
 
+// sourcery: AutoMockable
 public protocol BorderWidth {
     var none: CGFloat { get }
     var small: CGFloat { get }
@@ -27,6 +29,7 @@ public extension BorderWidth {
 
 // MARK: - Radius
 
+// sourcery: AutoMockable
 public protocol BorderRadius {
     var none: CGFloat { get }
     var small: CGFloat { get }
