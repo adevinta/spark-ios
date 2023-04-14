@@ -9,7 +9,7 @@
 import XCTest
 import SnapshotTesting
 
-final class SparkCoreTests: XCTestCase {
+final class SparkCoreTests: TestCase {
 
     func testExample() throws {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 300))
