@@ -20,10 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # TODO: just for testing - to remove asap
-      # - name: run fastlane test_fastlane
-      #   run: fastlane test_fastlane
-
       - name: run install dependencies
         run: |
           brew install sourcery
@@ -35,13 +31,13 @@ jobs:
           spec: project.yml
           version: '2.33.0'
 
-      - name: run fastlane unit_tests TARGET_NAME:SparkCore
-        run: fastlane unit_tests TARGET_NAME:SparkCore
-
       - uses: actions/checkout@v3
         with:
           repository: adevinta/spark-ios-snapshots
           path: spark-ios-snapshots
+
+      - name: run fastlane unit_tests TARGET_NAME:SparkCore
+        run: fastlane unit_tests TARGET_NAME:SparkCore
 
       - name: Tar files
         run: tar -cvf xcresult.tar out/SparkCore.xcresult
