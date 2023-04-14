@@ -16,6 +16,7 @@
 default_platform(:ios)
 
 platform :ios do
+
   desc "Lane for build framework"
   lane :build_framework do |options|
     gym(
@@ -25,6 +26,7 @@ platform :ios do
       skip_package_ipa: true,
     )
   end
+
   desc "Lane for unit testing"
   lane :unit_tests do |options|
     scan(

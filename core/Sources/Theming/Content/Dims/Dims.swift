@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 public protocol Dims {
     var dim1: CGFloat { get }
     var dim2: CGFloat { get }

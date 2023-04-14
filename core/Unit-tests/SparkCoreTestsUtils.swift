@@ -39,31 +39,10 @@ final class TestCaseTracker: NSObject, XCTestObservation {
     private(set) var currentTestCase: XCTestCase!
 
     func snapshotDirectory(for file: StaticString) -> String {
-      //  let snapshotDirectory = ProcessInfo.processInfo.environment["SNAPSHOT_REFERENCE_DIR"]! + "/"
-      //  guard var url = URL(string: snapshotDirectory) else { return "" }
-        var url = URL(fileURLWithPath: String(file))
+        let snapshotDirectory = ProcessInfo.processInfo.environment["SNAPSHOT_REFERENCE_DIR"]! + "/"
+        guard var url = URL(string: snapshotDirectory) else { return "" }
 
-        repeat {
-            let lastPathComponent = url.lastPathComponent
-            url.deleteLastPathComponent()
-            switch url.lastPathComponent {
-            case "Tests":
-                return url
-                    .appendingPathComponent(lastPathComponent)
-                    .appendingPathComponent("__Snapshots__")
-                    .appendingPathComponent(currentTestCase.testClassName)
-                    .path
-            case "Unit-tests":
-                let returnValue = url
-                    .appendingPathComponent("__Snapshots__")
-                    .appendingPathComponent(currentTestCase.testClassName)
-                    .path
-                print("returnValue", returnValue)
-                return returnValue
-            default:
-                precondition(url.path != "/", "Could not find test root and snapshot directory")
-            }
-        } while true
+        return url.appendingPathComponent(currentTestCase.testClassName).path
     }
 
     func testName(_ identifier: String? = nil) -> String {
