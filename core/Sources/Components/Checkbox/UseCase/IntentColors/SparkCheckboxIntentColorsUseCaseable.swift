@@ -32,17 +32,17 @@ struct SparkCheckboxIntentColorsUseCase: SparkCheckboxIntentColorsUseCaseable {
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: colors.feedback.success,
             checkboxIconColor: iconColor,
-            pressedBorderColor: pressedBorderColor)
+                                            pressedBorderColor: colors.feedback.successContainer)
         case .warning:
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: colors.feedback.alert,
             checkboxIconColor: iconColor,
-            pressedBorderColor: pressedBorderColor)
+            pressedBorderColor: colors.feedback.alertContainer)
         case .error:
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: colors.feedback.error,
             checkboxIconColor: iconColor,
-            pressedBorderColor: pressedBorderColor)
+            pressedBorderColor: colors.feedback.errorContainer)
         default:
             return SparkCheckboxStateColors(textColor: textColor,
                                              checkboxColor: surfaceColor,
