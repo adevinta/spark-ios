@@ -6,39 +6,38 @@ jobs:
   core_build:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: xavierLowmiller/xcodegen-action@1.1.2
+      - name: Checkout actions
+        uses: actions/checkout@v3
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
           version: '2.33.0'
-      - name: run fastlane build_framework TARGET_NAME:SparkCore
+      - name: Run fastlane build_framework TARGET_NAME:SparkCore
         run: fastlane build_framework TARGET_NAME:SparkCore
   core_unit_tests:
     name: core_unit_tests
     needs: [ core_build ]
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: run install dependencies
+      - name: Checkout actions
+        uses: actions/checkout@v3
+      - name: Run sourcery
         run: |
           brew install sourcery
           sourcery
-        
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
           version: '2.33.0'
-
-      - uses: actions/checkout@v3
+      - name: Run snapshots
+        uses: actions/checkout@v3
         with:
           repository: adevinta/spark-ios-snapshots
           path: spark-ios-snapshots
-
-      - name: run fastlane unit_tests TARGET_NAME:SparkCore
+      - name: Run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
-
       - name: Tar files
         run: tar -cvf xcresult.tar out/SparkCore.xcresult
         continue-on-error: true
@@ -53,27 +52,28 @@ jobs:
     needs: [ core_build ]
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: xavierLowmiller/xcodegen-action@1.1.2
+      - name: Checkout actions
+        uses: actions/checkout@v3
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
           version: '2.33.0'
-          # TODO: not sure if we needed this run install 
-      - name: run install swiftgen
-        run: brew install swiftgen
-      - name: run fastlane build_framework TARGET_NAME:Spark
+      - name: Run fastlane build_framework TARGET_NAME:Spark
         run: fastlane build_framework TARGET_NAME:Spark
   unit_tests:
     name: unit_tests
     needs: [ build ]
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: xavierLowmiller/xcodegen-action@1.1.2
+      - name: Checkout actions
+        uses: actions/checkout@v3
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
           version: '2.33.0'
-      - name: run fastlane lane unit_tests TARGET_NAME:Spark
+      - name: Run fastlane lane unit_tests TARGET_NAME:Spark
         run: fastlane unit_tests TARGET_NAME:Spark
       - name: Tar files
         run: tar -cvf xcresult.tar out/Spark.xcresult

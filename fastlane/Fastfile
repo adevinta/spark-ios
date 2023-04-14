@@ -16,9 +16,6 @@
 default_platform(:ios)
 
 platform :ios do
-  before_all do |lane, options|
-    ENV["SCRIPTS_PATH"] = "../scripts/fastlane/"
-  end
 
   desc "Lane for build framework"
   lane :build_framework do |options|
@@ -32,8 +29,6 @@ platform :ios do
 
   desc "Lane for unit testing"
   lane :unit_tests do |options|
-    generate_sourcery_files
-
     scan(
       clean: true,
       scheme: options[:TARGET_NAME],
@@ -42,10 +37,5 @@ platform :ios do
       result_bundle: true,
       device: "iPhone 14 Pro",
     )
-  end
-
-  desc "Lane to generate sourcery"
-  lane :generate_sourcery_files do
-    sh(ENV["SCRIPTS_PATH"] + "generate-sourcery-files.sh")
   end
 end
