@@ -1,5 +1,5 @@
 //
-//  MainView.swift
+//  ThemeView.swift
 //  SparkDemo
 //
 //  Created by robin.lemaire on 02/03/2023.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct ThemeView: View {
     var body: some View {
         NavigationView {
             List {
@@ -31,17 +31,18 @@ struct MainView: View {
                 NavigationLink("Typography") {
                     TypographyView()
                 }
+                
                 NavigationLink("Dims") {
                     DimsView()
                 }
             }
-            .navigationBarTitle(Text("Spark"))
+            .navigationBarTitle(Text("Theme"))
         }
     }
 }
 
-struct MainView_Previews: PreviewProvider {
+struct ThemeView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        ThemeView()
     }
 }

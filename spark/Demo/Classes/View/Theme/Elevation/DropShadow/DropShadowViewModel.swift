@@ -14,12 +14,12 @@ struct DropShadowViewModel {
 
     init(dropShadow: ElevationDropShadows & ElevationShadow = SparkTheme.shared.elevation.dropShadow) {
         self.itemViewModels = [
+            .init(name: "none", shadow: dropShadow.none),
             .init(name: "small", shadow: dropShadow.small),
             .init(name: "default", shadow: dropShadow),
             .init(name: "medium", shadow: dropShadow.medium),
             .init(name: "large", shadow: dropShadow.large),
-            .init(name: "extraLarge", shadow: dropShadow.extraLarge),
-            .init(name: "none", shadow: dropShadow.none),
+            .init(name: "extraLarge", shadow: dropShadow.extraLarge)
         ]
     }
 }
