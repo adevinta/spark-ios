@@ -16,7 +16,6 @@ struct DropShadowView: View {
         ForEach(viewModel.itemViewModels, id: \.id) { itemViewModel in
             DropShadowItemView(itemViewModel: itemViewModel)
         }
-        .padding(.bottom)
     }
 }
 
@@ -27,7 +26,6 @@ struct DropShadowItemView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(itemViewModel.name)
-            Spacer()
             Text(itemViewModel.description)
                 .font(Font.caption2)
                 .italic()
@@ -39,5 +37,6 @@ struct DropShadowItemView: View {
                 .cornerRadius(5)
                 .shadow(itemViewModel.shadow)
         }
+        .padding(.bottom)
     }
 }
