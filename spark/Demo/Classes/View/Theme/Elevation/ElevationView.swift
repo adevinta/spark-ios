@@ -11,13 +11,18 @@ import SwiftUI
 struct ElevationView: View {
 
     var body: some View {
-        ScrollView {
-            Section(header: Text("Drop Shadow").font(Font.title).underline()) {
-                Spacer()
+        List {
+            Section(header: Text("Drop Shadow")) {
                 DropShadowView()
-            }.padding()
+            }
         }
         .navigationTitle("Elevation")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+struct ElevationView_Previews: PreviewProvider {
+    static var previews: some View {
+        ElevationView()
+    }
+}
+
