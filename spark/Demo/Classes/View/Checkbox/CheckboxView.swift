@@ -10,7 +10,7 @@ import Spark
 import SparkCore
 import SwiftUI
 
-struct CheckboxView: View {
+struct CheckboxListView: View {
 
     // MARK: - Properties
 
@@ -18,7 +18,7 @@ struct CheckboxView: View {
 
     // MARK: - View
 
-    private func title(for state: SparkSelectButtonState) -> String {
+    private func title(for state: SelectButtonState) -> String {
         switch state {
         case .enabled:
             return "Enabled"
@@ -35,38 +35,38 @@ struct CheckboxView: View {
         }
     }
 
-    @State private var selection1: SparkCheckboxSelectionState = .selected
-    @State private var selection2: SparkCheckboxSelectionState = .unselected
-    @State private var selection3: SparkCheckboxSelectionState = .indeterminate
-    @State private var selection4: SparkCheckboxSelectionState = .selected
+    @State private var selection1: CheckboxSelectionState = .selected
+    @State private var selection2: CheckboxSelectionState = .unselected
+    @State private var selection3: CheckboxSelectionState = .indeterminate
+    @State private var selection4: CheckboxSelectionState = .selected
 
 
     var body: some View {
         List(viewModel.states, id: \.self) { state in
             Section(header: Text("State \(title(for: state))")) {
-                let theming = SparkCheckboxTheming.init(
+                let theming = CheckboxTheming.init(
                     theme: SparkTheme.shared,
                     variant: .filled
                 )
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Selected",
                     theming: theming,
                     state: state,
                     selectionState: $selection1
                 )
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Unselected",
                     theming: theming,
                     state: state,
                     selectionState: $selection2
                 )
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Indeterminate",
                     theming: theming,
                     state: state,
                     selectionState: $selection3
                 )
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Long text lorem ipsum dolor sit et amet abcdefghjijkl",
                     theming: theming,
                     state: state,
@@ -80,6 +80,6 @@ struct CheckboxView: View {
 
 struct CheckboxView_Previews: PreviewProvider {
     static var previews: some View {
-        CheckboxView()
+        CheckboxListView()
     }
 }

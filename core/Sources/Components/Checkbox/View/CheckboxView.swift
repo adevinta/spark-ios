@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxView.swift
+//  CheckboxView.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 04.04.23.
@@ -8,31 +8,31 @@
 
 import SwiftUI
 
-public struct SparkCheckboxView: View {
+public struct CheckboxView: View {
 
     // MARK: - Type Alias
 
-    private typealias AccessibilityIdentifier = SparkCheckboxAccessibilityIdentifier
+    private typealias AccessibilityIdentifier = CheckboxAccessibilityIdentifier
 
     // MARK: - Public Properties
 
-    public var theming: SparkCheckboxTheming {
+    public var theming: CheckboxTheming {
         viewModel.theming
     }
-    var colors: SparkCheckboxColorables {
+    var colors: CheckboxColorables {
         viewModel.colors
     }
 
     public var accessibilityIdentifier: String?
     public var accessibilityLabel: String?
 
-    @Binding public var selectionState: SparkCheckboxSelectionState
+    @Binding public var selectionState: CheckboxSelectionState
 
     @State var isPressed: Bool = false
 
     // MARK: - Private Properties
 
-    @ObservedObject var viewModel: SparkCheckboxViewModel
+    @ObservedObject var viewModel: CheckboxViewModel
 
     @Namespace private var namespace
 
@@ -52,10 +52,10 @@ public struct SparkCheckboxView: View {
     init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
-        theming: SparkCheckboxTheming,
-        colorsUseCase: SparkCheckboxColorsUseCaseable = SparkCheckboxColorsUseCase(),
-        state: SparkSelectButtonState = .enabled,
-        selectionState: Binding<SparkCheckboxSelectionState>,
+        theming: CheckboxTheming,
+        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
+        state: SelectButtonState = .enabled,
+        selectionState: Binding<CheckboxSelectionState>,
         accessibilityIdentifier: String? = nil
     ) {
         _selectionState = selectionState
@@ -67,16 +67,16 @@ public struct SparkCheckboxView: View {
     public init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
-        theming: SparkCheckboxTheming,
-        state: SparkSelectButtonState = .enabled,
-        selectionState: Binding<SparkCheckboxSelectionState>,
+        theming: CheckboxTheming,
+        state: SelectButtonState = .enabled,
+        selectionState: Binding<CheckboxSelectionState>,
         accessibilityIdentifier: String? = nil
     ) {
         self.init(
             text: text,
             checkboxPosition: checkboxPosition,
             theming: theming,
-            colorsUseCase: SparkCheckboxColorsUseCase(),
+            colorsUseCase: CheckboxColorsUseCase(),
             state: state,
             selectionState: selectionState,
             accessibilityIdentifier: accessibilityIdentifier
@@ -134,7 +134,7 @@ public struct SparkCheckboxView: View {
                 contentView
             }
         )
-        .buttonStyle(SparkCheckboxButtonStyle(isPressed: $isPressed))
+        .buttonStyle(CheckboxButtonStyle(isPressed: $isPressed))
         .if(accessibilityIdentifier != nil) {
             $0.accessibility(identifier: accessibilityIdentifier!)
         }

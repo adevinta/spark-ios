@@ -36,11 +36,11 @@ struct MainView: View {
                 }
 
                 NavigationLink("Checkbox") {
-                    CheckboxView()
+                    CheckboxListView()
                 }
 
                 NavigationLink("Checkbox Group") {
-                    CheckboxGroupView()
+                    CheckboxGroupListView()
                 }
             }
             .navigationBarTitle(Text("Spark"))

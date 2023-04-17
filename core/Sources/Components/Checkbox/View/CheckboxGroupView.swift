@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxGroupView.swift
+//  CheckboxGroupView.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 06.04.23.
@@ -8,27 +8,27 @@
 
 import SwiftUI
 
-public struct SparkCheckboxGroupView: View {
+public struct CheckboxGroupView: View {
 
     // MARK: - Type Alias
 
-    private typealias AccessibilityIdentifier = SparkCheckboxAccessibilityIdentifier
+    private typealias AccessibilityIdentifier = CheckboxAccessibilityIdentifier
 
     // MARK: - Private properties
 
-    @Binding private var items: [any SparkCheckboxGroupItemProtocol]
-    private var theming: SparkCheckboxTheming
-    private var layout: SparkCheckboxGroupLayout
-    private var checkboxPosition: SparkCheckboxView.CheckboxPosition
+    @Binding private var items: [any CheckboxGroupItemProtocol]
+    private var theming: CheckboxTheming
+    private var layout: CheckboxGroupLayout
+    private var checkboxPosition: CheckboxView.CheckboxPosition
     private var accessibilityIdentifierPrefix: String
 
     // MARK: - Initialization
 
     public init(
-        items: Binding<[any SparkCheckboxGroupItemProtocol]>,
-        layout: SparkCheckboxGroupLayout = .vertical,
-        checkboxPosition: SparkCheckboxView.CheckboxPosition,
-        theming: SparkCheckboxTheming,
+        items: Binding<[any CheckboxGroupItemProtocol]>,
+        layout: CheckboxGroupLayout = .vertical,
+        checkboxPosition: CheckboxView.CheckboxPosition,
+        theming: CheckboxTheming,
         accessibilityIdentifierPrefix: String
     ) {
         self._items = items
@@ -54,7 +54,7 @@ public struct SparkCheckboxGroupView: View {
     private var contentView: some View {
         ForEach($items, id: \.id) { item in
             let identifier = "\(accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
-            SparkCheckboxView(
+            CheckboxView(
                 text: item.title.wrappedValue,
                 checkboxPosition: checkboxPosition,
                 theming: theming,

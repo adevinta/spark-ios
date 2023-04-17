@@ -1,5 +1,5 @@
 //
-//  SparkSelectButtonState.swift
+//  SelectButtonState.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 11.04.23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum SparkSelectButtonState: Equatable, Hashable {
+public enum SelectButtonState: Equatable, Hashable {
     case enabled
     case disabled
 

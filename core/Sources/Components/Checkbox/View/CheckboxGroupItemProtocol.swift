@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxGroupItemProtocol.swift
+//  CheckboxGroupItemProtocol.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 12.04.23.
@@ -8,10 +8,10 @@
 
 import Foundation
 
-public protocol SparkCheckboxGroupItemProtocol: Hashable {
+public protocol CheckboxGroupItemProtocol: Hashable {
     var title: String { get set }
     var id: String { get set }
 
-    var selectionState: SparkCheckboxSelectionState { get set }
-    var state: SparkSelectButtonState { get set }
+    var selectionState: CheckboxSelectionState { get set }
+    var state: SelectButtonState { get set }
 }

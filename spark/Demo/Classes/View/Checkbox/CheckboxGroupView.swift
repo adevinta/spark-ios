@@ -10,7 +10,7 @@ import Spark
 import SparkCore
 import SwiftUI
 
-struct CheckboxGroupView: View {
+struct CheckboxGroupListView: View {
 
     // MARK: - Properties
 
@@ -18,11 +18,11 @@ struct CheckboxGroupView: View {
 
     // MARK: - View
 
-    @State private var layout: SparkCheckboxGroupLayout = .vertical
+    @State private var layout: CheckboxGroupLayout = .vertical
 
-    @State private var checkboxPosition: SparkCheckboxView.CheckboxPosition = .left
+    @State private var checkboxPosition: SparkCore.CheckboxView.CheckboxPosition = .left
 
-    @State private var items: [any SparkCheckboxGroupItemProtocol] = [
+    @State private var items: [any CheckboxGroupItemProtocol] = [
         CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
         CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
@@ -68,11 +68,11 @@ struct CheckboxGroupView: View {
 
         ScrollView(layout == .horizontal ? .horizontal : .vertical) {
             HStack {
-                let theming = SparkCheckboxTheming.init(
+                let theming = CheckboxTheming.init(
                     theme: SparkTheme.shared,
                     variant: .filled
                 )
-                SparkCheckboxGroupView(
+                CheckboxGroupView(
                     items: $items,
                     layout: layout,
                     checkboxPosition: checkboxPosition,
@@ -89,8 +89,8 @@ struct CheckboxGroupView: View {
     }
 
     func shuffleAction() {
-        let states = [SparkSelectButtonState.enabled, .disabled, .success(message: "Success"), .warning(message: "Warning"), .error(message: "Error")]
-        let selectionStates = [SparkCheckboxSelectionState.selected, .unselected, .indeterminate]
+        let states = [SelectButtonState.enabled, .disabled, .success(message: "Success"), .warning(message: "Warning"), .error(message: "Error")]
+        let selectionStates = [CheckboxSelectionState.selected, .unselected, .indeterminate]
 
         withAnimation {
             for index in 0..<items.count {
@@ -107,7 +107,7 @@ struct CheckboxGroupView: View {
         }
     }
 
-    var selectedItems: [any SparkCheckboxGroupItemProtocol] {
+    var selectedItems: [any CheckboxGroupItemProtocol] {
         items.filter { $0.selectionState == .selected }
     }
 
@@ -118,11 +118,11 @@ struct CheckboxGroupView: View {
 
 struct CheckboxGroupView_Previews: PreviewProvider {
     static var previews: some View {
-        CheckboxView()
+        CheckboxListView()
     }
 }
 
-class CheckboxGroupItem: SparkCheckboxGroupItemProtocol, Hashable {
+class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
         lhs.id == rhs.id
     }
@@ -133,14 +133,14 @@ class CheckboxGroupItem: SparkCheckboxGroupItemProtocol, Hashable {
 
     var title: String
     var id: String
-    var selectionState: SparkCheckboxSelectionState
-    var state: SparkSelectButtonState
+    var selectionState: CheckboxSelectionState
+    var state: SelectButtonState
 
     init(
         title: String,
         id: String,
-        selectionState: SparkCheckboxSelectionState,
-        state: SparkSelectButtonState = .enabled
+        selectionState: CheckboxSelectionState,
+        state: SelectButtonState = .enabled
     ) {
         self.title = title
         self.id = id

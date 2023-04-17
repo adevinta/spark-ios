@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxGroupLayout.swift
+//  CheckboxGroupLayout.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 11.04.23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum SparkCheckboxGroupLayout {
+public enum CheckboxGroupLayout {
     case horizontal
     case vertical
 }

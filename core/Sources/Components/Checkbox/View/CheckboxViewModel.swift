@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxViewModel.swift
+//  CheckboxViewModel.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 05.04.23.
@@ -8,20 +8,20 @@
 
 import Foundation
 
-final class SparkCheckboxViewModel: ObservableObject {
+final class CheckboxViewModel: ObservableObject {
     public var text: String
 
-    @Published public var theming: SparkCheckboxTheming
-    @Published public var state: SparkSelectButtonState
+    @Published public var theming: CheckboxTheming
+    @Published public var state: SelectButtonState
 
-    @Published private(set) var colors: SparkCheckboxColorables
-    private let colorsUseCase: SparkCheckboxColorsUseCaseable
+    @Published private(set) var colors: CheckboxColorables
+    private let colorsUseCase: CheckboxColorsUseCaseable
 
     init(
         text: String,
-        theming: SparkCheckboxTheming,
-        colorsUseCase: SparkCheckboxColorsUseCaseable = SparkCheckboxColorsUseCase(),
-        state: SparkSelectButtonState = .enabled
+        theming: CheckboxTheming,
+        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
+        state: SelectButtonState = .enabled
     ) {
         self.text = text
         self.theming = theming

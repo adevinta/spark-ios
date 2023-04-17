@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxSelectionState.swift
+//  CheckboxSelectionState.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 04.04.23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum SparkCheckboxSelectionState {
+public enum CheckboxSelectionState {
     case selected
     case indeterminate
     case unselected

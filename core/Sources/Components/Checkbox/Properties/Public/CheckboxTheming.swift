@@ -1,12 +1,12 @@
 //
-//  SparkCheckboxTheming.swift
+//  CheckboxTheming.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 04.04.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-public struct SparkCheckboxTheming {
+public struct CheckboxTheming {
 
     // MARK: - Properties
 

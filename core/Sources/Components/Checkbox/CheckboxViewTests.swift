@@ -13,10 +13,10 @@ import SnapshotTesting
 @testable import Spark
 
 final class SparkCheckboxViewTests: TestCase {
-    let theming = SparkCheckboxTheming(theme: SparkTheme(), variant: .filled)
+    let theming = CheckboxTheming(theme: SparkTheme(), variant: .filled)
 
     func testCheckboxSelected() throws {
-        let view = SparkCheckboxView(
+        let view = CheckboxView(
             text: "Selected checkbox.",
             theming: theming,
             selectionState: .init(get: { .selected }, set: { _ in }),
@@ -27,7 +27,7 @@ final class SparkCheckboxViewTests: TestCase {
     }
 
     func testCheckboxUnselected() throws {
-        let view = SparkCheckboxView(
+        let view = CheckboxView(
             text: "Unselected checkbox.",
             theming: theming,
             selectionState: .init(get: { .unselected }, set: { _ in }),
@@ -38,7 +38,7 @@ final class SparkCheckboxViewTests: TestCase {
     }
 
     func testCheckboxIndeterminate() throws {
-        let view = SparkCheckboxView(
+        let view = CheckboxView(
             text: "Indeterminate checkbox.",
             theming: theming,
             selectionState: .init(get: { .indeterminate }, set: { _ in }),
@@ -49,7 +49,7 @@ final class SparkCheckboxViewTests: TestCase {
     }
 
     func testCheckboxMultiline() throws {
-        let view = SparkCheckboxView(
+        let view = CheckboxView(
             text: "Multiline checkbox.\nMore text.",
             theming: theming,
             selectionState: .init(get: { .unselected }, set: { _ in }),

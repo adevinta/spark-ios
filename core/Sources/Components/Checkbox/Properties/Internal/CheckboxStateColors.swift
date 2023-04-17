@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxStateColors.swift
+//  CheckboxStateColors.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 04.04.23.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-protocol SparkCheckboxStateColorables {
+protocol CheckboxStateColorables {
     var textColor: ColorToken { get }
     var checkboxColor: ColorToken { get }
     var checkboxIconColor: ColorToken { get }
     var pressedBorderColor: ColorToken { get }
 }
 
-struct SparkCheckboxStateColors: SparkCheckboxStateColorables {
+struct CheckboxStateColors: CheckboxStateColorables {
 
     // MARK: - Properties
 

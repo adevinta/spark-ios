@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxColorables.swift
+//  CheckboxColorables.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 04.04.23.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-protocol SparkCheckboxColorables {
+protocol CheckboxColorables {
     var textColor: ColorToken { get }
     var checkboxTintColor: ColorToken { get }
     var checkboxIconColor: ColorToken { get }
     var pressedBorderColor: ColorToken { get }
 }
 
-struct SparkCheckboxColors: SparkCheckboxColorables {
+struct CheckboxColors: CheckboxColorables {
     let textColor: ColorToken
     let checkboxTintColor: ColorToken
     let checkboxIconColor: ColorToken

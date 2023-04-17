@@ -9,16 +9,16 @@
 import SparkCore
 import SwiftUI
 
-struct SparkCheckboxGroupView_Previews: PreviewProvider {
+struct CheckboxGroupView_Previews: PreviewProvider {
 
     struct ContainerView: View {
-        let position: SparkCheckboxView.CheckboxPosition
+        let position: CheckboxView.CheckboxPosition
 
-        let theming = SparkCheckboxTheming(theme: SparkTheme(), variant: .filled)
+        let theming = CheckboxTheming(theme: SparkTheme(), variant: .filled)
 
-        @State private var selection1: SparkCheckboxSelectionState = .selected
+        @State private var selection1: CheckboxSelectionState = .selected
 
-        @State private var items: [any SparkCheckboxGroupItemProtocol] = [
+        @State private var items: [any CheckboxGroupItemProtocol] = [
             CheckboxGroupItem(title: "Apple", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
             CheckboxGroupItem(title: "Cake", id: "2", selectionState: .indeterminate),
             CheckboxGroupItem(title: "Fish", id: "3", selectionState: .unselected),
@@ -28,7 +28,7 @@ struct SparkCheckboxGroupView_Previews: PreviewProvider {
 
         var body: some View {
             HStack {
-                SparkCheckboxGroupView(
+                CheckboxGroupView(
                     items: $items,
                     checkboxPosition: position,
                     theming: theming,
@@ -50,7 +50,7 @@ struct SparkCheckboxGroupView_Previews: PreviewProvider {
     }
 }
 
-final class CheckboxGroupItem: SparkCheckboxGroupItemProtocol, Hashable {
+final class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
         lhs.id == rhs.id
     }
@@ -61,14 +61,14 @@ final class CheckboxGroupItem: SparkCheckboxGroupItemProtocol, Hashable {
 
     var title: String
     var id: String
-    var selectionState: SparkCheckboxSelectionState
-    var state: SparkSelectButtonState
+    var selectionState: CheckboxSelectionState
+    var state: SelectButtonState
 
     init(
         title: String,
         id: String,
-        selectionState: SparkCheckboxSelectionState,
-        state: SparkSelectButtonState = .enabled
+        selectionState: CheckboxSelectionState,
+        state: SelectButtonState = .enabled
     ) {
         self.title = title
         self.id = id

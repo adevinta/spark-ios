@@ -9,16 +9,16 @@
 import SparkCore
 import SwiftUI
 
-struct SparkCheckboxView_Previews: PreviewProvider {
+struct CheckboxView_Previews: PreviewProvider {
 
     struct ContainerView: View {
-        let theming = SparkCheckboxTheming(theme: SparkTheme(), variant: .filled)
+        let theming = CheckboxTheming(theme: SparkTheme(), variant: .filled)
 
-        @State private var selection1: SparkCheckboxSelectionState = .selected
-        @State private var selection2: SparkCheckboxSelectionState = .unselected
-        @State private var selection3: SparkCheckboxSelectionState = .indeterminate
+        @State private var selection1: CheckboxSelectionState = .selected
+        @State private var selection2: CheckboxSelectionState = .unselected
+        @State private var selection3: CheckboxSelectionState = .indeterminate
 
-        @State private var items: [any SparkCheckboxGroupItemProtocol] = [
+        @State private var items: [any CheckboxGroupItemProtocol] = [
             CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
             CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
             CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected)
@@ -27,19 +27,19 @@ struct SparkCheckboxView_Previews: PreviewProvider {
         var body: some View {
             VStack(alignment: .leading) {
                 Text("Left")
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Selected checkbox.",
                     theming: theming,
                     selectionState: $selection1,
                     accessibilityIdentifier: "test"
                 )
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Unselected checkbox.",
                     theming: theming,
                     selectionState: $selection2,
                     accessibilityIdentifier: "test"
                 )
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Indeterminate checkbox.",
                     theming: theming,
                     selectionState: $selection3,
@@ -48,21 +48,21 @@ struct SparkCheckboxView_Previews: PreviewProvider {
 
                 Divider()
                 Text("Right")
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Selected checkbox.",
                     checkboxPosition: .right,
                     theming: theming,
                     selectionState: $selection1,
                     accessibilityIdentifier: "test"
                 )
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Unselected checkbox.",
                     checkboxPosition: .right,
                     theming: theming,
                     selectionState: $selection2,
                     accessibilityIdentifier: "test"
                 )
-                SparkCheckboxView(
+                CheckboxView(
                     text: "Indeterminate checkbox.",
                     checkboxPosition: .right,
                     theming: theming,

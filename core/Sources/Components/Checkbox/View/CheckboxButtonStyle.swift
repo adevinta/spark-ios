@@ -1,5 +1,5 @@
 //
-//  SparkCheckboxButtonStyle.swift
+//  CheckboxButtonStyle.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 12.04.23.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SparkCheckboxButtonStyle: ButtonStyle {
+struct CheckboxButtonStyle: ButtonStyle {
     @Binding var isPressed: Bool
 
     init(isPressed: Binding<Bool>) {

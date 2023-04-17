@@ -8,6 +8,6 @@
 
 import Foundation
 
-public enum SparkCheckboxAccessibilityIdentifier {
+public enum CheckboxAccessibilityIdentifier {
     public static let checkboxGroup = "checkbox-group"
 }
