@@ -21,7 +21,7 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Checkbox") {
-                    Text("TODO")
+                    ComponentsCheckboxListView()
                 }
 
                 NavigationLink("Chip") {

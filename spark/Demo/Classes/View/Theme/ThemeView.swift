@@ -35,14 +35,6 @@ struct ThemeView: View {
                 NavigationLink("Dims") {
                     DimsView()
                 }
-
-                NavigationLink("Checkbox") {
-                    CheckboxListView()
-                }
-
-                NavigationLink("Checkbox Group") {
-                    CheckboxGroupListView()
-                }
             }
             .navigationBarTitle(Text("Theme"))
         }
