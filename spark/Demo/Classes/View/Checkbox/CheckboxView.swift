@@ -45,8 +45,7 @@ struct CheckboxListView: View {
         List(viewModel.states, id: \.self) { state in
             Section(header: Text("State \(title(for: state))")) {
                 let theming = CheckboxTheming.init(
-                    theme: SparkTheme.shared,
-                    variant: .filled
+                    theme: SparkTheme.shared
                 )
                 CheckboxView(
                     text: "Selected",

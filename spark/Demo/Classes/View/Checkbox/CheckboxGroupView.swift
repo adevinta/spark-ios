@@ -69,8 +69,7 @@ struct CheckboxGroupListView: View {
         ScrollView(layout == .horizontal ? .horizontal : .vertical) {
             HStack {
                 let theming = CheckboxTheming.init(
-                    theme: SparkTheme.shared,
-                    variant: .filled
+                    theme: SparkTheme.shared
                 )
                 CheckboxGroupView(
                     items: $items,

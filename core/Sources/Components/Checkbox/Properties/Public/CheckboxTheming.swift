@@ -11,12 +11,10 @@ public struct CheckboxTheming {
     // MARK: - Properties
 
     let theme: Theme
-    let variant: SparkTagVariant
 
     // MARK: - Initialization
 
-    public init(theme: Theme, variant: SparkTagVariant) {
+    public init(theme: Theme) {
         self.theme = theme
-        self.variant = variant
     }
 }

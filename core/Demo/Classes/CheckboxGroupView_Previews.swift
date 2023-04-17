@@ -14,7 +14,7 @@ struct CheckboxGroupView_Previews: PreviewProvider {
     struct ContainerView: View {
         let position: CheckboxView.CheckboxPosition
 
-        let theming = CheckboxTheming(theme: SparkTheme(), variant: .filled)
+        let theming = CheckboxTheming(theme: SparkTheme())
 
         @State private var selection1: CheckboxSelectionState = .selected
 

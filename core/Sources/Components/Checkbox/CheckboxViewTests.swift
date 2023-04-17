@@ -13,7 +13,7 @@ import SnapshotTesting
 @testable import Spark
 
 final class SparkCheckboxViewTests: TestCase {
-    let theming = CheckboxTheming(theme: SparkTheme(), variant: .filled)
+    let theming = CheckboxTheming(theme: SparkTheme())
 
     func testCheckboxSelected() throws {
         let view = CheckboxView(
