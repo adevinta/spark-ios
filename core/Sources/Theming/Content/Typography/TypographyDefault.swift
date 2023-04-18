@@ -82,16 +82,14 @@ public struct TypographyFontTokenDefault: TypographyFontToken {
     private let fontWeight: UIFont.Weight
     private let fontTextStyle: TextStyle
 
-    private let getTextSyleUseCase: GetTextStyleUseCaseable
-
     public var uiFont: UIFont {
-        let textStyle = self.getTextSyleUseCase.executeForUIFont(from: self.fontTextStyle)
+        let textStyle = UIFont.TextStyle(from: self.fontTextStyle)
         let font = UIFont(name: self.fontName, size: self.fontSize) ?? .systemFont(ofSize: self.fontSize, weight: self.fontWeight)
         return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: font)
     }
     
     public var font: Font {
-        let textStyle = self.getTextSyleUseCase.execute(from: self.fontTextStyle)
+        let textStyle = Font.TextStyle(from: self.fontTextStyle)
         return Font.custom(self.fontName,
                            size: self.fontSize,
                            relativeTo: textStyle)
@@ -103,23 +101,9 @@ public struct TypographyFontTokenDefault: TypographyFontToken {
                             size: CGFloat,
                             weight: UIFont.Weight,
                             textStyle: TextStyle) {
-        self.init(named: fontName,
-                  size: size,
-                  weight: weight,
-                  textStyle: textStyle,
-                  getTextSyleUseCase: GetTextStyleUseCase())
-    }
-
-    private init(named fontName: String,
-                 size: CGFloat,
-                 weight: UIFont.Weight,
-                 textStyle: TextStyle,
-                 getTextSyleUseCase: GetTextStyleUseCaseable) {
         self.fontName = fontName
         self.fontSize = size
         self.fontWeight = weight
         self.fontTextStyle = textStyle
-
-        self.getTextSyleUseCase = getTextSyleUseCase
     }
 }
