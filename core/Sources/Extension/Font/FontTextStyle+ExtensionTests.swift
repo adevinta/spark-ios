@@ -37,7 +37,7 @@ final class FontTextStyleExtensionTests: XCTestCase {
             // THEN
             XCTAssertEqual(textStyle,
                            item.expectedFontTextStyle,
-                           "Wrong Font.TextStyle value for .\(item.expectedFontTextStyle) case")
+                           "Wrong Font.TextStyle value for .\(item.givenTextStyle) case")
         }
     }
 }
