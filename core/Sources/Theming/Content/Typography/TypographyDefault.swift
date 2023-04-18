@@ -80,27 +80,46 @@ public struct TypographyFontTokenDefault: TypographyFontToken {
     private let fontName: String
     private let fontSize: CGFloat
     private let fontWeight: UIFont.Weight
-    private let fontTextStyle: Font.TextStyle
+    private let fontTextStyle: TextStyle
+
+    private let getTextSyleUseCase: GetTextStyleUseCaseable
 
     public var uiFont: UIFont {
-        return UIFont(name: self.fontName, size: self.fontSize) ?? .systemFont(ofSize: self.fontSize, weight: self.fontWeight)
+        let textStyle = self.getTextSyleUseCase.executeForUIFont(from: self.fontTextStyle)
+        let font = UIFont(name: self.fontName, size: self.fontSize) ?? .systemFont(ofSize: self.fontSize, weight: self.fontWeight)
+        return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: font)
     }
     
     public var font: Font {
+        let textStyle = self.getTextSyleUseCase.execute(from: self.fontTextStyle)
         return Font.custom(self.fontName,
                            size: self.fontSize,
-                           relativeTo: self.fontTextStyle)
+                           relativeTo: textStyle)
     }
 
     // MARK: - Initialization
 
     public init(named fontName: String,
-                size: CGFloat,
-                weight: UIFont.Weight,
-                textStyle: Font.TextStyle) {
+                            size: CGFloat,
+                            weight: UIFont.Weight,
+                            textStyle: TextStyle) {
+        self.init(named: fontName,
+                  size: size,
+                  weight: weight,
+                  textStyle: textStyle,
+                  getTextSyleUseCase: GetTextStyleUseCase())
+    }
+
+    private init(named fontName: String,
+                 size: CGFloat,
+                 weight: UIFont.Weight,
+                 textStyle: TextStyle,
+                 getTextSyleUseCase: GetTextStyleUseCaseable) {
         self.fontName = fontName
         self.fontSize = size
         self.fontWeight = weight
         self.fontTextStyle = textStyle
+
+        self.getTextSyleUseCase = getTextSyleUseCase
     }
 }
