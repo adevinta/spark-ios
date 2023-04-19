@@ -98,6 +98,7 @@ public struct CheckboxView: View {
             switch selectionState {
             case .selected:
                 theming.theme.iconography.checkmark
+                    .image
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)

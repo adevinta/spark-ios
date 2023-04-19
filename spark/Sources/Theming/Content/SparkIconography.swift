@@ -10,7 +10,8 @@ import SwiftUI
 import SparkCore
 
 struct SparkIconography: Iconography {
-    private(set) var checkmark: Image = {
-        SparkIconAsset.checkboxSelected.swiftUIImage
+    private(set) var checkmark: ImageToken = {
+        let image = SparkIconAsset.checkboxSelected.image
+        return ImageTokenDefault(uiImage: image)
     }()
 }
