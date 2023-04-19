@@ -80,24 +80,27 @@ public struct TypographyFontTokenDefault: TypographyFontToken {
     private let fontName: String
     private let fontSize: CGFloat
     private let fontWeight: UIFont.Weight
-    private let fontTextStyle: Font.TextStyle
+    private let fontTextStyle: TextStyle
 
     public var uiFont: UIFont {
-        return UIFont(name: self.fontName, size: self.fontSize) ?? .systemFont(ofSize: self.fontSize, weight: self.fontWeight)
+        let textStyle = UIFont.TextStyle(from: self.fontTextStyle)
+        let font = UIFont(name: self.fontName, size: self.fontSize) ?? .systemFont(ofSize: self.fontSize, weight: self.fontWeight)
+        return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: font)
     }
     
     public var font: Font {
+        let textStyle = Font.TextStyle(from: self.fontTextStyle)
         return Font.custom(self.fontName,
                            size: self.fontSize,
-                           relativeTo: self.fontTextStyle)
+                           relativeTo: textStyle)
     }
 
     // MARK: - Initialization
 
     public init(named fontName: String,
-                size: CGFloat,
-                weight: UIFont.Weight,
-                textStyle: Font.TextStyle) {
+                            size: CGFloat,
+                            weight: UIFont.Weight,
+                            textStyle: TextStyle) {
         self.fontName = fontName
         self.fontSize = size
         self.fontWeight = weight
