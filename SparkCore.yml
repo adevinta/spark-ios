@@ -75,6 +75,8 @@ targetTemplates:
         excludes:
         - "Generated/"
       - path: spark/Sources/Theming
+        excludes:
+        - "**/*Tests.swift"
     dependencies:
       - target: SparkCore
 
