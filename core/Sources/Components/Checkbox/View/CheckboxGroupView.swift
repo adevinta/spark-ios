@@ -19,7 +19,7 @@ public struct CheckboxGroupView: View {
     @Binding private var items: [any CheckboxGroupItemProtocol]
     private var theming: CheckboxTheming
     private var layout: CheckboxGroupLayout
-    private var checkboxPosition: CheckboxView.CheckboxPosition
+    private var checkboxPosition: CheckboxPosition
     private var accessibilityIdentifierPrefix: String
 
     // MARK: - Initialization
@@ -27,7 +27,7 @@ public struct CheckboxGroupView: View {
     public init(
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
-        checkboxPosition: CheckboxView.CheckboxPosition,
+        checkboxPosition: CheckboxPosition,
         theming: CheckboxTheming,
         accessibilityIdentifierPrefix: String
     ) {
@@ -40,7 +40,7 @@ public struct CheckboxGroupView: View {
 
     public var body: some View {
         let spacing: CGFloat = 12
-        if layout == .horizontal{
+        if layout == .horizontal {
             HStack(alignment: .top, spacing: spacing) {
                 contentView
             }

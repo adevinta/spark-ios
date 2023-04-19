@@ -192,11 +192,6 @@ public struct CheckboxView: View {
         }
     }
 
-    public enum CheckboxPosition {
-        case left
-        case right
-    }
-
     private enum Identifier: String {
         case checkbox
         case content
