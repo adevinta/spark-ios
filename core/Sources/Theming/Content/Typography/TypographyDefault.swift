@@ -79,12 +79,13 @@ public struct TypographyFontTokenDefault: TypographyFontToken {
 
     private let fontName: String
     private let fontSize: CGFloat
-    private let fontWeight: UIFont.Weight
     private let fontTextStyle: TextStyle
 
     public var uiFont: UIFont {
+        guard let font = UIFont(name: self.fontName, size: self.fontSize) else {
+            fatalError("Missing font named \(self.fontName)")
+        }
         let textStyle = UIFont.TextStyle(from: self.fontTextStyle)
-        let font = UIFont(name: self.fontName, size: self.fontSize) ?? .systemFont(ofSize: self.fontSize, weight: self.fontWeight)
         return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: font)
     }
     
@@ -98,12 +99,10 @@ public struct TypographyFontTokenDefault: TypographyFontToken {
     // MARK: - Initialization
 
     public init(named fontName: String,
-                            size: CGFloat,
-                            weight: UIFont.Weight,
-                            textStyle: TextStyle) {
+                size: CGFloat,
+                textStyle: TextStyle) {
         self.fontName = fontName
         self.fontSize = size
-        self.fontWeight = weight
         self.fontTextStyle = textStyle
     }
 }
