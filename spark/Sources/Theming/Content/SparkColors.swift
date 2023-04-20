@@ -70,7 +70,7 @@ struct SparkColors: Colors {
     let states: ColorsStates = ColorsStatesDefault(
         primaryPressed: ColorTokenDefault(named: "primary-pressed", in: Bundle(for: ClassForBundle.self)),
         primaryVariantPressed: ColorTokenDefault(named: "primary-variant-pressed", in: Bundle(for: ClassForBundle.self)),
-        primaryContainerPressed: ColorTokenDefault(named: "prinary-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        primaryContainerPressed: ColorTokenDefault(named: "primary-container-pressed", in: Bundle(for: ClassForBundle.self)),
         secondaryPressed: ColorTokenDefault(named: "secondary-pressed", in: Bundle(for: ClassForBundle.self)),
         secondaryVariantPressed: ColorTokenDefault(named: "secondary-variant-pressed", in: Bundle(for: ClassForBundle.self)),
         secondaryContainerPressed: ColorTokenDefault(named: "secondary-container-pressed", in: Bundle(for: ClassForBundle.self)),
