@@ -25,6 +25,10 @@ struct ComponentsCheckboxListView: View {
                 NavigationLink("Checkbox") {
                     CheckboxUIViewControllerBridge()
                 }
+
+                NavigationLink("Checkbox Group") {
+                    CheckboxGroupUIViewControllerBridge()
+                }
             }
         }
         .navigationBarTitle(Text("Checkbox"))

@@ -158,3 +158,153 @@ extension CheckboxViewController: CheckboxUIViewDelegate {
         print("checkbox", checkbox.text ?? "", "did switch to", state)
     }
 }
+
+struct CheckboxGroupUIViewControllerBridge: UIViewControllerRepresentable {
+    typealias UIViewControllerType = CheckboxGroupViewController
+
+    func makeUIViewController(context: Context) -> CheckboxGroupViewController {
+        let vc = CheckboxGroupViewController()
+        return vc
+    }
+
+    func updateUIViewController(_ uiViewController: CheckboxGroupViewController, context: Context) {
+        // Updates the state of the specified view controller with new information from SwiftUI.
+    }
+}
+
+final class CheckboxGroupViewController: UIViewController {
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return scrollView
+    }()
+
+    private lazy var contentView: UIView = {
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        return contentView
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+       // view.backgroundColor = .yellow
+        scrollView.frame = view.bounds
+        view.addSubview(scrollView)
+
+        scrollView.backgroundColor = .orange
+        scrollView.addSubview(contentView)
+        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+
+        setUpView()
+    }
+
+
+    @State private var items: [any CheckboxGroupItemProtocol] = [
+        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
+        CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
+        CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
+        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
+        CheckboxGroupItem(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
+        CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
+        CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
+    ]
+
+    private func setUpView() {
+        let view = contentView
+        let theming = CheckboxTheming.init(
+            theme: SparkTheme.shared
+        )
+
+        view.backgroundColor = .green
+
+        let groupView = CheckboxGroupUIView(
+            items: $items,
+            checkboxPosition: .left,
+            theming: theming,
+            accessibilityIdentifierPrefix: "abc"
+        )
+        groupView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(groupView)
+        groupView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        groupView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        groupView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        groupView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+
+/*
+        var checkboxes: [CheckboxUIView] = []
+
+        let checkbox = CheckboxUIView(
+            theming: theming,
+            state: .enabled,
+            selectionState: .unselected,
+            checkboxPosition: .left,
+            selectionStateHandler: {
+                print("selectionStateHandler", $0)
+            }
+        )
+        checkbox.text = "Hello world!"
+        checkbox.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(checkbox)
+        checkboxes.append(checkbox)
+
+        let checkbox2 = CheckboxUIView(
+            theming: theming,
+            state: .disabled,
+            selectionState: .selected,
+            checkboxPosition: .left
+        )
+        checkbox2.text = "Second checkbox! This is a very very long descriptive text."
+        checkbox2.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(checkbox2)
+        checkboxes.append(checkbox2)
+
+
+        let errorCheckbox = CheckboxUIView(
+            theming: theming,
+            state: .error(message: "Error message"),
+            selectionState: .indeterminate,
+            checkboxPosition: .left
+        )
+        errorCheckbox.text = "Error checkbox"
+        errorCheckbox.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(errorCheckbox)
+        checkboxes.append(errorCheckbox)
+
+        let successCheckbox = CheckboxUIView(
+            theming: theming,
+            state: .success(message: "Success message"),
+            selectionState: .selected,
+            checkboxPosition: .right
+        )
+        successCheckbox.text = "Right checkbox"
+        successCheckbox.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(successCheckbox)
+        checkboxes.append(successCheckbox)
+
+        var previousCheckbox: CheckboxUIView?
+        for checkbox in checkboxes {
+            checkbox.delegate = self
+
+            checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+            checkbox.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+
+            if let previousCheckbox = previousCheckbox {
+                checkbox.topAnchor.constraint(equalTo: previousCheckbox.safeAreaLayoutGuide.bottomAnchor, constant: 16).isActive = true
+            } else {
+                checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            }
+
+            if checkbox == checkboxes.last {
+                checkbox.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+
+            }
+
+            previousCheckbox = checkbox
+        }*/
+    }
+}
