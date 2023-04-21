@@ -2,7 +2,7 @@
 //  CheckboxUIView.swift
 //  SparkCoreDemo
 //
-//  Created by janniklas.freundt.ext on 17.04.23.
+//  Created by janniklas.freundt.ext on 12.04.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Foundation
 import Spark
 import SparkCore
 import SwiftUI
-/*
+
 struct CheckboxUIViewControllerBridge: UIViewControllerRepresentable {
     typealias UIViewControllerType = CheckboxViewController
 
@@ -26,7 +26,7 @@ struct CheckboxUIViewControllerBridge: UIViewControllerRepresentable {
 final class CheckboxViewController: UIViewController {
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
 
@@ -40,9 +40,12 @@ final class CheckboxViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-       // view.backgroundColor = .yellow
-        scrollView.frame = view.bounds
+
         view.addSubview(scrollView)
+        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
         scrollView.addSubview(contentView)
         contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
@@ -155,7 +158,6 @@ final class CheckboxViewController: UIViewController {
 
 extension CheckboxViewController: CheckboxUIViewDelegate {
     func checkbox(_ checkbox: SparkCore.CheckboxUIView, didChangeSelection state: SparkCore.CheckboxSelectionState) {
-        print("checkbox", checkbox.text ?? "", "did switch to", state)
+        print("checkbox", checkbox.text, "did switch to", state)
     }
 }
-*/
