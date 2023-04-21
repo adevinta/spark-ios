@@ -92,6 +92,7 @@ public final class CheckboxUIView: UIView {
 
     public convenience init(
         theming: CheckboxTheming,
+        text: String,
         state: SelectButtonState = .enabled,
         selectionState: CheckboxSelectionState = .unselected,
         checkboxPosition: CheckboxPosition,
@@ -99,6 +100,7 @@ public final class CheckboxUIView: UIView {
     ) {
         self.init(
             theming: theming,
+            text: text,
             colorsUseCase: CheckboxColorsUseCase(),
             state: state,
             selectionState: selectionState,
@@ -109,6 +111,7 @@ public final class CheckboxUIView: UIView {
 
     init(
         theming: CheckboxTheming,
+        text: String,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
         selectionState: CheckboxSelectionState = .unselected,
@@ -119,6 +122,7 @@ public final class CheckboxUIView: UIView {
         self.colorsUseCase = colorsUseCase
         self.colors = colorsUseCase.execute(from: theming, state: state)
         self.state = state
+        self.text = text
         self.selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.selectionStateHandler = selectionStateHandler
@@ -127,6 +131,7 @@ public final class CheckboxUIView: UIView {
     }
 
     private func commonInit() {
+        translatesAutoresizingMaskIntoConstraints = false
         controlView.selectionState = selectionState
 
         textLabel.text = text

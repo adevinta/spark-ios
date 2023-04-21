@@ -57,6 +57,7 @@ public final class CheckboxGroupUIView: UIView {
 
         let checkbox = CheckboxUIView(
             theming: theming,
+            text: "Hello group!",
             state: .enabled,
             selectionState: .unselected,
             checkboxPosition: .left,
@@ -64,40 +65,39 @@ public final class CheckboxGroupUIView: UIView {
                 print("selectionStateHandler", $0)
             }
         )
-        checkbox.text = "Hello group!"
         checkbox.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(checkbox)
         checkboxes.append(checkbox)
 
         let checkbox2 = CheckboxUIView(
             theming: theming,
+            text: "Second checkbox! This is a very very long descriptive text.",
             state: .disabled,
             selectionState: .selected,
             checkboxPosition: .left
         )
-        checkbox2.text = "Second checkbox! This is a very very long descriptive text."
         checkbox2.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(checkbox2)
         checkboxes.append(checkbox2)
 
         let errorCheckbox = CheckboxUIView(
             theming: theming,
+            text: "Error checkbox",
             state: .error(message: "Error message"),
             selectionState: .indeterminate,
             checkboxPosition: .left
         )
-        errorCheckbox.text = "Error checkbox"
         errorCheckbox.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(errorCheckbox)
         checkboxes.append(errorCheckbox)
 
         let successCheckbox = CheckboxUIView(
             theming: theming,
+            text: "Right checkbox",
             state: .success(message: "Success message"),
             selectionState: .selected,
             checkboxPosition: .right
         )
-        successCheckbox.text = "Right checkbox"
         successCheckbox.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(successCheckbox)
         checkboxes.append(successCheckbox)
