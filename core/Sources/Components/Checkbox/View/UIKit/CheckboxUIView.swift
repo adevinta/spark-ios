@@ -193,7 +193,7 @@ public final class CheckboxUIView: UIView {
 
     private func updateViewConstraints() {
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let scaledSpacing = bodyFontMetrics.scaledValue(for: 20.0) + 8
+        let scaledSpacing = bodyFontMetrics.scaledValue(for: 20.0, compatibleWith: traitCollection) + 8
 
         controlViewWidthConstraint?.constant = scaledSpacing
         controlViewHeightConstraint?.constant = scaledSpacing
