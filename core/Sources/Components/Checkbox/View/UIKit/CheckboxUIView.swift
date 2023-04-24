@@ -283,7 +283,7 @@ public final class CheckboxUIView: UIView {
         case .unselected:
             selectionState = .selected
         case .indeterminate:
-            break
+            selectionState = .unselected
         }
         selectionStateHandler?(selectionState)
         delegate?.checkbox(self, didChangeSelection: selectionState)

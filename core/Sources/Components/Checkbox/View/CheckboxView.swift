@@ -189,7 +189,7 @@ public struct CheckboxView: View {
         case .unselected:
             selectionState = .selected
         case .indeterminate:
-            break
+            selectionState = .unselected
         }
     }
 
