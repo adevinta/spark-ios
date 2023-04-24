@@ -18,13 +18,23 @@ public final class CheckboxGroupUIView: UIView {
 
     @Binding private var items: [any CheckboxGroupItemProtocol]
     private var theming: CheckboxTheming
-    private var layout: CheckboxGroupLayout
-    private var checkboxPosition: CheckboxPosition
     private var accessibilityIdentifierPrefix: String
+    private var checkboxes: [CheckboxUIView] = []
 
     // MARK: - Public properties.
 
     public weak var delegate: CheckboxGroupUIViewProtocol?
+
+    public var layout: CheckboxGroupLayout {
+        didSet {
+            update()
+        }
+    }
+    public var checkboxPosition: CheckboxPosition {
+        didSet {
+            update()
+        }
+    }
 
     public required init?(coder: NSCoder) {
         fatalError("not implemented")
@@ -50,75 +60,89 @@ public final class CheckboxGroupUIView: UIView {
         setUpView()
     }
 
+    private func clearView() {
+        for checkbox in checkboxes {
+            checkbox.removeFromSuperview()
+        }
+        checkboxes = []
+    }
+
     private func setUpView() {
+        clearView()
         let view = self
 
         var checkboxes: [CheckboxUIView] = []
 
-        let checkbox = CheckboxUIView(
-            theming: theming,
-            text: "Hello group!",
-            state: .enabled,
-            selectionState: .unselected,
-            checkboxPosition: .left,
-            selectionStateHandler: {
-                print("selectionStateHandler", $0)
-            }
-        )
-        checkbox.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(checkbox)
-        checkboxes.append(checkbox)
+        for item in items {
+            let checkbox = CheckboxUIView(
+                theming: theming,
+                text: item.title,
+                state: item.state,
+                selectionState: item.selectionState,
+                checkboxPosition: checkboxPosition,
+                selectionStateHandler: { [weak self] state in
+                    print("selectionStateHandler", state)
+                    guard
+                        let self,
+                        let index = self.items.firstIndex(where: { $0.id == item.id}) else { return }
 
-        let checkbox2 = CheckboxUIView(
-            theming: theming,
-            text: "Second checkbox! This is a very very long descriptive text.",
-            state: .disabled,
-            selectionState: .selected,
-            checkboxPosition: .left
-        )
-        checkbox2.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(checkbox2)
-        checkboxes.append(checkbox2)
+                    var item = self.items[index]
+                    item.selectionState = state
+                    self.items[index] = item
+                }
+            )
+            checkbox.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(checkbox)
+            checkboxes.append(checkbox)
+        }
 
-        let errorCheckbox = CheckboxUIView(
-            theming: theming,
-            text: "Error checkbox",
-            state: .error(message: "Error message"),
-            selectionState: .indeterminate,
-            checkboxPosition: .left
-        )
-        errorCheckbox.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(errorCheckbox)
-        checkboxes.append(errorCheckbox)
-
-        let successCheckbox = CheckboxUIView(
-            theming: theming,
-            text: "Right checkbox",
-            state: .success(message: "Success message"),
-            selectionState: .selected,
-            checkboxPosition: .right
-        )
-        successCheckbox.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(successCheckbox)
-        checkboxes.append(successCheckbox)
+        self.checkboxes = checkboxes
 
         var previousCheckbox: CheckboxUIView?
-        for checkbox in checkboxes {
-            checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-            checkbox.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
 
-            if let previousCheckbox = previousCheckbox {
-                checkbox.topAnchor.constraint(equalTo: previousCheckbox.safeAreaLayoutGuide.bottomAnchor, constant: 16).isActive = true
-            } else {
-                checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        switch layout {
+        case .vertical:
+            for checkbox in checkboxes {
+                checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+                checkbox.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+
+                if let previousCheckbox = previousCheckbox {
+                    checkbox.topAnchor.constraint(equalTo: previousCheckbox.bottomAnchor, constant: 16).isActive = true
+                } else {
+                    checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+                }
+
+                if checkbox == checkboxes.last {
+                    checkbox.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+
+                }
+
+                previousCheckbox = checkbox
             }
 
-            if checkbox == checkboxes.last {
-                checkbox.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        case .horizontal:
+            for checkbox in checkboxes {
+                checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
+                checkbox.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
 
+                if let previousCheckbox = previousCheckbox {
+                    checkbox.leadingAnchor.constraint(equalTo: previousCheckbox.trailingAnchor, constant: 16).isActive = true
+                } else {
+                    checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+                }
+
+                if checkbox == checkboxes.last {
+                    checkbox.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+
+                }
+
+                previousCheckbox = checkbox
             }
-
-            previousCheckbox = checkbox
+            
         }
+    }
+
+    public func update() {
+        setUpView()
     }
 }
