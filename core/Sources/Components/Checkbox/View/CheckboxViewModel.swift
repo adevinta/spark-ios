@@ -14,7 +14,7 @@ final class CheckboxViewModel: ObservableObject {
     @Published public var theming: CheckboxTheming
     @Published public var state: SelectButtonState
 
-    @Published private(set) var colors: CheckboxColorables
+    @Published public var colors: CheckboxColorables
     private let colorsUseCase: CheckboxColorsUseCaseable
 
     init(

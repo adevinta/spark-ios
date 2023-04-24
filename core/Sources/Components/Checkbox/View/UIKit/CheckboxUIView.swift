@@ -47,8 +47,12 @@ public final class CheckboxUIView: UIView {
     public weak var delegate: CheckboxUIViewDelegate?
     public var selectionStateHandler: ((_ state: CheckboxSelectionState) -> Void)?
 
-    public var text: String? {
-        didSet {
+    public var text: String {
+        get {
+            viewModel.text
+        }
+        set {
+            viewModel.text = newValue
             textLabel.text = text
         }
     }
@@ -61,6 +65,7 @@ public final class CheckboxUIView: UIView {
 
     public var state: SelectButtonState {
         didSet {
+            viewModel.state = state
             colors = colorsUseCase.execute(from: theming, state: state)
 
             updateState()
@@ -70,7 +75,11 @@ public final class CheckboxUIView: UIView {
     public var theming: CheckboxTheming
 
     var colors: CheckboxColorables {
-        didSet {
+        get {
+            viewModel.colors
+        }
+        set {
+            viewModel.colors = newValue
             updateTheme()
         }
     }
@@ -79,6 +88,8 @@ public final class CheckboxUIView: UIView {
             colors = colorsUseCase.execute(from: theming, state: state)
         }
     }
+
+    var viewModel: CheckboxViewModel
 
     var isPressed: Bool = false {
         didSet {
@@ -120,14 +131,15 @@ public final class CheckboxUIView: UIView {
     ) {
         self.theming = theming
         self.colorsUseCase = colorsUseCase
-        self.colors = colorsUseCase.execute(from: theming, state: state)
         self.state = state
-        self.text = text
         self.selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.selectionStateHandler = selectionStateHandler
+        self.viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
+
         super.init(frame: .zero)
-        commonInit()
+        self.colors = colorsUseCase.execute(from: theming, state: state)
+        self.commonInit()
     }
 
     private func commonInit() {
@@ -145,7 +157,7 @@ public final class CheckboxUIView: UIView {
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
             textLabel.leadingAnchor.constraint(equalTo: controlView.trailingAnchor, constant: 4).isActive = true
             textLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
             textLabelBottomConstraint?.isActive = true
 
             controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
@@ -159,7 +171,7 @@ public final class CheckboxUIView: UIView {
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
             textLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
             textLabel.trailingAnchor.constraint(equalTo: controlView.leadingAnchor, constant: -4).isActive = true
-            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
             textLabelBottomConstraint?.isActive = true
 
             controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
@@ -221,7 +233,7 @@ public final class CheckboxUIView: UIView {
             if let bottomConstraint = textLabelBottomConstraint {
                 NSLayoutConstraint.deactivate([bottomConstraint])
             }
-            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor)
             textLabelBottomConstraint?.isActive = true
         }
 
@@ -229,30 +241,15 @@ public final class CheckboxUIView: UIView {
     }
 
     var interactionEnabled: Bool {
-        switch state {
-        case .disabled:
-            return false
-        default:
-            return true
-        }
+        viewModel.interactionEnabled
     }
 
     var opacity: CGFloat {
-        switch state {
-        case .disabled:
-            return theming.theme.dims.dim3
-        default:
-            return 1.0
-        }
+        viewModel.opacity
     }
 
     var supplementaryMessage: String? {
-        switch state {
-        case .error(let message), .success(let message), .warning(let message):
-            return message
-        default:
-            return nil
-        }
+        viewModel.supplementaryMessage
     }
 
     private func updateTheme() {
