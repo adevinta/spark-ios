@@ -8,6 +8,7 @@
 
 import Foundation
 
+@frozen
 public enum CheckboxGroupLayout {
     case horizontal
     case vertical
