@@ -25,6 +25,10 @@ struct CheckboxUIView_Previews: PreviewProvider {
                 .previewDisplayName("Extra small")
 
             CheckboxUIViewControllerBridge()
+                .environment(\.sizeCategory, .medium)
+                .previewDisplayName("Medium")
+
+            CheckboxUIViewControllerBridge()
                 .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
                 .previewDisplayName("Extra large")
         }

@@ -19,61 +19,66 @@ struct CheckboxView_Previews: PreviewProvider {
         @State private var selection2: CheckboxSelectionState = .unselected
         @State private var selection3: CheckboxSelectionState = .indeterminate
 
-        @State private var items: [any CheckboxGroupItemProtocol] = [
-            CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
-            CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
-            CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected)
-        ]
-
         var body: some View {
-            VStack(alignment: .leading) {
-                Text("Left")
-                CheckboxView(
-                    text: "Selected checkbox.",
-                    theming: theming,
-                    selectionState: $selection1,
-                    accessibilityIdentifier: "test"
-                )
-                CheckboxView(
-                    text: "Unselected checkbox.",
-                    theming: theming,
-                    selectionState: $selection2,
-                    accessibilityIdentifier: "test"
-                )
-                CheckboxView(
-                    text: "Indeterminate checkbox.",
-                    theming: theming,
-                    selectionState: $selection3,
-                    accessibilityIdentifier: "test"
-                )
+            scrollView
+                .environment(\.sizeCategory, .extraSmall)
+                .previewDisplayName("Extra small")
 
-                Divider()
-                Text("Right")
-                CheckboxView(
-                    text: "Selected checkbox.",
-                    checkboxPosition: .right,
-                    theming: theming,
-                    selectionState: $selection1,
-                    accessibilityIdentifier: "test"
-                )
-                CheckboxView(
-                    text: "Unselected checkbox.",
-                    checkboxPosition: .right,
-                    theming: theming,
-                    selectionState: $selection2,
-                    accessibilityIdentifier: "test"
-                )
-                CheckboxView(
-                    text: "Indeterminate checkbox.",
-                    checkboxPosition: .right,
-                    theming: theming,
-                    selectionState: $selection3,
-                    accessibilityIdentifier: "test"
-                )
-            }
-            .padding()
+            scrollView
+                .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
+                .previewDisplayName("Extra large")
         }
 
+        var scrollView: some View {
+            ScrollView {
+                VStack(spacing: 0) {
+                    Text("Left")
+                    CheckboxView(
+                        text: "Selected checkbox.",
+                        theming: theming,
+                        selectionState: $selection1,
+                        accessibilityIdentifier: "test"
+                    )
+                    CheckboxView(
+                        text: "Unselected checkbox.",
+                        theming: theming,
+                        selectionState: $selection2,
+                        accessibilityIdentifier: "test"
+                    )
+                    CheckboxView(
+                        text: "Indeterminate checkbox.",
+                        theming: theming,
+                        selectionState: $selection3,
+                        accessibilityIdentifier: "test"
+                    )
+
+                    Divider()
+                    Text("Right")
+                    CheckboxView(
+                        text: "Selected checkbox.",
+                        checkboxPosition: .right,
+                        theming: theming,
+                        selectionState: $selection1,
+                        accessibilityIdentifier: "test"
+                    )
+                    CheckboxView(
+                        text: "Unselected checkbox.",
+                        checkboxPosition: .right,
+                        theming: theming,
+                        selectionState: $selection2,
+                        accessibilityIdentifier: "test"
+                    )
+                    CheckboxView(
+                        text: "Indeterminate checkbox.",
+                        checkboxPosition: .right,
+                        theming: theming,
+                        selectionState: $selection3,
+                        accessibilityIdentifier: "test"
+                    )
+                }
+                .padding()
+            }
+        }
     }
 
     static var previews: some View {
