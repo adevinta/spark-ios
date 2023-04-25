@@ -15,7 +15,7 @@ final class TestCaseTracker: NSObject, XCTestObservation {
 
     func snapshotDirectory(for file: StaticString) -> String {
         let snapshotDirectory = ProcessInfo.processInfo.environment["SNAPSHOT_REFERENCE_DIR"]! + "/"
-        guard var url = URL(string: snapshotDirectory) else { return "" }
+        guard let url = URL(string: snapshotDirectory) else { return "" }
 
         return url.appendingPathComponent(currentTestCase.testClassName).path
     }

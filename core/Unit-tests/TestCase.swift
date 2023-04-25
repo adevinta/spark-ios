@@ -8,9 +8,13 @@
 
 import XCTest
 
+@testable import Spark
+
 open class TestCase: XCTestCase {
     override open class func setUp() {
         super.setUp()
+
+        SparkConfiguration.load()
 
         TestCaseTracker.shared.subscribe()
     }
