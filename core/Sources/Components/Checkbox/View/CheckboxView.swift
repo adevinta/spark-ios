@@ -40,6 +40,8 @@ public struct CheckboxView: View {
 
     @ScaledMetric private var checkboxWidth: CGFloat = 20
     @ScaledMetric private var checkboxHeight: CGFloat = 20
+    @ScaledMetric private var checkboxBorderRadius: CGFloat = 4
+    @ScaledMetric private var checkboxBorderWidth: CGFloat = 2
 
     @ScaledMetric private var checkboxSelectedWidth: CGFloat = 14
     @ScaledMetric private var checkboxSelectedHeight: CGFloat = 14
@@ -87,13 +89,22 @@ public struct CheckboxView: View {
         let tintColor = colors.checkboxTintColor.color
         let iconColor = colors.checkboxIconColor.color
         ZStack {
-            RoundedRectangle(cornerRadius: 4)
+            let lineWidth: CGFloat = 4
+            RoundedRectangle(cornerRadius: checkboxBorderRadius)
                 .if(selectionState == .selected || selectionState == .indeterminate) {
                     $0.fill(tintColor)
                 } else: {
-                    $0.strokeBorder(tintColor, lineWidth: 2)
+                    $0.strokeBorder(tintColor, lineWidth: checkboxBorderWidth)
                 }
                 .frame(width: checkboxWidth, height: checkboxHeight)
+                .if(isPressed && viewModel.interactionEnabled) {
+                    $0.overlay(
+                        RoundedRectangle(cornerRadius: checkboxBorderRadius)
+                            .inset(by: -lineWidth / 2)
+                            .stroke(colors.pressedBorderColor.color, lineWidth: lineWidth)
+                            .animation(.easeInOut(duration: 0.1), value: isPressed)
+                    )
+                }
 
             switch selectionState {
             case .selected:
@@ -111,13 +122,6 @@ public struct CheckboxView: View {
                     .fill(iconColor)
                     .frame(width: checkboxIndeterminateWidth, height: checkboxIndeterminateHeight)
             }
-
-            let lineWidth: CGFloat = isPressed ? 4 : 0
-            RoundedRectangle(cornerRadius: 4)
-                .inset(by: -lineWidth / 2)
-                .stroke(colors.pressedBorderColor.color, lineWidth: lineWidth)
-                .frame(width: checkboxWidth, height: checkboxHeight)
-                .animation(.easeInOut(duration: 0.1), value: isPressed)
         }
         .if(selectionState == .selected) {
             $0.accessibilityAddTraits(.isSelected)
