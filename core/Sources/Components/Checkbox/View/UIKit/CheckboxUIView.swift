@@ -12,10 +12,15 @@ public final class CheckboxUIView: UIView {
 
     // MARK: - Private properties.
 
-    private let button = UIButton()
+    private let button: UIButton = {
+        let button = UIButton()
+        button.isAccessibilityElement = false
+        return button
+    }()
 
     private let textLabel: UILabel = {
         let label = UILabel()
+        label.isAccessibilityElement = false
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         label.numberOfLines = 0
@@ -24,6 +29,7 @@ public final class CheckboxUIView: UIView {
 
     private var supplementaryTextLabel: UILabel = {
         let label = UILabel()
+        label.isAccessibilityElement = false
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         label.numberOfLines = 0
@@ -32,6 +38,7 @@ public final class CheckboxUIView: UIView {
 
     private lazy var controlView: CheckboxControlUIView = {
         let controlView = CheckboxControlUIView(selectionIcon: theming.theme.iconography.checkmark.uiImage)
+        controlView.isAccessibilityElement = false
         controlView.translatesAutoresizingMaskIntoConstraints = false
         return controlView
     }()
@@ -54,12 +61,14 @@ public final class CheckboxUIView: UIView {
         set {
             viewModel.text = newValue
             textLabel.text = text
+            updateAccessibility()
         }
     }
 
     public var selectionState: CheckboxSelectionState = .unselected {
         didSet {
             controlView.selectionState = selectionState
+            updateAccessibility()
         }
     }
 
@@ -70,6 +79,8 @@ public final class CheckboxUIView: UIView {
 
             updateState()
             updateViewConstraints()
+
+            updateAccessibility()
         }
     }
     public var theming: CheckboxTheming
@@ -143,6 +154,7 @@ public final class CheckboxUIView: UIView {
     }
 
     private func commonInit() {
+        isAccessibilityElement = true
         translatesAutoresizingMaskIntoConstraints = false
         controlView.selectionState = selectionState
 
@@ -195,6 +207,7 @@ public final class CheckboxUIView: UIView {
         updateTheme()
         updateState()
         updateViewConstraints()
+        updateAccessibility()
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -202,6 +215,21 @@ public final class CheckboxUIView: UIView {
         updateViewConstraints()
     }
 
+    private func updateAccessibility() {
+        if selectionState == .selected {
+            self.accessibilityTraits.insert(.selected)
+        } else {
+            self.accessibilityTraits.remove(.selected)
+        }
+
+        if state == .disabled {
+            self.accessibilityTraits.insert(.notEnabled)
+        } else {
+            self.accessibilityTraits.remove(.notEnabled)
+        }
+
+        self.accessibilityLabel = [viewModel.text, viewModel.supplementaryMessage].compactMap { $0 }.joined(separator: ". ")
+    }
 
     private func updateViewConstraints() {
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)

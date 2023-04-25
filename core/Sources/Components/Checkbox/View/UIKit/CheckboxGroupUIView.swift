@@ -91,6 +91,8 @@ public final class CheckboxGroupUIView: UIView {
                     self.items[index] = item
                 }
             )
+            let identifier = "\(accessibilityIdentifierPrefix).\(item.id)"
+            checkbox.accessibilityIdentifier = identifier
             checkbox.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(checkbox)
             checkboxes.append(checkbox)
