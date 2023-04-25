@@ -131,13 +131,3 @@ class CheckboxControlUIView: UIView {
         }
     }
 }
-
-private extension CGSize {
-    func scaled(for traitCollection: UITraitCollection) -> CGSize {
-        let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-
-        let scaledWidth = bodyFontMetrics.scaledValue(for: width, compatibleWith: traitCollection)
-        let scaledHeight = bodyFontMetrics.scaledValue(for: height, compatibleWith: traitCollection)
-        return CGSize(width: scaledWidth, height: scaledHeight)
-    }
-}

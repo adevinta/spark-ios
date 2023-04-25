@@ -294,10 +294,4 @@ public final class CheckboxUIView: UIView {
     @IBAction func actionTouchUp(sender: UIButton) {
         isPressed = false
     }
-
-    public override var bounds: CGRect {
-        didSet {
-            print("new bounds", bounds)
-        }
-    }
 }
