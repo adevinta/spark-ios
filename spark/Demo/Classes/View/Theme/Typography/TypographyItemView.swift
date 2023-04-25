@@ -34,7 +34,6 @@ struct TypographyItemView_Previews: PreviewProvider {
         TypographyItemView(viewModel: .init(name: "Title",
                                             token: TypographyFontTokenDefault(named: "Roboto",
                                                                               size: 12,
-                                                                              weight: .regular,
                                                                               textStyle: .body)))
     }
 }
