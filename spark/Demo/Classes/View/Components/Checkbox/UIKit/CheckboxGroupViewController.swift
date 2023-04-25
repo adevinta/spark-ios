@@ -142,6 +142,7 @@ final class CheckboxGroupViewController: UIViewController {
         )
 
         let groupView = CheckboxGroupUIView(
+            title: "Hello world!",
             items: .init(
                 get: { [weak self] in
                     self?.items ?? []

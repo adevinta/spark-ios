@@ -72,6 +72,7 @@ struct CheckboxGroupListView: View {
                     theme: SparkTheme.shared
                 )
                 CheckboxGroupView(
+                    title: "Very long custom title",
                     items: $items,
                     layout: layout,
                     checkboxPosition: checkboxPosition,

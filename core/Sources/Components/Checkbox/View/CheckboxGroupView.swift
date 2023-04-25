@@ -16,6 +16,7 @@ public struct CheckboxGroupView: View {
 
     // MARK: - Private properties
 
+    private var title: String
     @Binding private var items: [any CheckboxGroupItemProtocol]
     private var theming: CheckboxTheming
     private var layout: CheckboxGroupLayout
@@ -25,12 +26,14 @@ public struct CheckboxGroupView: View {
     // MARK: - Initialization
 
     public init(
+        title: String? = nil,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxPosition,
         theming: CheckboxTheming,
         accessibilityIdentifierPrefix: String
     ) {
+        self.title = title ?? ""
         self._items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
@@ -39,14 +42,25 @@ public struct CheckboxGroupView: View {
     }
 
     public var body: some View {
-        let spacing: CGFloat = 12
-        if layout == .horizontal {
-            HStack(alignment: .top, spacing: spacing) {
-                contentView
+        let spacing: CGFloat = spacing.xLarge / 2
+
+        VStack(alignment: .leading, spacing: 0) {
+            // Title will be refactored once we have a custom label component.
+            if !title.isEmpty {
+                Text(title)
+                    .foregroundColor(theming.theme.colors.base.onSurface.color)
+                    .font(theming.theme.typography.subhead.font)
+                    .padding(.bottom, theming.theme.layout.spacing.medium)
             }
-        } else {
-            VStack(alignment: .leading, spacing: spacing - 4) {
-                contentView
+
+            if layout == .horizontal {
+                HStack(alignment: .top, spacing: spacing) {
+                    contentView
+                }
+            } else {
+                VStack(alignment: .leading, spacing: spacing - self.spacing.small) {
+                    contentView
+                }
             }
         }
     }
@@ -63,5 +77,9 @@ public struct CheckboxGroupView: View {
                 accessibilityIdentifier: identifier
             )
         }
+    }
+
+    private var spacing: LayoutSpacing {
+        theming.theme.layout.spacing
     }
 }

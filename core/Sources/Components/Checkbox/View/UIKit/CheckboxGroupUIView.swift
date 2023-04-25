@@ -20,8 +20,15 @@ public final class CheckboxGroupUIView: UIView {
     private var theming: CheckboxTheming
     private var accessibilityIdentifierPrefix: String
     private var checkboxes: [CheckboxUIView] = []
+    private var titleLabel: UILabel?
 
     // MARK: - Public properties.
+
+    public var title: String? {
+        didSet {
+            update()
+        }
+    }
 
     public weak var delegate: CheckboxGroupUIViewProtocol?
 
@@ -41,12 +48,14 @@ public final class CheckboxGroupUIView: UIView {
     }
 
     public init(
+        title: String? = nil,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxPosition,
         theming: CheckboxTheming,
         accessibilityIdentifierPrefix: String
     ) {
+        self.title = title
         self._items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
@@ -61,15 +70,33 @@ public final class CheckboxGroupUIView: UIView {
     }
 
     private func clearView() {
+        titleLabel?.removeFromSuperview()
+        titleLabel = nil
+
         for checkbox in checkboxes {
             checkbox.removeFromSuperview()
         }
         checkboxes = []
     }
 
+    private var spacing: LayoutSpacing {
+        theming.theme.layout.spacing
+    }
+
     private func setUpView() {
         clearView()
         let view = self
+
+        if let title = self.title, !title.isEmpty {
+            let label = UILabel()
+            label.text = title
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.textColor = theming.theme.colors.base.onSurface.uiColor
+            label.font = theming.theme.typography.subhead.uiFont
+
+            self.titleLabel = label
+            view.addSubview(label)
+        }
 
         var checkboxes: [CheckboxUIView] = []
 
@@ -100,42 +127,52 @@ public final class CheckboxGroupUIView: UIView {
 
         self.checkboxes = checkboxes
 
-        var previousCheckbox: CheckboxUIView?
+        var previousCheckbox: UIView?
 
+        let horizontalSpacing = spacing.large
+        if let titleLabel = self.titleLabel {
+            let spacing: CGFloat = layout == .vertical ? horizontalSpacing : 0
+            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: spacing).isActive = true
+            titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -horizontalSpacing).isActive = true
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        }
         switch layout {
         case .vertical:
             for checkbox in checkboxes {
-                checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-                checkbox.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+                checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: horizontalSpacing).isActive = true
+                checkbox.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -horizontalSpacing).isActive = true
 
                 if let previousCheckbox = previousCheckbox {
-                    checkbox.topAnchor.constraint(equalTo: previousCheckbox.bottomAnchor, constant: 16).isActive = true
+                    checkbox.topAnchor.constraint(equalTo: previousCheckbox.bottomAnchor, constant: horizontalSpacing).isActive = true
                 } else {
-                    checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+                    if let titleLabel = titleLabel {
+                        checkbox.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: horizontalSpacing).isActive = true
+                    } else {
+                        checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+                    }
                 }
 
                 if checkbox == checkboxes.last {
                     checkbox.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-
                 }
 
                 previousCheckbox = checkbox
             }
 
         case .horizontal:
+            let topAnchor = titleLabel?.bottomAnchor ?? view.safeAreaLayoutGuide.topAnchor
             for checkbox in checkboxes {
-                checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
-                checkbox.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
+                checkbox.topAnchor.constraint(equalTo: topAnchor, constant: horizontalSpacing).isActive = true
+                checkbox.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -horizontalSpacing).isActive = true
 
                 if let previousCheckbox = previousCheckbox {
-                    checkbox.leadingAnchor.constraint(equalTo: previousCheckbox.trailingAnchor, constant: 16).isActive = true
+                    checkbox.leadingAnchor.constraint(equalTo: previousCheckbox.trailingAnchor, constant: horizontalSpacing).isActive = true
                 } else {
                     checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
                 }
 
                 if checkbox == checkboxes.last {
                     checkbox.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-
                 }
 
                 previousCheckbox = checkbox
