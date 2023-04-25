@@ -12,9 +12,9 @@ struct BorderViewModifier: ViewModifier {
 
     // MARK: - Properties
 
-    let width: CGFloat
-    let radius: CGFloat
-    let colorToken: ColorToken?
+    private let width: CGFloat
+    private let radius: CGFloat
+    private let colorToken: ColorToken?
 
     // MARK: - Initialization
 
@@ -38,7 +38,7 @@ struct BorderViewModifier: ViewModifier {
 
     // MARK: - Builder
 
-    @ViewBuilder var shape: some View {
+    @ViewBuilder private var shape: some View {
         if let color = self.colorToken?.color {
             RoundedRectangle(cornerRadius: self.radius)
                 .stroke(color, lineWidth: self.width)
