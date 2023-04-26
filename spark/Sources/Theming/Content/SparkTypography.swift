@@ -6,7 +6,6 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
 import SparkCore
 import SwiftUI
 import UIKit
@@ -16,56 +15,56 @@ struct SparkTypography: Typography {
     // MARK: - Properties
     
     let display1: TypographyFontToken = TypographyFontTokenDefault(size: 40,
-                                                                   isHighlight: true,
+                                                                   isHighlighted: true,
                                                                    textStyle: .largeTitle)
     let display2: TypographyFontToken = TypographyFontTokenDefault(size: 32,
-                                                                   isHighlight: true,
+                                                                   isHighlighted: true,
                                                                    textStyle: .largeTitle)
     let display3: TypographyFontToken = TypographyFontTokenDefault(size: 24,
-                                                                   isHighlight: true,
+                                                                   isHighlighted: true,
                                                                    textStyle: .largeTitle)
     
     let headline1: TypographyFontToken = TypographyFontTokenDefault(size: 20,
-                                                                    isHighlight: true,
+                                                                    isHighlighted: true,
                                                                     textStyle: .headline)
     let headline2: TypographyFontToken = TypographyFontTokenDefault(size: 18,
-                                                                    isHighlight: true,
+                                                                    isHighlighted: true,
                                                                     textStyle: .headline)
     
     let subhead: TypographyFontToken = TypographyFontTokenDefault(size: 16,
-                                                                  isHighlight: true,
+                                                                  isHighlighted: true,
                                                                   textStyle: .subheadline)
     
     let body1: TypographyFontToken = TypographyFontTokenDefault(size: 16,
-                                                                isHighlight: false,
+                                                                isHighlighted: false,
                                                                 textStyle: .body)
     let body1Highlight: TypographyFontToken = TypographyFontTokenDefault(size: 16,
-                                                                         isHighlight: true,
+                                                                         isHighlighted: true,
                                                                          textStyle: .body)
     
     let body2: TypographyFontToken = TypographyFontTokenDefault(size: 14,
-                                                                isHighlight: false,
+                                                                isHighlighted: false,
                                                                 textStyle: .body)
     let body2Highlight: TypographyFontToken = TypographyFontTokenDefault(size: 14,
-                                                                         isHighlight: true,
+                                                                         isHighlighted: true,
                                                                          textStyle: .body)
     
     let caption: TypographyFontToken = TypographyFontTokenDefault(size: 12,
-                                                                  isHighlight: false,
+                                                                  isHighlighted: false,
                                                                   textStyle: .caption)
     let captionHighlight: TypographyFontToken = TypographyFontTokenDefault(size: 12,
-                                                                           isHighlight: true,
+                                                                           isHighlighted: true,
                                                                            textStyle: .caption)
     
     let small: TypographyFontToken = TypographyFontTokenDefault(size: 10,
-                                                                isHighlight: false,
+                                                                isHighlighted: false,
                                                                 textStyle: .footnote)
     let smallHighlight: TypographyFontToken = TypographyFontTokenDefault(size: 10,
-                                                                         isHighlight: true,
+                                                                         isHighlighted: true,
                                                                          textStyle: .footnote)
     
     let callout: TypographyFontToken = TypographyFontTokenDefault(size: 16,
-                                                                  isHighlight: true,
+                                                                  isHighlighted: true,
                                                                   textStyle: .callout)
 }
 
@@ -83,15 +82,12 @@ private extension TypographyFontTokenDefault {
     // MARK: - Initialization
     
     init(size: CGFloat,
-         isHighlight: Bool,
+         isHighlighted: Bool,
          textStyle: TextStyle) {
         // Properties
-        let fontName = isHighlight ? Constants.boldFontName : Constants.regularFontName
-        let fontWeight: UIFont.Weight = isHighlight ? .bold : .regular
-
+        let fontName = isHighlighted ? Constants.boldFontName : Constants.regularFontName
         self.init(named: fontName,
                   size: size,
-                  weight: fontWeight,
                   textStyle: textStyle)
     }
 }

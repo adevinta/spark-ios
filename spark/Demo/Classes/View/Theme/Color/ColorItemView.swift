@@ -8,7 +8,6 @@
 
 import SwiftUI
 import SparkCore
-@testable import Spark
 
 struct ColorItemView: View {
     

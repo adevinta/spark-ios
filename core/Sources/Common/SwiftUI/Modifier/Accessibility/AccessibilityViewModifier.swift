@@ -12,8 +12,8 @@ struct AccessibilityViewModifier: ViewModifier {
 
     // MARK: - Properties
 
-    let identifier: String?
-    let label: String?
+    private let identifier: String?
+    private let label: String?
 
     // MARK: - Initialization
 
