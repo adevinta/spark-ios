@@ -23,7 +23,6 @@ extension ColorsStatesGeneratedMock {
         mock.underlyingSecondaryVariantPressed = ColorTokenGeneratedMock()
         mock.underlyingSecondaryContainerPressed = ColorTokenGeneratedMock()
 
-        mock.underlyingBackgroundPressed = ColorTokenGeneratedMock()
         mock.underlyingSurfacePressed = ColorTokenGeneratedMock()
         mock.underlyingSurfaceInversePressed = ColorTokenGeneratedMock()
         mock.underlyingOutlinePressed = ColorTokenGeneratedMock()
