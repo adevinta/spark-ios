@@ -17,28 +17,28 @@ final class SparkColorTests: TestCase {
     let colors = SparkTheme.shared.colors
 
     func testBaseColors() throws {
-        let mirror = Mirror(reflecting: colors.base)
-        testAllColors(colors: getColors(for: mirror))
+        let mirror = Mirror(reflecting: self.colors.base)
+        self.testAllColors(colors: self.getColors(for: mirror))
     }
 
     func testFeedbackColors() throws {
-        let mirror = Mirror(reflecting: colors.feedback)
-        testAllColors(colors: getColors(for: mirror))
+        let mirror = Mirror(reflecting: self.colors.feedback)
+        self.testAllColors(colors: self.getColors(for: mirror))
     }
 
     func testPrimaryColors() throws {
-        let mirror = Mirror(reflecting: colors.primary)
-        testAllColors(colors: getColors(for: mirror))
+        let mirror = Mirror(reflecting: self.colors.primary)
+        self.testAllColors(colors: self.getColors(for: mirror))
     }
 
     func testSecondaryColors() throws {
-        let mirror = Mirror(reflecting: colors.secondary)
-        testAllColors(colors: getColors(for: mirror))
+        let mirror = Mirror(reflecting: self.colors.secondary)
+        self.testAllColors(colors: self.getColors(for: mirror))
     }
 
     func testStateColors() throws {
-        let mirror = Mirror(reflecting: colors.states)
-        testAllColors(colors: getColors(for: mirror))
+        let mirror = Mirror(reflecting: self.colors.states)
+        self.testAllColors(colors: self.getColors(for: mirror))
     }
 
     private func testAllColors(colors: [String: ColorToken], testName: String = #function) {

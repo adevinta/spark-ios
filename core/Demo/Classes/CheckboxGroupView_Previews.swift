@@ -30,8 +30,8 @@ struct CheckboxGroupView_Previews: PreviewProvider {
             HStack {
                 CheckboxGroupView(
                     items: $items,
-                    checkboxPosition: position,
-                    theming: theming,
+                    checkboxPosition: self.position,
+                    theming: self.theming,
                     accessibilityIdentifierPrefix: "group"
                 )
                 Spacer()

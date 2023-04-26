@@ -40,20 +40,21 @@ public struct CheckboxGroupView: View {
 
     public var body: some View {
         let spacing: CGFloat = 12
-        if layout == .horizontal{
+        switch self.layout {
+        case .horizontal:
             HStack(alignment: .top, spacing: spacing) {
-                contentView
+                self.contentView
             }
-        } else {
+        case .vertical:
             VStack(alignment: .leading, spacing: spacing - 4) {
-                contentView
+                self.contentView
             }
         }
     }
 
     private var contentView: some View {
-        ForEach($items, id: \.id) { item in
-            let identifier = "\(accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
+        ForEach(self.$items, id: \.id) { item in
+            let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
             CheckboxView(
                 text: item.title.wrappedValue,
                 checkboxPosition: checkboxPosition,

@@ -18,7 +18,7 @@ final class SparkCheckboxViewTests: TestCase {
     func testCheckboxSelected() throws {
         let view = CheckboxView(
             text: "Selected checkbox.",
-            theming: theming,
+            theming: self.theming,
             selectionState: .init(get: { .selected }, set: { _ in }),
             accessibilityIdentifier: "test"
         ).fixedSize()
@@ -29,7 +29,7 @@ final class SparkCheckboxViewTests: TestCase {
     func testCheckboxUnselected() throws {
         let view = CheckboxView(
             text: "Unselected checkbox.",
-            theming: theming,
+            theming: self.theming,
             selectionState: .init(get: { .unselected }, set: { _ in }),
             accessibilityIdentifier: "test"
         ).fixedSize()
@@ -40,7 +40,7 @@ final class SparkCheckboxViewTests: TestCase {
     func testCheckboxIndeterminate() throws {
         let view = CheckboxView(
             text: "Indeterminate checkbox.",
-            theming: theming,
+            theming: self.theming,
             selectionState: .init(get: { .indeterminate }, set: { _ in }),
             accessibilityIdentifier: "test"
         ).fixedSize()
@@ -51,7 +51,7 @@ final class SparkCheckboxViewTests: TestCase {
     func testCheckboxMultiline() throws {
         let view = CheckboxView(
             text: "Multiline checkbox.\nMore text.",
-            theming: theming,
+            theming: self.theming,
             selectionState: .init(get: { .unselected }, set: { _ in }),
             accessibilityIdentifier: "test"
         ).fixedSize()

@@ -41,16 +41,16 @@ final class CheckboxViewModel: ObservableObject {
     }
 
     var opacity: CGFloat {
-        switch state {
+        switch self.state {
         case .disabled:
-            return theming.theme.dims.dim3
+            return self.theming.theme.dims.dim3
         default:
             return 1.0
         }
     }
 
     var supplementaryMessage: String? {
-        switch state {
+        switch self.state {
         case .error(let message), .success(let message), .warning(let message):
             return message
         default:

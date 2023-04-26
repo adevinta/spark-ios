@@ -36,23 +36,23 @@ struct CheckboxGroupListView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text("Selection:\n\(selectedItemsText)")
+                Text("Selection:\n\(self.selectedItemsText)")
                 Spacer()
             }
 
             Button("Shuffle states") {
-                shuffleAction()
+                self.shuffleAction()
             }
 
             Button("Change layout") {
                 withAnimation {
-                    layout = layout == .horizontal ? .vertical : .horizontal
+                    self.layout = layout == .horizontal ? .vertical : .horizontal
                 }
             }
 
             Button("Change position") {
                 withAnimation {
-                    checkboxPosition = checkboxPosition == .left ? .right : .left
+                    self.checkboxPosition = self.checkboxPosition == .left ? .right : .left
                 }
             }
 
@@ -66,7 +66,7 @@ struct CheckboxGroupListView: View {
         }
         .padding(.horizontal, 16)
 
-        ScrollView(layout == .horizontal ? .horizontal : .vertical) {
+        ScrollView(self.layout == .horizontal ? .horizontal : .vertical) {
             HStack {
                 let theming = CheckboxTheming.init(
                     theme: SparkTheme.shared
@@ -93,7 +93,7 @@ struct CheckboxGroupListView: View {
 
         withAnimation {
             for index in 0..<items.count {
-                var item = items[index]
+                var item = self.items[index]
                 if let randomState = states.randomElement() {
                     item.state = randomState
                 }
@@ -101,17 +101,17 @@ struct CheckboxGroupListView: View {
                 if let randomSelectionState = selectionStates.randomElement() {
                     item.selectionState = randomSelectionState
                 }
-                items[index] = item
+                self.items[index] = item
             }
         }
     }
 
     var selectedItems: [any CheckboxGroupItemProtocol] {
-        items.filter { $0.selectionState == .selected }
+        self.items.filter { $0.selectionState == .selected }
     }
 
     var selectedItemsText: String {
-        selectedItems.map { $0.title }.joined(separator: ", ")
+        self.selectedItems.map { $0.title }.joined(separator: ", ")
     }
 }
 

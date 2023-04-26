@@ -29,19 +29,19 @@ struct CheckboxView_Previews: PreviewProvider {
                 Text("Left")
                 CheckboxView(
                     text: "Selected checkbox.",
-                    theming: theming,
+                    theming: self.theming,
                     selectionState: $selection1,
                     accessibilityIdentifier: "test"
                 )
                 CheckboxView(
                     text: "Unselected checkbox.",
-                    theming: theming,
+                    theming: self.theming,
                     selectionState: $selection2,
                     accessibilityIdentifier: "test"
                 )
                 CheckboxView(
                     text: "Indeterminate checkbox.",
-                    theming: theming,
+                    theming: self.theming,
                     selectionState: $selection3,
                     accessibilityIdentifier: "test"
                 )
@@ -51,21 +51,21 @@ struct CheckboxView_Previews: PreviewProvider {
                 CheckboxView(
                     text: "Selected checkbox.",
                     checkboxPosition: .right,
-                    theming: theming,
+                    theming: self.theming,
                     selectionState: $selection1,
                     accessibilityIdentifier: "test"
                 )
                 CheckboxView(
                     text: "Unselected checkbox.",
                     checkboxPosition: .right,
-                    theming: theming,
+                    theming: self.theming,
                     selectionState: $selection2,
                     accessibilityIdentifier: "test"
                 )
                 CheckboxView(
                     text: "Indeterminate checkbox.",
                     checkboxPosition: .right,
-                    theming: theming,
+                    theming: self.theming,
                     selectionState: $selection3,
                     accessibilityIdentifier: "test"
                 )
