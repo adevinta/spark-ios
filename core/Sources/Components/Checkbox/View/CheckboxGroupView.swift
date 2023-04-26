@@ -38,6 +38,8 @@ public struct CheckboxGroupView: View {
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
     }
 
+    // MARK: - Body
+
     public var body: some View {
         let spacing: CGFloat = 12
         switch self.layout {

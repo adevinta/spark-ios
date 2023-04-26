@@ -17,10 +17,7 @@ public struct CheckboxView: View {
     // MARK: - Public Properties
 
     public var theming: CheckboxTheming {
-        self.viewModel.theming
-    }
-    var colors: CheckboxColorables {
-        self.viewModel.colors
+        return self.viewModel.theming
     }
 
     public var accessibilityIdentifier: String?
@@ -28,11 +25,17 @@ public struct CheckboxView: View {
 
     @Binding public var selectionState: CheckboxSelectionState
 
+    // MARK: - Internal Properties
+
     @State var isPressed: Bool = false
 
-    // MARK: - Private Properties
-
     @ObservedObject var viewModel: CheckboxViewModel
+
+    var colors: CheckboxColorables {
+        return self.viewModel.colors
+    }
+
+    // MARK: - Private Properties
 
     @Namespace private var namespace
 
@@ -83,6 +86,23 @@ public struct CheckboxView: View {
         )
     }
 
+    // MARK: - Body
+
+    public var body: some View {
+        Button(
+            action: {
+                self.tapped()
+            },
+            label: {
+                self.contentView
+            }
+        )
+        .buttonStyle(CheckboxButtonStyle(isPressed: self.$isPressed))
+        .if(self.accessibilityIdentifier != nil) {
+            $0.accessibility(identifier: self.accessibilityIdentifier!)
+        }
+    }
+
     @ViewBuilder private var checkboxView: some View {
         let tintColor = self.colors.checkboxTintColor.color
         let iconColor = self.colors.checkboxIconColor.color
@@ -125,21 +145,6 @@ public struct CheckboxView: View {
         .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: self.namespace)
     }
 
-    public var body: some View {
-        Button(
-            action: {
-                self.tapped()
-            },
-            label: {
-                self.contentView
-            }
-        )
-        .buttonStyle(CheckboxButtonStyle(isPressed: self.$isPressed))
-        .if(self.accessibilityIdentifier != nil) {
-            $0.accessibility(identifier: self.accessibilityIdentifier!)
-        }
-    }
-
     @ViewBuilder private var contentView: some View {
         HStack(alignment: .top) {
             switch checkboxPosition {
@@ -179,6 +184,8 @@ public struct CheckboxView: View {
         .matchedGeometryEffect(id: Identifier.content.rawValue, in: self.namespace)
     }
 
+    // MARK: - Action
+
     func tapped() {
         guard self.viewModel.interactionEnabled else { return }
 
@@ -191,6 +198,8 @@ public struct CheckboxView: View {
             break
         }
     }
+
+    // MARK: - Enum
 
     public enum CheckboxPosition {
         case left
