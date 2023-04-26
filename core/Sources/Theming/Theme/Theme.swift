@@ -19,7 +19,3 @@ public protocol Theme {
     var dims: SparkCore.Dims { get }
     var iconography: SparkCore.Iconography { get }
 }
-
-public protocol Iconography {
-    var checkmark: Image { get }
-}
