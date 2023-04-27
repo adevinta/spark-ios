@@ -23,7 +23,6 @@ public protocol ColorsStates {
 
     // MARK: - Base
 
-    var backgroundPressed: ColorToken { get }
     var surfacePressed: ColorToken { get }
     var surfaceInversePressed: ColorToken { get }
     var outlinePressed: ColorToken { get }

@@ -16,7 +16,6 @@ public struct ColorsStatesDefault: ColorsStates {
     public let secondaryPressed: ColorToken
     public let secondaryVariantPressed: ColorToken
     public let secondaryContainerPressed: ColorToken
-    public let backgroundPressed: ColorToken
     public let surfacePressed: ColorToken
     public let surfaceInversePressed: ColorToken
     public let outlinePressed: ColorToken
@@ -39,7 +38,6 @@ public struct ColorsStatesDefault: ColorsStates {
                 secondaryPressed: ColorToken,
                 secondaryVariantPressed: ColorToken,
                 secondaryContainerPressed: ColorToken,
-                backgroundPressed: ColorToken,
                 surfacePressed: ColorToken,
                 surfaceInversePressed: ColorToken,
                 outlinePressed: ColorToken,
@@ -59,7 +57,6 @@ public struct ColorsStatesDefault: ColorsStates {
         self.secondaryPressed = secondaryPressed
         self.secondaryVariantPressed = secondaryVariantPressed
         self.secondaryContainerPressed = secondaryContainerPressed
-        self.backgroundPressed = backgroundPressed
         self.surfacePressed = surfacePressed
         self.surfaceInversePressed = surfaceInversePressed
         self.outlinePressed = outlinePressed
