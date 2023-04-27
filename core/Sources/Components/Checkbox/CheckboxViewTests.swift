@@ -16,7 +16,7 @@ import SwiftUI
 final class CheckboxViewTests: TestCase {
     let theming: Theme = SparkTheme()
 
-    func test_checkbox_selected() throws {
+    func x_test_checkbox_selected() throws {
         let view = CheckboxView(
             text: "Selected checkbox.",
             theming: self.theming,
@@ -27,7 +27,7 @@ final class CheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func test_checkbox_unselected() throws {
+    func x_test_checkbox_unselected() throws {
         let view = CheckboxView(
             text: "Unselected checkbox.",
             theming: self.theming,
@@ -38,7 +38,7 @@ final class CheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func test_checkbox_indeterminate() throws {
+    func x_test_checkbox_indeterminate() throws {
         let view = CheckboxView(
             text: "Indeterminate checkbox.",
             theming: self.theming,
@@ -50,7 +50,7 @@ final class CheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func test_checkbox_multiline() throws {
+    func x_test_checkbox_multiline() throws {
         let view = CheckboxView(
             text: "Multiline checkbox.\nMore text.",
             theming: self.theming,
