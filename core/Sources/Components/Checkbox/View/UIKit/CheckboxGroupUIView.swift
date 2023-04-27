@@ -90,6 +90,7 @@ public final class CheckboxGroupUIView: UIView {
         if let title = self.title, !title.isEmpty {
             let label = UILabel()
             label.text = title
+            label.adjustsFontForContentSizeCategory = true
             label.translatesAutoresizingMaskIntoConstraints = false
             label.textColor = theming.colors.base.onSurface.uiColor
             label.font = theming.typography.subhead.uiFont
