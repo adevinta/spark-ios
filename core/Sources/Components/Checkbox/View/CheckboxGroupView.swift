@@ -48,6 +48,7 @@ public struct CheckboxGroupView: View {
 
     // MARK: - Body
 
+    /// Returns the rendered checkbox group view.
     public var body: some View {
         let spacing: CGFloat = 12
         switch self.layout {

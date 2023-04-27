@@ -11,10 +11,10 @@ import Foundation
 final class CheckboxViewModel: ObservableObject {
     // MARK: - Public properties
 
-    public var text: String
+    var text: String
 
-    @Published public var theming: Theme
-    @Published public var state: SelectButtonState
+    @Published var theming: Theme
+    @Published var state: SelectButtonState
 
     // MARK: - Private properties
 

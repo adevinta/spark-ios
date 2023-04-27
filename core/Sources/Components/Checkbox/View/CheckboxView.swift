@@ -17,13 +17,17 @@ public struct CheckboxView: View {
 
     // MARK: - Public Properties
 
+    /// The current Spark theme.
     public var theming: Theme {
         return self.viewModel.theming
     }
 
+    /// The accessibility identifier for the view.
     public var accessibilityIdentifier: String?
+    /// The accessibility label for the view.
     public var accessibilityLabel: String?
 
+    /// A binding for the selection state of the checkbox (`.selected`, `.unselected` or `.indeterminate`). The value will update when the control is tapped.
     @Binding public var selectionState: CheckboxSelectionState
 
     // MARK: - Internal Properties
@@ -97,6 +101,7 @@ public struct CheckboxView: View {
 
     // MARK: - Body
 
+    /// Returns a single rendered checkbox.
     public var body: some View {
         Button(
             action: {
@@ -210,8 +215,12 @@ public struct CheckboxView: View {
 
     // MARK: - Enum
 
+    /// The checkbox can be either on the leading or trailing edge of the view.
     public enum CheckboxPosition {
+        /// Checkbox on leading edge.
         case left
+
+        /// Checkbox on trailing edge.
         case right
     }
 

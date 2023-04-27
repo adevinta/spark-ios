@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// The accessibility identifiers for the checkbox
 public enum CheckboxAccessibilityIdentifier {
+    /// The grouped accessibility identifer.
     public static let checkboxGroup = "checkbox-group"
 }
