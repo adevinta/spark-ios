@@ -17,116 +17,84 @@ public struct TagView: View {
 
     // MARK: - Private Properties
 
-    @Binding private var theme: Theme
-    @Binding private var intentColor: TagIntentColor
-    @Binding private var variant: TagVariant
-
-    @Binding private var iconImage: Image?
-    @Binding private var text: String?
-
-    // MARK: - UI Properties
-
-    @Environment(\.sizeCategory) private var sizeCategory
-
-    private var height: CGFloat {
-        return self.getHeightUseCase.execute(from: self.sizeCategory)
-    }
-
-    private var colors: TagColorables {
-        return self.getColorsUseCase.execute(from: self.theme,
-                                             intentColor: self.intentColor,
-                                             variant: self.variant)
-    }
-
-    private let getColorsUseCase: TagGetColorsUseCaseable
-    private let getHeightUseCase: TagGetHeightUseCaseable
+    @ObservedObject private var viewModel: TagViewModel
+    @ScaledMetric private var height: CGFloat = 20
 
     // MARK: - Initialization
 
-    public init(theme: Binding<Theme>,
-                intentColor: Binding<TagIntentColor>,
-                variant: Binding<TagVariant>,
-                iconImage: Binding<Image?>) {
-        self.init(theme,
-                  intentColor: intentColor,
-                  variant: variant,
-                  iconImage: iconImage,
-                  text: Binding.constant(nil))
+    public init(theme: Theme,
+                intentColor: TagIntentColor,
+                variant: TagVariant,
+                iconImage: Image?) {
+        self.init(
+            theme: theme,
+            intentColor: intentColor,
+            variant: variant,
+            iconImage: iconImage,
+            text: nil
+        )
     }
 
-    public init(theme: Binding<Theme>,
-                intentColor: Binding<TagIntentColor>,
-                variant: Binding<TagVariant>,
-                text: Binding<String?>) {
-        self.init(theme,
-                  intentColor: intentColor,
-                  variant: variant,
-                  iconImage: Binding.constant(nil),
-                  text: text)
+    public init(theme: Theme,
+                intentColor: TagIntentColor,
+                variant: TagVariant,
+                text: String?) {
+        self.init(
+            theme: theme,
+            intentColor: intentColor,
+            variant: variant,
+            iconImage: nil,
+            text: text
+        )
     }
 
-    public init(theme: Binding<Theme>,
-                intentColor: Binding<TagIntentColor>,
-                variant: Binding<TagVariant>,
-                iconImage: Binding<Image?>,
-                text: Binding<String?>) {
-        self.init(theme,
-                  intentColor: intentColor,
-                  variant: variant,
-                  iconImage: iconImage,
-                  text: text)
-    }
-
-    private init(_ theme: Binding<Theme>,
-                 intentColor: Binding<TagIntentColor>,
-                 variant: Binding<TagVariant>,
-                 iconImage: Binding<Image?>,
-                 text: Binding<String?>,
-                 getColorsUseCase: TagGetColorsUseCaseable = TagGetColorsUseCase(),
-                 getHeightUseCase: TagGetHeightUseCaseable = TagGetHeightUseCase()) {
-        self._theme = theme
-        self._intentColor = intentColor
-        self._variant = variant
-        self._iconImage = iconImage
-        self._text = text
-
-        self.getColorsUseCase = getColorsUseCase
-        self.getHeightUseCase = getHeightUseCase
+    public init(theme: Theme,
+                intentColor: TagIntentColor,
+                variant: TagVariant,
+                iconImage: Image?,
+                text: String?) {
+        self.viewModel = .init(
+            theme: theme,
+            intentColor: intentColor,
+            variant: variant,
+            iconImage: iconImage,
+            text: text
+        )
     }
 
     // MARK: - View
 
     public var body: some View {
-        HStack(spacing: self.theme.layout.spacing.small) {
+        HStack(spacing: self.viewModel.spacing.small) {
             // Optional icon image
-            self.iconImage?
+            self.viewModel.iconImage?
                 .resizable()
                 .scaledToFit()
-                .foregroundColor(self.colors.foregroundColor.color)
+                .foregroundColor(self.viewModel.colors.foregroundColor.color)
                 .accessibilityIdentifier(AccessibilityIdentifier.iconImage)
 
             // Optional Text
-            if let text = self.text {
+            if let text = self.viewModel.text {
                 Text(text)
                     .lineLimit(1)
-                    .font(self.theme.typography.captionHighlight.font)
+                    .font(self.viewModel.typography.captionHighlight.font)
                     .truncationMode(.tail)
-                    .foregroundColor(self.colors.foregroundColor.color)
+                    .foregroundColor(self.viewModel.colors.foregroundColor.color)
                     .accessibilityIdentifier(AccessibilityIdentifier.text)
             }
         }
-        .padding(.init(vertical: self.theme.layout.spacing.small,
-                       horizontal: self.theme.layout.spacing.medium))
+        .padding(.init(vertical: self.viewModel.spacing.small,
+                       horizontal: self.viewModel.spacing.medium))
         .frame(height: self.height)
-        .background(self.colors.backgroundColor.color)
-        .border(width: self.theme.border.width.small,
-                radius: self.theme.border.radius.full,
-                colorToken: self.colors.borderColor)
+        .background(self.viewModel.colors.backgroundColor.color)
+        .border(width: self.viewModel.border.width.small,
+                radius: self.viewModel.border.radius.full,
+                colorToken: self.viewModel.colors.borderColor)
     }
 
     public func accessibility(identifier: String,
                               label: String?) -> some View {
         self.modifier(AccessibilityViewModifier(identifier: identifier,
-                                                label: label ?? self.text))
+                                                label: label ?? self.viewModel.text))
     }
 }
