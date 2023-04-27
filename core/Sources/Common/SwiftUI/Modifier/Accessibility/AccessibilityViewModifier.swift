@@ -26,11 +26,12 @@ struct AccessibilityViewModifier: ViewModifier {
     // MARK: - View
 
     func body(content: Content) -> some View {
-        if let identifier = self.identifier {
-            content.accessibilityIdentifier(identifier)
-        }
-        if let label = self.label {
-            content.accessibilityLabel(label)
-        }
+        content
+            .if(identifier != nil) {
+                $0.accessibilityIdentifier(identifier!)
+            }
+            .if(label != nil) {
+                $0.accessibilityLabel(label!)
+            }
     }
 }
