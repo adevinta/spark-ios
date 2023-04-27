@@ -28,10 +28,10 @@ struct AccessibilityViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .if(identifier != nil) {
-                $0.accessibilityIdentifier(identifier!)
+                $0.accessibilityIdentifier(identifier ?? "")
             }
             .if(label != nil) {
-                $0.accessibilityLabel(label!)
+                $0.accessibilityLabel(label ?? "")
             }
     }
 }
