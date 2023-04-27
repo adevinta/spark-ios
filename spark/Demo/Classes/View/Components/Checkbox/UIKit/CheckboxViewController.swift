@@ -41,17 +41,17 @@ final class CheckboxViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(scrollView)
-        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        view.addSubview(self.scrollView)
+        self.scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        self.scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        self.scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        self.scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        scrollView.addSubview(contentView)
-        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        self.scrollView.addSubview(self.contentView)
+        self.contentView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
+        self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor).isActive = true
+        self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+        self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
 
         setUpView()
     }
@@ -59,14 +59,14 @@ final class CheckboxViewController: UIViewController {
     @objc private func actionShuffle(sender: UIButton) {
         let selectionStates = [CheckboxSelectionState.indeterminate, .selected, .unselected]
         let states = [SelectButtonState.enabled, .disabled, .success(message: "Success message"), .warning(message: "Warning emssage"), .error(message: "Error message")]
-        for checkbox in checkboxes {
+        for checkbox in self.checkboxes {
             checkbox.selectionState = selectionStates.randomElement() ?? .indeterminate
             checkbox.state = states.randomElement() ?? .disabled
         }
     }
 
     private func setUpView() {
-        let view = contentView
+        let view = self.contentView
         let theming = SparkTheme.shared
 
         var checkboxes: [CheckboxUIView] = []
@@ -79,7 +79,7 @@ final class CheckboxViewController: UIViewController {
         shuffleButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         shuffleButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         shuffleButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        shuffleButton.addTarget(self, action: #selector(actionShuffle(sender:)), for: .touchUpInside)
+        shuffleButton.addTarget(self, action: #selector(self.actionShuffle(sender:)), for: .touchUpInside)
 
         let checkbox = CheckboxUIView(
             theming: theming,

@@ -8,6 +8,7 @@
 
 import XCTest
 import SnapshotTesting
+import SwiftUI
 
 @testable import SparkCore
 @testable import Spark
@@ -21,7 +22,7 @@ final class CheckboxViewTests: TestCase {
             theming: self.theming,
             selectionState: .init(get: { .selected }, set: { _ in }),
             accessibilityIdentifier: "test"
-        ).fixedSize()
+        ).fixedSize().environment(\.sizeCategory, .medium)
 
         sparktAssertSnapshot(matching: view, as: .image)
     }
@@ -32,7 +33,7 @@ final class CheckboxViewTests: TestCase {
             theming: self.theming,
             selectionState: .init(get: { .unselected }, set: { _ in }),
             accessibilityIdentifier: "test"
-        ).fixedSize()
+        ).fixedSize().environment(\.sizeCategory, .medium)
 
         sparktAssertSnapshot(matching: view, as: .image)
     }
@@ -43,7 +44,8 @@ final class CheckboxViewTests: TestCase {
             theming: self.theming,
             selectionState: .init(get: { .indeterminate }, set: { _ in }),
             accessibilityIdentifier: "test"
-        ).fixedSize()
+        )
+        .fixedSize().environment(\.sizeCategory, .medium)
 
         sparktAssertSnapshot(matching: view, as: .image)
     }
@@ -54,7 +56,7 @@ final class CheckboxViewTests: TestCase {
             theming: self.theming,
             selectionState: .init(get: { .unselected }, set: { _ in }),
             accessibilityIdentifier: "test"
-        ).fixedSize()
+        ).fixedSize().environment(\.sizeCategory, .medium)
 
         sparktAssertSnapshot(matching: view, as: .image)
     }
