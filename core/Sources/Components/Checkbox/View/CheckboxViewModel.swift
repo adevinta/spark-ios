@@ -13,7 +13,7 @@ final class CheckboxViewModel: ObservableObject {
 
     public var text: String
 
-    @Published public var theming: CheckboxTheming
+    @Published public var theming: Theme
     @Published public var state: SelectButtonState
 
     // MARK: - Private properties
@@ -25,7 +25,7 @@ final class CheckboxViewModel: ObservableObject {
 
     init(
         text: String,
-        theming: CheckboxTheming,
+        theming: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled
     ) {
@@ -51,7 +51,7 @@ final class CheckboxViewModel: ObservableObject {
     var opacity: CGFloat {
         switch self.state {
         case .disabled:
-            return self.theming.theme.dims.dim3
+            return self.theming.dims.dim3
         default:
             return 1.0
         }

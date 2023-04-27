@@ -14,13 +14,11 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
 
     // MARK: - Properties
     var theme: ThemeGeneratedMock!
-    var checkboxTheming: CheckboxTheming!
 
     // MARK: - Setup
     override func setUpWithError() throws {
         try super.setUpWithError()
         self.theme = ThemeGeneratedMock.mock
-        self.checkboxTheming = CheckboxTheming(theme: self.theme)
     }
 
     // MARK: - Tests
@@ -29,7 +27,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: self.checkboxTheming, state: .enabled)
+        let colors = sut.execute(from: self.theme, state: .enabled)
 
         // Then
         XCTAssertEqual(
@@ -49,7 +47,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: self.checkboxTheming, state: .disabled)
+        let colors = sut.execute(from: self.theme, state: .disabled)
 
         // Then
         XCTAssertEqual(
@@ -69,7 +67,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: self.checkboxTheming, state: .success(message: "message"))
+        let colors = sut.execute(from: self.theme, state: .success(message: "message"))
 
         // Then
         XCTAssertEqual(
@@ -89,7 +87,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: self.checkboxTheming, state: .warning(message: "message"))
+        let colors = sut.execute(from: self.theme, state: .warning(message: "message"))
 
         // Then
         XCTAssertEqual(
@@ -109,7 +107,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: self.checkboxTheming, state: .error(message: "message"))
+        let colors = sut.execute(from: self.theme, state: .error(message: "message"))
 
         // Then
         XCTAssertEqual(

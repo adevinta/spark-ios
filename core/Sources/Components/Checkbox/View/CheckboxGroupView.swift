@@ -17,7 +17,7 @@ public struct CheckboxGroupView: View {
     // MARK: - Private properties
 
     @Binding private var items: [any CheckboxGroupItemProtocol]
-    private var theming: CheckboxTheming
+    private var theming: Theme
     private var layout: CheckboxGroupLayout
     private var checkboxPosition: CheckboxView.CheckboxPosition
     private var accessibilityIdentifierPrefix: String
@@ -28,7 +28,7 @@ public struct CheckboxGroupView: View {
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxView.CheckboxPosition,
-        theming: CheckboxTheming,
+        theming: Theme,
         accessibilityIdentifierPrefix: String
     ) {
         self._items = items

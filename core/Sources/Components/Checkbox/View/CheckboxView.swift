@@ -16,7 +16,7 @@ public struct CheckboxView: View {
 
     // MARK: - Public Properties
 
-    public var theming: CheckboxTheming {
+    public var theming: Theme {
         return self.viewModel.theming
     }
 
@@ -55,7 +55,7 @@ public struct CheckboxView: View {
     init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
-        theming: CheckboxTheming,
+        theming: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
         selectionState: Binding<CheckboxSelectionState>,
@@ -70,7 +70,7 @@ public struct CheckboxView: View {
     public init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
-        theming: CheckboxTheming,
+        theming: Theme,
         state: SelectButtonState = .enabled,
         selectionState: Binding<CheckboxSelectionState>,
         accessibilityIdentifier: String? = nil
@@ -117,7 +117,7 @@ public struct CheckboxView: View {
 
             switch self.selectionState {
             case .selected:
-                self.theming.theme.iconography.checkmark
+                self.theming.iconography.checkmark
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)
@@ -171,12 +171,12 @@ public struct CheckboxView: View {
     private var labelView: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(self.viewModel.text)
-                .font(self.theming.theme.typography.body1.font)
+                .font(self.theming.typography.body1.font)
                 .foregroundColor(self.colors.textColor.color)
 
             if let message = self.viewModel.supplementaryMessage {
                 Text(message)
-                    .font(self.theming.theme.typography.caption.font)
+                    .font(self.theming.typography.caption.font)
                     .foregroundColor(self.colors.checkboxTintColor.color)
             }
         }

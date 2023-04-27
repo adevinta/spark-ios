@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Spark
 import SparkCore
 import SwiftUI
 
@@ -14,7 +15,7 @@ struct CheckboxGroupView_Previews: PreviewProvider {
     struct ContainerView: View {
         let position: CheckboxView.CheckboxPosition
 
-        let theming = CheckboxTheming(theme: SparkTheme())
+        let theming: Theme = SparkTheme.shared
 
         @State private var selection1: CheckboxSelectionState = .selected
 

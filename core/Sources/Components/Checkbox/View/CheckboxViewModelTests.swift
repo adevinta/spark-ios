@@ -67,8 +67,7 @@ final class CheckboxViewModelTests: XCTestCase {
     }
 
     private func sut(state: SelectButtonState) -> CheckboxViewModel {
-        let theming = CheckboxTheming(theme: self.theme)
-        return CheckboxViewModel(text: "Text", theming: theming, state: state)
+        return CheckboxViewModel(text: "Text", theming: self.theme, state: state)
     }
 }
 
