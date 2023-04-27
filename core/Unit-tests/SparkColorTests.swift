@@ -16,27 +16,27 @@ import XCTest
 final class SparkColorTests: TestCase {
     let colors = SparkTheme.shared.colors
 
-    func testBaseColors() throws {
+    func test_base_colors() throws {
         let mirror = Mirror(reflecting: self.colors.base)
         self.testAllColors(colors: self.getColors(for: mirror))
     }
 
-    func testFeedbackColors() throws {
+    func test_feedback_colors() throws {
         let mirror = Mirror(reflecting: self.colors.feedback)
         self.testAllColors(colors: self.getColors(for: mirror))
     }
 
-    func testPrimaryColors() throws {
+    func test_primary_colors() throws {
         let mirror = Mirror(reflecting: self.colors.primary)
         self.testAllColors(colors: self.getColors(for: mirror))
     }
 
-    func testSecondaryColors() throws {
+    func test_secondary_colors() throws {
         let mirror = Mirror(reflecting: self.colors.secondary)
         self.testAllColors(colors: self.getColors(for: mirror))
     }
 
-    func testStateColors() throws {
+    func test_state_colors() throws {
         let mirror = Mirror(reflecting: self.colors.states)
         self.testAllColors(colors: self.getColors(for: mirror))
     }

@@ -12,10 +12,10 @@ import SnapshotTesting
 @testable import SparkCore
 @testable import Spark
 
-final class SparkCheckboxViewTests: TestCase {
+final class CheckboxViewTests: TestCase {
     let theming = CheckboxTheming(theme: SparkTheme())
 
-    func testCheckboxSelected() throws {
+    func test_checkbox_selected() throws {
         let view = CheckboxView(
             text: "Selected checkbox.",
             theming: self.theming,
@@ -26,7 +26,7 @@ final class SparkCheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func testCheckboxUnselected() throws {
+    func test_checkbox_unselected() throws {
         let view = CheckboxView(
             text: "Unselected checkbox.",
             theming: self.theming,
@@ -37,7 +37,7 @@ final class SparkCheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func testCheckboxIndeterminate() throws {
+    func test_checkbox_indeterminate() throws {
         let view = CheckboxView(
             text: "Indeterminate checkbox.",
             theming: self.theming,
@@ -48,7 +48,7 @@ final class SparkCheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func testCheckboxMultiline() throws {
+    func test_checkbox_multiline() throws {
         let view = CheckboxView(
             text: "Multiline checkbox.\nMore text.",
             theming: self.theming,
