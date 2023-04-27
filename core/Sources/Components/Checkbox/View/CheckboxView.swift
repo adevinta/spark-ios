@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// The `CheckboxView`renders a single checkbox.
 public struct CheckboxView: View {
 
     // MARK: - Type Alias
@@ -16,11 +17,8 @@ public struct CheckboxView: View {
 
     // MARK: - Public Properties
 
-    public var theming: CheckboxTheming {
-        viewModel.theming
-    }
-    var colors: CheckboxColorables {
-        viewModel.colors
+    public var theming: Theme {
+        return self.viewModel.theming
     }
 
     public var accessibilityIdentifier: String?
@@ -28,11 +26,17 @@ public struct CheckboxView: View {
 
     @Binding public var selectionState: CheckboxSelectionState
 
+    // MARK: - Internal Properties
+
     @State var isPressed: Bool = false
 
-    // MARK: - Private Properties
-
     @ObservedObject var viewModel: CheckboxViewModel
+
+    var colors: CheckboxColorables {
+        return self.viewModel.colors
+    }
+
+    // MARK: - Private Properties
 
     @Namespace private var namespace
 
@@ -54,22 +58,30 @@ public struct CheckboxView: View {
     init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
-        theming: CheckboxTheming,
+        theming: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
         selectionState: Binding<CheckboxSelectionState>,
         accessibilityIdentifier: String? = nil
     ) {
-        _selectionState = selectionState
+        self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
-        viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
+        self.viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
 
+    /// Initialize a new checkbox.
+    /// - Parameters:
+    ///   - text: The checkbox text.
+    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - theming: The current Spark-Theme.
+    ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
+    ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
+    ///   - accessibilityIdentifier: The accessibility identifier.
     public init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
-        theming: CheckboxTheming,
+        theming: Theme,
         state: SelectButtonState = .enabled,
         selectionState: Binding<CheckboxSelectionState>,
         accessibilityIdentifier: String? = nil
@@ -85,18 +97,35 @@ public struct CheckboxView: View {
         )
     }
 
+    // MARK: - Body
+
+    public var body: some View {
+        Button(
+            action: {
+                self.tapped()
+            },
+            label: {
+                self.contentView
+            }
+        )
+        .buttonStyle(CheckboxButtonStyle(isPressed: self.$isPressed))
+        .if(self.accessibilityIdentifier != nil) {
+            $0.accessibility(identifier: self.accessibilityIdentifier!)
+        }
+    }
+
     @ViewBuilder private var checkboxView: some View {
-        let tintColor = colors.checkboxTintColor.color
-        let iconColor = colors.checkboxIconColor.color
+        let tintColor = self.colors.checkboxTintColor.color
+        let iconColor = self.colors.checkboxIconColor.color
         ZStack {
             let lineWidth: CGFloat = 4
-            RoundedRectangle(cornerRadius: checkboxBorderRadius)
-                .if(selectionState == .selected || selectionState == .indeterminate) {
+            RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
+                .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
                     $0.fill(tintColor)
                 } else: {
-                    $0.strokeBorder(tintColor, lineWidth: checkboxBorderWidth)
+                    $0.strokeBorder(tintColor, lineWidth: self.checkboxBorderWidth)
                 }
-                .frame(width: checkboxWidth, height: checkboxHeight)
+                .frame(width: self.checkboxWidth, height: self.checkboxHeight)
                 .if(isPressed && viewModel.interactionEnabled) {
                     $0.overlay(
                         RoundedRectangle(cornerRadius: checkboxBorderRadius)
@@ -106,95 +135,83 @@ public struct CheckboxView: View {
                     )
                 }
 
-            switch selectionState {
+            switch self.selectionState {
             case .selected:
-                theming.theme.iconography.checkmark
+                self.theming.iconography.checkmark
                     .image
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)
-                    .frame(width: checkboxSelectedWidth, height: checkboxSelectedHeight)
+                    .frame(width: self.checkboxSelectedWidth, height: self.checkboxSelectedHeight)
 
             case .unselected:
                 EmptyView()
             case .indeterminate:
                 Capsule()
                     .fill(iconColor)
-                    .frame(width: checkboxIndeterminateWidth, height: checkboxIndeterminateHeight)
+                    .frame(width: self.checkboxIndeterminateWidth, height: self.checkboxIndeterminateHeight)
             }
         }
-        .if(selectionState == .selected) {
+        .if(self.selectionState == .selected) {
             $0.accessibilityAddTraits(.isSelected)
         }
         .id(Identifier.checkbox.rawValue)
-        .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: namespace)
-    }
-
-    public var body: some View {
-        Button(
-            action: {
-                tapped()
-            },
-            label: {
-                contentView
-            }
-        )
-        .buttonStyle(CheckboxButtonStyle(isPressed: $isPressed))
-        .if(accessibilityIdentifier != nil) {
-            $0.accessibility(identifier: accessibilityIdentifier!)
-        }
+        .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: self.namespace)
     }
 
     @ViewBuilder private var contentView: some View {
         HStack(alignment: .top) {
             switch checkboxPosition {
             case .left:
-                checkboxView
+                self.checkboxView
 
-                labelView
+                self.labelView
 
                 Spacer()
             case .right:
-                labelView
+                self.labelView
 
                 Spacer()
 
-                checkboxView
+                self.checkboxView
             }
         }
         .padding(.vertical, 4)
-        .opacity(viewModel.opacity)
-        .allowsHitTesting(viewModel.interactionEnabled)
+        .opacity(self.viewModel.opacity)
+        .allowsHitTesting(self.viewModel.interactionEnabled)
         .contentShape(Rectangle())
     }
 
     private var labelView: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(viewModel.text)
-                .font(theming.theme.typography.body1.font)
-                .foregroundColor(colors.textColor.color)
+            Text(self.viewModel.text)
+                .font(self.theming.typography.body1.font)
+                .foregroundColor(self.colors.textColor.color)
 
-            if let message = viewModel.supplementaryMessage {
+            if let message = self.viewModel.supplementaryMessage {
                 Text(message)
-                    .font(theming.theme.typography.caption.font)
-                    .foregroundColor(colors.checkboxTintColor.color)
+                    .font(self.theming.typography.caption.font)
+                    .foregroundColor(self.colors.checkboxTintColor.color)
             }
         }
         .id(Identifier.content.rawValue)
-        .matchedGeometryEffect(id: Identifier.content.rawValue, in: namespace)
+        .matchedGeometryEffect(id: Identifier.content.rawValue, in: self.namespace)
     }
 
-    func tapped() {
-        guard viewModel.interactionEnabled else { return }
+    // MARK: - Action
 
-        switch selectionState {
+    func tapped() {
+        guard self.viewModel.interactionEnabled else { return }
+
+        switch self.selectionState {
         case .selected:
-            selectionState = .unselected
+            self.selectionState = .unselected
         case .unselected, .indeterminate:
-            selectionState = .selected
+            self.selectionState = .selected
         }
     }
 
+    // MARK: - Enum
     private enum Identifier: String {
         case checkbox
         case content

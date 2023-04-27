@@ -9,17 +9,23 @@
 import Foundation
 
 final class CheckboxViewModel: ObservableObject {
+    // MARK: - Public properties
+
     public var text: String
 
-    @Published public var theming: CheckboxTheming
+    @Published public var theming: Theme
     @Published public var state: SelectButtonState
 
-    @Published public var colors: CheckboxColorables
+    // MARK: - Private properties
+
+    @Published var colors: CheckboxColorables
     private let colorsUseCase: CheckboxColorsUseCaseable
+
+    // MARK: - Init
 
     init(
         text: String,
-        theming: CheckboxTheming,
+        theming: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled
     ) {
@@ -31,6 +37,8 @@ final class CheckboxViewModel: ObservableObject {
         self.colors = colorsUseCase.execute(from: theming, state: state)
     }
 
+    // MARK: - Computed properties
+
     var interactionEnabled: Bool {
         switch state {
         case .disabled:
@@ -41,16 +49,16 @@ final class CheckboxViewModel: ObservableObject {
     }
 
     var opacity: CGFloat {
-        switch state {
+        switch self.state {
         case .disabled:
-            return theming.theme.dims.dim3
+            return self.theming.dims.dim3
         default:
             return 1.0
         }
     }
 
     var supplementaryMessage: String? {
-        switch state {
+        switch self.state {
         case .error(let message), .success(let message), .warning(let message):
             return message
         default:

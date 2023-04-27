@@ -37,7 +37,7 @@ public final class CheckboxUIView: UIView {
     }()
 
     private lazy var controlView: CheckboxControlUIView = {
-        let controlView = CheckboxControlUIView(selectionIcon: theming.theme.iconography.checkmark.uiImage)
+        let controlView = CheckboxControlUIView(selectionIcon: theming.iconography.checkmark.uiImage)
         controlView.isAccessibilityElement = false
         controlView.translatesAutoresizingMaskIntoConstraints = false
         return controlView
@@ -83,7 +83,7 @@ public final class CheckboxUIView: UIView {
             updateAccessibility()
         }
     }
-    public var theming: CheckboxTheming
+    public var theming: Theme
 
     var colors: CheckboxColorables {
         get {
@@ -113,7 +113,7 @@ public final class CheckboxUIView: UIView {
     }
 
     public convenience init(
-        theming: CheckboxTheming,
+        theming: Theme,
         text: String,
         state: SelectButtonState = .enabled,
         selectionState: CheckboxSelectionState = .unselected,
@@ -132,7 +132,7 @@ public final class CheckboxUIView: UIView {
     }
 
     init(
-        theming: CheckboxTheming,
+        theming: Theme,
         text: String,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
@@ -283,12 +283,12 @@ public final class CheckboxUIView: UIView {
     private func updateTheme() {
         controlView.colors = colors
 
-        let font = theming.theme.typography.body1.uiFont
+        let font = theming.typography.body1.uiFont
         textLabel.font = font
         textLabel.adjustsFontForContentSizeCategory = true
         textLabel.textColor = colors.textColor.uiColor
 
-        let captionFont = theming.theme.typography.caption.uiFont
+        let captionFont = theming.typography.caption.uiFont
         supplementaryTextLabel.font = captionFont
         supplementaryTextLabel.adjustsFontForContentSizeCategory = true
         supplementaryTextLabel.textColor = colors.checkboxTintColor.uiColor

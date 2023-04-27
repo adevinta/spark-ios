@@ -12,13 +12,13 @@ import SnapshotTesting
 @testable import SparkCore
 @testable import Spark
 
-final class SparkCheckboxViewTests: TestCase {
-    let theming = CheckboxTheming(theme: SparkTheme())
+final class CheckboxViewTests: TestCase {
+    let theming: Theme = SparkTheme()
 
-    func testCheckboxSelected() throws {
+    func test_checkbox_selected() throws {
         let view = CheckboxView(
             text: "Selected checkbox.",
-            theming: theming,
+            theming: self.theming,
             selectionState: .init(get: { .selected }, set: { _ in }),
             accessibilityIdentifier: "test"
         ).fixedSize()
@@ -26,10 +26,10 @@ final class SparkCheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func testCheckboxUnselected() throws {
+    func test_checkbox_unselected() throws {
         let view = CheckboxView(
             text: "Unselected checkbox.",
-            theming: theming,
+            theming: self.theming,
             selectionState: .init(get: { .unselected }, set: { _ in }),
             accessibilityIdentifier: "test"
         ).fixedSize()
@@ -37,10 +37,10 @@ final class SparkCheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func testCheckboxIndeterminate() throws {
+    func test_checkbox_indeterminate() throws {
         let view = CheckboxView(
             text: "Indeterminate checkbox.",
-            theming: theming,
+            theming: self.theming,
             selectionState: .init(get: { .indeterminate }, set: { _ in }),
             accessibilityIdentifier: "test"
         ).fixedSize()
@@ -48,10 +48,10 @@ final class SparkCheckboxViewTests: TestCase {
         sparktAssertSnapshot(matching: view, as: .image)
     }
 
-    func testCheckboxMultiline() throws {
+    func test_checkbox_multiline() throws {
         let view = CheckboxView(
             text: "Multiline checkbox.\nMore text.",
-            theming: theming,
+            theming: self.theming,
             selectionState: .init(get: { .unselected }, set: { _ in }),
             accessibilityIdentifier: "test"
         ).fixedSize()

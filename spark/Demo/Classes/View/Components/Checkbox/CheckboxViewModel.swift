@@ -16,7 +16,5 @@ struct CheckboxViewModel {
 
     // MARK: - Initialization
 
-    init() {
-
-    }
+    init() {}
 }

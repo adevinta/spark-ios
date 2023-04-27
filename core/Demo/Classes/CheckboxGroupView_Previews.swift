@@ -15,7 +15,7 @@ struct CheckboxGroupView_Previews: PreviewProvider {
     struct ContainerView: View {
         let position: CheckboxPosition
 
-        let theming = CheckboxTheming(theme: SparkTheme.shared)
+        let theming: Theme = SparkTheme.shared
 
         @State private var selection1: CheckboxSelectionState = .selected
 
@@ -31,8 +31,8 @@ struct CheckboxGroupView_Previews: PreviewProvider {
             HStack {
                 CheckboxGroupView(
                     items: $items,
-                    checkboxPosition: position,
-                    theming: theming,
+                    checkboxPosition: self.position,
+                    theming: self.theming,
                     accessibilityIdentifierPrefix: "group"
                 )
                 Spacer()

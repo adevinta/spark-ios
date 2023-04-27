@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// The `CheckboxGroupView` renders a group containing of multiple`CheckboxView`-views. It supports a title, different layout and positioning options.
 public struct CheckboxGroupView: View {
 
     // MARK: - Type Alias
@@ -18,19 +19,26 @@ public struct CheckboxGroupView: View {
 
     private var title: String
     @Binding private var items: [any CheckboxGroupItemProtocol]
-    private var theming: CheckboxTheming
+    private var theming: Theme
     private var layout: CheckboxGroupLayout
     private var checkboxPosition: CheckboxPosition
     private var accessibilityIdentifierPrefix: String
 
     // MARK: - Initialization
 
+    /// Initialize a group of one or multiple checkboxes.
+    /// - Parameters:
+    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
+    ///   - layout: The layout of the group can be horizontal or vertical.
+    ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - theming: The Spark-Theme.
+    ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
         title: String? = nil,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxPosition,
-        theming: CheckboxTheming,
+        theming: Theme,
         accessibilityIdentifierPrefix: String
     ) {
         self.title = title ?? ""
@@ -41,33 +49,36 @@ public struct CheckboxGroupView: View {
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
     }
 
+    // MARK: - Body
+
     public var body: some View {
-        let spacing: CGFloat = spacing.xLarge / 2
+        let spacing: CGFloat = self.spacing.xLarge / 2
 
         VStack(alignment: .leading, spacing: 0) {
             // Title will be refactored once we have a custom label component.
-            if !title.isEmpty {
-                Text(title)
-                    .foregroundColor(theming.theme.colors.base.onSurface.color)
-                    .font(theming.theme.typography.subhead.font)
-                    .padding(.bottom, theming.theme.layout.spacing.medium)
+            if !self.title.isEmpty {
+                Text(self.title)
+                    .foregroundColor(self.theming.colors.base.onSurface.color)
+                    .font(self.theming.typography.subhead.font)
+                    .padding(.bottom, self.theming.layout.spacing.medium)
             }
 
-            if layout == .horizontal {
+            switch self.layout {
+            case .horizontal:
                 HStack(alignment: .top, spacing: spacing) {
-                    contentView
+                    self.contentView
                 }
-            } else {
+            case .vertical:
                 VStack(alignment: .leading, spacing: spacing - self.spacing.small) {
-                    contentView
+                    self.contentView
                 }
             }
         }
     }
 
     private var contentView: some View {
-        ForEach($items, id: \.id) { item in
-            let identifier = "\(accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
+        ForEach(self.$items, id: \.id) { item in
+            let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
             CheckboxView(
                 text: item.title.wrappedValue,
                 checkboxPosition: checkboxPosition,
@@ -80,6 +91,6 @@ public struct CheckboxGroupView: View {
     }
 
     private var spacing: LayoutSpacing {
-        theming.theme.layout.spacing
+        theming.layout.spacing
     }
 }

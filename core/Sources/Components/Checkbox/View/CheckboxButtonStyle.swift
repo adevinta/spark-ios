@@ -12,13 +12,13 @@ struct CheckboxButtonStyle: ButtonStyle {
     @Binding var isPressed: Bool
 
     init(isPressed: Binding<Bool>) {
-        _isPressed = isPressed
+        self._isPressed = isPressed
     }
 
     func makeBody(configuration: Self.Configuration) -> some View {
-        if configuration.isPressed != isPressed {
+        if configuration.isPressed != self.isPressed {
             DispatchQueue.main.async {
-                isPressed = configuration.isPressed
+                self.isPressed = configuration.isPressed
             }
         }
 

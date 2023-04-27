@@ -67,9 +67,7 @@ final class CheckboxViewController: UIViewController {
 
     private func setUpView() {
         let view = contentView
-        let theming = CheckboxTheming.init(
-            theme: SparkTheme.shared
-        )
+        let theming = SparkTheme.shared
 
         var checkboxes: [CheckboxUIView] = []
 

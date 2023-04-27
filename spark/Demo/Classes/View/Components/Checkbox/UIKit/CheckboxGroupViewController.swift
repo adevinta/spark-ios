@@ -137,9 +137,7 @@ final class CheckboxGroupViewController: UIViewController {
 
     private func setUpCheckboxGroupView() {
         let view = contentView
-        let theming = CheckboxTheming.init(
-            theme: SparkTheme.shared
-        )
+        let theming = SparkTheme.shared
 
         let groupView = CheckboxGroupUIView(
             title: "Hello world!",

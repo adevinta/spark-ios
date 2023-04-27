@@ -17,11 +17,11 @@ final class TestCaseTracker: NSObject, XCTestObservation {
         let snapshotDirectory = ProcessInfo.processInfo.environment["SNAPSHOT_REFERENCE_DIR"]! + "/"
         guard let url = URL(string: snapshotDirectory) else { return "" }
 
-        return url.appendingPathComponent(currentTestCase.testClassName).path
+        return url.appendingPathComponent(self.currentTestCase.testClassName).path
     }
 
     func testName(_ identifier: String? = nil) -> String {
-        [currentTestCase.testMethodName, identifier]
+        [self.currentTestCase.testMethodName, identifier]
             .compactMap { $0 }
             .filter { !$0.isEmpty }
             .joined(separator: "_")
@@ -30,21 +30,21 @@ final class TestCaseTracker: NSObject, XCTestObservation {
     // MARK: -
 
     func subscribe() {
-        guard !didSubscribe else {
+        guard !self.didSubscribe else {
             return
         }
 
-        defer { didSubscribe = true }
+        defer { self.didSubscribe = true }
 
         XCTestObservationCenter.shared.addTestObserver(self)
     }
 
     @objc func testCaseWillStart(_ testCase: XCTestCase) {
-        currentTestCase = testCase
+        self.currentTestCase = testCase
     }
 
     @objc func testCaseDidFinish(_ testCase: XCTestCase) {
-        currentTestCase = nil
+        self.currentTestCase = nil
     }
 
     // MARK: - Private
@@ -62,11 +62,11 @@ private extension String {
 
 extension XCTestCase {
     var testClassName: String {
-        String(sanitizedName.split(separator: " ").first!)
+        String(self.sanitizedName.split(separator: " ").first!)
     }
 
     var testMethodName: String {
-        String(sanitizedName.split(separator: " ").last!)
+        String(self.sanitizedName.split(separator: " ").last!)
     }
 
     // MARK: - Private

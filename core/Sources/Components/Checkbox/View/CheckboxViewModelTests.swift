@@ -27,7 +27,7 @@ final class CheckboxViewModelTests: XCTestCase {
     // MARK: - Tests
     func test_opacity() throws {
         // Given
-        let opacities = sutValues(for: \.opacity)
+        let opacities = self.sutValues(for: \.opacity)
 
         // Then
         XCTAssertEqual(opacities, [0.4, 1.0, 1.0, 1.0, 1.0])
@@ -35,7 +35,7 @@ final class CheckboxViewModelTests: XCTestCase {
 
     func test_interactionEnabled() {
         // Given
-        let disabledStates = sutValues(for: \.interactionEnabled)
+        let disabledStates = self.sutValues(for: \.interactionEnabled)
 
         // Then
         XCTAssertEqual(disabledStates, [false, true, true, true, true])
@@ -43,7 +43,7 @@ final class CheckboxViewModelTests: XCTestCase {
 
     func test_supplementaryMessage() {
         // Given
-        let supplementaryTexts = sutValues(for: \.supplementaryMessage)
+        let supplementaryTexts = self.sutValues(for: \.supplementaryMessage)
 
         // Then
         XCTAssertEqual(supplementaryTexts, [nil, nil, "Success", "Warning", "Error"])
@@ -67,8 +67,7 @@ final class CheckboxViewModelTests: XCTestCase {
     }
 
     private func sut(state: SelectButtonState) -> CheckboxViewModel {
-        let theming = CheckboxTheming(theme: self.theme)
-        return CheckboxViewModel(text: "Text", theming: theming, state: state)
+        return CheckboxViewModel(text: "Text", theming: self.theme, state: state)
     }
 }
 

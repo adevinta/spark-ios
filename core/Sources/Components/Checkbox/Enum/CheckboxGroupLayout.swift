@@ -8,8 +8,12 @@
 
 import Foundation
 
+/// Enum describing layout options for checkbox groups. Currently horizontal and vertical layouts are supported.
 @frozen
 public enum CheckboxGroupLayout {
+    /// Horizontal layout.
     case horizontal
+
+    /// Vertical layout.
     case vertical
 }

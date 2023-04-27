@@ -17,7 +17,7 @@ public final class CheckboxGroupUIView: UIView {
     // MARK: - Private properties.
 
     @Binding private var items: [any CheckboxGroupItemProtocol]
-    private var theming: CheckboxTheming
+    private var theming: Theme
     private var accessibilityIdentifierPrefix: String
     private var checkboxes: [CheckboxUIView] = []
     private var titleLabel: UILabel?
@@ -52,7 +52,7 @@ public final class CheckboxGroupUIView: UIView {
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxPosition,
-        theming: CheckboxTheming,
+        theming: Theme,
         accessibilityIdentifierPrefix: String
     ) {
         self.title = title
@@ -80,7 +80,7 @@ public final class CheckboxGroupUIView: UIView {
     }
 
     private var spacing: LayoutSpacing {
-        theming.theme.layout.spacing
+        theming.layout.spacing
     }
 
     private func setUpView() {
@@ -91,8 +91,8 @@ public final class CheckboxGroupUIView: UIView {
             let label = UILabel()
             label.text = title
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.textColor = theming.theme.colors.base.onSurface.uiColor
-            label.font = theming.theme.typography.subhead.uiFont
+            label.textColor = theming.colors.base.onSurface.uiColor
+            label.font = theming.typography.subhead.uiFont
 
             self.titleLabel = label
             view.addSubview(label)

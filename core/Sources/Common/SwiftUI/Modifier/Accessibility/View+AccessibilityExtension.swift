@@ -9,11 +9,7 @@
 import SwiftUI
 
 public extension View {
-
-    func accessibility(identifier: String?,
-                       label: String?,
-                       text: String?) -> some View {
-        self.modifier(AccessibilityViewModifier(identifier: identifier,
-                                                label: label ?? text))
+    func accessibility(identifier: String?, label: String?) -> some View {
+        return self.modifier(AccessibilityViewModifier(identifier: identifier, label: label))
     }
 }

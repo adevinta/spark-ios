@@ -14,22 +14,20 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
 
     // MARK: - Properties
     var theme: ThemeGeneratedMock!
-    var checkboxTheming: CheckboxTheming!
 
     // MARK: - Setup
     override func setUpWithError() throws {
         try super.setUpWithError()
         self.theme = ThemeGeneratedMock.mock
-        self.checkboxTheming = CheckboxTheming(theme: theme)
     }
 
     // MARK: - Tests
     func test_enabled_colors() throws {
         // Given
-        let sut = sut()
+        let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: checkboxTheming, state: .enabled)
+        let colors = sut.execute(from: self.theme, state: .enabled)
 
         // Then
         XCTAssertEqual(
@@ -46,10 +44,10 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
 
     func test_disabled_colors() throws {
         // Given
-        let sut = sut()
+        let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: checkboxTheming, state: .disabled)
+        let colors = sut.execute(from: self.theme, state: .disabled)
 
         // Then
         XCTAssertEqual(
@@ -66,10 +64,10 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
 
     func test_success_colors() throws {
         // Given
-        let sut = sut()
+        let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: checkboxTheming, state: .success(message: "message"))
+        let colors = sut.execute(from: self.theme, state: .success(message: "message"))
 
         // Then
         XCTAssertEqual(
@@ -86,10 +84,10 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
 
     func test_warning_colors() throws {
         // Given
-        let sut = sut()
+        let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: checkboxTheming, state: .warning(message: "message"))
+        let colors = sut.execute(from: self.theme, state: .warning(message: "message"))
 
         // Then
         XCTAssertEqual(
@@ -106,10 +104,10 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
 
     func test_error_colors() throws {
         // Given
-        let sut = sut()
+        let sut = self.sut()
 
         // When
-        let colors = sut.execute(from: checkboxTheming, state: .error(message: "message"))
+        let colors = sut.execute(from: self.theme, state: .error(message: "message"))
 
         // Then
         XCTAssertEqual(
