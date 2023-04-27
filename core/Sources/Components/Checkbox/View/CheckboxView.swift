@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// The `CheckboxView`renders a single checkbox.
 public struct CheckboxView: View {
 
     // MARK: - Type Alias
@@ -67,6 +68,14 @@ public struct CheckboxView: View {
         self.accessibilityIdentifier = accessibilityIdentifier
     }
 
+    /// Initialize a new checkbox.
+    /// - Parameters:
+    ///   - text: The checkbox text.
+    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - theming: The current Spark-Theme.
+    ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
+    ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
+    ///   - accessibilityIdentifier: The accessibility identifier.
     public init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,

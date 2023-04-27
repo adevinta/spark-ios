@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// The `CheckboxGroupView` renders a group containing of multiple`CheckboxView`-views. It supports a title, different layout and positioning options.
 public struct CheckboxGroupView: View {
 
     // MARK: - Type Alias
@@ -24,6 +25,13 @@ public struct CheckboxGroupView: View {
 
     // MARK: - Initialization
 
+    /// Initialize a group of one or multiple checkboxes.
+    /// - Parameters:
+    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
+    ///   - layout: The layout of the group can be horizontal or vertical.
+    ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - theming: The Spark-Theme.
+    ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
