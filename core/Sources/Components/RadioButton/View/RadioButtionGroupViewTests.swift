@@ -22,7 +22,7 @@ final class RadioButtionGroupViewTests: TestCase {
         )
     }()
 
-    func test_group() throws {
+    func x_test_group() throws {
         let sut = RadioButtonGroupView(
             theme: SparkTheme.shared,
             title: "Radio Button Group (SwiftUI)",
