@@ -30,8 +30,12 @@ class CheckboxControlUIView: UIView {
         }
     }
 
-    public init(selectionIcon: UIImage) {
+    var theming: Theme
+
+    public init(selectionIcon: UIImage, theming: Theme) {
         self.selectionIcon = selectionIcon
+        self.theming = theming
+        self.theming = theming
         super.init(frame: .zero)
         commonInit()
     }
@@ -64,6 +68,16 @@ class CheckboxControlUIView: UIView {
         return iconSize.scaled(for: traitCollection)
     }
 
+    private var spacing: LayoutSpacing {
+        theming.layout.spacing
+    }
+
+    private enum Constants {
+        static let cornerRadius: CGFloat = 4
+        static let lineWidth: CGFloat = 2
+        static let lineWidthPressed: CGFloat = 4
+    }
+
     private let offset: CGFloat = 2
     override func draw(_ rect: CGRect) {
         super.draw(rect)
@@ -74,15 +88,15 @@ class CheckboxControlUIView: UIView {
         else { return }
 
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let scaledSpacing = bodyFontMetrics.scaledValue(for: 20.0, compatibleWith: traitCollection) + 8
+        let scaledSpacing = bodyFontMetrics.scaledValue(for: spacing.xLarge - spacing.small, compatibleWith: traitCollection) + spacing.medium
 
         let controlRect = CGRect(x: 0, y: 0, width: scaledSpacing, height: scaledSpacing)
-        let controlInnerRect = controlRect.insetBy(dx: 4, dy: 4)
+        let controlInnerRect = controlRect.insetBy(dx: spacing.small, dy: spacing.small)
 
         if isPressed {
-            let lineWidth: CGFloat = 4
+            let lineWidth: CGFloat = Constants.lineWidthPressed
             let pressedBorderRectangle = controlRect.insetBy(dx: lineWidth/2, dy: lineWidth/2)
-            let borderPath = UIBezierPath(roundedRect: pressedBorderRectangle, cornerRadius: bodyFontMetrics.scaledValue(for: 4, compatibleWith: traitCollection)+2)
+            let borderPath = UIBezierPath(roundedRect: pressedBorderRectangle, cornerRadius: bodyFontMetrics.scaledValue(for: Constants.cornerRadius, compatibleWith: traitCollection)+2)
             borderPath.lineWidth = lineWidth
             colors.pressedBorderColor.uiColor.setStroke()
             ctx.setStrokeColor(colors.pressedBorderColor.uiColor.cgColor)
@@ -95,8 +109,8 @@ class CheckboxControlUIView: UIView {
         let scaledOffset = bodyFontMetrics.scaledValue(for: offset, compatibleWith: traitCollection)
         let rectangle = controlInnerRect.insetBy(dx: scaledOffset/2, dy: scaledOffset/2)
 
-        let path = UIBezierPath(roundedRect: rectangle, cornerRadius: bodyFontMetrics.scaledValue(for: 4, compatibleWith: traitCollection))
-        path.lineWidth = bodyFontMetrics.scaledValue(for: 2, compatibleWith: traitCollection)
+        let path = UIBezierPath(roundedRect: rectangle, cornerRadius: bodyFontMetrics.scaledValue(for: Constants.cornerRadius, compatibleWith: traitCollection))
+        path.lineWidth = bodyFontMetrics.scaledValue(for: Constants.lineWidth, compatibleWith: traitCollection)
         color.setStroke()
         color.setFill()
 
@@ -114,7 +128,7 @@ class CheckboxControlUIView: UIView {
                 y: controlInnerRect.origin.y + controlInnerRect.height / 2 - iconSize.height / 2
             )
             let iconRect = CGRect(origin: origin, size: iconSize)
-            let iconPath = UIBezierPath(roundedRect: iconRect, cornerRadius: bodyFontMetrics.scaledValue(for: 4, compatibleWith: traitCollection))
+            let iconPath = UIBezierPath(roundedRect: iconRect, cornerRadius: bodyFontMetrics.scaledValue(for: iconSize.height / 2, compatibleWith: traitCollection))
             colors.checkboxIconColor.uiColor.setFill()
             iconPath.fill()
 
@@ -127,6 +141,7 @@ class CheckboxControlUIView: UIView {
                 y: controlInnerRect.origin.y + controlInnerRect.height / 2 - iconSize.height / 2
             )
             let iconRect = CGRect(origin: origin, size: iconSize)
+            colors.checkboxIconColor.uiColor.set()
             selectionIcon.draw(in: iconRect)
         }
     }

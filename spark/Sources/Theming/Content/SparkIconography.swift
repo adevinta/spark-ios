@@ -11,7 +11,7 @@ import SparkCore
 
 struct SparkIconography: Iconography {
     private(set) var checkmark: ImageToken = {
-        let image = SparkIconAsset.checkboxSelected.image
+        let image = SparkIconAsset.checkboxSelected.image.withRenderingMode(.alwaysTemplate)
         return ImageTokenDefault(uiImage: image)
     }()
 }

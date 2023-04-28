@@ -176,10 +176,14 @@ public struct CheckboxView: View {
                 self.checkboxView
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, self.spacing.small)
         .opacity(self.viewModel.opacity)
         .allowsHitTesting(self.viewModel.interactionEnabled)
         .contentShape(Rectangle())
+    }
+
+    private var spacing: LayoutSpacing {
+        self.theming.layout.spacing
     }
 
     private var labelView: some View {

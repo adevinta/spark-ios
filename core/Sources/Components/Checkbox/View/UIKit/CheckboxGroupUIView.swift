@@ -9,10 +9,6 @@
 import SwiftUI
 import UIKit
 
-public protocol CheckboxGroupUIViewProtocol: AnyObject {
-    
-}
-
 public final class CheckboxGroupUIView: UIView {
     // MARK: - Private properties.
 
@@ -29,8 +25,6 @@ public final class CheckboxGroupUIView: UIView {
             update()
         }
     }
-
-    public weak var delegate: CheckboxGroupUIViewProtocol?
 
     public var layout: CheckboxGroupLayout {
         didSet {
@@ -109,7 +103,6 @@ public final class CheckboxGroupUIView: UIView {
                 selectionState: item.selectionState,
                 checkboxPosition: checkboxPosition,
                 selectionStateHandler: { [weak self] state in
-                    print("selectionStateHandler", state)
                     guard
                         let self,
                         let index = self.items.firstIndex(where: { $0.id == item.id}) else { return }

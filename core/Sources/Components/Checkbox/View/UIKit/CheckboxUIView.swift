@@ -37,7 +37,10 @@ public final class CheckboxUIView: UIView {
     }()
 
     private lazy var controlView: CheckboxControlUIView = {
-        let controlView = CheckboxControlUIView(selectionIcon: theming.iconography.checkmark.uiImage)
+        let controlView = CheckboxControlUIView(
+            selectionIcon: self.theming.iconography.checkmark.uiImage,
+            theming: self.theming
+        )
         controlView.isAccessibilityElement = false
         controlView.translatesAutoresizingMaskIntoConstraints = false
         return controlView
