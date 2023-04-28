@@ -9,6 +9,8 @@
 import SwiftUI
 import UIKit
 
+// TODO: remove this class if scaledValue works great on UIKit TagView (and remove Spark DynamicContentSize)
+
 // sourcery: AutoMockable
 protocol TagGetHeightUseCaseable {
     func execute(from contentSizeCategory: ContentSizeCategory) -> CGFloat
