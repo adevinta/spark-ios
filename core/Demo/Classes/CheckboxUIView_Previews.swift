@@ -13,7 +13,7 @@ import SwiftUI
 struct CheckboxUIView_Previews: PreviewProvider {
 
     struct ContainerView: View {
-        let theming = CheckboxTheming(theme: SparkTheme.shared)
+        let theming = SparkTheme.shared
 
         @State private var selection1: CheckboxSelectionState = .selected
         @State private var selection2: CheckboxSelectionState = .unselected
@@ -95,9 +95,7 @@ final class CheckboxViewController: UIViewController {
 
     private func setUpView() {
         let view = contentView
-        let theming = CheckboxTheming.init(
-            theme: SparkTheme.shared
-        )
+        let theming = SparkTheme.shared
 
         var checkboxes: [CheckboxUIView] = []
 
