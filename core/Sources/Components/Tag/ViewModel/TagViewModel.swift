@@ -20,8 +20,6 @@ final class TagViewModel: ObservableObject {
     @Published var iconImage: Image?
     @Published var text: String?
 
-//    private let getHeightUseCase: TagGetHeightUseCaseable
-
     // MARK: - Init
     init(
         theme: Theme,
@@ -30,7 +28,6 @@ final class TagViewModel: ObservableObject {
         iconImage: Image?,
         text: String?,
         getColorsUseCase: TagGetColorsUseCaseable = TagGetColorsUseCase()
-//        getHeightUseCase: TagGetHeightUseCaseable = TagGetHeightUseCase()
     ) {
         self.colors = getColorsUseCase.execute(
             from: theme,
