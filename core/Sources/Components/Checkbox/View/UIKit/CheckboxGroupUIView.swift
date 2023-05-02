@@ -9,6 +9,7 @@
 import SwiftUI
 import UIKit
 
+/// The `CheckboxGroupUIView` renders a group containing of multiple`CheckboxUIView`-views. It supports a title, different layout and positioning options.
 public final class CheckboxGroupUIView: UIView {
     // MARK: - Private properties.
 
@@ -20,27 +21,42 @@ public final class CheckboxGroupUIView: UIView {
 
     // MARK: - Public properties.
 
+    /// The title of the checkbox group displayed on top of the group.
     public var title: String? {
         didSet {
             update()
         }
     }
 
+    /// The layout of the checkbox
     public var layout: CheckboxGroupLayout {
         didSet {
             update()
         }
     }
+    ///  The checkbox is positioned on the leading or trailing edge of the view.
     public var checkboxPosition: CheckboxPosition {
         didSet {
             update()
         }
     }
 
+    // MARK: - Initialization
+
+    /// Not implemented. Please use another init.
+    /// - Parameter coder: the coder.
     public required init?(coder: NSCoder) {
         fatalError("not implemented")
     }
 
+    /// Initialize a group of one or multiple checkboxes.
+    /// - Parameters:
+    ///   - title: An optional group title displayed on top of the checkbox group..
+    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
+    ///   - layout: The layout of the group can be horizontal or vertical.
+    ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - theming: The Spark-Theme.
+    ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
         title: String? = nil,
         items: Binding<[any CheckboxGroupItemProtocol]>,
@@ -175,6 +191,7 @@ public final class CheckboxGroupUIView: UIView {
         }
     }
 
+    /// Triggers an update of the checkbox group.
     public func update() {
         setUpView()
     }

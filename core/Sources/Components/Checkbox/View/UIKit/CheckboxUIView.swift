@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// The `CheckboxUIView`renders a single checkbox using UIKit.
 public final class CheckboxUIView: UIView {
 
     // MARK: - Private properties.
@@ -54,9 +55,12 @@ public final class CheckboxUIView: UIView {
 
     // MARK: - Public properties.
 
+    /// Set a delegate to receive selection state change callbacks. Alternatively, you can set a `selectionStateHandler`.
     public weak var delegate: CheckboxUIViewDelegate?
+    /// Set the `selectionStateHandler` to receive selection state change callbacks. Alternatively, you can set a delegate.
     public var selectionStateHandler: ((_ state: CheckboxSelectionState) -> Void)?
 
+    /// The text displayed in the checkbox.
     public var text: String {
         get {
             viewModel.text
@@ -68,6 +72,7 @@ public final class CheckboxUIView: UIView {
         }
     }
 
+    /// The current selection state of the checkbox.
     public var selectionState: CheckboxSelectionState = .unselected {
         didSet {
             controlView.selectionState = selectionState
@@ -75,6 +80,7 @@ public final class CheckboxUIView: UIView {
         }
     }
 
+    /// The control state of the checkbox (e.g. `.enabled` or `.disabled`).
     public var state: SelectButtonState {
         didSet {
             viewModel.state = state
@@ -86,6 +92,7 @@ public final class CheckboxUIView: UIView {
             updateAccessibility()
         }
     }
+    /// Sets the theme of the checkbox.
     public var theming: Theme
 
     var colors: CheckboxColorables {
@@ -111,10 +118,20 @@ public final class CheckboxUIView: UIView {
         }
     }
 
+    /// Not implemented. Please use another init.
+    /// - Parameter coder: the coder.
     public required init?(coder: NSCoder) {
         fatalError("not implemented")
     }
 
+    /// Initialize a new checkbox UIKit-view.
+    /// - Parameters:
+    ///   - theming: The current Spark-Theme.
+    ///   - text: The checkbox text.
+    ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
+    ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
+    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - selectionStateHandler: The handler which is called when the checkbox state is changed.
     public convenience init(
         theming: Theme,
         text: String,
@@ -213,6 +230,7 @@ public final class CheckboxUIView: UIView {
         updateAccessibility()
     }
 
+    /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateViewConstraints()

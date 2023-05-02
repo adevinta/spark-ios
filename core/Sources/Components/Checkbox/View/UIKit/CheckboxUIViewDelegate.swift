@@ -8,6 +8,11 @@
 
 import Foundation
 
+/// The checkbox delegate informs about a new checkbox selection state.
 public protocol CheckboxUIViewDelegate: AnyObject {
+    /// The checkbox selection was changed.
+    /// - Parameters:
+    ///   - checkbox: The updated checkbox.
+    ///   - state: The new checkbox state.
     func checkbox(_ checkbox: CheckboxUIView, didChangeSelection state: CheckboxSelectionState)
 }

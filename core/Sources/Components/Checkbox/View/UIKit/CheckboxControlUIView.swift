@@ -10,6 +10,8 @@ import SwiftUI
 import UIKit
 
 class CheckboxControlUIView: UIView {
+    // MARK: - Properties.
+
     var selectionIcon: UIImage
 
     var isPressed: Bool = false {
@@ -32,7 +34,9 @@ class CheckboxControlUIView: UIView {
 
     var theming: Theme
 
-    public init(selectionIcon: UIImage, theming: Theme) {
+    // MARK: - Initialization
+
+    init(selectionIcon: UIImage, theming: Theme) {
         self.selectionIcon = selectionIcon
         self.theming = theming
         self.theming = theming
@@ -40,7 +44,7 @@ class CheckboxControlUIView: UIView {
         commonInit()
     }
 
-    public required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("not implemented")
     }
 
@@ -55,7 +59,7 @@ class CheckboxControlUIView: UIView {
         setNeedsDisplay()
     }
 
-    var iconSize: CGSize {
+    private var iconSize: CGSize {
         let iconSize: CGSize
         switch selectionState {
         case .unselected:

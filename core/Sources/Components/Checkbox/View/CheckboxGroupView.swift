@@ -28,6 +28,7 @@ public struct CheckboxGroupView: View {
 
     /// Initialize a group of one or multiple checkboxes.
     /// - Parameters:
+    ///   - title: An optional group title displayed on top of the checkbox group..
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
     ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
