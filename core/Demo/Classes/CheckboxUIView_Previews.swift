@@ -69,6 +69,8 @@ final class CheckboxViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let scrollView = self.scrollView
+        let contentView = self.contentView
         view.addSubview(scrollView)
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -94,7 +96,7 @@ final class CheckboxViewController: UIViewController {
     }
 
     private func setUpView() {
-        let view = contentView
+        let view = self.contentView
         let theming = SparkTheme.shared
 
         var checkboxes: [CheckboxUIView] = []
@@ -107,7 +109,7 @@ final class CheckboxViewController: UIViewController {
         shuffleButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         shuffleButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         shuffleButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        shuffleButton.addTarget(self, action: #selector(actionShuffle(sender:)), for: .touchUpInside)
+        shuffleButton.addTarget(self, action: #selector(self.actionShuffle(sender:)), for: .touchUpInside)
 
         let checkbox = CheckboxUIView(
             theming: theming,

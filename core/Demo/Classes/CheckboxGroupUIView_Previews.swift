@@ -49,7 +49,7 @@ final class CheckboxGroupViewController: UIViewController {
         button.setTitle("Shuffle", for: .normal)
         button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(actionShuffle(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.actionShuffle(sender:)), for: .touchUpInside)
         return button
     }()
 
@@ -58,7 +58,7 @@ final class CheckboxGroupViewController: UIViewController {
         button.setTitle("Change Layout", for: .normal)
         button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(actionChangeLayout(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.actionChangeLayout(sender:)), for: .touchUpInside)
         return button
     }()
 
@@ -67,7 +67,7 @@ final class CheckboxGroupViewController: UIViewController {
         button.setTitle("Change Position", for: .normal)
         button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(actionChangePosition(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.actionChangePosition(sender:)), for: .touchUpInside)
         return button
     }()
 
@@ -76,7 +76,7 @@ final class CheckboxGroupViewController: UIViewController {
         button.setTitle("Add Item", for: .normal)
         button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(actionAddItem(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.actionAddItem(sender:)), for: .touchUpInside)
         return button
     }()
 
@@ -95,7 +95,7 @@ final class CheckboxGroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let views = [selectionLabel, shuffleButton, changeLayoutButton, changePositionButton, addItemButton]
+        let views = [self.selectionLabel, self.shuffleButton, self.changeLayoutButton, self.changePositionButton, self.addItemButton]
         var previousView: UIView?
         for aView in views {
             view.addSubview(aView)
@@ -112,20 +112,23 @@ final class CheckboxGroupViewController: UIViewController {
 
         guard let lastView = views.last else { return }
 
+        let scrollView = self.scrollView
         view.addSubview(scrollView)
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.topAnchor.constraint(equalTo: lastView.bottomAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        setUpScrollContentView()
+        self.setUpScrollContentView()
     }
 
     private func setUpScrollContentView() {
-        checkboxGroup?.removeFromSuperview()
-        contentView.removeFromSuperview()
+        let scrollView = self.scrollView
+        self.checkboxGroup?.removeFromSuperview()
+        self.contentView.removeFromSuperview()
 
-        contentView = UIView()
+        let contentView = UIView()
+        self.contentView = contentView
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
 
@@ -142,12 +145,12 @@ final class CheckboxGroupViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         }
 
-        setUpCheckboxGroupView()
-        updateSelection()
+        self.setUpCheckboxGroupView()
+        self.updateSelection()
     }
 
     private func setUpCheckboxGroupView() {
-        let view = contentView
+        let view = self.contentView
         let theming = SparkTheme.shared
 
         let groupView = CheckboxGroupUIView(
@@ -159,7 +162,7 @@ final class CheckboxGroupViewController: UIViewController {
                     self?.items = $0
                 }
             ),
-            layout: checkboxGroupLayout,
+            layout: self.checkboxGroupLayout,
             checkboxPosition: .left,
             theming: theming,
             accessibilityIdentifierPrefix: "abc"
@@ -169,7 +172,7 @@ final class CheckboxGroupViewController: UIViewController {
 
         view.addSubview(groupView)
 
-        let spacing: CGFloat = checkboxGroupLayout == .vertical ? 0 : 16
+        let spacing: CGFloat = self.checkboxGroupLayout == .vertical ? 0 : 16
         groupView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: spacing).isActive = true
         groupView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         groupView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
@@ -177,11 +180,11 @@ final class CheckboxGroupViewController: UIViewController {
     }
 
     var selectedItems: [any CheckboxGroupItemProtocol] {
-        items.filter { $0.selectionState == .selected }
+        self.items.filter { $0.selectionState == .selected }
     }
 
     var selectedItemsText: String {
-        selectedItems.map { $0.title }.joined(separator: ", ")
+        self.selectedItems.map { $0.title }.joined(separator: ", ")
     }
 
     private var items: [any CheckboxGroupItemProtocol] = [
@@ -195,36 +198,36 @@ final class CheckboxGroupViewController: UIViewController {
         CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
     ] {
         didSet {
-            updateSelection()
+            self.updateSelection()
         }
     }
 
     private func updateSelection() {
-        selectionLabel.text = "Selection: " + selectedItemsText
+        self.selectionLabel.text = "Selection: " + self.selectedItemsText
     }
 
     @objc private func actionAddItem(sender: UIButton) {
         let identifier = "\(self.items.count + 1)"
         let newItem = CheckboxGroupItem(title: "Entry \(identifier)", id: identifier, selectionState: .unselected)
-        items.append(newItem)
-        checkboxGroup?.update()
+        self.items.append(newItem)
+        self.checkboxGroup?.update()
     }
 
     @objc private func actionChangePosition(sender: UIButton) {
-        checkboxGroup?.checkboxPosition = checkboxGroup?.checkboxPosition == .right ? .left : .right
+        self.checkboxGroup?.checkboxPosition = self.checkboxGroup?.checkboxPosition == .right ? .left : .right
     }
 
     @objc private func actionChangeLayout(sender: UIButton) {
-        checkboxGroupLayout = checkboxGroupLayout == .vertical ? .horizontal : .vertical
+        self.checkboxGroupLayout = self.checkboxGroupLayout == .vertical ? .horizontal : .vertical
 
-        setUpScrollContentView()
+        self.setUpScrollContentView()
     }
 
     @objc private func actionShuffle(sender: UIButton) {
         let selectionStates = [CheckboxSelectionState.indeterminate, .selected, .unselected]
         let states = [SelectButtonState.enabled, .disabled, .success(message: "Success message"), .warning(message: "Warning emssage"), .error(message: "Error message")]
-        for index in 0..<items.count {
-            var item = items[index]
+        for index in 0..<self.items.count {
+            var item = self.items[index]
             if let randomState = states.randomElement() {
                 item.state = randomState
             }
@@ -232,7 +235,7 @@ final class CheckboxGroupViewController: UIViewController {
             if let randomSelectionState = selectionStates.randomElement() {
                 item.selectionState = randomSelectionState
             }
-            items[index] = item
+            self.items[index] = item
         }
         self.checkboxGroup?.update()
     }
