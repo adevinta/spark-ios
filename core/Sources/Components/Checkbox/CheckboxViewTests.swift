@@ -19,11 +19,11 @@ final class CheckboxViewTests: TestCase {
     let states = [SelectButtonState.disabled, .enabled, .success(message: "Success message!"), .warning(message: "Warning message!"), .error(message: "Error message!")]
 
     func test_right_aligned() throws {
-        for state in states {
+        for state in self.states {
             let view = CheckboxView(
                 text: "Selected checkbox.",
                 checkboxPosition: .right,
-                theming: theming,
+                theming: self.theming,
                 state: state,
                 selectionState: .init(get: { .selected }, set: { _ in }),
                 accessibilityIdentifier: "test"
@@ -96,7 +96,7 @@ final class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(self.id)
     }
 
     var title: String

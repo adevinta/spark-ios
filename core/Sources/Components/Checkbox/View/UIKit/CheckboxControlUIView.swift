@@ -16,19 +16,19 @@ class CheckboxControlUIView: UIView {
 
     var isPressed: Bool = false {
         didSet {
-            setNeedsDisplay()
+            self.setNeedsDisplay()
         }
     }
 
     var selectionState: CheckboxSelectionState = .unselected {
         didSet {
-            setNeedsDisplay()
+            self.setNeedsDisplay()
         }
     }
 
     var colors: CheckboxColorables? {
         didSet {
-            setNeedsDisplay()
+            self.setNeedsDisplay()
         }
     }
 
@@ -41,7 +41,7 @@ class CheckboxControlUIView: UIView {
         self.theming = theming
         self.theming = theming
         super.init(frame: .zero)
-        commonInit()
+        self.commonInit()
     }
 
     required init?(coder: NSCoder) {
@@ -49,19 +49,19 @@ class CheckboxControlUIView: UIView {
     }
 
     private func commonInit() {
-        backgroundColor = .clear
-        clipsToBounds = false
-        setNeedsDisplay()
+        self.backgroundColor = .clear
+        self.clipsToBounds = false
+        self.setNeedsDisplay()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        setNeedsDisplay()
+        self.setNeedsDisplay()
     }
 
     private var iconSize: CGSize {
         let iconSize: CGSize
-        switch selectionState {
+        switch self.selectionState {
         case .unselected:
             return .zero
         case .selected:
@@ -69,11 +69,11 @@ class CheckboxControlUIView: UIView {
         case .indeterminate:
             iconSize = CGSize(width: 12, height: 2)
         }
-        return iconSize.scaled(for: traitCollection)
+        return iconSize.scaled(for: self.traitCollection)
     }
 
     private var spacing: LayoutSpacing {
-        theming.layout.spacing
+        self.theming.layout.spacing
     }
 
     private enum Constants {
@@ -91,13 +91,16 @@ class CheckboxControlUIView: UIView {
             let ctx = UIGraphicsGetCurrentContext()
         else { return }
 
+        let spacing = self.spacing
+        let traitCollection = self.traitCollection
+
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
         let scaledSpacing = bodyFontMetrics.scaledValue(for: spacing.xLarge - spacing.small, compatibleWith: traitCollection) + spacing.medium
 
         let controlRect = CGRect(x: 0, y: 0, width: scaledSpacing, height: scaledSpacing)
         let controlInnerRect = controlRect.insetBy(dx: spacing.small, dy: spacing.small)
 
-        if isPressed {
+        if self.isPressed {
             let lineWidth: CGFloat = Constants.lineWidthPressed
             let pressedBorderRectangle = controlRect.insetBy(dx: lineWidth/2, dy: lineWidth/2)
             let borderPath = UIBezierPath(roundedRect: pressedBorderRectangle, cornerRadius: bodyFontMetrics.scaledValue(for: Constants.cornerRadius, compatibleWith: traitCollection)+2)
@@ -110,7 +113,7 @@ class CheckboxControlUIView: UIView {
         let color = colors.checkboxTintColor.uiColor
         ctx.setStrokeColor(color.cgColor)
         ctx.setFillColor(color.cgColor)
-        let scaledOffset = bodyFontMetrics.scaledValue(for: offset, compatibleWith: traitCollection)
+        let scaledOffset = bodyFontMetrics.scaledValue(for: self.offset, compatibleWith: traitCollection)
         let rectangle = controlInnerRect.insetBy(dx: scaledOffset/2, dy: scaledOffset/2)
 
         let path = UIBezierPath(roundedRect: rectangle, cornerRadius: bodyFontMetrics.scaledValue(for: Constants.cornerRadius, compatibleWith: traitCollection))
@@ -119,7 +122,7 @@ class CheckboxControlUIView: UIView {
         color.setFill()
 
         let iconSize = self.iconSize
-        switch selectionState {
+        switch self.selectionState {
         case .unselected:
             path.stroke()
 
@@ -146,7 +149,7 @@ class CheckboxControlUIView: UIView {
             )
             let iconRect = CGRect(origin: origin, size: iconSize)
             colors.checkboxIconColor.uiColor.set()
-            selectionIcon.draw(in: iconRect)
+            self.selectionIcon.draw(in: iconRect)
         }
     }
 }

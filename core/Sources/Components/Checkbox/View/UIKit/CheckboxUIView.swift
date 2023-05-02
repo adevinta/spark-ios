@@ -63,33 +63,33 @@ public final class CheckboxUIView: UIView {
     /// The text displayed in the checkbox.
     public var text: String {
         get {
-            viewModel.text
+            self.viewModel.text
         }
         set {
-            viewModel.text = newValue
-            textLabel.text = text
-            updateAccessibility()
+            self.viewModel.text = newValue
+            self.textLabel.text = self.text
+            self.updateAccessibility()
         }
     }
 
     /// The current selection state of the checkbox.
     public var selectionState: CheckboxSelectionState = .unselected {
         didSet {
-            controlView.selectionState = selectionState
-            updateAccessibility()
+            self.controlView.selectionState = self.selectionState
+            self.updateAccessibility()
         }
     }
 
     /// The control state of the checkbox (e.g. `.enabled` or `.disabled`).
     public var state: SelectButtonState {
         didSet {
-            viewModel.state = state
-            colors = colorsUseCase.execute(from: theming, state: state)
+            self.viewModel.state = self.state
+            self.colors = self.colorsUseCase.execute(from: self.theming, state: self.state)
 
-            updateState()
-            updateViewConstraints()
+            self.updateState()
+            self.updateViewConstraints()
 
-            updateAccessibility()
+            self.updateAccessibility()
         }
     }
     /// Sets the theme of the checkbox.
@@ -97,16 +97,16 @@ public final class CheckboxUIView: UIView {
 
     var colors: CheckboxColorables {
         get {
-            viewModel.colors
+            self.viewModel.colors
         }
         set {
-            viewModel.colors = newValue
-            updateTheme()
+            self.viewModel.colors = newValue
+            self.updateTheme()
         }
     }
     var colorsUseCase: CheckboxColorsUseCaseable {
         didSet {
-            colors = colorsUseCase.execute(from: theming, state: state)
+            self.colors = self.colorsUseCase.execute(from: self.theming, state: self.state)
         }
     }
 
@@ -114,7 +114,7 @@ public final class CheckboxUIView: UIView {
 
     var isPressed: Bool = false {
         didSet {
-            controlView.isPressed = isPressed
+            self.controlView.isPressed = self.isPressed
         }
     }
 
@@ -174,173 +174,173 @@ public final class CheckboxUIView: UIView {
     }
 
     private func commonInit() {
-        isAccessibilityElement = true
-        translatesAutoresizingMaskIntoConstraints = false
-        controlView.selectionState = selectionState
+        self.isAccessibilityElement = true
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.controlView.selectionState = self.selectionState
 
-        textLabel.text = text
-        addSubview(textLabel)
+        self.textLabel.text = self.text
+        self.addSubview(self.textLabel)
 
-        addSubview(controlView)
+        self.addSubview(self.controlView)
 
         let view = self
-        switch checkboxPosition {
+        switch self.checkboxPosition {
         case .left:
-            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            textLabel.leadingAnchor.constraint(equalTo: controlView.trailingAnchor, constant: 4).isActive = true
-            textLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
-            textLabelBottomConstraint?.isActive = true
+            self.textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            self.textLabel.leadingAnchor.constraint(equalTo: self.controlView.trailingAnchor, constant: 4).isActive = true
+            self.textLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+            self.textLabelBottomConstraint = self.textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
+            self.textLabelBottomConstraint?.isActive = true
 
-            controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
-            controlViewWidthConstraint = controlView.widthAnchor.constraint(equalToConstant: 28)
-            controlViewWidthConstraint?.isActive = true
-            controlViewHeightConstraint = controlView.heightAnchor.constraint(equalToConstant: 28)
-            controlViewHeightConstraint?.isActive = true
-            controlView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: -4).isActive = true
+            self.controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
+            self.controlViewWidthConstraint = self.controlView.widthAnchor.constraint(equalToConstant: 28)
+            self.controlViewWidthConstraint?.isActive = true
+            self.controlViewHeightConstraint = self.controlView.heightAnchor.constraint(equalToConstant: 28)
+            self.controlViewHeightConstraint?.isActive = true
+            self.controlView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: -4).isActive = true
 
         case .right:
-            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            textLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-            textLabel.trailingAnchor.constraint(equalTo: controlView.leadingAnchor, constant: -4).isActive = true
-            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
-            textLabelBottomConstraint?.isActive = true
+            self.textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            self.textLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
+            self.textLabel.trailingAnchor.constraint(equalTo: self.controlView.leadingAnchor, constant: -4).isActive = true
+            self.textLabelBottomConstraint = self.textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
+            self.textLabelBottomConstraint?.isActive = true
 
-            controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
-            controlViewWidthConstraint = controlView.widthAnchor.constraint(equalToConstant: 28)
-            controlViewWidthConstraint?.isActive = true
-            controlViewHeightConstraint = controlView.heightAnchor.constraint(equalToConstant: 28)
-            controlViewHeightConstraint?.isActive = true
-            controlView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 4).isActive = true
+            self.controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
+            self.controlViewWidthConstraint = self.controlView.widthAnchor.constraint(equalToConstant: 28)
+            self.controlViewWidthConstraint?.isActive = true
+            self.controlViewHeightConstraint = self.controlView.heightAnchor.constraint(equalToConstant: 28)
+            self.controlViewHeightConstraint?.isActive = true
+            self.controlView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 4).isActive = true
         }
 
-        button.addTarget(self, action: #selector(actionTapped(sender:)), for: .touchUpInside)
-        button.addTarget(self, action: #selector(actionTouchDown(sender:)), for: .touchDown)
-        button.addTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchCancel)
+        self.button.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
+        self.button.addTarget(self, action: #selector(self.actionTouchDown(sender:)), for: .touchDown)
+        self.button.addTarget(self, action: #selector(self.actionTouchUp(sender:)), for: .touchUpOutside)
+        self.button.addTarget(self, action: #selector(self.actionTouchUp(sender:)), for: .touchCancel)
 
-        button.translatesAutoresizingMaskIntoConstraints = true
-        button.frame = self.bounds
-        button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        addSubview(button)
+        self.button.translatesAutoresizingMaskIntoConstraints = true
+        self.button.frame = self.bounds
+        self.button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        addSubview(self.button)
 
-        updateTheme()
-        updateState()
-        updateViewConstraints()
-        updateAccessibility()
+        self.updateTheme()
+        self.updateState()
+        self.updateViewConstraints()
+        self.updateAccessibility()
     }
 
     /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateViewConstraints()
+        self.updateViewConstraints()
     }
 
     private func updateAccessibility() {
-        if selectionState == .selected {
+        if self.selectionState == .selected {
             self.accessibilityTraits.insert(.selected)
         } else {
             self.accessibilityTraits.remove(.selected)
         }
 
-        if state == .disabled {
+        if self.state == .disabled {
             self.accessibilityTraits.insert(.notEnabled)
         } else {
             self.accessibilityTraits.remove(.notEnabled)
         }
 
-        self.accessibilityLabel = [viewModel.text, viewModel.supplementaryMessage].compactMap { $0 }.joined(separator: ". ")
+        self.accessibilityLabel = [self.viewModel.text, self.viewModel.supplementaryMessage].compactMap { $0 }.joined(separator: ". ")
     }
 
     private func updateViewConstraints() {
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
         let scaledSpacing = bodyFontMetrics.scaledValue(for: 20.0, compatibleWith: traitCollection) + 8
 
-        controlViewWidthConstraint?.constant = scaledSpacing
-        controlViewHeightConstraint?.constant = scaledSpacing
+        self.controlViewWidthConstraint?.constant = scaledSpacing
+        self.controlViewHeightConstraint?.constant = scaledSpacing
 
-        if let supplementaryMessage = supplementaryMessage {
-            supplementaryTextLabel.text = supplementaryMessage
+        if let supplementaryMessage = self.supplementaryMessage {
+            self.supplementaryTextLabel.text = supplementaryMessage
 
-            if supplementaryTextLabel.superview == nil {
-                addSubview(supplementaryTextLabel)
+            if self.supplementaryTextLabel.superview == nil {
+                self.addSubview(self.supplementaryTextLabel)
 
-                if let bottomConstraint = textLabelBottomConstraint {
+                if let bottomConstraint = self.textLabelBottomConstraint {
                     NSLayoutConstraint.deactivate([bottomConstraint])
                 }
 
-                supplementaryTextLabel.topAnchor.constraint(equalTo: textLabel.bottomAnchor).isActive = true
-                supplementaryTextLabel.leadingAnchor.constraint(equalTo: textLabel.leadingAnchor).isActive = true
-                supplementaryTextLabel.trailingAnchor.constraint(equalTo: textLabel.trailingAnchor).isActive = true
-                supplementaryTextLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
+                self.supplementaryTextLabel.topAnchor.constraint(equalTo: self.textLabel.bottomAnchor).isActive = true
+                self.supplementaryTextLabel.leadingAnchor.constraint(equalTo: self.textLabel.leadingAnchor).isActive = true
+                self.supplementaryTextLabel.trailingAnchor.constraint(equalTo: self.textLabel.trailingAnchor).isActive = true
+                self.supplementaryTextLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
             }
         } else {
-            if supplementaryTextLabel.superview != nil {
-                supplementaryTextLabel.removeFromSuperview()
+            if self.supplementaryTextLabel.superview != nil {
+                self.supplementaryTextLabel.removeFromSuperview()
             }
 
-            if let bottomConstraint = textLabelBottomConstraint {
+            if let bottomConstraint = self.textLabelBottomConstraint {
                 NSLayoutConstraint.deactivate([bottomConstraint])
             }
-            textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor)
-            textLabelBottomConstraint?.isActive = true
+            self.textLabelBottomConstraint = self.textLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor)
+            self.textLabelBottomConstraint?.isActive = true
         }
 
-        setNeedsLayout()
+        self.setNeedsLayout()
     }
 
     var interactionEnabled: Bool {
-        viewModel.interactionEnabled
+        self.viewModel.interactionEnabled
     }
 
     var opacity: CGFloat {
-        viewModel.opacity
+        self.viewModel.opacity
     }
 
     var supplementaryMessage: String? {
-        viewModel.supplementaryMessage
+        self.viewModel.supplementaryMessage
     }
 
     private func updateTheme() {
-        controlView.colors = colors
+        self.controlView.colors = self.colors
 
-        let font = theming.typography.body1.uiFont
-        textLabel.font = font
-        textLabel.adjustsFontForContentSizeCategory = true
-        textLabel.textColor = colors.textColor.uiColor
+        let font = self.theming.typography.body1.uiFont
+        self.textLabel.font = font
+        self.textLabel.adjustsFontForContentSizeCategory = true
+        self.textLabel.textColor = self.colors.textColor.uiColor
 
-        let captionFont = theming.typography.caption.uiFont
-        supplementaryTextLabel.font = captionFont
-        supplementaryTextLabel.adjustsFontForContentSizeCategory = true
-        supplementaryTextLabel.textColor = colors.checkboxTintColor.uiColor
+        let captionFont = self.theming.typography.caption.uiFont
+        self.supplementaryTextLabel.font = captionFont
+        self.supplementaryTextLabel.adjustsFontForContentSizeCategory = true
+        self.supplementaryTextLabel.textColor = self.colors.checkboxTintColor.uiColor
     }
 
     private func updateState() {
         let opacity = self.opacity
-        textLabel.alpha = opacity
-        controlView.alpha = opacity
-        supplementaryTextLabel.alpha = opacity
+        self.textLabel.alpha = opacity
+        self.controlView.alpha = opacity
+        self.supplementaryTextLabel.alpha = opacity
     }
 
     @IBAction func actionTapped(sender: UIButton) {
-        isPressed = false
+        self.isPressed = false
 
-        guard interactionEnabled else { return }
-        switch selectionState {
+        guard self.interactionEnabled else { return }
+        switch self.selectionState {
         case .selected:
-            selectionState = .unselected
+            self.selectionState = .unselected
         case .unselected, .indeterminate:
-            selectionState = .selected
+            self.selectionState = .selected
         }
-        selectionStateHandler?(selectionState)
-        delegate?.checkbox(self, didChangeSelection: selectionState)
+        self.selectionStateHandler?(self.selectionState)
+        self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
     }
 
     @IBAction func actionTouchDown(sender: UIButton) {
-        isPressed = true
+        self.isPressed = true
     }
 
     @IBAction func actionTouchUp(sender: UIButton) {
-        isPressed = false
+        self.isPressed = false
     }
 }

@@ -24,20 +24,20 @@ public final class CheckboxGroupUIView: UIView {
     /// The title of the checkbox group displayed on top of the group.
     public var title: String? {
         didSet {
-            update()
+            self.update()
         }
     }
 
     /// The layout of the checkbox
     public var layout: CheckboxGroupLayout {
         didSet {
-            update()
+            self.update()
         }
     }
     ///  The checkbox is positioned on the leading or trailing edge of the view.
     public var checkboxPosition: CheckboxPosition {
         didSet {
-            update()
+            self.update()
         }
     }
 
@@ -72,29 +72,29 @@ public final class CheckboxGroupUIView: UIView {
         self.theming = theming
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
         super.init(frame: .zero)
-        commonInit()
+        self.commonInit()
     }
 
     private func commonInit() {
-        setUpView()
+        self.setUpView()
     }
 
     private func clearView() {
-        titleLabel?.removeFromSuperview()
-        titleLabel = nil
+        self.titleLabel?.removeFromSuperview()
+        self.titleLabel = nil
 
-        for checkbox in checkboxes {
+        for checkbox in self.checkboxes {
             checkbox.removeFromSuperview()
         }
-        checkboxes = []
+        self.checkboxes = []
     }
 
     private var spacing: LayoutSpacing {
-        theming.layout.spacing
+        self.theming.layout.spacing
     }
 
     private func setUpView() {
-        clearView()
+        self.clearView()
         let view = self
 
         if let title = self.title, !title.isEmpty {
@@ -102,8 +102,8 @@ public final class CheckboxGroupUIView: UIView {
             label.text = title
             label.adjustsFontForContentSizeCategory = true
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.textColor = theming.colors.base.onSurface.uiColor
-            label.font = theming.typography.subhead.uiFont
+            label.textColor = self.theming.colors.base.onSurface.uiColor
+            label.font = self.theming.typography.subhead.uiFont
 
             self.titleLabel = label
             view.addSubview(label)
@@ -111,13 +111,13 @@ public final class CheckboxGroupUIView: UIView {
 
         var checkboxes: [CheckboxUIView] = []
 
-        for item in items {
+        for item in self.items {
             let checkbox = CheckboxUIView(
                 theming: theming,
                 text: item.title,
                 state: item.state,
                 selectionState: item.selectionState,
-                checkboxPosition: checkboxPosition,
+                checkboxPosition: self.checkboxPosition,
                 selectionStateHandler: { [weak self] state in
                     guard
                         let self,
@@ -128,7 +128,7 @@ public final class CheckboxGroupUIView: UIView {
                     self.items[index] = item
                 }
             )
-            let identifier = "\(accessibilityIdentifierPrefix).\(item.id)"
+            let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id)"
             checkbox.accessibilityIdentifier = identifier
             checkbox.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(checkbox)
@@ -139,14 +139,14 @@ public final class CheckboxGroupUIView: UIView {
 
         var previousCheckbox: UIView?
 
-        let horizontalSpacing = spacing.large
+        let horizontalSpacing = self.spacing.large
         if let titleLabel = self.titleLabel {
-            let spacing: CGFloat = layout == .vertical ? horizontalSpacing : 0
+            let spacing: CGFloat = self.layout == .vertical ? horizontalSpacing : 0
             titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: spacing).isActive = true
             titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -horizontalSpacing).isActive = true
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         }
-        switch layout {
+        switch self.layout {
         case .vertical:
             for checkbox in checkboxes {
                 checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: horizontalSpacing).isActive = true
@@ -155,7 +155,7 @@ public final class CheckboxGroupUIView: UIView {
                 if let previousCheckbox = previousCheckbox {
                     checkbox.topAnchor.constraint(equalTo: previousCheckbox.bottomAnchor, constant: horizontalSpacing).isActive = true
                 } else {
-                    if let titleLabel = titleLabel {
+                    if let titleLabel = self.titleLabel {
                         checkbox.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: horizontalSpacing).isActive = true
                     } else {
                         checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -170,7 +170,7 @@ public final class CheckboxGroupUIView: UIView {
             }
 
         case .horizontal:
-            let topAnchor = titleLabel?.bottomAnchor ?? view.safeAreaLayoutGuide.topAnchor
+            let topAnchor = self.titleLabel?.bottomAnchor ?? view.safeAreaLayoutGuide.topAnchor
             for checkbox in checkboxes {
                 checkbox.topAnchor.constraint(equalTo: topAnchor, constant: horizontalSpacing).isActive = true
                 checkbox.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -horizontalSpacing).isActive = true
@@ -193,6 +193,6 @@ public final class CheckboxGroupUIView: UIView {
 
     /// Triggers an update of the checkbox group.
     public func update() {
-        setUpView()
+        self.setUpView()
     }
 }
