@@ -63,7 +63,6 @@ final class CheckboxViewModelTests: XCTestCase {
         return statesToTest
             .map(sut(state:))
             .map{ $0[keyPath: keyPath] }
-
     }
 
     private func sut(state: SelectButtonState) -> CheckboxViewModel {

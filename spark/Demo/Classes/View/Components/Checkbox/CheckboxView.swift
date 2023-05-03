@@ -40,7 +40,6 @@ struct CheckboxListView: View {
     @State private var selection3: CheckboxSelectionState = .indeterminate
     @State private var selection4: CheckboxSelectionState = .selected
 
-
     var body: some View {
         List(self.viewModel.states, id: \.self) { state in
             Section(header: Text("State \(self.title(for: state))")) {

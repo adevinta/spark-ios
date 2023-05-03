@@ -23,7 +23,6 @@ struct ComponentsCheckboxListView: View {
     }
 }
 
-
 struct ComponentsCheckboxListView_Previews: PreviewProvider {
     static var previews: some View {
         ComponentsCheckboxListView()
