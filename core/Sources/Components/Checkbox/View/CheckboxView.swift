@@ -49,9 +49,12 @@ public struct CheckboxView: View {
 
     @ScaledMetric private var checkboxSelectedWidth: CGFloat = 14
     @ScaledMetric private var checkboxSelectedHeight: CGFloat = 14
+    @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat = 4
 
     @ScaledMetric private var checkboxIndeterminateWidth: CGFloat = 12
     @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = 2
+
+    @ScaledMetric private var horizontalSpacing: CGFloat
 
     // MARK: - Initialization
 
@@ -64,6 +67,7 @@ public struct CheckboxView: View {
         selectionState: Binding<CheckboxSelectionState>,
         accessibilityIdentifier: String? = nil
     ) {
+        self._horizontalSpacing = .init(wrappedValue: theming.layout.spacing.medium)
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
@@ -118,7 +122,6 @@ public struct CheckboxView: View {
         let tintColor = self.colors.checkboxTintColor.color
         let iconColor = self.colors.checkboxIconColor.color
         ZStack {
-            let lineWidth: CGFloat = 4
             RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
                 .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
                     $0.fill(tintColor)
@@ -126,11 +129,11 @@ public struct CheckboxView: View {
                     $0.strokeBorder(tintColor, lineWidth: self.checkboxBorderWidth)
                 }
                 .frame(width: self.checkboxWidth, height: self.checkboxHeight)
-                .if(isPressed && viewModel.interactionEnabled) {
+                .if(self.isPressed && self.viewModel.interactionEnabled) {
                     $0.overlay(
                         RoundedRectangle(cornerRadius: checkboxBorderRadius)
-                            .inset(by: -lineWidth / 2)
-                            .stroke(colors.pressedBorderColor.color, lineWidth: lineWidth)
+                            .inset(by: -checkboxSelectedBorderWidth / 2)
+                            .stroke(colors.pressedBorderColor.color, lineWidth: checkboxSelectedBorderWidth)
                             .animation(.easeInOut(duration: 0.1), value: isPressed)
                     )
                 }
@@ -160,10 +163,10 @@ public struct CheckboxView: View {
     }
 
     @ViewBuilder private var contentView: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .top, spacing: 0) {
             switch checkboxPosition {
             case .left:
-                self.checkboxView
+                self.checkboxView.padding(.trailing, self.horizontalSpacing)
 
                 self.labelView
 
@@ -173,7 +176,7 @@ public struct CheckboxView: View {
 
                 Spacer()
 
-                self.checkboxView
+                self.checkboxView.padding(.leading, self.horizontalSpacing)
             }
         }
         .padding(.vertical, self.spacing.small)

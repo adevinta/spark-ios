@@ -53,10 +53,7 @@ public struct CheckboxGroupView: View {
     // MARK: - Body
 
     public var body: some View {
-        let spacing: CGFloat = self.spacing.xLarge / 2
-
         VStack(alignment: .leading, spacing: 0) {
-            // Title will be refactored once we have a custom label component.
             if !self.title.isEmpty {
                 Text(self.title)
                     .foregroundColor(self.theming.colors.base.onSurface.color)
@@ -64,13 +61,14 @@ public struct CheckboxGroupView: View {
                     .padding(.bottom, self.theming.layout.spacing.medium)
             }
 
+            let horizontalSpacing = spacing.xLarge / 2
             switch self.layout {
             case .horizontal:
-                HStack(alignment: .top, spacing: spacing) {
+                HStack(alignment: .top, spacing: horizontalSpacing) {
                     self.contentView
                 }
             case .vertical:
-                VStack(alignment: .leading, spacing: spacing - self.spacing.small) {
+                VStack(alignment: .leading, spacing: horizontalSpacing - self.spacing.small) {
                     self.contentView
                 }
             }
@@ -83,7 +81,7 @@ public struct CheckboxGroupView: View {
             CheckboxView(
                 text: item.title.wrappedValue,
                 checkboxPosition: checkboxPosition,
-                theming: theming,
+                theming: self.theming,
                 state: item.state.wrappedValue,
                 selectionState: item.selectionState,
                 accessibilityIdentifier: identifier
@@ -92,6 +90,6 @@ public struct CheckboxGroupView: View {
     }
 
     private var spacing: LayoutSpacing {
-        theming.layout.spacing
+        return self.theming.layout.spacing
     }
 }

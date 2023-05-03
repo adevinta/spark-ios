@@ -50,6 +50,11 @@ public final class CheckboxUIView: UIView {
     private var controlViewWidthConstraint: NSLayoutConstraint?
     private var controlViewHeightConstraint: NSLayoutConstraint?
     private var textLabelBottomConstraint: NSLayoutConstraint?
+    private var textLabelLeadingConstraint: NSLayoutConstraint?
+    private var textLabelTrailingConstraint: NSLayoutConstraint?
+    private var controlViewTopConstraint: NSLayoutConstraint?
+    private var controlViewLeadingConstraint: NSLayoutConstraint?
+    private var controlViewTrailingConstraint: NSLayoutConstraint?
 
     private var checkboxPosition: CheckboxPosition = .left
 
@@ -63,7 +68,7 @@ public final class CheckboxUIView: UIView {
     /// The text displayed in the checkbox.
     public var text: String {
         get {
-            self.viewModel.text
+            return self.viewModel.text
         }
         set {
             self.viewModel.text = newValue
@@ -97,7 +102,7 @@ public final class CheckboxUIView: UIView {
 
     var colors: CheckboxColorables {
         get {
-            self.viewModel.colors
+            return self.viewModel.colors
         }
         set {
             self.viewModel.colors = newValue
@@ -173,6 +178,10 @@ public final class CheckboxUIView: UIView {
         self.commonInit()
     }
 
+    private var spacing: LayoutSpacing {
+        return self.theming.layout.spacing
+    }
+
     private func commonInit() {
         self.isAccessibilityElement = true
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -184,34 +193,45 @@ public final class CheckboxUIView: UIView {
         self.addSubview(self.controlView)
 
         let view = self
-        switch self.checkboxPosition {
+        let textLabel = self.textLabel
+        let controlView = self.controlView
+
+        let controlSize = Constants.checkboxSize
+        let padding = self.spacing.medium / 2
+        switch checkboxPosition {
         case .left:
-            self.textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            self.textLabel.leadingAnchor.constraint(equalTo: self.controlView.trailingAnchor, constant: 4).isActive = true
-            self.textLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-            self.textLabelBottomConstraint = self.textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
+            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: controlView.trailingAnchor, constant: padding)
+            self.textLabelLeadingConstraint?.isActive = true
+            textLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+            self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
             self.textLabelBottomConstraint?.isActive = true
 
-            self.controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
-            self.controlViewWidthConstraint = self.controlView.widthAnchor.constraint(equalToConstant: 28)
+            self.controlViewTopConstraint = controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -padding)
+            self.controlViewTopConstraint?.isActive = true
+            self.controlViewWidthConstraint = controlView.widthAnchor.constraint(equalToConstant: controlSize)
             self.controlViewWidthConstraint?.isActive = true
-            self.controlViewHeightConstraint = self.controlView.heightAnchor.constraint(equalToConstant: 28)
+            self.controlViewHeightConstraint = controlView.heightAnchor.constraint(equalToConstant: controlSize)
             self.controlViewHeightConstraint?.isActive = true
-            self.controlView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: -4).isActive = true
+            self.controlViewLeadingConstraint = controlView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: -padding)
+            self.controlViewLeadingConstraint?.isActive = true
 
         case .right:
-            self.textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            self.textLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-            self.textLabel.trailingAnchor.constraint(equalTo: self.controlView.leadingAnchor, constant: -4).isActive = true
-            self.textLabelBottomConstraint = self.textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
+            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            textLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
+            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: controlView.leadingAnchor, constant: -padding)
+            self.textLabelTrailingConstraint?.isActive = true
+            self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
             self.textLabelBottomConstraint?.isActive = true
 
-            self.controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
-            self.controlViewWidthConstraint = self.controlView.widthAnchor.constraint(equalToConstant: 28)
+            self.controlViewTopConstraint = controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -padding)
+            self.controlViewTopConstraint?.isActive = true
+            self.controlViewWidthConstraint = controlView.widthAnchor.constraint(equalToConstant: controlSize)
             self.controlViewWidthConstraint?.isActive = true
-            self.controlViewHeightConstraint = self.controlView.heightAnchor.constraint(equalToConstant: 28)
+            self.controlViewHeightConstraint = controlView.heightAnchor.constraint(equalToConstant: controlSize)
             self.controlViewHeightConstraint?.isActive = true
-            self.controlView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 4).isActive = true
+            self.controlViewTrailingConstraint = controlView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: padding)
+            self.controlViewTrailingConstraint?.isActive = true
         }
 
         self.button.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
@@ -252,12 +272,25 @@ public final class CheckboxUIView: UIView {
         self.accessibilityLabel = [self.viewModel.text, self.viewModel.supplementaryMessage].compactMap { $0 }.joined(separator: ". ")
     }
 
+    private enum Constants {
+        static let checkboxSize: CGFloat = 20
+    }
+
     private func updateViewConstraints() {
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let scaledSpacing = bodyFontMetrics.scaledValue(for: 20.0, compatibleWith: traitCollection) + 8
+        let scaledSpacing = bodyFontMetrics.scaledValue(for: Constants.checkboxSize, compatibleWith: traitCollection) + bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: traitCollection)
 
         self.controlViewWidthConstraint?.constant = scaledSpacing
         self.controlViewHeightConstraint?.constant = scaledSpacing
+
+        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium / 2, compatibleWith: traitCollection)
+
+        self.controlViewTopConstraint?.constant = -padding
+        self.controlViewLeadingConstraint?.constant = -padding
+        self.controlViewTrailingConstraint?.constant = padding
+
+        self.textLabelLeadingConstraint?.constant = padding
+        self.textLabelTrailingConstraint?.constant = -padding
 
         if let supplementaryMessage = self.supplementaryMessage {
             self.supplementaryTextLabel.text = supplementaryMessage
@@ -289,16 +322,16 @@ public final class CheckboxUIView: UIView {
         self.setNeedsLayout()
     }
 
-    var interactionEnabled: Bool {
-        self.viewModel.interactionEnabled
+    private var interactionEnabled: Bool {
+        return self.viewModel.interactionEnabled
     }
 
-    var opacity: CGFloat {
-        self.viewModel.opacity
+    private var opacity: CGFloat {
+        return self.viewModel.opacity
     }
 
-    var supplementaryMessage: String? {
-        self.viewModel.supplementaryMessage
+    private var supplementaryMessage: String? {
+        return self.viewModel.supplementaryMessage
     }
 
     private func updateTheme() {
@@ -322,7 +355,7 @@ public final class CheckboxUIView: UIView {
         self.supplementaryTextLabel.alpha = opacity
     }
 
-    @IBAction func actionTapped(sender: UIButton) {
+    @IBAction private func actionTapped(sender: UIButton) {
         self.isPressed = false
 
         guard self.interactionEnabled else { return }
@@ -336,11 +369,11 @@ public final class CheckboxUIView: UIView {
         self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
     }
 
-    @IBAction func actionTouchDown(sender: UIButton) {
+    @IBAction private func actionTouchDown(sender: UIButton) {
         self.isPressed = true
     }
 
-    @IBAction func actionTouchUp(sender: UIButton) {
+    @IBAction private func actionTouchUp(sender: UIButton) {
         self.isPressed = false
     }
 }
