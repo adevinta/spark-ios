@@ -118,6 +118,8 @@ struct CheckboxGroupView_Previews: PreviewProvider {
     }
 }
 
+// MARK: - Demo item
+
 class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
         lhs.id == rhs.id

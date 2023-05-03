@@ -52,6 +52,8 @@ final class TestCaseTracker: NSObject, XCTestObservation {
     private var didSubscribe = false
 }
 
+// MARK: - Private extensions
+
 private extension String {
     init(_ staticString: StaticString) {
         self = staticString.withUTF8Buffer {
