@@ -37,7 +37,7 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Tag") {
-                    Text("TODO")
+                    TagComponentView()
                 }
             }
             .navigationBarTitle(Text("Components"))
