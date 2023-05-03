@@ -93,6 +93,11 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         .accessibilityValue(self.viewModel.id.description)
     }
 
+    public func state(_ state: SparkSelectButtonState) -> Self {
+        self.viewModel.state = state
+        return self
+    }
+
     // MARK: - Private Functions
     
     private func buttonAndLabel() -> some View{

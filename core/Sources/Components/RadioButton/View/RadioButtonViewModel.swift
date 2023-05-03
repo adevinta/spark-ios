@@ -20,12 +20,16 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     private let useCase: GetRadioButtonColorUseCaseable
     private let theme: Theme
-    private let state: SparkSelectButtonState
+
+    var state: SparkSelectButtonState {
+        didSet {
+            self.updateColors()
+        }
+    }
     
     @Binding var selectedID: ID {
         didSet {
-            self.colors = useCase
-                .execute(state: self.state, isSelected: selectedID == id)
+            self.updateColors()
         }
     }
 
@@ -99,6 +103,11 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     func setSelected() {
         self.selectedID = self.id
+    }
+
+    private func updateColors() {
+        self.colors = useCase
+            .execute(state: self.state, isSelected: selectedID == id)
     }
 }
 
