@@ -9,11 +9,17 @@
 import SwiftUI
 
 struct CheckboxButtonStyle: ButtonStyle {
+    // MARK: - Properties
+
     @Binding var isPressed: Bool
+
+    // MARK: - Initialization
 
     init(isPressed: Binding<Bool>) {
         self._isPressed = isPressed
     }
+
+    // MARK: - Methods
 
     func makeBody(configuration: Self.Configuration) -> some View {
         if configuration.isPressed != self.isPressed {
