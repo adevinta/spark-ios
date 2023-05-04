@@ -84,20 +84,10 @@ public final class TagUIView: UIView {
     private var contentStackViewTrailingConstraint: NSLayoutConstraint?
     private var contentStackViewBottomConstraint: NSLayoutConstraint?
 
-    private var _height: CGFloat? {
+    private var height: CGFloat = TagConstants.height {
         didSet {
             self.reloadUIFromHeight()
         }
-    }
-    private var height: CGFloat {
-        // Init value from use case only if value is nil
-        guard let height = self._height else {
-            let height = self.getHeightFromUseCase()
-            self._height = height
-            return height
-        }
-
-        return height
     }
 
     private var _colors: TagColorables? {
@@ -117,7 +107,6 @@ public final class TagUIView: UIView {
     }
 
     private let getColorsUseCase: TagGetColorsUseCaseable
-    private let getHeightUseCase: TagGetHeightUseCaseable
 
     // MARK: - Initialization
 
@@ -160,15 +149,13 @@ public final class TagUIView: UIView {
                  variant: TagVariant,
                  iconImage: UIImage?,
                  text: String?,
-                 getColorsUseCase: TagGetColorsUseCaseable = TagGetColorsUseCase(),
-                 getHeightUseCase: TagGetHeightUseCaseable = TagGetHeightUseCase()) {
+                 getColorsUseCase: TagGetColorsUseCaseable = TagGetColorsUseCase()) {
         self.theme = theme
         self.intentColor = intentColor
         self.variant = variant
         self.iconImage = iconImage
         self.text = text
         self.getColorsUseCase = getColorsUseCase
-        self.getHeightUseCase = getHeightUseCase
 
         super.init(frame: .zero)
 
@@ -293,10 +280,6 @@ public final class TagUIView: UIView {
                                              variant: self.variant)
     }
 
-    private func getHeightFromUseCase() -> CGFloat {
-        return self.getHeightUseCase.execute(from: self.traitCollection.preferredContentSizeCategory)
-    }
-
     // MARK: - Trait Collection
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -308,8 +291,9 @@ public final class TagUIView: UIView {
         }
 
         // Update height content ?
-        if self.traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-            self._height = self.getHeightFromUseCase()
-        }
+        self.height = UIFontMetrics.default.scaledValue(
+            for: TagConstants.height,
+            compatibleWith: self.traitCollection
+        )
     }
 }
