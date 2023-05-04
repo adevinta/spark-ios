@@ -9,6 +9,7 @@
 import SwiftUI
 import UIKit
 
+/// The TextStyle use by SwiftUI and UIKit
 public enum TextStyle {
     /// The font style for large titles.
     case largeTitle

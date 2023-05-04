@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+/// The intent color for the tag.
 public enum TagIntentColor {
     case alert
     case danger

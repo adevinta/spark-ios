@@ -6,10 +6,13 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+/// The accessibility identifiers for the tag.
 public enum TagAccessibilityIdentifier {
 
     // MARK: - Properties
 
+    /// The text label accessibility identifer.
     public static let text = "spark-tag-text"
+    /// The icon image accessibility identifer.
     public static let iconImage = "spark-tag-iconImage"
 }
