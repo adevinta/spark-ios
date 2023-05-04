@@ -25,8 +25,7 @@ final class CheckboxViewTests: TestCase {
                 checkboxPosition: .right,
                 theming: self.theming,
                 state: state,
-                selectionState: .init(get: { .selected }, set: { _ in }),
-                accessibilityIdentifier: "test"
+                selectionState: .init(get: { .selected }, set: { _ in })
             ).fixedSize()
 
             sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
@@ -39,8 +38,7 @@ final class CheckboxViewTests: TestCase {
                 text: "Selected checkbox.",
                 theming: self.theming,
                 state: state,
-                selectionState: .init(get: { .selected }, set: { _ in }),
-                accessibilityIdentifier: "test"
+                selectionState: .init(get: { .selected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
 
             sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
@@ -53,8 +51,7 @@ final class CheckboxViewTests: TestCase {
                 text: "Unselected checkbox.",
                 theming: self.theming,
                 state: state,
-                selectionState: .init(get: { .unselected }, set: { _ in }),
-                accessibilityIdentifier: "test"
+                selectionState: .init(get: { .unselected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
 
             sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
@@ -67,8 +64,7 @@ final class CheckboxViewTests: TestCase {
                 text: "Indeterminate checkbox.",
                 theming: self.theming,
                 state: state,
-                selectionState: .init(get: { .indeterminate }, set: { _ in }),
-                accessibilityIdentifier: "test"
+                selectionState: .init(get: { .indeterminate }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
 
             sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
@@ -81,8 +77,7 @@ final class CheckboxViewTests: TestCase {
                 text: "Multiline checkbox.\nMore text.",
                 theming: self.theming,
                 state: state,
-                selectionState: .init(get: { .unselected }, set: { _ in }),
-                accessibilityIdentifier: "test"
+                selectionState: .init(get: { .unselected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
 
             sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)

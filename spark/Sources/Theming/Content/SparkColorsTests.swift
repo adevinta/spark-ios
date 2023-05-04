@@ -14,6 +14,7 @@ final class SparkColorsTests: XCTestCase {
 
     private lazy var tokens: [SparkCore.ColorToken] = self.getAllColorTokens()
 
+    // MARK: - Tests
     func testUIColors() {
         self.tokens.forEach {
             XCTAssertNotEqual(

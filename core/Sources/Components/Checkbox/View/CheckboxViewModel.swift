@@ -9,16 +9,15 @@
 import Foundation
 
 final class CheckboxViewModel: ObservableObject {
-    // MARK: - Public properties
+    // MARK: - Internal properties
 
-    public var text: String
+    var text: String
 
-    @Published public var theming: Theme
-    @Published public var state: SelectButtonState
+    @Published var theming: Theme
+    @Published var state: SelectButtonState
+    @Published var colors: CheckboxColorables
 
     // MARK: - Private properties
-
-    @Published var colors: CheckboxColorables
     private let colorsUseCase: CheckboxColorsUseCaseable
 
     // MARK: - Init

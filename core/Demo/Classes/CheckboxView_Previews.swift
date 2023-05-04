@@ -20,11 +20,11 @@ struct CheckboxView_Previews: PreviewProvider {
         @State private var selection3: CheckboxSelectionState = .indeterminate
 
         var body: some View {
-            scrollView
+            self.scrollView
                 .environment(\.sizeCategory, .extraSmall)
                 .previewDisplayName("Extra small")
 
-            scrollView
+            self.scrollView
                 .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
                 .previewDisplayName("Extra large")
         }
@@ -35,21 +35,18 @@ struct CheckboxView_Previews: PreviewProvider {
                     Text("Left")
                     CheckboxView(
                         text: "Selected checkbox.",
-                        theming: theming,
-                        selectionState: $selection1,
-                        accessibilityIdentifier: "test"
+                        theming: self.theming,
+                        selectionState: $selection1
                     )
                     CheckboxView(
                         text: "Unselected checkbox.",
-                        theming: theming,
-                        selectionState: $selection2,
-                        accessibilityIdentifier: "test"
+                        theming: self.theming,
+                        selectionState: $selection2
                     )
                     CheckboxView(
                         text: "Indeterminate checkbox.",
-                        theming: theming,
-                        selectionState: $selection3,
-                        accessibilityIdentifier: "test"
+                        theming: self.theming,
+                        selectionState: $selection3
                     )
 
                     Divider()
@@ -57,23 +54,20 @@ struct CheckboxView_Previews: PreviewProvider {
                     CheckboxView(
                         text: "Selected checkbox.",
                         checkboxPosition: .right,
-                        theming: theming,
-                        selectionState: $selection1,
-                        accessibilityIdentifier: "test"
+                        theming: self.theming,
+                        selectionState: $selection1
                     )
                     CheckboxView(
                         text: "Unselected checkbox.",
                         checkboxPosition: .right,
-                        theming: theming,
-                        selectionState: $selection2,
-                        accessibilityIdentifier: "test"
+                        theming: self.theming,
+                        selectionState: $selection2
                     )
                     CheckboxView(
                         text: "Indeterminate checkbox.",
                         checkboxPosition: .right,
-                        theming: theming,
-                        selectionState: $selection3,
-                        accessibilityIdentifier: "test"
+                        theming: self.theming,
+                        selectionState: $selection3
                     )
                 }
                 .padding()

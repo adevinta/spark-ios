@@ -8,6 +8,7 @@
 
 import XCTest
 
+/// `TestCaseTracker` is used to keep the track of the current test suite. It creates a sub-directory for the current test case classname for snapshot-images.
 final class TestCaseTracker: NSObject, XCTestObservation {
     static let shared = TestCaseTracker()
 
@@ -27,7 +28,7 @@ final class TestCaseTracker: NSObject, XCTestObservation {
             .joined(separator: "_")
     }
 
-    // MARK: -
+    // MARK: - Subscription
 
     func subscribe() {
         guard !self.didSubscribe else {
@@ -52,6 +53,8 @@ final class TestCaseTracker: NSObject, XCTestObservation {
     private var didSubscribe = false
 }
 
+// MARK: - Private extensions
+
 private extension String {
     init(_ staticString: StaticString) {
         self = staticString.withUTF8Buffer {
@@ -60,7 +63,7 @@ private extension String {
     }
 }
 
-extension XCTestCase {
+private extension XCTestCase {
     var testClassName: String {
         String(self.sanitizedName.split(separator: " ").first!)
     }

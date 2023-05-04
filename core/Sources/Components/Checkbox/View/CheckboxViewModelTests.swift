@@ -25,6 +25,27 @@ final class CheckboxViewModelTests: XCTestCase {
     }
 
     // MARK: - Tests
+    func test_init() throws {
+        let states = [SelectButtonState.enabled, .disabled, .success(message: "success message"), .error(message: "error message"), .warning(message: "warning message")]
+
+        for state in states {
+            // Given
+            let viewModel = sut(state: state)
+
+            // Then
+            XCTAssertEqual(state, viewModel.state, "wrong state")
+            XCTAssertNotNil(viewModel.theming, "no theme set")
+            XCTAssertNotNil(viewModel.colors, "no colors set")
+
+            XCTAssertIdentical(viewModel.theming as? ThemeGeneratedMock,
+                               self.theme,
+                               "Wrong typography value")
+
+            XCTAssertEqual(viewModel.text, "Text", "text does not match")
+            XCTAssertEqual(viewModel.supplementaryMessage, state.message, "supplementary message does not match")
+        }
+    }
+
     func test_opacity() throws {
         // Given
         let opacities = self.sutValues(for: \.opacity)
@@ -63,7 +84,6 @@ final class CheckboxViewModelTests: XCTestCase {
         return statesToTest
             .map(sut(state:))
             .map{ $0[keyPath: keyPath] }
-
     }
 
     private func sut(state: SelectButtonState) -> CheckboxViewModel {
@@ -76,44 +96,23 @@ private extension Theme where Self == ThemeGeneratedMock {
         let theme = ThemeGeneratedMock()
         let colors = ColorsGeneratedMock()
 
-        let base = ColorsBaseGeneratedMock()
-        base.outline = ColorTokenGeneratedMock()
-        base.surface = ColorTokenGeneratedMock()
-
-        let onSurface = ColorTokenGeneratedMock()
-        onSurface.color = Color.red
-        base.onSurface = onSurface
-
-        let primary = ColorsPrimaryGeneratedMock()
-        primary.primaryContainer = ColorTokenGeneratedMock()
-        primary.primary = ColorTokenGeneratedMock()
-        primary.onPrimary = ColorTokenGeneratedMock()
-
-        let feedback = ColorsFeedbackGeneratedMock()
-        feedback.success = ColorTokenGeneratedMock()
-        feedback.successContainer = ColorTokenGeneratedMock()
-
-        feedback.alert = ColorTokenGeneratedMock()
-        feedback.alertContainer = ColorTokenGeneratedMock()
-
-        feedback.error = ColorTokenGeneratedMock()
-        feedback.errorContainer = ColorTokenGeneratedMock()
-
-        colors.base = base
-        colors.primary = primary
-        colors.feedback = feedback
-
-        let layout = LayoutGeneratedMock()
-        let spacing = LayoutSpacingGeneratedMock()
-        spacing.medium = 5
-        layout.spacing = spacing
-
+        colors.base = ColorsBaseGeneratedMock.mocked()
+        colors.primary = ColorsPrimaryGeneratedMock.mocked()
+        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
         theme.colors = colors
-
-        let dims = DimsGeneratedMock()
-        dims.dim3 = 0.4
-        theme.dims = dims
+        theme.dims = DimsGeneratedMock.mocked()
 
         return theme
+    }
+}
+
+private extension SelectButtonState {
+    var message: String? {
+        switch self {
+        case .success(let message), .warning(let message), .error(let message):
+            return message
+        default:
+            return nil
+        }
     }
 }

@@ -11,19 +11,14 @@ import SwiftUI
 /// The `CheckboxView`renders a single checkbox.
 public struct CheckboxView: View {
 
-    // MARK: - Type Alias
-
-    private typealias AccessibilityIdentifier = CheckboxAccessibilityIdentifier
-
     // MARK: - Public Properties
 
+    /// The current Spark theme.
     public var theming: Theme {
         return self.viewModel.theming
     }
 
-    public var accessibilityIdentifier: String?
-    public var accessibilityLabel: String?
-
+    /// A binding for the selection state of the checkbox (`.selected`, `.unselected` or `.indeterminate`). The value will update when the control is tapped.
     @Binding public var selectionState: CheckboxSelectionState
 
     // MARK: - Internal Properties
@@ -64,14 +59,12 @@ public struct CheckboxView: View {
         theming: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
-        selectionState: Binding<CheckboxSelectionState>,
-        accessibilityIdentifier: String? = nil
+        selectionState: Binding<CheckboxSelectionState>
     ) {
         self._horizontalSpacing = .init(wrappedValue: theming.layout.spacing.medium)
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
-        self.accessibilityIdentifier = accessibilityIdentifier
     }
 
     /// Initialize a new checkbox.
@@ -81,14 +74,12 @@ public struct CheckboxView: View {
     ///   - theming: The current Spark-Theme.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
-    ///   - accessibilityIdentifier: The accessibility identifier.
     public init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
         theming: Theme,
         state: SelectButtonState = .enabled,
-        selectionState: Binding<CheckboxSelectionState>,
-        accessibilityIdentifier: String? = nil
+        selectionState: Binding<CheckboxSelectionState>
     ) {
         self.init(
             text: text,
@@ -96,13 +87,13 @@ public struct CheckboxView: View {
             theming: theming,
             colorsUseCase: CheckboxColorsUseCase(),
             state: state,
-            selectionState: selectionState,
-            accessibilityIdentifier: accessibilityIdentifier
+            selectionState: selectionState
         )
     }
 
     // MARK: - Body
 
+    /// Returns a single rendered checkbox.
     public var body: some View {
         Button(
             action: {
@@ -113,9 +104,6 @@ public struct CheckboxView: View {
             }
         )
         .buttonStyle(CheckboxButtonStyle(isPressed: self.$isPressed))
-        .if(self.accessibilityIdentifier != nil) {
-            $0.accessibility(identifier: self.accessibilityIdentifier!)
-        }
     }
 
     @ViewBuilder private var checkboxView: some View {
@@ -218,7 +206,6 @@ public struct CheckboxView: View {
         }
     }
 
-    // MARK: - Enum
     private enum Identifier: String {
         case checkbox
         case content

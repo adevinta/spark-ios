@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+// sourcery: AutoMockable
 protocol CheckboxStateColorsUseCaseable {
     func execute(for intentColor: SelectButtonState,
                  on colors: Colors) -> CheckboxStateColorables
