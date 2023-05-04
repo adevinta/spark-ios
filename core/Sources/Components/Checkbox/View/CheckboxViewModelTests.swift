@@ -29,11 +29,18 @@ final class CheckboxViewModelTests: XCTestCase {
         let states = [SelectButtonState.enabled, .disabled, .success(message: "success message"), .error(message: "error message"), .warning(message: "warning message")]
 
         for state in states {
+            // Given
             let viewModel = sut(state: state)
 
+            // Then
             XCTAssertEqual(state, viewModel.state, "wrong state")
             XCTAssertNotNil(viewModel.theming, "no theme set")
             XCTAssertNotNil(viewModel.colors, "no colors set")
+
+            XCTAssertIdentical(viewModel.theming as? ThemeGeneratedMock,
+                               self.theme,
+                               "Wrong typography value")
+
             XCTAssertEqual(viewModel.text, "Text", "text does not match")
             XCTAssertEqual(viewModel.supplementaryMessage, state.message, "supplementary message does not match")
         }
