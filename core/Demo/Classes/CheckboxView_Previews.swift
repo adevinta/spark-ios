@@ -13,7 +13,7 @@ import SwiftUI
 struct CheckboxView_Previews: PreviewProvider {
 
     struct ContainerView: View {
-        let theming = SparkTheme.shared
+        let theme = SparkTheme.shared
 
         @State private var selection1: CheckboxSelectionState = .selected
         @State private var selection2: CheckboxSelectionState = .unselected
@@ -30,17 +30,17 @@ struct CheckboxView_Previews: PreviewProvider {
                 Text("Left")
                 CheckboxView(
                     text: "Selected checkbox.",
-                    theming: self.theming,
+                    theme: self.theme,
                     selectionState: $selection1
                 )
                 CheckboxView(
                     text: "Unselected checkbox.",
-                    theming: self.theming,
+                    theme: self.theme,
                     selectionState: $selection2
                 )
                 CheckboxView(
                     text: "Indeterminate checkbox.",
-                    theming: self.theming,
+                    theme: self.theme,
                     selectionState: $selection3
                 )
 
@@ -49,19 +49,19 @@ struct CheckboxView_Previews: PreviewProvider {
                 CheckboxView(
                     text: "Selected checkbox.",
                     checkboxPosition: .right,
-                    theming: self.theming,
+                    theme: self.theme,
                     selectionState: $selection1
                 )
                 CheckboxView(
                     text: "Unselected checkbox.",
                     checkboxPosition: .right,
-                    theming: self.theming,
+                    theme: self.theme,
                     selectionState: $selection2
                 )
                 CheckboxView(
                     text: "Indeterminate checkbox.",
                     checkboxPosition: .right,
-                    theming: self.theming,
+                    theme: self.theme,
                     selectionState: $selection3
                 )
             }

@@ -14,8 +14,8 @@ public struct CheckboxView: View {
     // MARK: - Public Properties
 
     /// The current Spark theme.
-    public var theming: Theme {
-        return self.viewModel.theming
+    public var theme: Theme {
+        return self.viewModel.theme
     }
 
     /// A binding for the selection state of the checkbox (`.selected`, `.unselected` or `.indeterminate`). The value will update when the control is tapped.
@@ -51,34 +51,34 @@ public struct CheckboxView: View {
     init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
-        theming: Theme,
+        theme: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
-        self.viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
+        self.viewModel = .init(text: text, theme: theme, colorsUseCase: colorsUseCase, state: state)
     }
 
     /// Initialize a new checkbox.
     /// - Parameters:
     ///   - text: The checkbox text.
     ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
-    ///   - theming: The current Spark-Theme.
+    ///   - theme: The current Spark-Theme.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     public init(
         text: String,
         checkboxPosition: CheckboxPosition = .left,
-        theming: Theme,
+        theme: Theme,
         state: SelectButtonState = .enabled,
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self.init(
             text: text,
             checkboxPosition: checkboxPosition,
-            theming: theming,
+            theme: theme,
             colorsUseCase: CheckboxColorsUseCase(),
             state: state,
             selectionState: selectionState
@@ -114,7 +114,7 @@ public struct CheckboxView: View {
 
             switch self.selectionState {
             case .selected:
-                self.theming.iconography.checkmark
+                self.theme.iconography.checkmark
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)
@@ -168,12 +168,12 @@ public struct CheckboxView: View {
     private var labelView: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(self.viewModel.text)
-                .font(self.theming.typography.body1.font)
+                .font(self.theme.typography.body1.font)
                 .foregroundColor(self.colors.textColor.color)
 
             if let message = self.viewModel.supplementaryMessage {
                 Text(message)
-                    .font(self.theming.typography.caption.font)
+                    .font(self.theme.typography.caption.font)
                     .foregroundColor(self.colors.checkboxTintColor.color)
             }
         }

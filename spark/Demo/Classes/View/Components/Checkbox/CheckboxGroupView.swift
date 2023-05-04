@@ -72,7 +72,7 @@ struct CheckboxGroupListView: View {
                     items: $items,
                     layout: layout,
                     checkboxPosition: checkboxPosition,
-                    theming: SparkTheme.shared,
+                    theme: SparkTheme.shared,
                     accessibilityIdentifierPrefix: "checkbox-group"
                 )
                 Spacer()

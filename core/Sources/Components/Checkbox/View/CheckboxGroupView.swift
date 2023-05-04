@@ -14,7 +14,7 @@ public struct CheckboxGroupView: View {
     // MARK: - Private properties
 
     @Binding private var items: [any CheckboxGroupItemProtocol]
-    private var theming: Theme
+    private var theme: Theme
     private var layout: CheckboxGroupLayout
     private var checkboxPosition: CheckboxView.CheckboxPosition
     private var accessibilityIdentifierPrefix: String
@@ -26,19 +26,19 @@ public struct CheckboxGroupView: View {
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
     ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
-    ///   - theming: The Spark-Theme.
+    ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxView.CheckboxPosition,
-        theming: Theme,
+        theme: Theme,
         accessibilityIdentifierPrefix: String
     ) {
         self._items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
-        self.theming = theming
+        self.theme = theme
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
     }
 
@@ -65,7 +65,7 @@ public struct CheckboxGroupView: View {
             CheckboxView(
                 text: item.title.wrappedValue,
                 checkboxPosition: checkboxPosition,
-                theming: theming,
+                theme: theme,
                 state: item.state.wrappedValue,
                 selectionState: item.selectionState
             )

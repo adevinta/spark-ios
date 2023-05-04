@@ -14,12 +14,12 @@ import SwiftUI
 @testable import Spark
 
 final class CheckboxViewTests: TestCase {
-    let theming: Theme = SparkTheme()
+    let theme: Theme = SparkTheme()
 
     func test_checkbox_selected() throws {
         let view = CheckboxView(
             text: "Selected checkbox.",
-            theming: self.theming,
+            theme: self.theme,
             selectionState: .init(get: { .selected }, set: { _ in })
         ).fixedSize().environment(\.sizeCategory, .medium)
 
@@ -29,7 +29,7 @@ final class CheckboxViewTests: TestCase {
     func test_checkbox_unselected() throws {
         let view = CheckboxView(
             text: "Unselected checkbox.",
-            theming: self.theming,
+            theme: self.theme,
             selectionState: .init(get: { .unselected }, set: { _ in })
         ).fixedSize().environment(\.sizeCategory, .medium)
 
@@ -39,7 +39,7 @@ final class CheckboxViewTests: TestCase {
     func test_checkbox_indeterminate() throws {
         let view = CheckboxView(
             text: "Indeterminate checkbox.",
-            theming: self.theming,
+            theme: self.theme,
             selectionState: .init(get: { .indeterminate }, set: { _ in })
         )
         .fixedSize().environment(\.sizeCategory, .medium)
@@ -50,7 +50,7 @@ final class CheckboxViewTests: TestCase {
     func test_checkbox_multiline() throws {
         let view = CheckboxView(
             text: "Multiline checkbox.\nMore text.",
-            theming: self.theming,
+            theme: self.theme,
             selectionState: .init(get: { .unselected }, set: { _ in })
         ).fixedSize().environment(\.sizeCategory, .medium)
 
