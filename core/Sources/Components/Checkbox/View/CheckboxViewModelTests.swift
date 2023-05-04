@@ -75,44 +75,23 @@ private extension Theme where Self == ThemeGeneratedMock {
         let theme = ThemeGeneratedMock()
         let colors = ColorsGeneratedMock()
 
-        let base = ColorsBaseGeneratedMock()
-        base.outline = ColorTokenGeneratedMock()
-        base.surface = ColorTokenGeneratedMock()
-
-        let onSurface = ColorTokenGeneratedMock()
-        onSurface.color = Color.red
-        base.onSurface = onSurface
-
-        let primary = ColorsPrimaryGeneratedMock()
-        primary.primaryContainer = ColorTokenGeneratedMock()
-        primary.primary = ColorTokenGeneratedMock()
-        primary.onPrimary = ColorTokenGeneratedMock()
-
-        let feedback = ColorsFeedbackGeneratedMock()
-        feedback.success = ColorTokenGeneratedMock()
-        feedback.successContainer = ColorTokenGeneratedMock()
-
-        feedback.alert = ColorTokenGeneratedMock()
-        feedback.alertContainer = ColorTokenGeneratedMock()
-
-        feedback.error = ColorTokenGeneratedMock()
-        feedback.errorContainer = ColorTokenGeneratedMock()
-
-        colors.base = base
-        colors.primary = primary
-        colors.feedback = feedback
-
-        let layout = LayoutGeneratedMock()
-        let spacing = LayoutSpacingGeneratedMock()
-        spacing.medium = 5
-        layout.spacing = spacing
-
+        colors.base = ColorsBaseGeneratedMock.mocked()
+        colors.primary = ColorsPrimaryGeneratedMock.mocked()
+        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
         theme.colors = colors
-
-        let dims = DimsGeneratedMock()
-        dims.dim3 = 0.4
-        theme.dims = dims
+        theme.dims = DimsGeneratedMock.mocked()
 
         return theme
+    }
+}
+
+private extension SelectButtonState {
+    var message: String? {
+        switch self {
+        case .success(let message), .warning(let message), .error(let message):
+            return message
+        default:
+            return nil
+        }
     }
 }
