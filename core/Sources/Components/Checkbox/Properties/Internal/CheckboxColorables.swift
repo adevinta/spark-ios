@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol CheckboxColorables {
     var textColor: ColorToken { get }
     var checkboxTintColor: ColorToken { get }

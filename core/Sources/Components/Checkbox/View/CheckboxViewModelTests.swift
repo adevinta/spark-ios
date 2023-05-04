@@ -25,6 +25,20 @@ final class CheckboxViewModelTests: XCTestCase {
     }
 
     // MARK: - Tests
+    func test_init() throws {
+        let states = [SelectButtonState.enabled, .disabled, .success(message: "success message"), .error(message: "error message"), .warning(message: "warning message")]
+
+        for state in states {
+            let viewModel = sut(state: state)
+
+            XCTAssertEqual(state, viewModel.state, "wrong state")
+            XCTAssertNotNil(viewModel.theming, "no theme set")
+            XCTAssertNotNil(viewModel.colors, "no colors set")
+            XCTAssertEqual(viewModel.text, "Text", "text does not match")
+            XCTAssertEqual(viewModel.supplementaryMessage, state.message, "supplementary message does not match")
+        }
+    }
+
     func test_opacity() throws {
         // Given
         let opacities = self.sutValues(for: \.opacity)
