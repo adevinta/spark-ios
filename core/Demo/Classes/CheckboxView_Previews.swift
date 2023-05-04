@@ -31,20 +31,17 @@ struct CheckboxView_Previews: PreviewProvider {
                 CheckboxView(
                     text: "Selected checkbox.",
                     theming: self.theming,
-                    selectionState: $selection1,
-                    accessibilityIdentifier: "test"
+                    selectionState: $selection1
                 )
                 CheckboxView(
                     text: "Unselected checkbox.",
                     theming: self.theming,
-                    selectionState: $selection2,
-                    accessibilityIdentifier: "test"
+                    selectionState: $selection2
                 )
                 CheckboxView(
                     text: "Indeterminate checkbox.",
                     theming: self.theming,
-                    selectionState: $selection3,
-                    accessibilityIdentifier: "test"
+                    selectionState: $selection3
                 )
 
                 Divider()
@@ -53,22 +50,19 @@ struct CheckboxView_Previews: PreviewProvider {
                     text: "Selected checkbox.",
                     checkboxPosition: .right,
                     theming: self.theming,
-                    selectionState: $selection1,
-                    accessibilityIdentifier: "test"
+                    selectionState: $selection1
                 )
                 CheckboxView(
                     text: "Unselected checkbox.",
                     checkboxPosition: .right,
                     theming: self.theming,
-                    selectionState: $selection2,
-                    accessibilityIdentifier: "test"
+                    selectionState: $selection2
                 )
                 CheckboxView(
                     text: "Indeterminate checkbox.",
                     checkboxPosition: .right,
                     theming: self.theming,
-                    selectionState: $selection3,
-                    accessibilityIdentifier: "test"
+                    selectionState: $selection3
                 )
             }
             .padding()

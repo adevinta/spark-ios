@@ -11,10 +11,6 @@ import SwiftUI
 /// The `CheckboxGroupView` renders a group containing of multiple`CheckboxView`-views. It supports a title, different layout and positioning options.
 public struct CheckboxGroupView: View {
 
-    // MARK: - Type Alias
-
-    private typealias AccessibilityIdentifier = CheckboxAccessibilityIdentifier
-
     // MARK: - Private properties
 
     @Binding private var items: [any CheckboxGroupItemProtocol]
@@ -71,9 +67,9 @@ public struct CheckboxGroupView: View {
                 checkboxPosition: checkboxPosition,
                 theming: theming,
                 state: item.state.wrappedValue,
-                selectionState: item.selectionState,
-                accessibilityIdentifier: identifier
+                selectionState: item.selectionState
             )
+            .accessibilityIdentifier(identifier)
         }
     }
 }
