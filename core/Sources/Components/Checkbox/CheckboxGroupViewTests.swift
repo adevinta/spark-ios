@@ -17,7 +17,7 @@ final class CheckboxGroupViewTests: TestCase {
     private struct GroupView: View {
         let position: CheckboxPosition
 
-        let theming: Theme = SparkTheme.shared
+        let theme: Theme = SparkTheme.shared
 
         @State private var items: [any CheckboxGroupItemProtocol] = [
             CheckboxGroupItem(title: "Apple", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
@@ -31,7 +31,7 @@ final class CheckboxGroupViewTests: TestCase {
             CheckboxGroupView(
                 items: $items,
                 checkboxPosition: position,
-                theming: theming,
+                theme: theme,
                 accessibilityIdentifierPrefix: "group"
             ).fixedSize()
         }

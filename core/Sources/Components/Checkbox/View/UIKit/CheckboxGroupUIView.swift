@@ -14,7 +14,7 @@ public final class CheckboxGroupUIView: UIView {
     // MARK: - Private properties.
 
     @Binding private var items: [any CheckboxGroupItemProtocol]
-    private var theming: Theme
+    private var theme: Theme
     private var accessibilityIdentifierPrefix: String
     private var checkboxes: [CheckboxUIView] = []
     private var titleLabel: UILabel?
@@ -55,21 +55,21 @@ public final class CheckboxGroupUIView: UIView {
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
     ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
-    ///   - theming: The Spark-Theme.
+    ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
         title: String? = nil,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxPosition,
-        theming: Theme,
+        theme: Theme,
         accessibilityIdentifierPrefix: String
     ) {
         self.title = title
         self._items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
-        self.theming = theming
+        self.theme = theme
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
         super.init(frame: .zero)
         self.commonInit()
@@ -90,7 +90,7 @@ public final class CheckboxGroupUIView: UIView {
     }
 
     private var spacing: LayoutSpacing {
-        self.theming.layout.spacing
+        self.theme.layout.spacing
     }
 
     private func setUpView() {
@@ -102,8 +102,8 @@ public final class CheckboxGroupUIView: UIView {
             label.text = title
             label.adjustsFontForContentSizeCategory = true
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.textColor = self.theming.colors.base.onSurface.uiColor
-            label.font = self.theming.typography.subhead.uiFont
+            label.textColor = self.theme.colors.base.onSurface.uiColor
+            label.font = self.theme.typography.subhead.uiFont
 
             self.titleLabel = label
             view.addSubview(label)
@@ -113,7 +113,7 @@ public final class CheckboxGroupUIView: UIView {
 
         for item in self.items {
             let checkbox = CheckboxUIView(
-                theming: theming,
+                theme: theme,
                 text: item.title,
                 state: item.state,
                 selectionState: item.selectionState,

@@ -67,7 +67,7 @@ final class CheckboxViewController: UIViewController {
 
     private func setUpView() {
         let view = self.contentView
-        let theming = SparkTheme.shared
+        let theme = SparkTheme.shared
 
         var checkboxes: [CheckboxUIView] = []
 
@@ -82,7 +82,7 @@ final class CheckboxViewController: UIViewController {
         shuffleButton.addTarget(self, action: #selector(self.actionShuffle(sender:)), for: .touchUpInside)
 
         let checkbox = CheckboxUIView(
-            theming: theming,
+            theme: theme,
             text: "Hello world!",
             state: .enabled,
             selectionState: .unselected,
@@ -96,7 +96,7 @@ final class CheckboxViewController: UIViewController {
         checkboxes.append(checkbox)
 
         let checkbox2 = CheckboxUIView(
-            theming: theming,
+            theme: theme,
             text: "Second checkbox! This is a very very long descriptive text.",
             state: .disabled,
             selectionState: .selected,
@@ -108,7 +108,7 @@ final class CheckboxViewController: UIViewController {
 
 
         let errorCheckbox = CheckboxUIView(
-            theming: theming,
+            theme: theme,
             text: "Error checkbox",
             state: .error(message: "Error message"),
             selectionState: .indeterminate,
@@ -119,7 +119,7 @@ final class CheckboxViewController: UIViewController {
         checkboxes.append(errorCheckbox)
 
         let successCheckbox = CheckboxUIView(
-            theming: theming,
+            theme: theme,
             text: "Right checkbox",
             state: .success(message: "Success message"),
             selectionState: .selected,

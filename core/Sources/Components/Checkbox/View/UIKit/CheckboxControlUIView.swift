@@ -32,13 +32,13 @@ class CheckboxControlUIView: UIView {
         }
     }
 
-    var theming: Theme
+    var theme: Theme
 
     // MARK: - Initialization
 
-    init(selectionIcon: UIImage, theming: Theme) {
+    init(selectionIcon: UIImage, theme: Theme) {
         self.selectionIcon = selectionIcon
-        self.theming = theming
+        self.theme = theme
         super.init(frame: .zero)
         self.commonInit()
     }
@@ -72,7 +72,7 @@ class CheckboxControlUIView: UIView {
     }
 
     private var spacing: LayoutSpacing {
-        return self.theming.layout.spacing
+        return self.theme.layout.spacing
     }
 
     private enum Constants {

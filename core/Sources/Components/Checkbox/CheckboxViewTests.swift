@@ -23,7 +23,7 @@ final class CheckboxViewTests: TestCase {
             let view = CheckboxView(
                 text: "Selected checkbox.",
                 checkboxPosition: .right,
-                theming: self.theming,
+                theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .selected }, set: { _ in })
             ).fixedSize()
@@ -36,7 +36,7 @@ final class CheckboxViewTests: TestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Selected checkbox.",
-                theming: self.theme,
+                theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .selected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
@@ -49,7 +49,7 @@ final class CheckboxViewTests: TestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Unselected checkbox.",
-                theming: self.theme,
+                theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .unselected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
@@ -62,7 +62,7 @@ final class CheckboxViewTests: TestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Indeterminate checkbox.",
-                theming: self.theme,
+                theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .indeterminate }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
@@ -75,7 +75,7 @@ final class CheckboxViewTests: TestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Multiline checkbox.\nMore text.",
-                theming: self.theme,
+                theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .unselected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)

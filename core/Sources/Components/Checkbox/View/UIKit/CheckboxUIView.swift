@@ -39,8 +39,8 @@ public final class CheckboxUIView: UIView {
 
     private lazy var controlView: CheckboxControlUIView = {
         let controlView = CheckboxControlUIView(
-            selectionIcon: self.theming.iconography.checkmark.uiImage,
-            theming: self.theming
+            selectionIcon: self.theme.iconography.checkmark.uiImage,
+            theme: self.theme
         )
         controlView.isAccessibilityElement = false
         controlView.translatesAutoresizingMaskIntoConstraints = false
@@ -89,7 +89,7 @@ public final class CheckboxUIView: UIView {
     public var state: SelectButtonState {
         didSet {
             self.viewModel.state = self.state
-            self.colors = self.colorsUseCase.execute(from: self.theming, state: self.state)
+            self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
 
             self.updateState()
             self.updateViewConstraints()
@@ -98,7 +98,7 @@ public final class CheckboxUIView: UIView {
         }
     }
     /// Sets the theme of the checkbox.
-    public var theming: Theme
+    public var theme: Theme
 
     var colors: CheckboxColorables {
         get {
@@ -111,7 +111,7 @@ public final class CheckboxUIView: UIView {
     }
     var colorsUseCase: CheckboxColorsUseCaseable {
         didSet {
-            self.colors = self.colorsUseCase.execute(from: self.theming, state: self.state)
+            self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
         }
     }
 
@@ -131,14 +131,14 @@ public final class CheckboxUIView: UIView {
 
     /// Initialize a new checkbox UIKit-view.
     /// - Parameters:
-    ///   - theming: The current Spark-Theme.
+    ///   - theme: The current Spark-Theme.
     ///   - text: The checkbox text.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
     ///   - selectionStateHandler: The handler which is called when the checkbox state is changed.
     public convenience init(
-        theming: Theme,
+        theme: Theme,
         text: String,
         state: SelectButtonState = .enabled,
         selectionState: CheckboxSelectionState = .unselected,
@@ -146,7 +146,7 @@ public final class CheckboxUIView: UIView {
         selectionStateHandler: ((_ state: CheckboxSelectionState) -> Void)? = nil
     ) {
         self.init(
-            theming: theming,
+            theme: theme,
             text: text,
             colorsUseCase: CheckboxColorsUseCase(),
             state: state,
@@ -157,7 +157,7 @@ public final class CheckboxUIView: UIView {
     }
 
     init(
-        theming: Theme,
+        theme: Theme,
         text: String,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
@@ -165,21 +165,21 @@ public final class CheckboxUIView: UIView {
         checkboxPosition: CheckboxPosition,
         selectionStateHandler: ((_ state: CheckboxSelectionState) -> Void)? = nil
     ) {
-        self.theming = theming
+        self.theme = theme
         self.colorsUseCase = colorsUseCase
         self.state = state
         self.selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.selectionStateHandler = selectionStateHandler
-        self.viewModel = .init(text: text, theme: theming, colorsUseCase: colorsUseCase, state: state)
+        self.viewModel = .init(text: text, theme: theme, colorsUseCase: colorsUseCase, state: state)
 
         super.init(frame: .zero)
-        self.colors = colorsUseCase.execute(from: theming, state: state)
+        self.colors = colorsUseCase.execute(from: theme, state: state)
         self.commonInit()
     }
 
     private var spacing: LayoutSpacing {
-        return self.theming.layout.spacing
+        return self.theme.layout.spacing
     }
 
     private func commonInit() {
@@ -337,12 +337,12 @@ public final class CheckboxUIView: UIView {
     private func updateTheme() {
         self.controlView.colors = self.colors
 
-        let font = self.theming.typography.body1.uiFont
+        let font = self.theme.typography.body1.uiFont
         self.textLabel.font = font
         self.textLabel.adjustsFontForContentSizeCategory = true
         self.textLabel.textColor = self.colors.textColor.uiColor
 
-        let captionFont = self.theming.typography.caption.uiFont
+        let captionFont = self.theme.typography.caption.uiFont
         self.supplementaryTextLabel.font = captionFont
         self.supplementaryTextLabel.adjustsFontForContentSizeCategory = true
         self.supplementaryTextLabel.textColor = self.colors.checkboxTintColor.uiColor

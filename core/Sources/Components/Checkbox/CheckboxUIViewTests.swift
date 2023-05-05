@@ -14,7 +14,7 @@ import XCTest
 @testable import SparkCore
 
 final class CheckboxUIViewTests: TestCase {
-    let theming: Theme = SparkTheme.shared
+    let theme: Theme = SparkTheme.shared
 
     let states = [SelectButtonState.disabled, .enabled, .success(message: "Success message!"), .warning(message: "Warning message!"), .error(message: "Error message!")]
 
@@ -25,7 +25,7 @@ final class CheckboxUIViewTests: TestCase {
     func test_right_aligned() throws {
         for state in self.states {
             let checkbox = CheckboxUIView(
-                theming: self.theming,
+                theme: self.theme,
                 text: "Selected checkbox.",
                 state: state,
                 selectionState: .selected,
@@ -39,7 +39,7 @@ final class CheckboxUIViewTests: TestCase {
     func test_checkbox_selected() throws {
         for state in self.states {
             let checkbox = CheckboxUIView(
-                theming: self.theming,
+                theme: self.theme,
                 text: "Selected checkbox.",
                 state: state,
                 selectionState: .selected,
@@ -53,7 +53,7 @@ final class CheckboxUIViewTests: TestCase {
     func test_checkbox_unselected() throws {
         for state in self.states {
             let checkbox = CheckboxUIView(
-                theming: self.theming,
+                theme: self.theme,
                 text: "Unselected checkbox.",
                 state: state,
                 selectionState: .unselected,
@@ -67,7 +67,7 @@ final class CheckboxUIViewTests: TestCase {
     func test_checkbox_indeterminate() throws {
         for state in self.states {
             let checkbox = CheckboxUIView(
-                theming: self.theming,
+                theme: self.theme,
                 text: "Indeterminate checkbox.",
                 state: state,
                 selectionState: .indeterminate,
@@ -81,7 +81,7 @@ final class CheckboxUIViewTests: TestCase {
     func test_checkbox_multiline() throws {
         for state in self.states {
             let view = CheckboxUIView(
-                theming: self.theming,
+                theme: self.theme,
                 text: "Multiline checkbox.\nMore text.",
                 state: state,
                 selectionState: .selected,

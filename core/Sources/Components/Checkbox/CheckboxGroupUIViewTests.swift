@@ -23,7 +23,7 @@ final class CheckboxGroupUIViewTests: TestCase {
     ]
 
     private func createGroupView(position: CheckboxPosition) -> UIView {
-        let theming = SparkTheme.shared
+        let theme = SparkTheme.shared
 
         let groupView = CheckboxGroupUIView(
             items: .init(
@@ -36,7 +36,7 @@ final class CheckboxGroupUIViewTests: TestCase {
             ),
             layout: .vertical,
             checkboxPosition: position,
-            theming: theming,
+            theme: theme,
             accessibilityIdentifierPrefix: "abc"
         )
         groupView.translatesAutoresizingMaskIntoConstraints = false
