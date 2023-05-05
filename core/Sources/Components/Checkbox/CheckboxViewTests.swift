@@ -14,7 +14,7 @@ import XCTest
 @testable import SparkCore
 
 final class CheckboxViewTests: TestCase {
-    let theming: Theme = SparkTheme()
+    let theme: Theme = SparkTheme()
 
     let states = [SelectButtonState.disabled, .enabled, .success(message: "Success message!"), .warning(message: "Warning message!"), .error(message: "Error message!")]
 
@@ -36,7 +36,7 @@ final class CheckboxViewTests: TestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Selected checkbox.",
-                theming: self.theming,
+                theming: self.theme,
                 state: state,
                 selectionState: .init(get: { .selected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
@@ -49,7 +49,7 @@ final class CheckboxViewTests: TestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Unselected checkbox.",
-                theming: self.theming,
+                theming: self.theme,
                 state: state,
                 selectionState: .init(get: { .unselected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
@@ -62,7 +62,7 @@ final class CheckboxViewTests: TestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Indeterminate checkbox.",
-                theming: self.theming,
+                theming: self.theme,
                 state: state,
                 selectionState: .init(get: { .indeterminate }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
@@ -75,7 +75,7 @@ final class CheckboxViewTests: TestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Multiline checkbox.\nMore text.",
-                theming: self.theming,
+                theming: self.theme,
                 state: state,
                 selectionState: .init(get: { .unselected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)

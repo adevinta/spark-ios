@@ -7,7 +7,7 @@
 //
 
 protocol CheckboxColorsUseCaseable {
-    func execute(from theming: Theme, state: SelectButtonState) -> CheckboxColorables
+    func execute(from theme: Theme, state: SelectButtonState) -> CheckboxColorables
 }
 
 struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
@@ -24,8 +24,8 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(from theming: Theme, state: SelectButtonState) -> CheckboxColorables {
-        let colors = self.stateColorsUseCase.execute(for: state, on: theming.colors)
+    func execute(from theme: Theme, state: SelectButtonState) -> CheckboxColorables {
+        let colors = self.stateColorsUseCase.execute(for: state, on: theme.colors)
 
         return CheckboxColors(
             textColor: colors.textColor,

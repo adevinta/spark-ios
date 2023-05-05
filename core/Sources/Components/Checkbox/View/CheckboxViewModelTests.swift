@@ -34,10 +34,10 @@ final class CheckboxViewModelTests: XCTestCase {
 
             // Then
             XCTAssertEqual(state, viewModel.state, "wrong state")
-            XCTAssertNotNil(viewModel.theming, "no theme set")
+            XCTAssertNotNil(viewModel.theme, "no theme set")
             XCTAssertNotNil(viewModel.colors, "no colors set")
 
-            XCTAssertIdentical(viewModel.theming as? ThemeGeneratedMock,
+            XCTAssertIdentical(viewModel.theme as? ThemeGeneratedMock,
                                self.theme,
                                "Wrong typography value")
 
@@ -87,7 +87,7 @@ final class CheckboxViewModelTests: XCTestCase {
     }
 
     private func sut(state: SelectButtonState) -> CheckboxViewModel {
-        return CheckboxViewModel(text: "Text", theming: self.theme, state: state)
+        return CheckboxViewModel(text: "Text", theme: self.theme, state: state)
     }
 }
 

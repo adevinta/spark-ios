@@ -171,7 +171,7 @@ public final class CheckboxUIView: UIView {
         self.selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.selectionStateHandler = selectionStateHandler
-        self.viewModel = .init(text: text, theming: theming, colorsUseCase: colorsUseCase, state: state)
+        self.viewModel = .init(text: text, theme: theming, colorsUseCase: colorsUseCase, state: state)
 
         super.init(frame: .zero)
         self.colors = colorsUseCase.execute(from: theming, state: state)
