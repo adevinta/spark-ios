@@ -27,7 +27,7 @@ import UIKit
 
     /// The font metrics the scaling is based on. The default value is `.body`-text-style.
     private let metrics: UIFontMetrics
-    
+
     /// The trait collection used for the scaling operation. The default value is nil, which means the current trait collection will be used (`UITraitCollection.current`).
     private var traitCollection: UITraitCollection?
 
