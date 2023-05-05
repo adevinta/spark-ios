@@ -11,7 +11,8 @@ import Foundation
 struct ChipColors {
     // MARK: - Properties
 
-    let backgroundColor: ColorToken
-    let borderColor: ColorToken
-    let foregroundColor: ColorToken
+    let background: ColorToken
+    let border: ColorToken
+    let foreground: ColorToken
+    let backgroundPressed: ColorToken
 }

@@ -6,7 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-
+import UIKit
+import SwiftUI
 import Foundation
 
 protocol GetChipColorsUseCasable {
@@ -27,18 +28,34 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
 
         switch variant {
         case .dashed, .outlined:
-            return ChipColors(backgroundColor: intentColors.secondary,
-                              borderColor: intentColors.primary,
-                              foregroundColor: intentColors.primary)
+            if intent == .surface {
+                return ChipColors(background: ColorTokenDefault.clear,
+                                  border: intentColors.secondary,
+                                  foreground: intentColors.secondary,
+                                  backgroundPressed: intentColors.primary.opacity(theme.dims.dim5))
+            } else {
+                return ChipColors(background: ColorTokenDefault.clear,
+                                  border: intentColors.primary,
+                                  foreground: intentColors.primary,
+                                  backgroundPressed: intentColors.tintedPrimary)
+            }
         case .filled:
-            return ChipColors(backgroundColor: intentColors.primary,
-                              borderColor: intentColors.primary,
-                              foregroundColor: intentColors.secondary)
+            if intent == .surface {
+                return ChipColors(background: intentColors.primary,
+                                  border: intentColors.primary,
+                                  foreground: intentColors.secondary,
+                                  backgroundPressed: intentColors.primary.opacity(theme.dims.dim5))
+            } else {
+                return ChipColors(background: intentColors.primary,
+                                  border: intentColors.primary,
+                                  foreground: intentColors.secondary,
+                                  backgroundPressed: intentColors.tintedSecondary)
+            }
         case .tinted:
-            return ChipColors(backgroundColor: intentColors.tintedPrimary,
-                              borderColor: intentColors.tintedPrimary,
-                              foregroundColor: intentColors.tintedSecondary)
+            return ChipColors(background: intentColors.tintedPrimary,
+                              border: intentColors.tintedPrimary,
+                              foreground: intentColors.tintedSecondary,
+                              backgroundPressed: intentColors.primary.opacity(theme.dims.dim5))
         }
-
     }
 }

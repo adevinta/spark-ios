@@ -6,11 +6,13 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import UIKit
 
 private enum Constants {
     static let imageSize: CGFloat = 13.33
     static let height: CGFloat = 32
+    static let touchAreaPadding: CGFloat = 6
     static let borderWidth: CGFloat = 1
     static let dashLength: CGFloat = 1.9
 }
@@ -34,6 +36,39 @@ public final class ChipUIView: UIView {
         }
     }
 
+    public var action: (() -> ())? {
+        didSet {
+            setupButtonActions()
+        }
+    }
+
+    public var intentColor: ChipIntentColor {
+        set {
+            self.viewModel.intentColor = newValue
+        }
+        get {
+            return self.viewModel.intentColor
+        }
+    }
+
+    public var variant: ChipVariant {
+        set {
+            self.viewModel.variant = newValue
+        }
+        get {
+            return self.viewModel.variant
+        }
+    }
+
+    public var theme: Theme {
+        set {
+            self.viewModel.theme = newValue
+        }
+        get {
+            return self.viewModel.theme
+        }
+    }
+
     private let viewModel: ChipViewModel
 
     private let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
@@ -45,6 +80,10 @@ public final class ChipUIView: UIView {
 
     private var height: CGFloat {
         self.bodyFontMetrics.scaledValue(for: Constants.height, compatibleWith: traitCollection)
+    }
+
+    private var touchAreaPadding: CGFloat {
+        self.bodyFontMetrics.scaledValue(for: Constants.touchAreaPadding, compatibleWith: traitCollection)
     }
 
     private var spacing: CGFloat {
@@ -88,12 +127,23 @@ public final class ChipUIView: UIView {
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
 
+    private let button: UIButton = {
+        let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = true
+        button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return button
+    }()
+
     private var sizeConstraints: [NSLayoutConstraint] = []
     private var heightConstraint: NSLayoutConstraint?
+    private var topPaddingConstraint: NSLayoutConstraint?
+    private var bottomPaddingConstraint: NSLayoutConstraint?
+    private var cancellables = Set<AnyCancellable>()
 
     public convenience init(theme: Theme,
                 intentColor: ChipIntentColor,
@@ -117,6 +167,17 @@ public final class ChipUIView: UIView {
         self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: label , optionalIconImage: iconImage)
     }
 
+    public var component: UIView? {
+        willSet {
+            self.component?.removeFromSuperview()
+        }
+        didSet {
+            if let component = self.component {
+                self.stackView.addArrangedSubview(component)
+            }
+        }
+    }
+
     init(theme: Theme,
          intentColor: ChipIntentColor,
          variant: ChipVariant,
@@ -138,21 +199,23 @@ public final class ChipUIView: UIView {
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        print("trait collection did change")
 
         self.sizeConstraints.forEach{
             $0.constant = self.imageSize
         }
 
+        self.topPaddingConstraint?.constant = self.touchAreaPadding
+        self.bottomPaddingConstraint?.constant = -self.touchAreaPadding
+
         self.stackView.spacing = self.spacing
         self.heightConstraint?.constant = self.height
         self.stackView.layoutMargins = UIEdgeInsets(top: 0, left: self.padding, bottom: 0, right: self.padding)
-        self.layer.cornerRadius = self.borderRadius
+        self.stackView.layer.cornerRadius = self.borderRadius
         
         if self.viewModel.isBorderDashed {
             self.addDashedBorder()
         } else {
-            self.layer.borderWidth = self.borderWidth
+            self.stackView.layer.borderWidth = self.borderWidth
         }
     }
 
@@ -162,20 +225,21 @@ public final class ChipUIView: UIView {
 
     public override func layoutSubviews() {
         super.layoutSubviews()
-        print("did layout subviews")
         if self.viewModel.isBorderDashed {
             self.addDashedBorder()
         }
     }
+
+    private func setChipColors() {
+        self.stackView.backgroundColor = self.viewModel.colors.background.uiColor
+        self.uiLabel.textColor = self.viewModel.colors.foreground.uiColor
+        self.uiImageView.tintColor = self.viewModel.colors.foreground.uiColor
+    }
     
     private func setupView() {
-
-        print("Setup view")
-        addSubview(self.stackView)
-
-        self.backgroundColor = self.viewModel.colors.backgroundColor.uiColor
-        self.uiLabel.textColor = self.viewModel.colors.foregroundColor.uiColor
-        self.uiImageView.tintColor = self.viewModel.colors.foregroundColor.uiColor
+        self.addSubview(self.stackView)
+        self.addSubview(self.button)
+        self.button.frame = self.bounds
 
         self.stackView.spacing = self.spacing
 
@@ -191,28 +255,33 @@ public final class ChipUIView: UIView {
             self.uiImageView.widthAnchor.constraint(equalToConstant: self.imageSize)
         ]
 
+        let topPaddingConstraint = self.stackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: self.touchAreaPadding)
+        let bottomPaddingConstraint = self.stackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -self.touchAreaPadding)
+
         let stackConstraints = [
             self.stackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
             self.stackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-            self.stackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            self.stackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-            heightConstraint
+            heightConstraint,
+            topPaddingConstraint,
+            bottomPaddingConstraint
         ]
 
         NSLayoutConstraint.activate(stackConstraints)
 
-        self.layer.cornerRadius = self.borderRadius
-        self.layer.masksToBounds = true
+        self.stackView.layer.cornerRadius = self.borderRadius
+        self.stackView.layer.masksToBounds = true
 
         if self.viewModel.isBorderDashed {
             self.addDashedBorder()
         } else {
-            self.layer.borderWidth = self.borderWidth
-            self.layer.borderColor = self.viewModel.colors.borderColor.uiColor.cgColor
+            self.stackView.layer.borderWidth = self.borderWidth
+            self.stackView.layer.borderColor = self.viewModel.colors.border.uiColor.cgColor
         }
 
         self.sizeConstraints = sizeConstraints
         self.heightConstraint = heightConstraint
+        self.topPaddingConstraint = topPaddingConstraint
+        self.bottomPaddingConstraint = bottomPaddingConstraint
 
 
         if self.image == nil {
@@ -224,14 +293,66 @@ public final class ChipUIView: UIView {
         if self.text == nil {
             self.uiLabel.isHidden = true
         }
+
+        self.viewModel.$colors
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.setChipColors()
+            }.store(in: &self.cancellables)
+
+        self.viewModel.$isBorderDashed
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isDashed in
+                if isDashed {
+                    self?.removeDashedBorder()
+                } else {
+                    self?.addDashedBorder()
+                }
+            }.store(in: &self.cancellables)
+
+        self.setChipColors()
+    }
+
+    private func setupButtonActions() {
+
+        if self.action == nil {
+            self.button.removeTarget(self, action: #selector(actionTapped(sender:)), for: .touchUpInside)
+            self.button.removeTarget(self, action: #selector(actionTouchDown(sender:)), for: .touchDown)
+            self.button.removeTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchUpOutside)
+            self.button.removeTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchCancel)
+        } else {
+            self.button.addTarget(self, action: #selector(actionTapped(sender:)), for: .touchUpInside)
+            self.button.addTarget(self, action: #selector(actionTouchDown(sender:)), for: .touchDown)
+            self.button.addTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchUpOutside)
+            self.button.addTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchCancel)
+        }
+    }
+
+    @IBAction func actionTapped(sender: UIButton)  {
+        self.stackView.backgroundColor = self.viewModel.colors.background.uiColor
+        self.action?()
+      }
+
+      @IBAction func actionTouchDown(sender: UIButton)  {
+          self.stackView.backgroundColor = self.viewModel.colors.backgroundPressed.uiColor
+      }
+
+      @IBAction func actionTouchUp(sender: UIButton)  {
+          self.stackView.backgroundColor = self.viewModel.colors.background.uiColor
+      }
+
+    private func removeDashedBorder() {
+        self.dashBorder?.removeFromSuperlayer()
+        self.dashBorder = nil
     }
 
     private func addDashedBorder() {
         self.dashBorder?.removeFromSuperlayer()
 
         let dashBorder = CAShapeLayer()
-        dashBorder.lineWidth = borderWidth
-        dashBorder.strokeColor = viewModel.colors.borderColor.uiColor.cgColor
+        let bounds = self.stackView.bounds
+        dashBorder.lineWidth = self.borderWidth
+        dashBorder.strokeColor = self.viewModel.colors.border.uiColor.cgColor
         dashBorder.lineDashPattern = [self.dashLength, self.dashLength] as [NSNumber]
         dashBorder.frame = bounds
         dashBorder.fillColor = nil
@@ -241,7 +362,7 @@ public final class ChipUIView: UIView {
         } else {
             dashBorder.path = UIBezierPath(rect: bounds).cgPath
         }
-        layer.addSublayer(dashBorder)
+        self.stackView.layer.addSublayer(dashBorder)
         self.dashBorder = dashBorder
     }
 }

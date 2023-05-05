@@ -29,7 +29,7 @@ struct GetChipIntentColorsUseCase: GetChipIntentColorsUseCasable {
             return .init(primary: colors.base.surface,
                          secondary: colors.base.onSurface,
                          tintedPrimary: colors.base.surface,
-                         tintedSecondary: colors.base.onSurface) 
+                         tintedSecondary: colors.base.onSurface)
         case .neutral:
             return .init(primary: colors.feedback.neutral,
                          secondary: colors.feedback.onNeutral,
