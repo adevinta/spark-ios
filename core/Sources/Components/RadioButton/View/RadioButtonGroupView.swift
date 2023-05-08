@@ -80,8 +80,8 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                     selectedID: self.selectedID,
                     state: item.state
                 )
+                .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: item.id))
             }
         }
-        .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonGroup)
     }
 }
