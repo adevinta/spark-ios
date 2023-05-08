@@ -29,33 +29,53 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
         switch variant {
         case .dashed, .outlined:
             if intent == .surface {
-                return ChipColors(background: ColorTokenDefault.clear,
-                                  border: intentColors.secondary,
-                                  foreground: intentColors.secondary,
-                                  backgroundPressed: intentColors.primary.opacity(theme.dims.dim5))
+                return ChipColors(
+                    default: .init(background: ColorTokenDefault.clear,
+                                   border: intentColors.secondary,
+                                   foreground: intentColors.secondary),
+                    pressed: .init(background: intentColors.tintedSecondary,
+                                   border: intentColors.tintedSecondary,
+                                   foreground: intentColors.primary)
+                )
             } else {
-                return ChipColors(background: ColorTokenDefault.clear,
-                                  border: intentColors.primary,
-                                  foreground: intentColors.primary,
-                                  backgroundPressed: intentColors.tintedPrimary)
+                return ChipColors(
+                    default: .init(background: ColorTokenDefault.clear,
+                                   border: intentColors.primary,
+                                   foreground: intentColors.primary),
+                    pressed: .init(background: intentColors.tintedPrimary,
+                                   border: intentColors.tintedPrimary,
+                                   foreground: intentColors.primary)
+                )
             }
         case .filled:
             if intent == .surface {
-                return ChipColors(background: intentColors.primary,
-                                  border: intentColors.primary,
-                                  foreground: intentColors.secondary,
-                                  backgroundPressed: intentColors.primary.opacity(theme.dims.dim5))
+                return ChipColors(
+                    default: .init(background: intentColors.primary,
+                                   border: intentColors.primary,
+                                   foreground: intentColors.secondary),
+                    pressed: .init(background: intentColors.tintedSecondary,
+                                   border: intentColors.tintedSecondary,
+                                   foreground: intentColors.primary)
+                )
             } else {
-                return ChipColors(background: intentColors.primary,
-                                  border: intentColors.primary,
-                                  foreground: intentColors.secondary,
-                                  backgroundPressed: intentColors.tintedSecondary)
+                return ChipColors(
+                    default: .init(background: intentColors.primary,
+                                   border: intentColors.primary,
+                                   foreground: intentColors.secondary),
+                    pressed: .init(background: intentColors.tintedPrimary,
+                                   border: intentColors.tintedPrimary,
+                                   foreground: intentColors.primary)
+                )
             }
         case .tinted:
-            return ChipColors(background: intentColors.tintedPrimary,
-                              border: intentColors.tintedPrimary,
-                              foreground: intentColors.tintedSecondary,
-                              backgroundPressed: intentColors.primary.opacity(theme.dims.dim5))
+            return ChipColors(
+                default: .init(background: intentColors.tintedPrimary,
+                               border: intentColors.tintedPrimary,
+                               foreground: intentColors.tintedSecondary),
+                pressed: .init(background: intentColors.tintedSecondary,
+                               border: intentColors.tintedSecondary,
+                               foreground: intentColors.tintedPrimary)
+            )
         }
     }
 }

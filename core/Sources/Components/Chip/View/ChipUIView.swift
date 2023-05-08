@@ -19,15 +19,9 @@ private enum Constants {
 
 public final class ChipUIView: UIView {
 
-    public var text: String? {
-        set {
-            self.uiLabel.text = newValue
-        }
-        get {
-            return self.uiLabel.text
-        }
-    }
-    public var image: UIImage? {
+    //MARK: - Public properties
+    /// An optional icon on the Chip. This
+    public var icon: UIImage? {
         set {
             self.uiImageView.image = newValue
         }
@@ -36,12 +30,24 @@ public final class ChipUIView: UIView {
         }
     }
 
+    /// An optional text shown on the Chip. The text is rendered to the right of the image.
+    public var text: String? {
+        set {
+            self.uiLabel.text = newValue
+        }
+        get {
+            return self.uiLabel.text
+        }
+    }
+
+    /// An optional action. If the action is given, the Chip will act like a button and have a pressed state.
     public var action: (() -> ())? {
         didSet {
             setupButtonActions()
         }
     }
 
+    /// The intent of the chip.
     public var intentColor: ChipIntentColor {
         set {
             self.viewModel.intentColor = newValue
@@ -51,6 +57,7 @@ public final class ChipUIView: UIView {
         }
     }
 
+    /// The variant of the chip
     public var variant: ChipVariant {
         set {
             self.viewModel.variant = newValue
@@ -60,6 +67,7 @@ public final class ChipUIView: UIView {
         }
     }
 
+    /// The theme.
     public var theme: Theme {
         set {
             self.viewModel.theme = newValue
@@ -69,8 +77,21 @@ public final class ChipUIView: UIView {
         }
     }
 
-    private let viewModel: ChipViewModel
+    /// Optional component whicl will be rendered to the right of the label.
+    /// Note: the client must be responsible, that it fits within the chip which has a height of 32pts
+    public var component: UIView? {
+        willSet {
+            self.component?.removeFromSuperview()
+        }
+        didSet {
+            if let component = self.component {
+                self.stackView.addArrangedSubview(component)
+            }
+        }
+    }
 
+    //MARK: - Private properties
+    private let viewModel: ChipViewModel
     private let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
     private var dashBorder: CAShapeLayer?
 
@@ -145,6 +166,7 @@ public final class ChipUIView: UIView {
     private var bottomPaddingConstraint: NSLayoutConstraint?
     private var cancellables = Set<AnyCancellable>()
 
+    //MARK: - Initializers
     public convenience init(theme: Theme,
                 intentColor: ChipIntentColor,
                 variant: ChipVariant,
@@ -167,17 +189,6 @@ public final class ChipUIView: UIView {
         self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: label , optionalIconImage: iconImage)
     }
 
-    public var component: UIView? {
-        willSet {
-            self.component?.removeFromSuperview()
-        }
-        didSet {
-            if let component = self.component {
-                self.stackView.addArrangedSubview(component)
-            }
-        }
-    }
-
     init(theme: Theme,
          intentColor: ChipIntentColor,
          variant: ChipVariant,
@@ -189,11 +200,11 @@ public final class ChipUIView: UIView {
         super.init(frame: CGRect.zero)
 
         self.text = optionalLabel
-        self.image = optionalIconImage
+        self.icon = optionalIconImage
         self.uiLabel.sizeToFit()
 
         self.uiLabel.font = self.viewModel.font.uiFont
-        setupView()
+        self.setupView()
 
     }
 
@@ -213,7 +224,7 @@ public final class ChipUIView: UIView {
         self.stackView.layer.cornerRadius = self.borderRadius
         
         if self.viewModel.isBorderDashed {
-            self.addDashedBorder()
+            self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
         } else {
             self.stackView.layer.borderWidth = self.borderWidth
         }
@@ -226,14 +237,22 @@ public final class ChipUIView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         if self.viewModel.isBorderDashed {
-            self.addDashedBorder()
+            self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
         }
     }
 
-    private func setChipColors() {
-        self.stackView.backgroundColor = self.viewModel.colors.background.uiColor
-        self.uiLabel.textColor = self.viewModel.colors.foreground.uiColor
-        self.uiImageView.tintColor = self.viewModel.colors.foreground.uiColor
+    //MARK: - Private functions
+    private func setChipColors(_ chipColors: ChipStateColors) {
+        self.stackView.backgroundColor = chipColors.background.uiColor
+        self.uiLabel.textColor = chipColors.foreground.uiColor
+        self.uiImageView.tintColor = chipColors.foreground.uiColor
+
+        if self.viewModel.isBorderDashed {
+            self.addDashedBorder(borderColor: chipColors.border)
+        } else {
+            self.stackView.layer.borderWidth = self.borderWidth
+            self.stackView.layer.borderColor = chipColors.border.uiColor.cgColor
+        }
     }
     
     private func setupView() {
@@ -248,6 +267,12 @@ public final class ChipUIView: UIView {
         self.stackView.addArrangedSubview(self.uiImageView)
         self.stackView.addArrangedSubview(self.uiLabel)
 
+        self.setupConstraints()
+        self.setChipColors(self.viewModel.colors.default)
+        self.setupSubscriptions()
+    }
+
+    private func setupConstraints() {
         let heightConstraint = self.stackView.heightAnchor.constraint(equalToConstant: self.height)
 
         let sizeConstraints = [
@@ -271,20 +296,13 @@ public final class ChipUIView: UIView {
         self.stackView.layer.cornerRadius = self.borderRadius
         self.stackView.layer.masksToBounds = true
 
-        if self.viewModel.isBorderDashed {
-            self.addDashedBorder()
-        } else {
-            self.stackView.layer.borderWidth = self.borderWidth
-            self.stackView.layer.borderColor = self.viewModel.colors.border.uiColor.cgColor
-        }
-
         self.sizeConstraints = sizeConstraints
         self.heightConstraint = heightConstraint
         self.topPaddingConstraint = topPaddingConstraint
         self.bottomPaddingConstraint = bottomPaddingConstraint
 
 
-        if self.image == nil {
+        if self.icon == nil {
             self.uiImageView.isHidden = true
         } else {
             NSLayoutConstraint.activate(sizeConstraints)
@@ -293,66 +311,40 @@ public final class ChipUIView: UIView {
         if self.text == nil {
             self.uiLabel.isHidden = true
         }
+    }
 
+    private func setupSubscriptions() {
         self.viewModel.$colors
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
-                self?.setChipColors()
+                guard let self else { return }
+                self.setChipColors(self.viewModel.colors.default)
             }.store(in: &self.cancellables)
 
         self.viewModel.$isBorderDashed
             .receive(on: RunLoop.main)
             .sink { [weak self] isDashed in
+                guard let self else { return }
                 if isDashed {
-                    self?.removeDashedBorder()
+                    self.removeDashedBorder()
                 } else {
-                    self?.addDashedBorder()
+                    self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
                 }
             }.store(in: &self.cancellables)
-
-        self.setChipColors()
     }
-
-    private func setupButtonActions() {
-
-        if self.action == nil {
-            self.button.removeTarget(self, action: #selector(actionTapped(sender:)), for: .touchUpInside)
-            self.button.removeTarget(self, action: #selector(actionTouchDown(sender:)), for: .touchDown)
-            self.button.removeTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchUpOutside)
-            self.button.removeTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchCancel)
-        } else {
-            self.button.addTarget(self, action: #selector(actionTapped(sender:)), for: .touchUpInside)
-            self.button.addTarget(self, action: #selector(actionTouchDown(sender:)), for: .touchDown)
-            self.button.addTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchUpOutside)
-            self.button.addTarget(self, action: #selector(actionTouchUp(sender:)), for: .touchCancel)
-        }
-    }
-
-    @IBAction func actionTapped(sender: UIButton)  {
-        self.stackView.backgroundColor = self.viewModel.colors.background.uiColor
-        self.action?()
-      }
-
-      @IBAction func actionTouchDown(sender: UIButton)  {
-          self.stackView.backgroundColor = self.viewModel.colors.backgroundPressed.uiColor
-      }
-
-      @IBAction func actionTouchUp(sender: UIButton)  {
-          self.stackView.backgroundColor = self.viewModel.colors.background.uiColor
-      }
 
     private func removeDashedBorder() {
         self.dashBorder?.removeFromSuperlayer()
         self.dashBorder = nil
     }
 
-    private func addDashedBorder() {
+    private func addDashedBorder(borderColor: ColorToken) {
         self.dashBorder?.removeFromSuperlayer()
 
         let dashBorder = CAShapeLayer()
         let bounds = self.stackView.bounds
         dashBorder.lineWidth = self.borderWidth
-        dashBorder.strokeColor = self.viewModel.colors.border.uiColor.cgColor
+        dashBorder.strokeColor = borderColor.uiColor.cgColor
         dashBorder.lineDashPattern = [self.dashLength, self.dashLength] as [NSNumber]
         dashBorder.frame = bounds
         dashBorder.fillColor = nil
@@ -365,4 +357,34 @@ public final class ChipUIView: UIView {
         self.stackView.layer.addSublayer(dashBorder)
         self.dashBorder = dashBorder
     }
+
+    //MARK: Button actions
+    private func setupButtonActions() {
+        let actions: [(selector: Selector, event: UIControl.Event)] = [
+            (#selector(actionTapped(sender:)), .touchUpInside),
+            (#selector(actionTouchDown(sender:)), .touchDown),
+            (#selector(actionTouchUp(sender:)), .touchUpOutside),
+            (#selector(actionTouchUp(sender:)), .touchCancel)
+        ]
+
+        if self.action == nil {
+            actions.forEach { self.button.removeTarget(self, action: $0.selector, for: $0.event)}
+        } else {
+            actions.forEach { self.button.addTarget(self, action: $0.selector, for: $0.event)}
+        }
+    }
+
+    @IBAction func actionTapped(sender: UIButton)  {
+        self.setChipColors(self.viewModel.colors.default)
+        self.action?()
+    }
+
+    @IBAction func actionTouchDown(sender: UIButton)  {
+        self.setChipColors(self.viewModel.colors.pressed)
+    }
+
+    @IBAction func actionTouchUp(sender: UIButton)  {
+        self.setChipColors(self.viewModel.colors.default)
+    }
+
 }
