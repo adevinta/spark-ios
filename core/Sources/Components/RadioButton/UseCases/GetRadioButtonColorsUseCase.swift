@@ -9,7 +9,7 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol GetRadioButtonColorUseCaseable {
+protocol GetRadioButtonColorsUseCaseable {
     func execute(state: SparkSelectButtonState, isSelected: Bool) -> RadioButtonColorables
 }
 
@@ -19,7 +19,7 @@ protocol GetRadioButtonColorUseCaseable {
 ///
 /// Functions:
 /// - execute: takes a parameter if the radio button is selected or not, and returns a ``RadioButtonColorables`` defining the various colors of the radion button.
-struct GetRadioButtonColorsUseCase: GetRadioButtonColorUseCaseable {
+struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
 
     // MARK: - Properties
     let theme: Theme

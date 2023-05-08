@@ -8,6 +8,12 @@
 
 import SwiftUI
 
+private enum Constants {
+    static let pressedLineWidth: CGFloat = 4
+    static let lineWidth: CGFloat = 2
+    static let size: CGFloat = 20
+    static let filledSize: CGFloat = 10
+}
 /// RadioButtonView is a single radio button control.
 /// Radio buttons are used for selecting a single value from a selection of values.
 /// The values from which can be selected need to be ``Equatable`` & ``CustomStringConvertible``.
@@ -38,10 +44,10 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
     // MARK: - Local Properties
 
-    @ScaledMetric private var pressedLineWidth: CGFloat = 4
-    @ScaledMetric private var lineWidth: CGFloat = 2
-    @ScaledMetric private var size: CGFloat = 20
-    @ScaledMetric private var filledSize: CGFloat = 10
+    @ScaledMetric private var pressedLineWidth: CGFloat = Constants.pressedLineWidth
+    @ScaledMetric private var lineWidth: CGFloat = Constants.lineWidth
+    @ScaledMetric private var size: CGFloat = Constants.size
+    @ScaledMetric private var filledSize: CGFloat = Constants.filledSize
     @ScaledMetric private var buttonPadding: CGFloat = RadioButtonConstants.radioButtonPadding
 
     @State private var isPressed: Bool = false
@@ -88,7 +94,6 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         .opacity(self.viewModel.opacity)
         .buttonStyle(RadioButtonButtonStyle(isPressed: self.$isPressed))
         .padding(buttonPadding)
-        .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButton)
         .accessibilityLabel(self.viewModel.label)
         .accessibilityValue(self.viewModel.id.description)
     }

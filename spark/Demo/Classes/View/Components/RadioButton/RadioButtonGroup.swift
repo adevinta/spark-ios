@@ -11,9 +11,12 @@ import SparkCore
 import SwiftUI
 
 struct RadioButtonGroup: View {
+    // MARK: - Properties
+
     @State var selectedID: Int = 1
     let theme = SparkTheme.shared
 
+    // MARK: - View
     var body: some View {
         VStack {
             RadioButtonGroupView(

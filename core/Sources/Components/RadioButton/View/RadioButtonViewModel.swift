@@ -18,7 +18,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     let label: String
     let id: ID
 
-    private let useCase: GetRadioButtonColorUseCaseable
+    private let useCase: GetRadioButtonColorsUseCaseable
     private let theme: Theme
 
     var state: SparkSelectButtonState {

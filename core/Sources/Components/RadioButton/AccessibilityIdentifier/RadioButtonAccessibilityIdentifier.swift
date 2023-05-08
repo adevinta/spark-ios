@@ -10,6 +10,5 @@ public enum RadioButtonAccessibilityIdentifier {
 
     // MARK: - Properties
 
-    public static let radioButton = "spark-radio-button"
     public static let radioButtonGroup = "spark-radio-button-group"
 }
