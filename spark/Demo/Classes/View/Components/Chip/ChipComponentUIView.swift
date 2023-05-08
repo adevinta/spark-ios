@@ -126,19 +126,20 @@ final class ChipComponentUIViewController: UIViewController {
         let chip = ChipUIView(theme: theme,
                           intentColor: .primary,
                           variant: .filled,
-                          label: "Chip With Component",
+                          label: "Not selected",
                           iconImage: icon)
         let component = UIImageView(image: UIImage.strokedCheckmark)
-
-        chip.component = component
 
         var selected = false
         chip.action = {
             selected.toggle()
-            print("Selected == \(selected)")
             if selected {
+                chip.text = "Selected"
+                chip.component = component
                 chip.variant = .tinted
             } else {
+                chip.component = nil
+                chip.text = "Not selected"
                 chip.variant = .filled
             }
         }
