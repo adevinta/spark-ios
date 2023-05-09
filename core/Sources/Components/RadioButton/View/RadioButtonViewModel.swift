@@ -15,15 +15,19 @@ import SwiftUI
 final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: ObservableObject {
     // MARK: - Injected Properties
 
-    let label: String
+    @Published var label: String
     let id: ID
 
     private let useCase: GetRadioButtonColorsUseCaseable
-    private let theme: Theme
 
+    var theme: Theme {
+        didSet {
+            self.themeDidUpdate()
+        }
+    }
     var state: SparkSelectButtonState {
         didSet {
-            self.updateColors()
+            self.stateDidUpdate()
         }
     }
     
@@ -36,36 +40,13 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     // MARK: - Published Properties
 
     @Published var colors: RadioButtonColorables
-
-    // MARK: - Computed Properties
-
-    var isDisabled: Bool {
-        return self.state == .disabled
-    }
-
-    var opacity: CGFloat {
-        return self.theme.opacity(state: self.state)
-    }
-
-    var spacing: CGFloat {
-        return self.theme.layout.spacing.medium
-    }
-
-    var font: Font {
-        return self.theme.typography.body1.font
-    }
-
-    var suplemetaryFont: Font {
-        return self.theme.typography.caption.font
-    }
-
-    var surfaceColor: Color {
-        return self.theme.colors.base.onSurface.color
-    }
-
-    var suplementaryText: String? {
-        return self.state.suplementaryText
-    }
+    @Published var isDisabled: Bool
+    @Published var suplementaryText: String?
+    @Published var opacity: CGFloat
+    @Published var spacing: CGFloat
+    @Published var font: TypographyFontToken
+    @Published var suplemetaryFont: TypographyFontToken
+    @Published var surfaceColor: ColorToken
 
     // MARK: - Initialization
 
@@ -74,7 +55,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
                      label: String,
                      selectedID: Binding<ID>,
                      state: SparkSelectButtonState) {
-        let useCase = GetRadioButtonColorsUseCase(theme: theme)
+        let useCase = GetRadioButtonColorsUseCase()
         self.init(theme: theme,
                   id: id,
                   label: label,
@@ -96,7 +77,17 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.useCase = useCase
         self.state = state
 
-        self.colors = useCase.execute(state: state, isSelected: selectedID.wrappedValue == id)
+        self.isDisabled = self.state == .disabled
+        self.suplementaryText = self.state.suplementaryText
+
+        self.opacity = self.theme.opacity(state: self.state)
+        self.spacing = self.theme.layout.spacing.medium
+        self.font =  self.theme.typography.body1
+        self.suplemetaryFont = self.theme.typography.caption
+        self.surfaceColor = self.theme.colors.base.onSurface
+
+        self.colors = useCase
+            .execute(theme: theme, state: self.state, isSelected: selectedID.wrappedValue == id)
     }
 
     // MARK: - Functions
@@ -105,10 +96,28 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.selectedID = self.id
     }
 
+    // MARK: - Private Functions
+
     private func updateColors() {
         self.colors = useCase
-            .execute(state: self.state, isSelected: selectedID == id)
+            .execute(theme: self.theme, state: self.state, isSelected: selectedID == id)
     }
+
+    private func stateDidUpdate() {
+        self.isDisabled = self.state == .disabled
+        self.suplementaryText = self.state.suplementaryText
+        self.updateColors()
+    }
+
+    private func themeDidUpdate() {
+        self.opacity = self.theme.opacity(state: self.state)
+        self.spacing = self.theme.layout.spacing.medium
+        self.font =  self.theme.typography.body1
+        self.suplemetaryFont = self.theme.typography.caption
+        self.surfaceColor = self.theme.colors.base.onSurface
+        self.updateColors()
+    }
+
 }
 
 // MARK: - Private Helpers

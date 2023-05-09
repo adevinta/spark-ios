@@ -12,11 +12,15 @@ import XCTest
 
 final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
+    // MARK: - Properties
 
     var sut: GetRadioButtonColorsUseCase!
     var feedback: ColorsFeedbackGeneratedMock!
     var primary: ColorsPrimaryGeneratedMock!
     var base: ColorsBaseGeneratedMock!
+    var theme: ThemeGeneratedMock!
+
+    // MARK: - Setup
 
     override func setUp() {
         super.setUp()
@@ -35,10 +39,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
         theme.colors = colors
 
+        self.theme = theme
         self.base = base
         self.primary = primary
         self.feedback = feedback
-        self.sut = GetRadioButtonColorsUseCase(theme: theme)
+        self.sut = GetRadioButtonColorsUseCase()
     }
 
     // MARK: - Tests
@@ -57,7 +62,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.outline = outline
 
         // When
-        let colors = self.sut.execute(state: .enabled, isSelected: false)
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .enabled,
+                                      isSelected: false)
 
         // Then
         XCTAssertEqual(
@@ -88,7 +95,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.outline = outline
 
         // When
-        let colors = self.sut.execute(state: .disabled, isSelected: false)
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .disabled,
+                                      isSelected: false)
 
         // Then
         XCTAssertEqual(
@@ -119,7 +128,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.onSurface = onSurface
 
         // When
-        let colors = self.sut.execute(state: .error(message: "Error"), isSelected: false)
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .error(message: "Error"),
+                                      isSelected: false)
 
         // Then
         XCTAssertEqual(
@@ -153,7 +164,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.onSurface = onSurface
 
         // When
-        let colors = self.sut.execute(state: .warning(message: "Error"), isSelected: false)
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .warning(message: "Error"),
+                                      isSelected: false)
 
         // Then
         XCTAssertEqual(
@@ -183,7 +196,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.onSurface = onSurface
 
         // When
-        let colors = self.sut.execute(state: .success(message: "Error"), isSelected: false)
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .success(message: "Error"),
+                                      isSelected: false)
 
         // Then
         XCTAssertEqual(
@@ -214,7 +229,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.onSurface = onSurface
         
         // When
-        let colors = self.sut.execute(state: .enabled, isSelected: true)
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .enabled,
+                                      isSelected: true)
 
         // Then
         XCTAssertEqual(
@@ -245,7 +262,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.onSurface = onSurface
 
         // When
-        let colors = self.sut.execute(state: .disabled, isSelected: true)
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .disabled,
+                                      isSelected: true)
 
         // Then
         XCTAssertEqual(
@@ -276,7 +295,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.onSurface = onSurface
 
         // When
-        let colors = self.sut.execute(state: .error(message: "Error"), isSelected: true)
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .error(message: "Error"),
+                                      isSelected: true)
 
         // Then
         XCTAssertEqual(
@@ -310,7 +331,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base.onSurface = onSurface
 
         // When
-        let colors = sut.execute(state: .warning(message: "Error"), isSelected: true)
+        let colors = sut.execute(theme: self.theme,
+                                 state: .warning(message: "Error"),
+                                 isSelected: true)
 
         // Then
         XCTAssertEqual(
@@ -341,7 +364,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.feedback.successContainer = successContainer
         
         // When
-        let colors = sut.execute(state: .success(message: "Error"), isSelected: true)
+        let colors = sut.execute(theme: self.theme,
+                                 state: .success(message: "Error"),
+                                 isSelected: true)
 
         // Then
         XCTAssertEqual(

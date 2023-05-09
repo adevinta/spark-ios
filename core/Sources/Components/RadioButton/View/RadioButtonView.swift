@@ -98,6 +98,8 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         .accessibilityValue(self.viewModel.id.description)
     }
 
+    // MARK: - View modifier
+
     public func state(_ state: SparkSelectButtonState) -> Self {
         self.viewModel.state = state
         return self
@@ -112,13 +114,13 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
             VStack(alignment: .leading) {
                 Text(self.viewModel.label)
-                    .font(self.viewModel.font)
+                    .font(self.viewModel.font.font)
                     .multilineTextAlignment(.leading)
-                    .foregroundColor(self.viewModel.surfaceColor)
+                    .foregroundColor(self.viewModel.surfaceColor.color)
 
                 if let suplementaryLabel = self.viewModel.suplementaryText {
                     Text(suplementaryLabel)
-                        .font(self.viewModel.suplemetaryFont)
+                        .font(self.viewModel.suplemetaryFont.font)
                         .multilineTextAlignment(.leading)
                         .foregroundColor(self.viewModel.colors.subLabel?.color)
                 }

@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol GetRadioButtonColorsUseCaseable {
-    func execute(state: SparkSelectButtonState, isSelected: Bool) -> RadioButtonColorables
+    func execute(theme: Theme, state: SparkSelectButtonState, isSelected: Bool) -> RadioButtonColorables
 }
 
 /// A use case to determine the colors of a radio button.
@@ -21,9 +21,6 @@ protocol GetRadioButtonColorsUseCaseable {
 /// - execute: takes a parameter if the radio button is selected or not, and returns a ``RadioButtonColorables`` defining the various colors of the radion button.
 struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
 
-    // MARK: - Properties
-    let theme: Theme
-
     // MARK: - Functions
     ///
     /// Calculate the colors of the radio button depending on it's state and whether it is selected or not.
@@ -32,16 +29,17 @@ struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
     ///    - isSelected = true, when the radion button is selected, false otherwise.
     ///
     /// - Returns: ``RadioButtonColorables`` which contains the various colors of the radio button.
-    func execute(state: SparkSelectButtonState,
+    func execute(theme: Theme,
+                 state: SparkSelectButtonState,
                  isSelected: Bool) -> RadioButtonColorables {
-        let buttonColor = self.theme.buttonColor(state: state, isSelected: isSelected)
+        let buttonColor = theme.buttonColor(state: state, isSelected: isSelected)
 
         return RadioButtonColors(
             button: buttonColor,
-            label: self.theme.colors.base.onSurface,
-            halo: self.theme.haloColor(state: state),
+            label: theme.colors.base.onSurface,
+            halo: theme.haloColor(state: state),
             fill: isSelected ? buttonColor : nil,
-            subLabel: self.theme.supplementaryTextColor(state: state)
+            subLabel: theme.supplementaryTextColor(state: state)
         )
     }
 }
