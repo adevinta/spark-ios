@@ -78,7 +78,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.state = state
 
         self.isDisabled = self.state == .disabled
-        self.supplementaryText = self.state.suplementaryText
+        self.supplementaryText = self.state.supplementaryText
 
         self.opacity = self.theme.opacity(state: self.state)
         self.spacing = self.theme.layout.spacing.medium
@@ -105,7 +105,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     private func stateDidUpdate() {
         self.isDisabled = self.state == .disabled
-        self.supplementaryText = self.state.suplementaryText
+        self.supplementaryText = self.state.supplementaryText
         self.updateColors()
     }
 
@@ -131,7 +131,7 @@ private extension Theme {
 }
 
 private extension SparkSelectButtonState {
-    var suplementaryText: String? {
+    var supplementaryText: String? {
         switch self {
         case let .warning(message: message),
             let .error(message: message),
