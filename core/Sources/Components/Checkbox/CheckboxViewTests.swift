@@ -13,7 +13,7 @@ import SwiftUI
 @testable import SparkCore
 @testable import Spark
 
-final class CheckboxViewTests: TestCase {
+final class CheckboxViewTests: SwiftUIComponentTestCase {
     let theme: Theme = SparkTheme()
 
     func test_checkbox_selected() throws {
@@ -21,9 +21,9 @@ final class CheckboxViewTests: TestCase {
             text: "Selected checkbox.",
             theme: self.theme,
             selectionState: .init(get: { .selected }, set: { _ in })
-        ).fixedSize().environment(\.sizeCategory, .medium)
+        ).fixedSize()
 
-        sparktAssertSnapshot(matching: view, as: .image)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_checkbox_unselected() throws {
@@ -31,9 +31,9 @@ final class CheckboxViewTests: TestCase {
             text: "Unselected checkbox.",
             theme: self.theme,
             selectionState: .init(get: { .unselected }, set: { _ in })
-        ).fixedSize().environment(\.sizeCategory, .medium)
+        ).fixedSize()
 
-        sparktAssertSnapshot(matching: view, as: .image)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_checkbox_indeterminate() throws {
@@ -42,9 +42,9 @@ final class CheckboxViewTests: TestCase {
             theme: self.theme,
             selectionState: .init(get: { .indeterminate }, set: { _ in })
         )
-        .fixedSize().environment(\.sizeCategory, .medium)
+        .fixedSize()
 
-        sparktAssertSnapshot(matching: view, as: .image)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_checkbox_multiline() throws {
@@ -52,8 +52,8 @@ final class CheckboxViewTests: TestCase {
             text: "Multiline checkbox.\nMore text.",
             theme: self.theme,
             selectionState: .init(get: { .unselected }, set: { _ in })
-        ).fixedSize().environment(\.sizeCategory, .medium)
+        ).fixedSize()
 
-        sparktAssertSnapshot(matching: view, as: .image)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 }
