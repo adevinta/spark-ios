@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol GetChipIntentColorsUseCasable {
     func execute(colors: Colors, intentColor: ChipIntentColor) -> ChipIntentColors
 }

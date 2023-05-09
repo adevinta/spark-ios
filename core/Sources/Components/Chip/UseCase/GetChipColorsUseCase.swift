@@ -10,6 +10,7 @@ import UIKit
 import SwiftUI
 import Foundation
 
+// sourcery: AutoMockable
 protocol GetChipColorsUseCasable {
     func execute(theme: Theme, variant: ChipVariant, intent: ChipIntentColor) -> ChipColors
 }
