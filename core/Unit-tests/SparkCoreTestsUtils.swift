@@ -19,14 +19,12 @@ public func sparktAssertSnapshot<Value, Format>(
     testName: String = #function,
     line: UInt = #line
 ) {
-    let snapshotDirectory = ProcessInfo.processInfo.environment["SNAPSHOT_REFERENCE_DIR"]! + "/"
-
     let failure = verifySnapshot(
         matching: try value(),
         as: snapshotting,
         named: name,
         record: recording,
-        snapshotDirectory: snapshotDirectory,
+        snapshotDirectory: TestCaseTracker.shared.snapshotDirectory(for: file),
         timeout: timeout,
         file: file,
         testName: testName
