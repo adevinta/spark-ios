@@ -92,40 +92,17 @@ public final class ChipUIView: UIView {
 
     //MARK: - Private properties
     private let viewModel: ChipViewModel
-    private let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
+
     private var dashBorder: CAShapeLayer?
 
-    private var imageSize: CGFloat {
-        self.bodyFontMetrics.scaledValue(for: Constants.imageSize, compatibleWith: traitCollection)
-    }
-
-    private var height: CGFloat {
-        self.bodyFontMetrics.scaledValue(for: Constants.height, compatibleWith: traitCollection)
-    }
-
-    private var touchAreaPadding: CGFloat {
-        self.bodyFontMetrics.scaledValue(for: Constants.touchAreaPadding, compatibleWith: traitCollection)
-    }
-
-    private var spacing: CGFloat {
-        self.bodyFontMetrics.scaledValue(for: self.viewModel.spacing, compatibleWith: traitCollection)
-    }
-
-    private var padding: CGFloat {
-        self.bodyFontMetrics.scaledValue(for: self.viewModel.padding, compatibleWith: traitCollection)
-    }
-
-    private var borderRadius: CGFloat {
-        self.bodyFontMetrics.scaledValue(for: self.viewModel.borderRadius, compatibleWith: traitCollection)
-    }
-
-    private var borderWidth: CGFloat {
-        self.bodyFontMetrics.scaledValue(for: Constants.borderWidth, compatibleWith: traitCollection)
-    }
-
-    private var dashLength: CGFloat {
-        self.bodyFontMetrics.scaledValue(for: Constants.dashLength, compatibleWith: traitCollection)
-    }
+    @ScaledUIMetric private var imageSize = Constants.imageSize
+    @ScaledUIMetric private var height = Constants.height
+    @ScaledUIMetric private var touchAreaPadding = Constants.touchAreaPadding
+    @ScaledUIMetric private var borderWidth = Constants.borderWidth
+    @ScaledUIMetric private var dashLength = Constants.dashLength
+    @ScaledUIMetric private var spacing: CGFloat
+    @ScaledUIMetric private var padding: CGFloat
+    @ScaledUIMetric private var borderRadius: CGFloat
 
     private let uiLabel: UILabel = {
         let label = UILabel()
@@ -196,6 +173,9 @@ public final class ChipUIView: UIView {
          optionalIconImage: UIImage?) {
 
         self.viewModel = ChipViewModel(theme: theme, variant: variant, intentColor: intentColor)
+        self.spacing = self.viewModel.spacing
+        self.padding = self.viewModel.padding
+        self.borderRadius = self.viewModel.borderRadius
 
         super.init(frame: CGRect.zero)
 
@@ -210,6 +190,8 @@ public final class ChipUIView: UIView {
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+
+        self.updateScaledMetrics()
 
         self.sizeConstraints.forEach{
             $0.constant = self.imageSize
@@ -253,6 +235,17 @@ public final class ChipUIView: UIView {
             self.stackView.layer.borderWidth = self.borderWidth
             self.stackView.layer.borderColor = chipColors.border.uiColor.cgColor
         }
+    }
+
+    private func updateScaledMetrics() {
+        self._imageSize.update(traitCollection: self.traitCollection)
+        self._height.update(traitCollection: self.traitCollection)
+        self._touchAreaPadding.update(traitCollection: self.traitCollection)
+        self._spacing.update(traitCollection: self.traitCollection)
+        self._padding.update(traitCollection: self.traitCollection)
+        self._borderRadius.update(traitCollection: self.traitCollection)
+        self._borderWidth.update(traitCollection: self.traitCollection)
+        self._dashLength.update(traitCollection: self.traitCollection)
     }
     
     private func setupView() {
@@ -326,9 +319,9 @@ public final class ChipUIView: UIView {
             .sink { [weak self] isDashed in
                 guard let self else { return }
                 if isDashed {
-                    self.removeDashedBorder()
-                } else {
                     self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
+                } else {
+                    self.removeDashedBorder()
                 }
             }.store(in: &self.cancellables)
     }

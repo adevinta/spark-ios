@@ -11,7 +11,6 @@ import Foundation
 class ChipViewModel: ObservableObject {
     var theme: Theme {
         didSet {
-            print("Updating colors")
             self.updateColors()
         }
     }
