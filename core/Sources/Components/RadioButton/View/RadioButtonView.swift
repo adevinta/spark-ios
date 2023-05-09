@@ -49,6 +49,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     @ScaledMetric private var size: CGFloat = Constants.size
     @ScaledMetric private var filledSize: CGFloat = Constants.filledSize
     @ScaledMetric private var buttonPadding: CGFloat = RadioButtonConstants.radioButtonPadding
+    @ScaledMetric private var spacing: CGFloat
 
     @State private var isPressed: Bool = false
 
@@ -80,6 +81,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
     init(viewModel: RadioButtonViewModel<ID>) {
         self.viewModel = viewModel
+        self._spacing = ScaledMetric(wrappedValue: viewModel.spacing)
     }
 
     // MARK: - Content
@@ -108,7 +110,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     // MARK: - Private Functions
     
     private func buttonAndLabel() -> some View{
-        HStack(alignment: .top, spacing: self.viewModel.spacing) {
+        HStack(alignment: .top, spacing: self.spacing) {
             self.radioButton()
                 .animation(.easeIn(duration: 0.1), value: self.viewModel.selectedID)
 
@@ -118,9 +120,9 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                     .multilineTextAlignment(.leading)
                     .foregroundColor(self.viewModel.surfaceColor.color)
 
-                if let suplementaryLabel = self.viewModel.suplementaryText {
-                    Text(suplementaryLabel)
-                        .font(self.viewModel.suplemetaryFont.font)
+                if let supplementaryLabel = self.viewModel.supplementaryText {
+                    Text(supplementaryLabel)
+                        .font(self.viewModel.supplemetaryFont.font)
                         .multilineTextAlignment(.leading)
                         .foregroundColor(self.viewModel.colors.subLabel?.color)
                 }

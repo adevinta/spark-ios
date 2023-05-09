@@ -41,11 +41,11 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     @Published var colors: RadioButtonColorables
     @Published var isDisabled: Bool
-    @Published var suplementaryText: String?
+    @Published var supplementaryText: String?
     @Published var opacity: CGFloat
     @Published var spacing: CGFloat
     @Published var font: TypographyFontToken
-    @Published var suplemetaryFont: TypographyFontToken
+    @Published var supplemetaryFont: TypographyFontToken
     @Published var surfaceColor: ColorToken
 
     // MARK: - Initialization
@@ -78,12 +78,12 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.state = state
 
         self.isDisabled = self.state == .disabled
-        self.suplementaryText = self.state.suplementaryText
+        self.supplementaryText = self.state.suplementaryText
 
         self.opacity = self.theme.opacity(state: self.state)
         self.spacing = self.theme.layout.spacing.medium
         self.font =  self.theme.typography.body1
-        self.suplemetaryFont = self.theme.typography.caption
+        self.supplemetaryFont = self.theme.typography.caption
         self.surfaceColor = self.theme.colors.base.onSurface
 
         self.colors = useCase
@@ -105,15 +105,15 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     private func stateDidUpdate() {
         self.isDisabled = self.state == .disabled
-        self.suplementaryText = self.state.suplementaryText
+        self.supplementaryText = self.state.suplementaryText
         self.updateColors()
     }
 
     private func themeDidUpdate() {
         self.opacity = self.theme.opacity(state: self.state)
         self.spacing = self.theme.layout.spacing.medium
-        self.font =  self.theme.typography.body1
-        self.suplemetaryFont = self.theme.typography.caption
+        self.font = self.theme.typography.body1
+        self.supplemetaryFont = self.theme.typography.caption
         self.surfaceColor = self.theme.colors.base.onSurface
         self.updateColors()
     }

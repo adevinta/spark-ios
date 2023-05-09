@@ -15,13 +15,14 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     var theme: ThemeGeneratedMock!
     var bindingValue: Int = 0
-    var subscription: Cancellable?
+    var subscriptions: Set<AnyCancellable>!
 
     // MARK: - Setup
     override func setUpWithError() throws {
         try super.setUpWithError()
 
-        self.theme = ThemeGeneratedMock.mock
+        self.subscriptions = Set<AnyCancellable>()
+        self.theme = ThemeGeneratedMock.mock()
     }
 
     // MARK: - Tests
@@ -51,7 +52,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_fonts() {
         // Given
-        let fonts = sutValues(for: \.font)
+        let fonts = sutValues(for: \.font.font)
 
         // Then
         XCTAssertEqual(fonts, Array(repeating: Font.body, count: 5))
@@ -59,7 +60,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_supplementaryFonts() {
         // Given
-        let fonts = sutValues(for: \.suplemetaryFont)
+        let fonts = sutValues(for: \.supplemetaryFont.font)
 
         // Then
         XCTAssertEqual(fonts, Array(repeating: Font.caption, count: 5))
@@ -67,7 +68,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_surfaceColors() {
         // Given
-        let surfaceColors = sutValues(for: \.surfaceColor)
+        let surfaceColors = sutValues(for: \.surfaceColor.color)
 
         // Then
         XCTAssertEqual(surfaceColors, Array(repeating: Color.red, count: 5))
@@ -75,7 +76,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_supplementaryTexts() {
         // Given
-        let supplementaryTexts = sutValues(for: \.suplementaryText)
+        let supplementaryTexts = sutValues(for: \.supplementaryText)
 
         // Then
         XCTAssertEqual(supplementaryTexts, [nil, nil, "Success", "Warning", "Error"])
@@ -83,19 +84,57 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_colors_reset_when_selected_value_set() {
         // Given
-        let sut = sut(state: .enabled)
+        let sut = self.sut(state: .enabled)
         let expectation = XCTestExpectation(description: "Colors published when selection changes.")
         expectation.expectedFulfillmentCount = 2
 
-        self.subscription = sut.$colors.sink(receiveValue: { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        })
+        }).store(in: &self.subscriptions)
+
         // When
         sut.setSelected()
 
         // Then
         wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(self.bindingValue, 1)
+    }
+
+    func test_theme_update_publishes_changed_values() {
+        // Given
+        let sut = self.sut(state: .enabled)
+        let expectation = XCTestExpectation(description: "Changes to theme publishes value changes.")
+        expectation.expectedFulfillmentCount = 2
+
+        let publishers = Publishers.Zip4(sut.$opacity, sut.$spacing, sut.$font, sut.$supplemetaryFont)
+        let morePublishers = Publishers.Zip(sut.$surfaceColor, sut.$colors)
+
+        Publishers.Zip(publishers, morePublishers).sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        // When
+        sut.theme = ThemeGeneratedMock.mock()
+
+        // Then
+        wait(for: [expectation], timeout: 0.5)
+    }
+
+    func test_state_update_publishes_changed_values() {
+        // Given
+        let sut = self.sut(state: .enabled)
+        let expectation = XCTestExpectation(description: "Changes to state publishes value changes.")
+        expectation.expectedFulfillmentCount = 2
+
+        Publishers.Zip3(sut.$isDisabled, sut.$supplementaryText, sut.$colors).sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        // When
+        sut.state = .disabled
+
+        // Then
+        wait(for: [expectation], timeout: 0.5)
     }
 
     // MARK: - Private Helper Functions
@@ -111,7 +150,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         ]
 
         return statesToTest
-            .map(sut(state:))
+            .map(self.sut(state:))
             .map{ $0[keyPath: keyPath] }
 
     }
@@ -132,7 +171,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 }
 
 private extension Theme where Self == ThemeGeneratedMock {
-    static var mock: Self {
+    static func mock() -> Self {
         let theme = ThemeGeneratedMock()
         let colors = ColorsGeneratedMock()
 
