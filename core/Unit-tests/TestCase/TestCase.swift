@@ -20,5 +20,6 @@ open class TestCase: XCTestCase {
         super.setUp()
 
         SparkConfiguration.load()
+        TestCaseTracker.shared.subscribe()
     }
 }
