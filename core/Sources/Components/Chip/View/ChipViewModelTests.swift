@@ -37,12 +37,12 @@ final class ChipViewModelTests: TestCase {
                                  useCase: useCase)
     }
 
-    func test_variant_chang_triggers_publishers() throws {
+    func test_variant_change_triggers_color_change() throws {
         // Given
         let updateExpectation = expectation(description: "Colors and border status updated")
         updateExpectation.expectedFulfillmentCount = 2
 
-        Publishers.Zip(self.sut.$colors, self.sut.$isBorderDashed).sink { _ in
+        self.sut.$colors.sink { _ in
             updateExpectation.fulfill()
         }.store(in: &self.subscriptions)
 
@@ -89,27 +89,5 @@ final class ChipViewModelTests: TestCase {
 
         // Then
         wait(for: [updateExpectation], timeout: 0.1)
-    }
-}
-
-//@Published var spacing: CGFloat
-//@Published var padding: CGFloat
-//@Published var borderRadius: CGFloat
-//@Published var font: TypographyFontToken
-//@Published var colors: ChipColors
-//@Published var isBorderDashed: Bool
-
-private extension ThemeGeneratedMock {
-    static func mocked() -> ThemeGeneratedMock {
-        let theme = ThemeGeneratedMock()
-
-        theme.colors =  ColorsGeneratedMock.mocked()
-        theme.layout = LayoutGeneratedMock.mocked()
-        theme.typography = TypographyGeneratedMock.mocked()
-
-        theme.dims = DimsGeneratedMock.mocked()
-        theme.border = BorderGeneratedMock.mocked()
-
-        return theme
     }
 }

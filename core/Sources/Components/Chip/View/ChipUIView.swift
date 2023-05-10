@@ -207,7 +207,7 @@ public final class ChipUIView: UIView {
         
         if self.viewModel.isBorderDashed {
             self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
-        } else {
+        } else if self.viewModel.isBordered {
             self.stackView.layer.borderWidth = self.borderWidth
         }
     }
@@ -231,9 +231,12 @@ public final class ChipUIView: UIView {
 
         if self.viewModel.isBorderDashed {
             self.addDashedBorder(borderColor: chipColors.border)
-        } else {
+        } else if viewModel.isBordered {
             self.stackView.layer.borderWidth = self.borderWidth
             self.stackView.layer.borderColor = chipColors.border.uiColor.cgColor
+        } else {
+            self.stackView.layer.borderWidth = 0
+            self.stackView.layer.borderColor = nil
         }
     }
 
@@ -294,7 +297,6 @@ public final class ChipUIView: UIView {
         self.topPaddingConstraint = topPaddingConstraint
         self.bottomPaddingConstraint = bottomPaddingConstraint
 
-
         if self.icon == nil {
             self.uiImageView.isHidden = true
         } else {
@@ -312,17 +314,6 @@ public final class ChipUIView: UIView {
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.setChipColors(self.viewModel.colors.default)
-            }.store(in: &self.cancellables)
-
-        self.viewModel.$isBorderDashed
-            .receive(on: RunLoop.main)
-            .sink { [weak self] isDashed in
-                guard let self else { return }
-                if isDashed {
-                    self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
-                } else {
-                    self.removeDashedBorder()
-                }
             }.store(in: &self.cancellables)
     }
 

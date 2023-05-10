@@ -37,7 +37,14 @@ class ChipViewModel: ObservableObject {
     @Published var borderRadius: CGFloat
     @Published var font: TypographyFontToken
     @Published var colors: ChipColors
-    @Published var isBorderDashed: Bool
+
+    // MARK: - Computed variables
+    var isBorderDashed: Bool {
+        return self.variant.isDashedBorder
+    }
+    var isBordered: Bool {
+        return self.variant.isBordered
+    }
 
     // MARK: - Initializers
     convenience init(theme: Theme, variant: ChipVariant, intentColor: ChipIntentColor) {
@@ -50,7 +57,6 @@ class ChipViewModel: ObservableObject {
         self.intentColor = intentColor
         self.useCase = useCase
         self.colors = useCase.execute(theme: theme, variant: variant, intent: intentColor)
-        self.isBorderDashed = variant == .dashed
         self.spacing = self.theme.layout.spacing.small
         self.padding = self.theme.layout.spacing.medium
         self.borderRadius = self.theme.border.radius.medium
@@ -72,7 +78,16 @@ class ChipViewModel: ObservableObject {
     }
 
     private func variantDidUpdate() {
-        self.isBorderDashed = self.variant == .dashed
         self.updateColors()
+    }
+}
+
+private extension ChipVariant {
+    var isBordered: Bool {
+        return self == .dashed || self == .outlined
+    }
+
+    var isDashedBorder: Bool {
+        return self == .dashed
     }
 }
