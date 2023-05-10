@@ -15,14 +15,14 @@ extension ColorsSecondaryGeneratedMock {
     static func mocked() -> ColorsSecondaryGeneratedMock {
         let mock = ColorsSecondaryGeneratedMock()
 
-        mock.underlyingSecondary = ColorTokenGeneratedMock()
-        mock.underlyingOnSecondary = ColorTokenGeneratedMock()
+        mock.underlyingSecondary = ColorTokenGeneratedMock.random()
+        mock.underlyingOnSecondary = ColorTokenGeneratedMock.random()
 
-        mock.underlyingSecondaryVariant = ColorTokenGeneratedMock()
-        mock.underlyingOnSecondaryVariant = ColorTokenGeneratedMock()
+        mock.underlyingSecondaryVariant = ColorTokenGeneratedMock.random()
+        mock.underlyingOnSecondaryVariant = ColorTokenGeneratedMock.random()
         
-        mock.underlyingSecondaryContainer = ColorTokenGeneratedMock()
-        mock.underlyingOnSecondaryContainer = ColorTokenGeneratedMock()
+        mock.underlyingSecondaryContainer = ColorTokenGeneratedMock.random()
+        mock.underlyingOnSecondaryContainer = ColorTokenGeneratedMock.random()
 
         return mock
     }
