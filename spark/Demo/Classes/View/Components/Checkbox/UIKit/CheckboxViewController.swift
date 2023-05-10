@@ -11,6 +11,8 @@ import Spark
 import SparkCore
 import SwiftUI
 
+// MARK: - SwiftUI-wrapper
+
 struct CheckboxUIViewControllerBridge: UIViewControllerRepresentable {
     typealias UIViewControllerType = CheckboxViewController
 
@@ -23,7 +25,12 @@ struct CheckboxUIViewControllerBridge: UIViewControllerRepresentable {
     }
 }
 
+// MARK: - Demo View Controller
+
 final class CheckboxViewController: UIViewController {
+
+    // MARK: - Properties
+
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -37,6 +44,8 @@ final class CheckboxViewController: UIViewController {
     }()
 
     private var checkboxes: [CheckboxUIView] = []
+
+    // MARK: - Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,6 +162,8 @@ final class CheckboxViewController: UIViewController {
         self.checkboxes = checkboxes
     }
 }
+
+// MARK: - Demo delegate
 
 extension CheckboxViewController: CheckboxUIViewDelegate {
     func checkbox(_ checkbox: SparkCore.CheckboxUIView, didChangeSelection state: SparkCore.CheckboxSelectionState) {
