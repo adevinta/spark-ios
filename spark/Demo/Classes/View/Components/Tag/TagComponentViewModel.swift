@@ -12,19 +12,14 @@ struct TagComponentViewModel {
 
     // MARK: - Properties
 
-    let sectionViewModels: [TagComponentSectionViewModel]
+    let frameworkViewModels: [TagComponentFrameworkViewModel]
 
     // MARK: - Initialization
 
     init() {
-        self.sectionViewModels = [
-            .init(intentColor: .alert),
-            .init(intentColor: .danger),
-            .init(intentColor: .info),
-            .init(intentColor: .neutral),
-            .init(intentColor: .primary),
-            .init(intentColor: .secondary),
-            .init(intentColor: .success)
+        self.frameworkViewModels = [
+            .init(isSwiftUIComponent: true),
+            .init(isSwiftUIComponent: false)
         ]
     }
 }
