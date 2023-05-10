@@ -10,6 +10,16 @@ import SwiftUI
 import UIKit
 
 class CheckboxControlUIView: UIView {
+
+    // MARK: - Constants
+
+    private enum Constants {
+        static let cornerRadius: CGFloat = 4
+        static let cornerRadiusPressed: CGFloat = 7
+        static let lineWidth: CGFloat = 2
+        static let lineWidthPressed: CGFloat = 4
+    }
+
     // MARK: - Properties.
 
     var selectionIcon: UIImage
@@ -53,6 +63,8 @@ class CheckboxControlUIView: UIView {
         self.setNeedsDisplay()
     }
 
+    // MARK: - Methods
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.setNeedsDisplay()
@@ -73,13 +85,6 @@ class CheckboxControlUIView: UIView {
 
     private var spacing: LayoutSpacing {
         return self.theme.layout.spacing
-    }
-
-    private enum Constants {
-        static let cornerRadius: CGFloat = 4
-        static let cornerRadiusPressed: CGFloat = 7
-        static let lineWidth: CGFloat = 2
-        static let lineWidthPressed: CGFloat = 4
     }
 
     override func draw(_ rect: CGRect) {

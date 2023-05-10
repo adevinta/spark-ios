@@ -79,6 +79,8 @@ public final class CheckboxGroupUIView: UIView {
         self.setUpView()
     }
 
+    // MARK: - Methods
+
     private func clearView() {
         self.titleLabel?.removeFromSuperview()
         self.titleLabel = nil

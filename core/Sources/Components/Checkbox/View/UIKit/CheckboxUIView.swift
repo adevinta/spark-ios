@@ -11,6 +11,12 @@ import UIKit
 /// The `CheckboxUIView`renders a single checkbox using UIKit.
 public final class CheckboxUIView: UIView {
 
+    // MARK: - Constants
+
+    private enum Constants {
+        static let checkboxSize: CGFloat = 20
+    }
+
     // MARK: - Private properties.
 
     private let button: UIButton = {
@@ -57,6 +63,10 @@ public final class CheckboxUIView: UIView {
     private var controlViewTrailingConstraint: NSLayoutConstraint?
 
     private var checkboxPosition: CheckboxPosition = .left
+
+    private var spacing: LayoutSpacing {
+        return self.theme.layout.spacing
+    }
 
     // MARK: - Public properties.
 
@@ -123,6 +133,8 @@ public final class CheckboxUIView: UIView {
         }
     }
 
+    // MARK: - Initialization
+
     /// Not implemented. Please use another init.
     /// - Parameter coder: the coder.
     public required init?(coder: NSCoder) {
@@ -176,10 +188,6 @@ public final class CheckboxUIView: UIView {
         super.init(frame: .zero)
         self.colors = colorsUseCase.execute(from: theme, state: state)
         self.commonInit()
-    }
-
-    private var spacing: LayoutSpacing {
-        return self.theme.layout.spacing
     }
 
     private func commonInit() {
@@ -250,6 +258,8 @@ public final class CheckboxUIView: UIView {
         self.updateAccessibility()
     }
 
+    // MARK: - Methods
+
     /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -270,10 +280,6 @@ public final class CheckboxUIView: UIView {
         }
 
         self.accessibilityLabel = [self.viewModel.text, self.viewModel.supplementaryMessage].compactMap { $0 }.joined(separator: ". ")
-    }
-
-    private enum Constants {
-        static let checkboxSize: CGFloat = 20
     }
 
     private func updateViewConstraints() {
