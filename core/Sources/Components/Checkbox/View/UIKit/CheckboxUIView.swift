@@ -14,7 +14,7 @@ public final class CheckboxUIView: UIView {
     // MARK: - Constants
 
     private enum Constants {
-        static let checkboxSize: CGFloat = 20
+        @ScaledUIMetric static var checkboxSize: CGFloat = 20
     }
 
     // MARK: - Private properties.
@@ -284,7 +284,7 @@ public final class CheckboxUIView: UIView {
 
     private func updateViewConstraints() {
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let scaledSpacing = bodyFontMetrics.scaledValue(for: Constants.checkboxSize, compatibleWith: traitCollection) + bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: traitCollection)
+        let scaledSpacing = Constants.checkboxSize + bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: traitCollection)
 
         self.controlViewWidthConstraint?.constant = scaledSpacing
         self.controlViewHeightConstraint?.constant = scaledSpacing
