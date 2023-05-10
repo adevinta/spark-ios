@@ -19,11 +19,16 @@ struct TagComponentView: View {
     // MARK: - View
 
     var body: some View {
-        List(self.viewModel.sectionViewModels, id: \.name) { sectionViewModel in
-            Section(header: Text(sectionViewModel.name)) {
-                ForEach(sectionViewModel.itemViewModels, id: \.name) { itemViewModel in
-                    TagComponentItemView(viewModel: itemViewModel)
+        List(self.viewModel.frameworkViewModels, id: \.name) { frameworkViewModel in
+            NavigationLink(frameworkViewModel.name) {
+                List(frameworkViewModel.sectionViewModels, id: \.name) { sectionViewModel in
+                    Section(header: Text(sectionViewModel.name)) {
+                        ForEach(sectionViewModel.itemViewModels, id: \.name) { itemViewModel in
+                            TagComponentItemView(viewModel: itemViewModel)
+                        }
+                    }
                 }
+                .navigationBarTitle(Text("\(frameworkViewModel.name) Tag"))
             }
         }
         .navigationBarTitle(Text("Tag"))

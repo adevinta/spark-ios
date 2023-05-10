@@ -12,9 +12,16 @@ import SparkCore
 
 struct TagComponentItemView: View {
 
+    // MARK: - Constants
+
+    private enum Constants {
+        static let spacing: CGFloat = 10
+    }
+
     // MARK: - Properties
 
     let viewModel: TagComponentItemViewModel
+    @State private var uiKitViewHeight: CGFloat = .zero
 
     // MARK: - Initialization
 
@@ -30,28 +37,39 @@ struct TagComponentItemView: View {
                 .font(Font.caption2)
                 .italic()
 
-            HStack(spacing: 10) {
-                TagView(theme: SparkTheme.shared,
-                        intentColor: self.viewModel.intentColor,
-                        variant: self.viewModel.variant,
-                        iconImage: Image(self.viewModel.imageNamed),
-                        text: self.viewModel.text)
-                .accessibility(identifier: "MyTag1",
-                               label: "It's my first tag")
+            // Swift UI ?
+            if self.viewModel.isSwiftUIComponent {
+                HStack(spacing: Constants.spacing) {
 
-                TagView(theme: SparkTheme.shared,
-                        intentColor: self.viewModel.intentColor,
-                        variant: self.viewModel.variant,
-                        iconImage: Image(self.viewModel.imageNamed))
-                .accessibility(identifier: "MyTag3",
-                               label: "It's my first tag")
+                    TagView(theme: SparkTheme.shared)
+                        .intentColor(self.viewModel.intentColor)
+                        .variant(self.viewModel.variant)
+                        .iconImage(Image(self.viewModel.imageNamed))
+                        .text(self.viewModel.text)
+                        .accessibility(identifier: "MyTag1",
+                                       label: "It's my first tag")
 
-                TagView(theme: SparkTheme.shared,
-                        intentColor: self.viewModel.intentColor,
-                        variant: self.viewModel.variant,
-                        text: self.viewModel.text)
-                .accessibility(identifier: "MyTag3",
-                               label: nil)
+                    TagView(theme: SparkTheme.shared)
+                        .intentColor(self.viewModel.intentColor)
+                        .variant(self.viewModel.variant)
+                        .iconImage(Image(self.viewModel.imageNamed))
+                        .accessibility(identifier: "MyTag2",
+                                       label: "It's my second tag")
+
+                    TagView(theme: SparkTheme.shared)
+                        .intentColor(self.viewModel.intentColor)
+                        .variant(self.viewModel.variant)
+                        .text(self.viewModel.text)
+                        .accessibility(identifier: "MyTag3",
+                                       label: nil)
+                }
+            } else { // UIKit !
+                HStack(spacing: Constants.spacing) {
+                    TagComponentItemsUIView(itemViewModel: self.viewModel,
+                                            spacing: Constants.spacing,
+                                            height: self.$uiKitViewHeight)
+                    .frame(height: self.uiKitViewHeight, alignment: .leading)
+                }
             }
         }
     }
@@ -59,6 +77,12 @@ struct TagComponentItemView: View {
 
 struct TagComponentItemView_Previews: PreviewProvider {
     static var previews: some View {
-        TagComponentItemView(viewModel: .init(intentColor: .alert, variant: .filled))
+        TagComponentItemView(
+            viewModel: .init(
+                isSwiftUIComponent: true,
+                intentColor: .alert,
+                variant: .filled
+            )
+        )
     }
 }
