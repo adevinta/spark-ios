@@ -12,6 +12,8 @@ import SwiftUI
 
 struct CheckboxGroupView_Previews: PreviewProvider {
 
+    // MARK: - Container
+
     struct ContainerView: View {
         let position: CheckboxPosition
 
@@ -42,6 +44,8 @@ struct CheckboxGroupView_Previews: PreviewProvider {
 
     }
 
+    // MARK: - Previews
+
     static var previews: some View {
         ContainerView(position: .left)
             .previewDisplayName("Left layout")
@@ -50,6 +54,8 @@ struct CheckboxGroupView_Previews: PreviewProvider {
             .previewDisplayName("Right layout")
     }
 }
+
+// MARK: - Mock model
 
 final class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {

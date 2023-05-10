@@ -10,6 +10,8 @@ import Spark
 import SparkCore
 import SwiftUI
 
+// MARK: - Previews
+
 struct CheckboxGroupUIView_Previews: PreviewProvider {
     static var previews: some View {
         CheckboxGroupUIViewControllerBridge()
@@ -21,6 +23,8 @@ struct CheckboxGroupUIView_Previews: PreviewProvider {
             .previewDisplayName("Extra large")
     }
 }
+
+// MARK: - SwiftUI-wrapper
 
 struct CheckboxGroupUIViewControllerBridge: UIViewControllerRepresentable {
     typealias UIViewControllerType = CheckboxGroupViewController
@@ -35,7 +39,12 @@ struct CheckboxGroupUIViewControllerBridge: UIViewControllerRepresentable {
     }
 }
 
+// MARK: - Demo View Controller
+
 final class CheckboxGroupViewController: UIViewController {
+
+    // MARK: - Properties
+
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,6 +100,31 @@ final class CheckboxGroupViewController: UIViewController {
     private var checkboxGroup: CheckboxGroupUIView?
 
     private var checkboxGroupLayout: CheckboxGroupLayout = .vertical
+
+    var selectedItems: [any CheckboxGroupItemProtocol] {
+        self.items.filter { $0.selectionState == .selected }
+    }
+
+    var selectedItemsText: String {
+        self.selectedItems.map { $0.title }.joined(separator: ", ")
+    }
+
+    private var items: [any CheckboxGroupItemProtocol] = [
+        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
+        CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
+        CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
+        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
+        CheckboxGroupItem(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
+        CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
+        CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
+    ] {
+        didSet {
+            self.updateSelection()
+        }
+    }
+
+    // MARK: - Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -179,32 +213,11 @@ final class CheckboxGroupViewController: UIViewController {
         groupView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
 
-    var selectedItems: [any CheckboxGroupItemProtocol] {
-        self.items.filter { $0.selectionState == .selected }
-    }
-
-    var selectedItemsText: String {
-        self.selectedItems.map { $0.title }.joined(separator: ", ")
-    }
-
-    private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
-        CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
-        CheckboxGroupItem(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
-        CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
-    ] {
-        didSet {
-            self.updateSelection()
-        }
-    }
-
     private func updateSelection() {
         self.selectionLabel.text = "Selection: " + self.selectedItemsText
     }
+
+    // MARK: - Actions
 
     @objc private func actionAddItem(sender: UIButton) {
         let identifier = "\(self.items.count + 1)"

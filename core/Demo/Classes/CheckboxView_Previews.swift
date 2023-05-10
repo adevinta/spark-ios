@@ -11,6 +11,7 @@ import SparkCore
 import SwiftUI
 
 struct CheckboxView_Previews: PreviewProvider {
+    // MARK: - Container
 
     struct ContainerView: View {
         let theme = SparkTheme.shared
@@ -18,6 +19,8 @@ struct CheckboxView_Previews: PreviewProvider {
         @State private var selection1: CheckboxSelectionState = .selected
         @State private var selection2: CheckboxSelectionState = .unselected
         @State private var selection3: CheckboxSelectionState = .indeterminate
+
+        // MARK: - Content
 
         var body: some View {
             self.scrollView
