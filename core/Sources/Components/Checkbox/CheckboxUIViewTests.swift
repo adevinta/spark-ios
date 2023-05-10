@@ -13,7 +13,7 @@ import XCTest
 @testable import Spark
 @testable import SparkCore
 
-final class CheckboxUIViewTests: TestCase {
+final class CheckboxUIViewTests: UIKitComponentTestCase {
     let theme: Theme = SparkTheme.shared
 
     let states = [SelectButtonState.disabled, .enabled, .success(message: "Success message!"), .warning(message: "Warning message!"), .error(message: "Error message!")]

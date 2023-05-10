@@ -13,7 +13,7 @@ import XCTest
 @testable import Spark
 @testable import SparkCore
 
-final class CheckboxGroupUIViewTests: TestCase {
+final class CheckboxGroupUIViewTests: UIKitComponentTestCase {
     private var items: [any CheckboxGroupItemProtocol] = [
         CheckboxGroupItem(title: "Apple", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
         CheckboxGroupItem(title: "Cake", id: "2", selectionState: .indeterminate),
@@ -42,6 +42,8 @@ final class CheckboxGroupUIViewTests: TestCase {
         groupView.translatesAutoresizingMaskIntoConstraints = false
         return groupView
     }
+
+    // MARK: - Tests
 
     func test_left_layout() throws {
         let group = self.createGroupView(position: .left)

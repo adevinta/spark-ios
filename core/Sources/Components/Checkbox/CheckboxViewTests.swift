@@ -13,10 +13,12 @@ import XCTest
 @testable import Spark
 @testable import SparkCore
 
-final class CheckboxViewTests: TestCase {
+final class CheckboxViewTests: SwiftUIComponentTestCase {
     let theme: Theme = SparkTheme()
 
     let states = [SelectButtonState.disabled, .enabled, .success(message: "Success message!"), .warning(message: "Warning message!"), .error(message: "Error message!")]
+
+    // MARK: - Tests
 
     func test_right_aligned() throws {
         for state in self.states {
@@ -28,7 +30,7 @@ final class CheckboxViewTests: TestCase {
                 selectionState: .init(get: { .selected }, set: { _ in })
             ).fixedSize()
 
-            sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
         }
     }
 
@@ -41,7 +43,7 @@ final class CheckboxViewTests: TestCase {
                 selectionState: .init(get: { .selected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
 
-            sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
         }
     }
 
@@ -54,7 +56,7 @@ final class CheckboxViewTests: TestCase {
                 selectionState: .init(get: { .unselected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
 
-            sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
         }
     }
 
@@ -67,7 +69,7 @@ final class CheckboxViewTests: TestCase {
                 selectionState: .init(get: { .indeterminate }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
 
-            sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
         }
     }
 
@@ -80,10 +82,12 @@ final class CheckboxViewTests: TestCase {
                 selectionState: .init(get: { .unselected }, set: { _ in })
             ).fixedSize().environment(\.sizeCategory, .medium)
 
-            sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
         }
     }
 }
+
+// MARK: - Mock used for testing
 
 final class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
@@ -111,6 +115,8 @@ final class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         self.state = state
     }
 }
+
+// MARK: - Private extension
 
 extension SelectButtonState {
     var identifier: String {

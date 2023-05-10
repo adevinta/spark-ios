@@ -13,7 +13,7 @@ import XCTest
 @testable import Spark
 @testable import SparkCore
 
-final class CheckboxGroupViewTests: TestCase {
+final class CheckboxGroupViewTests: SwiftUIComponentTestCase {
     private struct GroupView: View {
         let position: CheckboxPosition
 
@@ -36,6 +36,8 @@ final class CheckboxGroupViewTests: TestCase {
             ).fixedSize()
         }
     }
+
+    // MARK: - Tests
 
     func testLeftLayout() throws {
         let group = GroupView(position: .left)
