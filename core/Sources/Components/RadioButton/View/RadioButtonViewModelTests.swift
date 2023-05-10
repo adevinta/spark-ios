@@ -13,6 +13,7 @@ import XCTest
 
 final class RadioButtonViewModelTests: XCTestCase {
 
+    // MARK: - Properties
     var theme: ThemeGeneratedMock!
     var bindingValue: Int = 0
     var subscriptions: Set<AnyCancellable>!
@@ -22,12 +23,13 @@ final class RadioButtonViewModelTests: XCTestCase {
         try super.setUpWithError()
 
         self.subscriptions = Set<AnyCancellable>()
-        self.theme = ThemeGeneratedMock.mock()
+        // Given
+        self.theme = ThemeGeneratedMock.mocked()
     }
 
     // MARK: - Tests
     func test_opacity() throws {
-        // Given
+        // When
         let opacities = sutValues(for: \.opacity)
 
         // Then
@@ -35,7 +37,7 @@ final class RadioButtonViewModelTests: XCTestCase {
     }
 
     func test_is_disabled() {
-        // Given
+        // When
         let disabledStates = sutValues(for: \.isDisabled)
 
         // Then
@@ -43,7 +45,7 @@ final class RadioButtonViewModelTests: XCTestCase {
     }
 
     func test_spacings() {
-        // Given
+        // When
         let spacings = sutValues(for: \.spacing)
 
         // Then
@@ -51,7 +53,7 @@ final class RadioButtonViewModelTests: XCTestCase {
     }
 
     func test_fonts() {
-        // Given
+        // When
         let fonts = sutValues(for: \.font.font)
 
         // Then
@@ -59,7 +61,7 @@ final class RadioButtonViewModelTests: XCTestCase {
     }
 
     func test_supplementaryFonts() {
-        // Given
+        // When
         let fonts = sutValues(for: \.supplemetaryFont.font)
 
         // Then
@@ -68,6 +70,10 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_surfaceColors() {
         // Given
+        let onSurfaceColors = self.theme.colors.base.onSurface as! ColorTokenGeneratedMock
+        onSurfaceColors.color = .red
+
+        // When
         let surfaceColors = sutValues(for: \.surfaceColor.color)
 
         // Then
@@ -75,7 +81,7 @@ final class RadioButtonViewModelTests: XCTestCase {
     }
 
     func test_supplementaryTexts() {
-        // Given
+        // When
         let supplementaryTexts = sutValues(for: \.supplementaryText)
 
         // Then
@@ -114,7 +120,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        sut.theme = ThemeGeneratedMock.mock()
+        sut.theme = ThemeGeneratedMock.mocked()
 
         // Then
         wait(for: [expectation], timeout: 0.5)
@@ -171,59 +177,16 @@ final class RadioButtonViewModelTests: XCTestCase {
 }
 
 private extension Theme where Self == ThemeGeneratedMock {
-    static func mock() -> Self {
+    static func mocked() -> Self {
         let theme = ThemeGeneratedMock()
-        let colors = ColorsGeneratedMock()
-
-        let base = ColorsBaseGeneratedMock()
-        base.outline = ColorTokenGeneratedMock()
-        base.surface = ColorTokenGeneratedMock()
-
-        let onSurface = ColorTokenGeneratedMock()
-        onSurface.color = Color.red
-        base.onSurface = onSurface
-
-        let primary = ColorsPrimaryGeneratedMock()
-        primary.primaryContainer = ColorTokenGeneratedMock()
-        primary.primary = ColorTokenGeneratedMock()
-
-        let feedback = ColorsFeedbackGeneratedMock()
-        feedback.success = ColorTokenGeneratedMock()
-        feedback.successContainer = ColorTokenGeneratedMock()
-
-        feedback.alert = ColorTokenGeneratedMock()
-        feedback.alertContainer = ColorTokenGeneratedMock()
-        feedback.onAlertContainer = ColorTokenGeneratedMock()
-
-        feedback.error = ColorTokenGeneratedMock()
-        feedback.errorContainer = ColorTokenGeneratedMock()
-
-        colors.base = base
-        colors.primary = primary
-        colors.feedback = feedback
-
-        let layout = LayoutGeneratedMock()
-        let spacing = LayoutSpacingGeneratedMock()
-        spacing.medium = 5
-        layout.spacing = spacing
-
-        let typography = TypographyGeneratedMock()
-        let body1 = TypographyFontTokenGeneratedMock()
-        body1.font = .body
-
-        let caption = TypographyFontTokenGeneratedMock()
-        caption.font = .caption
-
-        typography.body1 = body1
-        typography.caption = caption
+        let colors = ColorsGeneratedMock.mocked()
+        let layout = LayoutGeneratedMock.mocked()
+        let dims = DimsGeneratedMock.mocked()
+        let typography = TypographyGeneratedMock.mocked()
 
         theme.colors = colors
         theme.layout = layout
         theme.typography = typography
-
-        let dims = DimsGeneratedMock()
-        dims.dim3 = 0.40
-
         theme.dims = dims
 
         return theme

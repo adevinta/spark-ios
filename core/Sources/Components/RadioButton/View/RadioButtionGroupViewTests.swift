@@ -14,6 +14,7 @@ import XCTest
 
 final class RadioButtionGroupViewTests: SwiftUIComponentTestCase {
 
+    // MARK: - Properties
     var backingSelectedID = 1
     lazy var selectedID: Binding<Int> = {
         Binding<Int>(
@@ -22,6 +23,7 @@ final class RadioButtionGroupViewTests: SwiftUIComponentTestCase {
         )
     }()
 
+    // MARK: - Tests
     func test_group() throws {
         let sut = RadioButtonGroupView(
             theme: SparkTheme.shared,
