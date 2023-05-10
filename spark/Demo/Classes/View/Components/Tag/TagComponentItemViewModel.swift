@@ -14,6 +14,7 @@ struct TagComponentItemViewModel: Hashable {
 
     // MARK: - Properties
 
+    let isSwiftUIComponent: Bool
     let name: String
     let intentColor: TagIntentColor
     let variant: TagVariant
@@ -23,8 +24,10 @@ struct TagComponentItemViewModel: Hashable {
 
     // MARK: - Initialization
 
-    init(intentColor: TagIntentColor,
+    init(isSwiftUIComponent: Bool,
+         intentColor: TagIntentColor,
          variant: TagVariant) {
+        self.isSwiftUIComponent = isSwiftUIComponent
         self.name = ".\(variant) variant / .\(intentColor) intentColor"
         self.intentColor = intentColor
         self.variant = variant

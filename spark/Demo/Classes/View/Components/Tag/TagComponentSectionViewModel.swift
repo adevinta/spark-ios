@@ -17,12 +17,25 @@ struct TagComponentSectionViewModel: Hashable {
 
     // MARK: - Initialization
 
-    init(intentColor: TagIntentColor) {
+    init(isSwiftUIComponent: Bool,
+         intentColor: TagIntentColor) {
         self.name = "\(intentColor)"
         self.itemViewModels = [
-            .init(intentColor: intentColor, variant: .filled),
-            .init(intentColor: intentColor, variant: .outlined),
-            .init(intentColor: intentColor, variant: .tinted)
+            .init(
+                isSwiftUIComponent: isSwiftUIComponent,
+                intentColor: intentColor,
+                variant: .filled
+            ),
+            .init(
+                isSwiftUIComponent: isSwiftUIComponent,
+                intentColor: intentColor,
+                variant: .outlined
+            ),
+            .init(
+                isSwiftUIComponent: isSwiftUIComponent,
+                intentColor: intentColor,
+                variant: .tinted
+            )
         ]
     }
 }

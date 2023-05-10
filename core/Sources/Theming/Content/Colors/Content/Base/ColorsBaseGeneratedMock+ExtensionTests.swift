@@ -15,21 +15,21 @@ extension ColorsBaseGeneratedMock {
     static func mocked() -> ColorsBaseGeneratedMock {
         let mock = ColorsBaseGeneratedMock()
         
-        mock.underlyingBackground = ColorTokenGeneratedMock()
-        mock.underlyingOnBackground = ColorTokenGeneratedMock()
-        mock.underlyingBackgroundVariant = ColorTokenGeneratedMock()
-        mock.underlyingOnBackgroundVariant = ColorTokenGeneratedMock()
+        mock.underlyingBackground = ColorTokenGeneratedMock.random()
+        mock.underlyingOnBackground = ColorTokenGeneratedMock.random()
+        mock.underlyingBackgroundVariant = ColorTokenGeneratedMock.random()
+        mock.underlyingOnBackgroundVariant = ColorTokenGeneratedMock.random()
 
-        mock.underlyingSurface = ColorTokenGeneratedMock()
-        mock.underlyingOnSurface = ColorTokenGeneratedMock()
-        mock.underlyingSurfaceInverse = ColorTokenGeneratedMock()
-        mock.underlyingOnSurfaceInverse = ColorTokenGeneratedMock()
+        mock.underlyingSurface = ColorTokenGeneratedMock.random()
+        mock.underlyingOnSurface = ColorTokenGeneratedMock.random()
+        mock.underlyingSurfaceInverse = ColorTokenGeneratedMock.random()
+        mock.underlyingOnSurfaceInverse = ColorTokenGeneratedMock.random()
 
-        mock.underlyingOutline = ColorTokenGeneratedMock()
-        mock.underlyingOutlineHigh = ColorTokenGeneratedMock()
+        mock.underlyingOutline = ColorTokenGeneratedMock.random()
+        mock.underlyingOutlineHigh = ColorTokenGeneratedMock.random()
 
-        mock.underlyingOverlay = ColorTokenGeneratedMock()
-        mock.underlyingOnOverlay = ColorTokenGeneratedMock()
+        mock.underlyingOverlay = ColorTokenGeneratedMock.random()
+        mock.underlyingOnOverlay = ColorTokenGeneratedMock.random()
 
         return mock
     }

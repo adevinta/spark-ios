@@ -18,48 +18,12 @@ public struct TagView: View {
     // MARK: - Private Properties
 
     @ObservedObject private var viewModel: TagViewModel
-    @ScaledMetric private var height: CGFloat = 20
+    @ScaledMetric private var height: CGFloat = TagConstants.height
 
     // MARK: - Initialization
 
-    public init(theme: Theme,
-                intentColor: TagIntentColor,
-                variant: TagVariant,
-                iconImage: Image?) {
-        self.init(
-            theme: theme,
-            intentColor: intentColor,
-            variant: variant,
-            iconImage: iconImage,
-            text: nil
-        )
-    }
-
-    public init(theme: Theme,
-                intentColor: TagIntentColor,
-                variant: TagVariant,
-                text: String?) {
-        self.init(
-            theme: theme,
-            intentColor: intentColor,
-            variant: variant,
-            iconImage: nil,
-            text: text
-        )
-    }
-
-    public init(theme: Theme,
-                intentColor: TagIntentColor,
-                variant: TagVariant,
-                iconImage: Image?,
-                text: String?) {
-        self.viewModel = .init(
-            theme: theme,
-            intentColor: intentColor,
-            variant: variant,
-            iconImage: iconImage,
-            text: text
-        )
+    public init(theme: Theme) {
+        self.viewModel = .init(theme: theme)
     }
 
     // MARK: - View
@@ -92,9 +56,31 @@ public struct TagView: View {
                 colorToken: self.viewModel.colors.borderColor)
     }
 
+    // MARK: - Modifier
+
     public func accessibility(identifier: String,
                               label: String?) -> some View {
         self.modifier(AccessibilityViewModifier(identifier: identifier,
                                                 label: label ?? self.viewModel.text))
+    }
+
+    public func intentColor(_ intentColor: TagIntentColor) -> Self {
+        self.viewModel.setIntentColor(intentColor)
+        return self
+    }
+
+    public func variant(_ variant: TagVariant) -> Self {
+        self.viewModel.setVariant(variant)
+        return self
+    }
+
+    public func iconImage(_ iconImage: Image?) -> Self {
+        self.viewModel.setIconImage(iconImage)
+        return self
+    }
+
+    public func text(_ text: String?) -> Self {
+        self.viewModel.setText(text)
+        return self
     }
 }

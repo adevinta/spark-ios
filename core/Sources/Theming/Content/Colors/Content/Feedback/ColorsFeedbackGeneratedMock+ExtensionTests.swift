@@ -15,30 +15,30 @@ extension ColorsFeedbackGeneratedMock {
     static func mocked() -> ColorsFeedbackGeneratedMock {
         let mock = ColorsFeedbackGeneratedMock()
 
-        mock.underlyingSuccess = ColorTokenGeneratedMock()
-        mock.underlyingOnSuccess = ColorTokenGeneratedMock()
-        mock.underlyingSuccessContainer = ColorTokenGeneratedMock()
-        mock.underlyingOnSuccessContainer = ColorTokenGeneratedMock()
+        mock.underlyingSuccess = ColorTokenGeneratedMock.random()
+        mock.underlyingOnSuccess = ColorTokenGeneratedMock.random()
+        mock.underlyingSuccessContainer = ColorTokenGeneratedMock.random()
+        mock.underlyingOnSuccessContainer = ColorTokenGeneratedMock.random()
 
-        mock.underlyingAlert = ColorTokenGeneratedMock()
-        mock.underlyingOnAlert = ColorTokenGeneratedMock()
-        mock.underlyingAlertContainer = ColorTokenGeneratedMock()
-        mock.underlyingOnAlertContainer = ColorTokenGeneratedMock()
+        mock.underlyingAlert = ColorTokenGeneratedMock.random()
+        mock.underlyingOnAlert = ColorTokenGeneratedMock.random()
+        mock.underlyingAlertContainer = ColorTokenGeneratedMock.random()
+        mock.underlyingOnAlertContainer = ColorTokenGeneratedMock.random()
 
-        mock.underlyingError = ColorTokenGeneratedMock()
-        mock.underlyingOnError = ColorTokenGeneratedMock()
-        mock.underlyingErrorContainer = ColorTokenGeneratedMock()
-        mock.underlyingOnErrorContainer = ColorTokenGeneratedMock()
+        mock.underlyingError = ColorTokenGeneratedMock.random()
+        mock.underlyingOnError = ColorTokenGeneratedMock.random()
+        mock.underlyingErrorContainer = ColorTokenGeneratedMock.random()
+        mock.underlyingOnErrorContainer = ColorTokenGeneratedMock.random()
 
-        mock.underlyingInfo = ColorTokenGeneratedMock()
-        mock.underlyingOnInfo = ColorTokenGeneratedMock()
-        mock.underlyingInfoContainer = ColorTokenGeneratedMock()
-        mock.underlyingOnInfoContainer = ColorTokenGeneratedMock()
+        mock.underlyingInfo = ColorTokenGeneratedMock.random()
+        mock.underlyingOnInfo = ColorTokenGeneratedMock.random()
+        mock.underlyingInfoContainer = ColorTokenGeneratedMock.random()
+        mock.underlyingOnInfoContainer = ColorTokenGeneratedMock.random()
 
-        mock.underlyingNeutral = ColorTokenGeneratedMock()
-        mock.underlyingOnNeutral = ColorTokenGeneratedMock()
-        mock.underlyingNeutralContainer = ColorTokenGeneratedMock()
-        mock.underlyingOnNeutralContainer = ColorTokenGeneratedMock()
+        mock.underlyingNeutral = ColorTokenGeneratedMock.random()
+        mock.underlyingOnNeutral = ColorTokenGeneratedMock.random()
+        mock.underlyingNeutralContainer = ColorTokenGeneratedMock.random()
+        mock.underlyingOnNeutralContainer = ColorTokenGeneratedMock.random()
 
         return mock
     }
