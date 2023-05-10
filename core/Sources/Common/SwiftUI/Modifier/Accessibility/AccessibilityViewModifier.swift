@@ -12,27 +12,26 @@ struct AccessibilityViewModifier: ViewModifier {
 
     // MARK: - Properties
 
-    private let identifier: String
+    private let identifier: String?
     private let label: String?
 
     // MARK: - Initialization
 
     init(identifier: String?,
          label: String?) {
-        self.identifier = identifier ?? ""
+        self.identifier = identifier
         self.label = label
     }
 
     // MARK: - View
 
     func body(content: Content) -> some View {
-        if let label = self.label {
-            content
-                .accessibilityIdentifier(self.identifier)
-                .accessibilityLabel(label)
-        } else {
-            content
-                .accessibilityIdentifier(self.identifier)
-        }
+        content
+            .if(identifier != nil) {
+                $0.accessibilityIdentifier(identifier ?? "")
+            }
+            .if(label != nil) {
+                $0.accessibilityLabel(label ?? "")
+            }
     }
 }

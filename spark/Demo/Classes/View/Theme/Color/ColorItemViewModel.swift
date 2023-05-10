@@ -22,8 +22,8 @@ struct ColorItemViewModel: Hashable {
     init(name: String,
          colorToken: ColorToken) {
         self.name = name
-        self.color = colorToken.color
         self.foregroundColor = Self.makeForegroundColor(colorToken: colorToken)
+        self.color = colorToken.color
     }
 
     // MARK: - Hashable

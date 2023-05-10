@@ -6,11 +6,12 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Spark
 import SwiftUI
 
 struct ContentView: View {
 
-    private let theme = SparkTheme()
+    private let theme = SparkTheme.shared
 
     var body: some View {
         VStack {
