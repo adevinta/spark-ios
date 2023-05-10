@@ -8,6 +8,7 @@
 
 import Foundation
 
+@frozen
 public enum SelectButtonState: Equatable, Hashable {
     case enabled
     case disabled

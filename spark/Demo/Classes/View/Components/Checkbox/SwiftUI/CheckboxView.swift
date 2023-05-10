@@ -68,8 +68,6 @@ struct CheckboxListView: View {
             return "Warning"
         case .error:
             return "Error"
-        @unknown default:
-            return "Unknown"
         }
     }
 }
