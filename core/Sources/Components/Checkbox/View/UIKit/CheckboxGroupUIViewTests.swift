@@ -47,23 +47,11 @@ final class CheckboxGroupUIViewTests: UIKitComponentTestCase {
 
     func test_left_layout() throws {
         let group = self.createGroupView(position: .left)
-        sparktAssertSnapshot(matching: group, as: .image)
+        assertSnapshotInDarkAndLight(matching: group)
     }
 
     func test_right_layout() throws {
         let group = self.createGroupView(position: .right)
-        sparktAssertSnapshot(matching: group, as: .image)
-    }
-
-    func test_left_layout_dark_mode() throws {
-        let group = self.createGroupView(position: .left)
-        group.overrideUserInterfaceStyle = .dark
-        sparktAssertSnapshot(matching: group, as: .image)
-    }
-
-    func test_right_layout_dark_mode() throws {
-        let group = self.createGroupView(position: .right)
-        group.overrideUserInterfaceStyle = .dark
-        sparktAssertSnapshot(matching: group, as: .image)
+        assertSnapshotInDarkAndLight(matching: group)
     }
 }

@@ -18,9 +18,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
 
     let states = [SelectButtonState.disabled, .enabled, .success(message: "Success message!"), .warning(message: "Warning message!"), .error(message: "Error message!")]
 
-    override class func setUp() {
-        super.setUp()
-    }
+    // MARK: -  Tests
 
     func test_right_aligned() throws {
         for state in self.states {
@@ -32,7 +30,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 checkboxPosition: .right
             )
 
-            sparktAssertSnapshot(matching: checkbox, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
         }
     }
 
@@ -46,7 +44,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 checkboxPosition: .left
             )
 
-            sparktAssertSnapshot(matching: checkbox, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
         }
     }
 
@@ -60,7 +58,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 checkboxPosition: .left
             )
 
-            sparktAssertSnapshot(matching: checkbox, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
         }
     }
 
@@ -74,7 +72,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 checkboxPosition: .left
             )
 
-            sparktAssertSnapshot(matching: checkbox, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
         }
     }
 
@@ -88,7 +86,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 checkboxPosition: .left
             )
 
-            sparktAssertSnapshot(matching: view, as: .image, named: state.identifier)
+            assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
         }
     }
 }

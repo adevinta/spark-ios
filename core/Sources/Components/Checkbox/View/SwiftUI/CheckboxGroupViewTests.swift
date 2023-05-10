@@ -14,6 +14,8 @@ import XCTest
 @testable import SparkCore
 
 final class CheckboxGroupViewTests: SwiftUIComponentTestCase {
+    // MARK: - Container View
+
     private struct GroupView: View {
         let position: CheckboxPosition
 
@@ -41,25 +43,11 @@ final class CheckboxGroupViewTests: SwiftUIComponentTestCase {
 
     func testLeftLayout() throws {
         let group = GroupView(position: .left)
-        sparktAssertSnapshot(matching: group, as: .image)
+        assertSnapshotInDarkAndLight(matching: group)
     }
 
     func testRightLayout() throws {
         let group = GroupView(position: .right)
-        sparktAssertSnapshot(matching: group, as: .image)
-    }
-
-    func testLeftLayoutDarkMode() throws {
-        let group = GroupView(position: .left)
-            .background(Color.black)
-            .colorScheme(.dark)
-        sparktAssertSnapshot(matching: group, as: .image)
-    }
-
-    func testRightLayoutDarkMode() throws {
-        let group = GroupView(position: .right)
-            .background(Color.black)
-            .colorScheme(.dark)
-        sparktAssertSnapshot(matching: group, as: .image)
+        assertSnapshotInDarkAndLight(matching: group)
     }
 }
