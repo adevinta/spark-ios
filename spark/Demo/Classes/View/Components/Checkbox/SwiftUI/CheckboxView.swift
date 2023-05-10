@@ -16,29 +16,12 @@ struct CheckboxListView: View {
 
     private let viewModel = CheckboxViewModel()
 
-    // MARK: - View
-
-    private func title(for state: SelectButtonState) -> String {
-        switch state {
-        case .enabled:
-            return "Enabled"
-        case .disabled:
-            return "Disabled"
-        case .success:
-            return "Success"
-        case .warning:
-            return "Warning"
-        case .error:
-            return "Error"
-        @unknown default:
-            return "Unknown"
-        }
-    }
-
     @State private var selection1: CheckboxSelectionState = .selected
     @State private var selection2: CheckboxSelectionState = .unselected
     @State private var selection3: CheckboxSelectionState = .indeterminate
     @State private var selection4: CheckboxSelectionState = .selected
+
+    // MARK: - View
 
     var body: some View {
         List(self.viewModel.states, id: \.self) { state in
@@ -71,6 +54,23 @@ struct CheckboxListView: View {
             }
         }
         .navigationBarTitle(Text("Checkbox"))
+    }
+
+    private func title(for state: SelectButtonState) -> String {
+        switch state {
+        case .enabled:
+            return "Enabled"
+        case .disabled:
+            return "Disabled"
+        case .success:
+            return "Success"
+        case .warning:
+            return "Warning"
+        case .error:
+            return "Error"
+        @unknown default:
+            return "Unknown"
+        }
     }
 }
 
