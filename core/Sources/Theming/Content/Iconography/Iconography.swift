@@ -18,7 +18,6 @@ public protocol ImageToken {
     var image: Image { get }
 }
 
-
 public struct ImageTokenDefault: ImageToken {
 
     // MARK: - Properties
