@@ -80,6 +80,7 @@ targetTemplates:
         - "**/*Tests.swift"
     dependencies:
       - target: SparkCore
+      - target: Spark
 
 targets:
   SparkCore:
