@@ -14,8 +14,10 @@ import XCTest
 
 final class RadioButtonViewTests: SwiftUIComponentTestCase {
 
+    // MARK: - Properties
     var boundSelectedID = 0
 
+    // MARK: - Tests
     func test_multiline_label() throws {
         let view = sut(state: .enabled, isSelected: false, label: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.").frame(width: 300, height: 300)
 
