@@ -19,6 +19,12 @@ public final class CheckboxGroupUIView: UIView {
     private var checkboxes: [CheckboxUIView] = []
     private var titleLabel: UILabel?
 
+    private var titleLabelBottomConstraint: NSLayoutConstraint?
+    private var checkboxVerticalSpacingConstraints: [NSLayoutConstraint] = []
+    private var checkboxHorizontalSpacingConstraints: [NSLayoutConstraint] = []
+
+    @ScaledUIMetric private var spacingXLarge: CGFloat
+
     // MARK: - Public properties.
 
     /// The title of the checkbox group displayed on top of the group.
@@ -71,6 +77,7 @@ public final class CheckboxGroupUIView: UIView {
         self.checkboxPosition = checkboxPosition
         self.theme = theme
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
+        self.spacingXLarge = self.theme.layout.spacing.xLarge
         super.init(frame: .zero)
         self.commonInit()
     }
@@ -81,6 +88,25 @@ public final class CheckboxGroupUIView: UIView {
 
     // MARK: - Methods
 
+    /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.updateViewConstraints()
+    }
+
+    private func updateViewConstraints() {
+        let spacing = self.spacingXLarge
+        for constraint in self.checkboxVerticalSpacingConstraints {
+            constraint.constant = spacing
+        }
+
+        for constraint in self.checkboxHorizontalSpacingConstraints {
+            constraint.constant = spacing
+        }
+
+        self.titleLabelBottomConstraint?.constant = spacing
+    }
+
     private func clearView() {
         self.titleLabel?.removeFromSuperview()
         self.titleLabel = nil
@@ -89,6 +115,10 @@ public final class CheckboxGroupUIView: UIView {
             checkbox.removeFromSuperview()
         }
         self.checkboxes = []
+
+        self.titleLabelBottomConstraint = nil
+        self.checkboxVerticalSpacingConstraints = []
+        self.checkboxHorizontalSpacingConstraints = []
     }
 
     private var spacing: LayoutSpacing {
@@ -101,6 +131,7 @@ public final class CheckboxGroupUIView: UIView {
 
         if let title = self.title, !title.isEmpty {
             let label = UILabel()
+            label.numberOfLines = 0
             label.text = title
             label.adjustsFontForContentSizeCategory = true
             label.translatesAutoresizingMaskIntoConstraints = false
@@ -155,10 +186,13 @@ public final class CheckboxGroupUIView: UIView {
                 checkbox.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -horizontalSpacing).isActive = true
 
                 if let previousCheckbox = previousCheckbox {
-                    checkbox.topAnchor.constraint(equalTo: previousCheckbox.bottomAnchor, constant: horizontalSpacing).isActive = true
+                    let constraint = checkbox.topAnchor.constraint(equalTo: previousCheckbox.bottomAnchor, constant: self.spacingXLarge)
+                    constraint.isActive = true
+                    checkboxVerticalSpacingConstraints.append(constraint)
                 } else {
                     if let titleLabel = self.titleLabel {
-                        checkbox.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: horizontalSpacing).isActive = true
+                        titleLabelBottomConstraint = checkbox.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: self.spacingXLarge)
+                        titleLabelBottomConstraint?.isActive = true
                     } else {
                         checkbox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
                     }
@@ -174,11 +208,16 @@ public final class CheckboxGroupUIView: UIView {
         case .horizontal:
             let topAnchor = self.titleLabel?.bottomAnchor ?? view.safeAreaLayoutGuide.topAnchor
             for checkbox in checkboxes {
-                checkbox.topAnchor.constraint(equalTo: topAnchor, constant: horizontalSpacing).isActive = true
+                let spacingConstraint = checkbox.topAnchor.constraint(equalTo: topAnchor, constant: self.spacingXLarge)
+                spacingConstraint.isActive = true
+                checkboxVerticalSpacingConstraints.append(spacingConstraint)
+
                 checkbox.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -horizontalSpacing).isActive = true
 
                 if let previousCheckbox = previousCheckbox {
-                    checkbox.leadingAnchor.constraint(equalTo: previousCheckbox.trailingAnchor, constant: horizontalSpacing).isActive = true
+                    let spacingConstraint = checkbox.leadingAnchor.constraint(equalTo: previousCheckbox.trailingAnchor, constant: self.spacingXLarge)
+                    spacingConstraint.isActive = true
+                    checkboxHorizontalSpacingConstraints.append(spacingConstraint)
                 } else {
                     checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
                 }
