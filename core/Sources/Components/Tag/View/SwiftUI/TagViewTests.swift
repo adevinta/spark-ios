@@ -18,7 +18,7 @@ final class TagViewTests: SwiftUIComponentTestCase {
     // MARK: - Properties
 
     private let theme: Theme = SparkTheme.shared
-    private var iconImage = Image(systemName: "square.and.arrow.up")
+    private var iconImage = Image(systemName: "person.2.circle.fill")
     private let text = "Text"
 
     // MARK: - Tests
@@ -30,7 +30,7 @@ final class TagViewTests: SwiftUIComponentTestCase {
                 .intentColor(sut.intentColor)
                 .variant(sut.variant)
                 .iconImage(self.iconImage)
-                .fixedSize().environment(\.sizeCategory, .medium)
+                .fixedSize()
 
             self.assertSnapshotInDarkAndLight(
                 matching: view,
@@ -46,7 +46,7 @@ final class TagViewTests: SwiftUIComponentTestCase {
                 .intentColor(sut.intentColor)
                 .variant(sut.variant)
                 .text(self.text)
-                .fixedSize().environment(\.sizeCategory, .medium)
+                .fixedSize()
 
             self.assertSnapshotInDarkAndLight(
                 matching: view,
@@ -63,7 +63,7 @@ final class TagViewTests: SwiftUIComponentTestCase {
                 .variant(sut.variant)
                 .iconImage(self.iconImage)
                 .text(self.text)
-                .fixedSize().environment(\.sizeCategory, .medium)
+                .fixedSize()
 
             self.assertSnapshotInDarkAndLight(
                 matching: view,

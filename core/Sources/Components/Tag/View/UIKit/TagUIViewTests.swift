@@ -20,7 +20,7 @@ final class TagUIViewTests: UIKitComponentTestCase {
     private var iconImage: UIImage {
         get throws {
             try XCTUnwrap(
-                UIImage(systemName: "square.and.arrow.up"),
+                UIImage(systemName: "person.2.circle.fill"),
                 "IconImage shouldn't be nil"
             )
         }
