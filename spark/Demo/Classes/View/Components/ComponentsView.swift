@@ -29,7 +29,7 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Radio Button") {
-                    Text("TODO")
+                    RadioButtonGroup()
                 }
 
                 NavigationLink("Switch") {
