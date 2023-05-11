@@ -64,6 +64,7 @@ public final class CheckboxUIView: UIView {
     private var controlViewTrailingConstraint: NSLayoutConstraint?
 
     private var checkboxPosition: CheckboxPosition = .left
+    private var cancellables = Set<AnyCancellable>()
 
     private var spacing: LayoutSpacing {
         return self.theme.layout.spacing
@@ -255,6 +256,16 @@ public final class CheckboxUIView: UIView {
         self.updateState()
         self.updateViewConstraints()
         self.updateAccessibility()
+        self.subscribe()
+    }
+
+    private func subscribe() {
+        self.viewModel.$colors
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] text in
+                self?.updateTheme()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Methods
