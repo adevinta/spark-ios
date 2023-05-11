@@ -19,5 +19,5 @@ struct RadioButtonColors {
     let label: ColorToken
     let halo: ColorToken
     let fill: ColorToken
-    let subLabel: ColorToken?
+    let subLabel: ColorToken
 }

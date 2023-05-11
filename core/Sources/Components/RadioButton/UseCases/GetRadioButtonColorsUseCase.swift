@@ -56,13 +56,13 @@ private extension Theme {
         }
     }
 
-    func supplementaryTextColor(state: SparkSelectButtonState) -> ColorToken? {
+    func supplementaryTextColor(state: SparkSelectButtonState) -> ColorToken {
         switch state {
         case .warning: return self.colors.feedback.onAlertContainer
         case .error: return self.colors.feedback.error
         case .success: return self.colors.feedback.success
-        case .enabled: return nil
-        case .disabled: return nil
+        case .enabled: return self.colors.primary.primaryContainer
+        case .disabled: return self.colors.primary.primaryContainer
         }
     }
 

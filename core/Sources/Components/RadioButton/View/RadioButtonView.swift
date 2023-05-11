@@ -129,7 +129,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                     Text(supplementaryLabel)
                         .font(self.viewModel.supplemetaryFont.font)
                         .multilineTextAlignment(.leading)
-                        .foregroundColor(self.viewModel.colors.subLabel?.color)
+                        .foregroundColor(self.viewModel.colors.subLabel.color)
                 }
             }
             .padding(.top, self.lineWidth)

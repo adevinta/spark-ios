@@ -71,13 +71,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.red,
              .green,
              .blue,
-             nil])
-
-        XCTAssertNil(colors.fill)
+             .red])
     }
 
     func test_disabled_colors_when_button_is_not_selected() throws {
@@ -104,13 +102,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.yellow,
              .gray,
              .purple,
-             nil])
-
-        XCTAssertNil(colors.fill)
+             .yellow])
     }
 
     func test_error_colors_when_button_is_not_selected() throws {
@@ -137,13 +133,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.orange,
              .purple,
              .red,
              .red])
-
-        XCTAssertNil(colors.fill)
     }
 
     func test_warn_colors_when_button_is_not_selected() throws {
@@ -173,13 +167,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.gray,
              .green,
              .purple,
              .pink])
-
-        XCTAssertNil(colors.fill)
     }
 
     func test_success_colors_when_button_is_not_selected() throws {
@@ -205,13 +197,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.blue,
              .gray,
              .green,
              .green])
-
-        XCTAssertNil(colors.fill)
     }
 
     func test_enabled_colors_when_button_is_selected() throws {
@@ -239,12 +229,12 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
              colors.label,
              colors.button,
              colors.fill,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.gray,
              .green,
              .blue,
              .blue,
-             nil])
+             .gray])
     }
 
     func test_disabled_colors_when_button_is_selected() throws {
@@ -272,12 +262,12 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
              colors.label,
              colors.button,
              colors.fill,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.black,
              .white,
              .blue,
              .blue,
-             nil])
+             .black])
     }
 
     func test_error_colors_when_button_is_selected() throws {
@@ -305,7 +295,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
              colors.label,
              colors.button,
              colors.fill,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.white,
              .orange,
              .green,
@@ -341,7 +331,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
              colors.label,
              colors.button,
              colors.fill,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.gray,
              .green,
              .purple,
@@ -374,7 +364,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
              colors.label,
              colors.button,
              colors.fill,
-             colors.subLabel].map(\.?.color),
+             colors.subLabel].map(\.color),
             [Color.white,
              .gray,
              .green,
