@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import UIKit
 
 /// The `CheckboxUIView`renders a single checkbox using UIKit.
@@ -68,6 +69,10 @@ public final class CheckboxUIView: UIView {
         return self.theme.layout.spacing
     }
 
+    private var colors: CheckboxColorables {
+        return self.viewModel.colors
+    }
+
     // MARK: - Public properties.
 
     /// Set a delegate to receive selection state change callbacks. Alternatively, you can set a `selectionStateHandler`.
@@ -97,9 +102,11 @@ public final class CheckboxUIView: UIView {
 
     /// The control state of the checkbox (e.g. `.enabled` or `.disabled`).
     public var state: SelectButtonState {
-        didSet {
-            self.viewModel.state = self.state
-            self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
+        get {
+            return self.viewModel.state
+        }
+        set {
+            self.viewModel.state = newValue
 
             self.updateState()
             self.updateViewConstraints()
@@ -107,21 +114,17 @@ public final class CheckboxUIView: UIView {
             self.updateAccessibility()
         }
     }
-    /// Sets the theme of the checkbox.
-    public var theme: Theme
+    /// Returns the theme of the checkbox.
+    var theme: Theme {
+        return self.viewModel.theme
+    }
 
-    var colors: CheckboxColorables {
+    var colorsUseCase: CheckboxColorsUseCaseable {
         get {
-            return self.viewModel.colors
+            return self.viewModel.colorsUseCase
         }
         set {
-            self.viewModel.colors = newValue
-            self.updateTheme()
-        }
-    }
-    var colorsUseCase: CheckboxColorsUseCaseable {
-        didSet {
-            self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
+            self.viewModel.colorsUseCase = newValue
         }
     }
 
@@ -177,16 +180,12 @@ public final class CheckboxUIView: UIView {
         checkboxPosition: CheckboxPosition,
         selectionStateHandler: ((_ state: CheckboxSelectionState) -> Void)? = nil
     ) {
-        self.theme = theme
-        self.colorsUseCase = colorsUseCase
-        self.state = state
         self.selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.selectionStateHandler = selectionStateHandler
         self.viewModel = .init(text: text, theme: theme, colorsUseCase: colorsUseCase, state: state)
 
         super.init(frame: .zero)
-        self.colors = colorsUseCase.execute(from: theme, state: state)
         self.commonInit()
     }
 

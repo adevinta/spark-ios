@@ -14,11 +14,18 @@ final class CheckboxViewModel: ObservableObject {
     var text: String
 
     @Published var theme: Theme
-    @Published var state: SelectButtonState
+    @Published var state: SelectButtonState {
+        didSet {
+            self.updateColors()
+        }
+    }
     @Published var colors: CheckboxColorables
 
-    // MARK: - Private properties
-    private let colorsUseCase: CheckboxColorsUseCaseable
+    var colorsUseCase: CheckboxColorsUseCaseable {
+        didSet {
+            self.updateColors()
+        }
+    }
 
     // MARK: - Init
 
@@ -34,6 +41,12 @@ final class CheckboxViewModel: ObservableObject {
 
         self.colorsUseCase = colorsUseCase
         self.colors = colorsUseCase.execute(from: theme, state: state)
+    }
+
+    // MARK: - Methods
+
+    private func updateColors() {
+        self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
     }
 
     // MARK: - Computed properties
