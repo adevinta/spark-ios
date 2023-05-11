@@ -39,10 +39,10 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .primary)
 
         // Then
-        XCTAssertEqual([chipIntentColors.primary,
-                        chipIntentColors.secondary,
-                        chipIntentColors.tintedPrimary,
-                        chipIntentColors.tintedSecondary].map(\.uiColor),
+        XCTAssertEqual([chipIntentColors.principal,
+                        chipIntentColors.subordinate,
+                        chipIntentColors.tintedPrincipal,
+                        chipIntentColors.tintedSubordinate].map(\.uiColor),
                        [UIColor.blue, .gray, .yellow, .red])
     }
 
@@ -60,10 +60,10 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .secondary)
 
         // Then
-        XCTAssertEqual([chipIntentColors.primary,
-                        chipIntentColors.secondary,
-                        chipIntentColors.tintedPrimary,
-                        chipIntentColors.tintedSecondary].map(\.uiColor),
+        XCTAssertEqual([chipIntentColors.principal,
+                        chipIntentColors.subordinate,
+                        chipIntentColors.tintedPrincipal,
+                        chipIntentColors.tintedSubordinate].map(\.uiColor),
                        [UIColor.blue, .gray, .yellow, .red])
 
     }
@@ -80,10 +80,10 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .surface)
 
         // Then
-        XCTAssertEqual([chipIntentColors.primary,
-                        chipIntentColors.secondary,
-                        chipIntentColors.tintedPrimary,
-                        chipIntentColors.tintedSecondary].map(\.uiColor),
+        XCTAssertEqual([chipIntentColors.principal,
+                        chipIntentColors.subordinate,
+                        chipIntentColors.tintedPrincipal,
+                        chipIntentColors.tintedSubordinate].map(\.uiColor),
                        [UIColor.blue, .gray, .blue, .gray])
 
 
@@ -103,10 +103,10 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .neutral)
 
         // Then
-        XCTAssertEqual([chipIntentColors.primary,
-                        chipIntentColors.secondary,
-                        chipIntentColors.tintedPrimary,
-                        chipIntentColors.tintedSecondary].map(\.uiColor),
+        XCTAssertEqual([chipIntentColors.principal,
+                        chipIntentColors.subordinate,
+                        chipIntentColors.tintedPrincipal,
+                        chipIntentColors.tintedSubordinate].map(\.uiColor),
                        [UIColor.blue, .gray, .yellow, .red])
     }
 
@@ -124,10 +124,10 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .info)
 
         // Then
-        XCTAssertEqual([chipIntentColors.primary,
-                        chipIntentColors.secondary,
-                        chipIntentColors.tintedPrimary,
-                        chipIntentColors.tintedSecondary].map(\.uiColor),
+        XCTAssertEqual([chipIntentColors.principal,
+                        chipIntentColors.subordinate,
+                        chipIntentColors.tintedPrincipal,
+                        chipIntentColors.tintedSubordinate].map(\.uiColor),
                        [UIColor.blue, .gray, .yellow, .red])
     }
 
@@ -145,10 +145,10 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .success)
 
         // Then
-        XCTAssertEqual([chipIntentColors.primary,
-                        chipIntentColors.secondary,
-                        chipIntentColors.tintedPrimary,
-                        chipIntentColors.tintedSecondary].map(\.uiColor),
+        XCTAssertEqual([chipIntentColors.principal,
+                        chipIntentColors.subordinate,
+                        chipIntentColors.tintedPrincipal,
+                        chipIntentColors.tintedSubordinate].map(\.uiColor),
                        [UIColor.blue, .gray, .yellow, .red])
     }
 
@@ -166,10 +166,10 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .alert)
 
         // Then
-        XCTAssertEqual([chipIntentColors.primary,
-                        chipIntentColors.secondary,
-                        chipIntentColors.tintedPrimary,
-                        chipIntentColors.tintedSecondary].map(\.uiColor),
+        XCTAssertEqual([chipIntentColors.principal,
+                        chipIntentColors.subordinate,
+                        chipIntentColors.tintedPrincipal,
+                        chipIntentColors.tintedSubordinate].map(\.uiColor),
                        [UIColor.blue, .gray, .yellow, .red])
     }
 
@@ -187,10 +187,10 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .danger)
 
         // Then
-        XCTAssertEqual([chipIntentColors.primary,
-                        chipIntentColors.secondary,
-                        chipIntentColors.tintedPrimary,
-                        chipIntentColors.tintedSecondary].map(\.uiColor),
+        XCTAssertEqual([chipIntentColors.principal,
+                        chipIntentColors.subordinate,
+                        chipIntentColors.tintedPrincipal,
+                        chipIntentColors.tintedSubordinate].map(\.uiColor),
                        [UIColor.blue, .gray, .yellow, .red])
     }
 }

@@ -13,6 +13,7 @@ import XCTest
 
 final class ChipUIViewTests: UIKitComponentTestCase {
 
+    // MARK: Tests
     func test_variants_without_icon() {
         for intent in ChipIntentColor.allCases {
             for variant in ChipVariant.allCases {

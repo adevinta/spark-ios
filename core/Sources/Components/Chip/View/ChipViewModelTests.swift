@@ -13,10 +13,14 @@ import XCTest
 
 final class ChipViewModelTests: TestCase {
 
+    // MARK: - Properties
+
     var sut: ChipViewModel!
     var useCase: GetChipColorsUseCasableGeneratedMock!
     var theme: ThemeGeneratedMock!
     var subscriptions: Set<AnyCancellable>!
+
+    // MARK: - Setup
 
     override func setUpWithError() throws {
         try super.setUpWithError()
@@ -37,6 +41,8 @@ final class ChipViewModelTests: TestCase {
                                  useCase: useCase)
     }
 
+    // MARK: - Tests
+
     func test_variant_change_triggers_color_change() throws {
         // Given
         let updateExpectation = expectation(description: "Colors and border status updated")
@@ -47,7 +53,7 @@ final class ChipViewModelTests: TestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        self.sut.variant = .dashed
+        self.sut.set(variant: .dashed)
 
         // Then
         wait(for: [updateExpectation], timeout: 0.1)
@@ -69,7 +75,7 @@ final class ChipViewModelTests: TestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        self.sut.theme = ThemeGeneratedMock.mocked()
+        self.sut.set(theme: ThemeGeneratedMock.mocked())
 
         // Then
         wait(for: [updateExpectation], timeout: 0.1)
@@ -85,7 +91,7 @@ final class ChipViewModelTests: TestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        self.sut.intentColor = .alert
+        self.sut.set(intentColor: .alert)
 
         // Then
         wait(for: [updateExpectation], timeout: 0.1)

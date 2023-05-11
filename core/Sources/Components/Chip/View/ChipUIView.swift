@@ -20,7 +20,7 @@ private enum Constants {
 public final class ChipUIView: UIView {
 
     //MARK: - Public properties
-    /// An optional icon on the Chip. This
+    /// An optional icon on the Chip. The icon is always rendered to the left of the text
     public var icon: UIImage? {
         set {
             self.uiImageView.image = newValue
@@ -30,7 +30,7 @@ public final class ChipUIView: UIView {
         }
     }
 
-    /// An optional text shown on the Chip. The text is rendered to the right of the image.
+    /// An optional text shown on the Chip. The text is rendered to the right of the icon.
     public var text: String? {
         set {
             self.uiLabel.text = newValue
@@ -50,7 +50,7 @@ public final class ChipUIView: UIView {
     /// The intent of the chip.
     public var intentColor: ChipIntentColor {
         set {
-            self.viewModel.intentColor = newValue
+            self.viewModel.set(intentColor: newValue)
         }
         get {
             return self.viewModel.intentColor
@@ -60,7 +60,7 @@ public final class ChipUIView: UIView {
     /// The variant of the chip
     public var variant: ChipVariant {
         set {
-            self.viewModel.variant = newValue
+            self.viewModel.set(variant: newValue)
         }
         get {
             return self.viewModel.variant
@@ -70,7 +70,7 @@ public final class ChipUIView: UIView {
     /// The theme.
     public var theme: Theme {
         set {
-            self.viewModel.theme = newValue
+            self.viewModel.set(theme: newValue)
         }
         get {
             return self.viewModel.theme
@@ -144,6 +144,14 @@ public final class ChipUIView: UIView {
     private var cancellables = Set<AnyCancellable>()
 
     //MARK: - Initializers
+
+    /// Initializer of a chip containing only an icon.
+    ///
+    /// Parameters:
+    /// - theme: The theme.
+    /// - intentColor: The intent of the chip, e.g. primary, secondary
+    /// - variant: The chip variant, e.g. outlined, filled
+    /// - iconImage: An icon
     public convenience init(theme: Theme,
                 intentColor: ChipIntentColor,
                 variant: ChipVariant,
@@ -151,6 +159,13 @@ public final class ChipUIView: UIView {
         self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: nil, optionalIconImage: iconImage)
     }
 
+    /// Initializer of a chip containing only a text.
+    ///
+    /// Parameters:
+    /// - theme: The theme.
+    /// - intentColor: The intent of the chip, e.g. primary, secondary
+    /// - variant: The chip variant, e.g. outlined, filled
+    /// - text: The text label
     public convenience init(theme: Theme,
                 intentColor: ChipIntentColor,
                 variant: ChipVariant,
@@ -158,6 +173,14 @@ public final class ChipUIView: UIView {
         self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: label, optionalIconImage: nil)
     }
 
+    /// Initializer of a chip containing both a text and an icon.
+    ///
+    /// Parameters:
+    /// - theme: The theme.
+    /// - intentColor: The intent of the chip, e.g. primary, secondary
+    /// - variant: The chip variant, e.g. outlined, filled
+    /// - text: The text label
+    /// - iconImage: An icon
     public convenience init(theme: Theme,
                 intentColor: ChipIntentColor,
                 variant: ChipVariant,
@@ -188,6 +211,7 @@ public final class ChipUIView: UIView {
 
     }
 
+    /// Function traitCollectionDidChange: all dynamic sizing and padding will be recalculated here
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -209,6 +233,8 @@ public final class ChipUIView: UIView {
             self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
         } else if self.viewModel.isBordered {
             self.stackView.layer.borderWidth = self.borderWidth
+        } else {
+            self.stackView.layer.borderWidth = 0
         }
     }
 
@@ -224,6 +250,7 @@ public final class ChipUIView: UIView {
     }
 
     //MARK: - Private functions
+    /// Update all colors used
     private func setChipColors(_ chipColors: ChipStateColors) {
         self.stackView.backgroundColor = chipColors.background.uiColor
         self.uiLabel.textColor = chipColors.foreground.uiColor
@@ -240,6 +267,7 @@ public final class ChipUIView: UIView {
         }
     }
 
+    /// Update all scaled metrics
     private func updateScaledMetrics() {
         self._imageSize.update(traitCollection: self.traitCollection)
         self._height.update(traitCollection: self.traitCollection)

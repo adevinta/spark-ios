@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+/// The colors definie a chip
 struct ChipStateColors {
     let background: ColorToken
     let border: ColorToken

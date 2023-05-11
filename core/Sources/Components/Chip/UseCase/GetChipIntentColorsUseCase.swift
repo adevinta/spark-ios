@@ -13,49 +13,58 @@ protocol GetChipIntentColorsUseCasable {
     func execute(colors: Colors, intentColor: ChipIntentColor) -> ChipIntentColors
 }
 
+/// GetChipIntentColorsUseCase: A use case to calculate the colors that are needed by a chip
 struct GetChipIntentColorsUseCase: GetChipIntentColorsUseCasable {
+
+    /// Function `execute` calculates the intent colors used by a chip
+    ///
+    /// Parameters:
+    /// - colors: The available color palette
+    /// - intentColor: The intent of the chip
+    ///
+    /// Returns: ChipIntentColors
     func execute(colors: Colors, intentColor: ChipIntentColor) -> ChipIntentColors {
         switch intentColor {
         case .primary:
-            return .init(primary: colors.primary.primary,
-                         secondary: colors.primary.onPrimary,
-                         tintedPrimary: colors.primary.primaryContainer,
-                         tintedSecondary: colors.primary.onPrimaryContainer)
+            return .init(principal: colors.primary.primary,
+                         subordinate: colors.primary.onPrimary,
+                         tintedPrincipal: colors.primary.primaryContainer,
+                         tintedSubordinate: colors.primary.onPrimaryContainer)
         case .secondary:
-            return .init(primary: colors.secondary.secondary,
-                         secondary: colors.secondary.onSecondary,
-                         tintedPrimary: colors.secondary.secondaryContainer,
-                         tintedSecondary: colors.secondary.onSecondaryContainer)
+            return .init(principal: colors.secondary.secondary,
+                         subordinate: colors.secondary.onSecondary,
+                         tintedPrincipal: colors.secondary.secondaryContainer,
+                         tintedSubordinate: colors.secondary.onSecondaryContainer)
         case .surface:
-            return .init(primary: colors.base.surface,
-                         secondary: colors.base.onSurface,
-                         tintedPrimary: colors.base.surface,
-                         tintedSecondary: colors.base.onSurface)
+            return .init(principal: colors.base.surface,
+                         subordinate: colors.base.onSurface,
+                         tintedPrincipal: colors.base.surface,
+                         tintedSubordinate: colors.base.onSurface)
         case .neutral:
-            return .init(primary: colors.feedback.neutral,
-                         secondary: colors.feedback.onNeutral,
-                         tintedPrimary: colors.feedback.neutralContainer,
-                         tintedSecondary: colors.feedback.onNeutralContainer)
+            return .init(principal: colors.feedback.neutral,
+                         subordinate: colors.feedback.onNeutral,
+                         tintedPrincipal: colors.feedback.neutralContainer,
+                         tintedSubordinate: colors.feedback.onNeutralContainer)
         case .info:
-            return .init(primary: colors.feedback.info,
-                         secondary: colors.feedback.onInfo,
-                         tintedPrimary: colors.feedback.infoContainer,
-                         tintedSecondary: colors.feedback.onInfoContainer)
+            return .init(principal: colors.feedback.info,
+                         subordinate: colors.feedback.onInfo,
+                         tintedPrincipal: colors.feedback.infoContainer,
+                         tintedSubordinate: colors.feedback.onInfoContainer)
         case .success:
-            return .init(primary: colors.feedback.success,
-                         secondary: colors.feedback.onSuccess,
-                         tintedPrimary: colors.feedback.successContainer,
-                         tintedSecondary: colors.feedback.onSuccessContainer)
+            return .init(principal: colors.feedback.success,
+                         subordinate: colors.feedback.onSuccess,
+                         tintedPrincipal: colors.feedback.successContainer,
+                         tintedSubordinate: colors.feedback.onSuccessContainer)
         case .alert:
-            return .init(primary: colors.feedback.alert,
-                         secondary: colors.feedback.onAlert,
-                         tintedPrimary: colors.feedback.alertContainer,
-                         tintedSecondary: colors.feedback.onAlertContainer)
+            return .init(principal: colors.feedback.alert,
+                         subordinate: colors.feedback.onAlert,
+                         tintedPrincipal: colors.feedback.alertContainer,
+                         tintedSubordinate: colors.feedback.onAlertContainer)
         case .danger:
-            return .init(primary: colors.feedback.error,
-                         secondary: colors.feedback.onError,
-                         tintedPrimary: colors.feedback.errorContainer,
-                         tintedSecondary: colors.feedback.onErrorContainer)
+            return .init(principal: colors.feedback.error,
+                         subordinate: colors.feedback.onError,
+                         tintedPrincipal: colors.feedback.errorContainer,
+                         tintedSubordinate: colors.feedback.onErrorContainer)
         }
     }
 }

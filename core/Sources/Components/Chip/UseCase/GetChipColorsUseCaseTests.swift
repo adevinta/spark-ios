@@ -33,10 +33,10 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
         self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
-            primary: .red,
-            secondary: .green,
-            tintedPrimary: .purple,
-            tintedSecondary: .blue)
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
 
         let expected = ChipColors(
             default: ChipStateColors(
@@ -63,10 +63,10 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
         self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
-            primary: .red,
-            secondary: .green,
-            tintedPrimary: .purple,
-            tintedSecondary: .blue)
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
 
         let expected = ChipColors(
             default: ChipStateColors(
@@ -95,10 +95,10 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
         self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
-            primary: .red,
-            secondary: .green,
-            tintedPrimary: .purple,
-            tintedSecondary: .blue)
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
 
         let expected = ChipColors(
             default: ChipStateColors(
@@ -125,10 +125,10 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
         self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
-            primary: .red,
-            secondary: .green,
-            tintedPrimary: .purple,
-            tintedSecondary: .blue)
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
 
         let expected = ChipColors(
             default: ChipStateColors(
@@ -155,10 +155,10 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
         self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
-            primary: .red,
-            secondary: .green,
-            tintedPrimary: .purple,
-            tintedSecondary: .blue)
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
 
         let expected = ChipColors(
             default: ChipStateColors(
@@ -199,14 +199,14 @@ extension ChipStateColors: Equatable {
 }
 
 private extension ChipIntentColors {
-    init(primary: UIColor,
-     secondary: UIColor,
-     tintedPrimary: UIColor,
-     tintedSecondary: UIColor) {
-        self.init(primary: ColorTokenGeneratedMock(uiColor: primary),
-                  secondary: ColorTokenGeneratedMock(uiColor: secondary),
-                  tintedPrimary: ColorTokenGeneratedMock(uiColor: tintedPrimary),
-                  tintedSecondary: ColorTokenGeneratedMock(uiColor:tintedSecondary))
+    init(principal: UIColor,
+     subordinate: UIColor,
+     tintedPrincipal: UIColor,
+     tintedSubordinate: UIColor) {
+        self.init(principal: ColorTokenGeneratedMock(uiColor: principal),
+                  subordinate: ColorTokenGeneratedMock(uiColor: subordinate),
+                  tintedPrincipal: ColorTokenGeneratedMock(uiColor: tintedPrincipal),
+                  tintedSubordinate: ColorTokenGeneratedMock(uiColor:tintedSubordinate))
     }
 }
 

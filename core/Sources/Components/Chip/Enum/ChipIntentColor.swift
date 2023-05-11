@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// The various intent color a chip may have.
 public enum ChipIntentColor: CaseIterable {
     case primary
     case secondary

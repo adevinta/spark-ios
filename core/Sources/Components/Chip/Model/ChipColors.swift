@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+/// The colors a chip can have for the default state and the pressed state
 struct ChipColors {
     // MARK: - Properties
 

@@ -11,24 +11,9 @@ import Foundation
 class ChipViewModel: ObservableObject {
 
     // MARK: - Properties Injected
-    var theme: Theme {
-        didSet {
-            self.themeDidUpdate()
-        }
-    }
-
-    var variant: ChipVariant {
-        didSet {
-            self.variantDidUpdate()
-        }
-    }
-
-    var intentColor: ChipIntentColor {
-        didSet {
-            self.updateColors()
-        }
-    }
-
+    private (set) var theme: Theme
+    private (set) var variant: ChipVariant
+    private (set) var intentColor: ChipIntentColor
     private let useCase: GetChipColorsUseCasable
 
     // MARK: - Published Properties
@@ -63,6 +48,25 @@ class ChipViewModel: ObservableObject {
         self.font = self.theme.typography.body2
     }
 
+    func set(theme: Theme) {
+        self.theme = theme
+        self.themeDidUpdate()
+    }
+
+    func set(variant: ChipVariant) {
+        if self.variant != variant {
+            self.variant = variant
+            self.variantDidUpdate()
+        }
+    }
+
+    func set(intentColor: ChipIntentColor) {
+        if self.intentColor != intentColor {
+            self.intentColor = intentColor
+            self.intentColorsDidUpdate()
+        }
+    }
+
     // MARK: - Private functions
     private func updateColors() {
         self.colors = self.useCase.execute(theme: self.theme, variant: self.variant, intent: self.intentColor)
@@ -78,6 +82,10 @@ class ChipViewModel: ObservableObject {
     }
 
     private func variantDidUpdate() {
+        self.updateColors()
+    }
+
+    private func intentColorsDidUpdate() {
         self.updateColors()
     }
 }

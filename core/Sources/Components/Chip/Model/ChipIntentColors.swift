@@ -8,9 +8,10 @@
 
 import Foundation
 
+/// The intent colors a chip can have
 struct ChipIntentColors {
-    let primary: ColorToken
-    let secondary: ColorToken
-    let tintedPrimary: ColorToken
-    let tintedSecondary: ColorToken
+    let principal: ColorToken
+    let subordinate: ColorToken
+    let tintedPrincipal: ColorToken
+    let tintedSubordinate: ColorToken
 }
