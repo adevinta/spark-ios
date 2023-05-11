@@ -101,20 +101,20 @@ public struct TagView: View {
     /// - Parameters:
     ///   - iconImage: The icon image of the tag.
     /// - Nullability:
-    ///   - Image can be nil, in this case, no image is displayed.
-    ///   - If image is nil, **you must add a text**.
+    ///   - The image can be nil, in this case, no image is displayed.
+    ///   - If the image is nil, **a text must be added**.
     /// - Returns: Current Tag View.
     public func iconImage(_ iconImage: Image?) -> Self {
         self.viewModel.setIconImage(iconImage)
         return self
     }
 
-    /// Set the text on tag.
+    /// Set the text of the tag.
     /// - Parameters:
     ///   - text: The text of the tag. Can be nil.
     /// - Nullability:
-    ///   - Text can be nil, in this case, no text is displayed.
-    ///   - If text is nil, **you must add a iconImage**.
+    ///   - The text can be nil, in this case, no text is displayed.
+    ///   - If the text is nil, **an iconImage must be added**.
     /// - Returns: Current Tag View.
     public func text(_ text: String?) -> Self {
         self.viewModel.setText(text)
