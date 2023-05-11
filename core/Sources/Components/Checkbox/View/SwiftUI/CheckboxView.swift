@@ -67,6 +67,7 @@ public struct CheckboxView: View {
     @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = Constants.checkboxIndeterminateHeight
 
     @ScaledMetric private var horizontalSpacing: CGFloat
+    @ScaledMetric private var smallSpacing: CGFloat
 
     // MARK: - Initialization
 
@@ -79,6 +80,7 @@ public struct CheckboxView: View {
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self._horizontalSpacing = .init(wrappedValue: theme.layout.spacing.medium)
+        self._smallSpacing = .init(wrappedValue: theme.layout.spacing.small)
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.viewModel = .init(text: text, theme: theme, colorsUseCase: colorsUseCase, state: state)
@@ -184,7 +186,7 @@ public struct CheckboxView: View {
                 self.checkboxView.padding(.leading, self.horizontalSpacing)
             }
         }
-        .padding(.vertical, self.spacing.small)
+        .padding(.vertical, self.smallSpacing)
         .opacity(self.viewModel.opacity)
         .allowsHitTesting(self.viewModel.interactionEnabled)
         .contentShape(Rectangle())

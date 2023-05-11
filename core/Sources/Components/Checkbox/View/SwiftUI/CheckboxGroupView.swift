@@ -20,6 +20,9 @@ public struct CheckboxGroupView: View {
     private var checkboxPosition: CheckboxPosition
     private var accessibilityIdentifierPrefix: String
 
+    @ScaledMetric private var spacingSmall: CGFloat
+    @ScaledMetric private var spacingXLarge: CGFloat
+
     // MARK: - Initialization
 
     /// Initialize a group of one or multiple checkboxes.
@@ -44,6 +47,9 @@ public struct CheckboxGroupView: View {
         self.checkboxPosition = checkboxPosition
         self.theme = theme
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
+
+        self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
+        self._spacingXLarge = .init(wrappedValue: theme.layout.spacing.xLarge)
     }
 
     // MARK: - Body
@@ -55,17 +61,17 @@ public struct CheckboxGroupView: View {
                 Text(self.title)
                     .foregroundColor(self.theme.colors.base.onSurface.color)
                     .font(self.theme.typography.subhead.font)
-                    .padding(.bottom, self.theme.layout.spacing.medium)
+                    .padding(.bottom, self.spacingXLarge - self.spacingSmall)
             }
 
-            let horizontalSpacing = spacing.xLarge / 2
+            let spacing = self.spacingXLarge - self.spacingSmall * 2
             switch self.layout {
             case .horizontal:
-                HStack(alignment: .top, spacing: horizontalSpacing) {
+                HStack(alignment: .top, spacing: spacing) {
                     self.contentView
                 }
             case .vertical:
-                VStack(alignment: .leading, spacing: horizontalSpacing - self.spacing.small) {
+                VStack(alignment: .leading, spacing: spacing) {
                     self.contentView
                 }
             }
