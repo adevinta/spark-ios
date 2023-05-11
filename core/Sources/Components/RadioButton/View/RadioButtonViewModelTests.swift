@@ -120,7 +120,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        sut.theme = ThemeGeneratedMock.mocked()
+        sut.set(theme: ThemeGeneratedMock.mocked())
 
         // Then
         wait(for: [expectation], timeout: 0.5)
@@ -137,7 +137,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        sut.state = .disabled
+        sut.set(state: .disabled)
 
         // Then
         wait(for: [expectation], timeout: 0.5)

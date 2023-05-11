@@ -8,10 +8,6 @@
 
 import SwiftUI
 /// The RadioButtonViewModel is a view model used by the ``RadioButtonView`` to handle theming logic and state changes.
-/// The model is created providing:
-/// -
-/// - theming: A struct containg `state` and `theme` of the radion button.
-/// -
 final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: ObservableObject {
     // MARK: - Injected Properties
 
@@ -20,26 +16,14 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     private let useCase: GetRadioButtonColorsUseCaseable
 
-    var theme: Theme {
-        didSet {
-            self.themeDidUpdate()
-        }
-    }
-    var state: SparkSelectButtonState {
-        didSet {
-            self.stateDidUpdate()
-        }
-    }
+    private (set) var theme: Theme
+    private (set) var state: SparkSelectButtonState
     
-    @Binding var selectedID: ID {
-        didSet {
-            self.updateColors()
-        }
-    }
+    @Binding private (set) var selectedID: ID
 
     // MARK: - Published Properties
 
-    @Published var colors: RadioButtonColorables
+    @Published var colors: RadioButtonColors
     @Published var isDisabled: Bool
     @Published var supplementaryText: String?
     @Published var opacity: CGFloat
@@ -93,9 +77,23 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     // MARK: - Functions
 
     func setSelected() {
-        self.selectedID = self.id
+        if self.selectedID != self.id {
+            self.selectedID = self.id
+            self.updateColors()
+        }
     }
 
+    func set(theme: Theme) {
+        self.theme = theme
+        self.themeDidUpdate()
+    }
+
+    func set(state: SparkSelectButtonState) {
+        if self.state != state {
+            self.state = state
+            self.stateDidUpdate()
+        }
+    }
     // MARK: - Private Functions
 
     private func updateColors() {

@@ -54,7 +54,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     @State private var isPressed: Bool = false
 
     private var radioButtonSize: CGFloat {
-        return size + pressedLineWidth
+        return self.size + self.pressedLineWidth
     }
 
     // MARK: - Initialization
@@ -103,7 +103,12 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     // MARK: - View modifier
 
     public func state(_ state: SparkSelectButtonState) -> Self {
-        self.viewModel.state = state
+        self.viewModel.set(state: state)
+        return self
+    }
+
+    public func theme(_ theme: Theme) -> Self {
+        self.viewModel.set(theme: theme)
         return self
     }
 
