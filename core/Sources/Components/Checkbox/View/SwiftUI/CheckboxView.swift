@@ -11,6 +11,23 @@ import SwiftUI
 /// The `CheckboxView`renders a single checkbox.
 public struct CheckboxView: View {
 
+    // MARK: - Constants
+
+    private enum Constants {
+        static var checkboxSize: CGFloat = 20
+        static var checkboxWidth: CGFloat = 20
+        static var checkboxHeight: CGFloat = 20
+        static var checkboxBorderRadius: CGFloat = 4
+        static var checkboxBorderWidth: CGFloat = 2
+
+        static var checkboxSelectedWidth: CGFloat = 14
+        static var checkboxSelectedHeight: CGFloat = 14
+        static var checkboxSelectedBorderWidth: CGFloat = 4
+
+        static var checkboxIndeterminateWidth: CGFloat = 12
+        static var checkboxIndeterminateHeight: CGFloat = 2
+    }
+
     // MARK: - Public Properties
 
     /// The current Spark theme.
@@ -37,17 +54,17 @@ public struct CheckboxView: View {
 
     private let checkboxPosition: CheckboxPosition
 
-    @ScaledMetric private var checkboxWidth: CGFloat = 20
-    @ScaledMetric private var checkboxHeight: CGFloat = 20
-    @ScaledMetric private var checkboxBorderRadius: CGFloat = 4
-    @ScaledMetric private var checkboxBorderWidth: CGFloat = 2
+    @ScaledMetric private var checkboxWidth: CGFloat = Constants.checkboxWidth
+    @ScaledMetric private var checkboxHeight: CGFloat = Constants.checkboxHeight
+    @ScaledMetric private var checkboxBorderRadius: CGFloat = Constants.checkboxBorderRadius
+    @ScaledMetric private var checkboxBorderWidth: CGFloat = Constants.checkboxBorderWidth
 
-    @ScaledMetric private var checkboxSelectedWidth: CGFloat = 14
-    @ScaledMetric private var checkboxSelectedHeight: CGFloat = 14
-    @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat = 4
+    @ScaledMetric private var checkboxSelectedWidth: CGFloat = Constants.checkboxSelectedWidth
+    @ScaledMetric private var checkboxSelectedHeight: CGFloat = Constants.checkboxSelectedHeight
+    @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat = Constants.checkboxSelectedBorderWidth
 
-    @ScaledMetric private var checkboxIndeterminateWidth: CGFloat = 12
-    @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = 2
+    @ScaledMetric private var checkboxIndeterminateWidth: CGFloat = Constants.checkboxIndeterminateWidth
+    @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = Constants.checkboxIndeterminateHeight
 
     @ScaledMetric private var horizontalSpacing: CGFloat
 
