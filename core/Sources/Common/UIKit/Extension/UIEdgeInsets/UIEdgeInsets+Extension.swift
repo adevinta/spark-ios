@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension UIEdgeInsets {
+extension UIEdgeInsets {
 
     // MARK: - Init
 

@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// The UIKit version for the tag.
 public final class TagUIView: UIView {
 
     // MARK: - Type alias
@@ -44,6 +45,7 @@ public final class TagUIView: UIView {
 
     // MARK: - Public Properties
 
+    /// The spark theme of the tag.
     public var theme: Theme {
         didSet {
             self._colors = self.getColorsFromUseCase()
@@ -51,24 +53,32 @@ public final class TagUIView: UIView {
         }
     }
 
+    /// The intentColor of the tag.
     public var intentColor: TagIntentColor {
         didSet {
             self._colors = self.getColorsFromUseCase()
         }
     }
-    
+
+    /// The variant of the tag.
     public var variant: TagVariant {
         didSet {
             self._colors = self.getColorsFromUseCase()
         }
     }
 
+    /// The icon image of the tag.
+    /// Image can be nil, in this case, no image is displayed.
+    /// If image is nil, **you must add a text**.
     public var iconImage: UIImage? {
         didSet {
             self.reloadIconImageView()
         }
     }
 
+    /// The text of the tag.
+    /// Text can be nil, in this case, no text is displayed.
+    /// If text is nil, **you must add a iconImage**.
     public var text: String? {
         didSet {
             self.reloadTextLabel()
@@ -110,6 +120,12 @@ public final class TagUIView: UIView {
 
     // MARK: - Initialization
 
+    /// Initialize a new tag view with icon image.
+    /// - Parameters:
+    ///   - theme: The spark theme.
+    ///   - intentColor: The intentColor of the tag.
+    ///   - variant: The variant of the tag.
+    ///   - iconImage: The icon image of the tag.
     public convenience init(theme: Theme,
                             intentColor: TagIntentColor,
                             variant: TagVariant,
@@ -121,6 +137,12 @@ public final class TagUIView: UIView {
                   text: nil)
     }
 
+    /// Initialize a new tag view with text.
+    /// - Parameters:
+    ///   - theme: The spark theme.
+    ///   - intentColor: The intentColor of the tag.
+    ///   - variant: The variant of the tag.
+    ///   - text: The text of the tag.
     public convenience init(theme: Theme,
                             intentColor: TagIntentColor,
                             variant: TagVariant,
@@ -132,6 +154,13 @@ public final class TagUIView: UIView {
                   text: text)
     }
 
+    /// Initialize a new tag view with icon image and text.
+    /// - Parameters:
+    ///   - theme: The spark theme.
+    ///   - intentColor: The intentColor of the tag.
+    ///   - variant: The variant of the tag.
+    ///   - iconImage: The icon image of the tag.
+    ///   - text: The text of the tag.
     public convenience init(theme: Theme,
                             intentColor: TagIntentColor,
                             variant: TagVariant,
