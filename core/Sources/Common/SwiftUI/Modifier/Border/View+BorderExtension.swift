@@ -10,9 +10,15 @@ import SwiftUI
 
 public extension View {
 
+    /// Add border on current view.
+    /// - Parameters:
+    ///   - width: The border width.
+    ///   - radius: The border radius.
+    ///   - colorToken: The color token of the border.
+    /// - Returns: Current View.
     func border(width: CGFloat,
                 radius: CGFloat,
-                colorToken: ColorToken?) -> some View {
+                colorToken: ColorToken) -> some View {
         self.modifier(BorderViewModifier(width: width,
                                          radius: radius,
                                          colorToken: colorToken))

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public extension EdgeInsets {
+extension EdgeInsets {
 
     // MARK: - Init
 

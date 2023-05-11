@@ -19,6 +19,7 @@ public extension Bundle {
 
     // MARK: - Fonts
 
+    /// Register all bundle fonts  (.ttf or .otf) to be used by Spark
     func registerAllFonts() {
         // Get all custom fonts on bundle
         let fontURLs = Constants.fontExtensions.compactMap { fontExtension in

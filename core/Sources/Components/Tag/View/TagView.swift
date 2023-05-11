@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-// TODO: add documentation for all public struct/properties/func...
+/// The SwiftUI version for the tag
 public struct TagView: View {
 
     // MARK: - Type Alias
@@ -22,6 +22,16 @@ public struct TagView: View {
 
     // MARK: - Initialization
 
+    /// Initialize a new tag with default values.
+    /// - Parameters:
+    ///   - theme: The spark theme.
+    /// - Default values are:
+    ///   - intentColor is .primary case.
+    ///   - variant is .filled case.
+    ///   - iconImage is nil.
+    ///   - text is nil.
+    ///
+    /// - Note: You must use the Modifier to add at least iconImage or/and text.
     public init(theme: Theme) {
         self.viewModel = .init(theme: theme)
     }
@@ -58,27 +68,54 @@ public struct TagView: View {
 
     // MARK: - Modifier
 
+    /// Add the some accessibility values on tag.
+    /// - Parameters:
+    ///   - identifier: The accessibility identifier.
+    ///   - label: The label identifier. If value is nil and text is set, the label identifier will be the text value.
+    /// - Returns: Current Tag View.
     public func accessibility(identifier: String,
-                              label: String?) -> some View {
+                              label: String? = nil) -> some View {
         self.modifier(AccessibilityViewModifier(identifier: identifier,
                                                 label: label ?? self.viewModel.text))
     }
 
+    /// Set the intentColor on tag.
+    /// - Parameters:
+    ///   - intentColor: The intentColor of the tag.
+    /// - Returns: Current Tag View.
     public func intentColor(_ intentColor: TagIntentColor) -> Self {
         self.viewModel.setIntentColor(intentColor)
         return self
     }
 
+    /// Set the variant on tag.
+    /// - Parameters:
+    ///   - variant: The variant of the tag.
+    /// - Returns: Current Tag View.
     public func variant(_ variant: TagVariant) -> Self {
         self.viewModel.setVariant(variant)
         return self
     }
 
+    /// Set the iconImage on tag.
+    /// - Parameters:
+    ///   - iconImage: The icon image of the tag.
+    /// - Nullability:
+    ///   - Image can be nil, in this case, no image is displayed.
+    ///   - If image is nil, **you must add a text**.
+    /// - Returns: Current Tag View.
     public func iconImage(_ iconImage: Image?) -> Self {
         self.viewModel.setIconImage(iconImage)
         return self
     }
 
+    /// Set the text on tag.
+    /// - Parameters:
+    ///   - text: The text of the tag. Can be nil.
+    /// - Nullability:
+    ///   - Text can be nil, in this case, no text is displayed.
+    ///   - If text is nil, **you must add a iconImage**.
+    /// - Returns: Current Tag View.
     public func text(_ text: String?) -> Self {
         self.viewModel.setText(text)
         return self
