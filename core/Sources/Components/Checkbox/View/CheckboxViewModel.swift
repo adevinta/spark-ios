@@ -16,6 +16,8 @@ final class CheckboxViewModel: ObservableObject {
     @Published var theme: Theme
     @Published var state: SelectButtonState {
         didSet {
+            guard oldValue != state else { return }
+
             self.updateColors()
         }
     }

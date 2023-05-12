@@ -107,6 +107,8 @@ public final class CheckboxUIView: UIView {
             return self.viewModel.state
         }
         set {
+            guard newValue != self.viewModel.state else { return }
+
             self.viewModel.state = newValue
 
             self.updateState()
