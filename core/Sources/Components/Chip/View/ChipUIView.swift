@@ -229,6 +229,7 @@ public final class ChipUIView: UIView {
         self.stackView.spacing = self.spacing
         self.heightConstraint?.constant = self.height
 
+        self.updateLayoutMargins()
         self.updateBorder()
     }
 
