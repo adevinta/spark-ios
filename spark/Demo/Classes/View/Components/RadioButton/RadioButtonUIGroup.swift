@@ -10,6 +10,7 @@ import Spark
 import SparkCore
 import SwiftUI
 
+// MARK: SwiftUI Representable
 struct RadioButtonUIGroup: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> RadioButtionUIGroupViewController {
         return RadioButtionUIGroupViewController()
@@ -22,20 +23,50 @@ struct RadioButtonUIGroup: UIViewControllerRepresentable {
 
 final class RadioButtionUIGroupViewController: UIViewController {
 
+    // MARK: - Constant definitions
+
+    private enum Constants {
+        static let width: CGFloat = 40
+        static let padding: CGFloat = 20
+    }
+
+    // MARK: - Properies
+
     private var backingSelectedId: String = "1"
-    private lazy var selectedValueLabel = UIView.label("Selected Value \(backingSelectedId)")
+
+    private var label: String {
+        "Selected Value \(self.backingSelectedId)"
+    }
+
+    private lazy var selectedValueLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.text = self.label
+        label.font = .preferredFont(forTextStyle: .body)
+        return label
+    }()
+
     lazy var selectedId: Binding<String> = Binding<String>(
         get: {
             return self.backingSelectedId
         },
         set: {
             self.backingSelectedId = $0
-            self.selectedValueLabel.text = "Selected Value \(self.backingSelectedId)"
+            self.selectedValueLabel.text = self.label
         }
     )
     let theme = SparkTheme.shared
 
     private let scrollView = UIScrollView()
+
+    private let contentView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 24
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
 
     private lazy var radioButtonItems: [RadioButtonItem<String>] = [
         RadioButtonItem(id: "1",
@@ -57,63 +88,50 @@ final class RadioButtionUIGroupViewController: UIViewController {
                         state: .warning(message: "Warning")),
     ]
 
+    // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(scrollView)
+        self.setupView()
+        self.setupConstraints()
+    }
 
-
-
+    // MARK: Private Methods
+    private func setupView() {
+        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.scrollView)
 
         let radioButtonView = RadioButtonUIGroupView(
-            theme: theme,
+            theme: self.theme,
             title: "Radio Button Group (UIKit)",
-            selectedID: selectedId,
-            items: radioButtonItems)
+            selectedID: self.selectedId,
+            items: self.radioButtonItems)
 
 
-        let contentView = UIStackView()
-        contentView.axis = .vertical
-        contentView.alignment = .center
-        contentView.spacing = 24
+        self.contentView.addArrangedSubview(radioButtonView)
+        self.contentView.addArrangedSubview(self.selectedValueLabel)
+        self.contentView.addArrangedSubview(UIView())
 
-        contentView.translatesAutoresizingMaskIntoConstraints = false
+        self.scrollView.addSubview(self.contentView)
+    }
 
-        contentView.addArrangedSubview(radioButtonView)
-
-        contentView.addArrangedSubview(self.selectedValueLabel)
-
-        contentView.addArrangedSubview(UIView())
-
-        scrollView.addSubview(contentView)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-
+    private func setupConstraints() {
         let constraints = [
-            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 40),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+            self.scrollView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: Constants.width),
+            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.contentView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor),
+            self.contentView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: Constants.padding),
+            self.contentView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -Constants.padding),
+            self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+            self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
         ]
-
         NSLayoutConstraint.activate(constraints)
     }
 }
 
-private extension UIView {
-    static func label(_ title: String) -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.text = title
-        label.font = .preferredFont(forTextStyle: .body)
-        return label
-    }
-}
+// MARK: - Preview
 
 struct RadioButtonUIGroup_Previews: PreviewProvider {
     static var previews: some View {

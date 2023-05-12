@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Toggle view used for the radio button. When the toggle is pressed, a halo is rendered around the toggle.
 final class RadioButtonToggleUIView: UIView {
 
     // MARK: Properties
@@ -23,12 +24,7 @@ final class RadioButtonToggleUIView: UIView {
         }
     }
 
-    var isChanged: Bool = false {
-        didSet {
-            self.setNeedsDisplay()
-        }
-    }
-
+    // MARK: Initialization
     init() {
         self.haloColor = .clear
         self.buttonColor = .clear
@@ -36,6 +32,13 @@ final class RadioButtonToggleUIView: UIView {
         super.init(frame: .zero)
     }
 
+    /// Toggle view
+    /// This is the toggle used in the radio button to display whether an item is selected or not.
+    ///
+    /// Paramters:
+    /// - haloColor: The outermost color, usually set when the item is pressed
+    /// - buttonColor: The color of the inner circle
+    /// - fillColor: The filled dot in the middle.
     init(haloColor: UIColor, buttonColor: UIColor, fillColor: UIColor) {
         self.haloColor = haloColor
         self.buttonColor = buttonColor
@@ -47,6 +50,7 @@ final class RadioButtonToggleUIView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Methods
     func setColors(_ colors: RadioButtonColors) {
         self.haloColor = colors.halo.uiColor
         self.buttonColor = colors.button.uiColor
@@ -92,6 +96,8 @@ final class RadioButtonToggleUIView: UIView {
         }
     }
 }
+
+// MARK: Private helpers
 
 private extension UIBezierPath {
     static func circle(position: CGFloat,

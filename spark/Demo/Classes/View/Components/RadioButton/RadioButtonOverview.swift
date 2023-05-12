@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct RadioButtonOverview: View {
+
+    // MARK: - Body
+
     var body: some View {
         List {
             NavigationLink("Radio Button SwiftUI") {
@@ -24,6 +27,7 @@ struct RadioButtonOverview: View {
     }
 }
 
+// MARK: - Preview
 struct RadioButtonOverview_Previews: PreviewProvider {
     static var previews: some View {
         RadioButtonOverview()

@@ -11,6 +11,7 @@ import SwiftUI
 
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
 
+    // MARK: - Properties
     private var selectedID: Binding<ID>
     private let theme: Theme
     private let items: [RadioButtonItem<ID>]
@@ -38,6 +39,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     private var radioButtonViews: [RadioButtonUIView<ID>] = []
     private var titleLabel = UILabel()
 
+    // MARK: Initializers
     public init(theme: Theme,
                 title: String? = nil,
                 selectedID: Binding<ID>,
@@ -62,6 +64,8 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             constraint.constant = spacing
         }
     }
+
+    // MARK: Private Methods
 
     private func arrangeView() {
         self.radioButtonViews = items.map {

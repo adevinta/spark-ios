@@ -18,11 +18,16 @@ private enum Constants {
     static let textLabelTopSpacing: CGFloat = 3
 }
 
+/// A radio button view composed of a toggle item, a label and a possible sublabel.
+/// The color of the view is determined by the state. A possible sublabel is also part of the state.
+/// The value of the radio button is represented by the generic type ID.
+/// When the radio button is selected, it will change the binding value.
 public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: UIView {
 
     // MARK: Injected Properties
     private let viewModel: RadioButtonViewModel<ID>
 
+    /// The general theme
     public var theme: Theme {
         get {
             return self.viewModel.theme
@@ -32,6 +37,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
+    /// The current state
     public var state: SparkSelectButtonState {
         get {
             return self.viewModel.state
@@ -41,6 +47,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
+    /// The label of radio button
     public var label: String {
         get {
             return self.viewModel.label
@@ -80,6 +87,15 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     private var toggleViewTopConstraint: NSLayoutConstraint?
 
     //  MARK: - Initialization
+
+    /// The radio button comonent takes a theme, an id, a label and a binding
+    ///
+    /// Parameters:
+    /// - theme: The current theme
+    /// - id: The value of the radio button
+    /// - label: The text rendered to describe the value
+    /// - selectedId: A binding which is triggered when the radio button is selected
+    /// - state: the current state
     public convenience init(theme: Theme,
                             id: ID,
                             label: String,
@@ -105,10 +121,11 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Public Functions
     public func toggleNeedsRedisplay(_ selected: ID) {
         let radioButtonColors = self.viewModel.colorsFor(selectedID: selected)
         self.updateColors(radioButtonColors)
-        self.toggleView.isChanged = true
+        self.toggleView.setNeedsDisplay()
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -132,48 +149,43 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     // MARK: - Private functions
 
     private func setupSubscriptions() {
-        self.viewModel.$opacity
-            .receive(on: RunLoop.main)
-            .sink { [weak self] opacity in
+        self.subscribeTo(self.viewModel.$opacity) { [weak self] opacity in
             self?.alpha = opacity
         }
-        .store(in: &self.subscriptions)
 
-        self.viewModel.$colors
-            .receive(on: RunLoop.main)
-            .sink { [weak self] colors in
+        self.subscribeTo(self.viewModel.$colors) { [weak self] colors in
             self?.updateColors(colors)
-        }.store(in: &self.subscriptions)
+        }
 
-        self.viewModel.$isDisabled
-            .receive(on: RunLoop.main)
-            .sink { [weak self] isDisabled in
+        self.subscribeTo(self.viewModel.$isDisabled) { [weak self] isDisabled in
             self?.setupButtonActions(isDisabled: isDisabled)
-        }.store(in: &self.subscriptions)
+        }
 
-        self.viewModel.$font
-            .receive(on: RunLoop.main)
-            .sink { [weak self] font in
+        self.subscribeTo(self.viewModel.$font) { [weak self] font in
             self?.labelView.font = font.uiFont
-        }.store(in: &self.subscriptions)
+        }
 
-        self.viewModel.$supplemetaryFont
-            .receive(on: RunLoop.main)
-            .sink { [weak self] supplementaryFont in
+        self.subscribeTo(self.viewModel.$supplemetaryFont) { [weak self] supplementaryFont in
             self?.supplementaryLabelView.font = supplementaryFont.uiFont
-        }.store(in: &self.subscriptions)
+        }
 
-        self.viewModel.$supplementaryText
-            .receive(on: RunLoop.main)
-            .sink { [weak self] supplementaryText in
+        self.subscribeTo(self.viewModel.$supplementaryText) { [weak self] supplementaryText in
             self?.supplementaryLabelView.text = supplementaryText
-        }.store(in: &self.subscriptions)
+        }
 
-        self.viewModel.$label
-            .receive(on: RunLoop.main)
-            .sink {  [weak self] label in
+        self.subscribeTo(self.viewModel.$label) { [weak self] label in
             self?.labelView.text = label
-        }.store(in: &self.subscriptions)
+        }
+
+    }
+
+    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void ) {
+        publisher
+            .receive(on: RunLoop.main)
+            .sink { value in
+                action(value)
+            }
+            .store(in: &self.subscriptions)
     }
 
     private func arrangeViews() {
@@ -265,20 +277,8 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.labelViewBottomConstraint = bottomViewConstraint
     }
 
-//    private func updateColors(colors: RadioButtonColorables) {
-////        let radioButtonColors = self.viewModel.recalculateColors(selectedID: selectedID)
-////        let radioButtonColors = self.viewModel.colors
-//
-//        self.toggleView.haloColor = colors.halo.uiColor
-//        self.toggleView.buttonColor = colors.button.uiColor
-//        self.toggleView.fillColor = colors.fill?.uiColor
-//        self.labelView.textColor = colors.label.uiColor
-//    }
-
     @IBAction func actionTapped(sender: UIButton)  {
         self.viewModel.setSelected()
-//        self.updateColors(colors: self.viewModel.colors)
-
         self.toggleView.isPressed = false
     }
 
@@ -292,6 +292,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 }
 
 //MARK: - Private Helpers
+
 private extension UILabel {
     static var standard: UILabel {
         let label = UILabel()
@@ -304,4 +305,3 @@ private extension UILabel {
         return label
     }
 }
-
