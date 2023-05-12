@@ -22,9 +22,9 @@ final class GetChipColorsUseCaseTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        self.intentColorsUseCase = GetChipIntentColorsUseCasableGeneratedMock()
-        self.sut = GetChipColorsUseCase(intentColorsUseCase: intentColorsUseCase)
-        self.theme = ThemeGeneratedMock()
+        self.intentColorsUseCase = .init()
+        self.sut = .init(intentColorsUseCase: intentColorsUseCase)
+        self.theme = .init()
     }
 
     // MARK: - Tests
