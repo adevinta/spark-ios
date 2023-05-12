@@ -100,10 +100,10 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     public convenience init(theme: Theme,
                             id: ID,
                             label: String,
-                            selectedId: Binding<ID>,
+                            selectedID: Binding<ID>,
                             state: SparkSelectButtonState = .enabled
     ) {
-        let viewModel = RadioButtonViewModel(theme: theme, id: id, label: label, selectedID: selectedId, state: state)
+        let viewModel = RadioButtonViewModel(theme: theme, id: id, label: label, selectedID: selectedID, state: state)
 
         self.init(viewModel: viewModel)
     }

@@ -9,24 +9,24 @@
 import UIKit
 import SwiftUI
 
+private enum Constants {
+    static let touchPadding: CGFloat = 16
+}
+
 /// RadioButtonGroupView embodies a radio button group and handles 
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
 
-    // MARK: - Properties
+    // MARK: - Private Properties
     private var selectedID: Binding<ID>
     private let theme: Theme
     private let items: [RadioButtonItem<ID>]
     private let title: String?
-    private let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
     private var itemConstraints = [NSLayoutConstraint]()
 
-    var spacing: CGFloat {
-        return self.bodyFontMetrics.scaledValue(
-            for: (self.theme.layout.spacing.xLarge - 16),
-            compatibleWith: traitCollection)
-    }
+    @ScaledUIMetric var spacing: CGFloat
 
     private var stackView = UIStackView()
+
     private lazy var backingSelectedID: Binding<ID> = Binding(
         get: {
             return self.selectedID.wrappedValue
@@ -38,6 +38,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     )
 
     private var radioButtonViews: [RadioButtonUIView<ID>] = []
+
     private var titleLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
@@ -55,6 +56,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         self.items = items
         self.selectedID = selectedID
         self.title = title
+        self._spacing = ScaledUIMetric(wrappedValue: (theme.layout.spacing.xLarge - Constants.touchPadding))
         super.init(frame: .zero)
 
         arrangeView()
@@ -66,6 +68,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        self._spacing.update(traitCollection: self.traitCollection)
 
         for constraint in self.itemConstraints {
             constraint.constant = spacing
@@ -79,7 +82,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             RadioButtonUIView(theme: theme,
                               id: $0.id,
                               label: $0.label,
-                              selectedId: self.backingSelectedID,
+                              selectedID: self.backingSelectedID,
                               state: $0.state)
         }
 
