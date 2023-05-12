@@ -13,7 +13,7 @@ struct ComponentsView: View {
         NavigationView {
             List {
                 NavigationLink("Badge") {
-                    Text("TODO")
+                    BadgeComponentView()
                 }
 
                 NavigationLink("Button") {
