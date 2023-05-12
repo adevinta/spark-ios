@@ -45,13 +45,10 @@ jobs:
           path: spark-ios-snapshots
       - name: Check snapshot branch checkout failure
         if: steps.checkout_snapshot_branch_similar_to_main_repo.outcome != 'success'
-        runs-on: macos-latest
-        steps:
-          - name: Run snapshots main branch
-            uses: actions/checkout@v3
-            with:
-              repository: adevinta/spark-ios-snapshots
-              path: spark-ios-snapshots
+        uses: actions/checkout@v3
+        with:
+          repository: adevinta/spark-ios-snapshots
+          path: spark-ios-snapshots
       - name: Run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
       - name: Tar files
