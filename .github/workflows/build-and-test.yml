@@ -31,15 +31,10 @@ jobs:
         with:
           spec: project.yml
           version: '2.33.0'
-      - name: Extract branch name
-        shell: bash
-        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >>$GITHUB_OUTPUT
-        id: extract_branch
       - name: Run snapshots
         uses: actions/checkout@v3
         with:
           repository: adevinta/spark-ios-snapshots
-          ref: ${{ steps.extract_branch.outputs.branch }}
           path: spark-ios-snapshots
       - name: Run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
