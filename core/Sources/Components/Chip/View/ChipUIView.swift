@@ -128,6 +128,7 @@ public final class ChipUIView: UIView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
+        stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -143,7 +144,7 @@ public final class ChipUIView: UIView {
     private var heightConstraint: NSLayoutConstraint?
     private var topPaddingConstraint: NSLayoutConstraint?
     private var bottomPaddingConstraint: NSLayoutConstraint?
-    private var cancellables = Set<AnyCancellable>()
+    private var subscriptions = Set<AnyCancellable>()
 
     //MARK: - Initializers
 
@@ -208,7 +209,6 @@ public final class ChipUIView: UIView {
         self.icon = optionalIconImage
         self.uiLabel.sizeToFit()
 
-        self.uiLabel.font = self.viewModel.font.uiFont
         self.setupView()
 
     }
@@ -228,16 +228,8 @@ public final class ChipUIView: UIView {
 
         self.stackView.spacing = self.spacing
         self.heightConstraint?.constant = self.height
-        self.stackView.layoutMargins = UIEdgeInsets(top: 0, left: self.padding, bottom: 0, right: self.padding)
-        self.stackView.layer.cornerRadius = self.borderRadius
-        
-        if self.viewModel.isBorderDashed {
-            self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
-        } else if self.viewModel.isBordered {
-            self.stackView.layer.borderWidth = self.borderWidth
-        } else {
-            self.stackView.layer.borderWidth = 0
-        }
+
+        self.updateBorder()
     }
 
     required init?(coder: NSCoder) {
@@ -286,16 +278,40 @@ public final class ChipUIView: UIView {
         self.addSubview(self.button)
         self.button.frame = self.bounds
 
-        self.stackView.spacing = self.spacing
+        self.updateFont()
+        self.updateSpacing()
+        self.updateLayoutMargins()
 
-        self.stackView.layoutMargins = UIEdgeInsets(top: 0, left: self.padding, bottom: 0, right: self.padding)
-        self.stackView.isLayoutMarginsRelativeArrangement = true
         self.stackView.addArrangedSubview(self.uiImageView)
         self.stackView.addArrangedSubview(self.uiLabel)
 
         self.setupConstraints()
         self.setChipColors(self.viewModel.colors.default)
         self.setupSubscriptions()
+    }
+
+    private func updateLayoutMargins() {
+        self.stackView.layoutMargins = UIEdgeInsets(top: 0, left: self.padding, bottom: 0, right: self.padding)
+    }
+
+    private func updateSpacing() {
+        self.stackView.spacing = self.spacing
+    }
+
+    private func updateBorder() {
+        self.stackView.layer.cornerRadius = self.borderRadius
+
+        if self.viewModel.isBorderDashed {
+            self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
+        } else if self.viewModel.isBordered {
+            self.stackView.layer.borderWidth = self.borderWidth
+        } else {
+            self.stackView.layer.borderWidth = 0
+        }
+    }
+
+    private func updateFont() {
+        self.uiLabel.font = self.viewModel.font.uiFont
     }
 
     private func setupConstraints() {
@@ -339,12 +355,42 @@ public final class ChipUIView: UIView {
     }
 
     private func setupSubscriptions() {
-        self.viewModel.$colors
+        self.subscribeTo(self.viewModel.$colors) { [weak self] colors in
+            self?.setChipColors(colors.default)
+        }
+
+        self.subscribeTo(self.viewModel.$spacing) { [weak self] spacing in
+            guard let self else { return }
+            self.spacing = spacing
+            self._spacing.update(traitCollection: self.traitCollection)
+            self.updateSpacing()
+        }
+
+        self.subscribeTo(self.viewModel.$padding) { [weak self] padding in
+            guard let self else { return }
+            self.padding = padding
+            self._padding.update(traitCollection: self.traitCollection)
+            self.updateLayoutMargins()
+        }
+        
+        self.subscribeTo(self.viewModel.$borderRadius) { [weak self] borderRadius in
+            guard let self else { return }
+            self.borderRadius = borderRadius
+            self._borderRadius.update(traitCollection: self.traitCollection)
+            self.updateBorder()
+        }
+
+        self.subscribeTo(self.viewModel.$font) { [weak self] _ in
+            self?.updateFont()
+        }
+    }
+
+    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void) {
+        publisher
             .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.setChipColors(self.viewModel.colors.default)
-            }.store(in: &self.cancellables)
+            .sink { value in
+                action(value)
+            }.store(in: &self.subscriptions)
     }
 
     private func removeDashedBorder() {
