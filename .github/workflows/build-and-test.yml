@@ -33,7 +33,7 @@ jobs:
           version: '2.33.0'
       - name: Extract branch name
         shell: bash
-        run: echo "branch=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_OUTPUT
+        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >>$GITHUB_OUTPUT
         id: extract_branch
       - name: Run snapshots
         uses: actions/checkout@v3
