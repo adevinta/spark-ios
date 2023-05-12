@@ -172,7 +172,7 @@ final class CheckboxGroupViewController: UIViewController {
         let theme = SparkTheme.shared
 
         let groupView = CheckboxGroupUIView(
-            title: "Hello world!",
+            title: "Checkbox-group title (UIKit)",
             items: .init(
                 get: { [weak self] in
                     self?.items ?? []

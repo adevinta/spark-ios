@@ -69,7 +69,7 @@ struct CheckboxGroupListView: View {
         ScrollView(self.layout == .horizontal ? .horizontal : .vertical) {
             HStack {
                 CheckboxGroupView(
-                    title: "Very long custom title",
+                    title: "Checkbox-group title (SwiftUI)",
                     items: $items,
                     layout: layout,
                     checkboxPosition: checkboxPosition,
