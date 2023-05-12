@@ -50,7 +50,6 @@ final class GetChipColorsUseCaseTests: XCTestCase {
 
         // When
         for intentColor in [ChipIntentColor.primary, .secondary, .alert, .danger, .info, .neutral, .success] {
-
             let given = sut.execute(theme: theme, variant: .filled, intent: intentColor)
 
             // Then
