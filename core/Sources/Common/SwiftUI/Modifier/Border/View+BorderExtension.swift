@@ -10,7 +10,7 @@ import SwiftUI
 
 public extension View {
 
-    /// Add border on current view.
+    /// Add a border to the current view.
     /// - Parameters:
     ///   - width: The border width.
     ///   - radius: The border radius.
