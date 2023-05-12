@@ -33,7 +33,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         },
         set: { newValue in
             self.selectedID.wrappedValue = newValue
-            self.updateRadioButtonStates(newValue: newValue)
+            self.updateRadioButtonStates()
         }
     )
 
@@ -120,9 +120,9 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         self.addSubview(self.stackView)
     }
 
-    private func updateRadioButtonStates(newValue: ID) {
+    private func updateRadioButtonStates() {
         for radioButtonView in self.radioButtonViews {
-            radioButtonView.toggleNeedsRedisplay(newValue)
+            radioButtonView.toggleNeedsRedisplay()
         }
     }
 }

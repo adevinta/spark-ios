@@ -95,17 +95,12 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         }
     }
 
-    func colorsFor(selectedID: ID) -> RadioButtonColors {
-        return self.useCase
-            .execute(theme: self.theme, state: self.state, isSelected: selectedID == self.id)
-    }
-
-    // MARK: - Private Functions
-
-    private func updateColors() {
+    func updateColors() {
         self.colors = useCase
             .execute(theme: self.theme, state: self.state, isSelected: selectedID == id)
     }
+
+    // MARK: - Private Functions
 
     private func stateDidUpdate() {
         self.isDisabled = self.state == .disabled

@@ -123,9 +123,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     // MARK: Public Functions
-    public func toggleNeedsRedisplay(_ selected: ID) {
-        let radioButtonColors = self.viewModel.colorsFor(selectedID: selected)
-        self.updateColors(radioButtonColors)
+    public func toggleNeedsRedisplay() {
+        self.viewModel.updateColors()
+        self.updateColors(self.viewModel.colors)
         self.toggleView.setNeedsDisplay()
     }
 
