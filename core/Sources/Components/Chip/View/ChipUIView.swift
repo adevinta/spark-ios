@@ -9,15 +9,17 @@
 import Combine
 import UIKit
 
-private enum Constants {
-    static let imageSize: CGFloat = 13.33
-    static let height: CGFloat = 32
-    static let touchAreaPadding: CGFloat = 6
-    static let borderWidth: CGFloat = 1
-    static let dashLength: CGFloat = 1.9
-}
-
 public final class ChipUIView: UIView {
+
+    // MARK: - Constants
+
+    private enum Constants {
+        static let imageSize: CGFloat = 13.33
+        static let height: CGFloat = 32
+        static let touchAreaPadding: CGFloat = 6
+        static let borderWidth: CGFloat = 1
+        static let dashLength: CGFloat = 1.9
+    }
 
     //MARK: - Public properties
     /// An optional icon on the Chip. The icon is always rendered to the left of the text
