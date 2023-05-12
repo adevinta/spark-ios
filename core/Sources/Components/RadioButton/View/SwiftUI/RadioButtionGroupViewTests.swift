@@ -50,6 +50,7 @@ final class RadioButtionGroupViewTests: SwiftUIComponentTestCase {
             ])
             .frame(width: 400)
             .fixedSize(horizontal: false, vertical: true)
+
         assertSnapshotInDarkAndLight(matching: sut)
     }
 }

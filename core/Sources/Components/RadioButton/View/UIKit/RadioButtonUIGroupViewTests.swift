@@ -14,7 +14,10 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
-final class RadioButtonUIGroupViewTests: TestCase {
+final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
+
+    // MARK: - Properties
+
     var backingSelectedID = "1"
 
     lazy var selectedID: Binding<String> = {
@@ -24,6 +27,7 @@ final class RadioButtonUIGroupViewTests: TestCase {
         )
     }()
 
+    // MARK: - Tests
 
     func test_radioButtonGroup() throws {
         let items: [RadioButtonItem<String>] = [
@@ -58,46 +62,4 @@ final class RadioButtonUIGroupViewTests: TestCase {
 
         assertSnapshotInDarkAndLight(matching: sut)
     }
-
-}
-
-public func assertSnapshotInDarkAndLight(
-    matching view: @autoclosure () -> some UIView,
-    named name: String? = nil,
-    record recording: Bool = false,
-    timeout: TimeInterval = 5,
-    file: StaticString = #file,
-    testName: String = #function,
-    line: UInt = #line
-) {
-    sparktAssertSnapshot(
-        matching: view(),
-        as: .image(precision: 0.98,
-                   perceptualPrecision: 0.98,
-                   traits: .darkMode),
-        named: name,
-        record: recording,
-        timeout: timeout,
-        file: file,
-        testName: testName,
-        line: line
-    )
-    sparktAssertSnapshot(
-        matching: view(),
-        as: .image(precision: 0.98,
-                   perceptualPrecision: 0.98),
-        named: name,
-        record: recording,
-        timeout: timeout,
-        file: file,
-        testName: testName,
-        line: line
-    )
-}
-
-private extension UITraitCollection {
-    static let darkMode: UITraitCollection = .init(
-        traitsFrom: [
-            .init(userInterfaceStyle: .dark),
-        ])
 }
