@@ -29,7 +29,7 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
 
     // MARK: - Tests
 
-    func test_radioButtonGroup() throws {
+    func test_uikit_radioButtonGroup() throws {
         let items: [RadioButtonItem<String>] = [
             RadioButtonItem(id: "1",
                             label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
@@ -50,16 +50,27 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
                             state: .warning(message: "Warning")),
         ]
 
-
         let sut = RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             title: "Radio Button Group (UIKit)",
             selectedID: self.selectedID,
             items: items)
 
-        sut.frame = CGRect(x: 0, y: 0, width: 353, height: 523)
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
+        sut.translatesAutoresizingMaskIntoConstraints = false
 
-        assertSnapshotInDarkAndLight(matching: sut)
+        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 400, height: 800))
+
+        scrollView.addSubview(sut)
+
+        NSLayoutConstraint.activate([
+            sut.widthAnchor.constraint(equalToConstant: 400),
+            sut.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            sut.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            sut.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            sut.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
+        ])
+
+        assertSnapshotInDarkAndLight(matching: scrollView)
     }
 }

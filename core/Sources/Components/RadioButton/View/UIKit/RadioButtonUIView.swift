@@ -74,6 +74,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
         return toggleView
     }()
+
     private let labelView = UILabel.standard
     private let supplementaryLabelView = UILabel.standard
     private let button = UIButton(type: .custom)
@@ -176,7 +177,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.subscribeTo(self.viewModel.$label) { [weak self] label in
             self?.labelView.text = label
         }
-
     }
 
     private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void ) {
@@ -245,11 +245,14 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     private func setupConstraints() {
         let toggleViewWidthConstraint = self.toggleView.widthAnchor.constraint(equalToConstant: self.size)
         let toggleViewHeightConstraint = self.toggleView.heightAnchor.constraint(equalToConstant: self.size)
-        let toggleViewSpacingConstraint = self.toggleView.trailingAnchor.constraint(equalTo: self.labelView.leadingAnchor, constant: -self.spacing)
-        let labelViewTopConstraint = self.labelView.topAnchor.constraint(equalTo: self.toggleView.topAnchor, constant: self.textLabelTopSpacing)
-        let toggleViewTopConstraint = self.toggleView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: self.toggleViewPadding)
-        let bottomViewConstraint = self.supplementaryLabelView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -(self.toggleViewPadding+self.textLabelTopSpacing))
-
+        let toggleViewSpacingConstraint = self.toggleView.trailingAnchor.constraint(
+            equalTo: self.labelView.leadingAnchor, constant: -self.spacing)
+        let labelViewTopConstraint = self.labelView.topAnchor.constraint(
+            equalTo: self.toggleView.topAnchor, constant: self.textLabelTopSpacing)
+        let toggleViewTopConstraint = self.toggleView.topAnchor.constraint(
+            equalTo: self.safeAreaLayoutGuide.topAnchor, constant: self.toggleViewPadding)
+        let bottomViewConstraint = self.supplementaryLabelView.bottomAnchor.constraint(
+            equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -(self.toggleViewPadding+self.textLabelTopSpacing))
 
         let constraints = [
             toggleViewWidthConstraint,

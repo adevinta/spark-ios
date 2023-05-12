@@ -23,7 +23,6 @@ struct RadioButtonOverview: View {
             }
         }
         .navigationBarTitle(Text("Radio Buttons"))
-
     }
 }
 

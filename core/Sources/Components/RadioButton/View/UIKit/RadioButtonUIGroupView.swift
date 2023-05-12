@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 
+/// RadioButtonGroupView embodies a radio button group and handles 
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
 
     // MARK: - Properties
@@ -37,7 +38,13 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     )
 
     private var radioButtonViews: [RadioButtonUIView<ID>] = []
-    private var titleLabel = UILabel()
+    private var titleLabel: UILabel = {
+        let label = UILabel()
+        label.adjustsFontForContentSizeCategory = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        return label
+    }()
 
     // MARK: Initializers
     public init(theme: Theme,
@@ -83,7 +90,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             self.titleLabel.text = title
             self.titleLabel.font = self.theme.typography.subhead.uiFont
             self.titleLabel.textColor = self.theme.colors.base.onSurface.uiColor
-            self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
             self.addSubview(self.titleLabel)
 

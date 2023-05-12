@@ -16,9 +16,7 @@ struct RadioButtonUIGroup: UIViewControllerRepresentable {
         return RadioButtionUIGroupViewController()
     }
 
-    func updateUIViewController(_ uiViewController: RadioButtionUIGroupViewController, context: Context) {
-
-    }
+    func updateUIViewController(_ uiViewController: RadioButtionUIGroupViewController, context: Context) { }
 }
 
 final class RadioButtionUIGroupViewController: UIViewController {
@@ -106,7 +104,6 @@ final class RadioButtionUIGroupViewController: UIViewController {
             title: "Radio Button Group (UIKit)",
             selectedID: self.selectedId,
             items: self.radioButtonItems)
-
 
         self.contentView.addArrangedSubview(radioButtonView)
         self.contentView.addArrangedSubview(self.selectedValueLabel)
