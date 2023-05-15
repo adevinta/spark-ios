@@ -47,8 +47,9 @@ final class RadioButtionGroupViewTests: SwiftUIComponentTestCase {
                 RadioButtonItem(id: 6,
                                 label: "6 Radio button / Warning",
                                 state: .warning(message: "Warning")),
-            ]).frame(width: 400, height: 600)
-
+            ])
+            .frame(width: 400)
+            .fixedSize(horizontal: false, vertical: true)
         assertSnapshotInDarkAndLight(matching: sut)
     }
 }
