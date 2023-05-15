@@ -15,7 +15,7 @@ public final class CheckboxUIView: UIView {
     // MARK: - Constants
 
     private enum Constants {
-        @ScaledUIMetric static var checkboxSize: CGFloat = 20
+        static var checkboxSize: CGFloat = 20
     }
 
     // MARK: - Private properties.
@@ -65,6 +65,8 @@ public final class CheckboxUIView: UIView {
 
     private var checkboxPosition: CheckboxPosition = .left
     private var cancellables = Set<AnyCancellable>()
+
+    @ScaledUIMetric private var checkboxSize: CGFloat = Constants.checkboxSize
 
     private var spacing: LayoutSpacing {
         return self.theme.layout.spacing
@@ -206,7 +208,7 @@ public final class CheckboxUIView: UIView {
         let textLabel = self.textLabel
         let controlView = self.controlView
 
-        let controlSize = Constants.checkboxSize
+        let controlSize = checkboxSize
         let padding = self.spacing.medium / 2
         switch checkboxPosition {
         case .left:
@@ -275,6 +277,9 @@ public final class CheckboxUIView: UIView {
     /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+
+        self._checkboxSize.update(traitCollection: self.traitCollection)
+
         self.updateViewConstraints()
     }
 
@@ -296,7 +301,7 @@ public final class CheckboxUIView: UIView {
 
     private func updateViewConstraints() {
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let scaledSpacing = Constants.checkboxSize + bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: traitCollection)
+        let scaledSpacing = checkboxSize + bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: traitCollection)
 
         self.controlViewWidthConstraint?.constant = scaledSpacing
         self.controlViewHeightConstraint?.constant = scaledSpacing

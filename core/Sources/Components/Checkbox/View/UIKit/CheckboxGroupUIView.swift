@@ -91,6 +91,9 @@ public final class CheckboxGroupUIView: UIView {
     /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+
+        self._spacingXLarge.update(traitCollection: self.traitCollection)
+
         self.updateViewConstraints()
     }
 
