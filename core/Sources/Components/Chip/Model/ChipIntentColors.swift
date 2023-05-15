@@ -10,6 +10,9 @@ import Foundation
 
 /// The intent colors a chip can have
 struct ChipIntentColors {
+
+    // MARK: - Properties
+    
     let principal: ColorToken
     let subordinate: ColorToken
     let tintedPrincipal: ColorToken
