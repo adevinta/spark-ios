@@ -15,9 +15,12 @@ struct UIBadgeView: UIViewRepresentable {
     func makeUIView(context: Context) -> some UIView {
         let uiview = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 300, height: 50)))
         uiview.backgroundColor = .cyan
-        let badgeStyle = BadgeStyle(badgeSize: .small, badgeType: .danger, isBadgeOutlined: false, theme: SparkTheme.shared)
         let badgeView = BadgeUIView(
-            viewModel: .init(formatter: .thousandsCounter, theme: SparkTheme.shared, badgeStyle: badgeStyle, value: "423522342"))
+            viewModel: BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .danger
+            )
+        )
         uiview.addSubview(badgeView)
         NSLayoutConstraint.activate([
             badgeView.trailingAnchor.constraint(equalTo: uiview.trailingAnchor, constant: 0),

@@ -9,21 +9,33 @@
 import SwiftUI
 
 public struct BadgeView: View {
-    @Binding public var viewModel: BadgeViewModel
+    @ObservedObject public var viewModel: BadgeViewModel
 
     public var body: some View {
-        GeometryReader { proxy in
-            Text(viewModel.badgeText)
-                .padding(.init(vertical: viewModel.verticalOffset / 2.0, horizontal: viewModel.horizontalOffset / 2.0))
+        if viewModel.text.isEmpty {
+            Circle()
+                .foregroundColor(viewModel.backgroundColor.color)
+                .border(
+                    width: viewModel.badgeBorder.width,
+                    radius: viewModel.badgeBorder.radius,
+                    colorToken: viewModel.badgeBorder.color
+                )
+                .frame(width: viewModel.emptySize.width, height: viewModel.emptySize.height)
+        } else {
+            Text(viewModel.text)
                 .font(viewModel.textFont.font)
-                .foregroundColor(viewModel.badgeStyle.badgeColors.foregroundColor.color)
-                .background(viewModel.badgeStyle.badgeColors.backgroundColor.color)
-                .border(width: viewModel.borderWidth, radius: proxy.size.height / 2.0, colorToken: viewModel.borderColor)
+                .foregroundColor(viewModel.textColor.color)
+            .padding(.init(vertical: viewModel.verticalOffset / 2.0, horizontal: viewModel.horizontalOffset / 2.0))
+            .background(viewModel.backgroundColor.color)
+            .border(
+                width: viewModel.badgeBorder.width,
+                radius: viewModel.badgeBorder.radius,
+                colorToken: viewModel.badgeBorder.color
+            )
         }
-        .offset(x: viewModel.borderWidth / 2.0)
     }
 
-    public init(viewModel: Binding<BadgeViewModel>) {
-        self._viewModel = viewModel
+    public init(viewModel: BadgeViewModel) {
+        self.viewModel = viewModel
     }
 }

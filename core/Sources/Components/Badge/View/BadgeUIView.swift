@@ -28,17 +28,17 @@ public class BadgeUIView: UILabel {
     }
 
     private func setupBadgeText() {
-        text = viewModel.badgeText
-        textColor = viewModel.textColor
+        text = viewModel.text
+        textColor = viewModel.textColor.uiColor
         font = viewModel.textFont.uiFont
         textAlignment = .center
     }
 
     private func setupAppearance() {
-        backgroundColor = viewModel.backgroundColor
+        backgroundColor = viewModel.backgroundColor.uiColor
         translatesAutoresizingMaskIntoConstraints = false
-        layer.borderWidth = viewModel.borderWidth
-        layer.borderColor = viewModel.borderColor.uiColor.cgColor
+        layer.borderWidth = viewModel.badgeBorder.width
+        layer.borderColor = viewModel.badgeBorder.color.uiColor.cgColor
         clipsToBounds = true
     }
 
@@ -47,7 +47,7 @@ public class BadgeUIView: UILabel {
         let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
         let attributes = [NSAttributedString.Key.font: font]
         let estimatedSize = NSString(string: text ?? "").boundingRect(with: size, options: options, attributes: attributes as [NSAttributedString.Key : Any], context: nil)
-        if viewModel.badgeText.isEmpty {
+        if viewModel.text.isEmpty {
             return viewModel.emptySize
         } else {
             return CGSize(width: ceil(estimatedSize.width + viewModel.horizontalOffset), height: ceil(estimatedSize.height + viewModel.verticalOffset))

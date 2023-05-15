@@ -1,5 +1,5 @@
 //
-//  BadgeIntentColors.swift
+//  BadgeGetIntentColorsUseCase.swift
 //  Spark
 //
 //  Created by alex.vecherov on 10.05.23.
@@ -23,6 +23,30 @@ class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
         let surfaceColor = colors.base.surface
 
         switch intentType {
+        case .alert:
+            return BadgeColors(
+                backgroundColor: colors.feedback.alert,
+                borderColor: surfaceColor,
+                foregroundColor: colors.feedback.onAlert
+            )
+        case .danger:
+            return BadgeColors(
+                backgroundColor: colors.feedback.error,
+                borderColor: surfaceColor,
+                foregroundColor: colors.feedback.onError
+            )
+        case .info:
+            return BadgeColors(
+                backgroundColor: colors.feedback.info,
+                borderColor: surfaceColor,
+                foregroundColor: colors.feedback.onInfo
+            )
+        case .neutral:
+            return BadgeColors(
+                backgroundColor: colors.feedback.neutral,
+                borderColor: surfaceColor,
+                foregroundColor: colors.feedback.onNeutral
+            )
         case .primary:
             return BadgeColors(
                 backgroundColor: colors.primary.primary,
@@ -41,30 +65,7 @@ class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
                 borderColor: surfaceColor,
                 foregroundColor: colors.feedback.onSuccess
             )
-        case .neutral:
-            return BadgeColors(
-                backgroundColor: colors.feedback.neutral,
-                borderColor: surfaceColor,
-                foregroundColor: colors.feedback.onNeutral
-            )
-        case .danger:
-            return BadgeColors(
-                backgroundColor: colors.feedback.error,
-                borderColor: surfaceColor,
-                foregroundColor: colors.feedback.onError
-            )
-        case .alert:
-            return BadgeColors(
-                backgroundColor: colors.feedback.alert,
-                borderColor: surfaceColor,
-                foregroundColor: colors.feedback.onAlert
-            )
-        case .info:
-            return BadgeColors(
-                backgroundColor: colors.feedback.info,
-                borderColor: surfaceColor,
-                foregroundColor: colors.feedback.onInfo
-            )
+        
         }
     }
 }

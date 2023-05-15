@@ -7,79 +7,60 @@
 //
 
 import UIKit
+import Combine
+import SwiftUI
 
-public enum BadgeSize {
-    case normal
-    case small
-}
+public class BadgeViewModel: ObservableObject {
+    
+    @Published private var value: Int? = nil
 
-public struct BadgeStyle {
-    let badgeSize: BadgeSize
-    let badgeType: BadgeIntentType
-    let badgeColors: BadgeColorables
-    let isBadgeOutlined: Bool
+    @Published var text: String
+    @Published var textFont: TypographyFontToken
+    @Published var textColor: ColorToken
 
-    public init(badgeSize: BadgeSize, badgeType: BadgeIntentType, isBadgeOutlined: Bool, theme: Theme) {
-        self.badgeSize = badgeSize
-        self.badgeType = badgeType
-        self.isBadgeOutlined = isBadgeOutlined
-        self.badgeColors = BadgeGetColorsUseCase().execute(from: theme, badgeType: badgeType)
-    }
-}
+    @Published var backgroundColor: ColorToken
 
-public class BadgeViewModel {
+    @Published var verticalOffset: CGFloat
+    @Published var horizontalOffset: CGFloat
 
-    private var formatter: BadgeFormatter
-    public var badgeText: String {
-        switch formatter {
-        case .standart:
-            return value ?? ""
-        case .thousandsCounter:
-            if let value, let intValue = Int(value) {
-                return "\(Int(intValue / 1000))k"
-            } else {
-                return value ?? ""
-            }
-        case .custom(let formatter):
-            return formatter.badgeText(value: value)
-        }
-    }
-    private var value: String?
-    private(set) var badgeStyle: BadgeStyle
-    private var theme: Theme
-    public var backgroundColor: UIColor {
-        badgeStyle.badgeColors.backgroundColor.uiColor
-    }
-    public var borderColor: ColorToken {
-        badgeStyle.isBadgeOutlined ? badgeStyle.badgeColors.borderColor : ColorTokenDefault.clear
-    }
-    public var textColor: UIColor {
-        badgeStyle.badgeColors.foregroundColor.uiColor
-    }
-    public var textFont: TypographyFontToken {
-        switch badgeStyle.badgeSize {
-        case .small:
-            return theme.typography.smallHighlight
-        case .normal:
-            return theme.typography.captionHighlight
-        }
-    }
-    public var verticalOffset: CGFloat {
-        theme.layout.spacing.small * 2
-    }
-    public var horizontalOffset: CGFloat {
-        theme.layout.spacing.medium * 2
-    }
+    @Published var badgeBorder: BadgeBorder
 
-    public var borderWidth: CGFloat {
-        badgeStyle.isBadgeOutlined ? 2 : 0
-    }
-    public let emptySize: CGSize = .init(width: 12, height: 12)
+    @Published var theme: Theme
+    @Published private(set) var badgeFormat: BadgeFormat
 
-    public init(formatter: BadgeFormatter, theme: Theme, badgeStyle: BadgeStyle, value: String?) {
-        self.formatter = formatter
-        self.value = value
-        self.badgeStyle = badgeStyle
+    let emptySize: CGSize = .init(width: 12, height: 12)
+
+    // MARK: - Initializer
+
+    public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, initValue: Int? = nil, format: BadgeFormat = .standart, isOutlined: Bool = true) {
+        let badgeColors = BadgeGetIntentColorsUseCase().execute(intentType: badgeType, on: theme.colors)
+
+        value = initValue
+        text = format.badgeText(initValue)
+        textFont = badgeSize == .normal ? theme.typography.captionHighlight : theme.typography.smallHighlight
+        textColor = badgeColors.foregroundColor
+
+        backgroundColor = badgeColors.backgroundColor
+
+        verticalOffset = theme.layout.spacing.small * 2
+        horizontalOffset = theme.layout.spacing.medium * 2
+
+        badgeBorder = BadgeBorder(
+            width: isOutlined ?
+                theme.border.width.medium :
+                theme.border.width.none,
+            radius: theme.border.radius.full,
+            color: badgeColors.borderColor
+        )
+
         self.theme = theme
+        badgeFormat = .standart
+    }
+
+    // MARK: - Update configuration function
+
+    public func setBadgeValue(_ value: Int?) {
+        self.value = value
+        self.text = badgeFormat.badgeText(value)
     }
 }

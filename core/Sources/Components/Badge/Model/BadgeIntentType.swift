@@ -9,12 +9,12 @@
 import Foundation
 
 // sourcery: AutoMockable
-public enum BadgeIntentType {
+public enum BadgeIntentType: CaseIterable {
+    case alert
+    case danger
+    case info
+    case neutral
     case primary
     case secondary
     case success
-    case neutral
-    case danger
-    case alert
-    case info
 }
