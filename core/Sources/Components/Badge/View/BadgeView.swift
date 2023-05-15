@@ -8,6 +8,32 @@
 
 import SwiftUI
 
+/// This is SwiftUI badge view to show notifications count
+///
+/// Badge view is created by pasing:
+/// - **Theme**
+/// - ``BadgeViewModel``
+///
+/// **Example**
+/// This example shows how to create view with horizontal alignment of Badge
+/// ```swift
+///    @StateObject var viewModel = BadgeViewModel(
+///     theme: SparkTheme.shared,
+///     badgeType: .alert,
+///     badgeSize: .normal,
+///     initValue: 0
+///    )
+///    @State var value: Int? = 3
+///    var body: any View {
+///    Button("Change Notifications Number") {
+///         viewModel.setBadgeValue(5)
+///    }
+///    HStack {
+///         Text("Some text")
+///         BadgeView(viewModel)
+///    }
+///    }
+/// ```
 public struct BadgeView: View {
     @ObservedObject public var viewModel: BadgeViewModel
 

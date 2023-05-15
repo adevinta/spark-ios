@@ -8,6 +8,12 @@
 
 import Foundation
 
+/// Structure that is used for configuring border of ``BadgeView``
+///
+/// List of properties:
+/// - width
+/// - radius
+/// - color returned as ColorToken
 public struct BadgeBorder {
     var width: CGFloat
     let radius: CGFloat

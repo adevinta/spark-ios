@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// This is the UIKit version for the ``BadgeView``
 public class BadgeUIView: UILabel {
 
     private var viewModel: BadgeViewModel

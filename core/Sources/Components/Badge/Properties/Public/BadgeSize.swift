@@ -8,6 +8,11 @@
 
 import Foundation
 
+/// Enum that sets ``BadgeView`` size
+///
+/// There are two possible sizes:
+/// - normal
+/// - small
 public enum BadgeSize {
     case normal
     case small
