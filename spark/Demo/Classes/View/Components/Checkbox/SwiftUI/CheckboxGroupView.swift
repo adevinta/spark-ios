@@ -20,7 +20,7 @@ struct CheckboxGroupListView: View {
 
     @State private var layout: CheckboxGroupLayout = .vertical
 
-    @State private var checkboxPosition: SparkCore.CheckboxView.CheckboxPosition = .left
+    @State private var checkboxPosition: CheckboxPosition = .left
 
     @State private var items: [any CheckboxGroupItemProtocol] = [
         CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
@@ -69,6 +69,7 @@ struct CheckboxGroupListView: View {
         ScrollView(self.layout == .horizontal ? .horizontal : .vertical) {
             HStack {
                 CheckboxGroupView(
+                    title: "Checkbox-group title (SwiftUI)",
                     items: $items,
                     layout: layout,
                     checkboxPosition: checkboxPosition,

@@ -9,5 +9,26 @@
 import SwiftUI
 
 public protocol Iconography {
-    var checkmark: Image { get }
+    var checkmark: ImageToken { get }
+}
+
+// sourcery: AutoMockable
+public protocol ImageToken {
+    var uiImage: UIImage { get }
+    var image: Image { get }
+}
+
+public struct ImageTokenDefault: ImageToken {
+
+    // MARK: - Properties
+
+    public var uiImage: UIImage
+    public var image: Image
+
+    // MARK: - Initialization
+
+    public init(uiImage: UIImage) {
+        self.uiImage = uiImage
+        self.image = Image(uiImage: uiImage)
+    }
 }

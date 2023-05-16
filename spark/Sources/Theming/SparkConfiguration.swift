@@ -16,9 +16,14 @@ public struct SparkConfiguration: Configuration {
 
     private class Class {}
 
+    private static var didLoad = false
+
     // MARK: - static func
 
     public static func load() {
+        guard !didLoad else { return }
+        didLoad = true
+
         Bundle(for: Class.self).registerAllFonts()
     }
 }
