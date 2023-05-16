@@ -13,48 +13,67 @@ public struct CheckboxGroupView: View {
 
     // MARK: - Private properties
 
+    private var title: String
     @Binding private var items: [any CheckboxGroupItemProtocol]
     private var theme: Theme
     private var layout: CheckboxGroupLayout
-    private var checkboxPosition: CheckboxView.CheckboxPosition
+    private var checkboxPosition: CheckboxPosition
     private var accessibilityIdentifierPrefix: String
+
+    @ScaledMetric private var spacingSmall: CGFloat
+    @ScaledMetric private var spacingXLarge: CGFloat
 
     // MARK: - Initialization
 
     /// Initialize a group of one or multiple checkboxes.
     /// - Parameters:
+    ///   - title: An optional group title displayed on top of the checkbox group..
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
     ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
     ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
+        title: String? = nil,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
-        checkboxPosition: CheckboxView.CheckboxPosition,
+        checkboxPosition: CheckboxPosition,
         theme: Theme,
         accessibilityIdentifierPrefix: String
     ) {
+        self.title = title ?? ""
         self._items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
         self.theme = theme
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
+
+        self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
+        self._spacingXLarge = .init(wrappedValue: theme.layout.spacing.xLarge)
     }
 
     // MARK: - Body
 
     /// Returns the rendered checkbox group view.
     public var body: some View {
-        let spacing: CGFloat = 12
-        switch self.layout {
-        case .horizontal:
-            HStack(alignment: .top, spacing: spacing) {
-                self.contentView
+        VStack(alignment: .leading, spacing: 0) {
+            if !self.title.isEmpty {
+                Text(self.title)
+                    .foregroundColor(self.theme.colors.base.onSurface.color)
+                    .font(self.theme.typography.subhead.font)
+                    .padding(.bottom, self.spacingXLarge - self.spacingSmall)
             }
-        case .vertical:
-            VStack(alignment: .leading, spacing: spacing - 4) {
-                self.contentView
+
+            let spacing = self.spacingXLarge - self.spacingSmall * 2
+            switch self.layout {
+            case .horizontal:
+                HStack(alignment: .top, spacing: spacing) {
+                    self.contentView
+                }
+            case .vertical:
+                VStack(alignment: .leading, spacing: spacing) {
+                    self.contentView
+                }
             }
         }
     }
@@ -65,11 +84,15 @@ public struct CheckboxGroupView: View {
             CheckboxView(
                 text: item.title.wrappedValue,
                 checkboxPosition: checkboxPosition,
-                theme: theme,
+                theme: self.theme,
                 state: item.state.wrappedValue,
                 selectionState: item.selectionState
             )
             .accessibilityIdentifier(identifier)
         }
+    }
+
+    private var spacing: LayoutSpacing {
+        return self.theme.layout.spacing
     }
 }

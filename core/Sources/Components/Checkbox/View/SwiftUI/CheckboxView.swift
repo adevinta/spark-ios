@@ -11,6 +11,23 @@ import SwiftUI
 /// The `CheckboxView`renders a single checkbox.
 public struct CheckboxView: View {
 
+    // MARK: - Constants
+
+    private enum Constants {
+        static var checkboxSize: CGFloat = 20
+        static var checkboxWidth: CGFloat = 20
+        static var checkboxHeight: CGFloat = 20
+        static var checkboxBorderRadius: CGFloat = 4
+        static var checkboxBorderWidth: CGFloat = 2
+
+        static var checkboxSelectedWidth: CGFloat = 14
+        static var checkboxSelectedHeight: CGFloat = 14
+        static var checkboxSelectedBorderWidth: CGFloat = 4
+
+        static var checkboxIndeterminateWidth: CGFloat = 12
+        static var checkboxIndeterminateHeight: CGFloat = 2
+    }
+
     // MARK: - Public Properties
 
     /// The current Spark theme.
@@ -37,14 +54,20 @@ public struct CheckboxView: View {
 
     private let checkboxPosition: CheckboxPosition
 
-    @ScaledMetric private var checkboxWidth: CGFloat = 20
-    @ScaledMetric private var checkboxHeight: CGFloat = 20
+    @ScaledMetric private var checkboxWidth: CGFloat = Constants.checkboxWidth
+    @ScaledMetric private var checkboxHeight: CGFloat = Constants.checkboxHeight
+    @ScaledMetric private var checkboxBorderRadius: CGFloat = Constants.checkboxBorderRadius
+    @ScaledMetric private var checkboxBorderWidth: CGFloat = Constants.checkboxBorderWidth
 
-    @ScaledMetric private var checkboxSelectedWidth: CGFloat = 14
-    @ScaledMetric private var checkboxSelectedHeight: CGFloat = 14
+    @ScaledMetric private var checkboxSelectedWidth: CGFloat = Constants.checkboxSelectedWidth
+    @ScaledMetric private var checkboxSelectedHeight: CGFloat = Constants.checkboxSelectedHeight
+    @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat = Constants.checkboxSelectedBorderWidth
 
-    @ScaledMetric private var checkboxIndeterminateWidth: CGFloat = 12
-    @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = 2
+    @ScaledMetric private var checkboxIndeterminateWidth: CGFloat = Constants.checkboxIndeterminateWidth
+    @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = Constants.checkboxIndeterminateHeight
+
+    @ScaledMetric private var horizontalSpacing: CGFloat
+    @ScaledMetric private var smallSpacing: CGFloat
 
     // MARK: - Initialization
 
@@ -56,6 +79,8 @@ public struct CheckboxView: View {
         state: SelectButtonState = .enabled,
         selectionState: Binding<CheckboxSelectionState>
     ) {
+        self._horizontalSpacing = .init(wrappedValue: theme.layout.spacing.medium)
+        self._smallSpacing = .init(wrappedValue: theme.layout.spacing.small)
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.viewModel = .init(text: text, theme: theme, colorsUseCase: colorsUseCase, state: state)
@@ -104,17 +129,26 @@ public struct CheckboxView: View {
         let tintColor = self.colors.checkboxTintColor.color
         let iconColor = self.colors.checkboxIconColor.color
         ZStack {
-            RoundedRectangle(cornerRadius: 4)
+            RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
                 .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
                     $0.fill(tintColor)
                 } else: {
-                    $0.strokeBorder(tintColor, lineWidth: 2)
+                    $0.strokeBorder(tintColor, lineWidth: self.checkboxBorderWidth)
                 }
                 .frame(width: self.checkboxWidth, height: self.checkboxHeight)
+                .if(self.isPressed && self.viewModel.interactionEnabled) {
+                    $0.overlay(
+                        RoundedRectangle(cornerRadius: checkboxBorderRadius)
+                            .inset(by: -checkboxSelectedBorderWidth / 2)
+                            .stroke(colors.pressedBorderColor.color, lineWidth: checkboxSelectedBorderWidth)
+                            .animation(.easeInOut(duration: 0.1), value: isPressed)
+                    )
+                }
 
             switch self.selectionState {
             case .selected:
                 self.theme.iconography.checkmark
+                    .image
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)
@@ -127,13 +161,6 @@ public struct CheckboxView: View {
                     .fill(iconColor)
                     .frame(width: self.checkboxIndeterminateWidth, height: self.checkboxIndeterminateHeight)
             }
-
-            let lineWidth: CGFloat = self.isPressed ? 4 : 0
-            RoundedRectangle(cornerRadius: 4)
-                .inset(by: -lineWidth / 2)
-                .stroke(self.colors.pressedBorderColor.color, lineWidth: lineWidth)
-                .frame(width: self.checkboxWidth, height: self.checkboxHeight)
-                .animation(.easeInOut(duration: 0.1), value: self.isPressed)
         }
         .if(self.selectionState == .selected) {
             $0.accessibilityAddTraits(.isSelected)
@@ -143,10 +170,10 @@ public struct CheckboxView: View {
     }
 
     @ViewBuilder private var contentView: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .top, spacing: 0) {
             switch checkboxPosition {
             case .left:
-                self.checkboxView
+                self.checkboxView.padding(.trailing, self.horizontalSpacing)
 
                 self.labelView
 
@@ -156,13 +183,17 @@ public struct CheckboxView: View {
 
                 Spacer()
 
-                self.checkboxView
+                self.checkboxView.padding(.leading, self.horizontalSpacing)
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, self.smallSpacing)
         .opacity(self.viewModel.opacity)
         .allowsHitTesting(self.viewModel.interactionEnabled)
         .contentShape(Rectangle())
+    }
+
+    private var spacing: LayoutSpacing {
+        return self.theme.layout.spacing
     }
 
     private var labelView: some View {
@@ -189,22 +220,9 @@ public struct CheckboxView: View {
         switch self.selectionState {
         case .selected:
             self.selectionState = .unselected
-        case .unselected:
+        case .unselected, .indeterminate:
             self.selectionState = .selected
-        case .indeterminate:
-            break
         }
-    }
-
-    // MARK: - Enum
-
-    /// The checkbox can be either on the leading or trailing edge of the view.
-    public enum CheckboxPosition {
-        /// Checkbox on leading edge.
-        case left
-
-        /// Checkbox on trailing edge.
-        case right
     }
 
     private enum Identifier: String {

@@ -13,7 +13,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
-final class SparkColorTests: TestCase {
+final class ColorTests: TestCase {
     let colors = SparkTheme.shared.colors
 
     func test_base_colors() throws {
