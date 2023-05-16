@@ -14,7 +14,7 @@ struct ChipComponentUIView: View {
 
     var body: some View {
         ZStack {
-            UIColor.secondarySystemBackground.color
+            Color(UIColor.secondarySystemBackground)
                 .ignoresSafeArea()
             ChipComponentUIViewRepresentation()
                 .navigationBarTitle(Text("Chip (UIKit)"))
@@ -216,24 +216,5 @@ final class ChipComponentUIViewController: UIViewController {
 struct RadioButtonUIGroup_Previews: PreviewProvider {
     static var previews: some View {
         ChipComponentUIView()
-    }
-}
-
-private extension UIColor {
-    var color: Color {
-        let rgba: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) = {
-               var red: CGFloat = 0
-               var green: CGFloat = 0
-               var blue: CGFloat = 0
-               var alpha: CGFloat = 0
-               getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-
-               return (red, green, blue, alpha)
-           }()
-
-        return .init(red: Double(rgba.red),
-                    green: Double(rgba.green),
-                    blue: Double(rgba.blue),
-                    opacity: Double(rgba.alpha))
     }
 }
