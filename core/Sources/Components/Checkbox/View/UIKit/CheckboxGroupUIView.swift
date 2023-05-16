@@ -173,6 +173,11 @@ public final class CheckboxGroupUIView: UIView {
 
         self.checkboxes = checkboxes
 
+        self.setUpGroupConstraints()
+    }
+
+    private func setUpGroupConstraints() {
+        let view = self
         var previousCheckbox: UIView?
 
         let horizontalSpacing = self.spacing.large
@@ -231,7 +236,6 @@ public final class CheckboxGroupUIView: UIView {
 
                 previousCheckbox = checkbox
             }
-            
         }
     }
 

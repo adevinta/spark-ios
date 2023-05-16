@@ -152,12 +152,7 @@ class CheckboxControlUIView: UIView {
             path.stroke()
             path.fill()
 
-            let origin = CGPoint(
-                x: controlInnerRect.origin.x + controlInnerRect.width / 2 - iconSize.width / 2,
-                y: controlInnerRect.origin.y + controlInnerRect.height / 2 - iconSize.height / 2
-            )
-            let iconRect = CGRect(origin: origin, size: iconSize)
-            let iconPath = UIBezierPath(roundedRect: iconRect, cornerRadius: bodyFontMetrics.scaledValue(for: iconSize.height / 2, compatibleWith: traitCollection))
+            let iconPath = UIBezierPath(roundedRect: self.iconRect(for: controlInnerRect), cornerRadius: bodyFontMetrics.scaledValue(for: iconSize.height / 2, compatibleWith: traitCollection))
             colors.checkboxIconColor.uiColor.setFill()
             iconPath.fill()
 
@@ -165,13 +160,16 @@ class CheckboxControlUIView: UIView {
             path.stroke()
             path.fill()
 
-            let origin = CGPoint(
-                x: controlInnerRect.origin.x + controlInnerRect.width / 2 - iconSize.width / 2,
-                y: controlInnerRect.origin.y + controlInnerRect.height / 2 - iconSize.height / 2
-            )
-            let iconRect = CGRect(origin: origin, size: iconSize)
             colors.checkboxIconColor.uiColor.set()
-            self.selectionIcon.draw(in: iconRect)
+            self.selectionIcon.draw(in: self.iconRect(for: controlInnerRect))
         }
+    }
+
+    private func iconRect(for rectangle: CGRect) -> CGRect {
+        let origin = CGPoint(
+            x: rectangle.origin.x + rectangle.width / 2 - iconSize.width / 2,
+            y: rectangle.origin.y + rectangle.height / 2 - iconSize.height / 2
+        )
+        return CGRect(origin: origin, size: iconSize)
     }
 }
