@@ -144,6 +144,7 @@ open class UIKitComponentTestCase: TestCase {
 }
 
 // MARK: - UIContentSizeCategory identifier extension
+
 private extension UIContentSizeCategory {
     /// Returns the identifier used in the filename
     var identifier: String {
