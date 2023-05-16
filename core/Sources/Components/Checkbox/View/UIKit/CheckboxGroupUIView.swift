@@ -34,6 +34,9 @@ public final class CheckboxGroupUIView: UIView {
         }
     }
 
+    /// The tick-checkbox-icon for the selected state.
+    public let checkedImage: UIImage
+
     /// The layout of the checkbox
     public var layout: CheckboxGroupLayout {
         didSet {
@@ -58,6 +61,7 @@ public final class CheckboxGroupUIView: UIView {
     /// Initialize a group of one or multiple checkboxes.
     /// - Parameters:
     ///   - title: An optional group title displayed on top of the checkbox group..
+    ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
     ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
@@ -65,6 +69,7 @@ public final class CheckboxGroupUIView: UIView {
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
         title: String? = nil,
+        checkedImage: UIImage,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxPosition,
@@ -72,6 +77,7 @@ public final class CheckboxGroupUIView: UIView {
         accessibilityIdentifierPrefix: String
     ) {
         self.title = title
+        self.checkedImage = checkedImage
         self._items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
@@ -151,6 +157,7 @@ public final class CheckboxGroupUIView: UIView {
             let checkbox = CheckboxUIView(
                 theme: theme,
                 text: item.title,
+                checkedImage: self.checkedImage,
                 state: item.state,
                 selectionState: item.selectionState,
                 checkboxPosition: self.checkboxPosition,

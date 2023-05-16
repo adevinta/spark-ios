@@ -27,26 +27,31 @@ struct CheckboxListView: View {
         List(self.viewModel.states, id: \.self) { state in
             Section(header: Text("State \(self.title(for: state))")) {
                 let theme = SparkTheme.shared
+                let checkedImage = DemoIconography.shared.checkmark
                 CheckboxView(
                     text: "Selected",
+                    checkedImage: checkedImage,
                     theme: theme,
                     state: state,
                     selectionState: self.$selection1
                 )
                 CheckboxView(
                     text: "Unselected",
+                    checkedImage: checkedImage,
                     theme: theme,
                     state: state,
                     selectionState: self.$selection2
                 )
                 CheckboxView(
                     text: "Indeterminate",
+                    checkedImage: checkedImage,
                     theme: theme,
                     state: state,
                     selectionState: self.$selection3
                 )
                 CheckboxView(
                     text: "Long text lorem ipsum dolor sit et amet abcdefghjijkl",
+                    checkedImage: checkedImage,
                     theme: theme,
                     state: state,
                     selectionState: self.$selection4

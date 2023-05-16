@@ -46,7 +46,7 @@ public final class CheckboxUIView: UIView {
 
     private lazy var controlView: CheckboxControlUIView = {
         let controlView = CheckboxControlUIView(
-            selectionIcon: self.theme.iconography.checkmark.uiImage,
+            selectionIcon: self.viewModel.checkedImage,
             theme: self.theme
         )
         controlView.isAccessibilityElement = false
@@ -153,6 +153,7 @@ public final class CheckboxUIView: UIView {
     /// - Parameters:
     ///   - theme: The current Spark-Theme.
     ///   - text: The checkbox text.
+    ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
@@ -160,6 +161,7 @@ public final class CheckboxUIView: UIView {
     public convenience init(
         theme: Theme,
         text: String,
+        checkedImage: UIImage,
         state: SelectButtonState = .enabled,
         selectionState: CheckboxSelectionState = .unselected,
         checkboxPosition: CheckboxPosition,
@@ -168,6 +170,7 @@ public final class CheckboxUIView: UIView {
         self.init(
             theme: theme,
             text: text,
+            checkedImage: checkedImage,
             colorsUseCase: CheckboxColorsUseCase(),
             state: state,
             selectionState: selectionState,
@@ -179,6 +182,7 @@ public final class CheckboxUIView: UIView {
     init(
         theme: Theme,
         text: String,
+        checkedImage: UIImage,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
         selectionState: CheckboxSelectionState = .unselected,
@@ -188,7 +192,7 @@ public final class CheckboxUIView: UIView {
         self.selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.selectionStateHandler = selectionStateHandler
-        self.viewModel = .init(text: text, theme: theme, colorsUseCase: colorsUseCase, state: state)
+        self.viewModel = .init(text: text, checkedImage: checkedImage, theme: theme, colorsUseCase: colorsUseCase, state: state)
 
         super.init(frame: .zero)
         self.commonInit()

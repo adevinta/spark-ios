@@ -18,6 +18,8 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
 
     let states = [SelectButtonState.disabled, .enabled, .success(message: "Success message!"), .warning(message: "Warning message!"), .error(message: "Error message!")]
 
+    let checkedImage = IconographyTests.shared.checkmark
+
     // MARK: -  Tests
 
     func test_right_aligned() throws {
@@ -25,6 +27,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
             let checkbox = CheckboxUIView(
                 theme: self.theme,
                 text: "Selected checkbox.",
+                checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .selected,
                 checkboxPosition: .right
@@ -39,6 +42,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
             let checkbox = CheckboxUIView(
                 theme: self.theme,
                 text: "Selected checkbox.",
+                checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .selected,
                 checkboxPosition: .left
@@ -53,6 +57,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
             let checkbox = CheckboxUIView(
                 theme: self.theme,
                 text: "Unselected checkbox.",
+                checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .unselected,
                 checkboxPosition: .left
@@ -67,6 +72,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
             let checkbox = CheckboxUIView(
                 theme: self.theme,
                 text: "Indeterminate checkbox.",
+                checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .indeterminate,
                 checkboxPosition: .left
@@ -81,6 +87,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
             let view = CheckboxUIView(
                 theme: self.theme,
                 text: "Multiline checkbox.\nMore text.",
+                checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .selected,
                 checkboxPosition: .left

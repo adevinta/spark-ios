@@ -21,6 +21,8 @@ final class CheckboxGroupViewTests: SwiftUIComponentTestCase {
 
         let theme: Theme = SparkTheme.shared
 
+        let checkedImage = IconographyTests.shared.checkmark
+
         @State private var items: [any CheckboxGroupItemProtocol] = [
             CheckboxGroupItem(title: "Apple", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
             CheckboxGroupItem(title: "Cake", id: "2", selectionState: .indeterminate),
@@ -31,9 +33,10 @@ final class CheckboxGroupViewTests: SwiftUIComponentTestCase {
 
         var body: some View {
             CheckboxGroupView(
-                items: $items,
-                checkboxPosition: position,
-                theme: theme,
+                checkedImage: self.checkedImage,
+                items: self.$items,
+                checkboxPosition: self.position,
+                theme: self.theme,
                 accessibilityIdentifierPrefix: "group"
             ).fixedSize()
         }

@@ -90,9 +90,11 @@ final class CheckboxViewController: UIViewController {
         shuffleButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         shuffleButton.addTarget(self, action: #selector(self.actionShuffle(sender:)), for: .touchUpInside)
 
+        let image = DemoIconography.shared.checkmark
         let checkbox = CheckboxUIView(
             theme: theme,
             text: "Hello world!",
+            checkedImage: image,
             state: .enabled,
             selectionState: .unselected,
             checkboxPosition: .left,
@@ -107,6 +109,7 @@ final class CheckboxViewController: UIViewController {
         let checkbox2 = CheckboxUIView(
             theme: theme,
             text: "Second checkbox! This is a very very long descriptive text.",
+            checkedImage: image,
             state: .disabled,
             selectionState: .selected,
             checkboxPosition: .left
@@ -119,6 +122,7 @@ final class CheckboxViewController: UIViewController {
         let errorCheckbox = CheckboxUIView(
             theme: theme,
             text: "Error checkbox",
+            checkedImage: image,
             state: .error(message: "Error message"),
             selectionState: .indeterminate,
             checkboxPosition: .left
@@ -130,6 +134,7 @@ final class CheckboxViewController: UIViewController {
         let successCheckbox = CheckboxUIView(
             theme: theme,
             text: "Right checkbox",
+            checkedImage: image,
             state: .success(message: "Success message"),
             selectionState: .selected,
             checkboxPosition: .right
