@@ -154,12 +154,10 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                 )
                 .frame(width: self.size, height: self.size)
 
-            if let fillColor = colors.fill {
-                Circle()
-                    .fill()
-                    .foregroundColor(fillColor.color)
-                    .frame(width: self.filledSize, height: self.filledSize)
-            }
+            Circle()
+                .fill()
+                .foregroundColor(colors.fill.color)
+                .frame(width: self.filledSize, height: self.filledSize)
         }
         .frame(width: self.radioButtonSize,
                height: self.radioButtonSize)
