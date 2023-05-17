@@ -275,6 +275,8 @@ public final class ChipUIView: UIView {
     }
     
     private func setupView() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+
         self.addSubview(self.stackView)
         self.addSubview(self.button)
         self.button.frame = self.bounds

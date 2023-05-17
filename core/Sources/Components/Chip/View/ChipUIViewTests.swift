@@ -21,7 +21,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
                                           intentColor: intent,
                                           variant: variant,
                                           label: "Label")
-                _ = UIStackView(arrangedSubviews: [chipView])
+
                 assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(intent)-\(variant)")
             }
         }
@@ -34,7 +34,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
                                       intentColor: .primary,
                                       variant: variant,
                                       iconImage: icon)
-            _ = UIStackView(arrangedSubviews: [chipView])
+
             assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
         }
     }
@@ -47,7 +47,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
                                       variant: variant,
                                       label: "Label",
                                       iconImage: icon)
-            _ = UIStackView(arrangedSubviews: [chipView])
+
             assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
         }
     }
@@ -63,7 +63,6 @@ final class ChipUIViewTests: UIKitComponentTestCase {
                                       iconImage: icon)
             chipView.component = UIImageView(image: .add)
 
-            _ = UIStackView(arrangedSubviews: [chipView])
             assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
         }
     }
