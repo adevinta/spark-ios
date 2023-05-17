@@ -365,21 +365,18 @@ public final class ChipUIView: UIView {
         self.subscribeTo(self.viewModel.$spacing) { [weak self] spacing in
             guard let self else { return }
             self.spacing = spacing
-            self._spacing.update(traitCollection: self.traitCollection)
             self.updateSpacing()
         }
 
         self.subscribeTo(self.viewModel.$padding) { [weak self] padding in
             guard let self else { return }
             self.padding = padding
-            self._padding.update(traitCollection: self.traitCollection)
             self.updateLayoutMargins()
         }
         
         self.subscribeTo(self.viewModel.$borderRadius) { [weak self] borderRadius in
             guard let self else { return }
             self.borderRadius = borderRadius
-            self._borderRadius.update(traitCollection: self.traitCollection)
             self.updateBorder()
         }
 
