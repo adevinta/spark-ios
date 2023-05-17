@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SwiftUI
+import UIKit
 
 extension TypographyGeneratedMock {
 
@@ -15,15 +17,20 @@ extension TypographyGeneratedMock {
     static func mocked() -> TypographyGeneratedMock {
         let typography = TypographyGeneratedMock()
 
-        let body1 = TypographyFontTokenGeneratedMock()
-        body1.font = .body
+        typography.body1 = TypographyFontTokenGeneratedMock.mocked(.body)
+        typography.body2 = TypographyFontTokenGeneratedMock.mocked(.body)
+        typography.caption = TypographyFontTokenGeneratedMock.mocked(.caption)
 
-        let caption = TypographyFontTokenGeneratedMock()
-        caption.font = .caption
-
-        typography.body1 = body1
-        typography.caption = caption
-        
         return typography
+    }
+}
+
+extension TypographyFontTokenGeneratedMock {
+    // MARK: - Methods
+
+    static func mocked(_ font: Font) -> TypographyFontTokenGeneratedMock {
+        let fontToken = TypographyFontTokenGeneratedMock()
+        fontToken.font = font
+        return fontToken
     }
 }
