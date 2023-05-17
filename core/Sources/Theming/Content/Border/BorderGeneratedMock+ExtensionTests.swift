@@ -11,21 +11,29 @@ import Foundation
 extension BorderGeneratedMock {
     static func mocked() -> BorderGeneratedMock {
         let border = BorderGeneratedMock()
+        border.radius = BorderRadiusGeneratedMock.mocked()
+        border.width = BorderWidthGeneratedMock.mocked()
 
+        return border
+    }
+}
+
+extension BorderRadiusGeneratedMock {
+    static func mocked() -> BorderRadiusGeneratedMock {
         let radius = BorderRadiusGeneratedMock()
         radius.small = 4
         radius.medium = 8
         radius.large = 16
         radius.xLarge = 24
+        return radius
+    }
+}
 
-        border.radius = radius
-
+extension BorderWidthGeneratedMock {
+    static func mocked() -> BorderWidthGeneratedMock {
         let width = BorderWidthGeneratedMock()
         width.small = 1
         width.medium = 2
-
-        border.width = width
-
-        return border
+        return width
     }
 }
