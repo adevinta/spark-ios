@@ -187,7 +187,10 @@ final class CheckboxGroupViewController: UIViewController {
         let view = self.contentView
         let theme = SparkTheme.shared
 
+        let checkedImage = UIImage(systemName: "checkmark")!.withRenderingMode(.alwaysTemplate)
+
         let groupView = CheckboxGroupUIView(
+            checkedImage: checkedImage,
             items: .init(
                 get: { [weak self] in
                     self?.items ?? []

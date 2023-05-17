@@ -14,6 +14,7 @@ public struct CheckboxGroupView: View {
     // MARK: - Private properties
 
     private var title: String
+    private var checkedImage: UIImage
     @Binding private var items: [any CheckboxGroupItemProtocol]
     private var theme: Theme
     private var layout: CheckboxGroupLayout
@@ -28,6 +29,7 @@ public struct CheckboxGroupView: View {
     /// Initialize a group of one or multiple checkboxes.
     /// - Parameters:
     ///   - title: An optional group title displayed on top of the checkbox group..
+    ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
     ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
@@ -35,6 +37,7 @@ public struct CheckboxGroupView: View {
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
         title: String? = nil,
+        checkedImage: UIImage,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxPosition,
@@ -42,6 +45,7 @@ public struct CheckboxGroupView: View {
         accessibilityIdentifierPrefix: String
     ) {
         self.title = title ?? ""
+        self.checkedImage = checkedImage
         self._items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
@@ -83,7 +87,8 @@ public struct CheckboxGroupView: View {
             let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
             CheckboxView(
                 text: item.title.wrappedValue,
-                checkboxPosition: checkboxPosition,
+                checkedImage: self.checkedImage,
+                checkboxPosition: self.checkboxPosition,
                 theme: self.theme,
                 state: item.state.wrappedValue,
                 selectionState: item.selectionState

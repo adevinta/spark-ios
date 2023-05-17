@@ -17,5 +17,4 @@ public protocol Theme {
     var layout: SparkCore.Layout { get }
     var typography: SparkCore.Typography { get }
     var dims: SparkCore.Dims { get }
-    var iconography: SparkCore.Iconography { get }
 }

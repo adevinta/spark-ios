@@ -31,7 +31,10 @@ struct CheckboxGroupView_Previews: PreviewProvider {
 
         var body: some View {
             HStack {
+                let checkedImage = UIImage(systemName: "checkmark")!.withRenderingMode(.alwaysTemplate)
+
                 CheckboxGroupView(
+                    checkedImage: checkedImage,
                     items: $items,
                     checkboxPosition: self.position,
                     theme: self.theme,

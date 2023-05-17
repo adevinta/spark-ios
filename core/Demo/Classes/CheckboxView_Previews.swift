@@ -34,20 +34,25 @@ struct CheckboxView_Previews: PreviewProvider {
 
         var scrollView: some View {
             ScrollView {
+                let checkedImage = UIImage(systemName: "checkmark")!.withRenderingMode(.alwaysTemplate)
+
                 VStack(spacing: 0) {
                     Text("Left")
                     CheckboxView(
                         text: "Selected checkbox.",
+                        checkedImage: checkedImage,
                         theme: self.theme,
                         selectionState: $selection1
                     )
                     CheckboxView(
                         text: "Unselected checkbox.",
+                        checkedImage: checkedImage,
                         theme: self.theme,
                         selectionState: $selection2
                     )
                     CheckboxView(
                         text: "Indeterminate checkbox.",
+                        checkedImage: checkedImage,
                         theme: self.theme,
                         selectionState: $selection3
                     )
@@ -56,18 +61,21 @@ struct CheckboxView_Previews: PreviewProvider {
                     Text("Right")
                     CheckboxView(
                         text: "Selected checkbox.",
+                        checkedImage: checkedImage,
                         checkboxPosition: .right,
                         theme: self.theme,
                         selectionState: $selection1
                     )
                     CheckboxView(
                         text: "Unselected checkbox.",
+                        checkedImage: checkedImage,
                         checkboxPosition: .right,
                         theme: self.theme,
                         selectionState: $selection2
                     )
                     CheckboxView(
                         text: "Indeterminate checkbox.",
+                        checkedImage: checkedImage,
                         checkboxPosition: .right,
                         theme: self.theme,
                         selectionState: $selection3

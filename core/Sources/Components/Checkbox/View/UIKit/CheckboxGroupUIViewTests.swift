@@ -24,8 +24,10 @@ final class CheckboxGroupUIViewTests: UIKitComponentTestCase {
 
     private func createGroupView(position: CheckboxPosition) -> UIView {
         let theme = SparkTheme.shared
+        let checkedImage = IconographyTests.shared.checkmark
 
         let groupView = CheckboxGroupUIView(
+            checkedImage: checkedImage,
             items: .init(
                 get: { [weak self] in
                     self?.items ?? []

@@ -6,12 +6,13 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 final class CheckboxViewModel: ObservableObject {
     // MARK: - Internal properties
 
     var text: String
+    var checkedImage: UIImage
 
     @Published var theme: Theme
     @Published var state: SelectButtonState {
@@ -33,11 +34,13 @@ final class CheckboxViewModel: ObservableObject {
 
     init(
         text: String,
+        checkedImage: UIImage,
         theme: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled
     ) {
         self.text = text
+        self.checkedImage = checkedImage
         self.theme = theme
         self.state = state
 

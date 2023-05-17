@@ -16,6 +16,8 @@ import XCTest
 final class CheckboxViewTests: SwiftUIComponentTestCase {
     let theme: Theme = SparkTheme()
 
+    let checkedImage = IconographyTests.shared.checkmark
+
     let states = [SelectButtonState.disabled, .enabled, .success(message: "Success message!"), .warning(message: "Warning message!"), .error(message: "Error message!")]
 
     // MARK: - Tests
@@ -24,6 +26,7 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Selected checkbox.",
+                checkedImage: self.checkedImage,
                 checkboxPosition: .right,
                 theme: self.theme,
                 state: state,
@@ -38,6 +41,7 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Selected checkbox.",
+                checkedImage: self.checkedImage,
                 theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .selected }, set: { _ in })
@@ -51,6 +55,7 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Unselected checkbox.",
+                checkedImage: self.checkedImage,
                 theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .unselected }, set: { _ in })
@@ -64,6 +69,7 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Indeterminate checkbox.",
+                checkedImage: self.checkedImage,
                 theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .indeterminate }, set: { _ in })
@@ -77,6 +83,7 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
         for state in self.states {
             let view = CheckboxView(
                 text: "Multiline checkbox.\nMore text.",
+                checkedImage: self.checkedImage,
                 theme: self.theme,
                 state: state,
                 selectionState: .init(get: { .unselected }, set: { _ in })

@@ -73,6 +73,7 @@ public struct CheckboxView: View {
 
     init(
         text: String,
+        checkedImage: UIImage,
         checkboxPosition: CheckboxPosition = .left,
         theme: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
@@ -83,18 +84,26 @@ public struct CheckboxView: View {
         self._smallSpacing = .init(wrappedValue: theme.layout.spacing.small)
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
-        self.viewModel = .init(text: text, theme: theme, colorsUseCase: colorsUseCase, state: state)
+        self.viewModel = .init(
+            text: text,
+            checkedImage: checkedImage,
+            theme: theme,
+            colorsUseCase: colorsUseCase,
+            state: state
+        )
     }
 
     /// Initialize a new checkbox.
     /// - Parameters:
     ///   - text: The checkbox text.
+    ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
     ///   - theme: The current Spark-Theme.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     public init(
         text: String,
+        checkedImage: UIImage,
         checkboxPosition: CheckboxPosition = .left,
         theme: Theme,
         state: SelectButtonState = .enabled,
@@ -102,6 +111,7 @@ public struct CheckboxView: View {
     ) {
         self.init(
             text: text,
+            checkedImage: checkedImage,
             checkboxPosition: checkboxPosition,
             theme: theme,
             colorsUseCase: CheckboxColorsUseCase(),
@@ -147,8 +157,7 @@ public struct CheckboxView: View {
 
             switch self.selectionState {
             case .selected:
-                self.theme.iconography.checkmark
-                    .image
+                Image(uiImage: self.viewModel.checkedImage)
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)

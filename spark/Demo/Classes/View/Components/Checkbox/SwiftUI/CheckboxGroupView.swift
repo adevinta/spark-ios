@@ -68,8 +68,11 @@ struct CheckboxGroupListView: View {
 
         ScrollView(self.layout == .horizontal ? .horizontal : .vertical) {
             HStack {
+                let checkedImage = DemoIconography.shared.checkmark
+
                 CheckboxGroupView(
                     title: "Checkbox-group title (SwiftUI)",
+                    checkedImage: checkedImage,
                     items: $items,
                     layout: layout,
                     checkboxPosition: checkboxPosition,
