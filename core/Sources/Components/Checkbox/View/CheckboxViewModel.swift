@@ -6,35 +6,52 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 final class CheckboxViewModel: ObservableObject {
     // MARK: - Internal properties
 
     var text: String
+    var checkedImage: UIImage
 
     @Published var theme: Theme
-    @Published var state: SelectButtonState
-    @Published private(set) var colors: CheckboxColorables
+    @Published var state: SelectButtonState {
+        didSet {
+            guard oldValue != state else { return }
 
-    // MARK: - Private properties
+            self.updateColors()
+        }
+    }
+    @Published var colors: CheckboxColorables
 
-    private let colorsUseCase: CheckboxColorsUseCaseable
+    var colorsUseCase: CheckboxColorsUseCaseable {
+        didSet {
+            self.updateColors()
+        }
+    }
 
     // MARK: - Init
 
     init(
         text: String,
+        checkedImage: UIImage,
         theme: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled
     ) {
         self.text = text
+        self.checkedImage = checkedImage
         self.theme = theme
         self.state = state
 
         self.colorsUseCase = colorsUseCase
         self.colors = colorsUseCase.execute(from: theme, state: state)
+    }
+
+    // MARK: - Methods
+
+    private func updateColors() {
+        self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
     }
 
     // MARK: - Computed properties

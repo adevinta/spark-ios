@@ -11,12 +11,24 @@ import SwiftUI
 struct ComponentsCheckboxListView: View {
     var body: some View {
         List {
-            NavigationLink("Checkbox") {
-                CheckboxListView()
+            Section(header: Text("SwiftUI")) {
+                NavigationLink("Checkbox") {
+                    CheckboxListView()
+                }
+
+                NavigationLink("Checkbox Group") {
+                    CheckboxGroupListView()
+                }
             }
 
-            NavigationLink("Checkbox Group") {
-                CheckboxGroupListView()
+            Section(header: Text("UIKit")) {
+                NavigationLink("Checkbox") {
+                    CheckboxUIViewControllerBridge()
+                }
+
+                NavigationLink("Checkbox Group") {
+                    CheckboxGroupUIViewControllerBridge()
+                }
             }
         }
         .navigationBarTitle(Text("Checkbox"))

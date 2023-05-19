@@ -25,5 +25,4 @@ public struct SparkTheme: Theme {
                                         dim3: 0.40,
                                         dim4: 0.16,
                                         dim5: 0.08)
-    public let iconography: Iconography = SparkIconography()
 }

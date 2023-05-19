@@ -18,7 +18,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     private (set) var theme: Theme
     private (set) var state: SparkSelectButtonState
-    
+
     @Binding private (set) var selectedID: ID
 
     // MARK: - Published Properties
@@ -94,12 +94,13 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
             self.stateDidUpdate()
         }
     }
-    // MARK: - Private Functions
 
-    private func updateColors() {
+    func updateColors() {
         self.colors = useCase
             .execute(theme: self.theme, state: self.state, isSelected: selectedID == id)
     }
+
+    // MARK: - Private Functions
 
     private func stateDidUpdate() {
         self.isDisabled = self.state == .disabled
@@ -115,7 +116,6 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.surfaceColor = self.theme.colors.base.onSurface
         self.updateColors()
     }
-
 }
 
 // MARK: - Private Helpers
