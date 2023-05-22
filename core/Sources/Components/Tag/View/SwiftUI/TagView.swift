@@ -19,6 +19,8 @@ public struct TagView: View {
 
     @ObservedObject private var viewModel: TagViewModel
     @ScaledMetric private var height: CGFloat = TagConstants.height
+    @ScaledMetric private var smallSpacing: CGFloat
+    @ScaledMetric private var mediumSpacing: CGFloat
 
     // MARK: - Initialization
 
@@ -33,13 +35,17 @@ public struct TagView: View {
     ///
     /// - Note: You must use the Modifier to add at least iconImage or/and text.
     public init(theme: Theme) {
-        self.viewModel = .init(theme: theme)
+        let viewModel = TagViewModel(theme: theme)
+        self.viewModel = viewModel
+
+        self._smallSpacing = .init(wrappedValue: viewModel.spacing.small)
+        self._mediumSpacing = .init(wrappedValue: viewModel.spacing.medium)
     }
 
     // MARK: - View
 
     public var body: some View {
-        HStack(spacing: self.viewModel.spacing.small) {
+        HStack(spacing: self.smallSpacing) {
             // Optional icon image
             self.viewModel.iconImage?
                 .resizable()
@@ -57,8 +63,8 @@ public struct TagView: View {
                     .accessibilityIdentifier(AccessibilityIdentifier.text)
             }
         }
-        .padding(.init(vertical: self.viewModel.spacing.small,
-                       horizontal: self.viewModel.spacing.medium))
+        .padding(.init(vertical: self.smallSpacing,
+                       horizontal: self.mediumSpacing))
         .frame(height: self.height)
         .background(self.viewModel.colors.backgroundColor.color)
         .border(width: self.viewModel.border.width.small,
