@@ -21,8 +21,12 @@ extension TypographyGeneratedMock {
         let caption = TypographyFontTokenGeneratedMock()
         caption.font = .caption
 
+        let captionHighlight = TypographyFontTokenGeneratedMock()
+        captionHighlight.font = .caption.bold()
+
         typography.body1 = body1
         typography.caption = caption
+        typography.captionHighlight = captionHighlight
         
         return typography
     }
