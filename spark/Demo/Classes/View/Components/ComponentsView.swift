@@ -25,11 +25,11 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Chip") {
-                    Text("TODO")
+                    ChipComponentUIView()
                 }
 
                 NavigationLink("Radio Button") {
-                    RadioButtonGroup()
+                    RadioButtonOverview()
                 }
 
                 NavigationLink("Switch") {

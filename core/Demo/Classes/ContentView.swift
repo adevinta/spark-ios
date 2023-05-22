@@ -6,8 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Spark
 import SwiftUI
+import SparkCore
 
 struct ContentView: View {
 

@@ -6,14 +6,15 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Spark
 import SparkCore
 import SwiftUI
 
 struct CheckboxGroupView_Previews: PreviewProvider {
 
+    // MARK: - Container
+
     struct ContainerView: View {
-        let position: CheckboxView.CheckboxPosition
+        let position: CheckboxPosition
 
         let theme: Theme = SparkTheme.shared
 
@@ -29,7 +30,10 @@ struct CheckboxGroupView_Previews: PreviewProvider {
 
         var body: some View {
             HStack {
+                let checkedImage = UIImage(systemName: "checkmark")!.withRenderingMode(.alwaysTemplate)
+
                 CheckboxGroupView(
+                    checkedImage: checkedImage,
                     items: $items,
                     checkboxPosition: self.position,
                     theme: self.theme,
@@ -42,6 +46,8 @@ struct CheckboxGroupView_Previews: PreviewProvider {
 
     }
 
+    // MARK: - Previews
+
     static var previews: some View {
         ContainerView(position: .left)
             .previewDisplayName("Left layout")
@@ -50,6 +56,8 @@ struct CheckboxGroupView_Previews: PreviewProvider {
             .previewDisplayName("Right layout")
     }
 }
+
+// MARK: - Mock model
 
 final class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {

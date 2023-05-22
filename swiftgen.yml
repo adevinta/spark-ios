@@ -9,12 +9,3 @@ xcassets:
         params:
           enumName: SparkColorAsset
           publicAccess: true
-
-xcassets:
-  - inputs: Iconography.xcassets
-    outputs:
-      - templateName: swift5
-        output: Icons+Generated.swift
-        params:
-          enumName: SparkIconAsset
-          publicAccess: true

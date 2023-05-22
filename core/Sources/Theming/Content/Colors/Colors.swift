@@ -38,3 +38,15 @@ fileprivate struct ColorTokenClear: ColorToken {
     var uiColor: UIColor { .clear }
     var color: Color { .clear }
 }
+
+public extension ColorToken {
+    func opacity(_ opacity: CGFloat) -> ColorToken {
+        return OpacityColorToken(uiColor: self.uiColor.withAlphaComponent(opacity),
+                                 color: self.color.opacity(opacity))
+    }
+}
+
+fileprivate struct OpacityColorToken: ColorToken {
+    let uiColor: UIColor
+    let color: Color
+}

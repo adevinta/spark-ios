@@ -16,6 +16,7 @@ final class CheckboxViewModelTests: XCTestCase {
     var theme: ThemeGeneratedMock!
     var bindingValue: Int = 0
     var subscription: Cancellable?
+    var checkedImage = IconographyTests.shared.checkmark
 
     // MARK: - Setup
     override func setUpWithError() throws {
@@ -87,7 +88,7 @@ final class CheckboxViewModelTests: XCTestCase {
     }
 
     private func sut(state: SelectButtonState) -> CheckboxViewModel {
-        return CheckboxViewModel(text: "Text", theme: self.theme, state: state)
+        return CheckboxViewModel(text: "Text", checkedImage: self.checkedImage, theme: self.theme, state: state)
     }
 }
 

@@ -14,15 +14,25 @@ extension LayoutGeneratedMock {
 
     static func mocked() -> LayoutGeneratedMock {
         let mock = LayoutGeneratedMock()
-        let spacing = LayoutSpacingGeneratedMock()
-        spacing.none = 1
-        spacing.small = 3
-        spacing.medium = 5
-        spacing.large = 7
-        spacing.xLarge = 9
-        spacing.xxLarge = 11
-        spacing.xxxLarge = 13
-        mock.spacing = spacing
+        mock.spacing = LayoutSpacingGeneratedMock.mocked()
+
+        return mock
+    }
+}
+
+extension LayoutSpacingGeneratedMock {
+
+    // MARK: - Methods
+
+    static func mocked() -> LayoutSpacingGeneratedMock {
+        let mock = LayoutSpacingGeneratedMock()
+        mock.none = 1
+        mock.small = 3
+        mock.medium = 5
+        mock.large = 7
+        mock.xLarge = 9
+        mock.xxLarge = 11
+        mock.xxxLarge = 13
 
         return mock
     }
