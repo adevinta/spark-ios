@@ -50,6 +50,7 @@ public final class TagUIView: UIView {
         didSet {
             self._colors = self.getColorsFromUseCase()
             self.reloadUIFromTheme()
+            self.reloadUIFromSpacing()
         }
     }
 
@@ -94,11 +95,9 @@ public final class TagUIView: UIView {
     private var contentStackViewTrailingConstraint: NSLayoutConstraint?
     private var contentStackViewBottomConstraint: NSLayoutConstraint?
 
-    private var height: CGFloat = TagConstants.height {
-        didSet {
-            self.reloadUIFromHeight()
-        }
-    }
+    private var height: CGFloat = TagConstants.height
+    @ScaledUIMetric private var smallSpacing: CGFloat = 0
+    @ScaledUIMetric private var mediumSpacing: CGFloat = 0
 
     private var _colors: TagColorables? {
         didSet {
@@ -219,7 +218,7 @@ public final class TagUIView: UIView {
         self.reloadTextLabel()
         self.reloadUIFromTheme()
         self.reloadUIFromColors()
-        self.reloadUIFromHeight()
+        self.reloadUIFromSize()
     }
 
     private func reloadIconImageView() {
@@ -233,20 +232,18 @@ public final class TagUIView: UIView {
     }
 
     private func reloadUIFromTheme() {
+        // Spacing
+        self.smallSpacing = self.theme.layout.spacing.small
+        self._smallSpacing.update(traitCollection: self.traitCollection)
+        self.mediumSpacing = self.theme.layout.spacing.medium
+        self._mediumSpacing.update(traitCollection: self.traitCollection)
+
         // View
         self.setBorderWidth(self.theme.border.width.small)
         self.setMasksToBounds(true)
 
         // Subviews
-        self.contentStackView.spacing = self.theme.layout.spacing.small
         self.textLabel.font = self.theme.typography.captionHighlight.uiFont
-
-        // Constraint
-        self.contentStackViewLeadingConstraint?.constant = self.theme.layout.spacing.medium
-        self.contentStackViewTopConstraint?.constant = self.theme.layout.spacing.small
-        self.contentStackViewTrailingConstraint?.constant = -self.theme.layout.spacing.medium
-        self.contentStackViewBottomConstraint?.constant = -self.theme.layout.spacing.small
-        self.contentStackView.layoutIfNeeded()
     }
 
     private func reloadUIFromColors() {
@@ -259,11 +256,45 @@ public final class TagUIView: UIView {
         self.textLabel.textColor = self.colors.foregroundColor.uiColor
     }
 
+    private func reloadUIFromSize() {
+        self.reloadUIFromHeight()
+        self.reloadUIFromSpacing()
+    }
+
     private func reloadUIFromHeight() {
         // Reload height only if value changed
         if self.height != self.heightConstraint?.constant {
             self.heightConstraint?.constant = self.height
             self.layoutIfNeeded()
+        }
+    }
+
+    private func reloadUIFromSpacing() {
+        self.reloadUIFromSmallSpacing()
+        self.reloadUIFromMediumSpacing()
+    }
+
+    private func reloadUIFromSmallSpacing() {
+        // Reload spacing only if value changed
+        let smallSpacing = self._smallSpacing.wrappedValue
+        if smallSpacing != self.contentStackViewTopConstraint?.constant {
+            // Subviews
+            self.contentStackView.spacing = smallSpacing
+
+            // Constraint
+            self.contentStackViewTopConstraint?.constant = smallSpacing
+            self.contentStackViewBottomConstraint?.constant = -smallSpacing
+            self.contentStackView.layoutIfNeeded()
+        }
+    }
+
+    private func reloadUIFromMediumSpacing() {
+        // Reload spacing only if value changed
+        let mediumSpacing = self._mediumSpacing.wrappedValue
+        if mediumSpacing != self.contentStackViewLeadingConstraint?.constant {
+            self.contentStackViewLeadingConstraint?.constant = mediumSpacing
+            self.contentStackViewTrailingConstraint?.constant = -mediumSpacing
+            self.contentStackView.layoutIfNeeded()
         }
     }
 
@@ -319,10 +350,15 @@ public final class TagUIView: UIView {
             self.reloadUIFromColors()
         }
 
-        // Update height content ?
+        // **
+        // Update content size ?
         self.height = UIFontMetrics.default.scaledValue(
             for: TagConstants.height,
             compatibleWith: self.traitCollection
         )
+        self._smallSpacing.update(traitCollection: self.traitCollection)
+        self._mediumSpacing.update(traitCollection: self.traitCollection)
+        self.reloadUIFromSize()
+        // **
     }
 }
