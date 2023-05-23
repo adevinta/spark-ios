@@ -16,7 +16,7 @@ public protocol BadgeFormatting {
 
 /// With this formatter you can define behaviour of Badge label.
 ///
-/// Use **standart** for regular counting behavior with numbers.
+/// Use **default** for regular counting behavior with numbers.
 ///
 /// Use **overflowCounter(maxValue)**
 /// If badge **value** would be greater than passed **maxValue** into formatter
@@ -31,7 +31,7 @@ public enum BadgeFormat {
 
     // MARK: - Properties
 
-    case standart
+    case `default`
     case overflowCounter(maxValue: Int)
     case custom(formatter: BadgeFormatting)
 
@@ -39,11 +39,6 @@ public enum BadgeFormat {
 
     func badgeText(_ value: Int?) -> String {
         switch self {
-        case .standart:
-            guard let value else {
-                return ""
-            }
-            return "\(value)"
         case .overflowCounter(let maxValue):
             guard let value else {
                 return ""
@@ -51,6 +46,11 @@ public enum BadgeFormat {
             return value > maxValue ? "\(maxValue)+" : "\(value)"
         case .custom(let formatter):
             return formatter.formatText(for: value)
+        default:
+            guard let value else {
+                return ""
+            }
+            return "\(value)"
         }
     }
 }

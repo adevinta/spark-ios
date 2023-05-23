@@ -36,32 +36,47 @@ import SwiftUI
 /// ```
 public struct BadgeView: View {
     @ObservedObject public var viewModel: BadgeViewModel
+    @ScaledMetric private var smallOffset: CGFloat
+    @ScaledMetric private var mediumOffset: CGFloat
+    @ScaledMetric private var emptySize: CGFloat
 
     public var body: some View {
         if viewModel.text.isEmpty {
             Circle()
                 .foregroundColor(viewModel.backgroundColor.color)
+                .frame(width: self.emptySize, height: self.emptySize)
                 .border(
                     width: viewModel.badgeBorder.width,
                     radius: viewModel.badgeBorder.radius,
                     colorToken: viewModel.badgeBorder.color
                 )
-                .frame(width: viewModel.emptySize.width, height: viewModel.emptySize.height)
+                .fixedSize()
         } else {
             Text(viewModel.text)
                 .font(viewModel.textFont.font)
                 .foregroundColor(viewModel.textColor.color)
-            .padding(.init(vertical: viewModel.verticalOffset / 2.0, horizontal: viewModel.horizontalOffset / 2.0))
-            .background(viewModel.backgroundColor.color)
-            .border(
-                width: viewModel.badgeBorder.width,
-                radius: viewModel.badgeBorder.radius,
-                colorToken: viewModel.badgeBorder.color
-            )
+                .padding(.init(vertical: self.smallOffset, horizontal: self.mediumOffset))
+                .background(viewModel.backgroundColor.color)
+                .border(
+                    width: viewModel.badgeBorder.width,
+                    radius: viewModel.badgeBorder.radius,
+                    colorToken: viewModel.badgeBorder.color
+                )
+                .fixedSize()
         }
     }
 
     public init(viewModel: BadgeViewModel) {
         self.viewModel = viewModel
+
+        self._smallOffset =
+            .init(wrappedValue:
+                    viewModel.verticalOffset / 2
+            )
+        self._mediumOffset =
+            .init(wrappedValue:
+                    viewModel.horizontalOffset / 2
+            )
+        self._emptySize = .init(wrappedValue: BadgeConstants.emptySize.width)
     }
 }

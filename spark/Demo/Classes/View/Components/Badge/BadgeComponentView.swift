@@ -80,6 +80,8 @@ struct BadgeComponentView: View {
                 standartBadge.setBadgeValue(23)
                 smallCustomWithoutBorder.setBadgeValue(18)
             }
+            UIBadgeView()
+                .frame(height: 400)
             VStack(spacing: 100) {
                 HStack(spacing: 50) {
                     ZStack(alignment: .leading) {

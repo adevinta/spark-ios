@@ -50,24 +50,26 @@ public class BadgeViewModel: ObservableObject {
     @Published var theme: Theme
     @Published private(set) var badgeFormat: BadgeFormat
 
-    let emptySize: CGSize = .init(width: 12, height: 12)
 
     // MARK: - Initializer
 
-    public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, initValue: Int? = nil, format: BadgeFormat = .standart, isOutlined: Bool = true) {
+    public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, initValue: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true) {
         let badgeColors = BadgeGetIntentColorsUseCase().execute(intentType: badgeType, on: theme.colors)
 
-        value = initValue
-        text = format.badgeText(initValue)
-        textFont = badgeSize == .normal ? theme.typography.captionHighlight : theme.typography.smallHighlight
-        textColor = badgeColors.foregroundColor
+        self.value = initValue
+        self.text = format.badgeText(initValue)
+        self.textFont = badgeSize == .normal ? theme.typography.captionHighlight : theme.typography.smallHighlight
+        self.textColor = badgeColors.foregroundColor
 
-        backgroundColor = badgeColors.backgroundColor
+        self.backgroundColor = badgeColors.backgroundColor
 
-        verticalOffset = theme.layout.spacing.small * 2
-        horizontalOffset = theme.layout.spacing.medium * 2
+        let verticalOffset = theme.layout.spacing.small * 2
+        let horizontalOffset = theme.layout.spacing.medium * 2
 
-        badgeBorder = BadgeBorder(
+        self._verticalOffset = .init(wrappedValue: verticalOffset)
+        self._horizontalOffset = .init(wrappedValue: horizontalOffset)
+
+        self.badgeBorder = BadgeBorder(
             width: isOutlined ?
                 theme.border.width.medium :
                 theme.border.width.none,
@@ -76,7 +78,7 @@ public class BadgeViewModel: ObservableObject {
         )
 
         self.theme = theme
-        badgeFormat = .standart
+        self.badgeFormat = .default
     }
 
     // MARK: - Update configuration function

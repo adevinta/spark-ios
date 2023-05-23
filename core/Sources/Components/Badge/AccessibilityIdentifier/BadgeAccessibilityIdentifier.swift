@@ -1,5 +1,5 @@
 //
-//  BadgeAccessabilityIdentifier.swift
+//  BadgeAccessibilityIdentifier.swift
 //  Spark
 //
 //  Created by alex.vecherov on 04.05.23.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-public enum BadgeAccessabilityIdentifier {
+public enum BadgeAccessibilityIdentifier {
 
     // MARK: - Properties
 
