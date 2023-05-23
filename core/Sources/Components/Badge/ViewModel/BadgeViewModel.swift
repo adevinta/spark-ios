@@ -36,20 +36,19 @@ public class BadgeViewModel: ObservableObject {
     
     @Published private var value: Int? = nil
 
-    @Published var text: String
-    @Published var textFont: TypographyFontToken
-    @Published var textColor: ColorToken
+    // MARK: - Text Properties
+    var text: String
+    var textFont: TypographyFontToken
+    var textColor: ColorToken
 
-    @Published var backgroundColor: ColorToken
+    // MARK: - Appearance Properties
+    private(set) var badgeFormat: BadgeFormat
+    var badgeBorder: BadgeBorder
+    var backgroundColor: ColorToken
+    var theme: Theme
 
-    @Published var verticalOffset: CGFloat
-    @Published var horizontalOffset: CGFloat
-
-    @Published var badgeBorder: BadgeBorder
-
-    @Published var theme: Theme
-    @Published private(set) var badgeFormat: BadgeFormat
-
+    var verticalOffset: CGFloat
+    var horizontalOffset: CGFloat
 
     // MARK: - Initializer
 
@@ -66,8 +65,8 @@ public class BadgeViewModel: ObservableObject {
         let verticalOffset = theme.layout.spacing.small
         let horizontalOffset = theme.layout.spacing.medium
 
-        self._verticalOffset = .init(wrappedValue: verticalOffset)
-        self._horizontalOffset = .init(wrappedValue: horizontalOffset)
+        self.verticalOffset = verticalOffset
+        self.horizontalOffset = horizontalOffset
 
         self.badgeBorder = BadgeBorder(
             width: isOutlined ?

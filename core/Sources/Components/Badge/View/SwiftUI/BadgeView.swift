@@ -71,11 +71,11 @@ public struct BadgeView: View {
 
         self._smallOffset =
             .init(wrappedValue:
-                    viewModel.verticalOffset / 2
+                    viewModel.verticalOffset
             )
         self._mediumOffset =
             .init(wrappedValue:
-                    viewModel.horizontalOffset / 2
+                    viewModel.horizontalOffset
             )
         self._emptySize = .init(wrappedValue: BadgeConstants.emptySize.width)
     }
