@@ -12,9 +12,6 @@ import UIKit
 // MARK: - Dimming
 extension ColorToken {
     func dimmed(_ dim: CGFloat) -> ColorToken {
-        let uiColor = self.uiColor
-        let color = self.color
-
-        return ColorTokenDefault(color: color.opacity(dim), uiColor: uiColor.withAlphaComponent(dim))
+        return ColorTokenDimmed(colorToken: self, dim: dim)
     }
 }
