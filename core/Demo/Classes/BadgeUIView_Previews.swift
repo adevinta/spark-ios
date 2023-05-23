@@ -1,5 +1,5 @@
 //
-//  BadgeUIView_Previewes.swift
+//  BadgeUIView_Previews.swift
 //  SparkCoreDemo
 //
 //  Created by alex.vecherov on 22.05.23.
@@ -58,7 +58,8 @@ struct UIBadgeView: UIViewRepresentable {
         ),
         BadgeViewModel(
             theme: SparkTheme.shared,
-            badgeType: .secondary
+            badgeType: .secondary,
+            initValue: 23
         ),
         BadgeViewModel(
             theme: SparkTheme.shared,
@@ -85,8 +86,8 @@ struct UIBadgeView: UIViewRepresentable {
             ])
             if index >= 3 && index <= 6 {
                 NSLayoutConstraint.activate([
-                    badgeView.centerXAnchor.constraint(equalTo: label.trailingAnchor),
-                    badgeView.centerYAnchor.constraint(equalTo: label.topAnchor)
+                    badgeView.centerXAnchor.constraint(equalTo: label.trailingAnchor, constant: 5),
+                    badgeView.centerYAnchor.constraint(equalTo: label.topAnchor, constant: -5)
                 ])
             } else {
                 NSLayoutConstraint.activate([
