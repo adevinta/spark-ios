@@ -25,7 +25,6 @@ struct UIBadgeView: UIViewRepresentable {
         BadgeViewModel(
             theme: SparkTheme.shared,
             badgeType: .alert,
-            badgeSize: .normal,
             initValue: 6
         ),
         BadgeViewModel(

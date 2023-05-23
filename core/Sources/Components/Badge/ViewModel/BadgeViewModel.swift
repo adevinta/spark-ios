@@ -63,8 +63,8 @@ public class BadgeViewModel: ObservableObject {
 
         self.backgroundColor = badgeColors.backgroundColor
 
-        let verticalOffset = theme.layout.spacing.small * 2
-        let horizontalOffset = theme.layout.spacing.medium * 2
+        let verticalOffset = theme.layout.spacing.small
+        let horizontalOffset = theme.layout.spacing.medium
 
         self._verticalOffset = .init(wrappedValue: verticalOffset)
         self._horizontalOffset = .init(wrappedValue: horizontalOffset)
