@@ -59,5 +59,4 @@ public struct ColorTokenDefault: ColorToken {
         self.colorName = colorName
         self.bundle = bundle
     }
-
 }
