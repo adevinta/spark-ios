@@ -213,7 +213,7 @@ final class ChipComponentUIViewController: UIViewController {
     }
 }
 
-struct RadioButtonUIGroup_Previews: PreviewProvider {
+struct ChipComponentUIView_Previews: PreviewProvider {
     static var previews: some View {
         ChipComponentUIView()
     }
