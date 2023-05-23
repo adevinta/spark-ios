@@ -63,6 +63,7 @@ public struct BadgeView: View {
                     colorToken: viewModel.badgeBorder.color
                 )
                 .fixedSize()
+                .accessibilityIdentifier(BadgeAccessibilityIdentifier.text)
         }
     }
 

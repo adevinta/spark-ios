@@ -67,6 +67,7 @@ public class BadgeUIView: UIView {
 
     private func setupBadgeText() {
         self.addSubview(badgeLabel)
+        self.badgeLabel.accessibilityIdentifier = BadgeAccessibilityIdentifier.text
         self.badgeLabel.adjustsFontForContentSizeCategory = true
         self.badgeLabel.textAlignment = .center
         self.badgeLabel.text = self.viewModel.text
