@@ -7,36 +7,122 @@
 //
 
 import XCTest
+import SnapshotTesting
 
-final class BadgeUIViewTests: XCTestCase {
+@testable import SparkCore
+@testable import Spark
+
+private struct TestBadgeFormatting: BadgeFormatting {
+    func formatText(for value: Int?) -> String {
+        guard let value else {
+            return "No Value"
+        }
+        return "Test Value \(value)"
+    }
+}
+
+final class BadgeUIViewTests: UIKitComponentTestCase {
+
+    var theme: Theme!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        try super.setUpWithError()
 
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        theme = SparkTheme()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        try super.tearDownWithError()
+
+        theme = nil
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
+    func test_badge_all_cases_no_text() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            let view = BadgeUIView(
+                viewModel: BadgeViewModel(
+                    theme: theme,
+                    badgeType: badgeIntentType)
+            )
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_\(badgeIntentType)")
+        }
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
+    func test_badge_all_cases_text() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            let view = BadgeUIView(
+                viewModel: BadgeViewModel(
+                    theme: theme,
+                    badgeType: badgeIntentType,
+                    initValue: 23
+                )
+            )
+
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_with_text_\(badgeIntentType)")
+        }
+    }
+
+    func test_badge_all_cases_text_smal_size() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            let view = BadgeUIView(
+                viewModel: BadgeViewModel(
+                    theme: theme,
+                    badgeType: badgeIntentType,
+                    badgeSize: .small,
+                    initValue: 23
+                )
+            )
+
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_with_text_\(badgeIntentType)_small_size")
+        }
+    }
+
+    func test_badge_all_cases_text_overflow_format() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            let view = BadgeUIView(
+                viewModel: BadgeViewModel(
+                    theme: theme,
+                    badgeType: badgeIntentType,
+                    initValue: 23,
+                    format: .overflowCounter(maxValue: 20)
+                )
+            )
+
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_overflow_format_text_\(badgeIntentType)")
+        }
+    }
+
+    func test_badge_all_cases_text_custom_format() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            let view = BadgeUIView(
+                viewModel: BadgeViewModel(
+                    theme: theme,
+                    badgeType: badgeIntentType,
+                    initValue: 23,
+                    format: .custom(
+                        formatter: TestBadgeFormatting()
+                    )
+                )
+            )
+
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_custom_format_text_\(badgeIntentType)")
+        }
+    }
+
+    func test_badge_all_cases_no_text_custom_format() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            let view = BadgeUIView(
+                viewModel: BadgeViewModel(
+                    theme: theme,
+                    badgeType: badgeIntentType,
+                    format: .custom(
+                        formatter: TestBadgeFormatting()
+                    )
+                )
+            )
+
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_custom_format_no_text_\(badgeIntentType)")
         }
     }
 }
