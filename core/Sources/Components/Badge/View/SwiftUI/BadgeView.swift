@@ -39,6 +39,7 @@ public struct BadgeView: View {
     @ScaledMetric private var smallOffset: CGFloat
     @ScaledMetric private var mediumOffset: CGFloat
     @ScaledMetric private var emptySize: CGFloat
+    @ScaledMetric private var borderWidth: CGFloat
 
     public var body: some View {
         if viewModel.text.isEmpty {
@@ -46,7 +47,7 @@ public struct BadgeView: View {
                 .foregroundColor(viewModel.backgroundColor.color)
                 .frame(width: self.emptySize, height: self.emptySize)
                 .border(
-                    width: viewModel.badgeBorder.width,
+                    width: borderWidth,
                     radius: viewModel.badgeBorder.radius,
                     colorToken: viewModel.badgeBorder.color
                 )
@@ -58,7 +59,7 @@ public struct BadgeView: View {
                 .padding(.init(vertical: self.smallOffset, horizontal: self.mediumOffset))
                 .background(viewModel.backgroundColor.color)
                 .border(
-                    width: viewModel.badgeBorder.width,
+                    width: borderWidth,
                     radius: viewModel.badgeBorder.radius,
                     colorToken: viewModel.badgeBorder.color
                 )
@@ -79,5 +80,6 @@ public struct BadgeView: View {
                     viewModel.horizontalOffset
             )
         self._emptySize = .init(wrappedValue: BadgeConstants.emptySize.width)
+        self._borderWidth = .init(wrappedValue: viewModel.badgeBorder.width)
     }
 }

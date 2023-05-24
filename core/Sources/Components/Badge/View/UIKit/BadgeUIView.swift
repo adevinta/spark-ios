@@ -26,6 +26,7 @@ public class BadgeUIView: UIView {
     @ScaledUIMetric private var emptyBadgeSize: CGFloat = 0
     @ScaledUIMetric private var horizontalSpacing: CGFloat = 0
     @ScaledUIMetric private var verticalSpacing: CGFloat = 0
+    @ScaledUIMetric private var borderWidth: CGFloat = 0
 
     private var badgeLabel: UILabel = UILabel()
 
@@ -59,9 +60,9 @@ public class BadgeUIView: UIView {
     // MARK: - Badge configuration
 
     private func setupBadge() {
+        setupScalables()
         setupBadgeText()
         setupAppearance()
-        setupSizing()
         setupLayouts()
     }
 
@@ -79,18 +80,19 @@ public class BadgeUIView: UIView {
     private func setupAppearance() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = self.viewModel.backgroundColor.uiColor
-        self.layer.borderWidth = self.viewModel.badgeBorder.width
+        self.layer.borderWidth = self.borderWidth
         self.layer.borderColor = self.viewModel.badgeBorder.color.uiColor.cgColor
         self.clipsToBounds = true
     }
 
-    private func setupSizing() {
+    private func setupScalables() {
         if self.viewModel.text.isEmpty {
             self.emptyBadgeSize = BadgeConstants.emptySize.width
         } else {
             self.horizontalSpacing = self.viewModel.horizontalOffset
             self.verticalSpacing = self.viewModel.verticalOffset
         }
+        self.borderWidth = self.viewModel.badgeBorder.width
     }
 
     // MARK: - Layouts setup
@@ -168,6 +170,11 @@ public class BadgeUIView: UIView {
         }
     }
 
+    private func reloadBorderWidth() {
+        self._borderWidth.update(traitCollection: self.traitCollection)
+        self.layer.borderWidth = self.borderWidth
+    }
+
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -177,6 +184,7 @@ public class BadgeUIView: UIView {
 
         self.reloadBadgeFontIfNeeded()
         self.reloadUISize()
+        self.reloadBorderWidth()
         self.setupLayouts()
     }
 }
