@@ -29,7 +29,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.primary.primary,
              ColorTokenDefault.clear,
-             self.theme.colors.primary.primary.dimmed(self.theme.dims.dim5),
+             self.theme.colors.primary.primary.opacity(self.theme.dims.dim5),
              self.theme.colors.primary.primary,
              self.theme.colors.primary.primary
             ].map(\.color))
@@ -51,7 +51,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.secondary.secondary,
              ColorTokenDefault.clear,
-             self.theme.colors.secondary.secondary.dimmed(self.theme.dims.dim5),
+             self.theme.colors.secondary.secondary.opacity(self.theme.dims.dim5),
              self.theme.colors.secondary.secondary,
              self.theme.colors.secondary.secondary
             ].map(\.color))
@@ -73,7 +73,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.neutral,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.neutral.dimmed(self.theme.dims.dim5),
+             self.theme.colors.feedback.neutral.opacity(self.theme.dims.dim5),
              self.theme.colors.feedback.neutral,
              self.theme.colors.feedback.neutral
             ].map(\.color))
@@ -95,7 +95,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.alert,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.alert.dimmed(self.theme.dims.dim5),
+             self.theme.colors.feedback.alert.opacity(self.theme.dims.dim5),
              self.theme.colors.feedback.alert,
              self.theme.colors.feedback.alert
             ].map(\.color))
@@ -117,7 +117,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.success,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.success.dimmed(self.theme.dims.dim5),
+             self.theme.colors.feedback.success.opacity(self.theme.dims.dim5),
              self.theme.colors.feedback.success,
              self.theme.colors.feedback.success
             ].map(\.color))
@@ -139,7 +139,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.error,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.error.dimmed(self.theme.dims.dim5),
+             self.theme.colors.feedback.error.opacity(self.theme.dims.dim5),
              self.theme.colors.feedback.error,
              self.theme.colors.feedback.error
             ].map(\.color))
@@ -161,7 +161,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.base.surface,
              ColorTokenDefault.clear,
-             self.theme.colors.base.surface.dimmed(self.theme.dims.dim5),
+             self.theme.colors.base.surface.opacity(self.theme.dims.dim5),
              self.theme.colors.base.surface,
              self.theme.colors.base.surface
             ].map(\.color))

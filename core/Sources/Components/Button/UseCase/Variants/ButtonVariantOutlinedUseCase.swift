@@ -24,7 +24,7 @@ struct ButtonVariantOutlinedUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.primary.primary,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.primary.primary.dimmed(dim5),
+                pressedBackgroundColor: colors.primary.primary.opacity(dim5),
                 borderColor: colors.primary.primary,
                 pressedBorderColor: colors.primary.primary
             )
@@ -32,7 +32,7 @@ struct ButtonVariantOutlinedUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.secondary.secondary,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.secondary.secondary.dimmed(dim5),
+                pressedBackgroundColor: colors.secondary.secondary.opacity(dim5),
                 borderColor: colors.secondary.secondary,
                 pressedBorderColor: colors.secondary.secondary
             )
@@ -40,7 +40,7 @@ struct ButtonVariantOutlinedUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.feedback.neutral,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.feedback.neutral.dimmed(dim5),
+                pressedBackgroundColor: colors.feedback.neutral.opacity(dim5),
                 borderColor: colors.feedback.neutral,
                 pressedBorderColor: colors.feedback.neutral
             )
@@ -48,7 +48,7 @@ struct ButtonVariantOutlinedUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.feedback.alert,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.feedback.alert.dimmed(dim5),
+                pressedBackgroundColor: colors.feedback.alert.opacity(dim5),
                 borderColor: colors.feedback.alert,
                 pressedBorderColor: colors.feedback.alert
             )
@@ -56,7 +56,7 @@ struct ButtonVariantOutlinedUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.feedback.success,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.feedback.success.dimmed(dim5),
+                pressedBackgroundColor: colors.feedback.success.opacity(dim5),
                 borderColor: colors.feedback.success,
                 pressedBorderColor: colors.feedback.success
             )
@@ -64,7 +64,7 @@ struct ButtonVariantOutlinedUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.feedback.error,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.feedback.error.dimmed(dim5),
+                pressedBackgroundColor: colors.feedback.error.opacity(dim5),
                 borderColor: colors.feedback.error,
                 pressedBorderColor: colors.feedback.error
             )
@@ -72,7 +72,7 @@ struct ButtonVariantOutlinedUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.base.surface,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.base.surface.dimmed(dim5),
+                pressedBackgroundColor: colors.base.surface.opacity(dim5),
                 borderColor: colors.base.surface,
                 pressedBorderColor: colors.base.surface
             )
