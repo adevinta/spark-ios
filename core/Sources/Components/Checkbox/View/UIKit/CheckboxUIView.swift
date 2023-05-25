@@ -16,6 +16,7 @@ public final class CheckboxUIView: UIView {
 
     private enum Constants {
         static var checkboxSize: CGFloat = 20
+        static var hitTestMargin: CGFloat = 8
     }
 
     // MARK: - Private properties.
@@ -256,7 +257,7 @@ public final class CheckboxUIView: UIView {
         self.button.addTarget(self, action: #selector(self.actionTouchUp(sender:)), for: .touchCancel)
 
         self.button.translatesAutoresizingMaskIntoConstraints = true
-        self.button.frame = self.bounds
+        self.button.frame = self.bounds.insetBy(dx: -Constants.hitTestMargin, dy: -Constants.hitTestMargin)
         self.button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(self.button)
 
@@ -276,8 +277,7 @@ public final class CheckboxUIView: UIView {
             .store(in: &cancellables)
     }
 
-    // MARK: - Methods
-
+    // MARK: - Override
     /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -287,6 +287,13 @@ public final class CheckboxUIView: UIView {
         self.updateViewConstraints()
     }
 
+    // Tap area is bigger than the bounds of self.
+    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let convertedPoint = button.convert(point, from: self)
+        return button.point(inside: convertedPoint, with: event)
+    }
+
+    // MARK: - Methods
     private func updateAccessibility() {
         if self.selectionState == .selected {
             self.accessibilityTraits.insert(.selected)
