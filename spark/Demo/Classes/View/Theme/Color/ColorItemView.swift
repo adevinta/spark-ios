@@ -8,7 +8,6 @@
 
 import SwiftUI
 import SparkCore
-@testable import Spark
 
 struct ColorItemView: View {
     
@@ -22,9 +21,14 @@ struct ColorItemView: View {
         ZStack {
             self.viewModel.color
                 .frame(height: 60)
+
                 .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                )
             Text(self.viewModel.name)
-                .foregroundColor(.white).contrast(-10)
+                .foregroundColor(self.viewModel.foregroundColor)
         }
     }
 }
@@ -32,6 +36,6 @@ struct ColorItemView: View {
 struct ColorItemView_Previews: PreviewProvider {
     static var previews: some View {
         ColorItemView(viewModel: .init(name: "Title",
-                                            colorToken: ColorTokenDefault(named: "red", in: Bundle())))
+                                       colorToken: ColorTokenDefault(named: "red", in: Bundle())))
     }
 }

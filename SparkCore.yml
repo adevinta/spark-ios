@@ -52,6 +52,7 @@ targetTemplates:
 
     dependencies:
       - target: SparkCore
+      - target: Spark
       - package: SnapshotTesting
 
   SparkCoreDemoTemplate:
@@ -79,6 +80,7 @@ targetTemplates:
         - "**/*Tests.swift"
     dependencies:
       - target: SparkCore
+      - target: Spark
 
 targets:
   SparkCore:

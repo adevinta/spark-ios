@@ -15,29 +15,28 @@ extension ColorsStatesGeneratedMock {
     static func mocked() -> ColorsStatesGeneratedMock {
         let mock = ColorsStatesGeneratedMock()
 
-        mock.underlyingPrimaryPressed = ColorTokenGeneratedMock()
-        mock.underlyingPrimaryVariantPressed = ColorTokenGeneratedMock()
-        mock.underlyingPrimaryContainerPressed = ColorTokenGeneratedMock()
+        mock.underlyingPrimaryPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingPrimaryVariantPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingPrimaryContainerPressed = ColorTokenGeneratedMock.random()
 
-        mock.underlyingSecondaryPressed = ColorTokenGeneratedMock()
-        mock.underlyingSecondaryVariantPressed = ColorTokenGeneratedMock()
-        mock.underlyingSecondaryContainerPressed = ColorTokenGeneratedMock()
+        mock.underlyingSecondaryPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingSecondaryVariantPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingSecondaryContainerPressed = ColorTokenGeneratedMock.random()
 
-        mock.underlyingBackgroundPressed = ColorTokenGeneratedMock()
-        mock.underlyingSurfacePressed = ColorTokenGeneratedMock()
-        mock.underlyingSurfaceInversePressed = ColorTokenGeneratedMock()
-        mock.underlyingOutlinePressed = ColorTokenGeneratedMock()
+        mock.underlyingSurfacePressed = ColorTokenGeneratedMock.random()
+        mock.underlyingSurfaceInversePressed = ColorTokenGeneratedMock.random()
+        mock.underlyingOutlinePressed = ColorTokenGeneratedMock.random()
 
-        mock.underlyingSuccessPressed = ColorTokenGeneratedMock()
-        mock.underlyingSuccessContainerPressed = ColorTokenGeneratedMock()
-        mock.underlyingAlertPressed = ColorTokenGeneratedMock()
-        mock.underlyingAlertContainerPressed = ColorTokenGeneratedMock()
-        mock.underlyingErrorPressed = ColorTokenGeneratedMock()
-        mock.underlyingErrorContainerPressed = ColorTokenGeneratedMock()
-        mock.underlyingInfoPressed = ColorTokenGeneratedMock()
-        mock.underlyingInfoContainerPressed = ColorTokenGeneratedMock()
-        mock.underlyingNeutralPressed = ColorTokenGeneratedMock()
-        mock.underlyingNeutralContainerPressed = ColorTokenGeneratedMock()
+        mock.underlyingSuccessPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingSuccessContainerPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingAlertPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingAlertContainerPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingErrorPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingErrorContainerPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingInfoPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingInfoContainerPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingNeutralPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingNeutralContainerPressed = ColorTokenGeneratedMock.random()
 
         return mock
     }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // sourcery: AutoMockable
 public protocol Theme {

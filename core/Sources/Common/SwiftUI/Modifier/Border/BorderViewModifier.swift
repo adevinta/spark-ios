@@ -12,9 +12,9 @@ struct BorderViewModifier: ViewModifier {
 
     // MARK: - Properties
 
-    let width: CGFloat
-    let radius: CGFloat
-    let colorToken: ColorToken
+    private let width: CGFloat
+    private let radius: CGFloat
+    private let colorToken: ColorToken
 
     // MARK: - Initialization
 

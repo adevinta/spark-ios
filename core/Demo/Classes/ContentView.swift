@@ -1,16 +1,17 @@
 //
 //  ContentView.swift
-//  SparkDemo
+//  SparkCoreDemo
 //
 //  Created by luis.figueiredo-ext on 08/02/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import SwiftUI
+import SparkCore
 
 struct ContentView: View {
 
-    private let theme = SparkTheme()
+    private let theme = SparkTheme.shared
 
     var body: some View {
         VStack {
