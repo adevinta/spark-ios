@@ -29,7 +29,10 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 text: "Selected checkbox.",
                 checkedImage: self.checkedImage,
                 state: state,
-                selectionState: .selected,
+                selectionState: .init(
+                    get: { return .selected },
+                    set: { _ in }
+                ),
                 checkboxPosition: .right
             )
 
@@ -44,7 +47,10 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 text: "Selected checkbox.",
                 checkedImage: self.checkedImage,
                 state: state,
-                selectionState: .selected,
+                selectionState: .init(
+                    get: { return .selected },
+                    set: { _ in }
+                ),
                 checkboxPosition: .left
             )
 
@@ -59,7 +65,12 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 text: "Unselected checkbox.",
                 checkedImage: self.checkedImage,
                 state: state,
-                selectionState: .unselected,
+                selectionState: .init(
+                    get: { return .unselected
+
+                    },
+                    set: { _ in }
+                ),
                 checkboxPosition: .left
             )
 
@@ -74,7 +85,10 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 text: "Indeterminate checkbox.",
                 checkedImage: self.checkedImage,
                 state: state,
-                selectionState: .indeterminate,
+                selectionState: .init(
+                    get: { return .indeterminate },
+                    set: { _ in }
+                ),
                 checkboxPosition: .left
             )
 
@@ -89,7 +103,10 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 text: "Multiline checkbox.\nMore text.",
                 checkedImage: self.checkedImage,
                 state: state,
-                selectionState: .selected,
+                selectionState: .init(
+                    get: { return .selected },
+                    set: { _ in }
+                ),
                 checkboxPosition: .left
             )
 
