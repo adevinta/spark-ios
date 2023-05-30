@@ -16,46 +16,79 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
 
     func test_execute_for_all_variant_cases() throws {
         // GIVEN
-        let intentColorsMock = ButtonColorablesGeneratedMock()
-        intentColorsMock.underlyingTextColor  = ColorTokenGeneratedMock.random()
-        intentColorsMock.underlyingBackgroundColor = ColorTokenGeneratedMock.random()
-        intentColorsMock.underlyingPressedBackgroundColor = ColorTokenGeneratedMock.random()
-        intentColorsMock.underlyingBorderColor = ColorTokenGeneratedMock.random()
-        intentColorsMock.underlyingPressedBorderColor = ColorTokenGeneratedMock.random()
+        let variants: [ButtonVariant] = [.filled, .outlined, .contrast, .tinted, .ghost]
+        let items = variants.map {
+            let intentColorsMock = ButtonColorablesGeneratedMock()
+            intentColorsMock.underlyingTextColor = ColorTokenGeneratedMock.random()
+            intentColorsMock.underlyingBackgroundColor = ColorTokenGeneratedMock.random()
+            intentColorsMock.underlyingPressedBackgroundColor = ColorTokenGeneratedMock.random()
+            intentColorsMock.underlyingBorderColor = ColorTokenGeneratedMock.random()
+            intentColorsMock.underlyingPressedBorderColor = ColorTokenGeneratedMock.random()
 
-        let items: [GetColors] = [
-            .init(
+            return GetColors(
                 givenIntentColor: .primary,
+                givenVariant: $0,
+                givenColorables: intentColorsMock,
                 expectedTextColorToken: intentColorsMock.textColor,
                 expectedBackgroundToken: intentColorsMock.backgroundColor,
                 expectedPressedBackgroundToken: intentColorsMock.pressedBackgroundColor,
                 expectedBorderToken: intentColorsMock.borderColor,
                 expectedPressedBorderToken: intentColorsMock.pressedBorderColor
             )
-        ]
+        }
 
         for item in items {
             let themeColorsMock = ColorsGeneratedMock()
             themeColorsMock.primary = ColorsPrimaryGeneratedMock.mocked()
             themeColorsMock.states = ColorsStatesGeneratedMock.mocked()
 
+            let dimsMock = DimsGeneratedMock.mocked()
             let themeMock = ThemeGeneratedMock()
             themeMock.underlyingColors = themeColorsMock
-            themeMock.underlyingDims = DimsGeneratedMock.mocked()
+            themeMock.underlyingDims = dimsMock
 
-            let getIntentColorsUseCaseMock = ButtonGetColorsUseCaseableGeneratedMock()
-            getIntentColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantReturnValue = intentColorsMock
+            let filledUseCase = ButtonVariantUseCaseableGeneratedMock()
+            let outlinedUseCase = ButtonVariantUseCaseableGeneratedMock()
+            let tintedUseCase = ButtonVariantUseCaseableGeneratedMock()
+            let contrastUseCase = ButtonVariantUseCaseableGeneratedMock()
+            let ghostUseCase = ButtonVariantUseCaseableGeneratedMock()
+
+            let mockedUseCase: ButtonVariantUseCaseableGeneratedMock
+            switch item.givenVariant {
+            case .filled:
+                mockedUseCase = filledUseCase
+            case .outlined:
+                mockedUseCase = outlinedUseCase
+            case .tinted:
+                mockedUseCase = tintedUseCase
+            case .contrast:
+                mockedUseCase = contrastUseCase
+            case .ghost:
+                mockedUseCase = ghostUseCase
+            }
+            mockedUseCase.colorsWithIntentColorAndColorsAndDimsReturnValue = item.givenColorables
+
+            let getIntentColorsUseCaseMock = ButtonGetColorsUseCase(
+                filledUseCase: filledUseCase,
+                outlinedUseCase: outlinedUseCase,
+                tintedUseCase: tintedUseCase,
+                ghostUseCase: ghostUseCase,
+                contrastUseCase: contrastUseCase
+            )
 
             // WHEN
-            let colors = getIntentColorsUseCaseMock.execute(from: themeMock,
-                                         intentColor: item.givenIntentColor,
-                                         variant: .filled)
+            let colors = getIntentColorsUseCaseMock.execute(
+                from: themeMock,
+                intentColor: item.givenIntentColor,
+                variant: item.givenVariant
+            )
 
             // Other UseCase
             Tester.testColorsUseCaseExecuteCalling(
-                givenColorsUseCase: getIntentColorsUseCaseMock,
+                givenColorsUseCase: mockedUseCase,
                 givenIntentColor: item.givenIntentColor,
-                givenTheme: themeMock
+                givenColors: themeColorsMock,
+                givenDims: dimsMock
             )
 
             // Colors Properties
@@ -70,20 +103,24 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
 private struct Tester {
 
     static func testColorsUseCaseExecuteCalling(
-        givenColorsUseCase: ButtonGetColorsUseCaseableGeneratedMock,
+        givenColorsUseCase: ButtonVariantUseCaseableGeneratedMock,
         givenIntentColor: ButtonIntentColor,
-        givenTheme: ThemeGeneratedMock
+        givenColors: ColorsGeneratedMock,
+        givenDims: DimsGeneratedMock
     ) {
-        let arguments = givenColorsUseCase.executeWithThemeAndIntentColorAndVariantReceivedArguments
-        XCTAssertEqual(givenColorsUseCase.executeWithThemeAndIntentColorAndVariantCallsCount,
+        let arguments = givenColorsUseCase.colorsWithIntentColorAndColorsAndDimsReceivedArguments
+        XCTAssertEqual(givenColorsUseCase.colorsWithIntentColorAndColorsAndDimsCallsCount,
                        1,
                        "Wrong call number on execute")
         XCTAssertEqual(arguments?.intentColor,
                        givenIntentColor,
                        "Wrong intentColor parameter on execute")
-        XCTAssertIdentical(arguments?.theme as? ThemeGeneratedMock,
-                           givenTheme,
-                           "Wrong theme parameter on execute")
+        XCTAssertIdentical(arguments?.colors as? ColorsGeneratedMock,
+                           givenColors,
+                           "Wrong colors parameter on execute")
+        XCTAssertIdentical(arguments?.dims as? DimsGeneratedMock,
+                           givenDims,
+                           "Wrong dims parameter on execute")
     }
 
     static func testColorsProperties(
@@ -157,6 +194,8 @@ private struct Tester {
 
 private struct GetColors {
     let givenIntentColor: ButtonIntentColor
+    let givenVariant: ButtonVariant
+    let givenColorables: ButtonColorablesGeneratedMock
 
     let expectedTextColorToken: ColorToken
     let expectedBackgroundToken: ColorToken
