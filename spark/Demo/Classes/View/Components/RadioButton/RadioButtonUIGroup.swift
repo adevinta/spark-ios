@@ -36,20 +36,20 @@ final class RadioButtionUIGroupViewController: UIViewController {
         "Selected Value \(self.backingSelectedId)"
     }
 
-    private lazy var radioButtonView:  RadioButtonUIGroupView = {
+    private lazy var radioButtonView: RadioButtonUIGroupView = {
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
             title: "Radio Button Group (UIKit)",
             selectedID: self.selectedId,
             items: self.radioButtonItems,
-            radioButtonLabelPosition: self.labelPosition
+            radioButtonLabelPosition: .right
         )
         return groupView
     }()
 
-    private var labelPosition: RadioButtonLabelPosition = .right {
+    private var labelPosition: RadioButtonLabelPosition = .left {
         didSet {
-            self.radioButtonView.radioButtonLabelPosition = labelPosition
+            self.labelRadioButton.radioButtonLabelPosition = labelPosition
         }
     }
 
@@ -83,12 +83,12 @@ final class RadioButtionUIGroupViewController: UIViewController {
         return stackView
     }()
 
-    private lazy var leftRightRadioButtonGroup: UIView  = {
+    private lazy var leftRightRadioButtonGroup: RadioButtonUIGroupView = {
         let items: [RadioButtonItem<RadioButtonLabelPosition>] = [
-            RadioButtonItem(id: .right,
-                            label: "Right"),
             RadioButtonItem(id: .left,
-                            label: "Left")
+                            label: "Left"),
+            RadioButtonItem(id: .right,
+                            label: "Right")
         ]
         let selectedPosition = Binding<RadioButtonLabelPosition>(
             get: { return self.labelPosition},
@@ -96,14 +96,36 @@ final class RadioButtionUIGroupViewController: UIViewController {
         )
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
-            title: "Label Position",
+            title: "Toggle Label Position",
             selectedID: selectedPosition,
             items: items,
-            radioButtonLabelPosition: .right
+            radioButtonLabelPosition: .right,
+            groupLayout: .horizontal
         )
         return groupView
     }()
 
+    private lazy var labelRadioButton: RadioButtonUIGroupView = {
+        let items: [RadioButtonItem<Bool>] = [
+            RadioButtonItem(id: true,
+                            label: "Label")
+        ]
+        let selectedPosition = Binding<Bool>(
+            get: { return true },
+            set: { _ in }
+        )
+        let groupView = RadioButtonUIGroupView(
+            theme: self.theme,
+            title: "Label",
+            selectedID: selectedPosition,
+            items: items,
+            radioButtonLabelPosition: self.labelPosition,
+            groupLayout: .horizontal
+        )
+        return groupView
+    }()
+
+    
     private lazy var radioButtonItems: [RadioButtonItem<String>] = [
         RadioButtonItem(id: "1",
                         label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
@@ -143,6 +165,8 @@ final class RadioButtionUIGroupViewController: UIViewController {
 
         self.contentView
             .addArrangedSubview(self.leftRightRadioButtonGroup)
+
+        self.contentView.addArrangedSubview(self.labelRadioButton)
 
         self.scrollView.addSubview(self.contentView)
     }

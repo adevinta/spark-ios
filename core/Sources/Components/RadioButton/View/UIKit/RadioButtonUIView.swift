@@ -200,7 +200,8 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
             self?.updatePositionConstraints()
         }
 
-        self.subscribeTo(self.viewModel.$spacing) { [weak self] _ in
+        self.subscribeTo(self.viewModel.$spacing) { [weak self] spacing in
+            self?._spacing = ScaledUIMetric(wrappedValue: spacing)
             self?.updatePositionConstraints()
         }
     }
