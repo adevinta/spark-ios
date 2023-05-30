@@ -116,7 +116,6 @@ final class RadioButtionUIGroupViewController: UIViewController {
         )
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
-            title: "Label",
             selectedID: selectedPosition,
             items: items,
             radioButtonLabelPosition: self.labelPosition,

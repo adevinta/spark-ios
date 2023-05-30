@@ -70,8 +70,8 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.supplementaryText = self.state.supplementaryText
 
         self.opacity = self.theme.opacity(state: self.state)
-        self.spacing = labelPosition == .right ? self.theme.layout.spacing.medium : self.theme.layout.spacing.medium * 3
-        self.font =  self.theme.typography.body1
+        self.spacing = self.theme.spacing(for: labelPosition)
+        self.font = self.theme.typography.body1
         self.supplemetaryFont = self.theme.typography.caption
         self.surfaceColor = self.theme.colors.base.onSurface
 
@@ -130,7 +130,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     }
 
     private func labelPositionDidUpdate() {
-        self.spacing = self.labelPosition == .right ? self.theme.layout.spacing.medium : self.theme.layout.spacing.medium * 3
+        self.spacing = self.theme.spacing(for: self.labelPosition)
     }
 }
 
@@ -141,6 +141,10 @@ private extension Theme {
         case .disabled: return self.dims.dim3
         case .warning, .error, .success, .enabled: return 1
         }
+    }
+
+    func spacing(for labelPosition: RadioButtonLabelPosition) -> CGFloat {
+        return labelPosition == .right ? self.layout.spacing.medium : self.layout.spacing.xxxLarge
     }
 }
 
