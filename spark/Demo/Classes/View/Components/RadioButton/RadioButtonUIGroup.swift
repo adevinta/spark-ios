@@ -36,6 +36,23 @@ final class RadioButtionUIGroupViewController: UIViewController {
         "Selected Value \(self.backingSelectedId)"
     }
 
+    private lazy var radioButtonView:  RadioButtonUIGroupView = {
+        let groupView = RadioButtonUIGroupView(
+            theme: self.theme,
+            title: "Radio Button Group (UIKit)",
+            selectedID: self.selectedId,
+            items: self.radioButtonItems,
+            radioButtonLabelPosition: self.labelPosition
+        )
+        return groupView
+    }()
+
+    private var labelPosition: RadioButtonLabelPosition = .right {
+        didSet {
+            self.radioButtonView.radioButtonLabelPosition = labelPosition
+        }
+    }
+
     private lazy var selectedValueLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -60,10 +77,31 @@ final class RadioButtionUIGroupViewController: UIViewController {
     private let contentView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.alignment = .center
+        stackView.alignment = .leading
         stackView.spacing = 24
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
+    }()
+
+    private lazy var leftRightRadioButtonGroup: UIView  = {
+        let items: [RadioButtonItem<RadioButtonLabelPosition>] = [
+            RadioButtonItem(id: .right,
+                            label: "Right"),
+            RadioButtonItem(id: .left,
+                            label: "Left")
+        ]
+        let selectedPosition = Binding<RadioButtonLabelPosition>(
+            get: { return self.labelPosition},
+            set: { self.labelPosition = $0 }
+        )
+        let groupView = RadioButtonUIGroupView(
+            theme: self.theme,
+            title: "Label Position",
+            selectedID: selectedPosition,
+            items: items,
+            radioButtonLabelPosition: .right
+        )
+        return groupView
     }()
 
     private lazy var radioButtonItems: [RadioButtonItem<String>] = [
@@ -99,15 +137,12 @@ final class RadioButtionUIGroupViewController: UIViewController {
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.scrollView)
 
-        let radioButtonView = RadioButtonUIGroupView(
-            theme: self.theme,
-            title: "Radio Button Group (UIKit)",
-            selectedID: self.selectedId,
-            items: self.radioButtonItems)
-
-        self.contentView.addArrangedSubview(radioButtonView)
+        self.contentView.addArrangedSubview(self.radioButtonView)
         self.contentView.addArrangedSubview(self.selectedValueLabel)
         self.contentView.addArrangedSubview(UIView())
+
+        self.contentView
+            .addArrangedSubview(self.leftRightRadioButtonGroup)
 
         self.scrollView.addSubview(self.contentView)
     }

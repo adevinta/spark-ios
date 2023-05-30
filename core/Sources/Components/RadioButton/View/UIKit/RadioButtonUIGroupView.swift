@@ -18,10 +18,29 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     // MARK: - Private Properties
     private var selectedID: Binding<ID>
-    private let theme: Theme
+    public var theme: Theme {
+        didSet {
+            for radioButtonView in radioButtonViews {
+                radioButtonView.theme = theme
+            }
+
+            self.setNeedsDisplay()
+        }
+    }
     private let items: [RadioButtonItem<ID>]
     private let title: String?
     private var itemConstraints = [NSLayoutConstraint]()
+    public var radioButtonLabelPosition: RadioButtonLabelPosition {
+        didSet {
+            guard radioButtonLabelPosition != oldValue else { return }
+
+            for radioButtonView in radioButtonViews {
+                radioButtonView.labelPosition = radioButtonLabelPosition
+            }
+
+            self.setNeedsDisplay()
+        }
+    }
 
     @ScaledUIMetric var spacing: CGFloat
 
@@ -51,11 +70,14 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     public init(theme: Theme,
                 title: String? = nil,
                 selectedID: Binding<ID>,
-                items: [RadioButtonItem<ID>]) {
+                items: [RadioButtonItem<ID>],
+                radioButtonLabelPosition: RadioButtonLabelPosition = .right
+    ) {
         self.theme = theme
         self.items = items
         self.selectedID = selectedID
         self.title = title
+        self.radioButtonLabelPosition = radioButtonLabelPosition
         self._spacing = ScaledUIMetric(wrappedValue: (theme.layout.spacing.xLarge - Constants.touchPadding))
         super.init(frame: .zero)
 
@@ -83,7 +105,9 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                               id: $0.id,
                               label: $0.label,
                               selectedID: self.backingSelectedID,
-                              state: $0.state)
+                              state: $0.state,
+                              labelPosition: self.radioButtonLabelPosition
+            )
         }
 
         var previousLayoutTopAnchor = self.safeAreaLayoutGuide.topAnchor
