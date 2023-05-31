@@ -15,28 +15,31 @@ public protocol BadgeFormatting {
 }
 
 /// With this formatter you can define behaviour of Badge label.
-///
-/// Use **default** for regular counting behavior with numbers.
-///
-/// Use **overflowCounter(maxValue)**
-/// If badge **value** would be greater than passed **maxValue** into formatter
-/// then badge will show **maxValue+**
-///
-/// You can define your custom behavior by using **custom** type. But in that case
-/// Fromatter should be implemented and conform to **BadgeFormatting** protocol
-/// For example you can define thouthand counter to show 96k instead of 96000
-///
-/// To get text you need to call **badgeText(value) -> String** function
+/// avalabled formats:
+/// - ``default``
+/// - ``overflowCounter(maxValue:)``
+/// - ``custom(formatter:)``
 public enum BadgeFormat {
 
     // MARK: - Properties
 
+    /// Use **default** for regular counting behavior with numbers.
     case `default`
+
+    /// Use **overflowCounter(maxValue)**
+    /// If badge **value** would be greater than passed **maxValue** into formatter
+    /// then badge will show **maxValue+**
     case overflowCounter(maxValue: Int)
+
+    /// You can define your custom behavior by using **custom** type. But in that case
+    /// Formatter should be implemented and conform to **BadgeFormatting** protocol
+    /// For example you can define thousand counter to show 96k instead of 96000
     case custom(formatter: BadgeFormatting)
 
     // MARK: - Getting text
 
+    /// This function will return text value for your badge
+    /// wiht conformation to the selected **BadgeFormat** type
     func badgeText(_ value: Int?) -> String {
         switch self {
         case .overflowCounter(let maxValue):

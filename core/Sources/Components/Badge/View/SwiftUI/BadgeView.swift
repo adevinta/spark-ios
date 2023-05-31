@@ -10,7 +10,7 @@ import SwiftUI
 
 /// This is SwiftUI badge view to show notifications count
 ///
-/// Badge view is created by pasing:
+/// Badge view is created by passing:
 /// - **Theme**
 /// - ``BadgeViewModel``
 ///

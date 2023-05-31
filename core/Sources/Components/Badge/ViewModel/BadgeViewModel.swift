@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import SwiftUI
 
-/// **BadgeViewModel** is a view model that required for
+/// **BadgeViewModel** is a view model that is required for
 /// configuring ``BadgeView`` and changing it's properties.
 ///
 /// **Initializer**
@@ -23,7 +23,7 @@ import SwiftUI
 ///
 /// List of properties:
 /// - value -- property that represents **Int** displayed in ``BadgeView``
-/// - text -- is property that represents text in ``BadgeView``. Appearance of it
+/// - text -- property that represents text in ``BadgeView``. Appearance of it
 /// is configured via ``BadgeFormat`` and based on **value** property.
 /// - textColor -- property for coloring text
 /// - backgroundColor -- changes color of ``BadgeView`` and based on ``BadgeIntentType``
@@ -31,9 +31,9 @@ import SwiftUI
 /// - badgeBorder -- is property that helps you to configure ``BadgeView`` with
 /// border radius, width and color. See ``BadgeBorder``
 /// - theme  is representer of **Theme** used in the app
-/// - badgeFormat -- see ``BadgeFormat`` as a formater of **text**
-public class BadgeViewModel: ObservableObject {
-    
+/// - badgeFormat -- see ``BadgeFormat`` as a formatter of **text**
+public final class BadgeViewModel: ObservableObject {
+
     @Published private var value: Int? = nil
 
     // MARK: - Text Properties
