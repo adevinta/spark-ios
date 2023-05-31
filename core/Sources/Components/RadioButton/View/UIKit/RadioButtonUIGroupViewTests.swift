@@ -94,19 +94,7 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
         sut.translatesAutoresizingMaskIntoConstraints = false
 
-        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 400, height: 800))
-
-        scrollView.addSubview(sut)
-
-        NSLayoutConstraint.activate([
-            sut.widthAnchor.constraint(equalToConstant: 400),
-            sut.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            sut.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            sut.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            sut.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
-        ])
-
-        assertSnapshotInDarkAndLight(matching: scrollView)
+        assertSnapshotInDarkAndLight(matching: sut)
     }
 
     func test_uikit_radioButtonGroup_label_left() throws {
@@ -130,19 +118,32 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
         sut.translatesAutoresizingMaskIntoConstraints = false
 
-        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 400, height: 800))
+        assertSnapshotInDarkAndLight(matching: sut)
+    }
 
-        scrollView.addSubview(sut)
+    func test_uikit_radioButtonGroup_label_left_with_title() throws {
+        let items: [RadioButtonItem<String>] = [
+            RadioButtonItem(id: "1",
+                            label: "Label 1"),
+            RadioButtonItem(id: "2",
+                            label: "Label 2"),
+            RadioButtonItem(id: "3",
+                            label: "Label 3")
+        ]
 
-        NSLayoutConstraint.activate([
-            sut.widthAnchor.constraint(equalToConstant: 400),
-            sut.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            sut.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            sut.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            sut.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
-        ])
+        let sut = RadioButtonUIGroupView(
+            theme: SparkTheme.shared,
+            title: "Title",
+            selectedID: self.selectedID,
+            items: items,
+            radioButtonLabelPosition: .left,
+            groupLayout: .vertical
+        )
 
-        assertSnapshotInDarkAndLight(matching: scrollView)
+        sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
+        sut.translatesAutoresizingMaskIntoConstraints = false
+
+        assertSnapshotInDarkAndLight(matching: sut)
     }
 
 }

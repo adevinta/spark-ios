@@ -9,7 +9,7 @@
 import UIKit
 import SwiftUI
 
-/// RadioButtonGroupView embodies a radio button group and handles 
+/// RadioButtonGroupView embodies a radio button group and handles
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
 
     // MARK: - Private Properties
@@ -106,13 +106,15 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     private func arrangeView() {
         self.radioButtonViews = items.map {
-            RadioButtonUIView(theme: theme,
-                              id: $0.id,
-                              label: $0.label,
-                              selectedID: self.backingSelectedID,
-                              state: $0.state,
-                              labelPosition: self.radioButtonLabelPosition
+            let radioButtonView = RadioButtonUIView(theme: theme,
+                                                    id: $0.id,
+                                                    label: $0.label,
+                                                    selectedID: self.backingSelectedID,
+                                                    state: $0.state,
+                                                    labelPosition: self.radioButtonLabelPosition
             )
+            radioButtonView.translatesAutoresizingMaskIntoConstraints = false
+            return radioButtonView
         }
 
         if let title = self.title {
@@ -124,7 +126,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
 
         for radioButtonView in radioButtonViews {
-            radioButtonView.translatesAutoresizingMaskIntoConstraints = false
             self.addSubview(radioButtonView)
         }
     }
@@ -140,21 +141,26 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     func setupVerticalConstraints() {
         var previousLayoutTopAnchor = self.safeAreaLayoutGuide.topAnchor
         var constraints = [NSLayoutConstraint]()
+        var spacing: CGFloat = 0
 
         if self.title != nil {
             constraints.append(self.titleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
             constraints.append(self.titleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
             constraints.append(self.titleLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor))
             previousLayoutTopAnchor = self.titleLabel.bottomAnchor
+            spacing = self.spacing
         }
 
         for radioButtonView in radioButtonViews {
             constraints.append(radioButtonView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
             constraints.append(radioButtonView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
 
-            let itemConstraint = radioButtonView.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: self.spacing)
-            self.itemSpacingConstraints.append(itemConstraint)
+            let itemConstraint = radioButtonView.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: spacing)
             constraints.append(itemConstraint)
+            if spacing != 0 {
+                self.itemSpacingConstraints.append(itemConstraint)
+            }
+            spacing = self.spacing
 
             previousLayoutTopAnchor = radioButtonView.bottomAnchor
         }
