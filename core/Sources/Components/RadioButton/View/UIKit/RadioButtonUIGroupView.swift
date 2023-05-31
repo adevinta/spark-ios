@@ -9,10 +9,6 @@
 import UIKit
 import SwiftUI
 
-private enum Constants {
-    static let touchPadding: CGFloat = 16
-}
-
 /// RadioButtonGroupView embodies a radio button group and handles 
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
 
@@ -23,7 +19,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             for radioButtonView in radioButtonViews {
                 radioButtonView.theme = theme
             }
-            self._spacing = ScaledUIMetric(wrappedValue: (theme.layout.spacing.xLarge - Constants.touchPadding))
+            self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge)
         }
     }
     private let items: [RadioButtonItem<ID>]
@@ -86,8 +82,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         self.title = title
         self.radioButtonLabelPosition = radioButtonLabelPosition
         self.groupLayout = groupLayout
-        let padding = groupLayout == .vertical ? Constants.touchPadding : 0
-        self._spacing = ScaledUIMetric(wrappedValue: (theme.layout.spacing.xLarge - padding))
+        self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge)
         super.init(frame: .zero)
 
         arrangeView()
