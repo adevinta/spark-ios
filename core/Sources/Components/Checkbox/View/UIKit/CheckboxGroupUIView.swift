@@ -162,7 +162,8 @@ public final class CheckboxGroupUIView: UIView {
                 selectionState: .init(
                     get: {
                         return item.selectionState
-                    }, set: { [weak self] in
+                    },
+                    set: { [weak self] in
                         guard
                             let self,
                             let index = self.items.firstIndex(where: { $0.id == item.id}) else { return }
@@ -170,7 +171,8 @@ public final class CheckboxGroupUIView: UIView {
                         var item = self.items[index]
                         item.selectionState = $0
                         self.items[index] = item
-                    }),
+                    }
+                ),
                 checkboxPosition: self.checkboxPosition
             )
             let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id)"

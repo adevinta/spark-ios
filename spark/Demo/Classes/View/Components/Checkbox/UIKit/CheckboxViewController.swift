@@ -101,11 +101,10 @@ final class CheckboxViewController: UIViewController {
             text: "Hello world!",
             checkedImage: image,
             state: .enabled,
-            selectionState: .init(get: {
-                return self.checkboxValue1
-            }, set: {
-                self.checkboxValue1 = $0
-            }),
+            selectionState: .init(
+                get: { return self.checkboxValue1 },
+                set: { self.checkboxValue1 = $0 }
+            ),
             checkboxPosition: .left
         )
         checkbox.translatesAutoresizingMaskIntoConstraints = false
@@ -117,11 +116,10 @@ final class CheckboxViewController: UIViewController {
             text: "Second checkbox! This is a very very long descriptive text.",
             checkedImage: image,
             state: .disabled,
-            selectionState: .init(get: {
-                return self.checkboxValue2
-            }, set: {
-                self.checkboxValue2 = $0
-            }),
+            selectionState: .init(
+                get: { return self.checkboxValue2 },
+                set: { self.checkboxValue2 = $0 }
+            ),
             checkboxPosition: .left
         )
         checkbox2.translatesAutoresizingMaskIntoConstraints = false
@@ -134,11 +132,10 @@ final class CheckboxViewController: UIViewController {
             text: "Error checkbox",
             checkedImage: image,
             state: .error(message: "Error message"),
-            selectionState: .init(get: {
-                return self.checkboxValue3
-            }, set: {
-                self.checkboxValue3 = $0
-            }),
+            selectionState: .init(
+                get: { return self.checkboxValue3 },
+                set: { self.checkboxValue3 = $0 }
+            ),
             checkboxPosition: .left
         )
         errorCheckbox.translatesAutoresizingMaskIntoConstraints = false
@@ -150,11 +147,10 @@ final class CheckboxViewController: UIViewController {
             text: "Right checkbox",
             checkedImage: image,
             state: .success(message: "Success message"),
-            selectionState: .init(get: {
-                return self.checkboxValue4
-            }, set: {
-                self.checkboxValue4 = $0
-            }),
+            selectionState: .init(
+                get: { return self.checkboxValue4 },
+                set: { self.checkboxValue4 = $0 }
+            ),
             checkboxPosition: .right
         )
         successCheckbox.translatesAutoresizingMaskIntoConstraints = false

@@ -30,7 +30,10 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
                 checkboxPosition: .right,
                 theme: self.theme,
                 state: state,
-                selectionState: .init(get: { .selected }, set: { _ in })
+                selectionState: .init(
+                    get: { .selected },
+                    set: { _ in }
+                )
             ).fixedSize()
 
             assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
@@ -44,7 +47,10 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
                 checkedImage: self.checkedImage,
                 theme: self.theme,
                 state: state,
-                selectionState: .init(get: { .selected }, set: { _ in })
+                selectionState: .init(
+                    get: { .selected },
+                    set: { _ in }
+                )
             ).fixedSize().environment(\.sizeCategory, .medium)
 
             assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
@@ -58,7 +64,10 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
                 checkedImage: self.checkedImage,
                 theme: self.theme,
                 state: state,
-                selectionState: .init(get: { .unselected }, set: { _ in })
+                selectionState: .init(
+                    get: { .unselected },
+                    set: { _ in }
+                )
             ).fixedSize().environment(\.sizeCategory, .medium)
 
             assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
@@ -72,7 +81,10 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
                 checkedImage: self.checkedImage,
                 theme: self.theme,
                 state: state,
-                selectionState: .init(get: { .indeterminate }, set: { _ in })
+                selectionState: .init(
+                    get: { .indeterminate },
+                    set: { _ in }
+                )
             ).fixedSize().environment(\.sizeCategory, .medium)
 
             assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
@@ -86,7 +98,10 @@ final class CheckboxViewTests: SwiftUIComponentTestCase {
                 checkedImage: self.checkedImage,
                 theme: self.theme,
                 state: state,
-                selectionState: .init(get: { .unselected }, set: { _ in })
+                selectionState: .init(
+                    get: { .unselected },
+                    set: { _ in }
+                )
             ).fixedSize().environment(\.sizeCategory, .medium)
 
             assertSnapshotInDarkAndLight(matching: view, named: state.identifier)

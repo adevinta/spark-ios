@@ -66,9 +66,7 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
                 checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .init(
-                    get: { return .unselected
-
-                    },
+                    get: { return .unselected },
                     set: { _ in }
                 ),
                 checkboxPosition: .left
