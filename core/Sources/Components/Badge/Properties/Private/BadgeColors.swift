@@ -9,13 +9,7 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol BadgeColorables {
-    var backgroundColor: ColorToken { get }
-    var borderColor: ColorToken { get }
-    var foregroundColor: ColorToken { get }
-}
-
-struct BadgeColors: BadgeColorables {
+struct BadgeColors {
 
     // MARK: - Properties
 

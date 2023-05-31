@@ -82,7 +82,7 @@ final class BadgeGetColorsUseCaseTests: XCTestCase {
 private struct Tester {
 
     static func testColorsProperties(
-        givenColors: BadgeColorables,
+        givenColors: BadgeColors,
         getColors: BadgeGetColors
     ) throws {
         // Background Color

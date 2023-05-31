@@ -13,20 +13,7 @@ import XCTest
 
 final class BadgeViewModelTests: XCTestCase {
 
-    var theme: ThemeGeneratedMock!
-
-    // MARK: - Setup
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-
-        self.theme = ThemeGeneratedMock.mock
-    }
-
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-
-        self.theme = nil
-    }
+    var theme: ThemeGeneratedMock! = ThemeGeneratedMock.mocked()
 
     // MARK: - Tests
     func test_init() throws {
@@ -71,23 +58,5 @@ private extension BadgeBorder {
         return (isOutlined ? width == theme.border.width.medium : width == theme.border.width.none) &&
         radius == theme.border.radius.full &&
         color.color == theme.colors.base.surface.color
-    }
-}
-
-private extension Theme where Self == ThemeGeneratedMock {
-    static var mock: Self {
-        let theme = ThemeGeneratedMock()
-        let colors = ColorsGeneratedMock.mocked()
-
-        colors.base = ColorsBaseGeneratedMock.mocked()
-        colors.primary = ColorsPrimaryGeneratedMock.mocked()
-        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
-        theme.colors = colors
-        theme.dims = DimsGeneratedMock.mocked()
-        theme.typography = TypographyGeneratedMock.mocked()
-        theme.layout = LayoutGeneratedMock.mocked()
-        theme.border = BorderGeneratedMock.mocked()
-
-        return theme
     }
 }

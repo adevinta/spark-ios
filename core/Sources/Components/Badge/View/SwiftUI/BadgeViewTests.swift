@@ -24,19 +24,7 @@ private struct TestBadgeFormatting: BadgeFormatting {
 
 final class BadgeViewTests: SwiftUIComponentTestCase {
 
-    var theme: Theme!
-
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-
-        theme = SparkTheme()
-    }
-
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-
-        theme = nil
-    }
+    private let theme: Theme! = SparkTheme()
 
     func test_badge_all_cases_no_text() throws {
         for badgeIntentType in BadgeIntentType.allCases {

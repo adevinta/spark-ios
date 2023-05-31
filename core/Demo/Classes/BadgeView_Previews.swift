@@ -34,7 +34,8 @@ struct BadgeView_Previews: PreviewProvider {
             badgeType: .alert,
             badgeSize: .small,
             initValue: 22,
-            format: .overflowCounter(maxValue: 20)
+            format: .overflowCounter(maxValue: 20),
+            isOutlined: false
         )
 
         @State var standartDangerBadge = BadgeViewModel(
@@ -80,8 +81,12 @@ struct BadgeView_Previews: PreviewProvider {
         var body: some View {
             ScrollView {
                 Button("Change value") {
-                    standartBadge.setBadgeValue(23)
                     smallCustomWithoutBorder.setBadgeValue(18)
+                    smallCustomWithoutBorder.isBadgeOutlined = true
+                    smallCustomWithoutBorder.badgeType = .primary
+                    standartBadge.setBadgeValue(23)
+                    standartDangerBadge.badgeType = .neutral
+                    smallCustomWithoutBorder.badgeSize = .normal
                 }
                 VStack(spacing: 100) {
                     HStack(spacing: 100) {
