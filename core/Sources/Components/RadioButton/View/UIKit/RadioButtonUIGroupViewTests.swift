@@ -97,6 +97,30 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut)
     }
 
+    func test_uikit_radioButtonGroup_horizontal_with_title() throws {
+        let items: [RadioButtonItem<String>] = [
+            RadioButtonItem(id: "1",
+                            label: "Label 1"),
+            RadioButtonItem(id: "2",
+                            label: "Label 2"),
+            RadioButtonItem(id: "3",
+                            label: "Label 3")
+        ]
+
+        let sut = RadioButtonUIGroupView(
+            theme: SparkTheme.shared,
+            title: "Title",
+            selectedID: self.selectedID,
+            items: items,
+            groupLayout: .horizontal
+        )
+
+        sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
+        sut.translatesAutoresizingMaskIntoConstraints = false
+
+        assertSnapshotInDarkAndLight(matching: sut)
+    }
+
     func test_uikit_radioButtonGroup_label_left() throws {
         let items: [RadioButtonItem<String>] = [
             RadioButtonItem(id: "1",

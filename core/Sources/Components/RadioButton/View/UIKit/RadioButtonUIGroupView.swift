@@ -175,16 +175,22 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         var previousLayoutTopAnchor = self.safeAreaLayoutGuide.topAnchor
         var previousLayoutLeadingAnchor = self.safeAreaLayoutGuide.leadingAnchor
         var constraints = [NSLayoutConstraint]()
+        var spacing: CGFloat = 0
 
         if self.title != nil {
             constraints.append(self.titleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
             constraints.append(self.titleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
             constraints.append(self.titleLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor))
             previousLayoutTopAnchor = self.titleLabel.bottomAnchor
+            spacing = self.spacing
         }
 
         for (index, radioButtonView) in radioButtonViews.enumerated() {
-            constraints.append(radioButtonView.topAnchor.constraint(equalTo: previousLayoutTopAnchor))
+            let topConstraint = radioButtonView.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: spacing)
+            if spacing != 0 {
+                self.itemSpacingConstraints.append(topConstraint)
+            }
+            constraints.append(topConstraint)
             constraints.append(radioButtonView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor))
 
             if index == 0 {
