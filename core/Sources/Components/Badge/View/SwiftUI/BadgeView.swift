@@ -42,26 +42,26 @@ public struct BadgeView: View {
     @ScaledMetric private var borderWidth: CGFloat
 
     public var body: some View {
-        if viewModel.text.isEmpty {
+        if self.viewModel.text.isEmpty {
             Circle()
-                .foregroundColor(viewModel.backgroundColor.color)
+                .foregroundColor(self.viewModel.backgroundColor.color)
                 .frame(width: self.emptySize, height: self.emptySize)
                 .border(
-                    width: borderWidth,
-                    radius: viewModel.badgeBorder.radius,
-                    colorToken: viewModel.badgeBorder.color
+                    width: self.viewModel.isBadgeOutlined ? borderWidth : 0,
+                    radius: self.viewModel.badgeBorder.radius,
+                    colorToken: self.viewModel.badgeBorder.color
                 )
                 .fixedSize()
         } else {
-            Text(viewModel.text)
-                .font(viewModel.textFont.font)
-                .foregroundColor(viewModel.textColor.color)
+            Text(self.viewModel.text)
+                .font(self.viewModel.textFont.font)
+                .foregroundColor(self.viewModel.textColor.color)
                 .padding(.init(vertical: self.smallOffset, horizontal: self.mediumOffset))
-                .background(viewModel.backgroundColor.color)
+                .background(self.viewModel.backgroundColor.color)
                 .border(
-                    width: borderWidth,
-                    radius: viewModel.badgeBorder.radius,
-                    colorToken: viewModel.badgeBorder.color
+                    width: self.viewModel.isBadgeOutlined ? borderWidth : 0,
+                    radius: self.viewModel.badgeBorder.radius,
+                    colorToken: self.viewModel.badgeBorder.color
                 )
                 .fixedSize()
                 .accessibilityIdentifier(BadgeAccessibilityIdentifier.text)

@@ -20,51 +20,7 @@ private struct BadgePreviewFormatter: BadgeFormatting {
 
 struct UIBadgeView: UIViewRepresentable {
 
-    private var viewModels: [BadgeViewModel] =
-    [
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .alert,
-            initValue: 6
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .alert,
-            badgeSize: .small,
-            initValue: 22,
-            format: .overflowCounter(maxValue: 20)
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .danger,
-            initValue: 10,
-            format: .custom(
-                formatter: BadgePreviewFormatter()
-            )
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .info
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .neutral,
-            isOutlined: false
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .primary
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .secondary,
-            initValue: 23
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .success
-        )
-    ]
+    var viewModels: [BadgeViewModel]
 
     func makeUIView(context: Context) -> some UIView {
         let badgeViews = viewModels.enumerated().map { index, viewModel in
@@ -113,9 +69,60 @@ struct UIBadgeView: UIViewRepresentable {
 struct BadgeUIView_Previews: PreviewProvider {
 
     struct BadgeUIViewBridge: View {
+        private var viewModels = [
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .alert,
+                initValue: 6
+            ),
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .alert,
+                badgeSize: .small,
+                initValue: 22,
+                format: .overflowCounter(maxValue: 20)
+            ),
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .danger,
+                initValue: 10,
+                format: .custom(
+                    formatter: BadgePreviewFormatter()
+                )
+            ),
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .info
+            ),
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .neutral,
+                isOutlined: false
+            ),
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .primary
+            ),
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .secondary,
+                initValue: 23
+            ),
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .success
+            )
+        ]
+
         var body: some View {
-            UIBadgeView()
-                .frame(height: 400)
+            List {
+                Button("Tap Me") {
+                    viewModels[0].setBadgeValue(23)
+                }
+                UIBadgeView(viewModels: viewModels)
+                    .frame(height: 400)
+                    .listRowBackground(Color.gray.opacity(0.3))
+            }
         }
     }
 

@@ -38,13 +38,10 @@ public final class BadgeViewModel: ObservableObject {
 
     // MARK: - Text Properties
     public var text: String
-    private(set) var textFont: TypographyFontToken
-    private(set) var textColor: ColorToken
+    var textFont: TypographyFontToken
+    var textColor: ColorToken
 
-    // MARK: - Appearance Properties
-    private var badgeFormat: BadgeFormat
-
-    @Published public var badgeBorder: BadgeBorder
+    // MARK: - Appearance Public Properties
     @Published public var badgeSize: BadgeSize {
         didSet {
             guard oldValue != badgeSize else {
@@ -63,21 +60,18 @@ public final class BadgeViewModel: ObservableObject {
             reloadColors()
         }
     }
-    @Published public var isBadgeOutlined: Bool {
-        didSet {
-            guard oldValue != isBadgeOutlined else {
-                return
-            }
+    @Published public var isBadgeOutlined: Bool
 
-            reloadOutline()
-        }
-    }
+    // MARK: - Appearance Internal Properties
+    var backgroundColor: ColorToken
+    var badgeBorder: BadgeBorder
+    var theme: Theme
 
-    public var backgroundColor: ColorToken
-    public var theme: Theme
+    var verticalOffset: CGFloat
+    var horizontalOffset: CGFloat
 
-    public var verticalOffset: CGFloat
-    public var horizontalOffset: CGFloat
+    // MARK: - Appearance Private Properties
+    private var badgeFormat: BadgeFormat
 
     // MARK: - Initializer
 
@@ -98,9 +92,7 @@ public final class BadgeViewModel: ObservableObject {
         self.horizontalOffset = horizontalOffset
 
         self.badgeBorder = BadgeBorder(
-            width: isOutlined ?
-                theme.border.width.medium :
-                theme.border.width.none,
+            width: theme.border.width.medium,
             radius: theme.border.radius.full,
             color: badgeColors.borderColor
         )
@@ -113,7 +105,7 @@ public final class BadgeViewModel: ObservableObject {
         self.isBadgeOutlined = isOutlined
     }
 
-    // MARK: - Update configuration functions
+    // MARK: - Badge update functions
 
     public func setBadgeValue(_ value: Int?) {
         self.value = value
@@ -121,7 +113,7 @@ public final class BadgeViewModel: ObservableObject {
     }
 
     private func reloadSize() {
-        self.textFont = badgeSize == .normal ? theme.typography.captionHighlight : theme.typography.smallHighlight
+        self.textFont = self.badgeSize == .normal ? self.theme.typography.captionHighlight : self.theme.typography.smallHighlight
     }
 
     private func reloadColors() {
@@ -132,12 +124,5 @@ public final class BadgeViewModel: ObservableObject {
         self.backgroundColor = badgeColors.backgroundColor
 
         self.badgeBorder.setColor(badgeColors.borderColor)
-    }
-
-    private func reloadOutline() {
-        self.badgeBorder.setWidth(isBadgeOutlined ?
-                                  theme.border.width.medium :
-                                  theme.border.width.none
-        )
     }
 }

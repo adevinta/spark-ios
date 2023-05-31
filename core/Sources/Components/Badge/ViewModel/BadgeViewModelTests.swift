@@ -50,35 +50,11 @@ final class BadgeViewModelTests: XCTestCase {
 
             XCTAssertEqual(expectedUpdatedText, viewModel.text, "Text doesn't match incremented value with standart format")
 
-            XCTAssertEqual(viewModel.badgeBorder.width, theme.border.width.medium, "Border is not visible")
-
-            viewModel.isBadgeOutlined = false
-
-            XCTAssertEqual(viewModel.badgeBorder.width, theme.border.width.none, "Border should be hidden")
-
             XCTAssertEqual(viewModel.textFont.font, theme.typography.captionHighlight.font, "Font is wrong")
 
             viewModel.badgeSize = .small
 
             XCTAssertEqual(viewModel.textFont.font, theme.typography.smallHighlight.font, "Font is wrong")
-        }
-    }
-
-    func test_update_outline() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
-            // Given
-
-            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, initValue: 20)
-
-            // Then
-
-            XCTAssertTrue(viewModel.isBadgeOutlined, "Badge should be outlined by default")
-
-            XCTAssertEqual(viewModel.badgeBorder.width, theme.border.width.medium, "Border is not visible")
-
-            viewModel.isBadgeOutlined = false
-
-            XCTAssertEqual(viewModel.badgeBorder.width, theme.border.width.none, "Border should be hidden")
         }
     }
 

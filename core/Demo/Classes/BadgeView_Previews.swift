@@ -22,7 +22,7 @@ struct BadgeView_Previews: PreviewProvider {
 
     struct BadgeContainerView: View {
         
-        @StateObject var standartBadge = BadgeViewModel(
+        @State var standartBadge = BadgeViewModel(
             theme: SparkTheme.shared,
             badgeType: .alert,
             badgeSize: .normal,
@@ -34,7 +34,7 @@ struct BadgeView_Previews: PreviewProvider {
             badgeType: .alert,
             badgeSize: .small,
             initValue: 22,
-            format: .overflowCounter(maxValue: 20),
+            format: .overflowCounter(maxValue: 10),
             isOutlined: false
         )
 
@@ -79,66 +79,71 @@ struct BadgeView_Previews: PreviewProvider {
         @ScaledMetric var vOffset: CGFloat
 
         var body: some View {
-            ScrollView {
-                Button("Change value") {
-                    smallCustomWithoutBorder.setBadgeValue(18)
-                    smallCustomWithoutBorder.isBadgeOutlined = true
-                    smallCustomWithoutBorder.badgeType = .primary
-                    standartBadge.setBadgeValue(23)
-                    standartDangerBadge.badgeType = .neutral
-                    smallCustomWithoutBorder.badgeSize = .normal
-                }
-                VStack(spacing: 100) {
-                    HStack(spacing: 100) {
-                        ZStack(alignment: .leading) {
-                            Text("Text")
-                            BadgeView(viewModel: standartBadge)
-                                .offset(x: hOffset, y: -vOffset)
-                        }
-                        ZStack(alignment: .leading) {
-                            Text("Text")
-                            BadgeView(viewModel: smallCustomWithoutBorder)
-                                .offset(x: hOffset, y: -vOffset)
-                        }
+            List {
+                Section(header: Text("SwiftUI Badge")) {
+                    Button("Change Default Badge Value") {
+                        standartBadge.setBadgeValue(23)
                     }
+                    Button("Change Small Custom Badge") {
+                        smallCustomWithoutBorder.setBadgeValue(18)
+                        smallCustomWithoutBorder.isBadgeOutlined = true
+                        smallCustomWithoutBorder.badgeType = .primary
+                        smallCustomWithoutBorder.badgeSize = .normal
+                    }
+                    Button("Change Dange Badge") {
+                        standartDangerBadge.badgeType = .neutral
+                    }
+                    VStack(spacing: 100) {
+                        HStack(spacing: 50) {
+                            ZStack(alignment: .leading) {
+                                Text("Default Badge")
+                                BadgeView(viewModel: standartBadge)
+                                    .offset(x: 100, y: -15)
+                            }
+                            ZStack(alignment: .leading) {
+                                Text("Small Custom")
+                                BadgeView(viewModel: smallCustomWithoutBorder)
+                                    .offset(x: 100, y: -15)
+                            }
+                        }
 
-                    HStack(spacing: 100) {
-                        ZStack(alignment: .leading) {
-                            Text("Text")
-                            BadgeView(viewModel: standartDangerBadge)
-                                .offset(x: hOffset, y: -vOffset)
+                        HStack(spacing: 55) {
+                            ZStack(alignment: .leading) {
+                                Text("Danger Badge")
+                                BadgeView(viewModel: standartDangerBadge)
+                                    .offset(x: 100, y: -15)
+                            }
+                            ZStack(alignment: .leading) {
+                                Text("Text")
+                                BadgeView(viewModel: standartInfoBadge)
+                                    .offset(x: 25, y: -15)
+                            }
+                            ZStack(alignment: .leading) {
+                                Text("Text")
+                                BadgeView(viewModel: standartNeutralBadge)
+                                    .offset(x: 25, y: -15)
+                            }
                         }
-                        ZStack(alignment: .leading) {
-                            Text("Text")
-                            BadgeView(viewModel: standartInfoBadge)
-                                .offset(x: hOffset, y: -vOffset)
-                        }
-                        ZStack(alignment: .leading) {
-                            Text("Text")
-                            BadgeView(viewModel: standartNeutralBadge)
-                                .offset(x: hOffset, y: -vOffset)
-                        }
-                    }
 
-                    HStack(spacing: 100) {
-                        HStack {
-                            Text("Text")
-                            BadgeView(viewModel: standartPrimaryBadge)
-                        }
-                        HStack {
-                            Text("Text")
-                            BadgeView(viewModel: standartSecondaryBadge)
-                        }
-                        HStack {
-                            Text("Text")
-                            BadgeView(viewModel: standartSuccessBadge)
+                        HStack(spacing: 50) {
+                            HStack {
+                                Text("Text")
+                                BadgeView(viewModel: standartPrimaryBadge)
+                            }
+                            HStack {
+                                Text("Text")
+                                BadgeView(viewModel: standartSecondaryBadge)
+                            }
+                            HStack {
+                                Text("Text")
+                                BadgeView(viewModel: standartSuccessBadge)
+                            }
                         }
                     }
+                    .padding(.vertical, 15)
+                    .listRowBackground(Color.gray.opacity(0.3))
                 }
-                .offset(y: 30)
-                .frame(minWidth: 375)
             }
-            .background(Color.gray)
         }
     }
 
