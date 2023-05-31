@@ -15,7 +15,7 @@ public protocol BadgeFormatting {
 }
 
 /// With this formatter you can define behaviour of Badge label.
-/// avalabled formats:
+/// available formats:
 /// - ``default``
 /// - ``overflowCounter(maxValue:)``
 /// - ``custom(formatter:)``
