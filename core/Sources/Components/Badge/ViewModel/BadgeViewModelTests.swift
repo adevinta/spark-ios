@@ -13,7 +13,7 @@ import XCTest
 
 final class BadgeViewModelTests: XCTestCase {
 
-    var theme: ThemeGeneratedMock! = ThemeGeneratedMock.mocked()
+    var theme: ThemeGeneratedMock = ThemeGeneratedMock.mocked()
 
     // MARK: - Tests
     func test_init() throws {

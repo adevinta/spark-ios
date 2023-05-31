@@ -23,7 +23,7 @@ private struct TestBadgeFormatting: BadgeFormatting {
 
 final class BadgeUIViewTests: UIKitComponentTestCase {
 
-    private let theme: Theme! = SparkTheme()
+    private let theme: Theme = SparkTheme()
 
     func test_badge_all_cases_no_text() throws {
         for badgeIntentType in BadgeIntentType.allCases {
