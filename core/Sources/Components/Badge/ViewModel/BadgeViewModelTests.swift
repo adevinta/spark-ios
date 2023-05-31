@@ -49,7 +49,78 @@ final class BadgeViewModelTests: XCTestCase {
             viewModel.setBadgeValue(233)
 
             XCTAssertEqual(expectedUpdatedText, viewModel.text, "Text doesn't match incremented value with standart format")
+
+            XCTAssertEqual(viewModel.badgeBorder.width, theme.border.width.medium, "Border is not visible")
+
+            viewModel.isBadgeOutlined = false
+
+            XCTAssertEqual(viewModel.badgeBorder.width, theme.border.width.none, "Border should be hidden")
+
+            XCTAssertEqual(viewModel.textFont.font, theme.typography.captionHighlight.font, "Font is wrong")
+
+            viewModel.badgeSize = .small
+
+            XCTAssertEqual(viewModel.textFont.font, theme.typography.smallHighlight.font, "Font is wrong")
         }
+    }
+
+    func test_update_outline() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            // Given
+
+            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, initValue: 20)
+
+            // Then
+
+            XCTAssertTrue(viewModel.isBadgeOutlined, "Badge should be outlined by default")
+
+            XCTAssertEqual(viewModel.badgeBorder.width, theme.border.width.medium, "Border is not visible")
+
+            viewModel.isBadgeOutlined = false
+
+            XCTAssertEqual(viewModel.badgeBorder.width, theme.border.width.none, "Border should be hidden")
+        }
+    }
+
+    func test_update_size() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            // Given
+
+            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, initValue: 20)
+
+            // Then
+
+            XCTAssertEqual(viewModel.badgeSize, .normal, "Badge should be .normal sized by default")
+
+            XCTAssertEqual(viewModel.textFont.font, theme.typography.captionHighlight.font, "Font is wrong")
+
+            viewModel.badgeSize = .small
+
+            XCTAssertEqual(viewModel.textFont.font, theme.typography.smallHighlight.font, "Font is wrong")
+        }
+    }
+
+    func test_update_intent() throws {
+        for badgeIntentType in BadgeIntentType.allCases {
+            // Given
+
+            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, initValue: 20)
+
+            // Then
+
+            XCTAssertEqual(viewModel.badgeType, badgeIntentType, "Intent type was set wrong")
+
+            viewModel.badgeType = randomizeIntentAndExceptingCurrent(badgeIntentType)
+
+            XCTAssertNotEqual(viewModel.badgeType, badgeIntentType, "Intent type was set wrong")
+        }
+    }
+
+    private func randomizeIntentAndExceptingCurrent(_ currentIntentType: BadgeIntentType) -> BadgeIntentType {
+        let filteredIntentTypes = BadgeIntentType.allCases.filter({ $0 != currentIntentType })
+        let randomIndex = Int.random(in: 0...filteredIntentTypes.count - 1)
+
+        return filteredIntentTypes[randomIndex]
     }
 }
 

@@ -21,6 +21,7 @@ extension TypographyGeneratedMock {
         typography.body2 = TypographyFontTokenGeneratedMock.mocked(.body)
         typography.caption = TypographyFontTokenGeneratedMock.mocked(.caption)
         typography.captionHighlight = TypographyFontTokenGeneratedMock.mocked(.caption.bold())
+        typography.smallHighlight = TypographyFontTokenGeneratedMock.mocked(.caption2.bold())
 
         return typography
     }

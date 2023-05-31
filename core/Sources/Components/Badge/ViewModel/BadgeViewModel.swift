@@ -37,18 +37,47 @@ public final class BadgeViewModel: ObservableObject {
     @Published private var value: Int? = nil
 
     // MARK: - Text Properties
-    var text: String
-    var textFont: TypographyFontToken
-    var textColor: ColorToken
+    public var text: String
+    private(set) var textFont: TypographyFontToken
+    private(set) var textColor: ColorToken
 
     // MARK: - Appearance Properties
-    private(set) var badgeFormat: BadgeFormat
-    var badgeBorder: BadgeBorder
-    var backgroundColor: ColorToken
-    var theme: Theme
+    private var badgeFormat: BadgeFormat
 
-    var verticalOffset: CGFloat
-    var horizontalOffset: CGFloat
+    @Published public var badgeBorder: BadgeBorder
+    @Published public var badgeSize: BadgeSize {
+        didSet {
+            guard oldValue != badgeSize else {
+                return
+            }
+
+            reloadSize()
+        }
+    }
+    @Published public var badgeType: BadgeIntentType {
+        didSet {
+            guard oldValue != badgeType else {
+                return
+            }
+
+            reloadColors()
+        }
+    }
+    @Published public var isBadgeOutlined: Bool {
+        didSet {
+            guard oldValue != isBadgeOutlined else {
+                return
+            }
+
+            reloadOutline()
+        }
+    }
+
+    public var backgroundColor: ColorToken
+    public var theme: Theme
+
+    public var verticalOffset: CGFloat
+    public var horizontalOffset: CGFloat
 
     // MARK: - Initializer
 
@@ -77,13 +106,38 @@ public final class BadgeViewModel: ObservableObject {
         )
 
         self.theme = theme
-        self.badgeFormat = .default
+
+        self.badgeFormat = format
+        self.badgeSize = badgeSize
+        self.badgeType = badgeType
+        self.isBadgeOutlined = isOutlined
     }
 
-    // MARK: - Update configuration function
+    // MARK: - Update configuration functions
 
     public func setBadgeValue(_ value: Int?) {
         self.value = value
         self.text = badgeFormat.badgeText(value)
+    }
+
+    private func reloadSize() {
+        self.textFont = badgeSize == .normal ? theme.typography.captionHighlight : theme.typography.smallHighlight
+    }
+
+    private func reloadColors() {
+        let badgeColors = BadgeGetIntentColorsUseCase().execute(intentType: badgeType, on: theme.colors)
+
+        self.textColor = badgeColors.foregroundColor
+
+        self.backgroundColor = badgeColors.backgroundColor
+
+        self.badgeBorder.setColor(badgeColors.borderColor)
+    }
+
+    private func reloadOutline() {
+        self.badgeBorder.setWidth(isBadgeOutlined ?
+                                  theme.border.width.medium :
+                                  theme.border.width.none
+        )
     }
 }
