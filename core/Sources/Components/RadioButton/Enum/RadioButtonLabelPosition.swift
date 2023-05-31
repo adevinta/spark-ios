@@ -7,17 +7,9 @@
 //
 
 import Foundation
-//Hashable & Equatable & CustomStringConvertible
 /// The checkbox can be either on the leading or trailing edge of the view.
 @frozen
-public enum RadioButtonLabelPosition: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .left: return "left"
-        case .right: return "right"
-        }
-    }
-
+public enum RadioButtonLabelPosition {
     /// Radiobutton label on leading edge.
     case left
 

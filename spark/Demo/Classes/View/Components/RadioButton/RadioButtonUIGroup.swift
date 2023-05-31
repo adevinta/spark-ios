@@ -84,15 +84,15 @@ final class RadioButtionUIGroupViewController: UIViewController {
     }()
 
     private lazy var leftRightRadioButtonGroup: RadioButtonUIGroupView = {
-        let items: [RadioButtonItem<RadioButtonLabelPosition>] = [
-            RadioButtonItem(id: .left,
+        let items: [RadioButtonItem<Bool>] = [
+            RadioButtonItem(id: false,
                             label: "Left"),
-            RadioButtonItem(id: .right,
+            RadioButtonItem(id: true,
                             label: "Right")
         ]
-        let selectedPosition = Binding<RadioButtonLabelPosition>(
-            get: { return self.labelPosition},
-            set: { self.labelPosition = $0 }
+        let selectedPosition = Binding<Bool>(
+            get: { return self.labelPosition == .right},
+            set: { self.labelPosition = $0 ? .right : .left }
         )
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
