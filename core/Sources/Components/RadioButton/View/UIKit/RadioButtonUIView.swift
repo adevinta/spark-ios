@@ -14,7 +14,6 @@ import UIKit
 private enum Constants {
     static let toggleViewHeight: CGFloat = 28
     static let toggleViewSpacing: CGFloat = 4
-    static let toggleViewPadding: CGFloat = 6
     static let textLabelTopSpacing: CGFloat = 3
 }
 
@@ -57,10 +56,18 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
+    public var labelPosition: RadioButtonLabelPosition {
+        get {
+            return self.viewModel.labelPosition
+        }
+        set {
+            self.viewModel.set(labelPosition: newValue)
+        }
+    }
+
     // MARK: Private Properties
-    @ScaledUIMetric private var size = Constants.toggleViewHeight
-    @ScaledUIMetric private var spacing = Constants.toggleViewSpacing
-    @ScaledUIMetric private var toggleViewPadding = Constants.toggleViewPadding
+    @ScaledUIMetric private var toggleSize = Constants.toggleViewHeight
+    @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var textLabelTopSpacing = Constants.textLabelTopSpacing
 
     private var subscriptions = Set<AnyCancellable>()
@@ -85,7 +92,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     private var toggleViewSpacingConstraint: NSLayoutConstraint?
     private var labelViewTopConstraint: NSLayoutConstraint?
     private var labelViewBottomConstraint: NSLayoutConstraint?
-    private var toggleViewTopConstraint: NSLayoutConstraint?
+    private var labelPositionConstraints: [NSLayoutConstraint] = []
 
     //  MARK: - Initialization
 
@@ -101,21 +108,29 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
                             id: ID,
                             label: String,
                             selectedID: Binding<ID>,
-                            state: SparkSelectButtonState = .enabled
+                            state: SparkSelectButtonState = .enabled,
+                            labelPosition: RadioButtonLabelPosition = .right
     ) {
-        let viewModel = RadioButtonViewModel(theme: theme, id: id, label: label, selectedID: selectedID, state: state)
+        let viewModel = RadioButtonViewModel(theme: theme,
+                                             id: id,
+                                             label: label,
+                                             selectedID: selectedID,
+                                             state: state,
+                                             labelPosition: labelPosition)
 
         self.init(viewModel: viewModel)
     }
 
     init(viewModel: RadioButtonViewModel<ID>) {
         self.viewModel = viewModel
+        self._spacing = ScaledUIMetric(wrappedValue: viewModel.spacing)
 
         super.init(frame: CGRect.zero)
 
         self.arrangeViews()
         self.setupButtonActions(isDisabled: viewModel.isDisabled)
         self.updateViewAttributes()
+        self.setupSubscriptions()
     }
 
     required init?(coder: NSCoder) {
@@ -132,18 +147,16 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        self._size.update(traitCollection: self.traitCollection)
+        self._toggleSize.update(traitCollection: self.traitCollection)
         self._spacing.update(traitCollection: self.traitCollection)
-        self._toggleViewPadding.update(traitCollection: self.traitCollection)
         self._textLabelTopSpacing.update(traitCollection: self.traitCollection)
 
         toggleViewSpacingConstraint?.constant = -self.spacing
-        toggleViewWidthConstraint?.constant = self.size
-        toggleViewHeightConstraint?.constant = self.size
-        toggleViewTopConstraint?.constant = self.toggleViewPadding
+        toggleViewWidthConstraint?.constant = self.toggleSize
+        toggleViewHeightConstraint?.constant = self.toggleSize
 
         labelViewTopConstraint?.constant = self.textLabelTopSpacing
-        labelViewBottomConstraint?.constant = -(self.toggleViewPadding+self.textLabelTopSpacing)
+        labelViewBottomConstraint?.constant = -self.textLabelTopSpacing
     }
 
 
@@ -176,6 +189,16 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
         self.subscribeTo(self.viewModel.$label) { [weak self] label in
             self?.labelView.text = label
+        }
+
+        self.subscribeTo(self.viewModel.$labelPosition) { [weak self] _ in
+            self?.updatePositionConstraints()
+        }
+
+        self.subscribeTo(self.viewModel.$spacing) { [weak self] spacing in
+            guard let self else { return }
+            self._spacing = ScaledUIMetric(wrappedValue: spacing)
+            self.updatePositionConstraints()
         }
     }
 
@@ -243,32 +266,32 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     private func setupConstraints() {
-        let toggleViewWidthConstraint = self.toggleView.widthAnchor.constraint(equalToConstant: self.size)
-        let toggleViewHeightConstraint = self.toggleView.heightAnchor.constraint(equalToConstant: self.size)
-        let toggleViewSpacingConstraint = self.toggleView.trailingAnchor.constraint(
-            equalTo: self.labelView.leadingAnchor, constant: -self.spacing)
+        let toggleViewWidthConstraint = self.toggleView.widthAnchor.constraint(equalToConstant: self.toggleSize)
+        let toggleViewHeightConstraint = self.toggleView.heightAnchor.constraint(equalToConstant: self.toggleSize)
+
+        let toggleViewSpacingConstraint = self.calculateToggleViewSpacingConstraint()
+
         let labelViewTopConstraint = self.labelView.topAnchor.constraint(
             equalTo: self.toggleView.topAnchor, constant: self.textLabelTopSpacing)
         let toggleViewTopConstraint = self.toggleView.topAnchor.constraint(
-            equalTo: self.safeAreaLayoutGuide.topAnchor, constant: self.toggleViewPadding)
+            equalTo: self.safeAreaLayoutGuide.topAnchor)
         let bottomViewConstraint = self.supplementaryLabelView.bottomAnchor.constraint(
-            equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -(self.toggleViewPadding+self.textLabelTopSpacing))
+            equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -(self.textLabelTopSpacing))
+
+        let labelPositionConstraints = calculatePositionConstraints()
 
         let constraints = [
             toggleViewWidthConstraint,
             toggleViewHeightConstraint,
             toggleViewSpacingConstraint,
             toggleViewTopConstraint,
-            self.toggleView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-
             labelViewTopConstraint,
-            self.labelView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
 
             self.supplementaryLabelView.leadingAnchor.constraint(equalTo: self.labelView.leadingAnchor),
             self.supplementaryLabelView.trailingAnchor.constraint(equalTo: self.labelView.trailingAnchor),
             self.supplementaryLabelView.topAnchor.constraint(equalTo: self.labelView.bottomAnchor),
             bottomViewConstraint
-        ]
+        ] + labelPositionConstraints
 
         NSLayoutConstraint.activate(constraints)
 
@@ -276,8 +299,44 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.toggleViewHeightConstraint = toggleViewHeightConstraint
         self.toggleViewSpacingConstraint = toggleViewSpacingConstraint
         self.labelViewTopConstraint = labelViewTopConstraint
-        self.toggleViewTopConstraint = toggleViewTopConstraint
         self.labelViewBottomConstraint = bottomViewConstraint
+        self.labelPositionConstraints = labelPositionConstraints
+    }
+
+    private func calculatePositionConstraints() -> [NSLayoutConstraint] {
+        if self.viewModel.labelPosition == .right {
+            return [
+                self.toggleView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+                self.labelView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
+            ]
+        } else {
+            return [
+                self.toggleView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+                self.labelView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+            ]
+        }
+    }
+
+    private func calculateToggleViewSpacingConstraint() -> NSLayoutConstraint {
+        if self.viewModel.labelPosition == .right {
+            return self.toggleView.trailingAnchor.constraint(
+                equalTo: self.labelView.leadingAnchor, constant: -self.spacing)
+        } else {
+            return self.labelView.trailingAnchor.constraint(
+                lessThanOrEqualTo: self.toggleView.leadingAnchor, constant: -self.spacing)
+        }
+    }
+
+    private func updatePositionConstraints() {
+        NSLayoutConstraint.deactivate([self.toggleViewSpacingConstraint].compactMap{ return $0 } + self.labelPositionConstraints)
+
+        let toggleViewSpacingConstraint = calculateToggleViewSpacingConstraint()
+        let positionConstraints = self.calculatePositionConstraints()
+
+        NSLayoutConstraint.activate([toggleViewSpacingConstraint] + positionConstraints)
+
+        self.toggleViewSpacingConstraint = toggleViewSpacingConstraint
+        self.labelPositionConstraints = positionConstraints
     }
 
     @IBAction func actionTapped(sender: UIButton)  {
