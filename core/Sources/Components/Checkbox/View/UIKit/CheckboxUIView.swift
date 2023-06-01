@@ -7,6 +7,7 @@
 //
 
 import Combine
+import SwiftUI
 import UIKit
 
 /// The `CheckboxUIView`renders a single checkbox using UIKit.
@@ -16,6 +17,7 @@ public final class CheckboxUIView: UIView {
 
     private enum Constants {
         static var checkboxSize: CGFloat = 20
+        static var hitTestMargin: CGFloat = 8
     }
 
     // MARK: - Private properties.
@@ -78,10 +80,8 @@ public final class CheckboxUIView: UIView {
 
     // MARK: - Public properties.
 
-    /// Set a delegate to receive selection state change callbacks. Alternatively, you can set a `selectionStateHandler`.
+    /// Set a delegate to receive selection state change callbacks. Alternatively, you can use bindings.
     public weak var delegate: CheckboxUIViewDelegate?
-    /// Set the `selectionStateHandler` to receive selection state change callbacks. Alternatively, you can set a delegate.
-    public var selectionStateHandler: ((_ state: CheckboxSelectionState) -> Void)?
 
     /// The text displayed in the checkbox.
     public var text: String {
@@ -96,7 +96,7 @@ public final class CheckboxUIView: UIView {
     }
 
     /// The current selection state of the checkbox.
-    public var selectionState: CheckboxSelectionState = .unselected {
+    @Binding public var selectionState: CheckboxSelectionState {
         didSet {
             self.controlView.selectionState = self.selectionState
             self.updateAccessibility()
@@ -157,15 +157,13 @@ public final class CheckboxUIView: UIView {
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
-    ///   - selectionStateHandler: The handler which is called when the checkbox state is changed.
     public convenience init(
         theme: Theme,
         text: String,
         checkedImage: UIImage,
         state: SelectButtonState = .enabled,
-        selectionState: CheckboxSelectionState = .unselected,
-        checkboxPosition: CheckboxPosition,
-        selectionStateHandler: ((_ state: CheckboxSelectionState) -> Void)? = nil
+        selectionState: Binding<CheckboxSelectionState>,
+        checkboxPosition: CheckboxPosition
     ) {
         self.init(
             theme: theme,
@@ -174,8 +172,7 @@ public final class CheckboxUIView: UIView {
             colorsUseCase: CheckboxColorsUseCase(),
             state: state,
             selectionState: selectionState,
-            checkboxPosition: checkboxPosition,
-            selectionStateHandler: selectionStateHandler
+            checkboxPosition: checkboxPosition
         )
     }
 
@@ -185,13 +182,11 @@ public final class CheckboxUIView: UIView {
         checkedImage: UIImage,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
-        selectionState: CheckboxSelectionState = .unselected,
-        checkboxPosition: CheckboxPosition,
-        selectionStateHandler: ((_ state: CheckboxSelectionState) -> Void)? = nil
+        selectionState: Binding<CheckboxSelectionState>,
+        checkboxPosition: CheckboxPosition
     ) {
-        self.selectionState = selectionState
+        self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
-        self.selectionStateHandler = selectionStateHandler
         self.viewModel = .init(text: text, checkedImage: checkedImage, theme: theme, colorsUseCase: colorsUseCase, state: state)
 
         super.init(frame: .zero)
@@ -256,7 +251,7 @@ public final class CheckboxUIView: UIView {
         self.button.addTarget(self, action: #selector(self.actionTouchUp(sender:)), for: .touchCancel)
 
         self.button.translatesAutoresizingMaskIntoConstraints = true
-        self.button.frame = self.bounds
+        self.button.frame = self.bounds.insetBy(dx: -Constants.hitTestMargin, dy: -Constants.hitTestMargin)
         self.button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(self.button)
 
@@ -276,8 +271,7 @@ public final class CheckboxUIView: UIView {
             .store(in: &cancellables)
     }
 
-    // MARK: - Methods
-
+    // MARK: - Override
     /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -287,6 +281,13 @@ public final class CheckboxUIView: UIView {
         self.updateViewConstraints()
     }
 
+    // Tap area is bigger than the bounds of self.
+    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let convertedPoint = button.convert(point, from: self)
+        return button.point(inside: convertedPoint, with: event)
+    }
+
+    // MARK: - Methods
     private func updateAccessibility() {
         if self.selectionState == .selected {
             self.accessibilityTraits.insert(.selected)
@@ -392,11 +393,12 @@ public final class CheckboxUIView: UIView {
         case .unselected, .indeterminate:
             self.selectionState = .selected
         }
-        self.selectionStateHandler?(self.selectionState)
         self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
     }
 
     @IBAction private func actionTouchDown(sender: UIButton) {
+        guard self.interactionEnabled else { return }
+
         self.isPressed = true
     }
 

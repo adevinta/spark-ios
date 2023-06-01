@@ -10,7 +10,7 @@ import SparkCore
 import Foundation
 import UIKit
 
-public struct SparkConfiguration: Configuration {
+public struct SparkConfiguration {
 
     // MARK: - Subclass
 
@@ -21,8 +21,8 @@ public struct SparkConfiguration: Configuration {
     // MARK: - static func
 
     public static func load() {
-        guard !didLoad else { return }
-        didLoad = true
+        guard !self.didLoad else { return }
+        self.didLoad = true
 
         Bundle(for: Class.self).registerAllFonts()
     }

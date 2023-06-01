@@ -143,6 +143,27 @@ final class RadioButtonViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
+    func test_spacing_update_publishes_changed_values() {
+        // Given
+        let sut = self.sut(state: .enabled)
+        let expectation = XCTestExpectation(description: "Changes to label position publishes value changes.")
+        expectation.expectedFulfillmentCount = 2
+
+        var spacings = [CGFloat]()
+
+        sut.$spacing.sink { spacing in
+            spacings.append(spacing)
+            expectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        // When
+        sut.set(labelPosition: .left)
+
+        // Then
+        wait(for: [expectation], timeout: 0.5)
+
+        XCTAssertEqual(spacings, [self.theme.layout.spacing.medium, self.theme.layout.spacing.xxxLarge])
+    }
     // MARK: - Private Helper Functions
 
     private func sutValues<T>(for keyPath: KeyPath<RadioButtonViewModel<Int>, T>) -> [T] {

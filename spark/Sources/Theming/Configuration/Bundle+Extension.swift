@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public extension Bundle {
+extension Bundle {
 
     // MARK: - Constants
 
