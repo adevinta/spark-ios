@@ -35,14 +35,14 @@ import SwiftUI
 ///    }
 /// ```
 public struct BadgeView: View {
-    @ObservedObject public var viewModel: BadgeViewModel
+    @ObservedObject private var viewModel: BadgeViewModel
     @ScaledMetric private var smallOffset: CGFloat
     @ScaledMetric private var mediumOffset: CGFloat
     @ScaledMetric private var emptySize: CGFloat
     @ScaledMetric private var borderWidth: CGFloat
 
     public var body: some View {
-        if self.viewModel.text.isEmpty {
+        if self.viewModel.isBadgeEmpty {
             Circle()
                 .foregroundColor(self.viewModel.backgroundColor.color)
                 .frame(width: self.emptySize, height: self.emptySize)

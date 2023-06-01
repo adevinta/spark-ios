@@ -46,7 +46,7 @@ final class BadgeViewModelTests: XCTestCase {
 
             XCTAssertEqual(expectedInitText, viewModel.text, "Text doesn't match init value with standart format")
 
-            viewModel.setBadgeValue(233)
+            viewModel.value = 233
 
             XCTAssertEqual(expectedUpdatedText, viewModel.text, "Text doesn't match incremented value with standart format")
 

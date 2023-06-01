@@ -34,21 +34,28 @@ import SwiftUI
 /// - badgeFormat -- see ``BadgeFormat`` as a formatter of **text**
 public final class BadgeViewModel: ObservableObject {
 
-    @Published private var value: Int? = nil
-
     // MARK: - Text Properties
     public var text: String
     var textFont: TypographyFontToken
     var textColor: ColorToken
 
     // MARK: - Appearance Public Properties
+    @Published public var value: Int? = nil {
+        didSet {
+            guard oldValue != value else {
+                return
+            }
+
+            self.updateBadgeValue()
+        }
+    }
     @Published public var badgeSize: BadgeSize {
         didSet {
             guard oldValue != badgeSize else {
                 return
             }
 
-            reloadSize()
+            self.reloadSize()
         }
     }
     @Published public var badgeType: BadgeIntentType {
@@ -57,7 +64,7 @@ public final class BadgeViewModel: ObservableObject {
                 return
             }
 
-            reloadColors()
+            self.reloadColors()
         }
     }
     @Published public var isBadgeOutlined: Bool
@@ -66,6 +73,9 @@ public final class BadgeViewModel: ObservableObject {
     var backgroundColor: ColorToken
     var badgeBorder: BadgeBorder
     var theme: Theme
+    var isBadgeEmpty: Bool {
+        self.badgeFormat.badgeText(value).isEmpty
+    }
 
     var verticalOffset: CGFloat
     var horizontalOffset: CGFloat
@@ -107,8 +117,7 @@ public final class BadgeViewModel: ObservableObject {
 
     // MARK: - Badge update functions
 
-    public func setBadgeValue(_ value: Int?) {
-        self.value = value
+    private func updateBadgeValue() {
         self.text = badgeFormat.badgeText(value)
     }
 
