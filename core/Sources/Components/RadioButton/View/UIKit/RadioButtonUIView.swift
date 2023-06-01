@@ -196,8 +196,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
 
         self.subscribeTo(self.viewModel.$spacing) { [weak self] spacing in
-            self?._spacing = ScaledUIMetric(wrappedValue: spacing)
-            self?.updatePositionConstraints()
+            guard let self else { return }
+            self._spacing = ScaledUIMetric(wrappedValue: spacing)
+            self.updatePositionConstraints()
         }
     }
 
