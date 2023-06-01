@@ -31,6 +31,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     @Published var font: TypographyFontToken
     @Published var supplemetaryFont: TypographyFontToken
     @Published var surfaceColor: ColorToken
+    @Published var labelPosition: RadioButtonLabelPosition
 
     // MARK: - Initialization
 
@@ -38,13 +39,15 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
                      id: ID,
                      label: String,
                      selectedID: Binding<ID>,
-                     state: SparkSelectButtonState) {
+                     state: SparkSelectButtonState,
+                     labelPosition: RadioButtonLabelPosition = .right) {
         let useCase = GetRadioButtonColorsUseCase()
         self.init(theme: theme,
                   id: id,
                   label: label,
                   selectedID: selectedID,
                   state: state,
+                  labelPosition: labelPosition,
                   useCase: useCase)
         }
 
@@ -53,6 +56,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
          label: String,
          selectedID: Binding<ID>,
          state: SparkSelectButtonState,
+         labelPosition: RadioButtonLabelPosition,
          useCase: GetRadioButtonColorsUseCase) {
         self.theme = theme
         self.id = id
@@ -60,13 +64,14 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self._selectedID = selectedID
         self.useCase = useCase
         self.state = state
+        self.labelPosition = labelPosition
 
         self.isDisabled = self.state == .disabled
         self.supplementaryText = self.state.supplementaryText
 
         self.opacity = self.theme.opacity(state: self.state)
-        self.spacing = self.theme.layout.spacing.medium
-        self.font =  self.theme.typography.body1
+        self.spacing = self.theme.spacing(for: labelPosition)
+        self.font = self.theme.typography.body1
         self.supplemetaryFont = self.theme.typography.caption
         self.surfaceColor = self.theme.colors.base.onSurface
 
@@ -86,6 +91,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     func set(theme: Theme) {
         self.theme = theme
         self.themeDidUpdate()
+        self.labelPositionDidUpdate()
     }
 
     func set(state: SparkSelectButtonState) {
@@ -93,6 +99,13 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
             self.state = state
             self.stateDidUpdate()
         }
+    }
+
+    func set(labelPosition: RadioButtonLabelPosition) {
+        guard self.labelPosition != labelPosition else { return }
+
+        self.labelPosition = labelPosition
+        self.labelPositionDidUpdate()
     }
 
     func updateColors() {
@@ -110,11 +123,14 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     private func themeDidUpdate() {
         self.opacity = self.theme.opacity(state: self.state)
-        self.spacing = self.theme.layout.spacing.medium
         self.font = self.theme.typography.body1
         self.supplemetaryFont = self.theme.typography.caption
         self.surfaceColor = self.theme.colors.base.onSurface
         self.updateColors()
+    }
+
+    private func labelPositionDidUpdate() {
+        self.spacing = self.theme.spacing(for: self.labelPosition)
     }
 }
 
@@ -125,6 +141,10 @@ private extension Theme {
         case .disabled: return self.dims.dim3
         case .warning, .error, .success, .enabled: return 1
         }
+    }
+
+    func spacing(for labelPosition: RadioButtonLabelPosition) -> CGFloat {
+        return labelPosition == .right ? self.layout.spacing.medium : self.layout.spacing.xxxLarge
     }
 }
 
