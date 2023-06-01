@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol ButtonColorables {
     var textColor: ColorToken { get }
     var backgroundColor: ColorToken { get }
