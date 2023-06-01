@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import UIKit
 
 /// This is the UIKit version for the ``BadgeView``
@@ -13,35 +14,50 @@ public class BadgeUIView: UIView {
 
     private var viewModel: BadgeViewModel
 
-    /// Constraints for badge size in empty state
-    /// In this case badge is shown like a circle
-    private var emptyHeightConstraint: NSLayoutConstraint?
-    private var emptyWidthConstraint: NSLayoutConstraint?
-
-    /// Dynamicaly sized properties for badge
-    /// ``emptyBadgeSize`` represents size of the circle in empty state of Badge
-    ///
-    /// ``horizontalSpacing`` and ``verticalSpacing`` are properties
-    /// that used for space between badge background and text
+    // Dynamicaly sized properties for badge
+    // emptyBadgeSize represents size of the circle in empty state of Badge
+    // horizontalSpacing and verticalSpacing are properties
+    // that used for space between badge background and text
     @ScaledUIMetric private var emptyBadgeSize: CGFloat = 0
     @ScaledUIMetric private var horizontalSpacing: CGFloat = 0
     @ScaledUIMetric private var verticalSpacing: CGFloat = 0
     @ScaledUIMetric private var borderWidth: CGFloat = 0
 
-    private var badgeLabel: UILabel = UILabel()
-
-    /// Constraints for badge in non-empty state.
-    /// All of them are set to the badge text label
-    /// After that Badge view size is based on the size of the text
-    private var badgeTopConstraint: NSLayoutConstraint?
-    private var badgeLeadingConstraint: NSLayoutConstraint?
-    private var badgeTrailingConstraint: NSLayoutConstraint?
-    private var badgeBottomConstraint: NSLayoutConstraint?
+    // Constraints for badge size
+    // Thess constraints containes text size with
+    // vertical and horizontal offsets
     private var badgeWidthConstraint: NSLayoutConstraint?
     private var badgeHeightConstraint: NSLayoutConstraint?
-    private var badgeConstraints: [NSLayoutConstraint?] {
-        [badgeTopConstraint, badgeLeadingConstraint, badgeTrailingConstraint, badgeBottomConstraint, badgeWidthConstraint, badgeHeightConstraint]
+    private var badgeSizeConstraints: [NSLayoutConstraint?] {
+        [badgeWidthConstraint, badgeHeightConstraint]
     }
+
+    // MARK: - Badge Text Label properties
+    private var badgeLabel: UILabel = UILabel()
+
+    // Constraints for badge text label.
+    // All of these are applied to the badge text label
+    private var badgeLabelTopConstraint: NSLayoutConstraint?
+    private var badgeLabelLeadingConstraint: NSLayoutConstraint?
+    private var badgeLabelTrailingConstraint: NSLayoutConstraint?
+    private var badgeLabelBottomConstraint: NSLayoutConstraint?
+
+    // Array of badge text label constraints for
+    // easier activation
+    private var badgeLabelConstraints: [NSLayoutConstraint?] {
+        [badgeLabelTopConstraint, badgeLabelLeadingConstraint, badgeLabelTrailingConstraint, badgeLabelBottomConstraint]
+    }
+
+    // Bool property that determines wether we should
+    // install and activate text label constraints or not
+    private var shouldSetupLabelConstrains: Bool {
+        self.badgeLabelTopConstraint == nil ||
+        self.badgeLabelBottomConstraint == nil ||
+        self.badgeLabelLeadingConstraint == nil ||
+        self.badgeLabelTrailingConstraint == nil
+    }
+
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
 
@@ -64,6 +80,44 @@ public class BadgeUIView: UIView {
         setupBadgeText()
         setupAppearance()
         setupLayouts()
+        subscribe()
+    }
+
+    private func subscribe() {
+        self.viewModel.$badgeSize
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] badgeSize in
+                self?.reloadBadgeFontIfNeeded()
+                self?.reloadUISize()
+                self?.setupLayouts()
+            }
+            .store(in: &cancellables)
+        self.viewModel.$value
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.badgeLabel.text = self?.viewModel.text
+                self?.reloadUISize()
+                self?.setupLayouts()
+            }
+            .store(in: &cancellables)
+        self.viewModel.$badgeType
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.reloadColors()
+                self?.reloadUISize()
+                self?.setupLayouts()
+            }
+            .store(in: &cancellables)
+        self.viewModel.$isBadgeOutlined
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isBadgeOutlined in
+                if isBadgeOutlined {
+                    self?.reloadBorderWidth()
+                } else {
+                    self?.layer.borderWidth = 0
+                }
+            }
+            .store(in: &cancellables)
     }
 
     private func setupBadgeText() {
@@ -86,64 +140,51 @@ public class BadgeUIView: UIView {
     }
 
     private func setupScalables() {
-        if self.viewModel.text.isEmpty {
-            self.emptyBadgeSize = BadgeConstants.emptySize.width
-        } else {
-            self.horizontalSpacing = self.viewModel.horizontalOffset
-            self.verticalSpacing = self.viewModel.verticalOffset
-        }
+        self.emptyBadgeSize = BadgeConstants.emptySize.width
+        self.horizontalSpacing = self.viewModel.horizontalOffset
+        self.verticalSpacing = self.viewModel.verticalOffset
         self.borderWidth = self.viewModel.badgeBorder.width
     }
 
     // MARK: - Layouts setup
 
     private func setupLayouts() {
-        if self.viewModel.text.isEmpty {
-            self.setupEmptySizeConstraints()
+        let textSize = badgeLabel.intrinsicContentSize
+
+        self.setupSizeConstraint(for: textSize)
+        self.setupBadgeConstraintsIfNeeded(for: textSize)
+    }
+
+    private func setupSizeConstraint(for textSize: CGSize) {
+        let widht = self.viewModel.isBadgeEmpty ? self.emptyBadgeSize : textSize.width + (self.horizontalSpacing * 2)
+        let height = self.viewModel.isBadgeEmpty ? self.emptyBadgeSize : textSize.height + (self.verticalSpacing * 2)
+
+        if let badgeWidthConstraint, let badgeHeightConstraint {
+            badgeWidthConstraint.constant = widht
+            badgeHeightConstraint.constant = height
         } else {
-            let textSize = badgeLabel.intrinsicContentSize
-            self.setupBadgeConstraints(for: textSize)
+            self.badgeWidthConstraint = self.widthAnchor.constraint(equalToConstant: widht)
+            self.badgeHeightConstraint = self.heightAnchor.constraint(equalToConstant: height)
+            NSLayoutConstraint.activate(badgeSizeConstraints.compactMap({ $0 }))
         }
     }
 
-    private func setupEmptySizeConstraints() {
-        if let emptyHeightConstraint {
-            emptyHeightConstraint.constant = emptyBadgeSize
-        } else {
-            self.emptyHeightConstraint = self.heightAnchor.constraint(equalToConstant: emptyBadgeSize)
-            self.emptyHeightConstraint?.isActive = true
+    private func setupBadgeConstraintsIfNeeded(for textSize: CGSize) {
+        guard shouldSetupLabelConstrains else {
+            return
         }
-        if let emptyWidthConstraint {
-            emptyWidthConstraint.constant = emptyBadgeSize
-        } else {
-            self.emptyWidthConstraint = self.widthAnchor.constraint(equalToConstant: emptyBadgeSize)
-            self.emptyWidthConstraint?.isActive = true
-        }
-    }
 
-    private func setupBadgeConstraints(for textSize: CGSize) {
-        if let badgeTopConstraint, let badgeBottomConstraint, let badgeLeadingConstraint, let badgeTrailingConstraint, let badgeWidthConstraint, let badgeHeightConstraint {
-            badgeLeadingConstraint.constant = self.horizontalSpacing
-            badgeTrailingConstraint.constant = -self.horizontalSpacing
-            badgeTopConstraint.constant = self.verticalSpacing
-            badgeBottomConstraint.constant = -self.verticalSpacing
-            badgeWidthConstraint.constant = textSize.width
-            badgeHeightConstraint.constant = textSize.height
-        } else {
-            badgeLeadingConstraint = badgeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: self.horizontalSpacing)
-            badgeTopConstraint = badgeLabel.topAnchor.constraint(equalTo: topAnchor, constant: self.verticalSpacing)
-            badgeTrailingConstraint = badgeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -self.horizontalSpacing)
-            badgeBottomConstraint = badgeLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -self.verticalSpacing)
-            badgeWidthConstraint = badgeLabel.widthAnchor.constraint(equalToConstant: textSize.width)
-            badgeHeightConstraint = badgeLabel.heightAnchor.constraint(equalToConstant: textSize.height)
-            NSLayoutConstraint.activate(badgeConstraints.compactMap({ $0 }))
-        }
+        self.badgeLabelLeadingConstraint = self.badgeLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
+        self.badgeLabelTopConstraint = self.badgeLabel.topAnchor.constraint(equalTo: topAnchor)
+        self.badgeLabelTrailingConstraint = self.badgeLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
+        self.badgeLabelBottomConstraint = self.badgeLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+        NSLayoutConstraint.activate(badgeLabelConstraints.compactMap({ $0 }))
     }
 
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.layer.cornerRadius = frame.height / 2.0
+        self.layer.cornerRadius = min(frame.width, frame.height) / 2.0
     }
 
     // MARK: - Updates on Trait Collection Change
@@ -155,14 +196,14 @@ public class BadgeUIView: UIView {
     }
 
     private func reloadBadgeFontIfNeeded() {
-        guard !self.viewModel.text.isEmpty else {
+        guard !self.viewModel.isBadgeEmpty else {
             return
         }
         self.badgeLabel.font = self.viewModel.textFont.uiFont
     }
 
     private func reloadUISize() {
-        if self.viewModel.text.isEmpty {
+        if self.viewModel.isBadgeEmpty {
             self._emptyBadgeSize.update(traitCollection: self.traitCollection)
         } else {
             self._horizontalSpacing.update(traitCollection: self.traitCollection)
