@@ -82,10 +82,10 @@ struct BadgeView_Previews: PreviewProvider {
             List {
                 Section(header: Text("SwiftUI Badge")) {
                     Button("Change Default Badge Value") {
-                        standartBadge.setBadgeValue(23)
+                        standartBadge.value = 23
                     }
                     Button("Change Small Custom Badge") {
-                        smallCustomWithoutBorder.setBadgeValue(18)
+                        smallCustomWithoutBorder.value = 18
                         smallCustomWithoutBorder.isBadgeOutlined = true
                         smallCustomWithoutBorder.badgeType = .primary
                         smallCustomWithoutBorder.badgeSize = .normal

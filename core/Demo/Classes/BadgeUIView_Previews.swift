@@ -116,8 +116,20 @@ struct BadgeUIView_Previews: PreviewProvider {
 
         var body: some View {
             List {
-                Button("Tap Me") {
-                    viewModels[0].setBadgeValue(23)
+                Button("Change UIKit Badge 0 Type") {
+                    viewModels[0].badgeType = BadgeIntentType.allCases.randomElement() ?? .alert
+                }
+                Button("Change UIKit Badge 1 Value") {
+                    if viewModels[1].value == 10 {
+                        viewModels[1].value = nil
+                    } else if viewModels[1].value == 22 {
+                        viewModels[1].value = 10
+                    } else {
+                        viewModels[1].value = 22
+                    }
+                }
+                Button("Change UIKit Badge 2 Outline") {
+                    viewModels[2].isBadgeOutlined.toggle()
                 }
                 UIBadgeView(viewModels: viewModels)
                     .frame(height: 400)

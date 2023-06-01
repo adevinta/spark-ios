@@ -20,53 +20,7 @@ private struct BadgePreviewFormatter: BadgeFormatting {
 }
 
 struct UIBadgeView: UIViewRepresentable {
-
-    private var viewModels: [BadgeViewModel] =
-    [
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .alert,
-            badgeSize: .normal,
-            initValue: 6
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .alert,
-            badgeSize: .small,
-            initValue: 22,
-            format: .overflowCounter(maxValue: 20)
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .danger,
-            initValue: 10,
-            format: .custom(
-                formatter: BadgePreviewFormatter()
-            )
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .info
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .neutral,
-            isOutlined: false
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .primary
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .secondary,
-            initValue: 6
-        ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .success
-        )
-    ]
+    var viewModels: [BadgeViewModel]
 
     func makeUIView(context: Context) -> some UIView {
         let badgeViews = viewModels.enumerated().map { index, viewModel in
