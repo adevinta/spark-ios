@@ -19,6 +19,14 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
     // MARK: - Properties
 
     var backingSelectedID = "1"
+    let items: [RadioButtonItem<String>] = [
+        RadioButtonItem(id: "1",
+                        label: "Label 1"),
+        RadioButtonItem(id: "2",
+                        label: "Label 2"),
+        RadioButtonItem(id: "3",
+                        label: "Label 3")
+    ]
 
     lazy var selectedID: Binding<String> = {
         Binding(
@@ -75,19 +83,10 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
     }
 
     func test_uikit_radioButtonGroup_horizontal() throws {
-        let items: [RadioButtonItem<String>] = [
-            RadioButtonItem(id: "1",
-                            label: "Label 1"),
-            RadioButtonItem(id: "2",
-                            label: "Label 2"),
-            RadioButtonItem(id: "3",
-                            label: "Label 3")
-        ]
-
         let sut = RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             selectedID: self.selectedID,
-            items: items,
+            items: self.items,
             groupLayout: .horizontal
         )
 
@@ -98,20 +97,11 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
     }
 
     func test_uikit_radioButtonGroup_horizontal_with_title() throws {
-        let items: [RadioButtonItem<String>] = [
-            RadioButtonItem(id: "1",
-                            label: "Label 1"),
-            RadioButtonItem(id: "2",
-                            label: "Label 2"),
-            RadioButtonItem(id: "3",
-                            label: "Label 3")
-        ]
-
         let sut = RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             title: "Title",
             selectedID: self.selectedID,
-            items: items,
+            items: self.items,
             groupLayout: .horizontal
         )
 
@@ -122,19 +112,10 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
     }
 
     func test_uikit_radioButtonGroup_label_left() throws {
-        let items: [RadioButtonItem<String>] = [
-            RadioButtonItem(id: "1",
-                            label: "Label 1"),
-            RadioButtonItem(id: "2",
-                            label: "Label 2"),
-            RadioButtonItem(id: "3",
-                            label: "Label 3")
-        ]
-
         let sut = RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             selectedID: self.selectedID,
-            items: items,
+            items: self.items,
             radioButtonLabelPosition: .left,
             groupLayout: .vertical
         )
@@ -146,20 +127,11 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
     }
 
     func test_uikit_radioButtonGroup_label_left_with_title() throws {
-        let items: [RadioButtonItem<String>] = [
-            RadioButtonItem(id: "1",
-                            label: "Label 1"),
-            RadioButtonItem(id: "2",
-                            label: "Label 2"),
-            RadioButtonItem(id: "3",
-                            label: "Label 3")
-        ]
-
         let sut = RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             title: "Title",
             selectedID: self.selectedID,
-            items: items,
+            items: self.items,
             radioButtonLabelPosition: .left,
             groupLayout: .vertical
         )
