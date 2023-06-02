@@ -252,7 +252,15 @@ public class ButtonUIView: UIView {
         variant: ButtonVariant = .filled,
         intentColor: ButtonIntentColor
     ) {
-        self.viewModel = .init(text: text, icon: icon, theme: theme, colorsUseCase: colorsUseCase, state: state, intentColor: intentColor, variant: variant)
+        self.viewModel = .init(
+            text: text,
+            icon: icon,
+            theme: theme,
+            colorsUseCase: colorsUseCase,
+            state: state,
+            intentColor: intentColor,
+            variant: variant
+        )
 
         self.spacingLarge = theme.layout.spacing.large
         self.spacingMedium = theme.layout.spacing.medium
