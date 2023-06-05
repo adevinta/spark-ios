@@ -10,6 +10,22 @@ import UIKit
 import Combine
 import SwiftUI
 
+/// **BadgeViewModel** is a view model that required for
+/// configuring ``BadgeView`` and changing it's properties.
+///
+/// List of properties:
+/// - value -- property that represents **Int?** displayed in ``BadgeView``.
+/// Set *value* to nil to show empty Badge as circle
+///
+/// - badgeType -- changes ``BadgeIntentType``
+///
+/// - isBadgeOutlined -- ``Bool``, changes outline of the Badge
+///
+/// - badgeSize -- changes ``BadgeSize`` and text font
+///
+/// - badgeFormat -- see ``BadgeFormat`` as a formater of **Badge Text**
+///
+/// - theme  -- represents ``Theme`` used in the app
 public final class BadgeViewModel: ObservableObject {
 
     // MARK: - Appearance Internal Properties
