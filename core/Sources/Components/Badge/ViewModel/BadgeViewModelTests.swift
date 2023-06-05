@@ -40,7 +40,7 @@ final class BadgeViewModelTests: XCTestCase {
 
             let expectedInitText = "20"
             let expectedUpdatedText = "233"
-            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, initValue: 20)
+            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, value: 20)
 
             // Then
 
@@ -62,7 +62,7 @@ final class BadgeViewModelTests: XCTestCase {
         for badgeIntentType in BadgeIntentType.allCases {
             // Given
 
-            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, initValue: 20)
+            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, value: 20)
 
             // Then
 
@@ -80,7 +80,7 @@ final class BadgeViewModelTests: XCTestCase {
         for badgeIntentType in BadgeIntentType.allCases {
             // Given
 
-            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, initValue: 20)
+            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, value: 20)
 
             // Then
 

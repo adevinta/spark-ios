@@ -58,11 +58,11 @@ struct UIBadgeView: UIViewRepresentable {
         badgesStackView.alignment = .leading
         badgesStackView.spacing = 30
         badgesStackView.distribution = .fill
+
         return badgesStackView
     }
 
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        
     }
 }
 
@@ -73,26 +73,31 @@ struct BadgeUIView_Previews: PreviewProvider {
             BadgeViewModel(
                 theme: SparkTheme.shared,
                 badgeType: .alert,
-                initValue: 6
+                value: 6
             ),
             BadgeViewModel(
                 theme: SparkTheme.shared,
-                badgeType: .alert,
-                badgeSize: .small,
-                initValue: 22,
+                badgeType: .primary,
+                badgeSize: .normal,
+                value: 22,
                 format: .overflowCounter(maxValue: 20)
             ),
             BadgeViewModel(
                 theme: SparkTheme.shared,
                 badgeType: .danger,
-                initValue: 10,
+                value: 10,
                 format: .custom(
                     formatter: BadgePreviewFormatter()
                 )
             ),
             BadgeViewModel(
                 theme: SparkTheme.shared,
-                badgeType: .info
+                badgeType: .info,
+                value: 20
+            ),
+            BadgeViewModel(
+                theme: SparkTheme.shared,
+                badgeType: .primary
             ),
             BadgeViewModel(
                 theme: SparkTheme.shared,
@@ -101,12 +106,8 @@ struct BadgeUIView_Previews: PreviewProvider {
             ),
             BadgeViewModel(
                 theme: SparkTheme.shared,
-                badgeType: .primary
-            ),
-            BadgeViewModel(
-                theme: SparkTheme.shared,
                 badgeType: .secondary,
-                initValue: 23
+                value: 23
             ),
             BadgeViewModel(
                 theme: SparkTheme.shared,
@@ -130,6 +131,9 @@ struct BadgeUIView_Previews: PreviewProvider {
                 }
                 Button("Change UIKit Badge 2 Outline") {
                     viewModels[2].isBadgeOutlined.toggle()
+                }
+                Button("Change UIKit Badge 3 Size") {
+                    viewModels[3].badgeSize = .small
                 }
                 UIBadgeView(viewModels: viewModels)
                     .frame(height: 400)

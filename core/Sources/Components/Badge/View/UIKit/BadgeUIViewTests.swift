@@ -43,7 +43,7 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
                 viewModel: BadgeViewModel(
                     theme: theme,
                     badgeType: badgeIntentType,
-                    initValue: 23
+                    value: 23
                 )
             )
 
@@ -58,7 +58,7 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
                     theme: theme,
                     badgeType: badgeIntentType,
                     badgeSize: .small,
-                    initValue: 23
+                    value: 23
                 )
             )
 
@@ -72,7 +72,7 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
                 viewModel: BadgeViewModel(
                     theme: theme,
                     badgeType: badgeIntentType,
-                    initValue: 23,
+                    value: 23,
                     format: .overflowCounter(maxValue: 20)
                 )
             )
@@ -87,7 +87,7 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
                 viewModel: BadgeViewModel(
                     theme: theme,
                     badgeType: badgeIntentType,
-                    initValue: 23,
+                    value: 23,
                     format: .custom(
                         formatter: TestBadgeFormatting()
                     )

@@ -11,26 +11,20 @@ import SwiftUI
 /// This is SwiftUI badge view to show notifications count
 ///
 /// Badge view is created by passing:
-/// - **Theme**
-/// - ``BadgeViewModel``
+/// - ``Theme``
+/// - ``BadgeIntentType``
+/// - Badge Value as ``Int?``. You can set value to nil, to make ``BadgeView`` without text
 ///
+/// Badge border and offsets of it's text are ``@ScaledMetric`` variables and alligned to user's **Accessibility**
+/// 
 /// **Example**
 /// This example shows how to create view with horizontal alignment of Badge
 /// ```swift
-///    @StateObject var viewModel = BadgeViewModel(
-///     theme: SparkTheme.shared,
-///     badgeType: .alert,
-///     badgeSize: .normal,
-///     initValue: 0
-///    )
 ///    @State var value: Int? = 3
 ///    var body: any View {
-///    Button("Change Notifications Number") {
-///         viewModel.setBadgeValue(5)
-///    }
 ///    HStack {
 ///         Text("Some text")
-///         BadgeView(viewModel)
+///         BadgeView(theme: YourTheme.shared, badgeType: .alert, value: value)
 ///    }
 ///    }
 /// ```
@@ -68,7 +62,8 @@ public struct BadgeView: View {
         }
     }
 
-    public init(viewModel: BadgeViewModel) {
+    public init(theme: Theme, badgeType: BadgeIntentType, value: Int? = nil) {
+        let viewModel = BadgeViewModel(theme: theme, badgeType: badgeType, value: value)
         self.viewModel = viewModel
 
         self._smallOffset =
@@ -81,5 +76,31 @@ public struct BadgeView: View {
             )
         self._emptySize = .init(wrappedValue: BadgeConstants.emptySize.width)
         self._borderWidth = .init(wrappedValue: viewModel.badgeBorder.width)
+    }
+
+    /// Controll outline state of the Badge. By default Badge has an outline
+    /// base on current ``Theme``. You can show/hide the outline with
+    /// this function. Also, for example, you can use @State variable to control outline
+    /// based on this variable.
+    public func outlined(_ isOutlined: Bool) -> Self {
+        self.viewModel.isBadgeOutlined = isOutlined
+        return self
+    }
+
+    /// Controll text size of the Badge. By default size of the ``BadgeSize`` is ``BadgeSize.normal``
+    /// Text font size is based on ``BadgeSize`` value and current ``Theme``.
+    /// You can set ``BadgeSize`` with this function.
+    /// Also, for example, you can use @State variable to control ``BadgeSize`` based on this variable.
+    public func size(_ badgeSize: BadgeSize) -> Self {
+        self.viewModel.badgeSize = badgeSize
+        return self
+    }
+
+    /// Controll text format of the Badge. See more details in ``BadgeFormat``
+    /// You can set ``BadgeFormat`` with this function.
+    /// Also, for example, you can use @State variable to control ``BadgeFormat`` based on this variable.
+    public func format(_ badgeFormat: BadgeFormat) -> Self {
+        self.viewModel.badgeFormat = badgeFormat
+        return self
     }
 }

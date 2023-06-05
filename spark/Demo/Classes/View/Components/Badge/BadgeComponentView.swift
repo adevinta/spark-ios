@@ -27,19 +27,19 @@ struct BadgeComponentView: View {
             theme: SparkTheme.shared,
             badgeType: .alert,
             badgeSize: .normal,
-            initValue: 6
+            value: 6
         ),
         BadgeViewModel(
             theme: SparkTheme.shared,
             badgeType: .alert,
             badgeSize: .small,
-            initValue: 22,
+            value: 22,
             format: .overflowCounter(maxValue: 20)
         ),
         BadgeViewModel(
             theme: SparkTheme.shared,
             badgeType: .danger,
-            initValue: 10,
+            value: 10,
             format: .custom(
                 formatter: BadgePreviewFormatter()
             )
@@ -60,7 +60,7 @@ struct BadgeComponentView: View {
         BadgeViewModel(
             theme: SparkTheme.shared,
             badgeType: .secondary,
-            initValue: 6
+            value: 6
         ),
         BadgeViewModel(
             theme: SparkTheme.shared,
@@ -68,59 +68,18 @@ struct BadgeComponentView: View {
         )
     ]
 
-    @StateObject var standartBadge = BadgeViewModel(
-        theme: SparkTheme.shared,
-        badgeType: .alert,
-        badgeSize: .normal,
-        initValue: 6
-    )
+    @State var theme: Theme = SparkTheme.shared
 
-    @State var smallCustomWithoutBorder = BadgeViewModel(
-        theme: SparkTheme.shared,
-        badgeType: .alert,
-        badgeSize: .small,
-        initValue: 22,
-        format: .overflowCounter(maxValue: 20),
-        isOutlined: false
-    )
+    @State var standartBadgeValue: Int? = 3
+    @State var standartBadgeIsOutlined: Bool = true
 
-    @State var standartDangerBadge = BadgeViewModel(
-        theme: SparkTheme.shared,
-        badgeType: .danger,
-        initValue: 10,
-        format: .custom(
-            formatter: BadgePreviewFormatter()
-        )
-    )
+    @State var smallCustomBadgeValue: Int? = 14
+    @State var smallCustomBadgeSize: BadgeSize = .small
+    @State var smallCustomBadgeIsOutlined: Bool = true
+    @State var smallCustomBadgeType: BadgeIntentType = .alert
+    @State var badgeFormat: BadgeFormat = .default
 
-    @State var standartInfoBadge = BadgeViewModel(
-        theme: SparkTheme.shared,
-        badgeType: .info
-    )
-
-    @State var standartNeutralBadge = BadgeViewModel(
-        theme: SparkTheme.shared,
-        badgeType: .neutral,
-        isOutlined: false
-    )
-
-    @State var standartPrimaryBadge = BadgeViewModel(
-        theme: SparkTheme.shared,
-        badgeType: .primary
-    )
-
-    @State var standartSecondaryBadge = BadgeViewModel(
-        theme: SparkTheme.shared,
-        badgeType: .secondary
-    )
-
-    @State var standartSuccessBadge = BadgeViewModel(
-        theme: SparkTheme.shared,
-        badgeType: .success
-    )
-
-    @State var value: Int? = 3
-    @State var isOutlined: Bool = false
+    @State var standartDangerBadgeType: BadgeIntentType = .danger
 
     var body: some View {
         List {
@@ -147,45 +106,72 @@ struct BadgeComponentView: View {
 
             Section(header: Text("SwiftUI Badge")) {
                 Button("Change Default Badge Value") {
-                    standartBadge.value = 23
+                    standartBadgeValue = 23
+                    standartBadgeIsOutlined.toggle()
+                    badgeFormat = .overflowCounter(maxValue: 20)
                 }
                 Button("Change Small Custom Badge") {
-                    smallCustomWithoutBorder.value = 18
-                    smallCustomWithoutBorder.isBadgeOutlined = true
-                    smallCustomWithoutBorder.badgeType = .primary
-                    smallCustomWithoutBorder.badgeSize = .normal
+                    smallCustomBadgeValue = 18
+                    smallCustomBadgeSize = .normal
+                    smallCustomBadgeIsOutlined.toggle()
+                    smallCustomBadgeType = .primary
                 }
                 Button("Change Dange Badge") {
-                    standartDangerBadge.badgeType = .neutral
+                    standartDangerBadgeType = .neutral
                 }
                 VStack(spacing: 100) {
                     HStack(spacing: 50) {
                         ZStack(alignment: .leading) {
                             Text("Default Badge")
-                            BadgeView(viewModel: standartBadge)
-                                .offset(x: 100, y: -15)
+                            BadgeView(
+                                theme: theme,
+                                badgeType: .primary,
+                                value: standartBadgeValue
+                            )
+                            .format(badgeFormat)
+                            .outlined(standartBadgeIsOutlined)
+                            .offset(x: 100, y: -15)
                         }
                         ZStack(alignment: .leading) {
                             Text("Small Custom")
-                            BadgeView(viewModel: smallCustomWithoutBorder)
-                                .offset(x: 100, y: -15)
+                            BadgeView(
+                                theme: SparkTheme.shared,
+                                badgeType: smallCustomBadgeType,
+                                value: 22
+                            )
+                            .outlined(smallCustomBadgeIsOutlined)
+                            .size(smallCustomBadgeSize)
+                            .offset(x: 100, y: -15)
                         }
                     }
 
                     HStack(spacing: 55) {
                         ZStack(alignment: .leading) {
                             Text("Danger Badge")
-                            BadgeView(viewModel: standartDangerBadge)
+                            BadgeView(
+                                theme: SparkTheme.shared,
+                                badgeType: standartDangerBadgeType,
+                                value: 10
+                            )
+                            .format(.custom(
+                                formatter: BadgePreviewFormatter()
+                            ))
                                 .offset(x: 100, y: -15)
                         }
                         ZStack(alignment: .leading) {
                             Text("Text")
-                            BadgeView(viewModel: standartInfoBadge)
+                            BadgeView(
+                                theme: SparkTheme.shared,
+                                badgeType: .info
+                            )
                                 .offset(x: 25, y: -15)
                         }
                         ZStack(alignment: .leading) {
                             Text("Text")
-                            BadgeView(viewModel: standartNeutralBadge)
+                            BadgeView(
+                                theme: SparkTheme.shared,
+                                badgeType: .neutral
+                            )
                                 .offset(x: 25, y: -15)
                         }
                     }
@@ -193,15 +179,24 @@ struct BadgeComponentView: View {
                     HStack(spacing: 50) {
                         HStack {
                             Text("Text")
-                            BadgeView(viewModel: standartPrimaryBadge)
+                            BadgeView(
+                                theme: SparkTheme.shared,
+                                badgeType: .primary
+                            )
                         }
                         HStack {
                             Text("Text")
-                            BadgeView(viewModel: standartSecondaryBadge)
+                            BadgeView(
+                                theme: SparkTheme.shared,
+                                badgeType: .secondary
+                            )
                         }
                         HStack {
                             Text("Text")
-                            BadgeView(viewModel: standartSuccessBadge)
+                            BadgeView(
+                                theme: SparkTheme.shared,
+                                badgeType: .success
+                            )
                         }
                     }
                 }

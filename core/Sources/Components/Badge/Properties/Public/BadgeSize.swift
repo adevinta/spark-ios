@@ -16,4 +16,13 @@ import Foundation
 public enum BadgeSize {
     case normal
     case small
+
+    func fontSize(for theme: Theme) -> TypographyFontToken {
+        switch self {
+        case .normal:
+            return theme.typography.captionHighlight
+        case .small:
+            return theme.typography.smallHighlight
+        }
+    }
 }
