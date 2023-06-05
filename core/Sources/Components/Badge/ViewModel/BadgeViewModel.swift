@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import SwiftUI
 
-/// **BadgeViewModel** is a view model that required for
+/// **BadgeViewModel** is a view model that is required for
 /// configuring ``BadgeView`` and changing it's properties.
 ///
 /// List of properties:
