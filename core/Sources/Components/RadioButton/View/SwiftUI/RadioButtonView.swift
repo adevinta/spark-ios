@@ -38,6 +38,7 @@ private enum Constants {
 ///
 ///  An alternative to using ``RadioButtonViews`` is to use the ``RadioButtonGroupView``.
 public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
+
     // MARK: - Injected Properties
 
     @ObservedObject private var viewModel: RadioButtonViewModel<ID>
@@ -48,13 +49,12 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     @ScaledMetric private var lineWidth: CGFloat = Constants.lineWidth
     @ScaledMetric private var size: CGFloat = Constants.size
     @ScaledMetric private var filledSize: CGFloat = Constants.filledSize
-    @ScaledMetric private var buttonPadding: CGFloat = RadioButtonConstants.radioButtonPadding
     @ScaledMetric private var spacing: CGFloat
 
     @State private var isPressed: Bool = false
 
     private var radioButtonSize: CGFloat {
-        return self.size + self.pressedLineWidth
+        return self.size + (self.pressedLineWidth * 2)
     }
 
     // MARK: - Initialization
@@ -65,17 +65,20 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     ///   - label: A text describing the value
     ///   - selectedID: A binding to which the id of the radio button will be assigned when selected.
     ///   - state: The current state, default value is `.enabled`
+    ///   - labelPostion: The position of the label according to the radio button toggle. Default is `right`
     public init(theme: Theme,
                 id: ID,
                 label: String,
                 selectedID: Binding<ID>,
-                state: SparkSelectButtonState = .enabled) {
+                state: SparkSelectButtonState = .enabled,
+                labelPosition: RadioButtonLabelPosition = .right) {
         let viewModel = RadioButtonViewModel(
             theme: theme,
             id: id,
             label: label,
             selectedID: selectedID,
-            state: state)
+            state: state,
+            labelPosition: labelPosition)
         self.init(viewModel: viewModel)
     }
 
@@ -95,7 +98,6 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         .disabled(self.viewModel.isDisabled)
         .opacity(self.viewModel.opacity)
         .buttonStyle(RadioButtonButtonStyle(isPressed: self.$isPressed))
-        .padding(buttonPadding)
         .accessibilityLabel(self.viewModel.label)
         .accessibilityValue(self.viewModel.id.description)
     }
@@ -112,27 +114,45 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         return self
     }
 
+    public func labelPosition(_ labelPosition: RadioButtonLabelPosition) -> Self {
+        self.viewModel.set(labelPosition: labelPosition)
+        return self
+    }
+
     // MARK: - Private Functions
-    
-    private func buttonAndLabel() -> some View{
-        HStack(alignment: .top, spacing: self.spacing) {
-            self.radioButton()
-                .animation(.easeIn(duration: 0.1), value: self.viewModel.selectedID)
-
-            VStack(alignment: .leading) {
-                Text(self.viewModel.label)
-                    .font(self.viewModel.font.font)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(self.viewModel.surfaceColor.color)
-
-                if let supplementaryLabel = self.viewModel.supplementaryText {
-                    Text(supplementaryLabel)
-                        .font(self.viewModel.supplemetaryFont.font)
-                        .multilineTextAlignment(.leading)
-                        .foregroundColor(self.viewModel.colors.subLabel.color)
-                }
+    @ViewBuilder
+    private func buttonAndLabel() -> some View {
+        if self.viewModel.labelPosition == .right {
+            HStack(alignment: .top, spacing: self.spacing) {
+                self.radioButton()
+                self.labelAndSublabel()
             }
-            .padding(.top, self.lineWidth)
+        } else  {
+            HStack(alignment: .top, spacing: 0) {
+                self.labelAndSublabel()
+
+                Spacer()
+
+                self.radioButton()
+                    .padding(.leading, viewModel.spacing)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func labelAndSublabel() -> some View {
+        VStack(alignment: .leading) {
+            Text(self.viewModel.label)
+                .font(self.viewModel.font.font)
+                .multilineTextAlignment(.leading)
+                .foregroundColor(self.viewModel.surfaceColor.color)
+
+            if let supplementaryLabel = self.viewModel.supplementaryText {
+                Text(supplementaryLabel)
+                    .font(self.viewModel.supplemetaryFont.font)
+                    .multilineTextAlignment(.leading)
+                    .foregroundColor(self.viewModel.colors.subLabel.color)
+            }
         }
     }
 
@@ -161,6 +181,8 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         }
         .frame(width: self.radioButtonSize,
                height: self.radioButtonSize)
+        .padding(-self.pressedLineWidth)
+        .animation(.easeIn(duration: 0.1), value: self.viewModel.selectedID)
     }
 
     // MARK: - Button Style
