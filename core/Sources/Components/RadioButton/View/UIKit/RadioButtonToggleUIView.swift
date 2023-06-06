@@ -69,28 +69,28 @@ final class RadioButtonToggleUIView: UIView {
         else { return }
 
         backgroundColor = .clear
-        let borderWidth = rect.width / 7
+        let haloWidth = rect.width / 7
+        let center = rect.width / 2
+        let centerPoint = CGPoint(x: center, y: center)
 
         if self.isPressed {
-            let haloPath = UIBezierPath.circle(position: borderWidth/2,
-                                               size: rect.width - borderWidth)
-            haloPath.lineWidth = borderWidth
+            let haloPath = UIBezierPath.circle(arcCenter: centerPoint, radius: (rect.width/2 - haloWidth/2))
+            haloPath.lineWidth = haloWidth
             ctx.setStrokeColor(haloColor.cgColor)
             haloPath.stroke()
         }
         
-        let innerBorderWidth = (rect.width - borderWidth*2) / 10
-        let togglePath = UIBezierPath.circle(position: borderWidth,
-                                             size: rect.width - borderWidth*2)
+        let innerBorderWidth = (rect.width - haloWidth*2) / 10
+        let toggleWidth = rect.width - (haloWidth*2)
+        let togglePath = UIBezierPath.circle(arcCenter: centerPoint, radius: (toggleWidth/2 - innerBorderWidth/2))
         togglePath.lineWidth = innerBorderWidth
         ctx.setStrokeColor(buttonColor.cgColor)
         togglePath.stroke()
         
         if fillColor != .clear {
-            let fillSize = (rect.width - borderWidth*2) / 2
-            let fillPath = UIBezierPath.circle(position: rect.width/2 - fillSize/2,
-                                               size: fillSize)
-            
+            let fillSize = (rect.width - haloWidth*2) / 2
+            let fillPath = UIBezierPath.circle(arcCenter: centerPoint, radius: fillSize/2)
+
             ctx.setFillColor(fillColor.cgColor)
             fillPath.fill()
         }
@@ -100,13 +100,8 @@ final class RadioButtonToggleUIView: UIView {
 // MARK: Private helpers
 
 private extension UIBezierPath {
-    static func circle(position: CGFloat,
-                         size: CGFloat) ->  UIBezierPath {
-        let outerOval = CGRect(x: position,
-                               y: position,
-                               width: size,
-                               height: size)
-
-       return UIBezierPath(ovalIn: outerOval)
+    static func circle(arcCenter: CGPoint,
+                       radius: CGFloat) ->  UIBezierPath {
+        return UIBezierPath(arcCenter: arcCenter, radius: radius, startAngle: 0, endAngle: 360, clockwise: true)
     }
 }
