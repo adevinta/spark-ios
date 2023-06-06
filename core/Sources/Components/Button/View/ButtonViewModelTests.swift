@@ -15,8 +15,6 @@ final class ButtonViewModelTests: XCTestCase {
 
     // MARK: - Properties
     var theme: ThemeGeneratedMock!
-    var bindingValue: Int = 0
-    var subscription: Cancellable?
 
     // MARK: - Setup
     override func setUpWithError() throws {
