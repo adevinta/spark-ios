@@ -20,13 +20,14 @@ private struct BadgePreviewFormatter: BadgeFormatting {
 }
 
 struct UIBadgeView: UIViewRepresentable {
-    var viewModels: [BadgeViewModel]
+
+    var views: [BadgeUIView]
 
     func makeUIView(context: Context) -> some UIView {
-        let badgeViews = viewModels.enumerated().map { index, viewModel in
+        let badgesStackView = UIStackView()
+        views.enumerated().forEach { index, badgeView in
             let containerView = UIView()
             containerView.translatesAutoresizingMaskIntoConstraints = false
-            let badgeView = BadgeUIView(viewModel: viewModel)
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.text = "badge_\(index)"
@@ -51,17 +52,17 @@ struct UIBadgeView: UIViewRepresentable {
                 ])
             }
 
-            return containerView
+            badgesStackView.addArrangedSubview(containerView)
         }
-        let badgesStackView = UIStackView(arrangedSubviews: badgeViews)
         badgesStackView.axis = .vertical
         badgesStackView.alignment = .leading
         badgesStackView.spacing = 30
+        badgesStackView.distribution = .fill
+
         return badgesStackView
     }
 
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        
     }
 }
 

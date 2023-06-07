@@ -21,22 +21,20 @@ private struct BadgePreviewFormatter: BadgeFormatting {
 
 struct BadgeComponentView: View {
 
-    private var viewModels: [BadgeViewModel] =
-    [
-        BadgeViewModel(
+    private var views = [
+        BadgeUIView(
             theme: SparkTheme.shared,
             badgeType: .alert,
-            badgeSize: .normal,
             value: 6
         ),
-        BadgeViewModel(
+        BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .alert,
-            badgeSize: .small,
+            badgeType: .primary,
+            badgeSize: .normal,
             value: 22,
             format: .overflowCounter(maxValue: 20)
         ),
-        BadgeViewModel(
+        BadgeUIView(
             theme: SparkTheme.shared,
             badgeType: .danger,
             value: 10,
@@ -44,25 +42,26 @@ struct BadgeComponentView: View {
                 formatter: BadgePreviewFormatter()
             )
         ),
-        BadgeViewModel(
+        BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .info
+            badgeType: .info,
+            value: 20
         ),
-        BadgeViewModel(
+        BadgeUIView(
+            theme: SparkTheme.shared,
+            badgeType: .primary
+        ),
+        BadgeUIView(
             theme: SparkTheme.shared,
             badgeType: .neutral,
             isOutlined: false
         ),
-        BadgeViewModel(
-            theme: SparkTheme.shared,
-            badgeType: .primary
-        ),
-        BadgeViewModel(
+        BadgeUIView(
             theme: SparkTheme.shared,
             badgeType: .secondary,
-            value: 6
+            value: 23
         ),
-        BadgeViewModel(
+        BadgeUIView(
             theme: SparkTheme.shared,
             badgeType: .success
         )
@@ -85,22 +84,20 @@ struct BadgeComponentView: View {
         List {
             Section(header: Text("UIKit Badge")) {
                 Button("Change UIKit Badge 0 Type") {
-                    viewModels[0].badgeType = BadgeIntentType.allCases.randomElement() ?? .alert
+                    views[0].setBadgeType(BadgeIntentType.allCases.randomElement() ?? .alert)
                 }
                 Button("Change UIKit Badge 1 Value") {
-                    if viewModels[1].value == 10 {
-                        viewModels[1].value = nil
-                    } else if viewModels[1].value == 22 {
-                        viewModels[1].value = 10
-                    } else {
-                        viewModels[1].value = 22
-                    }
+                    views[1].setBadgeValue(2)
                 }
                 Button("Change UIKit Badge 2 Outline") {
-                    viewModels[2].isBadgeOutlined.toggle()
+                    views[2].setBadgeOutlineEnabled(false)
                 }
-                UIBadgeView(viewModels: viewModels)
+                Button("Change UIKit Badge 3 Size") {
+                    views[3].setBadgeSize(.small)
+                }
+                UIBadgeView(views: views)
                     .frame(height: 400)
+                    .listRowBackground(Color.gray.opacity(0.3))
             }
             .listRowBackground(Color.gray.opacity(0.3))
 

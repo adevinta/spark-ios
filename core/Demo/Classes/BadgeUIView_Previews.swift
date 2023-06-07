@@ -20,13 +20,13 @@ private struct BadgePreviewFormatter: BadgeFormatting {
 
 struct UIBadgeView: UIViewRepresentable {
 
-    var viewModels: [BadgeViewModel]
+    var views: [BadgeUIView]
 
     func makeUIView(context: Context) -> some UIView {
-        let badgeViews = viewModels.enumerated().map { index, viewModel in
+        let badgesStackView = UIStackView()
+        views.enumerated().forEach { index, badgeView in
             let containerView = UIView()
             containerView.translatesAutoresizingMaskIntoConstraints = false
-            let badgeView = BadgeUIView(viewModel: viewModel)
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.text = "badge_\(index)"
@@ -51,9 +51,8 @@ struct UIBadgeView: UIViewRepresentable {
                 ])
             }
 
-            return containerView
+            badgesStackView.addArrangedSubview(containerView)
         }
-        let badgesStackView = UIStackView(arrangedSubviews: badgeViews)
         badgesStackView.axis = .vertical
         badgesStackView.alignment = .leading
         badgesStackView.spacing = 30
@@ -69,20 +68,20 @@ struct UIBadgeView: UIViewRepresentable {
 struct BadgeUIView_Previews: PreviewProvider {
 
     struct BadgeUIViewBridge: View {
-        private var viewModels = [
-            BadgeViewModel(
+        private var views = [
+            BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .alert,
                 value: 6
             ),
-            BadgeViewModel(
+            BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .primary,
                 badgeSize: .normal,
                 value: 22,
                 format: .overflowCounter(maxValue: 20)
             ),
-            BadgeViewModel(
+            BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .danger,
                 value: 10,
@@ -90,26 +89,26 @@ struct BadgeUIView_Previews: PreviewProvider {
                     formatter: BadgePreviewFormatter()
                 )
             ),
-            BadgeViewModel(
+            BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .info,
                 value: 20
             ),
-            BadgeViewModel(
+            BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .primary
             ),
-            BadgeViewModel(
+            BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .neutral,
                 isOutlined: false
             ),
-            BadgeViewModel(
+            BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .secondary,
                 value: 23
             ),
-            BadgeViewModel(
+            BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .success
             )
@@ -118,24 +117,18 @@ struct BadgeUIView_Previews: PreviewProvider {
         var body: some View {
             List {
                 Button("Change UIKit Badge 0 Type") {
-                    viewModels[0].badgeType = BadgeIntentType.allCases.randomElement() ?? .alert
+                    views[0].setBadgeType(BadgeIntentType.allCases.randomElement() ?? .alert)
                 }
                 Button("Change UIKit Badge 1 Value") {
-                    if viewModels[1].value == 10 {
-                        viewModels[1].value = nil
-                    } else if viewModels[1].value == 22 {
-                        viewModels[1].value = 10
-                    } else {
-                        viewModels[1].value = 22
-                    }
+                    views[1].setBadgeValue(2)
                 }
                 Button("Change UIKit Badge 2 Outline") {
-                    viewModels[2].isBadgeOutlined.toggle()
+                    views[2].setBadgeOutlineEnabled(false)
                 }
                 Button("Change UIKit Badge 3 Size") {
-                    viewModels[3].badgeSize = .small
+                    views[3].setBadgeSize(.small)
                 }
-                UIBadgeView(viewModels: viewModels)
+                UIBadgeView(views: views)
                     .frame(height: 400)
                     .listRowBackground(Color.gray.opacity(0.3))
             }
