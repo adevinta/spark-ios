@@ -74,6 +74,13 @@ final class RadioButtonViewTests: SwiftUIComponentTestCase {
         assertSnapshotInDarkAndLight(matching: view)
     }
 
+    func test_label_left() throws {
+        let view = sut(state: .enabled, isSelected: true, label: "Label")
+            .labelPosition(.left)
+            .fixedSize()
+        assertSnapshotInDarkAndLight(matching: view)
+    }
+
     // MARK: - Private Helper Functions
     func sut(state: SparkSelectButtonState, isSelected: Bool, label: String? = nil) -> RadioButtonView<Int> {
         let selectedID = Binding<Int> (

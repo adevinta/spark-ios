@@ -15,13 +15,15 @@ struct RadioButtonGroup: View {
 
     @State var selectedID: Int = 1
     let theme = SparkTheme.shared
+    @State var rightTextAligment: Bool = false
+    @State var dummyBinding: Int = 1
 
     // MARK: - View
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             RadioButtonGroupView(
                 theme: self.theme,
-                title: "Radio Button Group",
+                title: "Radio Button Group (SwiftUI)",
                 selectedID: self.$selectedID,
                 items: [
                     RadioButtonItem(id: 1,
@@ -41,10 +43,42 @@ struct RadioButtonGroup: View {
                     RadioButtonItem(id: 6,
                                     label: "6 Radio button / Warning",
                                     state: .warning(message: "Warning")),
-                ])
+                ],
+                radioButtonLabelPosition: .left
+            )
             Text("Selected Value \(selectedID)")
+                .padding(.bottom, 20)
+
+            Text("Toggle label value")
+
+            RadioButtonGroupView(theme: self.theme,
+                                 selectedID: self.$rightTextAligment,
+                                 items: [
+                                    RadioButtonItem(id: false,
+                                                    label: "Left"),
+                                    RadioButtonItem(id: true,
+                                                    label: "Right")
+                                    ],
+                                 groupLayout: .horizontal)
+
+            HStack {
+                RadioButtonGroupView(theme: self.theme,
+                                     selectedID: self.$dummyBinding,
+                                     items: [
+                                        RadioButtonItem(id: 1,
+                                                        label: "Label 1"),
+                                        RadioButtonItem(id: 2,
+                                                        label: "Label 2")
+                                     ],
+                                     radioButtonLabelPosition: self.rightTextAligment ? .right : .left,
+                                     groupLayout: .horizontal)
+                Spacer()
+            }
+
+            Spacer()
 
         }
+        .padding(8)
     }
 }
 
