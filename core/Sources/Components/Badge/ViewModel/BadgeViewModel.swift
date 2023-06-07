@@ -28,37 +28,66 @@ import SwiftUI
 /// - theme  -- represents ``Theme`` used in the app
 public final class BadgeViewModel: ObservableObject {
 
-    // MARK: - Appearance Internal Properties
-    @Published public var value: Int? = nil
-    @Published public var badgeType: BadgeIntentType
-    @Published public var isBadgeOutlined: Bool
-    @Published public var badgeSize: BadgeSize
-    @Published public var badgeFormat: BadgeFormat
-    @Published public var theme: Theme
-
-    var backgroundColor: ColorToken
-    var badgeBorder: BadgeBorder
-    var isBadgeEmpty: Bool {
-        self.badgeFormat.badgeText(value).isEmpty
+    // MARK: - Badge Configuration Public Properties
+    public var value: Int? = nil {
+        didSet {
+            updateText()
+        }
     }
+    public var badgeType: BadgeIntentType {
+        didSet {
+            updateColors()
+        }
+    }
+    public var badgeSize: BadgeSize {
+        didSet {
+            updateFont()
+        }
+    }
+    public var badgeFormat: BadgeFormat {
+        didSet {
+            updateText()
+        }
+    }
+    public var theme: Theme {
+        didSet {
+            updateColors()
+            updateScalings()
+        }
+    }
+
+    // MARK: - Internal Published Properties
+    @Published var text: String
+    @Published var textFont: TypographyFontToken
+    @Published var textColor: ColorToken
+    @Published var isBadgeEmpty: Bool
+
+    @Published var backgroundColor: ColorToken
+    @Published var badgeBorder: BadgeBorder
+
+    @Published public var isBadgeOutlined: Bool
+
+    // MARK: - Internal Appearance Properties
+    var colorsUseCase: BadgeGetIntentColorsUseCaseable
     var verticalOffset: CGFloat
     var horizontalOffset: CGFloat
 
-    // MARK: - Internal Text Properties
-    var text: String {
-        badgeFormat.badgeText(value)
-    }
-    var textFont: TypographyFontToken {
-        badgeSize.fontSize(for: self.theme)
-    }
-    var textColor: ColorToken
 
     // MARK: - Initializer
 
-    public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true) {
-        let badgeColors = BadgeGetIntentColorsUseCase().execute(intentType: badgeType, on: theme.colors)
+    init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true, colorsUseCase: BadgeGetIntentColorsUseCaseable) {
+        let badgeColors = colorsUseCase.execute(intentType: badgeType, on: theme.colors)
 
         self.value = value
+
+        self.text = format.badgeText(value)
+        self.isBadgeEmpty = format.badgeText(value).isEmpty
+        switch badgeSize {
+        case .normal:
+            self.textFont = theme.typography.captionHighlight
+        case .small:
+            self.textFont = theme.typography.smallHighlight
+        }
         self.textColor = badgeColors.foregroundColor
 
         self.backgroundColor = badgeColors.backgroundColor
@@ -81,10 +110,15 @@ public final class BadgeViewModel: ObservableObject {
         self.badgeSize = badgeSize
         self.badgeType = badgeType
         self.isBadgeOutlined = isOutlined
+        self.colorsUseCase = colorsUseCase
     }
 
-    func updateColors() {
-        let badgeColors = BadgeGetIntentColorsUseCase().execute(intentType: self.badgeType, on: self.theme.colors)
+    convenience public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true) {
+        self.init(theme: theme, badgeType: badgeType, badgeSize: badgeSize, value: value, format: format, isOutlined: isOutlined, colorsUseCase: BadgeGetIntentColorsUseCase())
+    }
+
+    private func updateColors() {
+        let badgeColors = self.colorsUseCase.execute(intentType: self.badgeType, on: self.theme.colors)
 
         self.textColor = badgeColors.foregroundColor
 
@@ -93,7 +127,21 @@ public final class BadgeViewModel: ObservableObject {
         self.badgeBorder.setColor(badgeColors.borderColor)
     }
 
-    func updateScalings() {
+    private func updateText() {
+        self.text = self.badgeFormat.badgeText(self.value)
+        self.isBadgeEmpty = self.badgeFormat.badgeText(value).isEmpty
+    }
+
+    private func updateFont() {
+        switch badgeSize {
+        case .normal:
+            self.textFont = self.theme.typography.captionHighlight
+        case .small:
+            self.textFont = self.theme.typography.smallHighlight
+        }
+    }
+
+    private func updateScalings() {
         let verticalOffset = self.theme.layout.spacing.small
         let horizontalOffset = self.theme.layout.spacing.medium
 

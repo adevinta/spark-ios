@@ -61,8 +61,8 @@ public class BadgeUIView: UIView {
 
     // MARK: - Init
 
-    public init(viewModel: BadgeViewModel) {
-        self.viewModel = viewModel
+    public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true) {
+        self.viewModel = BadgeViewModel(theme: theme, badgeType: badgeType, badgeSize: badgeSize, value: value, format: format, isOutlined: isOutlined)
 
         super.init(frame: .zero)
 
@@ -83,64 +83,11 @@ public class BadgeUIView: UIView {
         subscribe()
     }
 
-    private func subscribe() {
-        self.viewModel.$value
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.badgeLabel.text = self?.viewModel.text
-                self?.reloadUISize()
-                self?.setupLayouts()
-            }
-            .store(in: &cancellables)
-
-        self.viewModel.$badgeType
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.reloadColors()
-                self?.reloadUISize()
-                self?.setupLayouts()
-            }
-            .store(in: &cancellables)
-
-        self.viewModel.$isBadgeOutlined
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isBadgeOutlined in
-                if isBadgeOutlined {
-                    self?.reloadBorderWidth()
-                } else {
-                    self?.layer.borderWidth = 0
-                }
-            }
-            .store(in: &cancellables)
-
-        self.viewModel.$badgeSize
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.reloadBadgeFontIfNeeded()
-                self?.reloadUISize()
-                self?.setupLayouts()
-            }
-            .store(in: &cancellables)
-
-        self.viewModel.$badgeFormat
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.badgeLabel.text = self?.viewModel.text
-                self?.reloadUISize()
-                self?.setupLayouts()
-            }
-            .store(in: &cancellables)
-
-        self.viewModel.$theme
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.viewModel.updateScalings()
-                self?.reloadColors()
-                self?.reloadBadgeFontIfNeeded()
-                self?.reloadUISize()
-                self?.setupLayouts()
-            }
-            .store(in: &cancellables)
+    private func setupScalables() {
+        self.emptyBadgeSize = BadgeConstants.emptySize.width
+        self.horizontalSpacing = self.viewModel.horizontalOffset
+        self.verticalSpacing = self.viewModel.verticalOffset
+        self.borderWidth = self.viewModel.badgeBorder.width
     }
 
     private func setupBadgeText() {
@@ -160,13 +107,6 @@ public class BadgeUIView: UIView {
         self.layer.borderWidth = self.borderWidth
         self.layer.borderColor = self.viewModel.badgeBorder.color.uiColor.cgColor
         self.clipsToBounds = true
-    }
-
-    private func setupScalables() {
-        self.emptyBadgeSize = BadgeConstants.emptySize.width
-        self.horizontalSpacing = self.viewModel.horizontalOffset
-        self.verticalSpacing = self.viewModel.verticalOffset
-        self.borderWidth = self.viewModel.badgeBorder.width
     }
 
     // MARK: - Layouts setup
@@ -209,11 +149,90 @@ public class BadgeUIView: UIView {
 
         self.layer.cornerRadius = min(frame.width, frame.height) / 2.0
     }
+}
 
-    // MARK: - Updates on Trait Collection Change
+// MARK: - Badge Subscribers
+extension BadgeUIView {
+    private func subscribe() {
+        self.subscribeToTextChanges()
+        self.subscribeToBorderChanges()
+        self.subscribeToColorChanges()
+    }
+
+    private func subscribeToTextChanges() {
+        self.viewModel.$text
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] text in
+                self?.badgeLabel.text = text
+                self?.reloadUISize()
+                self?.setupLayouts()
+            }
+            .store(in: &cancellables)
+        self.viewModel.$textFont
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] textFont in
+                self?.badgeLabel.font = textFont.uiFont
+                self?.reloadUISize()
+                self?.setupLayouts()
+            }
+            .store(in: &cancellables)
+        self.viewModel.$isBadgeEmpty
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isBadgeOutlined in
+                self?.badgeLabel.text = self?.viewModel.text
+                self?.reloadUISize()
+                self?.setupLayouts()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func subscribeToBorderChanges() {
+        self.viewModel.$isBadgeOutlined
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isBadgeOutlined in
+                guard let self else {
+                    return
+                }
+                self.updateBorder(self.viewModel.badgeBorder)
+            }
+            .store(in: &cancellables)
+        self.viewModel.$badgeBorder
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] badgeBorder in
+                self?.updateBorder(badgeBorder)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func subscribeToColorChanges() {
+        self.viewModel.$textColor
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] textColor in
+                self?.badgeLabel.textColor = textColor.uiColor
+            }
+            .store(in: &cancellables)
+        self.viewModel.$backgroundColor
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] backgroundColor in
+                self?.backgroundColor = backgroundColor.uiColor
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - Updates on Trait Collection Change
+extension BadgeUIView {
+    private func updateBorder(_ badgeBorder: BadgeBorder) {
+        self.layer.borderColor = badgeBorder.color.uiColor.cgColor
+        if self.viewModel.isBadgeOutlined {
+            self.setupScalables()
+            self.reloadBorderWidth()
+        } else {
+            self.layer.borderWidth = 0
+        }
+    }
 
     private func reloadColors() {
-        self.viewModel.updateColors()
         self.backgroundColor = self.viewModel.backgroundColor.uiColor
         badgeLabel.textColor = self.viewModel.textColor.uiColor
         self.layer.borderColor = self.viewModel.badgeBorder.color.uiColor.cgColor
@@ -251,5 +270,32 @@ public class BadgeUIView: UIView {
         self.reloadUISize()
         self.reloadBorderWidth()
         self.setupLayouts()
+    }
+}
+
+// MARK: - Badge Update Functions
+public extension BadgeUIView {
+    func setBadgeType(_ badgeType: BadgeIntentType) {
+        self.viewModel.badgeType = badgeType
+    }
+
+    func setBadgeOutlineEnabled(_ isOutlined: Bool) {
+        self.viewModel.isBadgeOutlined = isOutlined
+    }
+
+    func setBadgeValue(_ value: Int?) {
+        self.viewModel.value = value
+    }
+
+    func setBadgeFormat(_ format: BadgeFormat) {
+        self.viewModel.badgeFormat = format
+    }
+
+    func setBadgeSize(_ badgeSize: BadgeSize) {
+        self.viewModel.badgeSize = badgeSize
+    }
+
+    func setBadgeTheme(_ theme: Theme) {
+        self.viewModel.theme = theme
     }
 }
