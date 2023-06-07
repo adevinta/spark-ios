@@ -57,6 +57,24 @@ final class ButtonUIViewTests: UIKitComponentTestCase {
             }
         }
     }
+
+    func test_pressed() throws {
+        for variant in variants {
+            for intent in intents {
+                let button = ButtonUIView(
+                    theme: theme,
+                    text: "Pressed button",
+                    state: .enabled,
+                    variant: variant,
+                    intentColor: intent
+                )
+                button.isPressed = true
+
+                let identifier = "\(variant.identifier)-\(intent.identifier)"
+                assertSnapshotInDarkAndLight(matching: button, named: identifier)
+            }
+        }
+    }
 }
 
 // MARK: - Private extension
