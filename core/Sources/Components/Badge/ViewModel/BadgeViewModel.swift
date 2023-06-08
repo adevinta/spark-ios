@@ -113,10 +113,6 @@ public final class BadgeViewModel: ObservableObject {
         self.colorsUseCase = colorsUseCase
     }
 
-    convenience init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true) {
-        self.init(theme: theme, badgeType: badgeType, badgeSize: badgeSize, value: value, format: format, isBadgeOutlined: isOutlined)
-    }
-
     private func updateColors() {
         let badgeColors = self.colorsUseCase.execute(intentType: self.badgeType, on: self.theme.colors)
 

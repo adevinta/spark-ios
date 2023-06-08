@@ -54,7 +54,7 @@ struct BadgeComponentView: View {
         BadgeUIView(
             theme: SparkTheme.shared,
             badgeType: .neutral,
-            isOutlined: false
+            isBadgeOutlined: false
         ),
         BadgeUIView(
             theme: SparkTheme.shared,

@@ -101,7 +101,7 @@ struct BadgeUIView_Previews: PreviewProvider {
             BadgeUIView(
                 theme: SparkTheme.shared,
                 badgeType: .neutral,
-                isOutlined: false
+                isBadgeOutlined: false
             ),
             BadgeUIView(
                 theme: SparkTheme.shared,
