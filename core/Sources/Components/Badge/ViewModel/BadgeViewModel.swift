@@ -113,7 +113,7 @@ public final class BadgeViewModel: ObservableObject {
         self.colorsUseCase = colorsUseCase
     }
 
-    convenience public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true) {
+    convenience init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true) {
         self.init(theme: theme, badgeType: badgeType, badgeSize: badgeSize, value: value, format: format, isBadgeOutlined: isOutlined)
     }
 
