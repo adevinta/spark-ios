@@ -65,7 +65,7 @@ public final class BadgeViewModel: ObservableObject {
     @Published var backgroundColor: ColorToken
     @Published var badgeBorder: BadgeBorder
 
-    @Published public var isBadgeOutlined: Bool
+    @Published var isBadgeOutlined: Bool
 
     // MARK: - Internal Appearance Properties
     var colorsUseCase: BadgeGetIntentColorsUseCaseable
@@ -75,7 +75,7 @@ public final class BadgeViewModel: ObservableObject {
 
     // MARK: - Initializer
 
-    init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true, colorsUseCase: BadgeGetIntentColorsUseCaseable) {
+    init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBadgeOutlined: Bool = true, colorsUseCase: BadgeGetIntentColorsUseCaseable = BadgeGetIntentColorsUseCase()) {
         let badgeColors = colorsUseCase.execute(intentType: badgeType, on: theme.colors)
 
         self.value = value
@@ -109,12 +109,12 @@ public final class BadgeViewModel: ObservableObject {
         self.badgeFormat = format
         self.badgeSize = badgeSize
         self.badgeType = badgeType
-        self.isBadgeOutlined = isOutlined
+        self.isBadgeOutlined = isBadgeOutlined
         self.colorsUseCase = colorsUseCase
     }
 
     convenience public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isOutlined: Bool = true) {
-        self.init(theme: theme, badgeType: badgeType, badgeSize: badgeSize, value: value, format: format, isOutlined: isOutlined, colorsUseCase: BadgeGetIntentColorsUseCase())
+        self.init(theme: theme, badgeType: badgeType, badgeSize: badgeSize, value: value, format: format, isBadgeOutlined: isOutlined)
     }
 
     private func updateColors() {

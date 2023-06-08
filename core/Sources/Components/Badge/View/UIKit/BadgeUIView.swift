@@ -234,7 +234,7 @@ extension BadgeUIView {
 
     private func reloadColors() {
         self.backgroundColor = self.viewModel.backgroundColor.uiColor
-        badgeLabel.textColor = self.viewModel.textColor.uiColor
+        self.badgeLabel.textColor = self.viewModel.textColor.uiColor
         self.layer.borderColor = self.viewModel.badgeBorder.color.uiColor.cgColor
     }
 
