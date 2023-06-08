@@ -6,8 +6,9 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SwiftUI
 import Spark
+import SparkCore
+import SwiftUI
 
 struct MainView: View {
 
@@ -15,9 +16,36 @@ struct MainView: View {
 
     private let viewModel = BorderViewModel()
 
+    @ObservedObject var colorSchemeManager = ColorSchemeManager.shared
+
+    @Environment(\.colorScheme) var systemColorScheme: ColorScheme
+
+    var colorScheme: ColorScheme {
+        if let overriddenColorScheme = colorSchemeManager.colorScheme {
+            return overriddenColorScheme
+        } else {
+            return self.systemColorScheme
+        }
+    }
+
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     // MARK: - View
 
     var body: some View {
+        ZStack {
+            contentView
+
+            ThemeSwitchView()
+        }
+        .colorScheme(self.colorScheme)
+    }
+
+    var contentView: some View {
         NavigationView {
             TabView {
                 ThemeView()
@@ -33,7 +61,7 @@ struct MainView: View {
                     }
             }
         }
-        .accentColor(SparkTheme.shared.colors.primary.primary.color)
+        .accentColor(self.theme.colors.primary.primary.color)
     }
 }
 
@@ -41,4 +69,11 @@ struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
     }
+}
+
+class ColorSchemeManager: ObservableObject {
+    static let shared = ColorSchemeManager()
+    private init() {}
+
+    @Published var colorScheme: ColorScheme?
 }
