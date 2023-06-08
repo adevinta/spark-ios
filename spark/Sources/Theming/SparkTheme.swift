@@ -13,10 +13,12 @@ public struct SparkTheme: Theme {
 
     // MARK: - Properties
 
-    public static let shared = Self()
+    public static var shared = Self()
+
+    public init() {}
 
     public let border: Border = SparkBorder()
-    public let colors: Colors = SparkColors()
+    public var colors: Colors = SparkColors()
     public let elevation: Elevation = SparkElevation()
     public let layout: Layout = SparkLayout()
     public let typography: Typography = SparkTypography()
@@ -25,4 +27,12 @@ public struct SparkTheme: Theme {
                                         dim3: 0.40,
                                         dim4: 0.16,
                                         dim5: 0.08)
+}
+
+public class SparkThemePublisher: ObservableObject {
+    public static let shared = SparkThemePublisher()
+
+    private init() {}
+
+    @Published public var theme: Theme = SparkTheme()
 }
