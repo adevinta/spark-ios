@@ -28,10 +28,8 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
     func test_badge_all_cases_no_text() throws {
         for badgeIntentType in BadgeIntentType.allCases {
             let view = BadgeUIView(
-                viewModel: BadgeViewModel(
-                    theme: theme,
-                    badgeType: badgeIntentType)
-            )
+                theme: theme,
+                badgeType: badgeIntentType)
 
             assertSnapshotInDarkAndLight(matching: view, named: "test_badge_\(badgeIntentType)")
         }
@@ -40,11 +38,9 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
     func test_badge_all_cases_text() throws {
         for badgeIntentType in BadgeIntentType.allCases {
             let view = BadgeUIView(
-                viewModel: BadgeViewModel(
-                    theme: theme,
-                    badgeType: badgeIntentType,
-                    value: 23
-                )
+                theme: theme,
+                badgeType: badgeIntentType,
+                value: 23
             )
 
             assertSnapshotInDarkAndLight(matching: view, named: "test_badge_with_text_\(badgeIntentType)")
@@ -54,12 +50,10 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
     func test_badge_all_cases_text_smal_size() throws {
         for badgeIntentType in BadgeIntentType.allCases {
             let view = BadgeUIView(
-                viewModel: BadgeViewModel(
-                    theme: theme,
-                    badgeType: badgeIntentType,
-                    badgeSize: .small,
-                    value: 23
-                )
+                theme: theme,
+                badgeType: badgeIntentType,
+                badgeSize: .small,
+                value: 23
             )
 
             assertSnapshotInDarkAndLight(matching: view, named: "test_badge_with_text_\(badgeIntentType)_small_size")
@@ -69,12 +63,10 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
     func test_badge_all_cases_text_overflow_format() throws {
         for badgeIntentType in BadgeIntentType.allCases {
             let view = BadgeUIView(
-                viewModel: BadgeViewModel(
-                    theme: theme,
-                    badgeType: badgeIntentType,
-                    value: 23,
-                    format: .overflowCounter(maxValue: 20)
-                )
+                theme: theme,
+                badgeType: badgeIntentType,
+                value: 23,
+                format: .overflowCounter(maxValue: 20)
             )
 
             assertSnapshotInDarkAndLight(matching: view, named: "test_badge_overflow_format_text_\(badgeIntentType)")
@@ -84,13 +76,11 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
     func test_badge_all_cases_text_custom_format() throws {
         for badgeIntentType in BadgeIntentType.allCases {
             let view = BadgeUIView(
-                viewModel: BadgeViewModel(
-                    theme: theme,
-                    badgeType: badgeIntentType,
-                    value: 23,
-                    format: .custom(
-                        formatter: TestBadgeFormatting()
-                    )
+                theme: theme,
+                badgeType: badgeIntentType,
+                value: 23,
+                format: .custom(
+                    formatter: TestBadgeFormatting()
                 )
             )
 
@@ -101,12 +91,10 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
     func test_badge_all_cases_no_text_custom_format() throws {
         for badgeIntentType in BadgeIntentType.allCases {
             let view = BadgeUIView(
-                viewModel: BadgeViewModel(
-                    theme: theme,
-                    badgeType: badgeIntentType,
-                    format: .custom(
-                        formatter: TestBadgeFormatting()
-                    )
+                theme: theme,
+                badgeType: badgeIntentType,
+                format: .custom(
+                    formatter: TestBadgeFormatting()
                 )
             )
 
