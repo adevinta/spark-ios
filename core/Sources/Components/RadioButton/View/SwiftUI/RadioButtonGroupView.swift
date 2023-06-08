@@ -36,6 +36,8 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     private let theme: Theme
     private let items: [RadioButtonItem<ID>]
     private let title: String?
+    private let groupLayout: RadioButtonGroupLayout
+    private let radioButtonLabelPosition: RadioButtonLabelPosition
 
     // MARK: - Local properties
 
@@ -52,36 +54,72 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     public init(theme: Theme,
                 title: String? = nil,
                 selectedID: Binding<ID>,
-                items: [RadioButtonItem<ID>]) {
+                items: [RadioButtonItem<ID>],
+                radioButtonLabelPosition: RadioButtonLabelPosition = .right,
+                groupLayout: RadioButtonGroupLayout = .vertical) {
         self.theme = theme
         self.items = items
         self.selectedID = selectedID
         self.title = title
-
-        self._spacing = ScaledMetric(wrappedValue: theme.layout.spacing.xLarge - RadioButtonConstants.radioButtonPadding * 2)
+        self.groupLayout = groupLayout
+        self.radioButtonLabelPosition = radioButtonLabelPosition
+        self._spacing = ScaledMetric(wrappedValue: theme.layout.spacing.xLarge)
     }
 
     // MARK: - Content
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: self.spacing) {
-            if let title = self.title {
-                Text(title)
-                    .font(self.theme.typography.subhead.font)
-                    .foregroundColor(self.theme.colors.base.onSurface.color)
-                    .padding(.leading, self.titlePadding)
-            }
 
-            ForEach(items, id: \.id) { item in
-                RadioButtonView(
-                    theme: theme,
-                    id: item.id,
-                    label: item.label,
-                    selectedID: self.selectedID,
-                    state: item.state
-                )
-                .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: item.id))
+        if let title = self.title {
+            VStack(alignment: .leading, spacing: self.spacing) {
+                radioButtonTitle(title)
+
+                if self.groupLayout == .vertical {
+                    radioButtonItems
+                } else {
+                    horizontalRadioButtons
+                }
             }
+        } else if groupLayout == .vertical {
+            verticalRadioButtons
+        } else {
+            horizontalRadioButtons
+        }
+    }
+
+    @ViewBuilder
+    private func radioButtonTitle(_ title: String) -> some View {
+        Text(title)
+            .font(self.theme.typography.subhead.font)
+            .foregroundColor(self.theme.colors.base.onSurface.color)
+    }
+
+    @ViewBuilder
+    private var horizontalRadioButtons: some View {
+        HStack(alignment: .top, spacing: self.spacing) {
+            radioButtonItems
+        }
+    }
+
+    @ViewBuilder
+    private var verticalRadioButtons: some View {
+        VStack(alignment: .leading, spacing: self.spacing) {
+            radioButtonItems
+        }
+    }
+
+    @ViewBuilder
+    private var radioButtonItems: some View {
+        ForEach(items, id: \.id) { item in
+            RadioButtonView(
+                theme: theme,
+                id: item.id,
+                label: item.label,
+                selectedID: self.selectedID,
+                state: item.state,
+                labelPosition: self.radioButtonLabelPosition
+            )
+            .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: item.id))
         }
     }
 }
