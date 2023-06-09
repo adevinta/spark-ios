@@ -187,7 +187,12 @@ public class ButtonUIView: UIView {
     }
     /// Sets the theme of the checkbox.
     public var theme: Theme {
-        return self.viewModel.theme
+        get {
+            return self.viewModel.theme
+        }
+        set {
+            self.viewModel.theme = newValue
+        }
     }
 
     // MARK: - Internal properties
@@ -375,7 +380,26 @@ private extension ButtonUIView {
             .sink { [weak self] text in
                 self?.updateTheme()
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
+
+        self.subscribeTo(self.viewModel.$theme) { [weak self] _ in
+            guard let self else { return }
+            self.updateTheme()
+
+            self.updateSize()
+            self.updateTheme()
+            self.updateState()
+            self.updateViewConstraints()
+        }
+    }
+
+    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void) {
+        publisher
+            .receive(on: RunLoop.main)
+            .sink { value in
+                action(value)
+            }
+            .store(in: &self.cancellables)
     }
 
     func updateAccessibility() {

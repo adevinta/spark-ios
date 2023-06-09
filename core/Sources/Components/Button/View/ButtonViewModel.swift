@@ -17,7 +17,12 @@ final class ButtonViewModel: ObservableObject {
     var shape: ButtonShape = .rounded
     var size: ButtonSize = .medium
 
-    var theme: Theme
+    @Published var theme: Theme {
+        didSet {
+            self.updateColors()
+        }
+    }
+
     var state: ButtonState
     var intentColor: ButtonIntentColor {
         didSet {
