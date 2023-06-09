@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import Combine
 import Spark
 import SparkCore
 import SwiftUI
@@ -50,6 +50,14 @@ final class CheckboxViewController: UIViewController {
     private var checkboxValue3: CheckboxSelectionState = .indeterminate
     private var checkboxValue4: CheckboxSelectionState = .selected
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
+    private var cancellables = Set<AnyCancellable>()
+
     // MARK: - Methods
 
     override func viewDidLoad() {
@@ -67,7 +75,20 @@ final class CheckboxViewController: UIViewController {
         self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
         self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
 
-        setUpView()
+        self.setUpView()
+        self.subscribe()
+    }
+
+    private func subscribe() {
+        self.themePublisher.$theme
+            .sink { [weak self] theme in
+                guard let self else { return }
+
+                for checkbox in self.checkboxes {
+                    checkbox.theme = theme
+                }
+            }
+            .store(in: &self.cancellables)
     }
 
     @objc private func actionShuffle(sender: UIButton) {
@@ -81,7 +102,7 @@ final class CheckboxViewController: UIViewController {
 
     private func setUpView() {
         let view = self.contentView
-        let theme = SparkTheme.shared
+        let theme = self.theme
 
         var checkboxes: [CheckboxUIView] = []
 

@@ -18,6 +18,7 @@ public final class CheckboxUIView: UIView {
     private enum Constants {
         static var checkboxSize: CGFloat = 20
         static var hitTestMargin: CGFloat = 8
+        static var controlBorderWidth: CGFloat = 4
     }
 
     // MARK: - Private properties.
@@ -61,7 +62,6 @@ public final class CheckboxUIView: UIView {
     private var textLabelBottomConstraint: NSLayoutConstraint?
     private var textLabelLeadingConstraint: NSLayoutConstraint?
     private var textLabelTrailingConstraint: NSLayoutConstraint?
-    private var controlViewTopConstraint: NSLayoutConstraint?
     private var controlViewLeadingConstraint: NSLayoutConstraint?
     private var controlViewTrailingConstraint: NSLayoutConstraint?
 
@@ -69,6 +69,7 @@ public final class CheckboxUIView: UIView {
     private var cancellables = Set<AnyCancellable>()
 
     @ScaledUIMetric private var checkboxSize: CGFloat = Constants.checkboxSize
+    @ScaledUIMetric private var controlBorderWidth: CGFloat = Constants.controlBorderWidth
 
     private var spacing: LayoutSpacing {
         return self.theme.layout.spacing
@@ -120,8 +121,13 @@ public final class CheckboxUIView: UIView {
         }
     }
     /// Returns the theme of the checkbox.
-    var theme: Theme {
-        return self.viewModel.theme
+    public var theme: Theme {
+        get {
+            return self.viewModel.theme
+        }
+        set {
+            self.viewModel.theme = newValue
+        }
     }
 
     var colorsUseCase: CheckboxColorsUseCaseable {
@@ -207,9 +213,9 @@ public final class CheckboxUIView: UIView {
         let textLabel = self.textLabel
         let controlView = self.controlView
 
-        let controlSize = checkboxSize
+        let controlSize = self.checkboxSize
         let padding = self.spacing.medium / 2
-        switch checkboxPosition {
+        switch self.checkboxPosition {
         case .left:
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
             self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: controlView.trailingAnchor, constant: padding)
@@ -218,8 +224,6 @@ public final class CheckboxUIView: UIView {
             self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
             self.textLabelBottomConstraint?.isActive = true
 
-            self.controlViewTopConstraint = controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -padding)
-            self.controlViewTopConstraint?.isActive = true
             self.controlViewWidthConstraint = controlView.widthAnchor.constraint(equalToConstant: controlSize)
             self.controlViewWidthConstraint?.isActive = true
             self.controlViewHeightConstraint = controlView.heightAnchor.constraint(equalToConstant: controlSize)
@@ -235,8 +239,6 @@ public final class CheckboxUIView: UIView {
             self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
             self.textLabelBottomConstraint?.isActive = true
 
-            self.controlViewTopConstraint = controlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -padding)
-            self.controlViewTopConstraint?.isActive = true
             self.controlViewWidthConstraint = controlView.widthAnchor.constraint(equalToConstant: controlSize)
             self.controlViewWidthConstraint?.isActive = true
             self.controlViewHeightConstraint = controlView.heightAnchor.constraint(equalToConstant: controlSize)
@@ -244,6 +246,8 @@ public final class CheckboxUIView: UIView {
             self.controlViewTrailingConstraint = controlView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: padding)
             self.controlViewTrailingConstraint?.isActive = true
         }
+        let controlViewCenterConstraint = controlView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor)
+        controlViewCenterConstraint.isActive = true
 
         self.button.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
         self.button.addTarget(self, action: #selector(self.actionTouchDown(sender:)), for: .touchDown)
@@ -269,6 +273,23 @@ public final class CheckboxUIView: UIView {
                 self?.updateTheme()
             }
             .store(in: &cancellables)
+
+        self.subscribeTo(self.viewModel.$theme) { [weak self] _ in
+            guard let self else { return }
+
+            self.updateTheme()
+            self.updateState()
+            self.updateViewConstraints()
+        }
+    }
+
+    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void) {
+        publisher
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                action(value)
+            }
+            .store(in: &self.cancellables)
     }
 
     // MARK: - Override
@@ -277,6 +298,7 @@ public final class CheckboxUIView: UIView {
         super.traitCollectionDidChange(previousTraitCollection)
 
         self._checkboxSize.update(traitCollection: self.traitCollection)
+        self._controlBorderWidth.update(traitCollection: self.traitCollection)
 
         self.updateViewConstraints()
     }
@@ -306,16 +328,16 @@ public final class CheckboxUIView: UIView {
 
     private func updateViewConstraints() {
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let scaledSpacing = checkboxSize + bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: traitCollection)
+        let controlBorderWidth = self.controlBorderWidth
+        let scaledSpacing = self.checkboxSize + 2 * controlBorderWidth
 
         self.controlViewWidthConstraint?.constant = scaledSpacing
         self.controlViewHeightConstraint?.constant = scaledSpacing
 
-        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium / 2, compatibleWith: traitCollection)
+        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium) - controlBorderWidth
 
-        self.controlViewTopConstraint?.constant = -padding
-        self.controlViewLeadingConstraint?.constant = -padding
-        self.controlViewTrailingConstraint?.constant = padding
+        self.controlViewLeadingConstraint?.constant = -controlBorderWidth
+        self.controlViewTrailingConstraint?.constant = controlBorderWidth
 
         self.textLabelLeadingConstraint?.constant = padding
         self.textLabelTrailingConstraint?.constant = -padding
@@ -363,6 +385,7 @@ public final class CheckboxUIView: UIView {
     }
 
     private func updateTheme() {
+        self.controlView.theme = self.theme
         self.controlView.colors = self.colors
 
         let font = self.theme.typography.body1.uiFont

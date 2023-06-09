@@ -18,6 +18,7 @@ class CheckboxControlUIView: UIView {
         static var cornerRadiusPressed: CGFloat = 7
         static var lineWidth: CGFloat = 2
         static var lineWidthPressed: CGFloat = 4
+        static var controlSize: CGFloat = 20
     }
 
     // MARK: - Properties.
@@ -44,18 +45,17 @@ class CheckboxControlUIView: UIView {
 
     var theme: Theme
 
-    @ScaledUIMetric private var smallSpacing: CGFloat
     @ScaledUIMetric private var cornerRadius: CGFloat = Constants.cornerRadius
     @ScaledUIMetric private var cornerRadiusPressed: CGFloat = Constants.cornerRadiusPressed
     @ScaledUIMetric private var lineWidth: CGFloat = Constants.lineWidth
     @ScaledUIMetric private var lineWidthPressed: CGFloat = Constants.lineWidthPressed
+    @ScaledUIMetric private var controlSize: CGFloat = Constants.controlSize
 
     // MARK: - Initialization
 
     init(selectionIcon: UIImage, theme: Theme) {
         self.selectionIcon = selectionIcon
         self.theme = theme
-        self.smallSpacing = theme.layout.spacing.small
         super.init(frame: .zero)
         self.commonInit()
     }
@@ -80,7 +80,7 @@ class CheckboxControlUIView: UIView {
         _cornerRadiusPressed.update(traitCollection: traitCollection)
         _lineWidth.update(traitCollection: traitCollection)
         _lineWidthPressed.update(traitCollection: traitCollection)
-        _smallSpacing.update(traitCollection: traitCollection)
+        _controlSize.update(traitCollection: traitCollection)
 
         self.setNeedsDisplay()
     }
@@ -98,10 +98,6 @@ class CheckboxControlUIView: UIView {
         return iconSize.scaled(for: self.traitCollection)
     }
 
-    private var spacing: LayoutSpacing {
-        return self.theme.layout.spacing
-    }
-
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
@@ -110,16 +106,17 @@ class CheckboxControlUIView: UIView {
             let ctx = UIGraphicsGetCurrentContext()
         else { return }
 
-        let spacing = self.spacing
         let traitCollection = self.traitCollection
 
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
 
-        let scaledSpacing = bodyFontMetrics.scaledValue(for: spacing.xLarge + spacing.small, compatibleWith: traitCollection) //+ spacing.medium
+        let lineWidthPressed = self.lineWidthPressed
+        let controlSize = self.controlSize
+        let scaledSpacing = controlSize + 2 * lineWidthPressed
 
         let controlRect = CGRect(x: 0, y: 0, width: scaledSpacing, height: scaledSpacing)
 
-        let controlInnerRect = controlRect.insetBy(dx: self.smallSpacing, dy: self.smallSpacing)
+        let controlInnerRect = controlRect.insetBy(dx: lineWidthPressed, dy: lineWidthPressed)
 
         if self.isPressed {
             let lineWidth = lineWidthPressed
