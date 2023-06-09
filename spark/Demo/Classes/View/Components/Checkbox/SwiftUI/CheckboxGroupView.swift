@@ -33,6 +33,12 @@ struct CheckboxGroupListView: View {
         CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
     ]
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -76,7 +82,7 @@ struct CheckboxGroupListView: View {
                     items: $items,
                     layout: layout,
                     checkboxPosition: checkboxPosition,
-                    theme: SparkTheme.shared,
+                    theme: self.theme,
                     accessibilityIdentifierPrefix: "checkbox-group"
                 )
                 Spacer()
