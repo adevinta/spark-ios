@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
+import SwiftUI
 import UIKit
 
 final class CheckboxViewModel: ObservableObject {
@@ -14,7 +16,6 @@ final class CheckboxViewModel: ObservableObject {
     var text: String
     var checkedImage: UIImage
 
-    @Published var theme: Theme
     @Published var state: SelectButtonState {
         didSet {
             guard oldValue != state else { return }
@@ -22,6 +23,13 @@ final class CheckboxViewModel: ObservableObject {
             self.updateColors()
         }
     }
+
+    @Published var theme: Theme {
+        didSet {
+            self.updateColors()
+        }
+    }
+
     @Published var colors: CheckboxColorables
 
     var colorsUseCase: CheckboxColorsUseCaseable {
