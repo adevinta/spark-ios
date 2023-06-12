@@ -31,7 +31,7 @@ struct BadgeView_Previews: PreviewProvider {
         @State var smallCustomBadgeSize: BadgeSize = .small
         @State var smallCustomBadgeIsOutlined: Bool = true
         @State var smallCustomBadgeType: BadgeIntentType = .alert
-        @State var badgeFormat: BadgeFormat = .default
+        @State var badgeFormat: BadgeFormat = .overflowCounter(maxValue: 10)
 
         @State var standartDangerBadgeType: BadgeIntentType = .danger
 
@@ -62,10 +62,11 @@ struct BadgeView_Previews: PreviewProvider {
                                 BadgeView(
                                     theme: theme,
                                     badgeType: .primary,
-                                    value: standartBadgeValue
+                                    value: 3
                                 )
                                 .format(badgeFormat)
                                 .outlined(standartBadgeIsOutlined)
+                                .value(standartBadgeValue)
                                 .offset(x: 100, y: -15)
                             }
                             ZStack(alignment: .leading) {
