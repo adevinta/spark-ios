@@ -93,6 +93,9 @@ public struct CheckboxGroupView: View {
                 state: item.state.wrappedValue,
                 selectionState: item.selectionState
             )
+            .if(self.layout == .horizontal) {
+                $0.fixedSize()
+            }
             .accessibilityIdentifier(identifier)
         }
     }

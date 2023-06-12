@@ -16,10 +16,6 @@ struct CheckboxUIView_Previews: PreviewProvider {
     struct ContainerView: View {
         let theme = SparkTheme.shared
 
-        @State private var selection1: CheckboxSelectionState = .selected
-        @State private var selection2: CheckboxSelectionState = .unselected
-        @State private var selection3: CheckboxSelectionState = .indeterminate
-
         var body: some View {
             CheckboxUIViewControllerBridge()
                 .environment(\.sizeCategory, .extraSmall)
@@ -73,6 +69,11 @@ final class CheckboxViewController: UIViewController {
     }()
 
     private var checkboxes: [CheckboxUIView] = []
+
+    private var checkboxValue1: CheckboxSelectionState = .unselected
+    private var checkboxValue2: CheckboxSelectionState = .selected
+    private var checkboxValue3: CheckboxSelectionState = .indeterminate
+    private var checkboxValue4: CheckboxSelectionState = .selected
 
     // MARK: - Methods
 
@@ -128,11 +129,11 @@ final class CheckboxViewController: UIViewController {
             text: "Hello world!",
             checkedImage: checkedImage,
             state: .enabled,
-            selectionState: .unselected,
-            checkboxPosition: .left,
-            selectionStateHandler: {
-                print("selectionStateHandler", $0)
-            }
+            selectionState: .init(
+                get: { return self.checkboxValue1 },
+                set: { self.checkboxValue1 = $0 }
+            ),
+            checkboxPosition: .left
         )
         view.addSubview(checkbox)
         checkboxes.append(checkbox)
@@ -142,7 +143,10 @@ final class CheckboxViewController: UIViewController {
             text: "Second checkbox! This is a very very long descriptive text.",
             checkedImage: checkedImage,
             state: .disabled,
-            selectionState: .selected,
+            selectionState: .init(
+                get: { return self.checkboxValue2},
+                set: { self.checkboxValue2 = $0 }
+            ),
             checkboxPosition: .left
         )
         view.addSubview(checkbox2)
@@ -154,7 +158,10 @@ final class CheckboxViewController: UIViewController {
             text: "Error checkbox",
             checkedImage: checkedImage,
             state: .error(message: "Error message"),
-            selectionState: .indeterminate,
+            selectionState: .init(
+                get: { return self.checkboxValue3 },
+                set: { self.checkboxValue3 = $0 }
+            ),
             checkboxPosition: .left
         )
         view.addSubview(errorCheckbox)
@@ -165,7 +172,10 @@ final class CheckboxViewController: UIViewController {
             text: "Right checkbox",
             checkedImage: checkedImage,
             state: .success(message: "Success message"),
-            selectionState: .selected,
+            selectionState: .init(
+                get: { return self.checkboxValue4 },
+                set: { self.checkboxValue4 = $0 }
+            ),
             checkboxPosition: .right
         )
         view.addSubview(successCheckbox)

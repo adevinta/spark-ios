@@ -14,7 +14,6 @@ import XCTest
 
 final class RadioButtonUIViewTests: UIKitComponentTestCase {
 
-
     // MARK: - Properties
     var boundSelectedID = 0
 
@@ -88,8 +87,26 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: view)
     }
 
+    func test_label_right() throws {
+        let view = sut(state: .enabled,
+                       isSelected: true,
+                       label: "Label",
+                       labelPosition: .left).fixedSize()
+        assertSnapshotInDarkAndLight(matching: view)
+    }
+
+    func test_label_with_sublabel_right() throws {
+        let view = sut(state: .error(message: "Error"),
+                       isSelected: true,
+                       label: "Label",
+                       labelPosition: .left).fixedSize()
+        assertSnapshotInDarkAndLight(matching: view)
+    }
+
     // MARK: - Private Helper Functions
-    func sut(state: SparkSelectButtonState, isSelected: Bool, label: String? = nil) -> RadioButtonUIView<Int> {
+    func sut(state: SparkSelectButtonState, isSelected: Bool,
+             label: String? = nil,
+             labelPosition: RadioButtonLabelPosition = .right) -> RadioButtonUIView<Int> {
         let selectedID = Binding<Int> (
             get: { return self.boundSelectedID },
             set: { self.boundSelectedID = $0 }
@@ -100,7 +117,8 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
             id: isSelected ? self.boundSelectedID : 1,
             label: label ?? state.label(isSelected: isSelected),
             selectedID: selectedID,
-            state: state
+            state: state,
+            labelPosition: labelPosition
         )
 
         view.backgroundColor = UIColor.systemBackground

@@ -16,7 +16,6 @@ public final class ChipUIView: UIView {
     private enum Constants {
         static let imageSize: CGFloat = 13.33
         static let height: CGFloat = 32
-        static let touchAreaPadding: CGFloat = 6
         static let borderWidth: CGFloat = 1
         static let dashLength: CGFloat = 1.9
     }
@@ -99,7 +98,6 @@ public final class ChipUIView: UIView {
 
     @ScaledUIMetric private var imageSize = Constants.imageSize
     @ScaledUIMetric private var height = Constants.height
-    @ScaledUIMetric private var touchAreaPadding = Constants.touchAreaPadding
     @ScaledUIMetric private var borderWidth = Constants.borderWidth
     @ScaledUIMetric private var dashLength = Constants.dashLength
     @ScaledUIMetric private var spacing: CGFloat
@@ -142,8 +140,6 @@ public final class ChipUIView: UIView {
 
     private var sizeConstraints: [NSLayoutConstraint] = []
     private var heightConstraint: NSLayoutConstraint?
-    private var topPaddingConstraint: NSLayoutConstraint?
-    private var bottomPaddingConstraint: NSLayoutConstraint?
     private var subscriptions = Set<AnyCancellable>()
 
     //MARK: - Initializers
@@ -223,9 +219,6 @@ public final class ChipUIView: UIView {
             $0.constant = self.imageSize
         }
 
-        self.topPaddingConstraint?.constant = self.touchAreaPadding
-        self.bottomPaddingConstraint?.constant = -self.touchAreaPadding
-
         self.stackView.spacing = self.spacing
         self.heightConstraint?.constant = self.height
 
@@ -266,7 +259,6 @@ public final class ChipUIView: UIView {
     private func updateScaledMetrics() {
         self._imageSize.update(traitCollection: self.traitCollection)
         self._height.update(traitCollection: self.traitCollection)
-        self._touchAreaPadding.update(traitCollection: self.traitCollection)
         self._spacing.update(traitCollection: self.traitCollection)
         self._padding.update(traitCollection: self.traitCollection)
         self._borderRadius.update(traitCollection: self.traitCollection)
@@ -325,15 +317,12 @@ public final class ChipUIView: UIView {
             self.uiImageView.widthAnchor.constraint(equalToConstant: self.imageSize)
         ]
 
-        let topPaddingConstraint = self.stackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: self.touchAreaPadding)
-        let bottomPaddingConstraint = self.stackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -self.touchAreaPadding)
-
         let stackConstraints = [
             self.stackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
             self.stackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
             heightConstraint,
-            topPaddingConstraint,
-            bottomPaddingConstraint
+            self.stackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+            self.stackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
         ]
 
         NSLayoutConstraint.activate(stackConstraints)
@@ -343,8 +332,6 @@ public final class ChipUIView: UIView {
 
         self.sizeConstraints = sizeConstraints
         self.heightConstraint = heightConstraint
-        self.topPaddingConstraint = topPaddingConstraint
-        self.bottomPaddingConstraint = bottomPaddingConstraint
 
         if self.icon == nil {
             self.uiImageView.isHidden = true
