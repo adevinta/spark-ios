@@ -220,7 +220,7 @@ public class ButtonUIView: UIView {
     /// - Parameters:
     ///   - theme: The current Spark-Theme.
     ///   - text: The button text.
-    ///   - icon: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - icon: The button icon. **.none** by default.
     ///   - state: The control state controls whether the button is enabled or disabled.
     ///   - variant: Button variant sets the styling of the button.
     ///   - intentColor: Button variant sets the intent and colors of the button.
