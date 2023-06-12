@@ -214,7 +214,11 @@ public final class CheckboxUIView: UIView {
         let controlView = self.controlView
 
         let controlSize = self.checkboxSize
-        let padding = self.spacing.medium / 2
+
+        let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
+        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium) - self.controlBorderWidth
+        let wideSpacing = bodyFontMetrics.scaledValue(for: self.spacing.xxxLarge) - self.controlBorderWidth
+
         switch self.checkboxPosition {
         case .left:
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -234,7 +238,7 @@ public final class CheckboxUIView: UIView {
         case .right:
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
             textLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: controlView.leadingAnchor, constant: -padding)
+            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: controlView.leadingAnchor, constant: -wideSpacing)
             self.textLabelTrailingConstraint?.isActive = true
             self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
             self.textLabelBottomConstraint?.isActive = true
@@ -335,12 +339,13 @@ public final class CheckboxUIView: UIView {
         self.controlViewHeightConstraint?.constant = scaledSpacing
 
         let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium) - controlBorderWidth
+        let wideSpacing = bodyFontMetrics.scaledValue(for: self.spacing.xxxLarge) - controlBorderWidth
 
         self.controlViewLeadingConstraint?.constant = -controlBorderWidth
         self.controlViewTrailingConstraint?.constant = controlBorderWidth
 
         self.textLabelLeadingConstraint?.constant = padding
-        self.textLabelTrailingConstraint?.constant = -padding
+        self.textLabelTrailingConstraint?.constant = -wideSpacing
 
         if let supplementaryMessage = self.supplementaryMessage {
             self.supplementaryTextLabel.text = supplementaryMessage
