@@ -1,6 +1,6 @@
 # Spark-iOS
 ## Introduction
-Spark is the [Adevinta](https://www.adevinta.com/) ’s iOS Design System.
+Spark is [Adevinta’s](https://www.adevinta.com/) iOS Design System.
 Its mission is to provide an easy to use, customizable UI experience for consumers.
 
 ## More Details In Wiki
@@ -13,7 +13,7 @@ Also, you can find design specifications and tech information for supported plat
 Carthage: `github "adevinta/spark-ios" == 0.6.1`
 
 #### Plug & Play 
-If you want the easy to use Spark, we provide a Plug & Play solution containing a single Theme ready to be used. For that, import Spark.xcframework
+If you want the easy-to-use Spark, a Plug & Play solution containing a single Theme is provided and ready to be used. For that, import Spark.xcframework
 It's also possible to create your [own theme](https://github.com/adevinta/spark-ios/wiki/Theming#your-own-theming)
 
 ## Contributing
