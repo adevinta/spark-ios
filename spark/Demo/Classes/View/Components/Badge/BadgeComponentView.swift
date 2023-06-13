@@ -24,19 +24,19 @@ struct BadgeComponentView: View {
     private var views = [
         BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .alert,
+            intent: .alert,
             value: 6
         ),
         BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .primary,
-            badgeSize: .normal,
+            intent: .primary,
+            size: .normal,
             value: 22,
             format: .overflowCounter(maxValue: 20)
         ),
         BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .danger,
+            intent: .danger,
             value: 10,
             format: .custom(
                 formatter: BadgePreviewFormatter()
@@ -44,26 +44,26 @@ struct BadgeComponentView: View {
         ),
         BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .info,
+            intent: .info,
             value: 20
         ),
         BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .primary
+            intent: .primary
         ),
         BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .neutral,
-            isBadgeOutlined: false
+            intent: .neutral,
+            isBorderVisible: false
         ),
         BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .secondary,
+            intent: .secondary,
             value: 23
         ),
         BadgeUIView(
             theme: SparkTheme.shared,
-            badgeType: .success
+            intent: .success
         )
     ]
 
@@ -84,16 +84,16 @@ struct BadgeComponentView: View {
         List {
             Section(header: Text("UIKit Badge")) {
                 Button("Change UIKit Badge 0 Type") {
-                    views[0].setBadgeType(BadgeIntentType.allCases.randomElement() ?? .alert)
+                    views[0].setIntent(BadgeIntentType.allCases.randomElement() ?? .alert)
                 }
                 Button("Change UIKit Badge 1 Value") {
-                    views[1].setBadgeValue(2)
+                    views[1].setValue(2)
                 }
                 Button("Change UIKit Badge 2 Outline") {
-                    views[2].setBadgeOutlineEnabled(false)
+                    views[2].setBorderVisible(false)
                 }
                 Button("Change UIKit Badge 3 Size") {
-                    views[3].setBadgeSize(.small)
+                    views[3].setSize(.small)
                 }
                 UIBadgeView(views: views)
                     .frame(height: 400)
@@ -122,21 +122,21 @@ struct BadgeComponentView: View {
                             Text("Default Badge")
                             BadgeView(
                                 theme: theme,
-                                badgeType: .primary,
+                                intent: .primary,
                                 value: standartBadgeValue
                             )
                             .format(badgeFormat)
-                            .outlined(standartBadgeIsOutlined)
+                            .borderVisible(standartBadgeIsOutlined)
                             .offset(x: 100, y: -15)
                         }
                         ZStack(alignment: .leading) {
                             Text("Small Custom")
                             BadgeView(
                                 theme: SparkTheme.shared,
-                                badgeType: smallCustomBadgeType,
+                                intent: smallCustomBadgeType,
                                 value: 22
                             )
-                            .outlined(smallCustomBadgeIsOutlined)
+                            .borderVisible(smallCustomBadgeIsOutlined)
                             .size(smallCustomBadgeSize)
                             .offset(x: 100, y: -15)
                         }
@@ -147,7 +147,7 @@ struct BadgeComponentView: View {
                             Text("Danger Badge")
                             BadgeView(
                                 theme: SparkTheme.shared,
-                                badgeType: standartDangerBadgeType,
+                                intent: standartDangerBadgeType,
                                 value: 10
                             )
                             .format(.custom(
@@ -159,7 +159,7 @@ struct BadgeComponentView: View {
                             Text("Text")
                             BadgeView(
                                 theme: SparkTheme.shared,
-                                badgeType: .info
+                                intent: .info
                             )
                                 .offset(x: 25, y: -15)
                         }
@@ -167,7 +167,7 @@ struct BadgeComponentView: View {
                             Text("Text")
                             BadgeView(
                                 theme: SparkTheme.shared,
-                                badgeType: .neutral
+                                intent: .neutral
                             )
                                 .offset(x: 25, y: -15)
                         }
@@ -178,21 +178,21 @@ struct BadgeComponentView: View {
                             Text("Text")
                             BadgeView(
                                 theme: SparkTheme.shared,
-                                badgeType: .primary
+                                intent: .primary
                             )
                         }
                         HStack {
                             Text("Text")
                             BadgeView(
                                 theme: SparkTheme.shared,
-                                badgeType: .secondary
+                                intent: .secondary
                             )
                         }
                         HStack {
                             Text("Text")
                             BadgeView(
                                 theme: SparkTheme.shared,
-                                badgeType: .success
+                                intent: .success
                             )
                         }
                     }
