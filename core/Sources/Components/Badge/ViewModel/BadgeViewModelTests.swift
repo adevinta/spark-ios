@@ -17,12 +17,12 @@ final class BadgeViewModelTests: XCTestCase {
 
     // MARK: - Tests
     func test_init() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             // Given
 
-            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType)
+            let viewModel = BadgeViewModel(theme: theme, intent: badgeIntent)
 
-            let badgeExpectedColors = BadgeGetIntentColorsUseCase().execute(intentType: badgeIntentType, on: theme.colors)
+            let badgeExpectedColors = BadgeGetIntentColorsUseCase().execute(intentType: badgeIntent, on: theme.colors)
 
             // Then
 
@@ -30,17 +30,17 @@ final class BadgeViewModelTests: XCTestCase {
 
             XCTAssertIdentical(viewModel.theme as? ThemeGeneratedMock, theme, "Badge theme doesn't match expected theme")
 
-            XCTAssertTrue(viewModel.badgeBorder.isEqual(to: theme, isOutlined: true), "Border border doesn't match expected")
+            XCTAssertTrue(viewModel.border.isEqual(to: theme, isOutlined: true), "Border border doesn't match expected")
         }
     }
 
     func test_set_value() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             // Given
 
             let expectedInitText = "20"
             let expectedUpdatedText = "233"
-            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, value: 20)
+            let viewModel = BadgeViewModel(theme: theme, intent: badgeIntent, value: 20)
 
             // Then
 
@@ -52,43 +52,43 @@ final class BadgeViewModelTests: XCTestCase {
 
             XCTAssertEqual(viewModel.textFont.font, theme.typography.captionHighlight.font, "Font is wrong")
 
-            viewModel.badgeSize = .small
+            viewModel.size = .small
 
             XCTAssertEqual(viewModel.textFont.font, theme.typography.smallHighlight.font, "Font is wrong")
         }
     }
 
     func test_update_size() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             // Given
 
-            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, value: 20)
+            let viewModel = BadgeViewModel(theme: theme, intent: badgeIntent, value: 20)
 
             // Then
 
-            XCTAssertEqual(viewModel.badgeSize, .normal, "Badge should be .normal sized by default")
+            XCTAssertEqual(viewModel.size, .normal, "Badge should be .normal sized by default")
 
             XCTAssertEqual(viewModel.textFont.font, theme.typography.captionHighlight.font, "Font is wrong")
 
-            viewModel.badgeSize = .small
+            viewModel.size = .small
 
             XCTAssertEqual(viewModel.textFont.font, theme.typography.smallHighlight.font, "Font is wrong")
         }
     }
 
     func test_update_intent() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             // Given
 
-            let viewModel = BadgeViewModel(theme: theme, badgeType: badgeIntentType, value: 20)
+            let viewModel = BadgeViewModel(theme: theme, intent: badgeIntent, value: 20)
 
             // Then
 
-            XCTAssertEqual(viewModel.badgeType, badgeIntentType, "Intent type was set wrong")
+            XCTAssertEqual(viewModel.intent, badgeIntent, "Intent type was set wrong")
 
-            viewModel.badgeType = randomizeIntentAndExceptingCurrent(badgeIntentType)
+            viewModel.intent = randomizeIntentAndExceptingCurrent(badgeIntent)
 
-            XCTAssertNotEqual(viewModel.badgeType, badgeIntentType, "Intent type was set wrong")
+            XCTAssertNotEqual(viewModel.intent, badgeIntent, "Intent type was set wrong")
         }
     }
 
