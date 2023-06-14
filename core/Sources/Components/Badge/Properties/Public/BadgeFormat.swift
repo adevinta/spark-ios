@@ -40,7 +40,7 @@ public enum BadgeFormat {
 
     /// This function will return text value for your badge
     /// wiht conformation to the selected **BadgeFormat** type
-    func badgeText(_ value: Int?) -> String {
+    func text(_ value: Int?) -> String {
         switch self {
         case .overflowCounter(let maxValue):
             guard let value else {

@@ -61,11 +61,11 @@ struct BadgeView_Previews: PreviewProvider {
                                 Text("Default Badge")
                                 BadgeView(
                                     theme: theme,
-                                    badgeType: .primary,
+                                    intent: .primary,
                                     value: 3
                                 )
                                 .format(badgeFormat)
-                                .outlined(standartBadgeIsOutlined)
+                                .borderVisible(standartBadgeIsOutlined)
                                 .value(standartBadgeValue)
                                 .offset(x: 100, y: -15)
                             }
@@ -73,10 +73,10 @@ struct BadgeView_Previews: PreviewProvider {
                                 Text("Small Custom")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    badgeType: smallCustomBadgeType,
+                                    intent: smallCustomBadgeType,
                                     value: 22
                                 )
-                                .outlined(smallCustomBadgeIsOutlined)
+                                .borderVisible(smallCustomBadgeIsOutlined)
                                 .size(smallCustomBadgeSize)
                                 .offset(x: 100, y: -15)
                             }
@@ -87,7 +87,7 @@ struct BadgeView_Previews: PreviewProvider {
                                 Text("Danger Badge")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    badgeType: standartDangerBadgeType,
+                                    intent: standartDangerBadgeType,
                                     value: 10
                                 )
                                 .format(.custom(
@@ -99,7 +99,7 @@ struct BadgeView_Previews: PreviewProvider {
                                 Text("Text")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    badgeType: .info
+                                    intent: .info
                                 )
                                     .offset(x: 25, y: -15)
                             }
@@ -107,7 +107,7 @@ struct BadgeView_Previews: PreviewProvider {
                                 Text("Text")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    badgeType: .neutral
+                                    intent: .neutral
                                 )
                                     .offset(x: 25, y: -15)
                             }
@@ -118,21 +118,21 @@ struct BadgeView_Previews: PreviewProvider {
                                 Text("Text")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    badgeType: .primary
+                                    intent: .primary
                                 )
                             }
                             HStack {
                                 Text("Text")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    badgeType: .secondary
+                                    intent: .secondary
                                 )
                             }
                             HStack {
                                 Text("Text")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    badgeType: .success
+                                    intent: .success
                                 )
                             }
                         }

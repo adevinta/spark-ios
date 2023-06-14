@@ -19,7 +19,7 @@ import SwiftUI
 ///    var body: any View {
 ///    HStack {
 ///         Text("Some text")
-///         BadgeView(theme: YourTheme.shared, badgeType: .alert, value: value)
+///         BadgeView(theme: YourTheme.shared, intent: .alert, value: value)
 ///    }
 ///    }
 /// ```
@@ -36,9 +36,9 @@ public struct BadgeView: View {
                 .foregroundColor(self.viewModel.backgroundColor.color)
                 .frame(width: self.emptySize, height: self.emptySize)
                 .border(
-                    width: self.viewModel.isBadgeOutlined ? borderWidth : 0,
-                    radius: self.viewModel.badgeBorder.radius,
-                    colorToken: self.viewModel.badgeBorder.color
+                    width: self.viewModel.isBorderVisible ? borderWidth : 0,
+                    radius: self.viewModel.border.radius,
+                    colorToken: self.viewModel.border.color
                 )
                 .fixedSize()
         } else {
@@ -48,9 +48,9 @@ public struct BadgeView: View {
                 .padding(.init(vertical: self.smallOffset, horizontal: self.mediumOffset))
                 .background(self.viewModel.backgroundColor.color)
                 .border(
-                    width: self.viewModel.isBadgeOutlined ? borderWidth : 0,
-                    radius: self.viewModel.badgeBorder.radius,
-                    colorToken: self.viewModel.badgeBorder.color
+                    width: self.viewModel.isBorderVisible ? borderWidth : 0,
+                    radius: self.viewModel.border.radius,
+                    colorToken: self.viewModel.border.color
                 )
                 .fixedSize()
                 .accessibilityIdentifier(BadgeAccessibilityIdentifier.text)
@@ -58,10 +58,10 @@ public struct BadgeView: View {
     }
 
     /// - Parameter theme: ``Theme``
-    /// - Parameter badgeType: ``BadgeIntentType``
+    /// - Parameter intent: ``BadgeIntentType``
     /// - Parameter value: **Int?** You can set value to nil, to make ``BadgeView`` without text
-    public init(theme: Theme, badgeType: BadgeIntentType, value: Int? = nil) {
-        let viewModel = BadgeViewModel(theme: theme, badgeType: badgeType, value: value)
+    public init(theme: Theme, intent: BadgeIntentType, value: Int? = nil) {
+        let viewModel = BadgeViewModel(theme: theme, intent: intent, value: value)
         self.viewModel = viewModel
 
         self._smallOffset =
@@ -73,7 +73,7 @@ public struct BadgeView: View {
                     viewModel.horizontalOffset
             )
         self._emptySize = .init(wrappedValue: BadgeConstants.emptySize.width)
-        self._borderWidth = .init(wrappedValue: viewModel.badgeBorder.width)
+        self._borderWidth = .init(wrappedValue: viewModel.border.width)
     }
 
     // MARK: - Badge Modification Functions
@@ -82,8 +82,8 @@ public struct BadgeView: View {
     /// By default Badge has an outline based on current ``Theme``.
     ///
     /// Use @State variable to control outline based on this variable.
-    public func outlined(_ isOutlined: Bool) -> Self {
-        self.viewModel.isBadgeOutlined = isOutlined
+    public func borderVisible(_ isBorderVisible: Bool) -> Self {
+        self.viewModel.isBorderVisible = isBorderVisible
         return self
     }
 
@@ -91,16 +91,16 @@ public struct BadgeView: View {
     ///
     /// Text font size is based on ``BadgeSize`` value and current ``Theme``.
     /// Use @State variable to control ``BadgeSize`` based on this variable.
-    public func size(_ badgeSize: BadgeSize) -> Self {
-        self.viewModel.badgeSize = badgeSize
+    public func size(_ size: BadgeSize) -> Self {
+        self.viewModel.size = size
         return self
     }
 
     /// Controlls text format of the Badge. See more details in ``BadgeFormat``.
     ///
     /// Use @State variable to control ``BadgeFormat`` based on this variable.
-    public func format(_ badgeFormat: BadgeFormat) -> Self {
-        self.viewModel.badgeFormat = badgeFormat
+    public func format(_ format: BadgeFormat) -> Self {
+        self.viewModel.format = format
         return self
     }
 

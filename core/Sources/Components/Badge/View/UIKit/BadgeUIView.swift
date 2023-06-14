@@ -61,8 +61,8 @@ public class BadgeUIView: UIView {
 
     // MARK: - Init
 
-    public init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBadgeOutlined: Bool = true) {
-        self.viewModel = BadgeViewModel(theme: theme, badgeType: badgeType, badgeSize: badgeSize, value: value, format: format, isBadgeOutlined: isBadgeOutlined)
+    public init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = true) {
+        self.viewModel = BadgeViewModel(theme: theme, intent: intent, size: size, value: value, format: format, isBorderVisible: isBorderVisible)
 
         super.init(frame: .zero)
 
@@ -87,7 +87,7 @@ public class BadgeUIView: UIView {
         self.emptyBadgeSize = BadgeConstants.emptySize.width
         self.horizontalSpacing = self.viewModel.horizontalOffset
         self.verticalSpacing = self.viewModel.verticalOffset
-        self.borderWidth = self.viewModel.badgeBorder.width
+        self.borderWidth = self.viewModel.border.width
     }
 
     private func setupBadgeText() {
@@ -105,7 +105,7 @@ public class BadgeUIView: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = self.viewModel.backgroundColor.uiColor
         self.layer.borderWidth = self.borderWidth
-        self.layer.borderColor = self.viewModel.badgeBorder.color.uiColor.cgColor
+        self.layer.borderColor = self.viewModel.border.color.uiColor.cgColor
         self.clipsToBounds = true
     }
 
@@ -187,16 +187,16 @@ extension BadgeUIView {
     }
 
     private func subscribeToBorderChanges() {
-        self.viewModel.$isBadgeOutlined
+        self.viewModel.$isBorderVisible
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isBadgeOutlined in
                 guard let self else {
                     return
                 }
-                self.updateBorder(self.viewModel.badgeBorder)
+                self.updateBorder(self.viewModel.border)
             }
             .store(in: &cancellables)
-        self.viewModel.$badgeBorder
+        self.viewModel.$border
             .receive(on: DispatchQueue.main)
             .sink { [weak self] badgeBorder in
                 self?.updateBorder(badgeBorder)
@@ -224,7 +224,7 @@ extension BadgeUIView {
 extension BadgeUIView {
     private func updateBorder(_ badgeBorder: BadgeBorder) {
         self.layer.borderColor = badgeBorder.color.uiColor.cgColor
-        if self.viewModel.isBadgeOutlined {
+        if self.viewModel.isBorderVisible {
             self.setupScalables()
             self.reloadBorderWidth()
         } else {
@@ -235,7 +235,7 @@ extension BadgeUIView {
     private func reloadColors() {
         self.backgroundColor = self.viewModel.backgroundColor.uiColor
         self.badgeLabel.textColor = self.viewModel.textColor.uiColor
-        self.layer.borderColor = self.viewModel.badgeBorder.color.uiColor.cgColor
+        self.layer.borderColor = self.viewModel.border.color.uiColor.cgColor
     }
 
     private func reloadBadgeFontIfNeeded() {
@@ -275,27 +275,27 @@ extension BadgeUIView {
 
 // MARK: - Badge Update Functions
 public extension BadgeUIView {
-    func setBadgeType(_ badgeType: BadgeIntentType) {
-        self.viewModel.badgeType = badgeType
+    func setIntent(_ intent: BadgeIntentType) {
+        self.viewModel.intent = intent
     }
 
-    func setBadgeOutlineEnabled(_ isOutlined: Bool) {
-        self.viewModel.isBadgeOutlined = isOutlined
+    func setBorderVisible(_ isBorderVisible: Bool) {
+        self.viewModel.isBorderVisible = isBorderVisible
     }
 
-    func setBadgeValue(_ value: Int?) {
+    func setValue(_ value: Int?) {
         self.viewModel.value = value
     }
 
-    func setBadgeFormat(_ format: BadgeFormat) {
-        self.viewModel.badgeFormat = format
+    func setFormat(_ format: BadgeFormat) {
+        self.viewModel.format = format
     }
 
-    func setBadgeSize(_ badgeSize: BadgeSize) {
-        self.viewModel.badgeSize = badgeSize
+    func setSize(_ badgeSize: BadgeSize) {
+        self.viewModel.size = badgeSize
     }
 
-    func setBadgeTheme(_ theme: Theme) {
+    func setTheme(_ theme: Theme) {
         self.viewModel.theme = theme
     }
 }

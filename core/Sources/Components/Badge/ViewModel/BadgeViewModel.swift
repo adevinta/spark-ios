@@ -17,13 +17,13 @@ import SwiftUI
 /// - value -- property that represents **Int?** displayed in ``BadgeView``.
 /// Set *value* to nil to show empty Badge as circle
 ///
-/// - badgeType -- changes ``BadgeIntentType``
+/// - intent -- changes ``BadgeIntentType``
 ///
-/// - isBadgeOutlined -- ``Bool``, changes outline of the Badge
+/// - isBorderVisible -- ``Bool``, changes outline of the Badge
 ///
-/// - badgeSize -- changes ``BadgeSize`` and text font
+/// - size -- changes ``BadgeSize`` and text font
 ///
-/// - badgeFormat -- see ``BadgeFormat`` as a formater of **Badge Text**
+/// - format -- see ``BadgeFormat`` as a formater of **Badge Text**
 ///
 /// - theme  -- represents ``Theme`` used in the app
 public final class BadgeViewModel: ObservableObject {
@@ -34,17 +34,17 @@ public final class BadgeViewModel: ObservableObject {
             updateText()
         }
     }
-    public var badgeType: BadgeIntentType {
+    public var intent: BadgeIntentType {
         didSet {
             updateColors()
         }
     }
-    public var badgeSize: BadgeSize {
+    public var size: BadgeSize {
         didSet {
             updateFont()
         }
     }
-    public var badgeFormat: BadgeFormat {
+    public var format: BadgeFormat {
         didSet {
             updateText()
         }
@@ -63,9 +63,9 @@ public final class BadgeViewModel: ObservableObject {
     @Published var isBadgeEmpty: Bool
 
     @Published var backgroundColor: ColorToken
-    @Published var badgeBorder: BadgeBorder
+    @Published var border: BadgeBorder
 
-    @Published var isBadgeOutlined: Bool
+    @Published var isBorderVisible: Bool
 
     // MARK: - Internal Appearance Properties
     var colorsUseCase: BadgeGetIntentColorsUseCaseable
@@ -75,22 +75,22 @@ public final class BadgeViewModel: ObservableObject {
 
     // MARK: - Initializer
 
-    init(theme: Theme, badgeType: BadgeIntentType, badgeSize: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBadgeOutlined: Bool = true, colorsUseCase: BadgeGetIntentColorsUseCaseable = BadgeGetIntentColorsUseCase()) {
-        let badgeColors = colorsUseCase.execute(intentType: badgeType, on: theme.colors)
+    init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = true, colorsUseCase: BadgeGetIntentColorsUseCaseable = BadgeGetIntentColorsUseCase()) {
+        let colors = colorsUseCase.execute(intentType: intent, on: theme.colors)
 
         self.value = value
 
-        self.text = format.badgeText(value)
-        self.isBadgeEmpty = format.badgeText(value).isEmpty
-        switch badgeSize {
+        self.text = format.text(value)
+        self.isBadgeEmpty = format.text(value).isEmpty
+        switch size {
         case .normal:
             self.textFont = theme.typography.captionHighlight
         case .small:
             self.textFont = theme.typography.smallHighlight
         }
-        self.textColor = badgeColors.foregroundColor
+        self.textColor = colors.foregroundColor
 
-        self.backgroundColor = badgeColors.backgroundColor
+        self.backgroundColor = colors.backgroundColor
 
         let verticalOffset = theme.layout.spacing.small
         let horizontalOffset = theme.layout.spacing.medium
@@ -98,38 +98,38 @@ public final class BadgeViewModel: ObservableObject {
         self.verticalOffset = verticalOffset
         self.horizontalOffset = horizontalOffset
 
-        self.badgeBorder = BadgeBorder(
+        self.border = BadgeBorder(
             width: theme.border.width.medium,
             radius: theme.border.radius.full,
-            color: badgeColors.borderColor
+            color: colors.borderColor
         )
 
         self.theme = theme
 
-        self.badgeFormat = format
-        self.badgeSize = badgeSize
-        self.badgeType = badgeType
-        self.isBadgeOutlined = isBadgeOutlined
+        self.format = format
+        self.size = size
+        self.intent = intent
+        self.isBorderVisible = isBorderVisible
         self.colorsUseCase = colorsUseCase
     }
 
     private func updateColors() {
-        let badgeColors = self.colorsUseCase.execute(intentType: self.badgeType, on: self.theme.colors)
+        let colors = self.colorsUseCase.execute(intentType: self.intent, on: self.theme.colors)
 
-        self.textColor = badgeColors.foregroundColor
+        self.textColor = colors.foregroundColor
 
-        self.backgroundColor = badgeColors.backgroundColor
+        self.backgroundColor = colors.backgroundColor
 
-        self.badgeBorder.setColor(badgeColors.borderColor)
+        self.border.setColor(colors.borderColor)
     }
 
     private func updateText() {
-        self.text = self.badgeFormat.badgeText(self.value)
-        self.isBadgeEmpty = self.badgeFormat.badgeText(value).isEmpty
+        self.text = self.format.text(self.value)
+        self.isBadgeEmpty = self.format.text(value).isEmpty
     }
 
     private func updateFont() {
-        switch badgeSize {
+        switch size {
         case .normal:
             self.textFont = self.theme.typography.captionHighlight
         case .small:
@@ -144,6 +144,6 @@ public final class BadgeViewModel: ObservableObject {
         self.verticalOffset = verticalOffset
         self.horizontalOffset = horizontalOffset
 
-        self.badgeBorder.setWidth(self.theme.border.width.medium)
+        self.border.setWidth(self.theme.border.width.medium)
     }
 }
