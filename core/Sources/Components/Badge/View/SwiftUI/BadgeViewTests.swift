@@ -27,59 +27,59 @@ final class BadgeViewTests: SwiftUIComponentTestCase {
     private let theme: Theme = SparkTheme()
 
     func test_badge_all_cases_no_text() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
-            let view = BadgeView(theme: theme, badgeType: badgeIntentType)
+        for badgeIntent in BadgeIntentType.allCases {
+            let view = BadgeView(theme: theme, intent: badgeIntent)
                 .fixedSize()
 
-            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_\(badgeIntentType)")
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_\(badgeIntent)")
         }
     }
 
     func test_badge_all_cases_text() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             let view = BadgeView(
                 theme: theme,
-                badgeType: badgeIntentType,
+                intent: badgeIntent,
                 value: 23
             ).fixedSize()
 
-            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_with_text_\(badgeIntentType)")
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_with_text_\(badgeIntent)")
         }
     }
 
     func test_badge_all_cases_text_smal_size() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             let view = BadgeView(
                 theme: theme,
-                badgeType: badgeIntentType,
+                intent: badgeIntent,
                 value: 23
             )
                 .size(.small)
                 .fixedSize()
 
-            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_with_text_\(badgeIntentType)_small_size")
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_with_text_\(badgeIntent)_small_size")
         }
     }
 
     func test_badge_all_cases_text_overflow_format() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             let view = BadgeView(
                 theme: theme,
-                badgeType: badgeIntentType,
+                intent: badgeIntent,
                 value: 23
             )
                 .format(.overflowCounter(maxValue: 20))
                 .fixedSize()
 
-            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_overflow_format_text_\(badgeIntentType)")
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_overflow_format_text_\(badgeIntent)")
         }
     }
 
     func test_badge_all_cases_text_custom_format() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             let view = BadgeView(
                 theme: theme,
-                badgeType: badgeIntentType,
+                intent: badgeIntent,
                 value: 23
             )
                 .format(.custom(
@@ -87,22 +87,22 @@ final class BadgeViewTests: SwiftUIComponentTestCase {
                 ))
                 .fixedSize()
 
-            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_custom_format_text_\(badgeIntentType)")
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_custom_format_text_\(badgeIntent)")
         }
     }
 
     func test_badge_all_cases_no_text_custom_format() throws {
-        for badgeIntentType in BadgeIntentType.allCases {
+        for badgeIntent in BadgeIntentType.allCases {
             let view = BadgeView(
                 theme: theme,
-                badgeType: badgeIntentType
+                intent: badgeIntent
             )
                 .format(.custom(
                     formatter: TestBadgeFormatting()
                 ))
                 .fixedSize()
 
-            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_custom_format_no_text_\(badgeIntentType)")
+            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_custom_format_no_text_\(badgeIntent)")
         }
     }
 }
