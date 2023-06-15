@@ -6,13 +6,12 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import XCTest
-
 import SnapshotTesting
-@testable import Spark
-@testable import SparkCore
 import SwiftUI
 import XCTest
+
+@testable import Spark
+@testable import SparkCore
 
 final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
 

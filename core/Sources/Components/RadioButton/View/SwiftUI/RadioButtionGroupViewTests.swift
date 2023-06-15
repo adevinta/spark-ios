@@ -23,8 +23,15 @@ final class RadioButtionGroupViewTests: SwiftUIComponentTestCase {
         )
     }()
 
+    private let items = [
+        RadioButtonItem(id: 1,
+                        label: "Label 1"),
+        RadioButtonItem(id: 2,
+                        label: "Label 2")
+    ]
+
     // MARK: - Tests
-    func test_group() throws {
+    func test_group() {
         let sut = RadioButtonGroupView(
             theme: SparkTheme.shared,
             title: "Radio Button Group (SwiftUI)",
@@ -49,6 +56,41 @@ final class RadioButtionGroupViewTests: SwiftUIComponentTestCase {
                                 state: .warning(message: "Warning"))])
             .frame(width: 400)
             .fixedSize(horizontal: false, vertical: true)
+
+        assertSnapshotInDarkAndLight(matching: sut)
+    }
+
+    func test_horizontal_group_with_title() {
+        let sut = RadioButtonGroupView(
+            theme: SparkTheme.shared,
+            title: "Radio Button Horizontal Group (SwiftUI)",
+            selectedID: self.selectedID,
+            items: self.items,
+            groupLayout: .horizontal
+        ).fixedSize()
+
+        assertSnapshotInDarkAndLight(matching: sut)
+    }
+
+    func test_horizontal_group_no_title() {
+        let sut = RadioButtonGroupView(
+            theme: SparkTheme.shared,
+            selectedID: self.selectedID,
+            items: self.items,
+            groupLayout: .horizontal
+        ).fixedSize()
+
+        assertSnapshotInDarkAndLight(matching: sut)
+    }
+
+    func test_vertical_group_no_title_left_label() {
+        let sut = RadioButtonGroupView(
+            theme: SparkTheme.shared,
+            selectedID: self.selectedID,
+            items: self.items,
+            radioButtonLabelPosition: .left,
+            groupLayout: .vertical
+        ).fixedSize()
 
         assertSnapshotInDarkAndLight(matching: sut)
     }

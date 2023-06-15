@@ -14,7 +14,6 @@ import XCTest
 
 final class RadioButtonUIViewTests: UIKitComponentTestCase {
 
-
     // MARK: - Properties
     var boundSelectedID = 0
 
