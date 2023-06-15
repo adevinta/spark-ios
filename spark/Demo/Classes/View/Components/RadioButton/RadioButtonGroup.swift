@@ -44,7 +44,7 @@ struct RadioButtonGroup: View {
                                     label: "6 Radio button / Warning",
                                     state: .warning(message: "Warning")),
                 ],
-                radioButtonLabelPosition: .left
+                radioButtonLabelPosition: .right
             )
             Text("Selected Value \(selectedID)")
                 .padding(.bottom, 20)

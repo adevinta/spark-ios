@@ -100,13 +100,13 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     //  MARK: - Initialization
 
-    /// The radio button comonent takes a theme, an id, a label and a binding
+    /// The radio button component takes a theme, an id, a label and a binding
     ///
     /// Parameters:
     /// - theme: The current theme
     /// - id: The value of the radio button
     /// - label: The text rendered to describe the value
-    /// - selectedId: A binding which is triggered when the radio button is selected
+    /// - selectedID: A binding which is triggered when the radio button is selected
     /// - state: the current state
     public convenience init(theme: Theme,
                             id: ID,

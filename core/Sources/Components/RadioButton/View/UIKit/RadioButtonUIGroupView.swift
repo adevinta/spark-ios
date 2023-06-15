@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import UIKit
 import SwiftUI
 
@@ -13,48 +14,22 @@ import SwiftUI
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
 
     // MARK: - Private Properties
-    private var selectedID: Binding<ID>
-    public var theme: Theme {
-        didSet {
-            for radioButtonView in radioButtonViews {
-                radioButtonView.theme = theme
-            }
-            self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge)
-        }
-    }
     private let items: [RadioButtonItem<ID>]
     private let title: String?
     private var itemSpacingConstraints = [NSLayoutConstraint]()
     private var allConstraints = [NSLayoutConstraint]()
+    private let currentValue: CurrentValueSubject<ID, Never>
 
-    public var radioButtonLabelPosition: RadioButtonLabelPosition {
-        didSet {
-            guard radioButtonLabelPosition != oldValue else { return }
-
-            for radioButtonView in radioButtonViews {
-                radioButtonView.labelPosition = radioButtonLabelPosition
-            }
-
-        }
-    }
-
-    public var groupLayout: RadioButtonGroupLayout {
-        didSet {
-            guard groupLayout != oldValue else { return }
-            NSLayoutConstraint.deactivate(self.allConstraints)
-            self.setupConstraints()
-        }
-    }
-
-    @ScaledUIMetric var spacing: CGFloat
+    @ScaledUIMetric private var spacing: CGFloat
 
     private lazy var backingSelectedID: Binding<ID> = Binding(
         get: {
-            return self.selectedID.wrappedValue
+            return self.selectedID
         },
         set: { newValue in
-            self.selectedID.wrappedValue = newValue
-            self.updateRadioButtonStates()
+            self.selectedID = newValue
+            self.currentValue.send(newValue)
+            self.delegate?.radioButtonGroup(self, didChangeSelection: newValue)
         }
     )
 
@@ -68,10 +43,66 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         return label
     }()
 
+    // MARK: - Public Properties
+
+    /// The current selected ID. 
+    public var selectedID: ID {
+        didSet {
+            self.updateRadioButtonStates()
+        }
+    }
+
+    /// The current theme
+    public var theme: Theme {
+        didSet {
+            for radioButtonView in radioButtonViews {
+                radioButtonView.theme = theme
+            }
+            self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge)
+        }
+    }
+
+    /// The label position according to the toggle, either `left` or `right`. The default value is `.left`
+    public var radioButtonLabelPosition: RadioButtonLabelPosition {
+        didSet {
+            guard radioButtonLabelPosition != oldValue else { return }
+
+            for radioButtonView in radioButtonViews {
+                radioButtonView.labelPosition = radioButtonLabelPosition
+            }
+
+        }
+    }
+
+    /// The group layout of the radio buttons, either `horizontal` or `vertical`. The default is `vertical`.
+    public var groupLayout: RadioButtonGroupLayout {
+        didSet {
+            guard groupLayout != oldValue else { return }
+            NSLayoutConstraint.deactivate(self.allConstraints)
+            self.setupConstraints()
+        }
+    }
+
+    /// A delegate which can be set, to be notified of the changed selected item of the radio button. An alternative is to subscribe to the `publisher`.
+    public weak var delegate: (any RadioButtonUIGroupViewDelegate)?
+
+    /// A change of the selected item will be published. This is an alternative method to the `delegate` of being notified of changes to the selected item.
+    public var publisher: any Publisher<ID, Never> {
+        return self.currentValue
+    }
+
     // MARK: Initializers
+    /// Initializer of the radio button ui group component.
+    /// Parameters:
+    /// - theme: The current theme.
+    /// - title: The title of the radio button group. This is optional, if it's not given, no title will be shown.
+    /// - selectedID: The current selected value of the radio button group.
+    /// - items: A list of `RadioButtonItem` which represent each item in the radio button group.
+    /// - radioButtonLabelPosition: The position of the label in each radio button item according to the toggle. The default value is, that the label is to the `right` of the toggle.
+    /// - groupLayout: The layout of the items within the group. These can be `horizontal` or `vertical`. The defalt is `vertical`.
     public init(theme: Theme,
                 title: String? = nil,
-                selectedID: Binding<ID>,
+                selectedID: ID,
                 items: [RadioButtonItem<ID>],
                 radioButtonLabelPosition: RadioButtonLabelPosition = .right,
                 groupLayout: RadioButtonGroupLayout = .vertical
@@ -83,6 +114,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         self.radioButtonLabelPosition = radioButtonLabelPosition
         self.groupLayout = groupLayout
         self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge)
+        self.currentValue = CurrentValueSubject(selectedID)
         super.init(frame: .zero)
 
         arrangeView()
@@ -138,7 +170,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
-    func setupVerticalConstraints() {
+    private func setupVerticalConstraints() {
         var previousLayoutTopAnchor = self.safeAreaLayoutGuide.topAnchor
         var constraints = [NSLayoutConstraint]()
         var spacing: CGFloat = 0
@@ -171,7 +203,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         NSLayoutConstraint.activate(constraints)
     }
 
-    func setupHorizontalConstraints() {
+    private func setupHorizontalConstraints() {
         var previousLayoutTopAnchor = self.safeAreaLayoutGuide.topAnchor
         var previousLayoutLeadingAnchor = self.safeAreaLayoutGuide.leadingAnchor
         var constraints = [NSLayoutConstraint]()
