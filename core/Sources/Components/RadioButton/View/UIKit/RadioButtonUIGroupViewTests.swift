@@ -17,7 +17,8 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
 
     // MARK: - Properties
 
-    var backingSelectedID = "1"
+    var selectedID = "1"
+
     let items: [RadioButtonItem<String>] = [
         RadioButtonItem(id: "1",
                         label: "Label 1"),
@@ -26,13 +27,6 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
         RadioButtonItem(id: "3",
                         label: "Label 3")
     ]
-
-    lazy var selectedID: Binding<String> = {
-        Binding(
-            get: { return self.backingSelectedID },
-            set: { self.backingSelectedID = $0 }
-        )
-    }()
 
     // MARK: - Tests
 
