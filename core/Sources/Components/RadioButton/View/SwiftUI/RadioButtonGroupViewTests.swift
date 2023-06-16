@@ -1,5 +1,5 @@
 //
-//  RadioButtionGroupViewTests.swift
+//  RadioButtonGroupViewTests.swift
 //  SparkCoreTests
 //
 //  Created by michael.zimmermann on 26.04.23.
@@ -12,7 +12,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
-final class RadioButtionGroupViewTests: SwiftUIComponentTestCase {
+final class RadioButtonGroupViewTests: SwiftUIComponentTestCase {
 
     // MARK: - Properties
     var backingSelectedID = 1
