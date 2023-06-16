@@ -161,13 +161,19 @@ public class BadgeUIView: UIView {
 
     // MARK: - Attach / Detach
 
-
+    /// Remove constraints from the view the badge was attached onto
     public func detach() {
         self.attachConstraints.compactMap({ $0 }).forEach {
             self.removeConstraint($0)
         }
     }
 
+
+    /// Attach badge to another view by using constraints
+    /// Triggers detach() if it was already attached to a view
+    /// - Parameters:
+    ///   - view: the targeted view to attach the badge onto
+    ///   - position: position where the ``BadgeView`` can be attached
     public func attach(to view: UIView, position: BadgePosition) {
         self.detach()
 
