@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// Delegate that receives changes of radio buttion ui group view
+/// Delegate that receives changes of radio button ui group view
 public protocol RadioButtonUIGroupViewDelegate: AnyObject {
     func radioButtonGroup<ID : Hashable & Equatable & CustomStringConvertible>(_ radioButtonGroup: some RadioButtonUIGroupView<ID>, didChangeSelection item: ID)
 }
