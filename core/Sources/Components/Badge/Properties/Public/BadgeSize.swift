@@ -13,7 +13,7 @@ import Foundation
 /// There are two possible sizes:
 /// - normal
 /// - small
-public enum BadgeSize {
+public enum BadgeSize: CaseIterable {
     case normal
     case small
 }
