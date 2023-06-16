@@ -33,7 +33,7 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Switch") {
-                    Text("TODO")
+                    SwitchComponentView()
                 }
 
                 NavigationLink("Tag") {
