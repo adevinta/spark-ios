@@ -6,12 +6,13 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Foundation
+
 // sourcery: AutoMockable
 protocol SwitchColorables {
-    var backgroundColors: SwitchStatusAndStateColorables { get }
-
-    var statusBackgroundColor: ColorToken { get }
-    var statusForegroundColors: SwitchStatusAndStateColorables { get }
+    var toggleBackgroundColors: SwitchStatusColorables { get }
+    var toggleDotBackgroundColor: ColorToken { get }
+    var toggleDotForegroundColors: SwitchStatusColorables { get }
 
     var textForegroundColor: ColorToken { get }
 }
@@ -20,31 +21,25 @@ struct SwitchColors: SwitchColorables {
 
     // MARK: - Properties
 
-    let backgroundColors: SwitchStatusAndStateColorables
-
-    let statusBackgroundColor: ColorToken
-    let statusForegroundColors: SwitchStatusAndStateColorables
+    let toggleBackgroundColors: SwitchStatusColorables
+    let toggleDotBackgroundColor: ColorToken
+    let toggleDotForegroundColors: SwitchStatusColorables
 
     let textForegroundColor: ColorToken
 }
 
-// MARK: - SwitchStatusAndStateColors
+// MARK: - SwitchStatusColors
 
 // sourcery: AutoMockable
-protocol SwitchStatusAndStateColorables {
-    var onAndSelectedColor: ColorToken { get }
-    var onAndUnselectedColor: ColorToken { get }
-    var offAndSelectedColor: ColorToken { get }
-    var offAndUnselectedColor: ColorToken { get }
+protocol SwitchStatusColorables {
+    var onFullColorToken: FullColorToken { get }
+    var offFullColorToken: FullColorToken { get }
 }
 
-struct SwitchStatusAndStateColors: SwitchStatusAndStateColorables {
+struct SwitchStatusColors: SwitchStatusColorables {
 
     // MARK: - Properties
 
-    let onAndSelectedColor: ColorToken
-    let onAndUnselectedColor: ColorToken
-    let offAndSelectedColor: ColorToken
-    let offAndUnselectedColor: ColorToken
+    let onFullColorToken: FullColorToken
+    let offFullColorToken: FullColorToken
 }
-

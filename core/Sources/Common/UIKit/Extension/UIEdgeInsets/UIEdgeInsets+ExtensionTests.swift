@@ -1,5 +1,5 @@
 //
-//  UIEdgeInsets+ExtensionsTests.swift
+//  UIEdgeInsets+ExtensionTests.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 06/04/2023.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import SparkCore
 
-final class UIEdgeInsetsExtensionsTests: XCTestCase {
+final class UIEdgeInsetsExtensionTests: XCTestCase {
 
     // MARK: - Tests
 

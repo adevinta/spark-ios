@@ -12,6 +12,7 @@ import SparkCore
 import XCTest
 
 struct IconographyTests {
+
     // MARK: - Shared
 
     static var shared = IconographyTests()
@@ -23,13 +24,21 @@ struct IconographyTests {
     // MARK: - Icons
 
     lazy var checkmark: UIImage = {
-        return getImage(name: "checkbox-selected")
+        return self.getImage(name: "checkbox-selected")
+    }()
+
+    lazy var switchOff: UIImage = {
+        return self.getImage(name: "switchOff")
+    }()
+
+    lazy var switchOn: UIImage = {
+        return self.getImage(name: "switchOn")
     }()
 
     // MARK: - Helper
 
     private func getImage(name: String) -> UIImage {
-        guard let image =  UIImage(named: name, in: Bundle(for: ClassForBundle.self), with: nil) else {
+        guard let image = UIImage(named: name, in: Bundle(for: ClassForBundle.self), with: nil) else {
             fatalError("no image found for \(name)")
         }
         return image
@@ -37,4 +46,3 @@ struct IconographyTests {
 
     private class ClassForBundle {}
 }
-

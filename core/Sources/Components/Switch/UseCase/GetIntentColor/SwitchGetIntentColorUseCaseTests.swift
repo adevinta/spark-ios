@@ -31,13 +31,13 @@ final class SwitchGetIntentColorUseCaseTests: XCTestCase {
         for item in items {
             let useCase = SwitchGetIntentColorUseCase()
 
-            let color = useCase.execute(
-                for: item.givenIntentColor,
-                on: colorsMock
+            let colorToken = useCase.execute(
+                forIntentColor: item.givenIntentColor,
+                colors: colorsMock
             )
 
             // THEN
-            XCTAssertIdentical(color as? ColorTokenGeneratedMock,
+            XCTAssertIdentical(colorToken as? ColorTokenGeneratedMock,
                                item.expectedColorToken as? ColorTokenGeneratedMock,
                                "Wrong color for .\(item.givenIntentColor) case")
         }
