@@ -18,7 +18,7 @@ private enum Constants {
 /// Radio buttons are used for selecting a single value from a selection of values.
 /// The values from which can be selected need to be ``Equatable`` & ``CustomStringConvertible``.
 ///
-/// The radio buttion is created by providing:
+/// The radio button is created by providing:
 /// - A theme
 /// - A unique ID
 /// - A label representing the value to be selected
