@@ -10,7 +10,7 @@ import SwiftUI
 
 /// RadioButtonGroupView is a radio button group control which renders a list of ``RadioButtonView``.
 ///
-/// The radio buttion group is created by providing:
+/// The radio button group is created by providing:
 /// - A theme
 /// - An option title. If the title is empty, no title will be rendered.
 /// - The selectedID, a binding value.
