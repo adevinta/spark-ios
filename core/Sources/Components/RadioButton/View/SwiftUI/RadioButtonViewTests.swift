@@ -83,6 +83,8 @@ final class RadioButtonViewTests: SwiftUIComponentTestCase {
 
     // MARK: - Private Helper Functions
     func sut(state: SparkSelectButtonState, isSelected: Bool, label: String? = nil) -> RadioButtonView<Int> {
+        let attributedLabel = label.map(AttributedString.init)
+        
         let selectedID = Binding<Int> (
             get: { return self.boundSelectedID },
             set: { self.boundSelectedID = $0 }
@@ -91,7 +93,7 @@ final class RadioButtonViewTests: SwiftUIComponentTestCase {
         return RadioButtonView(
             theme: SparkTheme.shared,
             id: isSelected ? self.boundSelectedID : 1,
-            label: label ?? state.label(isSelected: isSelected),
+            label: attributedLabel ?? state.label(isSelected: isSelected),
             selectedID: selectedID,
             state: state
         )
@@ -99,15 +101,15 @@ final class RadioButtonViewTests: SwiftUIComponentTestCase {
 }
 
 private extension SparkSelectButtonState {
-    func label(isSelected: Bool) -> String {
+    func label(isSelected: Bool) -> AttributedString {
         let selected = isSelected ? "Selected" : "Not Selected"
 
         switch self {
-        case .enabled: return "Enabled / " + selected
-        case .disabled: return "Disabled / " + selected
-        case .error: return "Error / " + selected
-        case .success: return "Success / " + selected
-        case .warning: return "Warning / " + selected
+        case .enabled: return .init("Enabled / " + selected)
+        case .disabled: return .init("Disabled / " + selected)
+        case .error: return .init("Error / " + selected)
+        case .success: return .init("Success / " + selected)
+        case .warning: return .init("Warning / " + selected)
         }
     }
 }

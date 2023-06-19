@@ -188,9 +188,10 @@ final class RadioButtonViewModelTests: XCTestCase {
             set: { self.bindingValue = $0 }
         )
 
+        let label = NSAttributedString(string: "Test")
         return RadioButtonViewModel(theme: self.theme,
                                     id: 1,
-                                    label: "Test",
+                                    label: label,
                                     selectedID: seletedId,
                                     state: state)
 

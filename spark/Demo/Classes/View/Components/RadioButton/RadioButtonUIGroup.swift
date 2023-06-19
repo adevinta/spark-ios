@@ -83,11 +83,23 @@ final class RadioButtonUIGroupViewController: UIViewController {
     }()
 
     private lazy var leftRightRadioButtonGroup: RadioButtonUIGroupView = {
-        let items: [RadioButtonItem<Bool>] = [
-            RadioButtonItem(id: false,
-                            label: "Left"),
-            RadioButtonItem(id: true,
-                            label: "Right")
+        let leftLabel = NSAttributedStringBuilder()
+            .text("Left")
+            .symbol("arrowshape.left")
+            .text("aligned", color: .orange)
+            .build()
+
+        let rightLabel = NSAttributedStringBuilder()
+            .text("Right")
+            .symbol("arrowshape.right")
+            .text("aligned", color: .green)
+            .build()
+
+        let items: [RadioButtonUIItem<Bool>] = [
+            RadioButtonUIItem(id: false,
+                            label: leftLabel),
+            RadioButtonUIItem(id: true,
+                            label: rightLabel)
         ]
 
         let selectedPosition = Binding<Bool>(
@@ -111,8 +123,8 @@ final class RadioButtonUIGroupViewController: UIViewController {
     }()
 
     private lazy var labelRadioButton: RadioButtonUIGroupView = {
-        let items: [RadioButtonItem<Bool>] = [
-            RadioButtonItem(id: true,
+        let items: [RadioButtonUIItem<Bool>] = [
+            RadioButtonUIItem(id: true,
                             label: "Label")
         ]
         let selectedPosition = Binding<Bool>(
@@ -130,23 +142,23 @@ final class RadioButtonUIGroupViewController: UIViewController {
     }()
 
     
-    private lazy var radioButtonItems: [RadioButtonItem<String>] = [
-        RadioButtonItem(id: "1",
+    private lazy var radioButtonItems: [RadioButtonUIItem<String>] = [
+        RadioButtonUIItem(id: "1",
                         label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
-        RadioButtonItem(id: "2",
-                        label: "2 Radio button / Enabled",
+        RadioButtonUIItem(id: "2",
+                        label: .init("2 Radio button / Enabled"),
                         state: .enabled),
-        RadioButtonItem(id: "3",
-                        label: "3 Radio button / Disabled",
+        RadioButtonUIItem(id: "3",
+                        label: .init("3 Radio button /  Disabled"),
                         state: .disabled),
-        RadioButtonItem(id: "4",
-                        label: "4 Radio button / Error",
+        RadioButtonUIItem(id: "4",
+                        label: .init("4 Radio button / Error"),
                         state: .error(message: "Error")),
-        RadioButtonItem(id: "5",
-                        label: "5 Radio button / Success",
+        RadioButtonUIItem(id: "5",
+                        label: .init("5 Radio button / Success"),
                         state: .success(message: "Success")),
-        RadioButtonItem(id: "6",
-                        label: "6 Radio button / Warning",
+        RadioButtonUIItem(id: "6",
+                        label: .init("6 Radio button / Warning"),
                         state: .warning(message: "Warning")),
     ]
 
@@ -208,5 +220,43 @@ private class RadioButtonItemDelegate: RadioButtonUIGroupViewDelegate {
 struct RadioButtonUIGroup_Previews: PreviewProvider {
     static var previews: some View {
         RadioButtonUIGroup()
+    }
+}
+
+private extension NSAttributedString {
+    convenience init(_ label: String, _ trailingLabel: String, _ color: UIColor) {
+        let attrStr = NSAttributedStringBuilder()
+            .text(label)
+            .symbol("chevron.right.2")
+            .text(trailingLabel, color: color)
+            .build()
+        self.init(attributedString: attrStr)
+    }
+}
+
+private class NSAttributedStringBuilder {
+    private var nsAttributedString = NSMutableAttributedString()
+
+    func text(_ label: String) -> Self {
+        self.nsAttributedString.append(NSAttributedString(string: label))
+        return self
+    }
+
+    func text(_ label: String, color: UIColor) -> Self {
+        let attributedStringColor = [NSAttributedString.Key.foregroundColor : color];
+        self.nsAttributedString.append(NSAttributedString(string: label, attributes: attributedStringColor))
+        return self
+    }
+
+    func symbol(_ imageName: String) -> Self {
+        guard let image = UIImage(systemName: imageName) else { return self }
+        let imageAttachment = NSTextAttachment(image: image)
+        let imageString = NSAttributedString(attachment: imageAttachment)
+        self.nsAttributedString.append(imageString)
+        return self
+    }
+
+    func build() -> NSAttributedString {
+        return nsAttributedString
     }
 }
