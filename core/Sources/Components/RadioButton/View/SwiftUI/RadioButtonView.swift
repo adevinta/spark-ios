@@ -75,7 +75,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         let viewModel = RadioButtonViewModel(
             theme: theme,
             id: id,
-            label: .init(string: label),
+            label: .right(label),
             selectedID: selectedID,
             state: state,
             labelPosition: labelPosition)
@@ -98,7 +98,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         .disabled(self.viewModel.isDisabled)
         .opacity(self.viewModel.opacity)
         .buttonStyle(RadioButtonButtonStyle(isPressed: self.$isPressed))
-        .accessibilityLabel(self.viewModel.label.description)
+        .accessibilityLabel(self.viewModel.label.rightValue)
         .accessibilityValue(self.viewModel.id.description)
     }
 
@@ -142,7 +142,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     @ViewBuilder
     private func labelAndSublabel() -> some View {
         VStack(alignment: .leading) {
-            Text(AttributedString(self.viewModel.label))
+            Text(self.viewModel.label.rightValue)
                 .font(self.viewModel.font.font)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(self.viewModel.surfaceColor.color)
