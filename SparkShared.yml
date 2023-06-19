@@ -7,7 +7,7 @@ options:
   defaultConfig: Release
   groupSortPosition: top
   deploymentTarget:
-    iOS: 14.0
+    iOS: 15.0
   useBaseInternationalization: false
   groupOrdering:
     - order: [core, spark]

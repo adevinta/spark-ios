@@ -6,20 +6,21 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import Spark
 import SparkCore
 import SwiftUI
 
 // MARK: SwiftUI Representable
 struct RadioButtonUIGroup: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> RadioButtionUIGroupViewController {
-        return RadioButtionUIGroupViewController()
+    func makeUIViewController(context: Context) -> RadioButtonUIGroupViewController {
+        return RadioButtonUIGroupViewController()
     }
 
-    func updateUIViewController(_ uiViewController: RadioButtionUIGroupViewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: RadioButtonUIGroupViewController, context: Context) { }
 }
 
-final class RadioButtionUIGroupViewController: UIViewController {
+final class RadioButtonUIGroupViewController: UIViewController {
 
     // MARK: - Constant definitions
 
@@ -30,20 +31,22 @@ final class RadioButtionUIGroupViewController: UIViewController {
 
     // MARK: - Properies
 
-    private var backingSelectedId: String = "1"
+    private var backingSelectedID: String = "1"
+    private var subscriptions = Set<AnyCancellable>()
 
     private var label: String {
-        "Selected Value \(self.backingSelectedId)"
+        "Selected Value \(self.backingSelectedID)"
     }
 
     private lazy var radioButtonView: RadioButtonUIGroupView = {
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
             title: "Radio Button Group (UIKit)",
-            selectedID: self.selectedId,
+            selectedID: self.backingSelectedID,
             items: self.radioButtonItems,
             radioButtonLabelPosition: .right
         )
+        groupView.delegate = self.radioButtonItemDelegate
         return groupView
     }()
 
@@ -61,16 +64,12 @@ final class RadioButtionUIGroupViewController: UIViewController {
         return label
     }()
 
-    lazy var selectedId: Binding<String> = Binding<String>(
-        get: {
-            return self.backingSelectedId
-        },
-        set: {
-            self.backingSelectedId = $0
-            self.selectedValueLabel.text = self.label
-        }
-    )
-    let theme = SparkTheme.shared
+    private lazy var radioButtonItemDelegate = RadioButtonItemDelegate{
+        self.backingSelectedID = $0
+        self.selectedValueLabel.text = self.label
+    }
+
+    private let theme = SparkTheme.shared
 
     private let scrollView = UIScrollView()
 
@@ -90,6 +89,7 @@ final class RadioButtionUIGroupViewController: UIViewController {
             RadioButtonItem(id: true,
                             label: "Right")
         ]
+
         let selectedPosition = Binding<Bool>(
             get: { return self.labelPosition == .right},
             set: { self.labelPosition = $0 ? .right : .left }
@@ -97,11 +97,16 @@ final class RadioButtionUIGroupViewController: UIViewController {
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
             title: "Toggle Label Position",
-            selectedID: selectedPosition,
+            selectedID: self.labelPosition == .right,
             items: items,
             radioButtonLabelPosition: .right,
             groupLayout: .horizontal
         )
+
+        groupView.publisher.sink { [weak self] item in
+            self?.labelPosition = item ? .right : .left
+        }.store(in: &self.subscriptions)
+
         return groupView
     }()
 
@@ -116,7 +121,7 @@ final class RadioButtionUIGroupViewController: UIViewController {
         )
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
-            selectedID: selectedPosition,
+            selectedID: true,
             items: items,
             radioButtonLabelPosition: self.labelPosition,
             groupLayout: .horizontal
@@ -183,6 +188,18 @@ final class RadioButtionUIGroupViewController: UIViewController {
             self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
+    }
+}
+
+private class RadioButtonItemDelegate: RadioButtonUIGroupViewDelegate {
+    var action: (String) -> ()
+
+    init(action: @escaping (String) -> ()) {
+        self.action = action
+    }
+
+    func radioButtonGroup<ID>(_ radioButtonGroup: some Any, didChangeSelection item: ID) where ID : CustomStringConvertible, ID : Hashable {
+        action(item.description)
     }
 }
 
