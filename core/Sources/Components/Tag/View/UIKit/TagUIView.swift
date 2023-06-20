@@ -201,6 +201,9 @@ public final class TagUIView: UIView {
 
         // Setup constraints
         self.setupConstraints()
+
+        // Setup compressions
+        self.setupCompressions()
     }
 
     // MARK: - Layout
@@ -330,6 +333,27 @@ public final class TagUIView: UIView {
     private func setupIconImageViewConstraints() {
         self.iconImageView.translatesAutoresizingMaskIntoConstraints = false
         self.iconImageView.widthAnchor.constraint(equalTo: self.contentStackView.heightAnchor).isActive = true
+    }
+
+    // MARK: - Compressions
+
+    private func setupCompressions() {
+        self.setupIconImageViewCompression()
+        self.setupTextLabelCompression()
+    }
+
+    private func setupIconImageViewCompression() {
+        self.iconImageView.setContentCompressionsResistancePriority(
+            .required,
+            for: [.horizontal, .vertical]
+        )
+    }
+
+    private func setupTextLabelCompression() {
+        self.textLabel.setContentCompressionsResistancePriority(
+            .required,
+            for: [.horizontal, .vertical]
+        )
     }
 
     // MARK: - Getter
