@@ -33,7 +33,7 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         // WHEN
 
         let colors = useCase.execute(
-            forIntentColor: .alert,
+            forIntentColor: intentColorMock,
             colors: colorsMock,
             dims: dimsMock
         )

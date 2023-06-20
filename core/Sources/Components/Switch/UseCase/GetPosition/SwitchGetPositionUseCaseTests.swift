@@ -12,42 +12,58 @@ import SwiftUI
 
 final class SwitchGetPositionUseCaseTests: XCTestCase {
 
+    // MARK: - Properties
+
+    private let spacingMock = LayoutSpacingGeneratedMock.mocked()
+
     // MARK: - Tests
 
-    func test_execute_for_all_switchAlignment_cases() throws {
-        // GIVEN / WHEN
-        let spacingMock = LayoutSpacingGeneratedMock.mocked()
-
-        let items: [(
-            givenAlignment: SwitchAlignment,
-            expectedPosition: SwitchPosition
-        )] = [
-            (
-                givenAlignment: .left,
-                expectedPosition: .init(isToggleOnLeft: true, horizontalSpacing: spacingMock.medium)
-            ),
-            (
-                givenAlignment: .right,
-                expectedPosition: .init(isToggleOnLeft: false, horizontalSpacing: spacingMock.xxxLarge)
+    func test_execute_when_switchAlignment_is_left_case() throws {
+        try self.testExecute(
+            givenAlignment: .left,
+            expectedPosition: .init(
+                isToggleOnLeft: true,
+                horizontalSpacing: self.spacingMock.medium
             )
-        ]
+        )
+    }
 
-        for item in items {
-            let errorPrefixMessage = " for .\(item.givenAlignment) case"
-
-            let useCase = SwitchGetPositionUseCase()
-            let position = useCase.execute(
-                forAlignment: item.givenAlignment,
-                spacing: spacingMock
+    func test_execute_when_switchAlignment_is_right_case() throws {
+        try self.testExecute(
+            givenAlignment: .left,
+            expectedPosition: .init(
+                isToggleOnLeft: true,
+                horizontalSpacing: self.spacingMock.medium
             )
+        )
+    }
+}
 
-            // THEN
-            XCTAssertEqual(position.isToggleOnLeft,
-                           item.expectedPosition.isToggleOnLeft,
-                           "Wrong isToggleOnLeft position" + errorPrefixMessage)
-            XCTAssertEqual(position.horizontalSpacing,
-                           item.expectedPosition.horizontalSpacing,
-                           "Wrong horizontalSpacing position" + errorPrefixMessage)
-        }
+// MARK: - Execute Testing
+
+private extension SwitchGetPositionUseCaseTests {
+
+    func testExecute(
+        givenAlignment: SwitchAlignment,
+        expectedPosition: SwitchPosition
+    ) throws {
+        // GIVEN
+        let errorPrefixMessage = " for .\(givenAlignment) case"
+
+        let useCase = SwitchGetPositionUseCase()
+
+        // WHEN
+        let position = useCase.execute(
+            forAlignment: givenAlignment,
+            spacing: self.spacingMock
+        )
+
+        // THEN
+        XCTAssertEqual(position.isToggleOnLeft,
+                       expectedPosition.isToggleOnLeft,
+                       "Wrong isToggleOnLeft position" + errorPrefixMessage)
+        XCTAssertEqual(position.horizontalSpacing,
+                       expectedPosition.horizontalSpacing,
+                       "Wrong horizontalSpacing position" + errorPrefixMessage)
     }
 }

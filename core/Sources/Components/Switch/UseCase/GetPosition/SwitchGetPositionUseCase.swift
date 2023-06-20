@@ -21,16 +21,19 @@ struct SwitchGetPositionUseCase: SwitchGetPositionUseCaseable {
     func execute(forAlignment alignment: SwitchAlignment,
                  spacing: LayoutSpacing) -> SwitchPositionable {
         let horizontalSpacing: CGFloat
+        let isToggleOnLeft: Bool
         switch alignment {
         case .left:
             horizontalSpacing = spacing.medium
+            isToggleOnLeft = true
             
         case .right:
             horizontalSpacing = spacing.xxxLarge
+            isToggleOnLeft = false
         }
 
         return SwitchPosition(
-            isToggleOnLeft: alignment == .left,
+            isToggleOnLeft: isToggleOnLeft,
             horizontalSpacing: horizontalSpacing
         )
     }

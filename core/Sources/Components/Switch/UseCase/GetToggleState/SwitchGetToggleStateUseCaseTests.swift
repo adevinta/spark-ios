@@ -12,42 +12,55 @@ import SwiftUI
 
 final class SwitchGetToggleStateUseCaseTests: XCTestCase {
 
+    // MARK: - Properties
+
+    private let dimsMock = DimsGeneratedMock.mocked()
+
     // MARK: - Tests
 
-    func test_execute_for_all_cases() throws {
-        // GIVEN / WHEN
+    func test_execute_when_isEnabled_is_true() throws {
+        try self.testExecute(
+            givenIsEnabled: true,
+            expectedInteractionState: .init(interactionEnabled: true, opacity: 1)
+        )
+    }
+
+    func test_execute_when_isEnabled_is_false() throws {
+        try self.testExecute(
+            givenIsEnabled: false,
+            expectedInteractionState: .init(interactionEnabled: false, opacity: dimsMock.dim3)
+        )
+    }
+}
+
+// MARK: - Execute Testing
+
+private extension SwitchGetToggleStateUseCaseTests {
+
+    func testExecute(
+        givenIsEnabled: Bool,
+        expectedInteractionState: SwitchToggleState
+    ) throws {
+        // GIVEN
         let dimsMock = DimsGeneratedMock.mocked()
 
-        let items: [(
-            givenIsEnabled: Bool,
-            expectedInteractionState: SwitchToggleState
-        )] = [
-            (
-                givenIsEnabled: true,
-                expectedInteractionState: .init(interactionEnabled: true, opacity: 1)
-            ),
-            (
-                givenIsEnabled: false,
-                expectedInteractionState: .init(interactionEnabled: false, opacity: dimsMock.dim3)
-            )
-        ]
 
-        for item in items {
-            let errorPrefixMessage = " for \(item.givenIsEnabled) givenIsEnabled"
+        let errorPrefixMessage = " for \(givenIsEnabled) givenIsEnabled"
 
-            let useCase = SwitchGetToggleStateUseCase()
-            let interactionState = useCase.execute(
-                forIsEnabled: item.givenIsEnabled,
-                dims: dimsMock
-            )
+        let useCase = SwitchGetToggleStateUseCase()
 
-            // THEN
-            XCTAssertEqual(interactionState.interactionEnabled,
-                           item.expectedInteractionState.interactionEnabled,
-                           "Wrong interactionEnabled" + errorPrefixMessage)
-            XCTAssertEqual(interactionState.opacity,
-                           item.expectedInteractionState.opacity,
-                           "Wrong opacity" + errorPrefixMessage)
-        }
+        // GIVEN
+        let interactionState = useCase.execute(
+            forIsEnabled: givenIsEnabled,
+            dims: dimsMock
+        )
+
+        // THEN
+        XCTAssertEqual(interactionState.interactionEnabled,
+                       expectedInteractionState.interactionEnabled,
+                       "Wrong interactionEnabled" + errorPrefixMessage)
+        XCTAssertEqual(interactionState.opacity,
+                       expectedInteractionState.opacity,
+                       "Wrong opacity" + errorPrefixMessage)
     }
 }

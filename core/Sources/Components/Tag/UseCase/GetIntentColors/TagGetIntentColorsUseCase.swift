@@ -6,8 +6,6 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-// TODO: rename paremeters
-
 // sourcery: AutoMockable
 protocol TagGetIntentColorsUseCaseable {
     func execute(forIntentColor intentColor: TagIntentColor,
