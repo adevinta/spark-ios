@@ -7,7 +7,7 @@
 //
 
 /// The intent color of the tag.
-public enum TagIntentColor {
+public enum TagIntentColor: CaseIterable {
     case alert
     case danger
     case info

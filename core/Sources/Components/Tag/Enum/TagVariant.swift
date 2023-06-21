@@ -7,7 +7,7 @@
 //
 
 /// The variant for the tag.
-public enum TagVariant {
+public enum TagVariant: CaseIterable {
     /// Background and border color is the same, tint is lighter.
     case filled
     /// Border and tint color is the same, background is lighter.
