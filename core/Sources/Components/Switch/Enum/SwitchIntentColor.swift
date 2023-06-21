@@ -7,7 +7,7 @@
 //
 
 /// The intent color of the switch.
-public enum SwitchIntentColor {
+public enum SwitchIntentColor: CaseIterable {
     case alert
     case error
     case info

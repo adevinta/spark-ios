@@ -28,7 +28,7 @@ struct SwitchComponentView: View {
     @State var alignment: SwitchAlignment = .left
 
     @State private var intentColorSheetIsPresented = false
-    @State var intentColor: SwitchIntentColor = .alert
+    @State var intentColor: SwitchIntentColor = .primary
 
     @State private var isEnabledSheetIsPresented = false
     @State var isEnabled: Bool = true
@@ -180,13 +180,6 @@ struct SwitchComponentView_Previews: PreviewProvider {
 
 private extension SwitchAlignment {
 
-    static var allCases: [Self] {
-        return [
-            .left,
-            .right
-        ]
-    }
-
     var name: String {
         switch self {
         case .left:
@@ -194,24 +187,12 @@ private extension SwitchAlignment {
         case .right:
             return "Toggle on right"
         @unknown default:
-            return ""
+            return "Please, add this unknow alignment value"
         }
     }
 }
 
 private extension SwitchIntentColor {
-
-    static var allCases: [Self] {
-        return [
-            .alert,
-            .error,
-            .info,
-            .neutral,
-            .primary,
-            .secondary,
-            .success
-        ]
-    }
 
     var name: String {
         switch self {
@@ -230,7 +211,7 @@ private extension SwitchIntentColor {
         case .success:
             return "Success"
         @unknown default:
-            return ""
+            return "Please, add this unknow intent color value"
         }
     }
 }
