@@ -20,66 +20,55 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         let intentColorTokenMock = ColorTokenGeneratedMock.random()
 
         let colorsMock = ColorsGeneratedMock.mocked()
+        let dimsMock = DimsGeneratedMock.mocked()
 
         let getIntentColorUseCaseMock = SwitchGetIntentColorUseCaseableGeneratedMock()
         getIntentColorUseCaseMock.executeWithIntentColorAndColorsReturnValue = intentColorTokenMock
 
+        let expectedOnFullColorToken = FullColorTokenDefault(colorToken: intentColorTokenMock, opacity: 1)
+        let expectedOffFullColorToken = FullColorTokenDefault(colorToken: colorsMock.base.onSurface, opacity: dimsMock.dim4)
+
         let useCase = SwitchGetColorsUseCase(getIntentColorUseCase: getIntentColorUseCaseMock)
 
         // WHEN
-        let colors = useCase.execute(for: .alert, on: colorsMock)
+
+        let colors = useCase.execute(
+            forIntentColor: .alert,
+            colors: colorsMock,
+            dims: dimsMock
+        )
 
         // **
-        // Background colors
-        XCTAssertIdentical(
-            colors.backgroundColors.onAndSelectedColor as? ColorTokenGeneratedMock,
-            intentColorTokenMock,
-            "Wrong onAndSelectedColor color on backgroundColors"
+        // Status background colors
+        XCTAssertEqual(
+            colors.toggleBackgroundColors.onFullColorToken as? FullColorTokenDefault,
+            expectedOnFullColorToken,
+            "Wrong onFullColorToken on toggleBackgroundColors"
         )
-        XCTAssertIdentical(
-            colors.backgroundColors.onAndUnselectedColor as? ColorTokenGeneratedMock,
-            colorsMock.base.onSurface as? ColorTokenGeneratedMock,
-            "Wrong onAndUnselectedColor color on backgroundColors"
-        )
-        XCTAssertIdentical(
-            colors.backgroundColors.offAndSelectedColor as? ColorTokenGeneratedMock,
-            intentColorTokenMock,
-            "Wrong offAndSelectedColor color on backgroundColors"
-        )
-        XCTAssertIdentical(
-            colors.backgroundColors.offAndUnselectedColor as? ColorTokenGeneratedMock,
-            colorsMock.feedback.neutralContainer as? ColorTokenGeneratedMock,
-            "Wrong offAndUnselectedColor color on backgroundColors"
+        XCTAssertEqual(
+            colors.toggleBackgroundColors.offFullColorToken as? FullColorTokenDefault,
+            expectedOffFullColorToken,
+            "Wrong offFullColorToken on toggleBackgroundColors"
         )
         // **
 
         XCTAssertIdentical(
-            colors.statusBackgroundColor as? ColorTokenGeneratedMock,
+            colors.toggleDotBackgroundColor as? ColorTokenGeneratedMock,
             colorsMock.base.surface as? ColorTokenGeneratedMock,
-            "Wrong statusBackgroundColor color"
+            "Wrong toggleBackgroundColor color"
         )
 
         // **
         // State foreground colors
-        XCTAssertIdentical(
-            colors.statusForegroundColors.onAndSelectedColor as? ColorTokenGeneratedMock,
-            intentColorTokenMock,
-            "Wrong onAndSelectedColor color on statusForegroundColors"
+        XCTAssertEqual(
+            colors.toggleDotForegroundColors.onFullColorToken as? FullColorTokenDefault,
+            expectedOnFullColorToken,
+            "Wrong onFullColorToken on toggleDotForegroundColors"
         )
-        XCTAssertIdentical(
-            colors.statusForegroundColors.onAndUnselectedColor as? ColorTokenGeneratedMock,
-            colorsMock.base.onSurface as? ColorTokenGeneratedMock,
-            "Wrong onAndUnselectedColor color on statusForegroundColors"
-        )
-        XCTAssertIdentical(
-            colors.statusForegroundColors.offAndSelectedColor as? ColorTokenGeneratedMock,
-            intentColorTokenMock,
-            "Wrong offAndSelectedColor color on statusForegroundColors"
-        )
-        XCTAssertIdentical(
-            colors.statusForegroundColors.offAndUnselectedColor as? ColorTokenGeneratedMock,
-            colorsMock.feedback.neutralContainer as? ColorTokenGeneratedMock,
-            "Wrong offAndUnselectedColor color on statusForegroundColors"
+        XCTAssertEqual(
+            colors.toggleDotForegroundColors.offFullColorToken as? FullColorTokenDefault,
+            expectedOffFullColorToken,
+            "Wrong offFullColorToken on toggleDotForegroundColors"
         )
         // **
 
