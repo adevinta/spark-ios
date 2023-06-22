@@ -41,7 +41,7 @@ public class BadgeUIView: UIView {
     }
 
     // MARK: - Badge Text Label properties
-    private var badgeLabel: UILabel = UILabel()
+    private var textLabel: UILabel = UILabel()
 
     // Constraints for badge text label.
     // All of these are applied to the badge text label
@@ -100,14 +100,18 @@ public class BadgeUIView: UIView {
     }
 
     private func setupBadgeText() {
-        self.addSubview(badgeLabel)
-        self.badgeLabel.accessibilityIdentifier = BadgeAccessibilityIdentifier.text
-        self.badgeLabel.adjustsFontForContentSizeCategory = true
-        self.badgeLabel.textAlignment = .center
-        self.badgeLabel.text = self.viewModel.text
-        self.badgeLabel.textColor = self.viewModel.textColor.uiColor
-        self.badgeLabel.font = self.viewModel.textFont.uiFont
-        self.badgeLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(textLabel)
+        self.textLabel.setContentCompressionResistancePriority(.required,
+                                                           for: .vertical)
+        self.textLabel.setContentCompressionResistancePriority(.required,
+                                                           for: .horizontal)
+        self.textLabel.accessibilityIdentifier = BadgeAccessibilityIdentifier.text
+        self.textLabel.adjustsFontForContentSizeCategory = true
+        self.textLabel.textAlignment = .center
+        self.textLabel.text = self.viewModel.text
+        self.textLabel.textColor = self.viewModel.textColor.uiColor
+        self.textLabel.font = self.viewModel.textFont.uiFont
+        self.textLabel.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func setupAppearance() {
@@ -121,7 +125,7 @@ public class BadgeUIView: UIView {
     // MARK: - Layouts setup
 
     private func setupLayouts() {
-        let textSize = badgeLabel.intrinsicContentSize
+        let textSize = textLabel.intrinsicContentSize
 
         self.setupSizeConstraint(for: textSize)
         self.setupBadgeConstraintsIfNeeded(for: textSize)
@@ -146,10 +150,10 @@ public class BadgeUIView: UIView {
             return
         }
 
-        self.labelLeadingConstraint = self.badgeLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
-        self.labelTopConstraint = self.badgeLabel.topAnchor.constraint(equalTo: topAnchor)
-        self.labelTrailingConstraint = self.badgeLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
-        self.labelBottomConstraint = self.badgeLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+        self.labelLeadingConstraint = self.textLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
+        self.labelTopConstraint = self.textLabel.topAnchor.constraint(equalTo: topAnchor)
+        self.labelTrailingConstraint = self.textLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
+        self.labelBottomConstraint = self.textLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         NSLayoutConstraint.activate(labelConstraints.compactMap({ $0 }))
     }
 
@@ -183,7 +187,7 @@ public class BadgeUIView: UIView {
             self.attachCenterYAnchorConstraint = self.centerYAnchor.constraint(equalTo: view.topAnchor)
         case .trailing:
             self.attachLeadingAnchorConstraint = self.leadingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                                         constant: self.viewModel.theme.layout.spacing.small)
+                                                                               constant: self.viewModel.theme.layout.spacing.small)
             self.attachCenterYAnchorConstraint = self.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         }
 
@@ -203,7 +207,7 @@ extension BadgeUIView {
         self.viewModel.$text
             .receive(on: DispatchQueue.main)
             .sink { [weak self] text in
-                self?.badgeLabel.text = text
+                self?.textLabel.text = text
                 self?.reloadUISize()
                 self?.setupLayouts()
             }
@@ -211,7 +215,7 @@ extension BadgeUIView {
         self.viewModel.$textFont
             .receive(on: DispatchQueue.main)
             .sink { [weak self] textFont in
-                self?.badgeLabel.font = textFont.uiFont
+                self?.textLabel.font = textFont.uiFont
                 self?.reloadUISize()
                 self?.setupLayouts()
             }
@@ -219,7 +223,7 @@ extension BadgeUIView {
         self.viewModel.$isBadgeEmpty
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isBadgeOutlined in
-                self?.badgeLabel.text = self?.viewModel.text
+                self?.textLabel.text = self?.viewModel.text
                 self?.reloadUISize()
                 self?.setupLayouts()
             }
@@ -248,7 +252,7 @@ extension BadgeUIView {
         self.viewModel.$textColor
             .receive(on: DispatchQueue.main)
             .sink { [weak self] textColor in
-                self?.badgeLabel.textColor = textColor.uiColor
+                self?.textLabel.textColor = textColor.uiColor
             }
             .store(in: &cancellables)
         self.viewModel.$backgroundColor
@@ -270,7 +274,7 @@ extension BadgeUIView {
 
     private func reloadColors() {
         self.backgroundColor = self.viewModel.backgroundColor.uiColor
-        self.badgeLabel.textColor = self.viewModel.textColor.uiColor
+        self.textLabel.textColor = self.viewModel.textColor.uiColor
         self.layer.borderColor = self.viewModel.border.color.uiColor.cgColor
     }
 
@@ -278,7 +282,7 @@ extension BadgeUIView {
         guard !self.viewModel.isBadgeEmpty else {
             return
         }
-        self.badgeLabel.font = self.viewModel.textFont.uiFont
+        self.textLabel.font = self.viewModel.textFont.uiFont
     }
 
     private func reloadUISize() {
@@ -306,6 +310,21 @@ extension BadgeUIView {
         self.reloadUISize()
         self.reloadBorderWidth()
         self.setupLayouts()
+    }
+}
+
+// MARK: - Label priorities
+public extension BadgeUIView {
+    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
+                                                      for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentCompressionResistancePriority(priority,
+                                                           for: axis)
+    }
+
+    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
+                                        for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentHuggingPriority(priority,
+                                             for: axis)
     }
 }
 
