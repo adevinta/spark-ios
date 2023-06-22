@@ -80,12 +80,15 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         toggleView.translatesAutoresizingMaskIntoConstraints = false
         toggleView.backgroundColor = .clear
         toggleView.sizeToFit()
-
+        toggleView.setContentCompressionResistancePriority(.required,
+                                                           for: .vertical)
+        toggleView.setContentCompressionResistancePriority(.required,
+                                                           for: .horizontal)
         return toggleView
     }()
 
-    private let labelView = UILabel.standard
-    private let supplementaryLabelView = UILabel.standard
+    private let textLabel = UILabel.standard
+    private let supplementaryLabel = UILabel.standard
     private let button = UIButton(type: .custom)
 
     // MARK: - Constraint properties
@@ -184,19 +187,19 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
 
         self.subscribeTo(self.viewModel.$font) { [weak self] font in
-            self?.labelView.font = font.uiFont
+            self?.textLabel.font = font.uiFont
         }
 
         self.subscribeTo(self.viewModel.$supplemetaryFont) { [weak self] supplementaryFont in
-            self?.supplementaryLabelView.font = supplementaryFont.uiFont
+            self?.supplementaryLabel.font = supplementaryFont.uiFont
         }
 
         self.subscribeTo(self.viewModel.$supplementaryText) { [weak self] supplementaryText in
-            self?.supplementaryLabelView.text = supplementaryText
+            self?.supplementaryLabel.text = supplementaryText
         }
 
         self.subscribeTo(self.viewModel.$label) { [weak self] label in
-            self?.labelView.text = label
+            self?.textLabel.text = label
         }
 
         self.subscribeTo(self.viewModel.$labelPosition) { [weak self] _ in
@@ -223,8 +226,8 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.addSubview(self.toggleView)
-        self.addSubview(self.labelView)
-        self.addSubview(self.supplementaryLabelView)
+        self.addSubview(self.textLabel)
+        self.addSubview(self.supplementaryLabel)
 
         self.button.translatesAutoresizingMaskIntoConstraints = true
         self.button.frame = self.bounds
@@ -233,25 +236,25 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.addSubview(self.button)
 
         self.setupConstraints()
-        self.labelView.text = self.viewModel.label
+        self.textLabel.text = self.viewModel.label
     }
 
     private func updateViewAttributes() {
         self.updateColors(self.viewModel.colors)
 
-        self.labelView.text = self.viewModel.label
-        self.labelView.font = self.viewModel.font.uiFont
+        self.textLabel.text = self.viewModel.label
+        self.textLabel.font = self.viewModel.font.uiFont
 
-        self.supplementaryLabelView.text = self.viewModel.supplementaryText
-        self.supplementaryLabelView.font = self.viewModel.supplemetaryFont.uiFont
+        self.supplementaryLabel.text = self.viewModel.supplementaryText
+        self.supplementaryLabel.font = self.viewModel.supplemetaryFont.uiFont
         self.alpha = self.viewModel.opacity
     }
 
     private func updateColors(_ colors: RadioButtonColors) {
         self.toggleView.setColors(colors)
-        self.labelView.textColor = colors.label.uiColor
-        self.labelView.textColor = colors.label.uiColor
-        self.supplementaryLabelView.textColor = colors.subLabel.uiColor
+        self.textLabel.textColor = colors.label.uiColor
+        self.textLabel.textColor = colors.label.uiColor
+        self.supplementaryLabel.textColor = colors.subLabel.uiColor
     }
 
     private func setupButtonActions(isDisabled: Bool) {
@@ -279,11 +282,11 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
         let toggleViewSpacingConstraint = self.calculateToggleViewSpacingConstraint()
 
-        let labelViewTopConstraint = self.labelView.topAnchor.constraint(
+        let labelViewTopConstraint = self.textLabel.topAnchor.constraint(
             equalTo: self.toggleView.topAnchor, constant: self.textLabelTopSpacing)
         let toggleViewTopConstraint = self.toggleView.topAnchor.constraint(
             equalTo: self.safeAreaLayoutGuide.topAnchor, constant: -(self.haloWidth))
-        let bottomViewConstraint = self.supplementaryLabelView.bottomAnchor.constraint(
+        let bottomViewConstraint = self.supplementaryLabel.bottomAnchor.constraint(
             equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: 0)
 
         let labelPositionConstraints = calculatePositionConstraints()
@@ -295,9 +298,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
             toggleViewTopConstraint,
             labelViewTopConstraint,
 
-            self.supplementaryLabelView.leadingAnchor.constraint(equalTo: self.labelView.leadingAnchor),
-            self.supplementaryLabelView.trailingAnchor.constraint(equalTo: self.labelView.trailingAnchor),
-            self.supplementaryLabelView.topAnchor.constraint(equalTo: self.labelView.bottomAnchor),
+            self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.textLabel.leadingAnchor),
+            self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.textLabel.trailingAnchor),
+            self.supplementaryLabel.topAnchor.constraint(equalTo: self.textLabel.bottomAnchor),
             bottomViewConstraint
         ] + labelPositionConstraints
 
@@ -319,7 +322,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
             return [
                 toggleViewLeadingConstraint,
-                self.labelView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
+                self.textLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
             ]
         } else {
             let toggleViewTrailingConstraint = self.toggleView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: self.haloWidth)
@@ -327,7 +330,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
             return [
                 toggleViewTrailingConstraint,
-                self.labelView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+                self.textLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
             ]
         }
     }
@@ -335,9 +338,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     private func calculateToggleViewSpacingConstraint() -> NSLayoutConstraint {
         if self.viewModel.labelPosition == .right {
             return self.toggleView.trailingAnchor.constraint(
-                equalTo: self.labelView.leadingAnchor, constant: -self.spacing)
+                equalTo: self.textLabel.leadingAnchor, constant: -self.spacing)
         } else {
-            return self.labelView.trailingAnchor.constraint(
+            return self.textLabel.trailingAnchor.constraint(
                 lessThanOrEqualTo: self.toggleView.leadingAnchor, constant: -self.spacing)
         }
     }
@@ -378,7 +381,23 @@ private extension UILabel {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontForContentSizeCategory = true
-
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
         return label
+    }
+}
+
+// MARK: - Label priorities
+public extension RadioButtonUIView {
+    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
+                                                      for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentCompressionResistancePriority(priority,
+                                                               for: axis)
+    }
+
+    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
+                                        for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentHuggingPriority(priority,
+                                                 for: axis)
     }
 }
