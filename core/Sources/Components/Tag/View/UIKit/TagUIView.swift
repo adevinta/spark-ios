@@ -31,6 +31,10 @@ public final class TagUIView: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = AccessibilityIdentifier.iconImage
+        imageView.setContentCompressionResistancePriority(.required,
+                                                          for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required,
+                                                          for: .horizontal)
         return imageView
     }()
 
@@ -40,6 +44,10 @@ public final class TagUIView: UIView {
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = AccessibilityIdentifier.text
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .horizontal)
         return label
     }()
 
@@ -360,5 +368,20 @@ public final class TagUIView: UIView {
         self._mediumSpacing.update(traitCollection: self.traitCollection)
         self.reloadUIFromSize()
         // **
+    }
+}
+
+// MARK: - Label priorities
+public extension TagUIView {
+    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
+                                                      for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentCompressionResistancePriority(priority,
+                                                               for: axis)
+    }
+
+    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
+                                        for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentHuggingPriority(priority,
+                                                 for: axis)
     }
 }
