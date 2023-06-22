@@ -18,7 +18,7 @@ protocol FullColorToken {
 
 struct FullColorTokenDefault: FullColorToken {
 
-    // MARK: - Private Properties
+    // MARK: - Public Properties
 
     var uiColor: UIColor {
         return self.colorToken.uiColor.withAlphaComponent(self.opacity)
@@ -28,7 +28,7 @@ struct FullColorTokenDefault: FullColorToken {
         return self.colorToken.color.opacity(self.opacity)
     }
 
-    // MARK: - Public Properties
+    // MARK: - Private Properties
 
     private let colorToken: ColorToken
     private let opacity: CGFloat

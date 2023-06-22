@@ -12,112 +12,135 @@ import SwiftUI
 
 final class SwitchGetImageUseCaseTests: XCTestCase {
 
-    // MARK: - Tests
+    // MARK: - Properties
 
-    func test_execute_for_all_cases() throws {
-        // GIVEN / WHEN
-        let onImageMock = Image(systemName: "square.and.arrow.up")
-        let offImageMock = Image(systemName: "square.and.arrow.down")
+    private let onImageMock = Image(systemName: "square.and.arrow.up")
+    private let offImageMock = Image(systemName: "square.and.arrow.down")
 
-        let onUIImageMock = IconographyTests.shared.switchOn
-        let offUIImageMock = IconographyTests.shared.switchOff
+    private let onUIImageMock = IconographyTests.shared.switchOn
+    private let offUIImageMock = IconographyTests.shared.switchOff
 
-        let variantMock = SwitchVariant(
-            onImage: onImageMock,
-            offImage: offImageMock
+    private lazy var variantMock: SwitchVariant = {
+        return .init(
+            onImage: self.onImageMock,
+            offImage: self.offImageMock
         )
-        let variantUIMock = SwitchVariant(
-            onImage: onUIImageMock,
-            offImage: offUIImageMock
+    }()
+    private lazy var variantUIMock: SwitchVariant = {
+        return .init(
+            onImage: self.onUIImageMock,
+            offImage: self.offUIImageMock
+        )
+    }()
+
+    private lazy var expectedOnImage: SwitchImage = {
+        return .init(
+            image: self.onImageMock,
+            uiImage: self.onUIImageMock
+        )
+    }()
+    private lazy var expectedOffImage: SwitchImage = {
+        return .init(
+            image: self.offImageMock,
+            uiImage: self.offUIImageMock
+        )
+    }()
+
+    // MARK: - SwiftUI Variant Tests
+
+    func test_execute_when_isOn_is_true_and_variant_is_set_with_swiftUI_variant_images() throws {
+        try self.testExecute(
+            givenIsOn: true,
+            givenVariant: self.variantMock,
+            expectedImage: self.expectedOnImage
+        )
+    }
+
+    func test_execute_when_isOn_is_false_and_variant_is_set_with_swiftUI_variant_images() throws {
+        try self.testExecute(
+            givenIsOn: false,
+            givenVariant: self.variantMock,
+            expectedImage: self.expectedOffImage
+        )
+    }
+
+    // MARK: - UIKit Variant Tests
+
+    func test_execute_when_isOn_is_true_and_variant_is_set_with_UIKit_variant_images() throws {
+        try self.testExecute(
+            givenIsOn: true,
+            givenVariant: self.variantUIMock,
+            expectedImage: self.expectedOnImage
+        )
+    }
+
+    func test_execute_when_isOn_is_false_and_variant_is_set_with_UIKit_variant_images() throws {
+        try self.testExecute(
+            givenIsOn: false,
+            givenVariant: self.variantUIMock,
+            expectedImage: self.expectedOffImage
+        )
+    }
+
+    // MARK: - UIKit Variant Tests
+
+    func test_execute_when_isOn_is_true_and_variant_is_set_without_variant() throws {
+        try self.testExecute(
+            givenIsOn: true,
+            givenVariant: nil,
+            expectedImage: nil
+        )
+    }
+
+    func test_execute_when_isOn_is_false_and_variant_is_set_without_variant() throws {
+        try self.testExecute(
+            givenIsOn: true,
+            givenVariant: nil,
+            expectedImage: nil
+        )
+    }
+}
+
+// MARK: - Execute Testing
+
+private extension SwitchGetImageUseCaseTests {
+
+    func testExecute(
+        givenIsOn: Bool,
+        givenVariant: SwitchVariant?,
+        expectedImage: SwitchImage?
+    ) throws {
+        // GIVEN
+        let errorPrefixMessage = " for \(givenIsOn) isOn"
+
+        let useCase = SwitchGetImageUseCase()
+
+        // WHEN
+        let image = useCase.execute(
+            forIsOn: givenIsOn,
+            variant: givenVariant
         )
 
-        let expectedOnImage = SwitchImage(
-            image: onImageMock,
-            uiImage: onUIImageMock
-        )
-        let expectedOffImage = SwitchImage(
-            image: offImageMock,
-            uiImage: offUIImageMock
-        )
-
-        let items: [(
-            givenIsOn: Bool,
-            givenVariant: SwitchVariant?,
-            expectedImage: SwitchImage?
-        )] = [
-            // **
-            // SwitfUI Variant
-            (
-                givenIsOn: true,
-                givenVariant: variantMock,
-                expectedImage: expectedOnImage
-            ),
-            (
-                givenIsOn: false,
-                givenVariant: variantMock,
-                expectedImage: expectedOffImage
-            ),
-            // **
-
-            // **
-            // UIKit Variant
-            (
-                givenIsOn: true,
-                givenVariant: variantUIMock,
-                expectedImage: expectedOnImage
-            ),
-            (
-                givenIsOn: false,
-                givenVariant: variantUIMock,
-                expectedImage: expectedOffImage
-            ),
-            // **
-
-            // **
-            // Without Variant
-            (
-                givenIsOn: true,
-                givenVariant: nil,
-                expectedImage: nil
-            ),
-            (
-                givenIsOn: false,
-                givenVariant: nil,
-                expectedImage: nil
-            )
-            // **
-        ]
-
-        for item in items {
-            let errorPrefixMessage = " for \(item.givenIsOn) isOn"
-
-            let useCase = SwitchGetImageUseCase()
-            let image = useCase.execute(
-                forIsOn: item.givenIsOn,
-                variant: item.givenVariant
-            )
-
-            // THEN
-            if let image = image {
-                if item.givenIsOn {
-                    XCTAssertEqual(image.image,
-                                   item.givenVariant?.onImage,
-                                   "Wrong on image" + errorPrefixMessage)
-                    XCTAssertEqual(image.uiImage,
-                                   item.givenVariant?.onUIImage,
-                                   "Wrong on UIImage" + errorPrefixMessage)
-                } else {
-                    XCTAssertEqual(image.image,
-                                   item.givenVariant?.offImage,
-                                   "Wrong off image" + errorPrefixMessage)
-                    XCTAssertEqual(image.uiImage,
-                                   item.givenVariant?.offUIImage,
-                                   "Wrong off UIImage" + errorPrefixMessage)
-                }
+        // THEN
+        if let image = image {
+            if givenIsOn {
+                XCTAssertEqual(image.image,
+                               givenVariant?.onImage,
+                               "Wrong on image" + errorPrefixMessage)
+                XCTAssertEqual(image.uiImage,
+                               givenVariant?.onUIImage,
+                               "Wrong on UIImage" + errorPrefixMessage)
             } else {
-                XCTAssertNil(item.expectedImage,
-                             "Image should be nil" + errorPrefixMessage)
+                XCTAssertEqual(image.image,
+                               givenVariant?.offImage,
+                               "Wrong off image" + errorPrefixMessage)
+                XCTAssertEqual(image.uiImage,
+                               givenVariant?.offUIImage,
+                               "Wrong off UIImage" + errorPrefixMessage)
             }
+        } else {
+            XCTAssertNil(expectedImage,
+                         "Image should be nil" + errorPrefixMessage)
         }
     }
 }

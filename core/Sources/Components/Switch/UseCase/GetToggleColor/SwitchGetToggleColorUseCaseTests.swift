@@ -12,41 +12,54 @@ import SwiftUI
 
 final class SwitchGetToggleColorUseCaseTests: XCTestCase {
 
+    // MARK: - Properties
+
+    private var statusAndStateColorMock: SwitchStatusColorablesGeneratedMock = {
+        let mock = SwitchStatusColorablesGeneratedMock()
+        mock.underlyingOnFullColorToken = FullColorTokenGeneratedMock()
+        mock.underlyingOffFullColorToken = FullColorTokenGeneratedMock()
+        return mock
+    }()
+
     // MARK: - Tests
 
-    func test_execute_for_all_cases() throws {
-        // GIVEN / WHEN
-        let statusAndStateColorMock = SwitchStatusColorablesGeneratedMock()
-        statusAndStateColorMock.underlyingOnFullColorToken = FullColorTokenGeneratedMock()
-        statusAndStateColorMock.underlyingOffFullColorToken = FullColorTokenGeneratedMock()
+    func test_execute_when_isOn_is_true() throws {
+        try self.testExecute(
+            givenIsOn: true,
+            expectedColorToken: self.statusAndStateColorMock.onFullColorToken
+        )
+    }
 
-        let items: [(
-            givenIsOn: Bool,
-            expectedColorToken: FullColorToken
-        )] = [
-            (
-                givenIsOn: true,
-                expectedColorToken: statusAndStateColorMock.onFullColorToken
-            ),
-            (
-                givenIsOn: false,
-                expectedColorToken: statusAndStateColorMock.offFullColorToken
-            )
-        ]
+    func test_execute_when_isOn_is_false() throws {
+        try self.testExecute(
+            givenIsOn: false,
+            expectedColorToken: self.statusAndStateColorMock.offFullColorToken
+        )
+    }
+}
 
-        for item in items {
-            let errorPrefixMessage = " for \(item.givenIsOn) isOn"
+// MARK: - Execute Testing
 
-            let useCase = SwitchGetToggleColorUseCase()
-            let colorToken = useCase.execute(
-                forIsOn: item.givenIsOn,
-                statusAndStateColor: statusAndStateColorMock
-            )
+private extension SwitchGetToggleColorUseCaseTests {
 
-            // THEN
-            XCTAssertIdentical(colorToken as? ColorTokenGeneratedMock,
-                               item.expectedColorToken as? ColorTokenGeneratedMock,
-                               "Wrong interactionEnabled" + errorPrefixMessage)
-        }
+    func testExecute(
+        givenIsOn: Bool,
+        expectedColorToken: FullColorToken
+    ) throws {
+        // GIVEN
+        let errorPrefixMessage = " for \(givenIsOn) isOn"
+
+        let useCase = SwitchGetToggleColorUseCase()
+
+        // WHEN
+        let colorToken = useCase.execute(
+            forIsOn: givenIsOn,
+            statusAndStateColor: statusAndStateColorMock
+        )
+
+        // THEN
+        XCTAssertIdentical(colorToken as? ColorTokenGeneratedMock,
+                           expectedColorToken as? ColorTokenGeneratedMock,
+                           "Wrong interactionEnabled" + errorPrefixMessage)
     }
 }
