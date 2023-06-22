@@ -13,14 +13,14 @@ import SwiftUI
 
 // MARK: SwiftUI Representable
 struct RadioButtonUIGroup: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> RadioButtionUIGroupViewController {
-        return RadioButtionUIGroupViewController()
+    func makeUIViewController(context: Context) -> RadioButtonUIGroupViewController {
+        return RadioButtonUIGroupViewController()
     }
 
-    func updateUIViewController(_ uiViewController: RadioButtionUIGroupViewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: RadioButtonUIGroupViewController, context: Context) { }
 }
 
-final class RadioButtionUIGroupViewController: UIViewController {
+final class RadioButtonUIGroupViewController: UIViewController {
 
     // MARK: - Constant definitions
 
