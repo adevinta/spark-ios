@@ -12,34 +12,82 @@ import SwiftUI
 
 final class SwitchGetIntentColorUseCaseTests: XCTestCase {
 
+    // MARK: - Properties
+
+    private let colorsMock = ColorsGeneratedMock.mocked()
+
     // MARK: - Tests
 
-    func test_execute_for_all_SwitchIntentColor_cases() throws {
-        // GIVEN / WHEN
-        let colorsMock = ColorsGeneratedMock.mocked()
+    func test_execute_when_switchIntentColor_is_alert_case() throws {
+        try self.testExecute(
+            givenIntentColor: .alert,
+            expectedColorToken: self.colorsMock.feedback.alert
+        )
+    }
 
-        let items: [(givenIntentColor: SwitchIntentColor, expectedColorToken: ColorToken)] = [
-            (.alert, colorsMock.feedback.alert),
-            (.error, colorsMock.feedback.error),
-            (.info, colorsMock.feedback.info),
-            (.neutral, colorsMock.feedback.neutral),
-            (.primary, colorsMock.primary.primary),
-            (.secondary, colorsMock.secondary.secondary),
-            (.success, colorsMock.feedback.success)
-        ]
+    func test_execute_when_switchIntentColor_is_error_case() throws {
+        try self.testExecute(
+            givenIntentColor: .error,
+            expectedColorToken: self.colorsMock.feedback.error
+        )
+    }
 
-        for item in items {
-            let useCase = SwitchGetIntentColorUseCase()
+    func test_execute_when_switchIntentColor_is_info_case() throws {
+        try self.testExecute(
+            givenIntentColor: .info,
+            expectedColorToken: self.colorsMock.feedback.info
+        )
+    }
 
-            let color = useCase.execute(
-                for: item.givenIntentColor,
-                on: colorsMock
-            )
+    func test_execute_when_switchIntentColor_is_neutral_case() throws {
+        try self.testExecute(
+            givenIntentColor: .neutral,
+            expectedColorToken: self.colorsMock.feedback.neutral
+        )
+    }
 
-            // THEN
-            XCTAssertIdentical(color as? ColorTokenGeneratedMock,
-                               item.expectedColorToken as? ColorTokenGeneratedMock,
-                               "Wrong color for .\(item.givenIntentColor) case")
-        }
+    func test_execute_when_switchIntentColor_is_primary_case() throws {
+        try self.testExecute(
+            givenIntentColor: .primary,
+            expectedColorToken: self.colorsMock.primary.primary
+        )
+    }
+
+    func test_execute_when_switchIntentColor_is_secondary_case() throws {
+        try self.testExecute(
+            givenIntentColor: .secondary,
+            expectedColorToken: self.colorsMock.secondary.secondary
+        )
+    }
+
+    func test_execute_when_switchIntentColor_is_success_case() throws {
+        try self.testExecute(
+            givenIntentColor: .success,
+            expectedColorToken: self.colorsMock.feedback.success
+        )
+    }
+}
+
+// MARK: - Execute Testing
+
+private extension SwitchGetIntentColorUseCaseTests {
+
+    func testExecute(
+        givenIntentColor: SwitchIntentColor,
+        expectedColorToken: ColorToken
+    ) throws {
+        // GIVEN
+        let useCase = SwitchGetIntentColorUseCase()
+        
+        // WHEN
+        let colorToken = useCase.execute(
+            forIntentColor: givenIntentColor,
+            colors: self.colorsMock
+        )
+        
+        // THEN
+        XCTAssertIdentical(colorToken as? ColorTokenGeneratedMock,
+                           expectedColorToken as? ColorTokenGeneratedMock,
+                           "Wrong color for .\(givenIntentColor) case")
     }
 }

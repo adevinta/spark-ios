@@ -34,7 +34,7 @@ final class TagViewModel: ObservableObject {
         }
     }
 
-    private let getColorsUseCase: TagGetColorsUseCaseable
+    private let getColorsUseCase: any TagGetColorsUseCaseable
 
     // MARK: - Initialization
 
@@ -44,10 +44,10 @@ final class TagViewModel: ObservableObject {
         variant: TagVariant = .filled,
         iconImage: Image? = nil,
         text: String? = nil,
-        getColorsUseCase: TagGetColorsUseCaseable = TagGetColorsUseCase()
+        getColorsUseCase: any TagGetColorsUseCaseable = TagGetColorsUseCase()
     ) {
         self.colors = Self.getColors(
-            from: theme,
+            forTheme: theme,
             intentColor: intentColor,
             variant: variant,
             useCase: getColorsUseCase
@@ -70,7 +70,7 @@ final class TagViewModel: ObservableObject {
 
     private func reloadColors() {
         self.colors = Self.getColors(
-            from: self.theme,
+            forTheme: self.theme,
             intentColor: intentColor,
             variant: variant,
             useCase: getColorsUseCase
@@ -98,13 +98,13 @@ final class TagViewModel: ObservableObject {
     // MARK: - Getter
 
     private static func getColors(
-        from theme: Theme,
+        forTheme theme: Theme,
         intentColor: TagIntentColor,
         variant: TagVariant,
-        useCase: TagGetColorsUseCaseable
+        useCase: any TagGetColorsUseCaseable
     ) -> TagColorables {
         return useCase.execute(
-            from: theme,
+            forTheme: theme,
             intentColor: intentColor,
             variant: variant
         )

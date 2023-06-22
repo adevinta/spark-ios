@@ -39,6 +39,10 @@ public class ButtonUIView: UIView {
         label.textAlignment = .center
         label.backgroundColor = .clear
         label.numberOfLines = 0
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
+        label.setContentCompressionResistancePriority(.defaultHigh,
+                                                      for: .horizontal)
         return label
     }()
 
@@ -47,6 +51,10 @@ public class ButtonUIView: UIView {
         imageView.backgroundColor = .clear
         imageView.isAccessibilityElement = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.setContentCompressionResistancePriority(.required,
+                                                          for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required,
+                                                          for: .vertical)
         return imageView
     }()
 
@@ -519,5 +527,20 @@ private extension ButtonUIView {
     @IBAction func actionTouchCancel(sender: UIButton) {
         self.isPressed = false
         self.delegate?.button(self, didReceive: .touchCancel)
+    }
+}
+
+// MARK: - Label priorities
+public extension ButtonUIView {
+    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
+                                                      for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentCompressionResistancePriority(priority,
+                                                               for: axis)
+    }
+
+    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
+                                        for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentHuggingPriority(priority,
+                                                 for: axis)
     }
 }

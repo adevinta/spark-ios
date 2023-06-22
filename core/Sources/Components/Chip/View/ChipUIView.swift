@@ -24,20 +24,20 @@ public final class ChipUIView: UIView {
     /// An optional icon on the Chip. The icon is always rendered to the left of the text
     public var icon: UIImage? {
         set {
-            self.uiImageView.image = newValue
+            self.imageView.image = newValue
         }
         get {
-            return self.uiImageView.image
+            return self.imageView.image
         }
     }
 
     /// An optional text shown on the Chip. The text is rendered to the right of the icon.
     public var text: String? {
         set {
-            self.uiLabel.text = newValue
+            self.textLabel.text = newValue
         }
         get {
-            return self.uiLabel.text
+            return self.textLabel.text
         }
     }
 
@@ -104,21 +104,28 @@ public final class ChipUIView: UIView {
     @ScaledUIMetric private var padding: CGFloat
     @ScaledUIMetric private var borderRadius: CGFloat
 
-    private let uiLabel: UILabel = {
+    private let textLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello World"
         label.isAccessibilityElement = false
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 1
+        label.setContentCompressionResistancePriority(.defaultHigh,
+                                                      for: .horizontal)
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
         return label
     }()
 
-    private let uiImageView: UIImageView = {
+    private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.isAccessibilityElement = false
+        imageView.setContentCompressionResistancePriority(.required,
+                                                          for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required,
+                                                          for: .vertical)
         return imageView
     }()
 
@@ -152,9 +159,9 @@ public final class ChipUIView: UIView {
     /// - variant: The chip variant, e.g. outlined, filled
     /// - iconImage: An icon
     public convenience init(theme: Theme,
-                intentColor: ChipIntentColor,
-                variant: ChipVariant,
-                iconImage: UIImage) {
+                            intentColor: ChipIntentColor,
+                            variant: ChipVariant,
+                            iconImage: UIImage) {
         self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: nil, optionalIconImage: iconImage)
     }
 
@@ -166,9 +173,9 @@ public final class ChipUIView: UIView {
     /// - variant: The chip variant, e.g. outlined, filled
     /// - text: The text label
     public convenience init(theme: Theme,
-                intentColor: ChipIntentColor,
-                variant: ChipVariant,
-                label: String) {
+                            intentColor: ChipIntentColor,
+                            variant: ChipVariant,
+                            label: String) {
         self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: label, optionalIconImage: nil)
     }
 
@@ -181,10 +188,10 @@ public final class ChipUIView: UIView {
     /// - text: The text label
     /// - iconImage: An icon
     public convenience init(theme: Theme,
-                intentColor: ChipIntentColor,
-                variant: ChipVariant,
-                label: String,
-                iconImage: UIImage) {
+                            intentColor: ChipIntentColor,
+                            variant: ChipVariant,
+                            label: String,
+                            iconImage: UIImage) {
         self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: label , optionalIconImage: iconImage)
     }
 
@@ -203,7 +210,7 @@ public final class ChipUIView: UIView {
 
         self.text = optionalLabel
         self.icon = optionalIconImage
-        self.uiLabel.sizeToFit()
+        self.textLabel.sizeToFit()
 
         self.setupView()
 
@@ -241,8 +248,8 @@ public final class ChipUIView: UIView {
     /// Update all colors used
     private func setChipColors(_ chipColors: ChipStateColors) {
         self.stackView.backgroundColor = chipColors.background.uiColor
-        self.uiLabel.textColor = chipColors.foreground.uiColor
-        self.uiImageView.tintColor = chipColors.foreground.uiColor
+        self.textLabel.textColor = chipColors.foreground.uiColor
+        self.imageView.tintColor = chipColors.foreground.uiColor
 
         if self.viewModel.isBorderDashed {
             self.addDashedBorder(borderColor: chipColors.border)
@@ -277,8 +284,8 @@ public final class ChipUIView: UIView {
         self.updateSpacing()
         self.updateLayoutMargins()
 
-        self.stackView.addArrangedSubview(self.uiImageView)
-        self.stackView.addArrangedSubview(self.uiLabel)
+        self.stackView.addArrangedSubview(self.imageView)
+        self.stackView.addArrangedSubview(self.textLabel)
 
         self.setupConstraints()
         self.setChipColors(self.viewModel.colors.default)
@@ -306,15 +313,15 @@ public final class ChipUIView: UIView {
     }
 
     private func updateFont() {
-        self.uiLabel.font = self.viewModel.font.uiFont
+        self.textLabel.font = self.viewModel.font.uiFont
     }
 
     private func setupConstraints() {
         let heightConstraint = self.stackView.heightAnchor.constraint(equalToConstant: self.height)
 
         let sizeConstraints = [
-            self.uiImageView.heightAnchor.constraint(equalToConstant: self.imageSize),
-            self.uiImageView.widthAnchor.constraint(equalToConstant: self.imageSize)
+            self.imageView.heightAnchor.constraint(equalToConstant: self.imageSize),
+            self.imageView.widthAnchor.constraint(equalToConstant: self.imageSize)
         ]
 
         let stackConstraints = [
@@ -334,13 +341,13 @@ public final class ChipUIView: UIView {
         self.heightConstraint = heightConstraint
 
         if self.icon == nil {
-            self.uiImageView.isHidden = true
+            self.imageView.isHidden = true
         } else {
             NSLayoutConstraint.activate(sizeConstraints)
         }
 
         if self.text == nil {
-            self.uiLabel.isHidden = true
+            self.textLabel.isHidden = true
         }
     }
 
@@ -434,4 +441,19 @@ public final class ChipUIView: UIView {
         self.setChipColors(self.viewModel.colors.default)
     }
 
+}
+
+// MARK: - Label priorities
+public extension ChipUIView {
+    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
+                                                      for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentCompressionResistancePriority(priority,
+                                                               for: axis)
+    }
+
+    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
+                                        for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentHuggingPriority(priority,
+                                                 for: axis)
+    }
 }

@@ -10,8 +10,9 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol SwitchGetColorsUseCaseable {
-    func execute(for intentColor: SwitchIntentColor,
-                 on colors: Colors) -> SwitchColorables
+    func execute(forIntentColor intentColor: SwitchIntentColor,
+                 colors: Colors,
+                 dims: Dims) -> SwitchColorables
 }
 
 struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
@@ -28,26 +29,25 @@ struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for intentColor: SwitchIntentColor,
-                 on colors: Colors) -> SwitchColorables {
+    func execute(forIntentColor intentColor: SwitchIntentColor,
+                 colors: Colors,
+                 dims: Dims) -> SwitchColorables {
 
         // Get intent color from use case
         let intentColor = self.getIntentColorUseCase.execute(
-            for: intentColor,
-            on: colors
+            forIntentColor: intentColor,
+            colors: colors
         )
 
-        let statusAndStateColors = SwitchStatusAndStateColors(
-            onAndSelectedColor: intentColor,
-            onAndUnselectedColor: colors.base.onSurface,
-            offAndSelectedColor: intentColor,
-            offAndUnselectedColor: colors.feedback.neutralContainer
+        let statusAndStateColors = SwitchStatusColors(
+            onFullColorToken: FullColorTokenDefault(colorToken: intentColor, opacity: 1),
+            offFullColorToken: FullColorTokenDefault(colorToken: colors.base.onSurface, opacity: dims.dim4)
         )
 
         return SwitchColors(
-            backgroundColors: statusAndStateColors,
-            statusBackgroundColor: colors.base.surface,
-            statusForegroundColors: statusAndStateColors,
+            toggleBackgroundColors: statusAndStateColors,
+            toggleDotBackgroundColor: colors.base.surface,
+            toggleDotForegroundColors: statusAndStateColors,
             textForegroundColor: colors.base.onSurface
         )
     }

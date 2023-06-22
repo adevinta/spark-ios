@@ -25,6 +25,10 @@ public final class CheckboxUIView: UIView {
     private let button: UIButton = {
         let button = UIButton()
         button.isAccessibilityElement = false
+        button.setContentCompressionResistancePriority(.required,
+                                                       for: .vertical)
+        button.setContentCompressionResistancePriority(.required,
+                                                       for: .horizontal)
         return button
     }()
 
@@ -34,6 +38,8 @@ public final class CheckboxUIView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         label.numberOfLines = 0
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
         return label
     }()
 
@@ -404,5 +410,20 @@ public final class CheckboxUIView: UIView {
 
     @IBAction private func actionTouchUp(sender: UIButton) {
         self.isPressed = false
+    }
+}
+
+// MARK: - Label priorities
+public extension CheckboxUIView {
+    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
+                                                      for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentCompressionResistancePriority(priority,
+                                                               for: axis)
+    }
+
+    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
+                                        for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentHuggingPriority(priority,
+                                                 for: axis)
     }
 }
