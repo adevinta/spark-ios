@@ -21,7 +21,6 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
     @Binding var height: CGFloat
 
     @Binding var isOn: Bool
-    private let version: ComponentVersion
     private let alignment: SwitchAlignment
     private let intentColor: SwitchIntentColor
     private let isEnabled: Bool
@@ -37,7 +36,6 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         width: CGFloat,
         height: Binding<CGFloat>,
         isOn: Binding<Bool>,
-        version: ComponentVersion,
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
@@ -48,7 +46,6 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         self.width = width
         self._height = height
         self._isOn = isOn
-        self.version = version
         self.alignment = alignment
         self.intentColor = intentColor
         self.isEnabled = isEnabled

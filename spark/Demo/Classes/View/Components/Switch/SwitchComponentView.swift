@@ -151,7 +151,6 @@ struct SwitchComponentView: View {
                             width: geometry.size.width,
                             height: self.$uiKitViewHeight,
                             isOn: self.$isOn,
-                            version: self.$version.wrappedValue,
                             alignment: self.$alignment.wrappedValue,
                             intentColor: self.$intentColor.wrappedValue,
                             isEnabled: self.$isEnabled.wrappedValue,
