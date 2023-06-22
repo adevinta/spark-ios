@@ -27,8 +27,6 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
     private let isVariant: Bool
     private let isMultilineText: Bool
 
-    var switchView: SwitchUIView?
-
     // MARK: - Initialization
 
     init(
