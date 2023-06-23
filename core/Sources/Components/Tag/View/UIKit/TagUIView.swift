@@ -123,13 +123,13 @@ public final class TagUIView: UIView {
         return colors
     }
 
-    private let getColorsUseCase: TagGetColorsUseCaseable
+    private let getColorsUseCase: any TagGetColorsUseCaseable
 
     // MARK: - Initialization
 
     /// Initialize a new tag view with icon image.
     /// - Parameters:
-    ///   - theme: The spark theme.
+    ///   - theme: The spark theme of the tag.
     ///   - intentColor: The intentColor of the tag.
     ///   - variant: The variant of the tag.
     ///   - iconImage: The icon image of the tag.
@@ -146,7 +146,7 @@ public final class TagUIView: UIView {
 
     /// Initialize a new tag view with text.
     /// - Parameters:
-    ///   - theme: The spark theme.
+    ///   - theme: The spark theme of the tag.
     ///   - intentColor: The intentColor of the tag.
     ///   - variant: The variant of the tag.
     ///   - text: The text of the tag.
@@ -163,7 +163,7 @@ public final class TagUIView: UIView {
 
     /// Initialize a new tag view with icon image and text.
     /// - Parameters:
-    ///   - theme: The spark theme.
+    ///   - theme: The spark theme of the tag.
     ///   - intentColor: The intentColor of the tag.
     ///   - variant: The variant of the tag.
     ///   - iconImage: The icon image of the tag.
@@ -185,7 +185,7 @@ public final class TagUIView: UIView {
                  variant: TagVariant,
                  iconImage: UIImage?,
                  text: String?,
-                 getColorsUseCase: TagGetColorsUseCaseable = TagGetColorsUseCase()) {
+                 getColorsUseCase: any TagGetColorsUseCaseable = TagGetColorsUseCase()) {
         self.theme = theme
         self.intentColor = intentColor
         self.variant = variant
@@ -343,7 +343,7 @@ public final class TagUIView: UIView {
     // MARK: - Getter
 
     private func getColorsFromUseCase() -> TagColorables {
-        return self.getColorsUseCase.execute(from: self.theme,
+        return self.getColorsUseCase.execute(forTheme: self.theme,
                                              intentColor: self.intentColor,
                                              variant: self.variant)
     }

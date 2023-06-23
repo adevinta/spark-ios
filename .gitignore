@@ -110,3 +110,5 @@ spark-ios-snapshots
 
 #sourcery
 *Generated/
+
+vendor/

@@ -8,16 +8,16 @@
 
 // sourcery: AutoMockable
 protocol SwitchGetIntentColorUseCaseable {
-    func execute(for intentColor: SwitchIntentColor,
-                 on colors: Colors) -> ColorToken
+    func execute(forIntentColor intentColor: SwitchIntentColor,
+                 colors: Colors) -> ColorToken
 }
 
 struct SwitchGetIntentColorUseCase: SwitchGetIntentColorUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for intentColor: SwitchIntentColor,
-                 on colors: Colors) -> ColorToken {
+    func execute(forIntentColor intentColor: SwitchIntentColor,
+                 colors: Colors) -> ColorToken {
         switch intentColor {
         case .alert:
             return colors.feedback.alert

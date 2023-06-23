@@ -9,6 +9,7 @@
 import XCTest
 import SwiftUI
 import UIKit
+import SnapshotTesting
 
 @testable import Spark
 
@@ -96,22 +97,28 @@ open class UIKitComponentTestCase: TestCase {
         named name: String? = nil,
         sizes: [UIContentSizeCategory] = Constants.sizes,
         record recording: Bool = Constants.record,
+        delay: TimeInterval = 0,
         timeout: TimeInterval = Constants.timeout,
         file: StaticString = #file,
         testName: String = #function,
         line: UInt = #line
     ) {
+
         // Dark mode testing
         for size in sizes {
             let traits = UITraitCollection(traitsFrom: [.darkMode, UITraitCollection(preferredContentSizeCategory: size)])
             let filename = [testName, Constants.namedSuffixForDark, size.identifier]
                 .joined(separator: Constants.separator)
-
             sparktAssertSnapshot(
                 matching: view(),
-                as: .image(precision: Constants.imagePrecision,
-                           perceptualPrecision: Constants.imagePerceptualPrecision,
-                           traits: traits),
+                as: .wait(
+                    for: delay,
+                    on: .image(
+                        precision: Constants.imagePrecision,
+                        perceptualPrecision: Constants.imagePerceptualPrecision,
+                        traits: traits
+                    )
+                ),
                 named: name,
                 record: recording,
                 timeout: timeout,
@@ -129,9 +136,14 @@ open class UIKitComponentTestCase: TestCase {
             
             sparktAssertSnapshot(
                 matching: view(),
-                as: .image(precision: Constants.imagePrecision,
-                           perceptualPrecision: Constants.imagePerceptualPrecision,
-                           traits: traits),
+                as: .wait(
+                    for: delay,
+                    on: .image(
+                        precision: Constants.imagePrecision,
+                        perceptualPrecision: Constants.imagePerceptualPrecision,
+                        traits: traits
+                    )
+                ),
                 named: name,
                 record: recording,
                 timeout: timeout,

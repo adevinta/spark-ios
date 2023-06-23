@@ -14,71 +14,100 @@ struct TagComponentItemsUIView: UIViewRepresentable {
 
     // MARK: - Properties
 
-    let itemViewModel: TagComponentItemViewModel
-    private let spacing: CGFloat
+    private let viewModel: TagComponentViewModel
+    private let iconImage: UIImage
 
     @Binding var height: CGFloat
+
+    private let intentColor: TagIntentColor
+    private let variant: TagVariant
+    private let content: TagContent
 
     // MARK: - Initialization
 
     init(
-        itemViewModel: TagComponentItemViewModel,
-        spacing: CGFloat,
-        height: Binding<CGFloat>
+        viewModel: TagComponentViewModel,
+        height: Binding<CGFloat>,
+        intentColor: TagIntentColor,
+        variant: TagVariant,
+        content: TagContent
     ) {
-        self.itemViewModel = itemViewModel
-        self.spacing = spacing
+        self.viewModel = viewModel
+        self.iconImage = UIImage(named: viewModel.imageNamed) ?? UIImage()
         self._height = height
+        self.intentColor = intentColor
+        self.variant = variant
+        self.content = content
     }
 
     // MARK: - Maker
 
     func makeUIView(context: Context) -> UIStackView {
-        let iconImage = UIImage(named: self.itemViewModel.imageNamed) ?? UIImage()
+        var tagView: TagUIView
 
-        let fullTagView = TagUIView(
-            theme: SparkTheme.shared,
-            intentColor: self.itemViewModel.intentColor,
-            variant: self.itemViewModel.variant,
-            iconImage: iconImage,
-            text: self.itemViewModel.text
-        )
+        switch self.content {
+        case .icon:
+            tagView = TagUIView(
+                theme: SparkTheme.shared,
+                intentColor: self.intentColor,
+                variant: self.variant,
+                iconImage: self.iconImage
+            )
 
-        let iconTagView = TagUIView(
-            theme: SparkTheme.shared,
-            intentColor: self.itemViewModel.intentColor,
-            variant: self.itemViewModel.variant,
-            iconImage: iconImage
-        )
+        case .text:
+            tagView = TagUIView(
+                theme: SparkTheme.shared,
+                intentColor: self.intentColor,
+                variant: self.variant,
+                text: self.viewModel.text
+            )
 
-        let textTagView = TagUIView(
-            theme: SparkTheme.shared,
-            intentColor: self.itemViewModel.intentColor,
-            variant: self.itemViewModel.variant,
-            text: self.itemViewModel.text
-        )
+        case .all:
+            tagView = TagUIView(
+                theme: SparkTheme.shared,
+                intentColor: self.intentColor,
+                variant: self.variant,
+                iconImage: self.iconImage,
+                text: self.viewModel.text
+            )
+        }
 
         let stackView = UIStackView(arrangedSubviews: [
-            fullTagView,
-            iconTagView,
-            textTagView,
+            tagView,
             UIView()
         ])
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.spacing = self.spacing
+        stackView.axis = .vertical
+        stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.heightAnchor.constraint(equalTo: fullTagView.heightAnchor).isActive = true
+        stackView.heightAnchor.constraint(equalTo: tagView.heightAnchor).isActive = true
 
         return stackView
     }
 
     func updateUIView(_ stackView: UIStackView, context: Context) {
-        DispatchQueue.main.async {
-            guard let tagView = stackView.arrangedSubviews.first(where: { $0 is TagUIView}) else {
-                return
-            }
+        guard let tagView = stackView.arrangedSubviews.compactMap({ $0 as? TagUIView }).first else {
+            return
+        }
 
+        if tagView.intentColor != self.intentColor {
+            tagView.intentColor = self.intentColor
+        }
+
+        if tagView.variant != self.variant {
+            tagView.variant = self.variant
+        }
+
+        if (tagView.iconImage == nil && self.content.showIcon) ||
+            (tagView.iconImage != nil && !self.content.showIcon) {
+            tagView.iconImage = self.content.showIcon ? self.iconImage : nil
+        }
+
+        if (tagView.text == nil && self.content.showText) ||
+            (tagView.text != nil && !self.content.showText) {
+            tagView.text = self.content.showText ? self.viewModel.text : nil
+        }
+
+        DispatchQueue.main.async {
             self.height = tagView.frame.height
         }
     }

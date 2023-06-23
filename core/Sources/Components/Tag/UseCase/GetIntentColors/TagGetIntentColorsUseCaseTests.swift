@@ -82,8 +82,8 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
             let useCase = TagGetIntentColorsUseCase()
 
             // WHEN
-            let intentColors = useCase.execute(for: item.givenIntentColor,
-                                               on: colorsMock)
+            let intentColors = useCase.execute(forIntentColor: item.givenIntentColor,
+                                               colors: colorsMock)
 
             //  Intent Colors Properties
             try Tester.testColorsProperties(givenIntentColors: intentColors,
@@ -152,7 +152,8 @@ private struct Tester {
                                   "Wrong" + errorPrefixMessage)
         XCTAssertIdentical(color,
                            expectedColorToken as? ColorTokenGeneratedMock,
-                           "Wrong value" + errorPrefixMessage)    }
+                           "Wrong value" + errorPrefixMessage)
+    }
 }
 
 // MARK: - Others Strucs
