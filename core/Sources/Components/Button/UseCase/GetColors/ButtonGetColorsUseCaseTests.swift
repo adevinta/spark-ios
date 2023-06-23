@@ -47,38 +47,38 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
             themeMock.underlyingColors = themeColorsMock
             themeMock.underlyingDims = dimsMock
 
-            let filledUseCase = ButtonVariantUseCaseableGeneratedMock()
-            let outlinedUseCase = ButtonVariantUseCaseableGeneratedMock()
-            let tintedUseCase = ButtonVariantUseCaseableGeneratedMock()
-            let contrastUseCase = ButtonVariantUseCaseableGeneratedMock()
-            let ghostUseCase = ButtonVariantUseCaseableGeneratedMock()
+            let getContrastUseCaseMock = ButtonGetVariantUseCaseableGeneratedMock()
+            let getFilledUseCaseMock = ButtonGetVariantUseCaseableGeneratedMock()
+            let getGhostUseCaseMock = ButtonGetVariantUseCaseableGeneratedMock()
+            let getOutlinedUseCaseMock = ButtonGetVariantUseCaseableGeneratedMock()
+            let getTintedUseCaseMock = ButtonGetVariantUseCaseableGeneratedMock()
 
-            let mockedUseCase: ButtonVariantUseCaseableGeneratedMock
+            let mockedUseCase: ButtonGetVariantUseCaseableGeneratedMock
             switch item.givenVariant {
-            case .filled:
-                mockedUseCase = filledUseCase
-            case .outlined:
-                mockedUseCase = outlinedUseCase
-            case .tinted:
-                mockedUseCase = tintedUseCase
             case .contrast:
-                mockedUseCase = contrastUseCase
+                mockedUseCase = getContrastUseCaseMock
+            case .filled:
+                mockedUseCase = getFilledUseCaseMock
             case .ghost:
-                mockedUseCase = ghostUseCase
+                mockedUseCase = getGhostUseCaseMock
+            case .outlined:
+                mockedUseCase = getOutlinedUseCaseMock
+            case .tinted:
+                mockedUseCase = getTintedUseCaseMock
             }
             mockedUseCase.colorsWithIntentColorAndColorsAndDimsReturnValue = item.givenColorables
 
             let getIntentColorsUseCaseMock = ButtonGetColorsUseCase(
-                filledUseCase: filledUseCase,
-                outlinedUseCase: outlinedUseCase,
-                tintedUseCase: tintedUseCase,
-                ghostUseCase: ghostUseCase,
-                contrastUseCase: contrastUseCase
+                getContrastUseCase: getContrastUseCaseMock,
+                getFilledUseCase: getFilledUseCaseMock,
+                getGhostUseCase: getGhostUseCaseMock,
+                getOutlinedUseCase: getOutlinedUseCaseMock,
+                getTintedUseCase: getTintedUseCaseMock
             )
 
             // WHEN
             let colors = getIntentColorsUseCaseMock.execute(
-                from: themeMock,
+                forTheme: themeMock,
                 intentColor: item.givenIntentColor,
                 variant: item.givenVariant
             )
@@ -103,7 +103,7 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
 private struct Tester {
 
     static func testColorsUseCaseExecuteCalling(
-        givenColorsUseCase: ButtonVariantUseCaseableGeneratedMock,
+        givenColorsUseCase: ButtonGetVariantUseCaseableGeneratedMock,
         givenIntentColor: ButtonIntentColor,
         givenColors: ColorsGeneratedMock,
         givenDims: DimsGeneratedMock

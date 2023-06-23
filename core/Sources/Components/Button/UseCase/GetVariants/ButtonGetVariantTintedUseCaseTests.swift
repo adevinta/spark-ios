@@ -1,5 +1,5 @@
 //
-//  ButtonVariantOutlinedUseCaseTests.swift
+//  ButtonGetVariantTintedUseCaseTests.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 16.05.23.
@@ -10,7 +10,7 @@ import XCTest
 import SwiftUI
 @testable import SparkCore
 
-final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
+final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
 
     // MARK: - Tests
     func test_primary_colors() throws {
@@ -18,7 +18,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .primary, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .primary, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -27,11 +27,11 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.primary.primary,
+            [self.theme.colors.primary.onPrimaryContainer,
+             self.theme.colors.primary.primaryContainer,
+             self.theme.colors.states.primaryContainerPressed,
              ColorTokenDefault.clear,
-             self.theme.colors.primary.primary.opacity(self.theme.dims.dim5),
-             self.theme.colors.primary.primary,
-             self.theme.colors.primary.primary
+             ColorTokenDefault.clear
             ].map(\.color))
     }
 
@@ -40,7 +40,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .secondary, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .secondary, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -49,11 +49,11 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.secondary.secondary,
+            [self.theme.colors.secondary.onSecondaryContainer,
+             self.theme.colors.secondary.secondaryContainer,
+             self.theme.colors.states.secondaryContainerPressed,
              ColorTokenDefault.clear,
-             self.theme.colors.secondary.secondary.opacity(self.theme.dims.dim5),
-             self.theme.colors.secondary.secondary,
-             self.theme.colors.secondary.secondary
+             ColorTokenDefault.clear
             ].map(\.color))
     }
 
@@ -62,7 +62,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .neutral, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .neutral, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -71,11 +71,11 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.feedback.neutral,
+            [self.theme.colors.feedback.onNeutralContainer,
+             self.theme.colors.feedback.neutralContainer,
+             self.theme.colors.states.neutralContainerPressed,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.neutral.opacity(self.theme.dims.dim5),
-             self.theme.colors.feedback.neutral,
-             self.theme.colors.feedback.neutral
+             ColorTokenDefault.clear
             ].map(\.color))
     }
 
@@ -84,7 +84,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .alert, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .alert, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -93,11 +93,11 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.feedback.alert,
+            [self.theme.colors.feedback.onAlertContainer,
+             self.theme.colors.feedback.alertContainer,
+             self.theme.colors.states.alertContainerPressed,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.alert.opacity(self.theme.dims.dim5),
-             self.theme.colors.feedback.alert,
-             self.theme.colors.feedback.alert
+             ColorTokenDefault.clear
             ].map(\.color))
     }
 
@@ -106,7 +106,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .success, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .success, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -115,11 +115,11 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.feedback.success,
+            [self.theme.colors.feedback.onSuccessContainer,
+             self.theme.colors.feedback.successContainer,
+             self.theme.colors.states.successContainerPressed,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.success.opacity(self.theme.dims.dim5),
-             self.theme.colors.feedback.success,
-             self.theme.colors.feedback.success
+             ColorTokenDefault.clear
             ].map(\.color))
     }
 
@@ -128,7 +128,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .danger, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .danger, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -137,11 +137,11 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.feedback.error,
+            [self.theme.colors.feedback.onErrorContainer,
+             self.theme.colors.feedback.errorContainer,
+             self.theme.colors.states.errorContainerPressed,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.error.opacity(self.theme.dims.dim5),
-             self.theme.colors.feedback.error,
-             self.theme.colors.feedback.error
+             ColorTokenDefault.clear
             ].map(\.color))
     }
 
@@ -150,7 +150,7 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .surface, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .surface, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -159,16 +159,16 @@ final class ButtonVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.base.surface,
+            [self.theme.colors.base.onBackgroundVariant,
+             self.theme.colors.base.backgroundVariant,
+             self.theme.colors.states.surfacePressed,
              ColorTokenDefault.clear,
-             self.theme.colors.base.surface.opacity(self.theme.dims.dim5),
-             self.theme.colors.base.surface,
-             self.theme.colors.base.surface
+             ColorTokenDefault.clear
             ].map(\.color))
     }
 
     // MARK: - Helper Functions
-    func sut() -> ButtonVariantOutlinedUseCase {
-        return ButtonVariantOutlinedUseCase()
+    func sut() -> ButtonGetVariantTintedUseCase {
+        return ButtonGetVariantTintedUseCase()
     }
 }

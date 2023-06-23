@@ -10,7 +10,7 @@ import Foundation
 
 /// A button intent is used to apply a color scheme to a button.
 @frozen
-public enum ButtonIntentColor {
+public enum ButtonIntentColor: CaseIterable {
     /// Intent used for warning-feedback.
     case alert
 

@@ -9,19 +9,19 @@
 import Foundation
 
 /// A button variant is used to distinguish between different design and appearance options.
-public enum ButtonVariant {
+public enum ButtonVariant: CaseIterable {
+    /// A contrast button with a solid background for better readability.
+    case contrast
+
     /// A filled button with a solid background.
     case filled
+
+    /// A ghost button with no background at all.
+    case ghost
 
     /// A transparent button with an outline-border.
     case outlined
 
     /// A tinted button with a solid background.
     case tinted
-
-    /// A ghost button with no background at all.
-    case ghost
-
-    /// A contrast button with a solid background for better readability.
-    case contrast
 }

@@ -12,13 +12,7 @@ import UIKit
 /// The `ButtonUIView`renders a Spark-button using UIKit.
 public class ButtonUIView: UIView {
 
-    // MARK: - Constants
-
-    private enum Constants {
-        static var borderWidth: CGFloat = 2
-    }
-
-    // MARK: - Private properties.
+    // MARK: - Components
 
     private let button: UIButton = {
         let button = UIButton()
@@ -57,6 +51,8 @@ public class ButtonUIView: UIView {
                                                           for: .vertical)
         return imageView
     }()
+
+    // MARK: - Private properties.
 
     private var imageViewWidthConstraint: NSLayoutConstraint?
     private var imageViewHeightConstraint: NSLayoutConstraint?
@@ -447,6 +443,8 @@ private extension ButtonUIView {
         self.textLabelBottomConstraint?.isActive = true
 
         imageView.isHidden = !viewModel.hasIcon
+
+        imageView.backgroundColor = .orange
         textLabel.isHidden = !viewModel.hasText
 
         NSLayoutConstraint.deactivate([self.textLabelLeadingConstraint, self.textLabelTrailingConstraint, self.imageViewLeadingConstraint, self.imageViewTrailingConstraint].compactMap { $0 })
@@ -542,6 +540,7 @@ private extension ButtonUIView {
 
 // MARK: - Actions
 private extension ButtonUIView {
+
     @IBAction func actionTouchUpInside(sender: UIButton) {
         self.isPressed = false
 

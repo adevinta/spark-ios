@@ -1,5 +1,5 @@
 //
-//  ButtonVariantTintedUseCase.swift
+//  ButtonGetVariantTintedUseCase.swift
 //  SparkCoreTests
 //
 //  Created by janniklas.freundt.ext on 16.05.23.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-struct ButtonVariantTintedUseCase: ButtonVariantUseCaseable {
+struct ButtonGetVariantTintedUseCase: ButtonGetVariantUseCaseable {
 
     // MARK: - Methods
 
     func colors(
-        for intentColor: ButtonIntentColor,
-        on colors: Colors,
+        forIntentColor intentColor: ButtonIntentColor,
+        colors: Colors,
         dims: Dims
     ) -> ButtonColorables {
         switch intentColor {

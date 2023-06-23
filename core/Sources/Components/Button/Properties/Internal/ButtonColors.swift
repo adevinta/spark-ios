@@ -6,8 +6,6 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
-
 // sourcery: AutoMockable
 protocol ButtonColorables {
     var textColor: any ColorToken { get }

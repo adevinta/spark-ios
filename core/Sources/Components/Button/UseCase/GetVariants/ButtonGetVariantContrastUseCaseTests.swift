@@ -1,5 +1,5 @@
 //
-//  ButtonVariantContrastUseCaseTests.swift
+//  ButtonVariantGetContrastUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by janniklas.freundt.ext on 16.05.23.
@@ -10,7 +10,7 @@ import XCTest
 import SwiftUI
 @testable import SparkCore
 
-final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
+final class ButtonVariantGetContrastUseCaseTests: ButtonVariantUseCaseTests {
 
     // MARK: - Tests
     func test_primary_colors() throws {
@@ -18,7 +18,7 @@ final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .primary, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .primary, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -40,7 +40,7 @@ final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .secondary, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .secondary, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -62,7 +62,7 @@ final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .neutral, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .neutral, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -84,7 +84,7 @@ final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .alert, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .alert, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -106,7 +106,7 @@ final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .success, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .success, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -128,7 +128,7 @@ final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .danger, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .danger, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -150,7 +150,7 @@ final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(for: .surface, on: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(forIntentColor: .surface, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -168,7 +168,7 @@ final class ButtonVariantContrastUseCaseTests: ButtonVariantUseCaseTests {
     }
 
     // MARK: - Helper Functions
-    func sut() -> ButtonVariantContrastUseCase {
-        return ButtonVariantContrastUseCase()
+    func sut() -> ButtonVariantGetContrastUseCase {
+        return ButtonVariantGetContrastUseCase()
     }
 }
