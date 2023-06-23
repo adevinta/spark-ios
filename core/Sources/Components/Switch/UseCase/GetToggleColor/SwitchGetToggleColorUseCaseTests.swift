@@ -16,8 +16,8 @@ final class SwitchGetToggleColorUseCaseTests: XCTestCase {
 
     private var statusAndStateColorMock: SwitchStatusColorablesGeneratedMock = {
         let mock = SwitchStatusColorablesGeneratedMock()
-        mock.underlyingOnFullColorToken = FullColorTokenGeneratedMock()
-        mock.underlyingOffFullColorToken = FullColorTokenGeneratedMock()
+        mock.underlyingOnColorToken = ColorTokenGeneratedMock()
+        mock.underlyingOffColorToken = ColorTokenGeneratedMock()
         return mock
     }()
 
@@ -26,14 +26,14 @@ final class SwitchGetToggleColorUseCaseTests: XCTestCase {
     func test_execute_when_isOn_is_true() throws {
         try self.testExecute(
             givenIsOn: true,
-            expectedColorToken: self.statusAndStateColorMock.onFullColorToken
+            expectedColorToken: self.statusAndStateColorMock.onColorToken
         )
     }
 
     func test_execute_when_isOn_is_false() throws {
         try self.testExecute(
             givenIsOn: false,
-            expectedColorToken: self.statusAndStateColorMock.offFullColorToken
+            expectedColorToken: self.statusAndStateColorMock.offColorToken
         )
     }
 }
@@ -44,7 +44,7 @@ private extension SwitchGetToggleColorUseCaseTests {
 
     func testExecute(
         givenIsOn: Bool,
-        expectedColorToken: FullColorToken
+        expectedColorToken: ColorToken
     ) throws {
         // GIVEN
         let errorPrefixMessage = " for \(givenIsOn) isOn"

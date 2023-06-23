@@ -41,7 +41,7 @@ fileprivate struct ColorTokenClear: ColorToken {
 
 public extension ColorToken {
 
-    @available(*, deprecated, message: "Use FullColorToken instead")
+    @available(*, deprecated, message: "Use FullColorTokenDefault instead")
     func opacity(_ opacity: CGFloat) -> ColorToken {
         return OpacityColorToken(uiColor: self.uiColor.withAlphaComponent(opacity),
                                  color: self.color.opacity(opacity))

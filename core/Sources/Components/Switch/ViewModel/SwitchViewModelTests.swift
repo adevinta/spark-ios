@@ -29,8 +29,8 @@ final class SwitchViewModelTests: XCTestCase {
 
     private let imageMock = SwitchImageableGeneratedMock()
 
-    private var fullColorTokenMock: FullColorTokenGeneratedMock = {
-        let mock = FullColorTokenGeneratedMock()
+    private var colorTokenMock: ColorTokenGeneratedMock = {
+        let mock = ColorTokenGeneratedMock()
         mock.underlyingColor = .orange
         mock.underlyingUiColor = .green
         return mock
@@ -66,7 +66,7 @@ final class SwitchViewModelTests: XCTestCase {
     }()
     private lazy var getToggleColorUseCaseMock: SwitchGetToggleColorUseCaseableGeneratedMock = {
         let mock = SwitchGetToggleColorUseCaseableGeneratedMock()
-        mock.executeWithIsOnAndStatusAndStateColorReturnValue = self.fullColorTokenMock
+        mock.executeWithIsOnAndStatusAndStateColorReturnValue = self.colorTokenMock
         return mock
 
     }()
@@ -532,15 +532,15 @@ private extension SwitchViewModelTests {
     }
 
     func testColors(on viewModel: SwitchViewModel) {
-        XCTAssertIdentical(viewModel.toggleBackgroundFullColorToken as? FullColorTokenGeneratedMock,
-                           self.fullColorTokenMock,
-                           "Wrong toggleBackgroundFullColorToken value")
+        XCTAssertIdentical(viewModel.toggleBackgroundColorToken as? ColorTokenGeneratedMock,
+                           self.colorTokenMock,
+                           "Wrong toggleBackgroundColorToken value")
         XCTAssertIdentical(try XCTUnwrap(viewModel.toggleDotBackgroundColorToken as? ColorTokenGeneratedMock),
                            self.colorsMock.toggleDotBackgroundColor as? ColorTokenGeneratedMock,
                            "Wrong toggleDotBackgroundColorToken value")
-        XCTAssertIdentical(viewModel.toggleDotForegroundFullColorToken as? FullColorTokenGeneratedMock,
-                           self.fullColorTokenMock,
-                           "Wrong toggleDotForegroundFullColorToken value")
+        XCTAssertIdentical(viewModel.toggleDotForegroundColorToken as? ColorTokenGeneratedMock,
+                           self.colorTokenMock,
+                           "Wrong toggleDotForegroundColorToken value")
         XCTAssertIdentical(try XCTUnwrap(viewModel.textForegroundColorToken as? ColorTokenGeneratedMock),
                            self.colorsMock.textForegroundColor as? ColorTokenGeneratedMock,
                            "Wrong textForegroundColorToken value")
