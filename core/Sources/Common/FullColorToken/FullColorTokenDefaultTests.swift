@@ -1,5 +1,5 @@
 //
-//  FullColorTokenTests.swift
+//  FullColorTokenDefault.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 13/06/2023.
@@ -11,7 +11,7 @@ import SwiftUI
 import UIKit
 @testable import SparkCore
 
-final class FullColorTokenTests: XCTestCase {
+final class FullColorTokenDefaultTests: XCTestCase {
 
     // MARK: - Tests
 

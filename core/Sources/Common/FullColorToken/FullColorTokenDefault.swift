@@ -1,5 +1,5 @@
 //
-//  FullColorToken.swift
+//  FullColorTokenDefault.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 07/06/2023.
