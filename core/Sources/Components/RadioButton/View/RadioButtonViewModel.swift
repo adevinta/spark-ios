@@ -11,7 +11,7 @@ import SwiftUI
 final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: ObservableObject {
     // MARK: - Injected Properties
 
-    @Published var label: String
+    @Published var label: Either<NSAttributedString, String>
     let id: ID
 
     private let useCase: GetRadioButtonColorsUseCaseable
@@ -37,7 +37,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     convenience init(theme: Theme,
                      id: ID,
-                     label: String,
+                     label: Either<NSAttributedString, String>,
                      selectedID: Binding<ID>,
                      state: SparkSelectButtonState,
                      labelPosition: RadioButtonLabelPosition = .right) {
@@ -53,7 +53,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     init(theme: Theme,
          id: ID,
-         label: String,
+         label: Either<NSAttributedString, String>,
          selectedID: Binding<ID>,
          state: SparkSelectButtonState,
          labelPosition: RadioButtonLabelPosition,

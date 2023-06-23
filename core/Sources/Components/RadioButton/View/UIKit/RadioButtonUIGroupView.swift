@@ -14,7 +14,7 @@ import SwiftUI
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
 
     // MARK: - Private Properties
-    private let items: [RadioButtonItem<ID>]
+    private let items: [RadioButtonUIItem<ID>]
     private let title: String?
     private var itemSpacingConstraints = [NSLayoutConstraint]()
     private var allConstraints = [NSLayoutConstraint]()
@@ -103,7 +103,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     public init(theme: Theme,
                 title: String? = nil,
                 selectedID: ID,
-                items: [RadioButtonItem<ID>],
+                items: [RadioButtonUIItem<ID>],
                 radioButtonLabelPosition: RadioButtonLabelPosition = .right,
                 groupLayout: RadioButtonGroupLayout = .vertical
     ) {

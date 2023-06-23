@@ -19,36 +19,36 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
 
     var selectedID = "1"
 
-    let items: [RadioButtonItem<String>] = [
-        RadioButtonItem(id: "1",
-                        label: "Label 1"),
-        RadioButtonItem(id: "2",
-                        label: "Label 2"),
-        RadioButtonItem(id: "3",
-                        label: "Label 3")
+    let items: [RadioButtonUIItem<String>] = [
+        RadioButtonUIItem(id: "1",
+                          label: "Label 1"),
+        RadioButtonUIItem(id: "2",
+                          label: "Label 2"),
+        RadioButtonUIItem(id: "3",
+                          label: "Label 3")
     ]
 
     // MARK: - Tests
 
     func test_uikit_radioButtonGroup() throws {
-        let items: [RadioButtonItem<String>] = [
-            RadioButtonItem(id: "1",
-                            label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
-            RadioButtonItem(id: "2",
-                            label: "2 Radio button / Enabled",
-                            state: .enabled),
-            RadioButtonItem(id: "3",
-                            label: "3 Radio button / Disabled",
-                            state: .disabled),
-            RadioButtonItem(id: "4",
-                            label: "4 Radio button / Error",
-                            state: .error(message: "Error")),
-            RadioButtonItem(id: "5",
-                            label: "5 Radio button / Success",
-                            state: .success(message: "Success")),
-            RadioButtonItem(id: "6",
-                            label: "6 Radio button / Warning",
-                            state: .warning(message: "Warning")),
+        let items: [RadioButtonUIItem<String>] = [
+            RadioButtonUIItem(id: "1",
+                              label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
+            RadioButtonUIItem(id: "2",
+                              label: "2 Radio button / Enabled",
+                              state: .enabled),
+            RadioButtonUIItem(id: "3",
+                              label: "3 Radio button / Disabled",
+                              state: .disabled),
+            RadioButtonUIItem(id: "4",
+                              label: "4 Radio button / Error",
+                              state: .error(message: "Error")),
+            RadioButtonUIItem(id: "5",
+                              label: "5 Radio button / Success",
+                              state: .success(message: "Success")),
+            RadioButtonUIItem(id: "6",
+                              label: "6 Radio button / Warning",
+                              state: .warning(message: "Warning")),
         ]
 
         let sut = RadioButtonUIGroupView(

@@ -48,12 +48,12 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     /// The label of radio button
-    public var label: String {
+    public var label: NSAttributedString {
         get {
-            return self.viewModel.label
+            return self.viewModel.label.leftValue
         }
         set {
-            self.viewModel.label = newValue
+            self.viewModel.label = .left(newValue)
         }
     }
 
@@ -113,14 +113,14 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     /// - state: the current state
     public convenience init(theme: Theme,
                             id: ID,
-                            label: String,
+                            label: NSAttributedString,
                             selectedID: Binding<ID>,
                             state: SparkSelectButtonState = .enabled,
                             labelPosition: RadioButtonLabelPosition = .right
     ) {
         let viewModel = RadioButtonViewModel(theme: theme,
                                              id: id,
-                                             label: label,
+                                             label: .left(label),
                                              selectedID: selectedID,
                                              state: state,
                                              labelPosition: labelPosition)
@@ -179,7 +179,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
 
         self.subscribeTo(self.viewModel.$colors) { [weak self] colors in
-            self?.updateColors(colors)
+            guard let self else { return }
+            self.updateColors(colors)
+            self.textLabel.attributedText = self.viewModel.label.leftValue
         }
 
         self.subscribeTo(self.viewModel.$isDisabled) { [weak self] isDisabled in
@@ -187,7 +189,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
 
         self.subscribeTo(self.viewModel.$font) { [weak self] font in
-            self?.textLabel.font = font.uiFont
+            guard let self else { return }
+            self.textLabel.font = font.uiFont
+            self.textLabel.attributedText = self.viewModel.label.leftValue
         }
 
         self.subscribeTo(self.viewModel.$supplemetaryFont) { [weak self] supplementaryFont in
@@ -199,7 +203,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
 
         self.subscribeTo(self.viewModel.$label) { [weak self] label in
-            self?.textLabel.text = label
+            self?.textLabel.attributedText = label.leftValue
         }
 
         self.subscribeTo(self.viewModel.$labelPosition) { [weak self] _ in
@@ -236,13 +240,13 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.addSubview(self.button)
 
         self.setupConstraints()
-        self.textLabel.text = self.viewModel.label
+        self.textLabel.attributedText = self.viewModel.label.leftValue
     }
 
     private func updateViewAttributes() {
         self.updateColors(self.viewModel.colors)
 
-        self.textLabel.text = self.viewModel.label
+        self.textLabel.attributedText = self.viewModel.label.leftValue
         self.textLabel.font = self.viewModel.font.uiFont
 
         self.supplementaryLabel.text = self.viewModel.supplementaryText
