@@ -523,18 +523,18 @@ public final class SwitchUIView: UIView {
 
         // **
         // Colors
-        self.subscribeTo(self.viewModel.$toggleBackgroundFullColorToken) { [weak self] fullColorToken in
-            guard let self, let fullColorToken else { return }
+        self.subscribeTo(self.viewModel.$toggleBackgroundColorToken) { [weak self] colorToken in
+            guard let self, let colorToken else { return }
 
             // Animate only if there is currently an color on View and if new color is different from current color
-            let animated = self.toggleView.backgroundColor != nil && self.toggleView.backgroundColor != fullColorToken.uiColor
+            let animated = self.toggleView.backgroundColor != nil && self.toggleView.backgroundColor != colorToken.uiColor
 
             if animated {
                 UIView.animate(withDuration: Constants.animationDuration) { [weak self] in
-                    self?.toggleView.backgroundColor = fullColorToken.uiColor
+                    self?.toggleView.backgroundColor = colorToken.uiColor
                 }
             } else {
-                self.toggleView.backgroundColor = fullColorToken.uiColor
+                self.toggleView.backgroundColor = colorToken.uiColor
             }
         }
         self.subscribeTo(self.viewModel.$toggleDotBackgroundColorToken) { [weak self] colorToken in
@@ -542,18 +542,18 @@ public final class SwitchUIView: UIView {
 
             self.toggleDotView.backgroundColor = colorToken.uiColor
         }
-        self.subscribeTo(self.viewModel.$toggleDotForegroundFullColorToken) { [weak self] fullColorToken in
-            guard let self, let fullColorToken else { return }
+        self.subscribeTo(self.viewModel.$toggleDotForegroundColorToken) { [weak self] colorToken in
+            guard let self, let colorToken else { return }
 
             // Animate only if there is currently an color on View and if new color is different from current color
-            let animated = self.toggleDotImageView.tintColor != nil && self.toggleDotImageView.tintColor != fullColorToken.uiColor
+            let animated = self.toggleDotImageView.tintColor != nil && self.toggleDotImageView.tintColor != colorToken.uiColor
 
             if animated {
                 UIView.animate(withDuration: Constants.animationDuration) { [weak self] in
-                    self?.toggleDotImageView.tintColor = fullColorToken.uiColor
+                    self?.toggleDotImageView.tintColor = colorToken.uiColor
                 }
             } else {
-                self.toggleDotImageView.tintColor = fullColorToken.uiColor
+                self.toggleDotImageView.tintColor = colorToken.uiColor
             }
         }
         self.subscribeTo(self.viewModel.$textForegroundColorToken) { [weak self] colorToken in

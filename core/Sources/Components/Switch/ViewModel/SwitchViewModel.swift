@@ -27,9 +27,9 @@ final class SwitchViewModel: ObservableObject {
     @Published private (set) var isToggleInteractionEnabled: Bool?
     @Published private (set) var toggleOpacity: CGFloat?
 
-    @Published private (set) var toggleBackgroundFullColorToken: FullColorToken?
+    @Published private (set) var toggleBackgroundColorToken: ColorToken?
     @Published private (set) var toggleDotBackgroundColorToken: ColorToken?
-    @Published private (set) var toggleDotForegroundFullColorToken: FullColorToken?
+    @Published private (set) var toggleDotForegroundColorToken: ColorToken?
     @Published private (set) var textForegroundColorToken: ColorToken?
 
     @Published private (set) var isToggleOnLeft: Bool?
@@ -161,12 +161,12 @@ final class SwitchViewModel: ObservableObject {
             return
         }
 
-        self.toggleBackgroundFullColorToken = self.getToggleColorUseCase.execute(
+        self.toggleBackgroundColorToken = self.getToggleColorUseCase.execute(
             forIsOn: self.isOn,
             statusAndStateColor: colors.toggleBackgroundColors
         )
         self.toggleDotBackgroundColorToken = colors.toggleDotBackgroundColor
-        self.toggleDotForegroundFullColorToken = self.getToggleColorUseCase.execute(
+        self.toggleDotForegroundColorToken = self.getToggleColorUseCase.execute(
             forIsOn: self.isOn,
             statusAndStateColor: colors.toggleDotForegroundColors
         )

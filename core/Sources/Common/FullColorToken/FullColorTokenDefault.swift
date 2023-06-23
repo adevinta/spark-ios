@@ -1,5 +1,5 @@
 //
-//  FullColorToken.swift
+//  FullColorTokenDefault.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 07/06/2023.
@@ -10,13 +10,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
-// sourcery: AutoMockable
-protocol FullColorToken {
-    var uiColor: UIColor { get }
-    var color: Color { get }
-}
-
-struct FullColorTokenDefault: FullColorToken {
+struct FullColorTokenDefault: ColorToken {
 
     // MARK: - Public Properties
 

@@ -30,14 +30,14 @@ struct SwitchColors: SwitchColorables {
 
 // sourcery: AutoMockable
 protocol SwitchStatusColorables {
-    var onFullColorToken: FullColorToken { get }
-    var offFullColorToken: FullColorToken { get }
+    var onColorToken: ColorToken { get }
+    var offColorToken: ColorToken { get }
 }
 
 struct SwitchStatusColors: SwitchStatusColorables {
 
     // MARK: - Properties
 
-    let onFullColorToken: FullColorToken
-    let offFullColorToken: FullColorToken
+    let onColorToken: ColorToken
+    let offColorToken: ColorToken
 }

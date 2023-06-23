@@ -25,8 +25,8 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         let getIntentColorUseCaseMock = SwitchGetIntentColorUseCaseableGeneratedMock()
         getIntentColorUseCaseMock.executeWithIntentColorAndColorsReturnValue = intentColorTokenMock
 
-        let expectedOnFullColorToken = FullColorTokenDefault(colorToken: intentColorTokenMock, opacity: 1)
-        let expectedOffFullColorToken = FullColorTokenDefault(colorToken: colorsMock.base.onSurface, opacity: dimsMock.dim4)
+        let expectedOnColorToken = FullColorTokenDefault(colorToken: intentColorTokenMock, opacity: 1)
+        let expectedOffColorToken = FullColorTokenDefault(colorToken: colorsMock.base.onSurface, opacity: dimsMock.dim4)
 
         let useCase = SwitchGetColorsUseCase(getIntentColorUseCase: getIntentColorUseCaseMock)
 
@@ -41,14 +41,14 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         // **
         // Status background colors
         XCTAssertEqual(
-            colors.toggleBackgroundColors.onFullColorToken as? FullColorTokenDefault,
-            expectedOnFullColorToken,
-            "Wrong onFullColorToken on toggleBackgroundColors"
+            colors.toggleBackgroundColors.onColorToken as? FullColorTokenDefault,
+            expectedOnColorToken,
+            "Wrong onColorToken on toggleBackgroundColors"
         )
         XCTAssertEqual(
-            colors.toggleBackgroundColors.offFullColorToken as? FullColorTokenDefault,
-            expectedOffFullColorToken,
-            "Wrong offFullColorToken on toggleBackgroundColors"
+            colors.toggleBackgroundColors.offColorToken as? FullColorTokenDefault,
+            expectedOffColorToken,
+            "Wrong offColorToken on toggleBackgroundColors"
         )
         // **
 
@@ -61,14 +61,14 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         // **
         // State foreground colors
         XCTAssertEqual(
-            colors.toggleDotForegroundColors.onFullColorToken as? FullColorTokenDefault,
-            expectedOnFullColorToken,
-            "Wrong onFullColorToken on toggleDotForegroundColors"
+            colors.toggleDotForegroundColors.onColorToken as? FullColorTokenDefault,
+            expectedOnColorToken,
+            "Wrong onColorToken on toggleDotForegroundColors"
         )
         XCTAssertEqual(
-            colors.toggleDotForegroundColors.offFullColorToken as? FullColorTokenDefault,
-            expectedOffFullColorToken,
-            "Wrong offFullColorToken on toggleDotForegroundColors"
+            colors.toggleDotForegroundColors.offColorToken as? FullColorTokenDefault,
+            expectedOffColorToken,
+            "Wrong offColorToken on toggleDotForegroundColors"
         )
         // **
 

@@ -40,8 +40,8 @@ struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
         )
 
         let statusAndStateColors = SwitchStatusColors(
-            onFullColorToken: FullColorTokenDefault(colorToken: intentColor, opacity: 1),
-            offFullColorToken: FullColorTokenDefault(colorToken: colors.base.onSurface, opacity: dims.dim4)
+            onColorToken: FullColorTokenDefault(colorToken: intentColor, opacity: 1),
+            offColorToken: FullColorTokenDefault(colorToken: colors.base.onSurface, opacity: dims.dim4)
         )
 
         return SwitchColors(

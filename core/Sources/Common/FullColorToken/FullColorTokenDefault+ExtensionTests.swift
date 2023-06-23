@@ -1,5 +1,5 @@
 //
-//  FullColorToken+ExtensionTests.swift
+//  FullColorTokenDefault+ExtensionTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 13/06/2023.
