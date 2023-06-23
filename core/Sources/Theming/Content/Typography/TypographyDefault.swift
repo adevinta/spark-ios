@@ -96,6 +96,18 @@ public struct TypographyFontTokenDefault: TypographyFontToken {
                            relativeTo: textStyle)
     }
 
+    public func uiFont(isScaled: Bool = false) -> UIFont {
+        guard let font = UIFont(name: self.fontName, size: self.fontSize) else {
+            fatalError("Missing font named \(self.fontName)")
+        }
+        let textStyle = UIFont.TextStyle(from: self.fontTextStyle)
+        if isScaled {
+            return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: font)
+        } else {
+            return font
+        }
+    }
+
     // MARK: - Initialization
 
     public init(named fontName: String,

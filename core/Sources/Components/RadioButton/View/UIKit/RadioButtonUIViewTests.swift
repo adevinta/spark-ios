@@ -118,7 +118,8 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
             label: label ?? state.label(isSelected: isSelected),
             selectedID: selectedID,
             state: state,
-            labelPosition: labelPosition
+            labelPosition: labelPosition,
+            isAutoscalingEnabled: true
         )
 
         view.backgroundColor = UIColor.systemBackground

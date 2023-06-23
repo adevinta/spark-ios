@@ -12,10 +12,12 @@ import UIKit
 @propertyWrapper struct ScaledUIMetric<Value> where Value : BinaryFloatingPoint {
     // MARK: - Properties
 
+    let isAutoscalable: Bool
+
     /// Returns the scaled value for the `baseValue` according to the trait collection. When setting this property a new baseValue is set.
     var wrappedValue: Value {
         get {
-            return self.scaledValue(for: self.traitCollection)
+            return self.isAutoscalable ? self.scaledValue(for: self.traitCollection) : self.baseValue
         }
         set {
             self.baseValue = newValue
@@ -41,11 +43,13 @@ import UIKit
     init(
         wrappedValue baseValue: Value,
         relativeTo metrics: UIFontMetrics,
+        isAutoscalable: Bool = true,
         traitCollection: UITraitCollection? = nil
     ) {
         self.baseValue = baseValue
         self.metrics = metrics
         self.traitCollection = traitCollection
+        self.isAutoscalable = isAutoscalable
     }
 
     /// Initialize a new property wrapper.
@@ -56,11 +60,13 @@ import UIKit
     init(
         wrappedValue baseValue: Value,
         relativeTo textStyle: UIFont.TextStyle = .body,
+        isAutoscalable: Bool = true,
         traitCollection: UITraitCollection? = nil
     ) {
         self.init(
             wrappedValue: baseValue,
             relativeTo: UIFontMetrics(forTextStyle: textStyle),
+            isAutoscalable: isAutoscalable,
             traitCollection: traitCollection
         )
     }

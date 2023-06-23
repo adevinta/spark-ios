@@ -41,4 +41,11 @@ public protocol Typography {
 public protocol TypographyFontToken {
     var uiFont: UIFont { get }
     var font: Font { get }
+    func uiFont(isScaled: Bool) -> UIFont
+}
+
+extension TypographyFontToken {
+    func uiFont(isScaled: Bool = false) -> UIFont {
+        return self.uiFont
+    }
 }

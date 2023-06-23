@@ -55,7 +55,8 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
             theme: SparkTheme.shared,
             title: "Radio Button Group (UIKit)",
             selectedID: self.selectedID,
-            items: items)
+            items: items,
+            isAutoscalingEnabled: true)
 
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
         sut.translatesAutoresizingMaskIntoConstraints = false
@@ -80,7 +81,8 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
             theme: SparkTheme.shared,
             selectedID: self.selectedID,
             items: self.items,
-            groupLayout: .horizontal
+            groupLayout: .horizontal,
+            isAutoscalingEnabled: true
         )
 
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
@@ -95,7 +97,8 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
             title: "Title",
             selectedID: self.selectedID,
             items: self.items,
-            groupLayout: .horizontal
+            groupLayout: .horizontal,
+            isAutoscalingEnabled: true
         )
 
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
@@ -110,7 +113,8 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
             selectedID: self.selectedID,
             items: self.items,
             radioButtonLabelPosition: .left,
-            groupLayout: .vertical
+            groupLayout: .vertical,
+            isAutoscalingEnabled: true
         )
 
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
@@ -126,7 +130,8 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
             selectedID: self.selectedID,
             items: self.items,
             radioButtonLabelPosition: .left,
-            groupLayout: .vertical
+            groupLayout: .vertical,
+            isAutoscalingEnabled: true
         )
 
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor

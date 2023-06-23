@@ -26,6 +26,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     // MARK: Injected Properties
     private let viewModel: RadioButtonViewModel<ID>
+    private let isAutoscalingEnabled: Bool
 
     /// The general theme
     public var theme: Theme {
@@ -67,10 +68,10 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     // MARK: Private Properties
-    @ScaledUIMetric private var toggleSize = Constants.toggleViewHeight
+    @ScaledUIMetric private var toggleSize: CGFloat
     @ScaledUIMetric private var spacing: CGFloat
-    @ScaledUIMetric private var textLabelTopSpacing = Constants.textLabelTopSpacing
-    @ScaledUIMetric private var haloWidth = Constants.haloWidth
+    @ScaledUIMetric private var textLabelTopSpacing: CGFloat
+    @ScaledUIMetric private var haloWidth: CGFloat
 
     private var subscriptions = Set<AnyCancellable>()
 
@@ -116,7 +117,8 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
                             label: String,
                             selectedID: Binding<ID>,
                             state: SparkSelectButtonState = .enabled,
-                            labelPosition: RadioButtonLabelPosition = .right
+                            labelPosition: RadioButtonLabelPosition = .right,
+                            isAutoscalingEnabled: Bool
     ) {
         let viewModel = RadioButtonViewModel(theme: theme,
                                              id: id,
@@ -125,12 +127,16 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
                                              state: state,
                                              labelPosition: labelPosition)
 
-        self.init(viewModel: viewModel)
+        self.init(viewModel: viewModel, isAutoscalingEnabled: isAutoscalingEnabled)
     }
 
-    init(viewModel: RadioButtonViewModel<ID>) {
+    init(viewModel: RadioButtonViewModel<ID>, isAutoscalingEnabled: Bool) {
         self.viewModel = viewModel
-        self._spacing = ScaledUIMetric(wrappedValue: viewModel.spacing)
+        self._spacing = ScaledUIMetric(wrappedValue: viewModel.spacing, isAutoscalable: isAutoscalingEnabled)
+        self._toggleSize = ScaledUIMetric(wrappedValue: Constants.toggleViewHeight, isAutoscalable: isAutoscalingEnabled)
+        self._textLabelTopSpacing = ScaledUIMetric(wrappedValue: Constants.textLabelTopSpacing, isAutoscalable: isAutoscalingEnabled)
+        self._haloWidth = ScaledUIMetric(wrappedValue: Constants.haloWidth, isAutoscalable: isAutoscalingEnabled)
+        self.isAutoscalingEnabled = isAutoscalingEnabled
 
         super.init(frame: CGRect.zero)
 
@@ -153,6 +159,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        guard self.isAutoscalingEnabled else { return }
 
         self._toggleSize.update(traitCollection: self.traitCollection)
         self._spacing.update(traitCollection: self.traitCollection)
@@ -187,11 +194,13 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
 
         self.subscribeTo(self.viewModel.$font) { [weak self] font in
-            self?.textLabel.font = font.uiFont
+            guard let self else { return }
+            self.textLabel.font = font.uiFont(isScaled: self.isAutoscalingEnabled)
         }
 
         self.subscribeTo(self.viewModel.$supplemetaryFont) { [weak self] supplementaryFont in
-            self?.supplementaryLabel.font = supplementaryFont.uiFont
+            guard let self else { return }
+            self.supplementaryLabel.font = supplementaryFont.uiFont(isScaled: self.isAutoscalingEnabled)
         }
 
         self.subscribeTo(self.viewModel.$supplementaryText) { [weak self] supplementaryText in
@@ -224,6 +233,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     private func arrangeViews() {
         self.translatesAutoresizingMaskIntoConstraints = false
+
+        self.textLabel.adjustsFontForContentSizeCategory = self.isAutoscalingEnabled
+        self.supplementaryLabel.adjustsFontForContentSizeCategory = self.isAutoscalingEnabled
 
         self.addSubview(self.toggleView)
         self.addSubview(self.textLabel)
@@ -380,7 +392,6 @@ private extension UILabel {
         label.backgroundColor = .clear
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required,
                                                       for: .vertical)
         return label

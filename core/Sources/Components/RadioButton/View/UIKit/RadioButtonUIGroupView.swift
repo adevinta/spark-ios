@@ -22,6 +22,8 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     @ScaledUIMetric private var spacing: CGFloat
 
+    private var isAutoscalingEnabled: Bool = false
+
     private lazy var backingSelectedID: Binding<ID> = Binding(
         get: {
             return self.selectedID
@@ -35,9 +37,9 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     private var radioButtonViews: [RadioButtonUIView<ID>] = []
 
-    private var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontForContentSizeCategory = self.isAutoscalingEnabled
         label.translatesAutoresizingMaskIntoConstraints = false
 
         return label
@@ -58,7 +60,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             for radioButtonView in radioButtonViews {
                 radioButtonView.theme = theme
             }
-            self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge)
+            self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge, isAutoscalable: self.isAutoscalingEnabled)
         }
     }
 
@@ -105,7 +107,8 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                 selectedID: ID,
                 items: [RadioButtonItem<ID>],
                 radioButtonLabelPosition: RadioButtonLabelPosition = .right,
-                groupLayout: RadioButtonGroupLayout = .vertical
+                groupLayout: RadioButtonGroupLayout = .vertical,
+                isAutoscalingEnabled: Bool = false
     ) {
         self.theme = theme
         self.items = items
@@ -113,8 +116,9 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         self.title = title
         self.radioButtonLabelPosition = radioButtonLabelPosition
         self.groupLayout = groupLayout
-        self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge)
+        self._spacing = ScaledUIMetric(wrappedValue: theme.layout.spacing.xLarge, isAutoscalable: isAutoscalingEnabled)
         self.currentValue = CurrentValueSubject(selectedID)
+        self.isAutoscalingEnabled = isAutoscalingEnabled
         super.init(frame: .zero)
 
         arrangeView()
@@ -127,6 +131,8 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        guard isAutoscalingEnabled else { return }
+
         self._spacing.update(traitCollection: self.traitCollection)
 
         for constraint in self.itemSpacingConstraints {
@@ -143,15 +149,15 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                                                     label: $0.label,
                                                     selectedID: self.backingSelectedID,
                                                     state: $0.state,
-                                                    labelPosition: self.radioButtonLabelPosition
-            )
+                                                    labelPosition: self.radioButtonLabelPosition,
+                                                    isAutoscalingEnabled: self.isAutoscalingEnabled)
             radioButtonView.translatesAutoresizingMaskIntoConstraints = false
             return radioButtonView
         }
 
         if let title = self.title {
             self.titleLabel.text = title
-            self.titleLabel.font = self.theme.typography.subhead.uiFont
+            self.titleLabel.font = self.theme.typography.subhead.uiFont(isScaled: self.isAutoscalingEnabled)
             self.titleLabel.textColor = self.theme.colors.base.onSurface.uiColor
 
             self.addSubview(self.titleLabel)
