@@ -18,7 +18,7 @@ private enum Constants {
 /// Radio buttons are used for selecting a single value from a selection of values.
 /// The values from which can be selected need to be ``Equatable`` & ``CustomStringConvertible``.
 ///
-/// The radio buttion is created by providing:
+/// The radio button is created by providing:
 /// - A theme
 /// - A unique ID
 /// - A label representing the value to be selected
@@ -75,7 +75,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         let viewModel = RadioButtonViewModel(
             theme: theme,
             id: id,
-            label: label,
+            label: .right(label),
             selectedID: selectedID,
             state: state,
             labelPosition: labelPosition)
@@ -98,7 +98,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         .disabled(self.viewModel.isDisabled)
         .opacity(self.viewModel.opacity)
         .buttonStyle(RadioButtonButtonStyle(isPressed: self.$isPressed))
-        .accessibilityLabel(self.viewModel.label)
+        .accessibilityLabel(self.viewModel.label.rightValue)
         .accessibilityValue(self.viewModel.id.description)
     }
 
@@ -142,7 +142,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     @ViewBuilder
     private func labelAndSublabel() -> some View {
         VStack(alignment: .leading) {
-            Text(self.viewModel.label)
+            Text(self.viewModel.label.rightValue)
                 .font(self.viewModel.font.font)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(self.viewModel.surfaceColor.color)

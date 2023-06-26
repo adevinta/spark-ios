@@ -19,7 +19,8 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
 
     // MARK: - Tests
     func test_multiline_label() throws {
-        let sut = sut(state: .enabled, isSelected: false, label: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+        let label = NSAttributedString(string: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+        let sut = sut(state: .enabled, isSelected: false, label: label)
 
         sut.translatesAutoresizingMaskIntoConstraints = false
 
@@ -90,7 +91,7 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
     func test_label_right() throws {
         let view = sut(state: .enabled,
                        isSelected: true,
-                       label: "Label",
+                       label: NSAttributedString(string: "Label"),
                        labelPosition: .left).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
@@ -98,14 +99,40 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
     func test_label_with_sublabel_right() throws {
         let view = sut(state: .error(message: "Error"),
                        isSelected: true,
-                       label: "Label",
+                       label: NSAttributedString(string: "Label"),
+                       labelPosition: .left).fixedSize()
+        assertSnapshotInDarkAndLight(matching: view)
+    }
+
+    func test_attributed_label_right() throws {
+        let label = NSMutableAttributedString(string: "Label")
+            .text(" orange ", color: UIColor.orange)
+            .symbol("square.and.arrow.up.on.square.fill")
+            .text(" green ", color: UIColor.green)
+
+        let view = sut(state: .enabled,
+                       isSelected: true,
+                       label: label,
+                       labelPosition: .left).fixedSize()
+        assertSnapshotInDarkAndLight(matching: view)
+    }
+
+    func test_attributed_label_with_sublabel_right() throws {
+        let label = NSMutableAttributedString(string: "Label")
+            .text(" red ", color: UIColor.red)
+            .symbol("square.and.arrow.up.circle.fill")
+            .text(" blue ", color: UIColor.blue)
+
+        let view = sut(state: .error(message: "Error"),
+                       isSelected: true,
+                       label: label,
                        labelPosition: .left).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     // MARK: - Private Helper Functions
     func sut(state: SparkSelectButtonState, isSelected: Bool,
-             label: String? = nil,
+             label: NSAttributedString? = nil,
              labelPosition: RadioButtonLabelPosition = .right) -> RadioButtonUIView<Int> {
         let selectedID = Binding<Int> (
             get: { return self.boundSelectedID },
@@ -140,15 +167,37 @@ private extension UIView {
 }
 
 private extension SparkSelectButtonState {
-    func label(isSelected: Bool) -> String {
+    func label(isSelected: Bool) -> NSAttributedString {
         let selected = isSelected ? "Selected" : "Not Selected"
 
         switch self {
-        case .enabled: return "Enabled / " + selected
-        case .disabled: return "Disabled / " + selected
-        case .error: return "Error / " + selected
-        case .success: return "Success / " + selected
-        case .warning: return "Warning / " + selected
+        case .enabled: return .init(string: "Enabled / \(selected)")
+        case .disabled: return .init(string: "Disabled / \(selected)")
+        case .error: return .init(string: "Error / \(selected)")
+        case .success: return .init(string: "Success / \(selected)")
+        case .warning: return .init(string: "Warning / \(selected)")
         }
     }
 }
+
+private extension NSMutableAttributedString {
+    func text(_ label: String) -> Self {
+        self.append(NSAttributedString(string: label))
+        return self
+    }
+
+    func text(_ label: String, color: UIColor) -> Self {
+        let attributedStringColor = [NSAttributedString.Key.foregroundColor : color];
+        self.append(NSAttributedString(string: label, attributes: attributedStringColor))
+        return self
+    }
+
+    func symbol(_ imageName: String) -> Self {
+        guard let image = UIImage(systemName: imageName) else { return self }
+        let imageAttachment = NSTextAttachment(image: image)
+        let imageString = NSAttributedString(attachment: imageAttachment)
+        self.append(imageString)
+        return self
+    }
+}
+

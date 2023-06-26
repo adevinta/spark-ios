@@ -83,6 +83,7 @@ final class RadioButtonViewTests: SwiftUIComponentTestCase {
 
     // MARK: - Private Helper Functions
     func sut(state: SparkSelectButtonState, isSelected: Bool, label: String? = nil) -> RadioButtonView<Int> {
+
         let selectedID = Binding<Int> (
             get: { return self.boundSelectedID },
             set: { self.boundSelectedID = $0 }

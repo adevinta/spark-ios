@@ -8,13 +8,16 @@
 
 import SwiftUI
 
-/// The variant of the SwitUI switch.
+/// The variant of the switch.
 public struct SwitchVariant {
 
     // MARK: - Properties
 
-    let onImage: Image
-    let offImage: Image
+    let onImage: Image?
+    let offImage: Image?
+
+    let onUIImage: UIImage?
+    let offUIImage: UIImage?
 
     // MARK: - Initialization
 
@@ -22,5 +25,17 @@ public struct SwitchVariant {
                 offImage: Image) {
         self.onImage = onImage
         self.offImage = offImage
+
+        self.onUIImage = nil
+        self.offUIImage = nil
+    }
+
+    public init(onImage: UIImage,
+                offImage: UIImage) {
+        self.onImage = nil
+        self.offImage = nil
+
+        self.onUIImage = onImage
+        self.offUIImage = offImage
     }
 }

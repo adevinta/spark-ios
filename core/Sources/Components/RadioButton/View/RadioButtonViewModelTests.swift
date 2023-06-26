@@ -190,7 +190,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 
         return RadioButtonViewModel(theme: self.theme,
                                     id: 1,
-                                    label: "Test",
+                                    label: .right("Test"),
                                     selectedID: seletedId,
                                     state: state)
 

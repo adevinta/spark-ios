@@ -6,20 +6,12 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Spark
+import SparkCore
 
-struct TagComponentViewModel {
+struct TagComponentViewModel: Hashable {
 
     // MARK: - Properties
 
-    let frameworkViewModels: [TagComponentFrameworkViewModel]
-
-    // MARK: - Initialization
-
-    init() {
-        self.frameworkViewModels = [
-            .init(isSwiftUIComponent: true),
-            .init(isSwiftUIComponent: false)
-        ]
-    }
+    let imageNamed: String = "alert"
+    let text: String = "This is a Tag"
 }

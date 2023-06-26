@@ -7,7 +7,7 @@
 //
 
 /// The alignment of the switch.
-public enum SwitchAlignment {
+public enum SwitchAlignment: CaseIterable {
     /// Switch is on the left, text is on the right
     case left
     /// Switch is on the right, text is on the left
