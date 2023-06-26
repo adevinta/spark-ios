@@ -29,7 +29,7 @@ struct ThemeSwitchView: View {
 
     var themes: [ThemeCellModel] = [
         .init(title: "Spark", theme: SparkTheme()),
-        .init(title: "Kleinanzeigen", theme: KleinanzeigenTheme())
+        .init(title: "Purple", theme: PurpleTheme())
     ]
 
     // MARK: - Content
