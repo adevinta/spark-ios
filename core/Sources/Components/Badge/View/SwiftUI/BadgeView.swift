@@ -103,4 +103,20 @@ public struct BadgeView: View {
         self.viewModel.badgeFormat = badgeFormat
         return self
     }
+
+    /// Controlls spark theme of the Badge. See more details in ``Theme``.
+    ///
+    /// Use @State variable to control ``Theme`` based on this variable.
+    public func theme(_ theme: Theme) -> Self {
+        self.viewModel.theme = theme
+        return self
+    }
+
+    /// Controlls badge intent type. See more details in ``BadgeIntentType``
+    ///
+    /// Use @State variable to control ``BadgeIntentType`` based on this variable.
+    public func value(_ value: Int?) -> Self {
+        self.viewModel.value = value
+        return self
+    }
 }
