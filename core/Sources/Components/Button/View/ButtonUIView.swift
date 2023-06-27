@@ -195,7 +195,12 @@ public class ButtonUIView: UIView {
     }
     /// Sets the theme of the checkbox.
     public var theme: Theme {
-        return self.viewModel.theme
+        get {
+            return self.viewModel.theme
+        }
+        set {
+            self.viewModel.theme = newValue
+        }
     }
 
     // MARK: - Internal properties
@@ -291,6 +296,7 @@ public class ButtonUIView: UIView {
         contentView.addSubview(imageView)
 
         textLabel.text = self.text
+        contentView.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
 
         button.addTarget(self, action: #selector(self.actionTouchUpInside(sender:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(self.actionTouchDown(sender:)), for: .touchDown)
@@ -371,6 +377,14 @@ public class ButtonUIView: UIView {
         if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             self.updateTheme()
         }
+
+        let traitCollection = self.traitCollection
+        _spacingLarge.update(traitCollection: traitCollection)
+        _spacingMedium.update(traitCollection: traitCollection)
+        _borderRadiusLarge.update(traitCollection: traitCollection)
+        _borderWidth.update(traitCollection: traitCollection)
+
+        self.setNeedsDisplay()
     }
 
 }
@@ -383,7 +397,26 @@ private extension ButtonUIView {
             .sink { [weak self] text in
                 self?.updateTheme()
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
+
+        self.subscribeTo(self.viewModel.$theme) { [weak self] _ in
+            guard let self else { return }
+            self.updateTheme()
+
+            self.updateSize()
+            self.updateTheme()
+            self.updateState()
+            self.updateViewConstraints()
+        }
+    }
+
+    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void) {
+        publisher
+            .receive(on: RunLoop.main)
+            .sink { value in
+                action(value)
+            }
+            .store(in: &self.cancellables)
     }
 
     func updateAccessibility() {
@@ -431,31 +464,31 @@ private extension ButtonUIView {
             self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: mediumSpacing)
             self.textLabelLeadingConstraint?.isActive = true
 
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -largeSpacing)
+            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -largeSpacing)
             self.textLabelTrailingConstraint?.isActive = true
 
-            self.imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: largeSpacing)
+            self.imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: largeSpacing)
             self.imageViewLeadingConstraint?.isActive = true
         case .trailing:
             self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: -mediumSpacing)
             self.textLabelTrailingConstraint?.isActive = true
 
-            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: largeSpacing)
+            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: largeSpacing)
             self.textLabelLeadingConstraint?.isActive = true
 
-            self.imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -largeSpacing)
+            self.imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -largeSpacing)
             self.imageViewTrailingConstraint?.isActive = true
         case .none:
-            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: largeSpacing)
+            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: largeSpacing)
             self.textLabelLeadingConstraint?.isActive = true
 
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -largeSpacing)
+            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -largeSpacing)
             self.textLabelTrailingConstraint?.isActive = true
         case .iconOnly:
-            self.imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: mediumSpacing)
+            self.imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: mediumSpacing)
             self.imageViewLeadingConstraint?.isActive = true
 
-            self.imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -mediumSpacing)
+            self.imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -mediumSpacing)
             self.imageViewTrailingConstraint?.isActive = true
         }
 
@@ -467,7 +500,7 @@ private extension ButtonUIView {
         case .square:
             self.layer.cornerRadius = 0
         case .rounded:
-            self.layer.cornerRadius = self.borderRadiusLarge
+            self.layer.cornerRadius = min(self.borderRadiusLarge, self.scaledButtonHeight / 2)
         case .pill:
             self.layer.cornerRadius = self.scaledButtonHeight / 2
         }
@@ -480,6 +513,11 @@ private extension ButtonUIView {
     }
 
     func updateTheme() {
+        let theme = self.theme
+        self.spacingLarge = theme.layout.spacing.large
+        self.spacingMedium = theme.layout.spacing.medium
+        self.borderRadiusLarge = theme.border.radius.large
+
         let colors = self.colors
         if self.isPressed {
             self.backgroundColor = colors.pressedBackgroundColor.uiColor
@@ -508,7 +546,6 @@ private extension ButtonUIView {
         self.isPressed = false
 
         guard self.interactionEnabled else { return }
-        //self.tapHandler?(self)
         self.delegate?.button(self, didReceive: .touchUpInside)
         self.delegate?.buttonWasTapped(self)
     }

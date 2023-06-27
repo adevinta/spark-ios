@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import Combine
 import Spark
 import SparkCore
 import SwiftUI
@@ -111,6 +111,14 @@ final class CheckboxGroupViewController: UIViewController {
         }
     }
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
+    private var cancellables = Set<AnyCancellable>()
+
     // MARK: - Methods
 
     override func viewDidLoad() {
@@ -140,6 +148,15 @@ final class CheckboxGroupViewController: UIViewController {
         self.scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
         self.setUpScrollContentView()
+        self.subscribe()
+    }
+
+    private func subscribe() {
+        self.themePublisher.$theme
+            .sink { [weak self] theme in
+                self?.checkboxGroup?.theme = theme
+            }
+            .store(in: &self.cancellables)
     }
 
     private func setUpScrollContentView() {
@@ -169,7 +186,6 @@ final class CheckboxGroupViewController: UIViewController {
 
     private func setUpCheckboxGroupView() {
         let view = self.contentView
-        let theme = SparkTheme.shared
 
         let checkedImage = DemoIconography.shared.checkmark
 

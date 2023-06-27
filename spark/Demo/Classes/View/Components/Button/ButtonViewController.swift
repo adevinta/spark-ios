@@ -44,12 +44,18 @@ final class ButtonViewController: UIViewController {
 
     private var cancellables = Set<AnyCancellable>()
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     // MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setUpScrollView()
-        setUpView()
+        self.setUpScrollView()
+        self.setUpView()
     }
 
     private func setUpScrollView() {
@@ -85,7 +91,6 @@ final class ButtonViewController: UIViewController {
 
     private func setUpView() {
         let view = self.contentView
-        let theme = SparkTheme.shared
 
         var buttons: [ButtonUIView] = []
 
@@ -107,7 +112,7 @@ final class ButtonViewController: UIViewController {
         for variant in variants {
             for intent in intents {
                 let button = ButtonUIView(
-                    theme: theme,
+                    theme: self.theme,
                     text: "\(variant.title) \(intent.title)",
                     icon: .trailing(icon: UIImage(systemName: "trash")!),
                     state: .enabled,
@@ -147,6 +152,19 @@ final class ButtonViewController: UIViewController {
         }
 
         self.buttons = buttons
+        self.subscribe()
+    }
+
+    private func subscribe() {
+        self.themePublisher.$theme
+            .sink { [weak self] theme in
+                guard let self else { return }
+
+                for button in self.buttons {
+                    button.theme = theme
+                }
+            }
+            .store(in: &self.cancellables)
     }
 }
 

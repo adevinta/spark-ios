@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import Spark
 import SparkCore
 import SwiftUI
@@ -15,6 +16,12 @@ struct CheckboxListView: View {
     // MARK: - Properties
 
     private let viewModel = CheckboxViewModel()
+
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
 
     @State private var selection1: CheckboxSelectionState = .selected
     @State private var selection2: CheckboxSelectionState = .unselected
@@ -26,7 +33,6 @@ struct CheckboxListView: View {
     var body: some View {
         List(self.viewModel.states, id: \.self) { state in
             Section(header: Text("State \(self.title(for: state))")) {
-                let theme = SparkTheme.shared
                 let checkedImage = DemoIconography.shared.checkmark
                 CheckboxView(
                     text: "Selected",

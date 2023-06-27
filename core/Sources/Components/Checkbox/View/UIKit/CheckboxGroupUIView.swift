@@ -14,7 +14,16 @@ public final class CheckboxGroupUIView: UIView {
     // MARK: - Private properties.
 
     @Binding private var items: [any CheckboxGroupItemProtocol]
-    private var theme: Theme
+    @Published public var theme: Theme {
+        didSet {
+            self.spacingXLarge = self.theme.layout.spacing.xLarge
+
+            self.updateViewConstraints()
+            for checkbox in self.checkboxes {
+                checkbox.theme = self.theme
+            }
+        }
+    }
     private var accessibilityIdentifierPrefix: String
     private var checkboxes: [CheckboxUIView] = []
     private var titleLabel: UILabel?
@@ -83,7 +92,7 @@ public final class CheckboxGroupUIView: UIView {
         self.checkboxPosition = checkboxPosition
         self.theme = theme
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
-        self.spacingXLarge = self.theme.layout.spacing.xLarge
+        self.spacingXLarge = theme.layout.spacing.xLarge
         super.init(frame: .zero)
         self.commonInit()
     }
