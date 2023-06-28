@@ -27,7 +27,7 @@ struct ButtonVariantGhostUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.primary.primary,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.primary.primary.opacity(dim5),
+                pressedBackgroundColor: FullColorTokenDefault(colorToken: colors.primary.primary, opacity: dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -35,7 +35,7 @@ struct ButtonVariantGhostUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.secondary.secondary,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.secondary.secondary.opacity(dim5),
+                pressedBackgroundColor: FullColorTokenDefault(colorToken: colors.secondary.secondary, opacity: dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -43,7 +43,7 @@ struct ButtonVariantGhostUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.feedback.neutral,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.feedback.neutral.opacity(dim5),
+                pressedBackgroundColor: FullColorTokenDefault(colorToken: colors.feedback.neutral, opacity: dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -51,7 +51,7 @@ struct ButtonVariantGhostUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.feedback.alert,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.feedback.alert.opacity(dim5),
+                pressedBackgroundColor: FullColorTokenDefault(colorToken: colors.feedback.alert, opacity: dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -59,7 +59,7 @@ struct ButtonVariantGhostUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.feedback.success,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.feedback.success.opacity(dim5),
+                pressedBackgroundColor: FullColorTokenDefault(colorToken: colors.feedback.success, opacity: dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -67,7 +67,7 @@ struct ButtonVariantGhostUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.feedback.error,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.feedback.error.opacity(dim5),
+                pressedBackgroundColor: FullColorTokenDefault(colorToken: colors.feedback.error, opacity: dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -75,7 +75,7 @@ struct ButtonVariantGhostUseCase: ButtonVariantUseCaseable {
             return ButtonColors(
                 textColor: colors.base.surface,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.base.surface.opacity(dim5),
+                pressedBackgroundColor: FullColorTokenDefault(colorToken: colors.base.surface, opacity: dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )

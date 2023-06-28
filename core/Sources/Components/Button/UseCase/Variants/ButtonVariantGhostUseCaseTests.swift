@@ -29,7 +29,7 @@ final class ButtonVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.primary.primary,
              ColorTokenDefault.clear,
-             self.theme.colors.primary.primary.opacity(self.theme.dims.dim5),
+             FullColorTokenDefault(colorToken: self.theme.colors.primary.primary, opacity: self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
@@ -51,7 +51,7 @@ final class ButtonVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.secondary.secondary,
              ColorTokenDefault.clear,
-             self.theme.colors.secondary.secondary.opacity(self.theme.dims.dim5),
+             FullColorTokenDefault(colorToken: self.theme.colors.secondary.secondary, opacity: self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
@@ -73,7 +73,7 @@ final class ButtonVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.neutral,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.neutral.opacity(self.theme.dims.dim5),
+             FullColorTokenDefault(colorToken: self.theme.colors.feedback.neutral, opacity: self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
@@ -95,7 +95,7 @@ final class ButtonVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.alert,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.alert.opacity(self.theme.dims.dim5),
+             FullColorTokenDefault(colorToken: self.theme.colors.feedback.alert, opacity: self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
@@ -117,7 +117,7 @@ final class ButtonVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.success,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.success.opacity(self.theme.dims.dim5),
+             FullColorTokenDefault(colorToken: self.theme.colors.feedback.success, opacity: self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
@@ -139,7 +139,7 @@ final class ButtonVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.error,
              ColorTokenDefault.clear,
-             self.theme.colors.feedback.error.opacity(self.theme.dims.dim5),
+             FullColorTokenDefault(colorToken: self.theme.colors.feedback.error, opacity: self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
@@ -161,7 +161,7 @@ final class ButtonVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.base.surface,
              ColorTokenDefault.clear,
-             self.theme.colors.base.surface.opacity(self.theme.dims.dim5),
+             FullColorTokenDefault(colorToken: self.theme.colors.base.surface, opacity: self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
