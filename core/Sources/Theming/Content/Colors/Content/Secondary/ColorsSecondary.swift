@@ -8,10 +8,10 @@
 
 // sourcery: AutoMockable
 public protocol ColorsSecondary {
-    var secondary: ColorToken { get }
-    var onSecondary: ColorToken { get }
-    var secondaryVariant: ColorToken { get }
-    var onSecondaryVariant: ColorToken { get }
-    var secondaryContainer: ColorToken { get }
-    var onSecondaryContainer: ColorToken { get }
+    var secondary: any ColorToken { get }
+    var onSecondary: any ColorToken { get }
+    var secondaryVariant: any ColorToken { get }
+    var onSecondaryVariant: any ColorToken { get }
+    var secondaryContainer: any ColorToken { get }
+    var onSecondaryContainer: any ColorToken { get }
 }

@@ -9,10 +9,10 @@
 // sourcery: AutoMockable
 protocol SwitchColorables {
     var toggleBackgroundColors: SwitchStatusColorables { get }
-    var toggleDotBackgroundColor: ColorToken { get }
+    var toggleDotBackgroundColor: any ColorToken { get }
     var toggleDotForegroundColors: SwitchStatusColorables { get }
 
-    var textForegroundColor: ColorToken { get }
+    var textForegroundColor: any ColorToken { get }
 }
 
 struct SwitchColors: SwitchColorables {
@@ -20,24 +20,24 @@ struct SwitchColors: SwitchColorables {
     // MARK: - Properties
 
     let toggleBackgroundColors: SwitchStatusColorables
-    let toggleDotBackgroundColor: ColorToken
+    let toggleDotBackgroundColor: any ColorToken
     let toggleDotForegroundColors: SwitchStatusColorables
 
-    let textForegroundColor: ColorToken
+    let textForegroundColor: any ColorToken
 }
 
 // MARK: - SwitchStatusColors
 
 // sourcery: AutoMockable
 protocol SwitchStatusColorables {
-    var onColorToken: ColorToken { get }
-    var offColorToken: ColorToken { get }
+    var onColorToken: any ColorToken { get }
+    var offColorToken: any ColorToken { get }
 }
 
 struct SwitchStatusColors: SwitchStatusColorables {
 
     // MARK: - Properties
 
-    let onColorToken: ColorToken
-    let offColorToken: ColorToken
+    let onColorToken: any ColorToken
+    let offColorToken: any ColorToken
 }

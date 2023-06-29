@@ -47,7 +47,7 @@ struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
 // MARK: - Private Extensions
 private extension Theme {
     func buttonColor(state: SparkSelectButtonState,
-                     isSelected: Bool) -> ColorToken {
+                     isSelected: Bool) -> any ColorToken {
         switch state {
         case .warning: return self.colors.feedback.alert
         case .error: return self.colors.feedback.error
@@ -56,7 +56,7 @@ private extension Theme {
         }
     }
 
-    func supplementaryTextColor(state: SparkSelectButtonState) -> ColorToken {
+    func supplementaryTextColor(state: SparkSelectButtonState) -> any ColorToken {
         switch state {
         case .warning: return self.colors.feedback.onAlertContainer
         case .error: return self.colors.feedback.error
@@ -66,7 +66,7 @@ private extension Theme {
         }
     }
 
-    func haloColor(state: SparkSelectButtonState) -> ColorToken {
+    func haloColor(state: SparkSelectButtonState) -> any ColorToken {
         switch state {
         case .warning: return self.colors.feedback.alertContainer
         case .error: return self.colors.feedback.errorContainer

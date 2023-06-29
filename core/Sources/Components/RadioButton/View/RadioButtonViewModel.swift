@@ -30,7 +30,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     @Published var spacing: CGFloat
     @Published var font: TypographyFontToken
     @Published var supplemetaryFont: TypographyFontToken
-    @Published var surfaceColor: ColorToken
+    @Published var surfaceColor: any ColorToken
     @Published var labelPosition: RadioButtonLabelPosition
 
     // MARK: - Initialization

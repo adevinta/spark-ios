@@ -10,20 +10,20 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ButtonColorables {
-    var textColor: ColorToken { get }
-    var backgroundColor: ColorToken { get }
-    var pressedBackgroundColor: ColorToken { get }
-    var borderColor: ColorToken { get }
-    var pressedBorderColor: ColorToken { get }
+    var textColor: any ColorToken { get }
+    var backgroundColor: any ColorToken { get }
+    var pressedBackgroundColor: any ColorToken { get }
+    var borderColor: any ColorToken { get }
+    var pressedBorderColor: any ColorToken { get }
 }
 
 struct ButtonColors: ButtonColorables {
 
     // MARK: - Properties
 
-    let textColor: ColorToken
-    let backgroundColor: ColorToken
-    let pressedBackgroundColor: ColorToken
-    let borderColor: ColorToken
-    let pressedBorderColor: ColorToken
+    let textColor: any ColorToken
+    let backgroundColor: any ColorToken
+    let pressedBackgroundColor: any ColorToken
+    let borderColor: any ColorToken
+    let pressedBorderColor: any ColorToken
 }

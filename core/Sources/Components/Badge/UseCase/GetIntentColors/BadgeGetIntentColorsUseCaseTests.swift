@@ -111,10 +111,10 @@ private struct Tester {
     }
 
     private static func testColor(
-        givenColorProperty: ColorToken?,
+        givenColorProperty: (any ColorToken)?,
         givenPropertyName: String,
         givenIntent: BadgeIntentType,
-        expectedColorToken: ColorToken?
+        expectedColorToken: (any ColorToken)?
     ) throws {
         let errorPrefixMessage = "\(givenPropertyName) for .\(givenIntent) case"
 
@@ -130,7 +130,7 @@ private struct Tester {
 private struct BadgeGetColors {
     let givenIntent: BadgeIntentType
 
-    let expectedBackgroundToken: ColorToken
-    let expectedBorderToken: ColorToken
-    let expectedTextToken: ColorToken
+    let expectedBackgroundToken: any ColorToken
+    let expectedBorderToken: any ColorToken
+    let expectedTextToken: any ColorToken
 }

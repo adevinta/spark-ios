@@ -11,36 +11,36 @@ public protocol ColorsFeedback {
 
     // MARK: - Success
 
-    var success: ColorToken { get }
-    var onSuccess: ColorToken { get }
-    var successContainer: ColorToken { get }
-    var onSuccessContainer: ColorToken { get }
+    var success: any ColorToken { get }
+    var onSuccess: any ColorToken { get }
+    var successContainer: any ColorToken { get }
+    var onSuccessContainer: any ColorToken { get }
 
     // MARK: - Alert
 
-    var alert: ColorToken { get }
-    var onAlert: ColorToken { get }
-    var alertContainer: ColorToken { get }
-    var onAlertContainer: ColorToken { get }
+    var alert: any ColorToken { get }
+    var onAlert: any ColorToken { get }
+    var alertContainer: any ColorToken { get }
+    var onAlertContainer: any ColorToken { get }
 
     // MARK: - Error
 
-    var error: ColorToken { get }
-    var onError: ColorToken { get }
-    var errorContainer: ColorToken { get }
-    var onErrorContainer: ColorToken { get }
+    var error: any ColorToken { get }
+    var onError: any ColorToken { get }
+    var errorContainer: any ColorToken { get }
+    var onErrorContainer: any ColorToken { get }
 
     // MARK: - Info
 
-    var info: ColorToken { get }
-    var onInfo: ColorToken { get }
-    var infoContainer: ColorToken { get }
-    var onInfoContainer: ColorToken { get }
+    var info: any ColorToken { get }
+    var onInfo: any ColorToken { get }
+    var infoContainer: any ColorToken { get }
+    var onInfoContainer: any ColorToken { get }
 
     // MARK: - Neutral
 
-    var neutral: ColorToken { get }
-    var onNeutral: ColorToken { get }
-    var neutralContainer: ColorToken { get }
-    var onNeutralContainer: ColorToken { get }
+    var neutral: any ColorToken { get }
+    var onNeutral: any ColorToken { get }
+    var neutralContainer: any ColorToken { get }
+    var onNeutralContainer: any ColorToken { get }
 }

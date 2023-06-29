@@ -127,10 +127,10 @@ private struct Tester {
     }
 
     private static func testColor(
-        givenColorProperty: ColorToken?,
+        givenColorProperty: (any ColorToken)?,
         givenPropertyName: String,
         givenVariant: TagVariant,
-        expectedColorToken: ColorToken?
+        expectedColorToken: (any ColorToken)?
     ) throws {
         let errorPrefixMessage = " \(givenPropertyName) for .\(givenVariant) case"
 
@@ -154,7 +154,7 @@ private struct TagGetColors {
 
     let givenVariant: TagVariant
 
-    let expectedBackgroundToken: ColorToken
-    let expectedBorderToken: ColorToken?
-    let expectedForegroundToken: ColorToken
+    let expectedBackgroundToken: any ColorToken
+    let expectedBorderToken: (any ColorToken)?
+    let expectedForegroundToken: any ColorToken
 }

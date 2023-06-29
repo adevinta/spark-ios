@@ -7,7 +7,7 @@
 //
 
 /// The colors a chip can have for the default state and the pressed state
-struct ChipColors {
+struct ChipColors: Equatable {
     // MARK: - Properties
 
     let `default`: ChipStateColors

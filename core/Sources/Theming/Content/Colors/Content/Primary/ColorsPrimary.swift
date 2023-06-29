@@ -8,10 +8,10 @@
 
 // sourcery: AutoMockable
 public protocol ColorsPrimary {
-    var primary: ColorToken { get }
-    var onPrimary: ColorToken { get }
-    var primaryVariant: ColorToken { get }
-    var onPrimaryVariant: ColorToken { get }
-    var primaryContainer: ColorToken { get }
-    var onPrimaryContainer: ColorToken { get }
+    var primary: any ColorToken { get }
+    var onPrimary: any ColorToken { get }
+    var primaryVariant: any ColorToken { get }
+    var onPrimaryVariant: any ColorToken { get }
+    var primaryContainer: any ColorToken { get }
+    var onPrimaryContainer: any ColorToken { get }
 }
