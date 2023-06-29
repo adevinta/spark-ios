@@ -14,62 +14,29 @@ final class SwitchGetImageUseCaseTests: XCTestCase {
 
     // MARK: - Properties
 
-    private let onImageMock = Image(systemName: "square.and.arrow.up")
-    private let offImageMock = Image(systemName: "square.and.arrow.down")
-
-    private let onUIImageMock = IconographyTests.shared.switchOn
-    private let offUIImageMock = IconographyTests.shared.switchOff
+    private let onImageMock = IconographyTests.shared.switchOn
+    private let offImageMock = IconographyTests.shared.switchOff
 
     private lazy var variantMock: SwitchVariant = {
-        return .init(
-            onImage: self.onImageMock,
-            offImage: self.offImageMock
-        )
-    }()
-    private lazy var variantUIMock: SwitchVariant = {
-        return .init(
-            onImage: self.onUIImageMock,
-            offImage: self.offUIImageMock
-        )
+        return .init(images: SwitchUIVariantImages(
+            on: self.onImageMock,
+            off: self.offImageMock
+        ))!
     }()
 
     private lazy var expectedOnImage: SwitchImage = {
-        return .init(
-            image: self.onImageMock,
-            uiImage: self.onUIImageMock
-        )
+        return .left(self.onImageMock)
     }()
     private lazy var expectedOffImage: SwitchImage = {
-        return .init(
-            image: self.offImageMock,
-            uiImage: self.offUIImageMock
-        )
+        return .left(self.offImageMock)
     }()
 
-    // MARK: - SwiftUI Variant Tests
-
-    func test_execute_when_isOn_is_true_and_variant_is_set_with_swiftUI_variant_images() throws {
-        try self.testExecute(
-            givenIsOn: true,
-            givenVariant: self.variantMock,
-            expectedImage: self.expectedOnImage
-        )
-    }
-
-    func test_execute_when_isOn_is_false_and_variant_is_set_with_swiftUI_variant_images() throws {
-        try self.testExecute(
-            givenIsOn: false,
-            givenVariant: self.variantMock,
-            expectedImage: self.expectedOffImage
-        )
-    }
-
-    // MARK: - UIKit Variant Tests
+    // MARK: - With Variant Tests
 
     func test_execute_when_isOn_is_true_and_variant_is_set_with_UIKit_variant_images() throws {
         try self.testExecute(
             givenIsOn: true,
-            givenVariant: self.variantUIMock,
+            givenVariant: self.variantMock,
             expectedImage: self.expectedOnImage
         )
     }
@@ -77,7 +44,7 @@ final class SwitchGetImageUseCaseTests: XCTestCase {
     func test_execute_when_isOn_is_false_and_variant_is_set_with_UIKit_variant_images() throws {
         try self.testExecute(
             givenIsOn: false,
-            givenVariant: self.variantUIMock,
+            givenVariant: self.variantMock,
             expectedImage: self.expectedOffImage
         )
     }
@@ -124,19 +91,13 @@ private extension SwitchGetImageUseCaseTests {
         // THEN
         if let image = image {
             if givenIsOn {
-                XCTAssertEqual(image.image,
-                               givenVariant?.onImage,
+                XCTAssertEqual(image.leftValue,
+                               givenVariant?.onImage.leftValue,
                                "Wrong on image" + errorPrefixMessage)
-                XCTAssertEqual(image.uiImage,
-                               givenVariant?.onUIImage,
-                               "Wrong on UIImage" + errorPrefixMessage)
             } else {
-                XCTAssertEqual(image.image,
-                               givenVariant?.offImage,
+                XCTAssertEqual(image.leftValue,
+                               givenVariant?.offImage.leftValue,
                                "Wrong off image" + errorPrefixMessage)
-                XCTAssertEqual(image.uiImage,
-                               givenVariant?.offUIImage,
-                               "Wrong off UIImage" + errorPrefixMessage)
             }
         } else {
             XCTAssertNil(expectedImage,

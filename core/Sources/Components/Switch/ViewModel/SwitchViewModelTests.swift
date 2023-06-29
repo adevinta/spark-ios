@@ -27,12 +27,21 @@ final class SwitchViewModelTests: XCTestCase {
         return mock
     }()
 
-    private let imageMock = SwitchImageableGeneratedMock()
+    private let imageMock = IconographyTests.shared.switchOn
+    private let variantMock = SwitchVariantableGeneratedMock()
+    private let textMock = "My Text"
+    private let attributedTextMock = NSAttributedString(string: "My Attributed Text")
 
     private var colorTokenMock: ColorTokenGeneratedMock = {
         let mock = ColorTokenGeneratedMock()
         mock.underlyingColor = .orange
         mock.underlyingUiColor = .green
+        return mock
+    }()
+
+    private lazy var textContentMock: SwitchTextContentableGeneratedMock = {
+        let mock = SwitchTextContentableGeneratedMock()
+        mock.text = self.textMock
         return mock
     }()
 
@@ -60,7 +69,13 @@ final class SwitchViewModelTests: XCTestCase {
     }()
     private lazy var getImageUseCaseMock: SwitchGetImageUseCaseableGeneratedMock = {
         let mock = SwitchGetImageUseCaseableGeneratedMock()
-        mock.executeWithIsOnAndVariantReturnValue = self.imageMock
+        mock.executeWithIsOnAndVariantReturnValue = .left(self.imageMock)
+        return mock
+
+    }()
+    private lazy var getTextContentUseCaseMock: SwitchGetTextContentUseCaseableGeneratedMock = {
+        let mock = SwitchGetTextContentUseCaseableGeneratedMock()
+        mock.executeWithTextAndAttributedTextReturnValue = self.textContentMock
         return mock
 
     }()
@@ -78,7 +93,7 @@ final class SwitchViewModelTests: XCTestCase {
     }()
     private lazy var getToggleStateUseCaseMock: SwitchGetToggleStateUseCaseableGeneratedMock = {
         let mock = SwitchGetToggleStateUseCaseableGeneratedMock()
-        mock.executeWithIsEnabledAndDimsReturnValue = self.toggleStateMock
+        mock.executeWithIsEnabledReturnValue = self.toggleStateMock
         return mock
     }()
 
@@ -90,10 +105,6 @@ final class SwitchViewModelTests: XCTestCase {
         let alignmentMock: SwitchAlignment = .left
         let intentColorMock: SwitchIntentColor = .alert
         let isEnabledMock = true
-        let variantMock = SwitchVariant(
-            onImage: IconographyTests.shared.switchOn,
-            offImage: IconographyTests.shared.switchOff
-        )
 
         // WHEN
         let viewModel = self.classToTest(
@@ -101,7 +112,7 @@ final class SwitchViewModelTests: XCTestCase {
             alignment: alignmentMock,
             intentColor: intentColorMock,
             isEnabled: isEnabledMock,
-            variant: variantMock
+            variant: self.variantMock
         )
 
         // THEN
@@ -120,8 +131,14 @@ final class SwitchViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.isEnabled,
                        isEnabledMock,
                        "Wrong isEnabled value")
-        XCTAssertEqual(viewModel.variant,
-                       variantMock,
+        XCTAssertIdentical(viewModel.variant as? SwitchVariantableGeneratedMock,
+                           self.variantMock,
+                           "Wrong variant value")
+        XCTAssertEqual(viewModel.text,
+                       self.textMock,
+                       "Wrong variant value")
+        XCTAssertEqual(viewModel.attributedText?.leftValue,
+                       self.attributedTextMock,
                        "Wrong variant value")
 
         XCTAssertNil(viewModel.isOnChanged,
@@ -132,6 +149,7 @@ final class SwitchViewModelTests: XCTestCase {
         self.testToggleState(on: viewModel)
         self.testColors(on: viewModel)
         self.testPosition(on: viewModel)
+        self.testTextContent(on: viewModel)
         self.testToggleDotImage(on: viewModel)
         self.testTextFont(on: viewModel, theme: self.themeMock)
         XCTAssertTrue(viewModel.showToggleLeftSpace == true,
@@ -146,7 +164,11 @@ final class SwitchViewModelTests: XCTestCase {
         )
         self.testGetImageUseCaseMock(
             givenIsOn: isOnMock,
-            givenVariant: variantMock
+            givenVariant: self.variantMock
+        )
+        self.testGetTextContentUseCaseMock(
+            givenText: self.textMock,
+            givenAttributedText: self.attributedTextMock
         )
         self.testGetToggleColorUseCaseMock(
             givenIsOn: isOnMock
@@ -173,7 +195,7 @@ final class SwitchViewModelTests: XCTestCase {
         let alignmentMock: SwitchAlignment = .right
         let intentColorMock: SwitchIntentColor = .secondary
         let isEnabledMock = false
-        let variantMock: SwitchVariant? = nil
+        let variantMock: SwitchVariantableGeneratedMock? = nil
 
         let viewModel = self.classToTest(
             isOn: false,
@@ -233,7 +255,7 @@ final class SwitchViewModelTests: XCTestCase {
         let alignmentMock: SwitchAlignment = .right
         let intentColorMock: SwitchIntentColor = .secondary
         let isEnabledMock = false
-        let variantMock: SwitchVariant? = nil
+        let variantMock: SwitchVariantableGeneratedMock? = nil
 
         let viewModel = self.classToTest(
             isOn: isOnMock,
@@ -278,7 +300,7 @@ final class SwitchViewModelTests: XCTestCase {
 
     // MARK: - Setter Tests
 
-    func test_theme() {
+    func test_set_theme() {
         // GIVEN
         let newTheme = ThemeGeneratedMock.mocked()
 
@@ -286,7 +308,7 @@ final class SwitchViewModelTests: XCTestCase {
         let alignmentMock: SwitchAlignment = .right
         let intentColorMock: SwitchIntentColor = .secondary
         let isEnabledMock = false
-        let variantMock: SwitchVariant? = nil
+        let variantMock: SwitchVariantableGeneratedMock? = nil
 
         let viewModel = self.classToTest(
             isOn: isOnMock,
@@ -342,7 +364,7 @@ final class SwitchViewModelTests: XCTestCase {
         // **
     }
 
-    func test_alignment() {
+    func test_set_alignment() {
         // GIVEN
         let newAlignmentMock: SwitchAlignment = .right
 
@@ -371,7 +393,7 @@ final class SwitchViewModelTests: XCTestCase {
         )
     }
 
-    func test_intentColor() {
+    func test_set_intentColor() {
         // GIVEN
         let newIntentColor: SwitchIntentColor = .primary
 
@@ -408,7 +430,68 @@ final class SwitchViewModelTests: XCTestCase {
         // **
     }
 
-    func test_isEnabled() {
+    func test_set_text() {// GIVEN
+        let newText = "New Text"
+
+        let viewModel = self.classToTest()
+
+        // Reset all UseCase mock
+        self.resetUseCasesMockAfterInitViewModel()
+
+        // WHEN
+        viewModel.set(text: newText)
+
+        // THEN
+        XCTAssertEqual(viewModel.text,
+                       newText,
+                       "Wrong text value")
+        XCTAssertNil(viewModel.attributedText,
+                     "Wrong attributedText value")
+
+        // Published properties
+        self.testTextContent(on: viewModel)
+
+        // **
+        // Use Cases
+        self.testGetTextContentUseCaseMock(
+            givenText: newText,
+            givenAttributedText: nil
+        )
+        // **
+    }
+
+    func test_set_attributedText() {
+        // GIVEN
+        let newAttributedText = NSAttributedString(string: "New Text")
+
+        let viewModel = self.classToTest()
+
+        // Reset all UseCase mock
+        self.resetUseCasesMockAfterInitViewModel()
+
+        // WHEN
+        viewModel.set(attributedText: .left(newAttributedText))
+
+        // THEN
+        XCTAssertEqual(viewModel.attributedText?.leftValue,
+                       newAttributedText,
+                       "Wrong attributedText value")
+        XCTAssertNil(viewModel.text,
+                     "Wrong text value")
+
+        // Published properties
+        self.testTextContent(on: viewModel)
+
+        // **
+        // Use Cases
+        self.testGetTextContentUseCaseMock(
+            givenText: nil,
+            givenAttributedText: newAttributedText
+        )
+        // **
+    }
+
+    func test_set_isEnabled() {
         // GIVEN
         let newIsEnabledMock = false
 
@@ -457,10 +540,7 @@ final class SwitchViewModelTests: XCTestCase {
 
     func test_set_variant() {
         // GIVEN
-        let newVariantMock = SwitchVariant(
-            onImage: IconographyTests.shared.switchOn,
-            offImage: IconographyTests.shared.switchOff
-        )
+        let newVariantMock = SwitchVariantableGeneratedMock()
 
         let isOnMock = true
 
@@ -476,9 +556,9 @@ final class SwitchViewModelTests: XCTestCase {
         viewModel.set(variant: newVariantMock)
 
         // THEN
-        XCTAssertEqual(viewModel.variant,
-                       newVariantMock,
-                       "Wrong variant value")
+        XCTAssertIdentical(viewModel.variant as? SwitchVariantableGeneratedMock,
+                           newVariantMock,
+                           "Wrong variant value")
 
         // Published properties
         self.testToggleDotImage(on: viewModel)
@@ -500,7 +580,7 @@ private extension SwitchViewModelTests {
         alignment: SwitchAlignment = .left,
         intentColor: SwitchIntentColor = .alert,
         isEnabled: Bool = true,
-        variant: SwitchVariant? = nil
+        variant: SwitchVariantable? = nil
     ) -> SwitchViewModel {
         return .init(
             theme: self.themeMock,
@@ -509,8 +589,11 @@ private extension SwitchViewModelTests {
             intentColor: intentColor,
             isEnabled: isEnabled,
             variant: variant,
+            text: self.textMock,
+            attributedText: .init(left: self.attributedTextMock),
             getColorsUseCase: self.getColorsUseCaseMock,
             getImageUseCase: self.getImageUseCaseMock,
+            getTextContentUseCase: self.getTextContentUseCaseMock,
             getToggleColorUseCase: self.getToggleColorUseCaseMock,
             getPositionUseCase: self.getPositionUseCaseMock,
             getToggleStateUseCase: self.getToggleStateUseCaseMock
@@ -555,10 +638,16 @@ private extension SwitchViewModelTests {
                        "Wrong toggleOpacity value")
     }
 
+    func testTextContent(on viewModel: SwitchViewModel) {
+        XCTAssertIdentical(viewModel.textContent as? SwitchTextContentableGeneratedMock,
+                           self.textContentMock,
+                           "Wrong textContent value")
+    }
+
     func testToggleDotImage(on viewModel: SwitchViewModel) {
-        XCTAssertIdentical(viewModel.toggleDotImage as? SwitchImageableGeneratedMock,
-                           self.imageMock,
-                           "Wrong toggleDotImage value")
+        XCTAssertEqual(viewModel.toggleDotImage?.leftValue,
+                       self.imageMock,
+                       "Wrong toggleDotImage value")
     }
 
     func testTextFont(on viewModel: SwitchViewModel, theme: Theme) {
@@ -598,7 +687,7 @@ private extension SwitchViewModelTests {
     func testGetImageUseCaseMock(
         numberOfCalls: Int = 1,
         givenIsOn: Bool,
-        givenVariant: SwitchVariant?
+        givenVariant: SwitchVariantableGeneratedMock?
     ) {
         XCTAssertEqual(self.getImageUseCaseMock.executeWithIsOnAndVariantCallsCount,
                        numberOfCalls,
@@ -611,12 +700,43 @@ private extension SwitchViewModelTests {
                            "Wrong isOn parameter on execute on getImageUseCase")
 
             if let givenVariant {
-                XCTAssertEqual(getImageUseCaseArgs?.variant,
-                               givenVariant,
-                               "Wrong variant parameter on execute on getImageUseCase")
+                XCTAssertIdentical(getImageUseCaseArgs?.variant as? SwitchVariantableGeneratedMock,
+                                   givenVariant,
+                                   "Wrong variant parameter on execute on getImageUseCase")
             } else {
                 XCTAssertNil(getImageUseCaseArgs?.variant,
                              "variant parameter should be nil on execute on getImageUseCase")
+            }
+        }
+    }
+
+    func testGetTextContentUseCaseMock(
+        numberOfCalls: Int = 1,
+        givenText: String?,
+        givenAttributedText: NSAttributedString?
+    ) {
+        XCTAssertEqual(self.getTextContentUseCaseMock.executeWithTextAndAttributedTextCallsCount,
+                       numberOfCalls,
+                       "Wrong call number on execute on getTextContentUseCase")
+
+        if numberOfCalls > 0 {
+            let getTextContentUseCaseArgs = self.getTextContentUseCaseMock.executeWithTextAndAttributedTextReceivedArguments
+            if let givenText {
+                XCTAssertEqual(getTextContentUseCaseArgs?.text,
+                               givenText,
+                               "Wrong text parameter on execute on getTextContentUseCase")
+            } else {
+                XCTAssertNil(getTextContentUseCaseArgs?.text,
+                             "text parameter should be nil on execute on getTextContentUseCase")
+            }
+
+            if let givenAttributedText {
+                XCTAssertEqual(getTextContentUseCaseArgs?.attributedText?.leftValue,
+                               givenAttributedText,
+                               "Wrong attributedText parameter on execute on getTextContentUseCase")
+            } else {
+                XCTAssertNil(getTextContentUseCaseArgs?.attributedText,
+                             "attributedText parameter should be nil on execute on getTextContentUseCase")
             }
         }
     }
@@ -685,18 +805,14 @@ private extension SwitchViewModelTests {
         givenTheme: Theme,
         givenIsEnabled: Bool
     ) {
-        XCTAssertEqual(self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount,
+        XCTAssertEqual(self.getToggleStateUseCaseMock.executeWithIsEnabledCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getToggleStateUseCase")
 
         if numberOfCalls > 0 {
-            let getToggleStateUseCaseArgs = self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments
-            XCTAssertEqual(getToggleStateUseCaseArgs?.isEnabled,
+            XCTAssertEqual(self.getToggleStateUseCaseMock.executeWithIsEnabledReceivedIsEnabled,
                            givenIsEnabled,
                            "Wrong isEnabled parameter on execute on getToggleStateUseCase")
-            XCTAssertIdentical(try XCTUnwrap(getToggleStateUseCaseArgs?.dims as? DimsGeneratedMock),
-                               givenTheme.dims as? DimsGeneratedMock,
-                               "Wrong dims parameter on execute on getToggleStateUseCase")
         }
     }
 
@@ -710,6 +826,10 @@ private extension SwitchViewModelTests {
         self.getImageUseCaseMock.executeWithIsOnAndVariantReceivedArguments = nil
         self.getImageUseCaseMock.executeWithIsOnAndVariantReceivedInvocations = []
 
+        self.getTextContentUseCaseMock.executeWithTextAndAttributedTextCallsCount = 0
+        self.getTextContentUseCaseMock.executeWithTextAndAttributedTextReceivedArguments = nil
+        self.getTextContentUseCaseMock.executeWithTextAndAttributedTextReceivedInvocations = []
+
         self.getToggleColorUseCaseMock.executeWithIsOnAndStatusAndStateColorCallsCount = 0
         self.getToggleColorUseCaseMock.executeWithIsOnAndStatusAndStateColorReceivedArguments = nil
         self.getToggleColorUseCaseMock.executeWithIsOnAndStatusAndStateColorReceivedInvocations = []
@@ -718,8 +838,8 @@ private extension SwitchViewModelTests {
         self.getPositionUseCaseMock.executeWithAlignmentAndSpacingReceivedArguments = nil
         self.getPositionUseCaseMock.executeWithAlignmentAndSpacingReceivedInvocations = []
 
-        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount = 0
-        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments = nil
-        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedInvocations = []
+        self.getToggleStateUseCaseMock.executeWithIsEnabledCallsCount = 0
+        self.getToggleStateUseCaseMock.executeWithIsEnabledReceivedIsEnabled = nil
+        self.getToggleStateUseCaseMock.executeWithIsEnabledReceivedInvocations = []
     }
 }

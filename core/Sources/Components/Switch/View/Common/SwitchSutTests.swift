@@ -77,25 +77,29 @@ struct SwitchSutTests {
 private extension SwitchVariant {
 
     init(isSwiftUIComponent: Bool) throws {
-        self = try isSwiftUIComponent ? Image.variant : UIImage.variant
+        if isSwiftUIComponent {
+            self = try XCTUnwrap(.init(images: Image.variant))
+        } else {
+            self = try XCTUnwrap(.init(images: UIImage.variant))
+        }
     }
 }
 
 private extension Image {
 
-    static let variant: SwitchVariant = .init(
-        onImage: Image("switchOn"),
-        offImage: Image("switchOff")
+    static let variant: SwitchVariantImages = (
+        on: Image("switchOn"),
+        off: Image("switchOff")
     )
 }
 
 private extension UIImage {
 
-    static var variant: SwitchVariant {
+    static var variant: SwitchUIVariantImages {
         get throws {
-            .init(
-                onImage: IconographyTests.shared.switchOn,
-                offImage: IconographyTests.shared.switchOff
+            (
+                on: IconographyTests.shared.switchOn,
+                off: IconographyTests.shared.switchOff
             )
         }
     }

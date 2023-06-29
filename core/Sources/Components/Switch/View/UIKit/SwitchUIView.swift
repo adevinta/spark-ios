@@ -10,6 +10,8 @@ import UIKit
 import Combine
 import SwiftUI
 
+// TODO: compression prioprity
+
 /// The delegate for the UIKit switch.
 public protocol SwitchUIViewDelegate: AnyObject {
     /// When isOn value is changed
@@ -49,6 +51,10 @@ public final class SwitchUIView: UIView {
         view.accessibilityIdentifier = AccessibilityIdentifier.toggleView
         view.addSubview(self.toggleContentStackView)
         view.isUserInteractionEnabled = true
+        view.setContentCompressionResistancePriority(.required,
+                                                     for: .vertical)
+        view.setContentCompressionResistancePriority(.required,
+                                                     for: .horizontal)
         return view
     }()
 
@@ -99,6 +105,10 @@ public final class SwitchUIView: UIView {
         label.textAlignment = .left
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = AccessibilityIdentifier.text
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .horizontal)
         return label
     }()
 
@@ -162,20 +172,35 @@ public final class SwitchUIView: UIView {
         }
     }
 
-    /// The variant of the switch.
-    public var variant: SwitchVariant? {
+    /// The variant images of the switch.
+    public var variant: SwitchUIVariantImages? {
         get {
-            return self.viewModel.variant
+            return self.viewModel.variant?.toUIImages()
         }
         set {
-            self.viewModel.set(variant: newValue)
+            self.viewModel.set(variant: SwitchVariant(images: newValue))
         }
     }
 
     /// The text of the switch.
-    public var text: String {
-        didSet {
-            self.textLabel.text = self.text
+    /// If the value is set, the attributedString properties will be deleted
+    public var text: String? {
+        get {
+            return self.viewModel.text
+        }
+        set {
+            self.viewModel.set(text: newValue)
+        }
+    }
+
+    /// The attributed text of the switch.
+    /// If the value is set, the text properties will be deleted
+    public var attributedText: NSAttributedString? {
+        get {
+            return self.viewModel.attributedText?.leftValue
+        }
+        set {
+            self.viewModel.set(attributedText: .init(left: newValue))
         }
     }
 
@@ -205,7 +230,7 @@ public final class SwitchUIView: UIView {
 
     // MARK: - Initialization
 
-    /// Initialize a new switch view without variant.
+    /// Initialize a new switch view without variant and with text.
     /// - Parameters:
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
@@ -228,11 +253,40 @@ public final class SwitchUIView: UIView {
             intentColor: intentColor,
             isEnabled: isEnabled,
             variant: nil,
-            text: text
+            text: text,
+            attributedText: nil
         )
     }
 
-    /// Initialize a new switch view with variant.
+    /// Initialize a new switch view without variant and with attributedText.
+    /// - Parameters:
+    ///   - theme: The spark theme of the switch.
+    ///   - isOn: The value of the switch.
+    ///   - alignment: The alignment of the switch.
+    ///   - intentColor: The intent color of the switch.
+    ///   - isEnabled: The state of the switch: enabled or not.
+    ///   - attributedText: The attributed text of the switch.
+    public convenience init(
+        theme: Theme,
+        isOn: Bool,
+        alignment: SwitchAlignment,
+        intentColor: SwitchIntentColor,
+        isEnabled: Bool,
+        attributedText: NSAttributedString
+    ) {
+        self.init(
+            theme,
+            isOn: isOn,
+            alignment: alignment,
+            intentColor: intentColor,
+            isEnabled: isEnabled,
+            variant: nil,
+            text: nil,
+            attributedText: attributedText
+        )
+    }
+
+    /// Initialize a new switch view with variant and text.
     /// - Parameters:
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
@@ -247,7 +301,7 @@ public final class SwitchUIView: UIView {
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
-        variant: SwitchVariant,
+        variant: SwitchUIVariantImages,
         text: String
     ) {
         self.init(
@@ -257,7 +311,38 @@ public final class SwitchUIView: UIView {
             intentColor: intentColor,
             isEnabled: isEnabled,
             variant: variant,
-            text: text
+            text: text,
+            attributedText: nil
+        )
+    }
+
+    /// Initialize a new switch view with variant and attributed text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the switch.
+    ///   - isOn: The value of the switch.
+    ///   - alignment: The alignment of the switch.
+    ///   - intentColor: The intent color of the switch.
+    ///   - isEnabled: The state of the switch: enabled or not.
+    ///   - variant: The variant of the switch.
+    ///   - attributedText: The attributed text of the switch.
+    public convenience init(
+        theme: Theme,
+        isOn: Bool,
+        alignment: SwitchAlignment,
+        intentColor: SwitchIntentColor,
+        isEnabled: Bool,
+        variant: SwitchUIVariantImages,
+        attributedText: NSAttributedString
+    ) {
+        self.init(
+            theme,
+            isOn: isOn,
+            alignment: alignment,
+            intentColor: intentColor,
+            isEnabled: isEnabled,
+            variant: variant,
+            text: nil,
+            attributedText: attributedText
         )
     }
 
@@ -267,8 +352,9 @@ public final class SwitchUIView: UIView {
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
-        variant: SwitchVariant?,
-        text: String
+        variant: SwitchUIVariantImages?,
+        text: String?,
+        attributedText: NSAttributedString?
     ) {
         self.viewModel = .init(
             theme: theme,
@@ -276,9 +362,10 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intentColor: intentColor,
             isEnabled: isEnabled,
-            variant: variant
+            variant: SwitchVariant(images: variant),
+            text: text,
+            attributedText: .init(left: attributedText)
         )
-        self.text = text
 
         super.init(frame: .zero)
 
@@ -295,9 +382,6 @@ public final class SwitchUIView: UIView {
 
         // View properties
         self.backgroundColor = .clear
-
-        // Add subviews properties
-        self.textLabel.text = self.text
 
         // Setup gestures
         self.setupGesturesRecognizer()
@@ -602,7 +686,7 @@ public final class SwitchUIView: UIView {
         self.subscribeTo(self.viewModel.$toggleDotImage) { [weak self] toggleDotImage in
             guard let self else { return }
 
-            let image = toggleDotImage?.uiImage
+            let image = toggleDotImage?.leftValue
 
             // Animate only if there is currently an image on ImageView and new image is exists
             let animated = self.toggleDotImageView.image != nil && image != nil
@@ -619,6 +703,19 @@ public final class SwitchUIView: UIView {
                 )
             } else {
                 self.toggleDotImageView.image = image
+            }
+        }
+
+        // Text Content Label
+        self.subscribeTo(self.viewModel.$textContent) { [weak self] content in
+            guard let self, let content else { return }
+
+            if let text = content.text {
+                self.textLabel.attributedText = nil
+                self.textLabel.text = text
+            } else if let attributedText = content.attributedText?.leftValue {
+                self.textLabel.text = nil
+                self.textLabel.attributedText = attributedText
             }
         }
 
@@ -652,5 +749,19 @@ public final class SwitchUIView: UIView {
         self._toggleWidth.update(traitCollection: self.traitCollection)
         self._toggleHeight.update(traitCollection: self.traitCollection)
         self.updateToggleViewSize()
+    }
+
+    // MARK: - Label priorities
+
+    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
+                                                      for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentCompressionResistancePriority(priority,
+                                                               for: axis)
+    }
+
+    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
+                                        for axis: NSLayoutConstraint.Axis) {
+        self.textLabel.setContentHuggingPriority(priority,
+                                                 for: axis)
     }
 }

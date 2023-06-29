@@ -16,6 +16,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
     // MARK: - Properties
 
     private let viewModel: SwitchComponentViewModel
+    private let attributedText: NSAttributedString
 
     var width: CGFloat
     @Binding var height: CGFloat
@@ -25,7 +26,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
     private let intentColor: SwitchIntentColor
     private let isEnabled: Bool
     private let isVariant: Bool
-    private let isMultilineText: Bool
+    private let textContent: SwitchTextContent
 
     // MARK: - Initialization
 
@@ -38,9 +39,16 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
         isVariant: Bool,
-        isMultilineText: Bool
+        textContent: SwitchTextContent
     ) {
         self.viewModel = viewModel
+        self.attributedText = .init(
+            string: viewModel.text,
+            attributes: [
+                .underlineColor: SparkTheme.shared.colors.base.outline.uiColor,
+                .font: SparkTheme.shared.typography.body2Highlight.uiFont
+            ]
+        )
         self.width = width
         self._height = height
         self._isOn = isOn
@@ -48,32 +56,40 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         self.intentColor = intentColor
         self.isEnabled = isEnabled
         self.isVariant = isVariant
-        self.isMultilineText = isMultilineText
+        self.textContent = textContent
     }
 
     // MARK: - Maker
 
     func makeUIView(context: Context) -> UIStackView {
         var switchView: SwitchUIView
-        if self.isVariant {
-            switchView = SwitchUIView(
-                theme: SparkTheme.shared,
-                isOn: self.isOn,
-                alignment: self.alignment,
-                intentColor: self.intentColor,
-                isEnabled: self.isEnabled,
-                variant: self.variant(),
-                text: self.viewModel.text(isMultilineText: self.isMultilineText)
-            )
-        } else {
-            switchView = SwitchUIView(
-                theme: SparkTheme.shared,
-                isOn: self.isOn,
-                alignment: self.alignment,
-                intentColor: self.intentColor,
-                isEnabled: self.isEnabled,
-                text: self.viewModel.text(isMultilineText: self.isMultilineText)
-            )
+
+        switch self.textContent {
+        case .text:
+            switchView = self.makeView(isMultilineText: false)
+        case .attributedText:
+            if self.isVariant {
+                switchView = SwitchUIView(
+                    theme: SparkTheme.shared,
+                    isOn: self.isOn,
+                    alignment: self.alignment,
+                    intentColor: self.intentColor,
+                    isEnabled: self.isEnabled,
+                    variant: self.variant(),
+                    attributedText: self.attributedText
+                )
+            } else {
+                switchView = SwitchUIView(
+                    theme: SparkTheme.shared,
+                    isOn: self.isOn,
+                    alignment: self.alignment,
+                    intentColor: self.intentColor,
+                    isEnabled: self.isEnabled,
+                    attributedText: self.attributedText
+                )
+            }
+        case .multilineText:
+            switchView = self.makeView(isMultilineText: false)
         }
         switchView.delegate = context.coordinator
 
@@ -116,8 +132,18 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
             switchView.variant = self.isVariant ? self.variant() : nil
         }
 
-        if switchView.text != self.viewModel.text(isMultilineText: self.isMultilineText) {
-            switchView.text = self.viewModel.text(isMultilineText: self.isMultilineText)
+        if ((switchView.text == nil || switchView.text != self.viewModel.text(isMultilineText: self.textContent.isMultilineText)) && self.textContent.showText) ||
+            (switchView.text != nil && !self.textContent.showText) {
+            if self.textContent.showText {
+                switchView.text = self.viewModel.text(isMultilineText: self.textContent.isMultilineText)
+            } else {
+                switchView.text = nil
+            }
+        }
+
+        if (switchView.attributedText == nil && self.textContent.showAttributeText) ||
+            (switchView.attributedText != nil && !self.textContent.showAttributeText) {
+            switchView.attributedText = self.textContent.showAttributeText ? self.attributedText : nil
         }
 
         DispatchQueue.main.async {
@@ -131,16 +157,39 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         return Coordinator(isOn: self.$isOn)
     }
 
-    // MARK: - Getter
+    // MARK: - Getter & Maker
 
-    private func variant() -> SwitchVariant {
+    private func variant() -> SwitchUIVariantImages {
         let onImage = UIImage(named: self.viewModel.onImageNamed) ?? UIImage()
         let offImage = UIImage(named: self.viewModel.offImageNamed) ?? UIImage()
 
-        return .init(
-            onImage: onImage,
-            offImage: offImage
+        return SwitchUIVariantImages(
+            on: onImage,
+            off: offImage
         )
+    }
+
+    private func makeView(isMultilineText: Bool) -> SwitchUIView {
+        if self.isVariant {
+            return SwitchUIView(
+                theme: SparkTheme.shared,
+                isOn: self.isOn,
+                alignment: self.alignment,
+                intentColor: self.intentColor,
+                isEnabled: self.isEnabled,
+                variant: self.variant(),
+                text: self.viewModel.text(isMultilineText: isMultilineText)
+            )
+        } else {
+            return SwitchUIView(
+                theme: SparkTheme.shared,
+                isOn: self.isOn,
+                alignment: self.alignment,
+                intentColor: self.intentColor,
+                isEnabled: self.isEnabled,
+                text: self.viewModel.text(isMultilineText: isMultilineText)
+            )
+        }
     }
 }
 

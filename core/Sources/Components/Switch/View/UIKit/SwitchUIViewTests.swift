@@ -27,24 +27,24 @@ final class SwitchUIViewTests: UIKitComponentTestCase {
             let view: SwitchUIView
 
             if let variant = sut.variant {
-                view = SwitchUIView(
-                    theme: self.theme,
-                    isOn: sut.isOn,
-                    alignment: sut.alignment,
-                    intentColor: sut.intentColor,
-                    isEnabled: sut.isEnabled,
-                    variant: variant,
-                    text: sut.text
-                )
+                    view = SwitchUIView(
+                        theme: self.theme,
+                        isOn: sut.isOn,
+                        alignment: sut.alignment,
+                        intentColor: sut.intentColor,
+                        isEnabled: sut.isEnabled,
+                        variant: variant.toUIImages(),
+                        text: sut.text
+                    )
             } else {
-                view = SwitchUIView(
-                    theme: self.theme,
-                    isOn: sut.isOn,
-                    alignment: sut.alignment,
-                    intentColor: sut.intentColor,
-                    isEnabled: sut.isEnabled,
-                    text: sut.text
-                )
+                    view = SwitchUIView(
+                        theme: self.theme,
+                        isOn: sut.isOn,
+                        alignment: sut.alignment,
+                        intentColor: sut.intentColor,
+                        isEnabled: sut.isEnabled,
+                        text: sut.text
+                    )
             }
 
             view.backgroundColor = self.theme.colors.base.background.uiColor

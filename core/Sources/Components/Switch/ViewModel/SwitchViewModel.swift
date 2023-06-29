@@ -18,7 +18,9 @@ final class SwitchViewModel: ObservableObject {
     private(set) var alignment: SwitchAlignment
     private(set) var intentColor: SwitchIntentColor
     private(set) var isEnabled: Bool
-    private(set) var variant: SwitchVariant?
+    private(set) var variant: SwitchVariantable?
+    private(set) var text: String?
+    private(set) var attributedText: SwitchAttributedString?
 
     // MARK: - Published Properties
 
@@ -37,8 +39,9 @@ final class SwitchViewModel: ObservableObject {
 
     @Published private (set) var showToggleLeftSpace: Bool?
 
-    @Published private (set) var toggleDotImage: SwitchImageable?
+    @Published private (set) var toggleDotImage: SwitchImage?
 
+    @Published private (set) var textContent: SwitchTextContentable?
     @Published private (set) var textFontToken: TypographyFontToken?
 
     // MARK: - Private Properties
@@ -47,6 +50,7 @@ final class SwitchViewModel: ObservableObject {
 
     private let getColorsUseCase: any SwitchGetColorsUseCaseable
     private let getImageUseCase: any SwitchGetImageUseCaseable
+    private let getTextContentUseCase: any SwitchGetTextContentUseCaseable
     private let getToggleColorUseCase: any SwitchGetToggleColorUseCaseable
     private let getPositionUseCase: any SwitchGetPositionUseCaseable
     private let getToggleStateUseCase: any SwitchGetToggleStateUseCaseable
@@ -59,9 +63,12 @@ final class SwitchViewModel: ObservableObject {
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
-        variant: SwitchVariant?,
+        variant: SwitchVariantable?,
+        text: String?,
+        attributedText: SwitchAttributedString?,
         getColorsUseCase: any SwitchGetColorsUseCaseable = SwitchGetColorsUseCase(),
         getImageUseCase: any SwitchGetImageUseCaseable = SwitchGetImageUseCase(),
+        getTextContentUseCase: any SwitchGetTextContentUseCaseable = SwitchGetTextContentUseCase(),
         getToggleColorUseCase: any SwitchGetToggleColorUseCaseable = SwitchGetToggleColorUseCase(),
         getPositionUseCase: any SwitchGetPositionUseCaseable = SwitchGetPositionUseCase(),
         getToggleStateUseCase: any SwitchGetToggleStateUseCaseable = SwitchGetToggleStateUseCase()
@@ -73,9 +80,12 @@ final class SwitchViewModel: ObservableObject {
         self.intentColor = intentColor
         self.isEnabled = isEnabled
         self.variant = variant
+        self.text = text
+        self.attributedText = attributedText
 
         self.getColorsUseCase = getColorsUseCase
         self.getImageUseCase = getImageUseCase
+        self.getTextContentUseCase = getTextContentUseCase
         self.getToggleColorUseCase = getToggleColorUseCase
         self.getPositionUseCase = getPositionUseCase
         self.getToggleStateUseCase = getToggleStateUseCase
@@ -131,10 +141,24 @@ final class SwitchViewModel: ObservableObject {
         self.toggleStateDidUpdate()
     }
 
-    func set(variant: SwitchVariant?) {
+    func set(variant: SwitchVariantable?) {
         self.variant = variant
 
         self.toggleDotImageDidUpdate()
+    }
+
+    func set(text: String?) {
+        self.text = text
+        self.attributedText = nil
+
+        self.textContentDidUpdate()
+    }
+
+    func set(attributedText: SwitchAttributedString?) {
+        self.attributedText = attributedText
+        self.text = nil
+
+        self.textContentDidUpdate()
     }
 
     // MARK: - Update
@@ -145,6 +169,7 @@ final class SwitchViewModel: ObservableObject {
         self.toggleStateDidUpdate()
         self.toggleDotImageDidUpdate()
         self.toggleSpacesVisibilityDidUpdate()
+        self.textContentDidUpdate()
         self.textFontDidUpdate()
     }
 
@@ -185,8 +210,7 @@ final class SwitchViewModel: ObservableObject {
 
     private func toggleStateDidUpdate() {
         let interactionState = self.getToggleStateUseCase.execute(
-            forIsEnabled: self.isEnabled,
-            dims: self.theme.dims
+            forIsEnabled: self.isEnabled
         )
 
         self.isToggleInteractionEnabled = interactionState.interactionEnabled
@@ -202,6 +226,13 @@ final class SwitchViewModel: ObservableObject {
 
     private func toggleSpacesVisibilityDidUpdate() {
         self.showToggleLeftSpace = self.isOn
+    }
+
+    private func textContentDidUpdate() {
+        self.textContent = self.getTextContentUseCase.execute(
+            text: self.text,
+            attributedText: self.attributedText
+        )
     }
 
     private func textFontDidUpdate() {

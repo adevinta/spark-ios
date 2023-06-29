@@ -39,6 +39,9 @@ struct SwitchComponentView: View {
     @State private var isMultilineTextSheetIsPresented = false
     @State var isMultilineText: Bool = true
 
+    @State private var textContentSheetIsPresented = false
+    @State var textContent: SwitchTextContent = .text
+
     // MARK: - View
 
     var body: some View {
@@ -127,12 +130,20 @@ struct SwitchComponentView: View {
                             .labelsHidden()
                     }
 
-                    // Is Multiline text
+                    // Text Content
                     HStack() {
-                        Text("Is multiline text: ")
+                        Text("Text content: ")
                             .bold()
-                        Toggle("", isOn: self.$isMultilineText)
-                            .labelsHidden()
+                        Button("\(self.textContent.name)") {
+                            self.textContentSheetIsPresented = true
+                        }
+                        .confirmationDialog("Select an text content", isPresented: self.$textContentSheetIsPresented) {
+                            ForEach(SwitchTextContent.allCases, id: \.self) { textContent in
+                                Button("\(textContent.name)") {
+                                    self.textContent = textContent
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -155,7 +166,7 @@ struct SwitchComponentView: View {
                             intentColor: self.$intentColor.wrappedValue,
                             isEnabled: self.$isEnabled.wrappedValue,
                             isVariant: self.$isVariant.wrappedValue,
-                            isMultilineText: self.$isMultilineText.wrappedValue
+                            textContent: self.$textContent.wrappedValue
                         )
                         .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .leading)
                     }
@@ -211,6 +222,20 @@ private extension SwitchIntentColor {
             return "Success"
         @unknown default:
             return "Please, add this unknow intent color value"
+        }
+    }
+}
+
+private extension SwitchTextContent {
+
+    var name: String {
+        switch self {
+        case .text:
+            return "Text"
+        case .attributedText:
+            return "Attributed Text"
+        case .multilineText:
+            return "Multiline Text"
         }
     }
 }
