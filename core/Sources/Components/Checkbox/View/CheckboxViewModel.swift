@@ -13,7 +13,7 @@ import UIKit
 final class CheckboxViewModel: ObservableObject {
     // MARK: - Internal properties
 
-    var text: String
+    var text: String?
     var attributedText: NSAttributedString?
     var checkedImage: UIImage
 

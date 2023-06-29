@@ -91,12 +91,12 @@ public final class CheckboxUIView: UIView {
     public weak var delegate: CheckboxUIViewDelegate?
 
     /// The text displayed in the checkbox.
-    public var text: String {
+    public var text: String? {
         get {
             return self.viewModel.text
         }
         set {
-            self.update(content: .right(newValue))
+            self.update(content: .right(newValue ?? ""))
         }
     }
 
