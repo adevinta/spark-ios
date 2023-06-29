@@ -140,6 +140,7 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     }
 
     var title: String
+    var attributedTitle: NSAttributedString?
     var id: String
     var selectionState: CheckboxSelectionState
     var state: SelectButtonState
@@ -151,6 +152,20 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         state: SelectButtonState = .enabled
     ) {
         self.title = title
+        self.attributedTitle = nil
+        self.id = id
+        self.selectionState = selectionState
+        self.state = state
+    }
+
+    init(
+        attributedTitle: NSAttributedString,
+        id: String,
+        selectionState: CheckboxSelectionState,
+        state: SelectButtonState = .enabled
+    ) {
+        self.title = attributedTitle.string
+        self.attributedTitle = attributedTitle
         self.id = id
         self.selectionState = selectionState
         self.state = state

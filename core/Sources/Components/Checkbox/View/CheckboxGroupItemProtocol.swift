@@ -13,6 +13,9 @@ public protocol CheckboxGroupItemProtocol: Hashable {
     /// The checkbox title.
     var title: String { get set }
 
+    /// The attributed checkbox title.
+    var attributedTitle: NSAttributedString? { get set }
+
     /// The checkbox identifier.
     var id: String { get set }
 

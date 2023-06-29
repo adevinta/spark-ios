@@ -58,6 +58,19 @@ final class CheckboxViewController: UIViewController {
 
     private var cancellables = Set<AnyCancellable>()
 
+    private var attributedCheckboxLabel: NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: "This text is ")
+        let boldString = NSAttributedString(
+            string: "bold",
+            attributes: [
+                .font: self.theme.typography.body1Highlight.uiFont,
+                .foregroundColor: UIColor.red
+            ]
+        )
+        attributedString.append(boldString)
+        return attributedString
+    }
+    
     // MARK: - Methods
 
     override func viewDidLoad() {
@@ -177,6 +190,21 @@ final class CheckboxViewController: UIViewController {
         successCheckbox.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(successCheckbox)
         checkboxes.append(successCheckbox)
+
+        let attributedCheckbox = CheckboxUIView(
+            theme: theme,
+            text: "Right checkbox",
+            checkedImage: image,
+            state: .success(message: "Success message"),
+            selectionState: .init(
+                get: { return self.checkboxValue4 },
+                set: { self.checkboxValue4 = $0 }
+            ),
+            checkboxPosition: .right
+        )
+        attributedCheckbox.attributedText = self.attributedCheckboxLabel
+        view.addSubview(attributedCheckbox)
+        checkboxes.append(attributedCheckbox)
 
         var previousCheckbox: CheckboxUIView?
         for checkbox in checkboxes {

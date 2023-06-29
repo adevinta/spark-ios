@@ -85,7 +85,7 @@ public struct CheckboxView: View {
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.viewModel = .init(
-            text: text,
+            text: .right(text),
             checkedImage: checkedImage,
             theme: theme,
             colorsUseCase: colorsUseCase,
