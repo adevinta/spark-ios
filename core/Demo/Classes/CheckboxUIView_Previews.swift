@@ -181,6 +181,26 @@ final class CheckboxViewController: UIViewController {
         view.addSubview(successCheckbox)
         checkboxes.append(successCheckbox)
 
+        let attributedCheckbox = CheckboxUIView(
+            theme: theme,
+            attributedText: NSAttributedString(
+                string: "Attributed title",
+                attributes: [
+                    .foregroundColor: UIColor.purple,
+                    .font: theme.typography.body1.uiFont
+                ]
+            ),
+            checkedImage: checkedImage,
+            state: .success(message: "Success message"),
+            selectionState: .init(
+                get: { return self.checkboxValue4 },
+                set: { self.checkboxValue4 = $0 }
+            ),
+            checkboxPosition: .right
+        )
+        view.addSubview(attributedCheckbox)
+        checkboxes.append(attributedCheckbox)
+
         var previousCheckbox: CheckboxUIView?
         for checkbox in checkboxes {
             checkbox.delegate = self
