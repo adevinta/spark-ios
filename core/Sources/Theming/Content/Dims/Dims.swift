@@ -16,3 +16,10 @@ public protocol Dims {
     var dim4: CGFloat { get }
     var dim5: CGFloat { get }
 }
+
+extension Dims {
+    /// None corresponding to 1.0 value
+    var none: CGFloat {
+        return 1.0
+    }
+}

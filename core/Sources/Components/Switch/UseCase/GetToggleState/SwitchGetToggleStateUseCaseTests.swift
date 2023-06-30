@@ -21,7 +21,7 @@ final class SwitchGetToggleStateUseCaseTests: XCTestCase {
     func test_execute_when_isEnabled_is_true() throws {
         try self.testExecute(
             givenIsEnabled: true,
-            expectedInteractionState: .init(interactionEnabled: true, opacity: 1)
+            expectedInteractionState: .init(interactionEnabled: true, opacity: self.dimsMock.none)
         )
     }
 

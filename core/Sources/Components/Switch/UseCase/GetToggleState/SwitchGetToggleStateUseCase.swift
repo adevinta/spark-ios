@@ -22,7 +22,7 @@ struct SwitchGetToggleStateUseCase: SwitchGetToggleStateUseCaseable {
         forIsEnabled isEnabled: Bool,
         dims: Dims
     ) -> SwitchToggleStateable {
-        let opacity = isEnabled ? 1 : dims.dim3
+        let opacity = isEnabled ? dims.none : dims.dim3
 
         return SwitchToggleState(
             interactionEnabled: isEnabled,
