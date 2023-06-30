@@ -12,6 +12,6 @@ struct ButtonComponentViewModel {
 
     // MARK: - Properties
 
-    let text: String = "This is a Button"
-    let imageNamed: String = "alert"
+    let text: String = "Button"
+    let imageNamed: String = "arrow"
 }

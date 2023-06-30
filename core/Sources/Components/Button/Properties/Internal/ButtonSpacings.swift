@@ -1,5 +1,5 @@
 //
-//  ButtonSpacing.swift
+//  ButtonSpacings.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 23/06/2023.
@@ -9,13 +9,13 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol ButtonSpacingsProtocol {
+protocol ButtonSpacings {
     var verticalSpacing: CGFloat { get }
     var horizontalSpacing: CGFloat { get }
     var horizontalPadding: CGFloat { get }
 }
 
-struct ButtonSpacings: ButtonSpacingsProtocol {
+struct ButtonSpacingsDefault: ButtonSpacings {
 
     // MARK: - Properties
 

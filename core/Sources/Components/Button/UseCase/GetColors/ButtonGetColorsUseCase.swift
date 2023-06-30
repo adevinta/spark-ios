@@ -6,11 +6,11 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-// TODO: recheck all colors on variants UC
-
 // sourcery: AutoMockable
 protocol ButtonGetColorsUseCaseable {
-    func execute(forTheme theme: Theme, intentColor: ButtonIntentColor, variant: ButtonVariant) -> ButtonColorables
+    func execute(forTheme theme: Theme,
+                 intentColor: ButtonIntentColor,
+                 variant: ButtonVariant) -> ButtonColors
 }
 
 struct ButtonGetColorsUseCase: ButtonGetColorsUseCaseable {
@@ -44,7 +44,7 @@ struct ButtonGetColorsUseCase: ButtonGetColorsUseCaseable {
         forTheme theme: Theme,
         intentColor: ButtonIntentColor,
         variant: ButtonVariant
-    ) -> ButtonColorables {
+    ) -> ButtonColors {
         let colors = theme.colors
         let dims = theme.dims
 

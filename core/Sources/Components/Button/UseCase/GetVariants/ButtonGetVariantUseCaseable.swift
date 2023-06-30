@@ -10,5 +10,5 @@ import SwiftUI
 
 // sourcery: AutoMockable
 protocol ButtonGetVariantUseCaseable {
-    func colors(forIntentColor intentColor: ButtonIntentColor, colors: Colors, dims: Dims) -> ButtonColorables
+    func colors(forIntentColor intentColor: ButtonIntentColor, colors: Colors, dims: Dims) -> ButtonColors
 }

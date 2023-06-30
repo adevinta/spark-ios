@@ -22,7 +22,7 @@ struct ButtonComponentView: View {
     @State var version: ComponentVersion = .uiKit
 
     @State private var intentColorSheetIsPresented = false
-    @State var intentColor: ButtonIntentColor = .primary
+    @State var intentColor: ButtonIntentColor = .primary 
 
     @State private var variantSheetIsPresented = false
     @State var variant: ButtonVariant = .filled
@@ -33,14 +33,16 @@ struct ButtonComponentView: View {
     @State private var shapeSheetIsPresented = false
     @State var shape: ButtonShape = .rounded
 
-    @State private var iconSheetIsPresented = false
-    @State var icon: ButtonIcon = .none
+    @State private var alignmentSheetIsPresented = false
+    @State var alignment: ButtonAlignment = .leadingIcon
+
+    @State private var contentSheetIsPresented = false
+    @State var content: ButtonContentDefault = .text
 
     @State private var isEnabledSheetIsPresented = false
     @State var isEnabled: Bool = true
 
-    @State private var isTextSheetIsPresented = false
-    @State var isText: Bool = true
+    @State var shouldShowReverseBackgroundColor: Bool = false
 
     // MARK: - View
 
@@ -66,6 +68,9 @@ struct ButtonComponentView: View {
                                     self.version = version
                                 }
                             }
+                        }
+                        .onChange(of: self.intentColor) { newValue in
+                            self.shouldShowReverseBackgroundColor = (newValue == .surface)
                         }
                     }
                     // **
@@ -143,21 +148,39 @@ struct ButtonComponentView: View {
                     // **
 
                     // **
-                    // Icon
-//                    HStack() {
-//                        Text("Icon: ")
-//                            .bold()
-//                        Button("\(self.icon.name)") {
-//                            self.iconSheetIsPresented = true
-//                        }
-//                        .confirmationDialog("Select a icon", isPresented: self.iconSheetIsPresented) {
-//                            ForEach(ButtonIcon.allCases, id: \.self) { icon in
-//                                Button("\(icon.name)") {
-//                                    self.icon = icon
-//                                }
-//                            }
-//                        }
-//                    }
+                    // Alignment
+                    HStack() {
+                        Text("Alignment: ")
+                            .bold()
+                        Button("\(self.alignment.name)") {
+                            self.alignmentSheetIsPresented = true
+                        }
+                        .confirmationDialog("Select a alignment", isPresented: self.$alignmentSheetIsPresented) {
+                            ForEach(ButtonAlignment.allCases, id: \.self) { alignment in
+                                Button("\(alignment.name)") {
+                                    self.alignment = alignment
+                                }
+                            }
+                        }
+                    }
+                    // **
+
+                    // **
+                    // Content
+                    HStack() {
+                        Text("Content: ")
+                            .bold()
+                        Button("\(self.content.name)") {
+                            self.contentSheetIsPresented = true
+                        }
+                        .confirmationDialog("Select a content", isPresented: self.$contentSheetIsPresented) {
+                            ForEach(ButtonContentDefault.allCases, id: \.self) { content in
+                                Button("\(content.name)") {
+                                    self.content = content
+                                }
+                            }
+                        }
+                    }
                     // **
 
                     // Is Enabled
@@ -165,14 +188,6 @@ struct ButtonComponentView: View {
                         Text("Is enabled: ")
                             .bold()
                         Toggle("", isOn: self.$isEnabled)
-                            .labelsHidden()
-                    }
-
-                    // Is text
-                    HStack() {
-                        Text("Is text: ")
-                            .bold()
-                        Toggle("", isOn: self.$isText)
                             .labelsHidden()
                     }
                 }
@@ -195,11 +210,14 @@ struct ButtonComponentView: View {
                             variant: self.$variant.wrappedValue,
                             size: self.$size.wrappedValue,
                             shape: self.$shape.wrappedValue,
-                            icon: self.$icon.wrappedValue,
-                            isText: self.$isText.wrappedValue,
+                            alignment: self.$alignment.wrappedValue,
+                            content: self.$content.wrappedValue,
                             isEnabled: self.$isEnabled.wrappedValue
                         )
                         .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .center)
+                        .padding(.horizontal, self.shouldShowReverseBackgroundColor ? 4 : 0)
+                        .padding(.vertical, self.shouldShowReverseBackgroundColor ? 4 : 0)
+                        .background(self.shouldShowReverseBackgroundColor ? Color.gray : Color.clear)
                     }
                 }
 
@@ -237,8 +255,6 @@ private extension ButtonIntentColor {
             return "Success"
         case .surface:
             return "Surface"
-        @unknown default:
-            return "Please, add this unknow intent color value"
         }
     }
 }
@@ -296,22 +312,34 @@ private extension ButtonShape {
     }
 }
 
-private extension ButtonIcon {
+private extension ButtonAlignment {
 
-//    var name: String {
-//        switch self {
-//        case .filled:
-//            return "Filled"
-//        case .outlined:
-//            return "Outlined"
-//        case .tinted:
-//            return "Tinted"
-//        case .ghost:
-//            return "Ghost"
-//        case .contrast:
-//            return "Contrast"
-//        @unknown default:
-//            return "Please, add this unknow variant value"
-//        }
-//    }
+    var name: String {
+        switch self {
+        case .leadingIcon:
+            return "Icon on left"
+        case .trailingIcon:
+            return "Icon on right"
+        @unknown default:
+            return "Please, add this unknow alignment value"
+        }
+    }
+}
+
+private extension ButtonContentDefault {
+
+    var name: String {
+        switch self {
+        case .icon:
+            return "Icon"
+        case .text:
+            return "Text"
+        case .attributedText:
+            return "Attributed Text"
+        case .iconAndText:
+            return "Icon & Text"
+        case .iconAndAttributedText:
+            return "Icon & Attributed Text"
+        }
+    }
 }

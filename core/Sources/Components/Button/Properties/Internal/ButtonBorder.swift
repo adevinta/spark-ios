@@ -9,12 +9,12 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol ButtonBorderProtocol {
+protocol ButtonBorder {
     var width: CGFloat { get }
     var radius: CGFloat { get }
 }
 
-struct ButtonBorder: ButtonBorderProtocol {
+struct ButtonBorderDefault: ButtonBorder {
 
     // MARK: - Properties
 

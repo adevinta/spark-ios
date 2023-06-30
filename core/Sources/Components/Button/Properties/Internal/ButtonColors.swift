@@ -1,5 +1,5 @@
 //
-//  ButtonColorables.swift
+//  ButtonColors.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 02.05.23.
@@ -7,7 +7,7 @@
 //
 
 // sourcery: AutoMockable
-protocol ButtonColorables {
+protocol ButtonColors {
     var textColor: any ColorToken { get }
     var backgroundColor: any ColorToken { get }
     var pressedBackgroundColor: any ColorToken { get }
@@ -15,7 +15,8 @@ protocol ButtonColorables {
     var pressedBorderColor: any ColorToken { get }
 }
 
-struct ButtonColors: ButtonColorables {
+/// All Button Colors from a theme, variant and intent colors
+struct ButtonColorsDefault: ButtonColors {
 
     // MARK: - Properties
 

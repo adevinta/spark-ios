@@ -17,13 +17,29 @@ extension TypographyGeneratedMock {
     static func mocked() -> TypographyGeneratedMock {
         let typography = TypographyGeneratedMock()
 
+        typography.display1 = TypographyFontTokenGeneratedMock.mocked(.title)
+        typography.display2 = TypographyFontTokenGeneratedMock.mocked(.title2)
+        typography.display3 = TypographyFontTokenGeneratedMock.mocked(.title3)
+
+        typography.headline1 = TypographyFontTokenGeneratedMock.mocked(.headline)
+        typography.headline2 = TypographyFontTokenGeneratedMock.mocked(.headline)
+
+        typography.subhead = TypographyFontTokenGeneratedMock.mocked(.subheadline)
+
         typography.body1 = TypographyFontTokenGeneratedMock.mocked(.body)
+        typography.body1Highlight = TypographyFontTokenGeneratedMock.mocked(.body.bold())
         typography.body2 = TypographyFontTokenGeneratedMock.mocked(.body)
+        typography.body2Highlight = TypographyFontTokenGeneratedMock.mocked(.body.bold())
+
         typography.caption = TypographyFontTokenGeneratedMock.mocked(.caption)
         typography.captionHighlight = TypographyFontTokenGeneratedMock.mocked(.caption.bold())
+
+        typography.small = TypographyFontTokenGeneratedMock.mocked(.caption2)
         typography.smallHighlight = TypographyFontTokenGeneratedMock.mocked(.caption2.bold())
         typography.subhead = TypographyFontTokenGeneratedMock.mocked(.subheadline)
 
+        typography.callout = TypographyFontTokenGeneratedMock.mocked(.callout)
+        
         return typography
     }
 }

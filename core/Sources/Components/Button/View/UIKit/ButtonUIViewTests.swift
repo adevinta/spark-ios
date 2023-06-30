@@ -6,117 +6,121 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SnapshotTesting
-import SwiftUI
 import XCTest
+import SnapshotTesting
 
-@testable import Spark
 @testable import SparkCore
+@testable import Spark
 
 final class ButtonUIViewTests: UIKitComponentTestCase {
 
     // MARK: - Properties
-    let theme: Theme = SparkTheme.shared
 
-    let intents = [ButtonIntentColor.alert, .danger, .success, .neutral, .secondary, .surface, .primary]
-    let variants = [ButtonVariant.filled, .outlined, .tinted, .ghost, .contrast]
+    private let theme: Theme = SparkTheme.shared
 
-    // MARK: -  Tests
+    // MARK: - Tests
 
-    func test_button() throws {
-        for variant in variants {
-            for intent in intents {
-                let button = ButtonUIView(
-                    theme: theme,
-                    text: "Hello world",
-                    state: .enabled,
-                    variant: variant,
-                    intentColor: intent
-                )
-
-                let identifier = "\(variant.identifier)-\(intent.identifier)"
-                assertSnapshotInDarkAndLight(matching: button, named: identifier)
-            }
-        }
+    func test_uikit_switch_colors() {
+        let suts = ButtonSutTests.allColorsCases()
+        self.test(suts: suts)
     }
 
-    func test_button_with_icon() throws {
-        for variant in variants {
-            for intent in intents {
-                let button = ButtonUIView(
-                    theme: theme,
-                    text: "Hello world",
-                    icon: .leading(icon: UIImage(systemName: "trash")!),
-                    state: .enabled,
-                    variant: variant,
-                    intentColor: intent
-                )
-
-                let identifier = "\(variant.identifier)-\(intent.identifier)"
-                assertSnapshotInDarkAndLight(matching: button, named: identifier)
-            }
-        }
+    func test_uikit_switch_styles() {
+        let suts = ButtonSutTests.allStylesCases()
+        self.test(suts: suts)
     }
 
-    func test_pressed() throws {
-        for variant in variants {
-            for intent in intents {
-                let button = ButtonUIView(
-                    theme: theme,
-                    text: "Pressed button",
-                    state: .enabled,
-                    variant: variant,
-                    intentColor: intent
-                )
-                button.isPressed = true
-
-                let identifier = "\(variant.identifier)-\(intent.identifier)"
-                assertSnapshotInDarkAndLight(matching: button, named: identifier)
-            }
-        }
+    func test_uikit_switch_contents() {
+        let suts = ButtonSutTests.allContentCases(isSwiftUIComponent: false)
+        self.test(suts: suts)
     }
 }
 
-// MARK: - Private extension
+// MARK: - Testing
 
-private extension ButtonIntentColor {
-    var identifier: String {
-        let returnValue: String
-        switch self {
-        case .alert:
-            returnValue = "alert"
-        case .danger:
-            returnValue = "danger"
-        case .neutral:
-            returnValue = "neutral"
-        case .primary:
-            returnValue = "primary"
-        case .secondary:
-            returnValue = "secondary"
-        case .success:
-            returnValue = "success"
-        case .surface:
-            returnValue = "surface"
-        }
-        return returnValue
-    }
-}
+private extension ButtonUIViewTests {
 
-private extension ButtonVariant {
-    var identifier: String {
-        let returnValue: String
-        switch self {
-        case .filled:
-            returnValue = "filled"
-        case .outlined:
-            returnValue = "outlined"
-        case .tinted:
-            returnValue = "tinted"
-        case .ghost:
-            returnValue = "ghost"
-        case .contrast:
-            returnValue = "contrast"
+    func test(suts: [ButtonSutTests], function: String = #function) {
+        for sut in suts {
+            var view: ButtonUIView!
+
+            // Icon + Text ?
+            if let iconImage = sut.iconImage, let text = sut.text {
+                view = ButtonUIView(
+                    theme: self.theme,
+                    intentColor: sut.intentColor,
+                    variant: sut.variant,
+                    size: sut.size,
+                    shape: sut.shape,
+                    alignment: sut.alignment,
+                    iconImage: iconImage.leftValue,
+                    text: text,
+                    isEnabled: sut.isEnabled
+                )
+
+            } else if let iconImage = sut.iconImage, let attributedText = sut.attributedText { // Icon + Attributed Text
+                view = ButtonUIView(
+                    theme: self.theme,
+                    intentColor: sut.intentColor,
+                    variant: sut.variant,
+                    size: sut.size,
+                    shape: sut.shape,
+                    alignment: sut.alignment,
+                    iconImage: iconImage.leftValue,
+                    attributedText: attributedText.leftValue,
+                    isEnabled: sut.isEnabled
+                )
+
+            } else if let iconImage = sut.iconImage { // Only Icon
+                view = ButtonUIView(
+                    theme: self.theme,
+                    intentColor: sut.intentColor,
+                    variant: sut.variant,
+                    size: sut.size,
+                    shape: sut.shape,
+                    alignment: sut.alignment,
+                    iconImage: iconImage.leftValue,
+                    isEnabled: sut.isEnabled
+                )
+
+            } else if let text = sut.text { // Only Text
+                view = ButtonUIView(
+                    theme: self.theme,
+                    intentColor: sut.intentColor,
+                    variant: sut.variant,
+                    size: sut.size,
+                    shape: sut.shape,
+                    alignment: sut.alignment,
+                    text: text,
+                    isEnabled: sut.isEnabled
+                )
+
+            } else if let attributedText = sut.attributedText { // Only Attributed Text
+                view = ButtonUIView(
+                    theme: self.theme,
+                    intentColor: sut.intentColor,
+                    variant: sut.variant,
+                    size: sut.size,
+                    shape: sut.shape,
+                    alignment: sut.alignment,
+                    attributedText: attributedText.leftValue,
+                    isEnabled: sut.isEnabled
+                )
+            } else {
+                XCTFail("View should be init")
+            }
+
+            view.backgroundColor = self.theme.colors.base.background.uiColor
+
+            // Is pressed ?
+            if sut.isPressed {
+                view.testPressedAction()
+            }
+
+            self.assertSnapshotInDarkAndLight(
+                matching: view,
+                testName: sut.testName(on: function)
+            )
         }
-        return returnValue
     }
 }

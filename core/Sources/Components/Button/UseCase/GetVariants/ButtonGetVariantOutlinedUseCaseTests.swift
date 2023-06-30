@@ -22,13 +22,13 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.primary.primary,
-             ColorTokenDefault.clear,
+             self.theme.colors.base.surface,
              self.theme.colors.primary.primary.opacity(self.theme.dims.dim5),
              self.theme.colors.primary.primary,
              self.theme.colors.primary.primary
@@ -44,13 +44,13 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.secondary.secondary,
-             ColorTokenDefault.clear,
+             self.theme.colors.base.surface,
              self.theme.colors.secondary.secondary.opacity(self.theme.dims.dim5),
              self.theme.colors.secondary.secondary,
              self.theme.colors.secondary.secondary
@@ -66,13 +66,13 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.neutral,
-             ColorTokenDefault.clear,
+             self.theme.colors.base.surface,
              self.theme.colors.feedback.neutral.opacity(self.theme.dims.dim5),
              self.theme.colors.feedback.neutral,
              self.theme.colors.feedback.neutral
@@ -88,13 +88,13 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.alert,
-             ColorTokenDefault.clear,
+             self.theme.colors.base.surface,
              self.theme.colors.feedback.alert.opacity(self.theme.dims.dim5),
              self.theme.colors.feedback.alert,
              self.theme.colors.feedback.alert
@@ -110,13 +110,13 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.success,
-             ColorTokenDefault.clear,
+             self.theme.colors.base.surface,
              self.theme.colors.feedback.success.opacity(self.theme.dims.dim5),
              self.theme.colors.feedback.success,
              self.theme.colors.feedback.success
@@ -132,13 +132,13 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.feedback.error,
-             ColorTokenDefault.clear,
+             self.theme.colors.base.surface,
              self.theme.colors.feedback.error.opacity(self.theme.dims.dim5),
              self.theme.colors.feedback.error,
              self.theme.colors.feedback.error
@@ -154,13 +154,13 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
             [self.theme.colors.base.surface,
-             ColorTokenDefault.clear,
+             self.theme.colors.base.surfaceInverse,
              self.theme.colors.base.surface.opacity(self.theme.dims.dim5),
              self.theme.colors.base.surface,
              self.theme.colors.base.surface

@@ -9,139 +9,120 @@
 import Combine
 import UIKit
 
-/// The `ButtonUIView`renders a Spark-button using UIKit.
-public class ButtonUIView: UIView {
+/// The UIKit version for the button.
+public final class ButtonUIView: UIView {
+
+    // MARK: - Type alias
+
+    private typealias AccessibilityIdentifier = ButtonAccessibilityIdentifier
+    private typealias Constants = ButtonConstants
 
     // MARK: - Components
 
-    private let button: UIButton = {
-        let button = UIButton()
-        button.isAccessibilityElement = false
-        return button
+    private lazy var contentStackView: UIStackView = {
+        let stackView = UIStackView(
+            arrangedSubviews:
+                [
+                    self.iconView,
+                    self.textLabel
+                ]
+        )
+        stackView.axis = .horizontal
+        return stackView
     }()
 
-    private let contentView: UIView = {
+    private lazy var iconView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(self.iconImageView)
+        view.accessibilityIdentifier = AccessibilityIdentifier.icon
+        view.setContentCompressionResistancePriority(.required,
+                                                     for: .vertical)
+        view.setContentCompressionResistancePriority(.required,
+                                                     for: .horizontal)
         return view
     }()
 
-    private let textLabel: UILabel = {
-        let label = UILabel()
-        label.isAccessibilityElement = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.backgroundColor = .clear
-        label.numberOfLines = 0
-        label.setContentCompressionResistancePriority(.required,
-                                                      for: .vertical)
-        label.setContentCompressionResistancePriority(.defaultHigh,
-                                                      for: .horizontal)
-        return label
-    }()
-
-    private lazy var imageView: UIImageView = {
+    private var iconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .clear
-        imageView.isAccessibilityElement = false
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.setContentCompressionResistancePriority(.required,
-                                                          for: .horizontal)
-        imageView.setContentCompressionResistancePriority(.required,
-                                                          for: .vertical)
+        imageView.contentMode = .scaleAspectFit
+        imageView.accessibilityIdentifier = AccessibilityIdentifier.iconImage
         return imageView
     }()
 
-    // MARK: - Private properties.
+    private var textLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .left
+        label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = AccessibilityIdentifier.text
+        label.lineBreakMode = .byTruncatingMiddle
+        return label
+    }()
 
-    private var imageViewWidthConstraint: NSLayoutConstraint?
-    private var imageViewHeightConstraint: NSLayoutConstraint?
-    private var imageViewLeadingConstraint: NSLayoutConstraint?
-    private var imageViewTrailingConstraint: NSLayoutConstraint?
+    private lazy var clearButton: UIButton = {
+        let button = UIButton()
+        button.isAccessibilityElement = false
+        button.addTarget(self, action: #selector(self.touchUpInsideAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.touchDownAction), for: .touchDown)
+        button.addTarget(self, action: #selector(self.touchUpOutsideAction), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(self.touchCancelAction), for: .touchCancel)
+        return button
+    }()
 
-    private var textLabelBottomConstraint: NSLayoutConstraint?
-    private var textLabelTrailingConstraint: NSLayoutConstraint?
-    private var textLabelLeadingConstraint: NSLayoutConstraint?
-    private var buttonHeightConstraint: NSLayoutConstraint?
+    // MARK: - Public Properties
 
-    @ScaledUIMetric private var spacingLarge: CGFloat
-    @ScaledUIMetric private var spacingMedium: CGFloat
-    @ScaledUIMetric private var borderRadiusLarge: CGFloat
-    @ScaledUIMetric private var borderWidth: CGFloat = Constants.borderWidth
-
-    private var cancellables = Set<AnyCancellable>()
-
-    private var scaledButtonHeight: CGFloat {
-        let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let traitCollection = self.traitCollection
-
-        return bodyFontMetrics.scaledValue(for: self.buttonHeight, compatibleWith: traitCollection)
-    }
-
-    private var buttonHeight: CGFloat {
-        return self.size.height
-    }
-
-    private var colors: ButtonColorables {
-        return self.viewModel.colors
-    }
-
-    private var opacity: CGFloat {
-        return self.viewModel.opacity
-    }
-
-    private var spacing: LayoutSpacing {
-        return self.theme.layout.spacing
-    }
-
-    // MARK: - Public properties.
-
-    /// Set a delegate to receive selection state change callbacks. Alternatively, you can use the `tapPublisher`.
+    /// The delegate used to notify about some changed on button.
     public weak var delegate: ButtonUIViewDelegate?
 
     /// The tap publisher. Alternatively, you can set a delegate.
     public var tapPublisher: UIControl.EventPublisher {
-        return self.button.publisher(for: .touchUpInside)
+        return self.clearButton.publisher(for: .touchUpInside)
     }
 
     /// Publishes when a touch was cancelled (e.g. by the system).
     public var touchCancelPublisher: UIControl.EventPublisher {
-        return self.button.publisher(for: .touchCancel)
+        return self.clearButton.publisher(for: .touchCancel)
     }
 
     /// Publishes when a touch was started but the touch ended outside of the button view bounds.
     public var touchUpOutsidePublisher: UIControl.EventPublisher {
-        return self.button.publisher(for: .touchUpOutside)
+        return self.clearButton.publisher(for: .touchUpOutside)
     }
 
     /// Publishes instantly when the button is touched down.
     /// - warning: This should not trigger a user action and should only be used for things like tracking.
     public var touchDownPublisher: UIControl.EventPublisher {
-        return self.button.publisher(for: .touchDown)
+        return self.clearButton.publisher(for: .touchDown)
     }
 
-    /// The text displayed in the button.
-    public var text: String {
+    /// The spark theme of the button.
+    public var theme: Theme {
         get {
-            self.viewModel.text
+            return self.viewModel.theme
         }
         set {
-            self.viewModel.text = newValue
-            self.textLabel.text = text
-            self.updateAccessibility()
+            self.viewModel.set(theme: newValue)
         }
     }
 
-    /// The button corner shape.
-    public var shape: ButtonShape {
+    /// The intentColor of the button.
+    public var intentColor: ButtonIntentColor {
         get {
-            return self.viewModel.shape
+            return self.viewModel.intentColor
         }
         set {
-            guard newValue != self.viewModel.shape else { return }
-            self.viewModel.shape = newValue
+            self.viewModel.set(intentColor: newValue)
+        }
+    }
 
-            self.updateShape()
+    /// The variant of the button.
+    public var variant: ButtonVariant {
+        get {
+            return self.viewModel.variant
+        }
+        set {
+            self.viewModel.set(variant: newValue)
         }
     }
 
@@ -151,432 +132,668 @@ public class ButtonUIView: UIView {
             return self.viewModel.size
         }
         set {
-            guard newValue != self.viewModel.size else { return }
-            self.viewModel.size = newValue
-
-            self.updateSize()
-            self.updateViewConstraints()
+            self.viewModel.set(size: newValue)
         }
     }
 
-    /// The icon of the button.
-    public var icon: ButtonIcon {
+    /// The shape of the button.
+    public var shape: ButtonShape {
         get {
-            return viewModel.icon
+            return self.viewModel.shape
         }
         set {
-            guard newValue != icon else { return }
-            self.viewModel.icon = newValue
-
-            self.imageView.image = self.icon.image
-            self.updateViewConstraints()
+            self.viewModel.set(shape: newValue)
         }
     }
 
-    /// The control state of the button (e.g. `.enabled` or `.disabled`).
-    public var state: ButtonState {
+    /// The alignment of the button.
+    public var alignment: ButtonAlignment {
         get {
-            return self.viewModel.state
+            return self.viewModel.alignment
         }
         set {
-            guard newValue != self.viewModel.state else { return }
-
-            self.viewModel.state = newValue
-
-            self.updateState()
-            self.updateViewConstraints()
-
-            self.updateAccessibility()
+            self.viewModel.set(alignment: newValue)
         }
     }
-    /// Sets the theme of the checkbox.
-    public var theme: Theme {
+
+    /// The icon image of the button.
+    public var iconImage: UIImage? {
         get {
-            return self.viewModel.theme
+            return self.viewModel.iconImage?.leftValue
         }
         set {
-            self.viewModel.theme = newValue
+            self.viewModel.set(iconImage: Self.getImageEither(from: newValue))
         }
     }
 
-    // MARK: - Internal properties
-
-    var colorsUseCase: ButtonGetColorsUseCaseable {
-        return self.viewModel.colorsUseCase
-    }
-
-    var viewModel: ButtonViewModel
-
-    var isPressed: Bool = false {
-        didSet {
-            self.updateTheme()
+    /// The text of the button.
+    public var text: String? {
+        get {
+            return self.textLabel.text
+        }
+        set {
+            self.textLabel.text = newValue
+            self.viewModel.set(text: newValue)
         }
     }
 
-    var interactionEnabled: Bool {
-        return self.viewModel.interactionEnabled
+    /// The attributed text of the button.
+    public var attributedText: NSAttributedString? {
+        get {
+            return self.textLabel.attributedText
+        }
+        set {
+            self.textLabel.attributedText = newValue
+            self.viewModel.set(attributedText: Self.getAttributedTextEither(from: newValue))
+        }
     }
 
-    // MARK: - Initialize
-
-    /// Not implemented. Please use another init.
-    /// - Parameter coder: the coder.
-    public required init?(coder: NSCoder) {
-        fatalError("not implemented")
+    /// The lineBreakMode for the text of the button.
+    /// The default value is **byTruncatingTail**
+    public var lineBreakMode: NSLineBreakMode {
+        get {
+            return self.textLabel.lineBreakMode
+        }
+        set {
+            self.textLabel.lineBreakMode = newValue
+        }
     }
 
-    /// Initialize a new button UIKit-view.
+    /// The state of the button: enabled or not.
+    public var isEnabled: Bool {
+        get {
+            return self.viewModel.isEnabled
+        }
+        set {
+            self.viewModel.set(isEnabled: newValue)
+        }
+    }
+
+    // MARK: - Internal Properties
+
+    internal let viewModel: ButtonViewModel
+
+    // MARK: - Private Properties
+
+    private var heightConstraint: NSLayoutConstraint?
+
+    private var contentStackViewLeadingConstraint: NSLayoutConstraint?
+    private var contentStackViewTopConstraint: NSLayoutConstraint?
+    private var contentStackViewTrailingConstraint: NSLayoutConstraint?
+    private var contentStackViewBottomConstraint: NSLayoutConstraint?
+
+    private var iconImageViewHeightConstraint: NSLayoutConstraint?
+
+    @ScaledUIMetric private var height: CGFloat = 0
+    @ScaledUIMetric private var verticalSpacing: CGFloat = 0
+    @ScaledUIMetric private var horizontalSpacing: CGFloat = 0
+    @ScaledUIMetric private var horizontalPadding: CGFloat = 0
+    @ScaledUIMetric private var iconHeight: CGFloat = 0
+    private var cornerRadius: CGFloat = 0
+
+    private var firstContentStackViewAnimation: Bool = true
+    private var firstContentStackViewSubviewAnimation: Bool = true
+
+    private var subscriptions = Set<AnyCancellable>()
+
+    // MARK: - Initialization
+
+    /// Initialize a new button view with a text.
     /// - Parameters:
-    ///   - theme: The current Spark-Theme.
-    ///   - text: The button text.
-    ///   - icon: The button icon. **.none** by default.
-    ///   - state: The control state controls whether the button is enabled or disabled.
-    ///   - variant: Button variant sets the styling of the button.
-    ///   - intentColor: Button variant sets the intent and colors of the button.
+    ///   - theme: The spark theme of the button.
+    ///   - intentColor: The intent color of the button.
+    ///   - variant: The variant of the button.
+    ///   - size: The size of the button.
+    ///   - shape: The shape of the button.
+    ///   - alignment: The alignment of the button.
+    ///   - text: The text of the button.
+    ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
         theme: Theme,
+        intentColor: ButtonIntentColor,
+        variant: ButtonVariant,
+        size: ButtonSize,
+        shape: ButtonShape,
+        alignment: ButtonAlignment,
         text: String,
-        icon: ButtonIcon = .none,
-        state: ButtonState = .enabled,
-        variant: ButtonVariant = .filled,
-        intentColor: ButtonIntentColor
+        isEnabled: Bool
     ) {
         self.init(
-            theme: theme,
-            text: text,
-            icon: icon,
-            colorsUseCase: ButtonGetColorsUseCase(),
-            state: state,
+            theme,
+            intentColor: intentColor,
             variant: variant,
-            intentColor: intentColor
+            size: size,
+            shape: shape,
+            alignment: alignment,
+            iconImage: nil,
+            text: text,
+            attributedText: nil,
+            isEnabled: isEnabled
         )
     }
 
-    init(
+    /// Initialize a new button view with an attributed text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the button.
+    ///   - intentColor: The intent color of the button.
+    ///   - variant: The variant of the button.
+    ///   - size: The size of the button.
+    ///   - shape: The shape of the button.
+    ///   - alignment: The alignment of the button.
+    ///   - attributedText: The attributed text of the button.
+    ///   - isEnabled: The state of the button: enabled or not.
+    public convenience init(
         theme: Theme,
+        intentColor: ButtonIntentColor,
+        variant: ButtonVariant,
+        size: ButtonSize,
+        shape: ButtonShape,
+        alignment: ButtonAlignment,
+        attributedText: NSAttributedString,
+        isEnabled: Bool
+    ) {
+        self.init(
+            theme,
+            intentColor: intentColor,
+            variant: variant,
+            size: size,
+            shape: shape,
+            alignment: alignment,
+            iconImage: nil,
+            text: nil,
+            attributedText: attributedText,
+            isEnabled: isEnabled
+        )
+    }
+
+    /// Initialize a new button view with an icon image.
+    /// - Parameters:
+    ///   - theme: The spark theme of the button.
+    ///   - intentColor: The intent color of the button.
+    ///   - variant: The variant of the button.
+    ///   - size: The size of the button.
+    ///   - shape: The shape of the button.
+    ///   - alignment: The alignment of the button.
+    ///   - iconImage: The icon image of the button.
+    ///   - isEnabled: The state of the button: enabled or not.
+    public convenience init(
+        theme: Theme,
+        intentColor: ButtonIntentColor,
+        variant: ButtonVariant,
+        size: ButtonSize,
+        shape: ButtonShape,
+        alignment: ButtonAlignment,
+        iconImage: UIImage,
+        isEnabled: Bool
+    ) {
+        self.init(
+            theme,
+            intentColor: intentColor,
+            variant: variant,
+            size: size,
+            shape: shape,
+            alignment: alignment,
+            iconImage: iconImage,
+            text: nil,
+            attributedText: nil,
+            isEnabled: isEnabled
+        )
+    }
+
+    /// Initialize a new button view with an icon image and a text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the button.
+    ///   - intentColor: The intent color of the button.
+    ///   - variant: The variant of the button.
+    ///   - size: The size of the button.
+    ///   - shape: The shape of the button.
+    ///   - alignment: The alignment of the button.
+    ///   - iconImage: The icon image of the button.
+    ///   - text: The text of the button.
+    ///   - isEnabled: The state of the button: enabled or not.
+    public convenience init(
+        theme: Theme,
+        intentColor: ButtonIntentColor,
+        variant: ButtonVariant,
+        size: ButtonSize,
+        shape: ButtonShape,
+        alignment: ButtonAlignment,
+        iconImage: UIImage,
         text: String,
-        icon: ButtonIcon,
-        colorsUseCase: ButtonGetColorsUseCaseable = ButtonGetColorsUseCase(),
-        state: ButtonState = .enabled,
-        variant: ButtonVariant = .filled,
-        intentColor: ButtonIntentColor
+        isEnabled: Bool
+    ) {
+        self.init(
+            theme,
+            intentColor: intentColor,
+            variant: variant,
+            size: size,
+            shape: shape,
+            alignment: alignment,
+            iconImage: iconImage,
+            text: text,
+            attributedText: nil,
+            isEnabled: isEnabled
+        )
+    }
+
+    /// Initialize a new button view with an icon image and an attributed text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the button.
+    ///   - intentColor: The intent color of the button.
+    ///   - variant: The variant of the button.
+    ///   - size: The size of the button.
+    ///   - shape: The shape of the button.
+    ///   - alignment: The alignment of the button.
+    ///   - iconImage: The icon image of the button.
+    ///   - attributedText: The attributed text of the button.
+    ///   - isEnabled: The state of the button: enabled or not.
+    public convenience init(
+        theme: Theme,
+        intentColor: ButtonIntentColor,
+        variant: ButtonVariant,
+        size: ButtonSize,
+        shape: ButtonShape,
+        alignment: ButtonAlignment,
+        iconImage: UIImage,
+        attributedText: NSAttributedString,
+        isEnabled: Bool
+    ) {
+        self.init(
+            theme,
+            intentColor: intentColor,
+            variant: variant,
+            size: size,
+            shape: shape,
+            alignment: alignment,
+            iconImage: iconImage,
+            text: nil,
+            attributedText: attributedText,
+            isEnabled: isEnabled
+        )
+    }
+
+    private init(
+        _ theme: Theme,
+        intentColor: ButtonIntentColor,
+        variant: ButtonVariant,
+        size: ButtonSize,
+        shape: ButtonShape,
+        alignment: ButtonAlignment,
+        iconImage: UIImage?,
+        text: String?,
+        attributedText: NSAttributedString?,
+        isEnabled: Bool
     ) {
         self.viewModel = .init(
-            text: text,
-            icon: icon,
             theme: theme,
-            colorsUseCase: colorsUseCase,
-            state: state,
             intentColor: intentColor,
-            variant: variant
-        )
-
-        self.spacingLarge = theme.layout.spacing.large
-        self.spacingMedium = theme.layout.spacing.medium
-        self.borderRadiusLarge = theme.border.radius.large
+            variant: variant,
+            size: size,
+            shape: shape,
+            alignment: alignment,
+            iconImage: Self.getImageEither(from: iconImage),
+            text: text,
+            attributedText: Self.getAttributedTextEither(from: attributedText),
+            isEnabled: isEnabled)
 
         super.init(frame: .zero)
-        self.commonInit()
+
+        // Setup
+        self.setupView()
+        self.setupProperties(
+            text: text,
+            attributedText: attributedText
+        )
     }
 
-    private func commonInit() {
-        self.isAccessibilityElement = true
-        self.translatesAutoresizingMaskIntoConstraints = false
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-        let imageView = self.imageView
-        let textLabel = self.textLabel
-        let button = self.button
-        let contentView = self.contentView
-        self.addSubview(contentView)
-        contentView.addSubview(textLabel)
-        contentView.addSubview(imageView)
+    // MARK: - View setup
 
-        textLabel.text = self.text
-        contentView.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
+    private func setupView() {
+        // Add subviews
+        self.addSubview(self.contentStackView)
+        self.addSubview(self.clearButton)
 
-        button.addTarget(self, action: #selector(self.actionTouchUpInside(sender:)), for: .touchUpInside)
-        button.addTarget(self, action: #selector(self.actionTouchDown(sender:)), for: .touchDown)
-        button.addTarget(self, action: #selector(self.actionTouchUpOutside(sender:)), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(self.actionTouchCancel(sender:)), for: .touchCancel)
-
-        button.translatesAutoresizingMaskIntoConstraints = true
-        button.frame = self.bounds
-        button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        imageView.image = self.icon.image
-        self.addSubview(button)
-
+        // Setup constraints
         self.setupConstraints()
 
-        self.updateSize()
-        self.updateTheme()
-        self.updateState()
-        self.updateViewConstraints()
-        self.updateAccessibility()
-        self.subscribe()
+        // Setup publisher subcriptions
+        self.setupSubscriptions()
+
+        // Load view model
+        self.viewModel.load()
     }
+
+    private func setupProperties(
+        text: String?,
+        attributedText: NSAttributedString?
+    ) {
+        // Label
+        // Only one of the text/attributedText can be set in the init
+        if let text {
+            self.textLabel.text = text
+        } else if let attributedText {
+            self.textLabel.attributedText = attributedText
+        }
+    }
+
+    // MARK: - Layout
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.updateBorderRadius()
+    }
+
+    // MARK: - Constraints
 
     private func setupConstraints() {
-        let view = self
-        let imageView = self.imageView
-        let textLabel = self.textLabel
-        let contentView = self.contentView
+        self.setupViewConstraints()
+        self.setupContentStackViewConstraints()
+        self.setupIconViewConstraints()
+        self.setupIconImageViewConstraints()
+        self.setupClearButtonConstraints()
+    }
 
-        contentView.leadingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        contentView.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+    private func setupViewConstraints() {
+        self.translatesAutoresizingMaskIntoConstraints = false
 
-        self.buttonHeightConstraint = textLabel.heightAnchor.constraint(equalToConstant: self.scaledButtonHeight)
-        self.buttonHeightConstraint?.isActive = true
+        self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
+        self.heightConstraint?.isActive = true
 
-        imageView.centerYAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        self.imageViewWidthConstraint = imageView.widthAnchor.constraint(equalToConstant: 0)
-        self.imageViewWidthConstraint?.isActive = true
-        self.imageViewHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: 0)
-        self.imageViewHeightConstraint?.isActive = true
+        self.widthAnchor.constraint(greaterThanOrEqualTo: self.heightAnchor).isActive = true
+    }
 
-        switch self.icon {
-        case .leading, .none, .iconOnly:
-            textLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
-            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor)
-            self.textLabelLeadingConstraint?.isActive = true
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor)
-            self.textLabelTrailingConstraint?.isActive = true
-            self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.safeAreaLayoutGuide.bottomAnchor)
-            self.textLabelBottomConstraint?.isActive = true
+    private func setupContentStackViewConstraints() {
+        self.contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
-            self.imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor)
-            self.imageViewLeadingConstraint?.isActive = true
+        self.contentStackViewLeadingConstraint = self.contentStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        self.contentStackViewTopConstraint = self.contentStackView.topAnchor.constraint(equalTo: self.topAnchor)
+        self.contentStackViewTrailingConstraint = self.contentStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        self.contentStackViewBottomConstraint = self.contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
 
-        case .trailing:
-            textLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
-            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor)
-            self.textLabelLeadingConstraint?.isActive = true
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: imageView.leadingAnchor)
-            self.textLabelTrailingConstraint?.isActive = true
-            self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.safeAreaLayoutGuide.bottomAnchor)
-            self.textLabelBottomConstraint?.isActive = true
+        self.contentStackViewLeadingConstraint?.isActive = true
+        self.contentStackViewTopConstraint?.isActive = true
+        self.contentStackViewTrailingConstraint?.isActive = true
+        self.contentStackViewBottomConstraint?.isActive = true
+    }
 
-            self.imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-            self.imageViewTrailingConstraint?.isActive = true
+    private func setupIconViewConstraints() {
+        self.iconView.translatesAutoresizingMaskIntoConstraints = false
+        self.iconView.widthAnchor.constraint(greaterThanOrEqualTo: self.iconImageView.widthAnchor).isActive = true
+    }
+
+    private func setupIconImageViewConstraints() {
+        self.iconImageView.translatesAutoresizingMaskIntoConstraints = false
+
+        self.iconImageViewHeightConstraint = self.iconImageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
+        self.iconImageViewHeightConstraint?.isActive = true
+
+        self.iconImageView.widthAnchor.constraint(equalTo: self.iconImageView.heightAnchor).isActive = true
+        self.iconImageView.centerXAnchor.constraint(equalTo: self.iconView.centerXAnchor).isActive = true
+        self.iconImageView.centerYAnchor.constraint(equalTo: self.iconView.centerYAnchor).isActive = true
+    }
+
+    private func setupClearButtonConstraints() {
+        self.clearButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.stickEdges(from: self.clearButton, to: self)
+    }
+
+    // MARK: - Update UI
+
+    private func updateBorderRadius() {
+        self.setCornerRadius(self.cornerRadius)
+    }
+
+    private func updateHeight() {
+        // Reload height only if value changed
+        if self.heightConstraint?.constant != self.height {
+            self.heightConstraint?.constant = self.height
+            self.layoutIfNeeded()
         }
     }
 
-    // MARK: - Overrides
+    private func updateSpacings() {
+        // Reload spacing only if value changed
+        let verticalSpacing = self._verticalSpacing.wrappedValue
+        let horizontalSpacing = self._horizontalSpacing.wrappedValue
+        let horizontalPadding = self._horizontalPadding.wrappedValue
 
-    /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        self.updateViewConstraints()
+        let animationDuration = self.firstContentStackViewAnimation ? 0 : Constants.Animation.slowDuration
+        if verticalSpacing != self.contentStackViewTopConstraint?.constant ||
+            horizontalSpacing != self.contentStackViewLeadingConstraint?.constant ||
+            horizontalPadding != self.contentStackView.spacing {
+            UIView.animate(withDuration: animationDuration) { [weak self] in
+                guard let self else { return }
 
-        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.updateTheme()
-        }
+                self.firstContentStackViewAnimation = false
 
-        let traitCollection = self.traitCollection
-        _spacingLarge.update(traitCollection: traitCollection)
-        _spacingMedium.update(traitCollection: traitCollection)
-        _borderRadiusLarge.update(traitCollection: traitCollection)
-        _borderWidth.update(traitCollection: traitCollection)
+                self.contentStackViewLeadingConstraint?.constant = horizontalSpacing
+                self.contentStackViewTopConstraint?.constant = verticalSpacing
+                self.contentStackViewTrailingConstraint?.constant = -horizontalSpacing
+                self.contentStackViewBottomConstraint?.constant = -verticalSpacing
+                self.contentStackView.layoutIfNeeded()
 
-        self.setNeedsDisplay()
-    }
-
-}
-
-// MARK: - Private methods
-private extension ButtonUIView {
-    func subscribe() {
-        self.viewModel.$colors
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] text in
-                self?.updateTheme()
+                self.contentStackView.spacing = horizontalPadding
             }
-            .store(in: &self.cancellables)
-
-        self.subscribeTo(self.viewModel.$theme) { [weak self] _ in
-            guard let self else { return }
-            self.updateTheme()
-
-            self.updateSize()
-            self.updateTheme()
-            self.updateState()
-            self.updateViewConstraints()
         }
     }
 
-    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void) {
+    private func updateIconHeight() {
+        // Reload height only if value changed
+        if self.iconImageViewHeightConstraint?.constant != self.iconHeight {
+            self.iconImageViewHeightConstraint?.constant = self.iconHeight
+            self.iconImageView.layoutIfNeeded()
+        }
+    }
+
+    // MARK: - Subscribe
+
+    private func setupSubscriptions() {
+        // **
+        // State
+        self.subscribeTo(self.viewModel.$state) { [weak self] state in
+            guard let self, let state else { return }
+
+            // Update the user interaction enabled
+            self.clearButton.isUserInteractionEnabled = state.isInteractionEnabled
+
+            // Animate only if new alpha is different from current alpha
+            let alpha = state.opacity
+            if self.alpha != alpha {
+                UIView.animate(withDuration: Constants.Animation.slowDuration) { [weak self] in
+                    self?.alpha = alpha
+                }
+            } else {
+                self.alpha = alpha
+            }
+        }
+        // **
+
+        // **
+        // Colors
+        self.subscribeTo(self.viewModel.$currentColors) { [weak self] colors in
+            guard let self, let colors else { return }
+
+            // Background Color
+            if self.backgroundColor != colors.backgroundColor.uiColor {
+                UIView.animate(withDuration: Constants.Animation.fastDuration) { [weak self] in
+                    self?.backgroundColor = colors.backgroundColor.uiColor
+                }
+            } else {
+                self.backgroundColor = colors.backgroundColor.uiColor
+            }
+
+            // Border Color
+            self.setBorderColor(from: colors.borderColor)
+
+            // Foreground Color
+            self.iconImageView.tintColor = colors.foregroundColor.uiColor
+            self.textLabel.textColor = colors.foregroundColor.uiColor
+        }
+
+        // **
+        // Sizes
+        self.subscribeTo(self.viewModel.$sizes) { [weak self] sizes in
+            guard let self, let sizes else { return }
+
+            // Height
+            self.height = sizes.height
+            self._height.update(traitCollection: self.traitCollection)
+            self.updateHeight()
+
+            // Icon size
+            self.iconHeight = sizes.iconSize
+            self._iconHeight.update(traitCollection: self.traitCollection)
+            self.updateIconHeight()
+        }
+        // **
+
+        // **
+        // Border
+        self.subscribeTo(self.viewModel.$border) { [weak self] border in
+            guard let self, let border else { return }
+
+            // Radius
+            self.cornerRadius = border.radius
+            self.updateBorderRadius()
+
+            // Width
+            self.setBorderWidth(border.width)
+        }
+        // **
+
+        // **
+        // Spacings
+        self.subscribeTo(self.viewModel.$spacings) { [weak self] spacings in
+            guard let self, let spacings else { return }
+
+            self.verticalSpacing = spacings.verticalSpacing
+            self._verticalSpacing.update(traitCollection: self.traitCollection)
+
+            self.horizontalSpacing = spacings.horizontalSpacing
+            self._horizontalSpacing.update(traitCollection: self.traitCollection)
+
+            self.horizontalPadding = spacings.horizontalPadding
+            self._horizontalPadding.update(traitCollection: self.traitCollection)
+
+            self.updateSpacings()
+        }
+        // **
+
+        // **
+        // Content
+        self.subscribeTo(self.viewModel.$content) { [weak self] content in
+            guard let self, let content else { return }
+
+            // Icon ImageView
+            self.iconImageView.image = content.iconImage?.leftValue
+
+            // Subviews positions and visibilities
+            let animationDuration = self.firstContentStackViewSubviewAnimation ? 0 : Constants.Animation.slowDuration
+            UIView.animate(withDuration: animationDuration) { [weak self] in
+                guard let self else { return }
+
+                self.firstContentStackViewSubviewAnimation = false
+
+                if self.iconView.isHidden == content.showIconImage {
+                    self.iconView.isHidden = !content.showIconImage
+                }
+
+                if self.textLabel.isHidden == content.showText {
+                    self.textLabel.isHidden = !content.showText
+                }
+                self.contentStackView.layoutIfNeeded()
+            }
+
+            // Position
+            self.contentStackView.semanticContentAttribute = content.isIconImageOnRight ? .forceRightToLeft : .forceLeftToRight
+        }
+        // **
+
+        // **
+        // Text Font
+        self.subscribeTo(self.viewModel.$textFontToken) { [weak self] textFontToken in
+            guard let self, let textFontToken else { return }
+
+            self.textLabel.font = textFontToken.uiFont
+        }
+        // **
+    }
+
+    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void ) {
         publisher
             .receive(on: RunLoop.main)
             .sink { value in
                 action(value)
             }
-            .store(in: &self.cancellables)
+            .store(in: &self.subscriptions)
     }
 
-    func updateAccessibility() {
-        if self.state == .disabled {
-            self.accessibilityTraits.insert(.notEnabled)
-        } else {
-            self.accessibilityTraits.remove(.notEnabled)
-        }
+    // MARK: - Actions
 
-        self.accessibilityLabel = self.viewModel.text
-    }
+    @objc private func touchUpInsideAction() {
+        self.unpressedAction()
 
-    func updateViewConstraints() {
-        let textLabel = self.textLabel
-        let imageView = self.imageView
-        let contentView = self.contentView
-
-        let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let iconSize = self.buttonHeight - 2 * self.spacing.medium
-        let scaledIconSize = bodyFontMetrics.scaledValue(for: iconSize, compatibleWith: traitCollection)
-        self.imageViewWidthConstraint?.constant = scaledIconSize
-        self.imageViewHeightConstraint?.constant = scaledIconSize
-
-        if let bottomConstraint = self.textLabelBottomConstraint {
-            NSLayoutConstraint.deactivate([bottomConstraint])
-        }
-        self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor)
-        self.textLabelBottomConstraint?.isActive = true
-
-        imageView.isHidden = !viewModel.hasIcon
-
-        imageView.backgroundColor = .orange
-        textLabel.isHidden = !viewModel.hasText
-
-        NSLayoutConstraint.deactivate([self.textLabelLeadingConstraint, self.textLabelTrailingConstraint, self.imageViewLeadingConstraint, self.imageViewTrailingConstraint].compactMap { $0 })
-        self.textLabelLeadingConstraint = nil
-        self.textLabelTrailingConstraint = nil
-        self.imageViewLeadingConstraint = nil
-        self.imageViewTrailingConstraint = nil
-
-        self.updateSize()
-
-        let largeSpacing = self.spacingLarge
-        let mediumSpacing = self.spacingMedium
-        switch self.icon {
-        case .leading:
-            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: mediumSpacing)
-            self.textLabelLeadingConstraint?.isActive = true
-
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -largeSpacing)
-            self.textLabelTrailingConstraint?.isActive = true
-
-            self.imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: largeSpacing)
-            self.imageViewLeadingConstraint?.isActive = true
-        case .trailing:
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: -mediumSpacing)
-            self.textLabelTrailingConstraint?.isActive = true
-
-            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: largeSpacing)
-            self.textLabelLeadingConstraint?.isActive = true
-
-            self.imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -largeSpacing)
-            self.imageViewTrailingConstraint?.isActive = true
-        case .none:
-            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: largeSpacing)
-            self.textLabelLeadingConstraint?.isActive = true
-
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -largeSpacing)
-            self.textLabelTrailingConstraint?.isActive = true
-        case .iconOnly:
-            self.imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: mediumSpacing)
-            self.imageViewLeadingConstraint?.isActive = true
-
-            self.imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -mediumSpacing)
-            self.imageViewTrailingConstraint?.isActive = true
-        }
-
-        self.setNeedsLayout()
-    }
-
-    func updateShape() {
-        switch self.shape {
-        case .square:
-            self.layer.cornerRadius = 0
-        case .rounded:
-            self.layer.cornerRadius = min(self.borderRadiusLarge, self.scaledButtonHeight / 2)
-        case .pill:
-            self.layer.cornerRadius = self.scaledButtonHeight / 2
-        }
-        self.layer.borderWidth = self.borderWidth
-    }
-
-    func updateSize() {
-        self.buttonHeightConstraint?.constant = self.scaledButtonHeight
-        self.updateShape()
-    }
-
-    func updateTheme() {
-        let theme = self.theme
-        self.spacingLarge = theme.layout.spacing.large
-        self.spacingMedium = theme.layout.spacing.medium
-        self.borderRadiusLarge = theme.border.radius.large
-
-        let colors = self.colors
-        if self.isPressed {
-            self.backgroundColor = colors.pressedBackgroundColor.uiColor
-            self.layer.borderColor = colors.pressedBorderColor.uiColor.cgColor
-        } else {
-            self.backgroundColor = colors.backgroundColor.uiColor
-            self.layer.borderColor = colors.borderColor.uiColor.cgColor
-        }
-
-        let font = self.theme.typography.callout.uiFont
-        self.textLabel.font = font
-        self.textLabel.adjustsFontForContentSizeCategory = true
-        self.textLabel.textColor = colors.textColor.uiColor
-        self.imageView.tintColor = colors.textColor.uiColor
-    }
-
-    func updateState() {
-        let opacity = self.opacity
-        self.alpha = opacity
-    }
-}
-
-// MARK: - Actions
-private extension ButtonUIView {
-
-    @IBAction func actionTouchUpInside(sender: UIButton) {
-        self.isPressed = false
-
-        guard self.interactionEnabled else { return }
         self.delegate?.button(self, didReceive: .touchUpInside)
         self.delegate?.buttonWasTapped(self)
     }
 
-    @IBAction func actionTouchDown(sender: UIButton) {
-        guard self.interactionEnabled else { return }
-        self.isPressed = true
+    @objc private func touchDownAction() {
+        self.viewModel.pressedAction()
         self.delegate?.button(self, didReceive: .touchDown)
     }
 
-    @IBAction func actionTouchUpOutside(sender: UIButton) {
-        self.isPressed = false
+    @objc private func touchUpOutsideAction() {
+        self.unpressedAction()
         self.delegate?.button(self, didReceive: .touchUpOutside)
     }
 
-    @IBAction func actionTouchCancel(sender: UIButton) {
-        self.isPressed = false
+    @objc private func touchCancelAction() {
+        self.unpressedAction()
         self.delegate?.button(self, didReceive: .touchCancel)
     }
-}
 
-// MARK: - Label priorities
-public extension ButtonUIView {
-    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
-                                                      for axis: NSLayoutConstraint.Axis) {
-        self.textLabel.setContentCompressionResistancePriority(priority,
-                                                               for: axis)
+    private func unpressedAction() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.Animation.fastDuration, execute: { [weak self] in
+            self?.viewModel.unpressedAction()
+        })
     }
 
-    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
-                                        for axis: NSLayoutConstraint.Axis) {
-        self.textLabel.setContentHuggingPriority(priority,
-                                                 for: axis)
+    // MARK: - Trait Collection
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // Update heights
+        self._height.update(traitCollection: self.traitCollection)
+        self.updateHeight()
+        self._iconHeight.update(traitCollection: self.traitCollection)
+        self.updateIconHeight()
+
+        // Update spacings
+        self._verticalSpacing.update(traitCollection: self.traitCollection)
+        self._horizontalSpacing.update(traitCollection: self.traitCollection)
+        self._horizontalPadding.update(traitCollection: self.traitCollection)
+        self.updateSpacings()
+    }
+
+    // MARK: - Either Getter
+
+    private static func getImageEither(from value: UIImage?) -> ImageEither? {
+        guard let value else {
+            return nil
+        }
+
+        return .left(value)
+    }
+
+    private static func getAttributedTextEither(from value: NSAttributedString?) -> AttributedStringEither? {
+        guard let value else {
+            return nil
+        }
+
+        return .left(value)
     }
 }

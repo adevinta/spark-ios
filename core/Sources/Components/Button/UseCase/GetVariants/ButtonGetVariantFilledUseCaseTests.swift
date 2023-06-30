@@ -22,7 +22,7 @@ final class ButtonGetVariantFilledUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
@@ -44,7 +44,7 @@ final class ButtonGetVariantFilledUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
@@ -66,7 +66,7 @@ final class ButtonGetVariantFilledUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
@@ -88,7 +88,7 @@ final class ButtonGetVariantFilledUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
@@ -110,7 +110,7 @@ final class ButtonGetVariantFilledUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
@@ -132,7 +132,7 @@ final class ButtonGetVariantFilledUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,
@@ -154,7 +154,7 @@ final class ButtonGetVariantFilledUseCaseTests: ButtonVariantUseCaseTests {
 
         // Then
         XCTAssertEqual(
-            [colors.textColor,
+            [colors.foregroundColor,
              colors.backgroundColor,
              colors.pressedBackgroundColor,
              colors.borderColor,

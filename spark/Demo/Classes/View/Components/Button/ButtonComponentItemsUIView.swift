@@ -16,7 +16,8 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     // MARK: - Properties
 
     private let viewModel: ButtonComponentViewModel
-    private var iconImage: UIImage
+    private let iconImage: UIImage
+    private let attributedText: NSAttributedString
 
     var width: CGFloat
     @Binding var height: CGFloat
@@ -25,8 +26,8 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     private let variant: ButtonVariant
     private let size: ButtonSize
     private let shape: ButtonShape
-    private let icon: ButtonIcon
-    private let isText: Bool
+    private let alignment: ButtonAlignment
+    private let content: ButtonContentDefault
     private let isEnabled: Bool
 
     // MARK: - Initialization
@@ -39,34 +40,98 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        icon: ButtonIcon,
-        isText: Bool,
+        alignment: ButtonAlignment,
+        content: ButtonContentDefault,
         isEnabled: Bool
     ) {
         self.viewModel = viewModel
         self.iconImage = .init(named: viewModel.imageNamed) ?? UIImage()
+        self.attributedText = .init(
+            string: self.viewModel.text,
+            attributes: [
+                .foregroundColor: UIColor.purple,
+                .font: SparkTheme.shared.typography.body2Highlight.uiFont
+            ]
+        )
         self.width = width
         self._height = height
         self.intentColor = intentColor
         self.variant = variant
         self.size = size
         self.shape = shape
-        self.icon = icon
-        self.isText = isText
+        self.alignment = alignment
+        self.content = content
         self.isEnabled = isEnabled
     }
 
     // MARK: - Maker
 
     func makeUIView(context: Context) -> UIStackView {
-        let buttonView = ButtonUIView(
-            theme: SparkTheme.shared,
-            text: self.viewModel.text,
-            icon: .leading(icon: self.iconImage), // TODO:
-            state: self.isEnabled ? .enabled : .disabled,
-            variant:  self.variant,
-            intentColor: self.intentColor
-        )
+        let buttonView: ButtonUIView
+
+        switch self.content {
+        case .icon:
+            buttonView = ButtonUIView(
+                theme: SparkTheme.shared,
+                intentColor: self.intentColor,
+                variant: self.variant,
+                size: self.size,
+                shape: self.shape,
+                alignment: self.alignment,
+                iconImage: self.iconImage,
+                isEnabled: self.isEnabled
+            )
+
+        case .text:
+            buttonView = ButtonUIView(
+                theme: SparkTheme.shared,
+                intentColor: self.intentColor,
+                variant: self.variant,
+                size: self.size,
+                shape: self.shape,
+                alignment: self.alignment,
+                text: self.viewModel.text,
+                isEnabled: self.isEnabled
+            )
+
+        case .attributedText:
+            buttonView = ButtonUIView(
+                theme: SparkTheme.shared,
+                intentColor: self.intentColor,
+                variant: self.variant,
+                size: self.size,
+                shape: self.shape,
+                alignment: self.alignment,
+                attributedText: self.attributedText,
+                isEnabled: self.isEnabled
+            )
+
+        case .iconAndText:
+            buttonView = ButtonUIView(
+                theme: SparkTheme.shared,
+                intentColor: self.intentColor,
+                variant: self.variant,
+                size: self.size,
+                shape: self.shape,
+                alignment: self.alignment,
+                iconImage: self.iconImage,
+                text: self.viewModel.text,
+                isEnabled: self.isEnabled
+            )
+
+        case .iconAndAttributedText:
+            buttonView = ButtonUIView(
+                theme: SparkTheme.shared,
+                intentColor: self.intentColor,
+                variant: self.variant,
+                size: self.size,
+                shape: self.shape,
+                alignment: self.alignment,
+                iconImage: self.iconImage,
+                attributedText: self.attributedText,
+                isEnabled: self.isEnabled
+            )
+        }
 
         let stackView = UIStackView(arrangedSubviews: [
             buttonView,
@@ -86,33 +151,56 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
             return
         }
 
-//        if buttonView.intentColor != self.intentColor {
-//            buttonView.intentColor = self.intentColor
-//        }
-//
-//        if buttonView.variant != self.variant) {
-//            buttonView.variant = self.variant
-//        }
+        if buttonView.intentColor != self.intentColor {
+            buttonView.intentColor = self.intentColor
+        }
+
+        if buttonView.variant != self.variant {
+            buttonView.variant = self.variant
+        }
 
         if buttonView.size != self.size {
-            buttonView.size = size
+            buttonView.size = self.size
         }
 
         if buttonView.shape != self.shape {
-            buttonView.shape = shape
+            buttonView.shape = self.shape
         }
 
-//        if buttonView.icon != self.viewModel.icon {
-//            buttonView.icon = self.viewModel.icon
-//        }
+        if buttonView.alignment != self.alignment {
+            buttonView.alignment = self.alignment
+        }
 
-        if buttonView.text != self.viewModel.text {
+        switch self.content {
+        case .icon:
+            buttonView.text = nil
+            buttonView.attributedText = nil
+            buttonView.iconImage = self.iconImage
+
+        case .text:
+            buttonView.iconImage = nil
+            buttonView.attributedText = nil
             buttonView.text = self.viewModel.text
+
+        case .attributedText:
+            buttonView.iconImage = nil
+            buttonView.text = nil
+            buttonView.attributedText = self.attributedText
+
+        case .iconAndText:
+            buttonView.attributedText = nil
+            buttonView.iconImage = self.iconImage
+            buttonView.text = self.viewModel.text
+
+        case .iconAndAttributedText:
+            buttonView.text = nil
+            buttonView.iconImage = self.iconImage
+            buttonView.attributedText = self.attributedText
         }
 
-//        if buttonView.isEnabled != self.isEnabled {
-//            buttonView.isEnabled = self.isEnabled
-//        }
+        if buttonView.isEnabled != self.isEnabled {
+            buttonView.isEnabled = self.isEnabled
+        }
 
         DispatchQueue.main.async {
             self.height = buttonView.frame.height

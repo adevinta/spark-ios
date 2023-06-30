@@ -16,7 +16,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
         forIntentColor intentColor: ButtonIntentColor,
         colors: Colors,
         dims: Dims
-    ) -> ButtonColorables {
+    ) -> ButtonColors {
         let borderColor = ColorTokenDefault.clear
         let pressedBorderColor = ColorTokenDefault.clear
 
@@ -24,8 +24,8 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
 
         switch intentColor {
         case .primary:
-            return ButtonColors(
-                textColor: colors.primary.primary,
+            return ButtonColorsDefault(
+                foregroundColor: colors.primary.primary,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.primary.primary,
@@ -35,8 +35,8 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .secondary:
-            return ButtonColors(
-                textColor: colors.secondary.secondary,
+            return ButtonColorsDefault(
+                foregroundColor: colors.secondary.secondary,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.secondary.secondary,
@@ -46,8 +46,8 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .neutral:
-            return ButtonColors(
-                textColor: colors.feedback.neutral,
+            return ButtonColorsDefault(
+                foregroundColor: colors.feedback.neutral,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.feedback.neutral,
@@ -57,8 +57,8 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .alert:
-            return ButtonColors(
-                textColor: colors.feedback.alert,
+            return ButtonColorsDefault(
+                foregroundColor: colors.feedback.alert,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.feedback.alert,
@@ -68,8 +68,8 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .success:
-            return ButtonColors(
-                textColor: colors.feedback.success,
+            return ButtonColorsDefault(
+                foregroundColor: colors.feedback.success,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.feedback.success,
@@ -79,8 +79,8 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .danger:
-            return ButtonColors(
-                textColor: colors.feedback.error,
+            return ButtonColorsDefault(
+                foregroundColor: colors.feedback.error,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.feedback.error,
@@ -90,8 +90,8 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .surface:
-            return ButtonColors(
-                textColor: colors.base.surface,
+            return ButtonColorsDefault(
+                foregroundColor: colors.base.surface,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.base.surface,

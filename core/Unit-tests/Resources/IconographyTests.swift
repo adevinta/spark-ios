@@ -23,6 +23,10 @@ struct IconographyTests {
 
     // MARK: - Icons
 
+    lazy var arrow: UIImage = {
+        return self.getImage(name: "arrow")
+    }()
+
     lazy var checkmark: UIImage = {
         return self.getImage(name: "checkbox-selected")
     }()

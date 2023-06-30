@@ -18,8 +18,8 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
         // GIVEN
         let variants: [ButtonVariant] = [.filled, .outlined, .contrast, .tinted, .ghost]
         let items = variants.map {
-            let intentColorsMock = ButtonColorablesGeneratedMock()
-            intentColorsMock.underlyingTextColor = ColorTokenGeneratedMock.random()
+            let intentColorsMock = ButtonColorsGeneratedMock()
+            intentColorsMock.underlyingForegroundColor = ColorTokenGeneratedMock.random()
             intentColorsMock.underlyingBackgroundColor = ColorTokenGeneratedMock.random()
             intentColorsMock.underlyingPressedBackgroundColor = ColorTokenGeneratedMock.random()
             intentColorsMock.underlyingBorderColor = ColorTokenGeneratedMock.random()
@@ -29,7 +29,7 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
                 givenIntentColor: .primary,
                 givenVariant: $0,
                 givenColorables: intentColorsMock,
-                expectedTextColorToken: intentColorsMock.textColor,
+                expectedforegroundColorToken: intentColorsMock.foregroundColor,
                 expectedBackgroundToken: intentColorsMock.backgroundColor,
                 expectedPressedBackgroundToken: intentColorsMock.pressedBackgroundColor,
                 expectedBorderToken: intentColorsMock.borderColor,
@@ -124,15 +124,15 @@ private struct Tester {
     }
 
     static func testColorsProperties(
-        givenColors: ButtonColorables,
+        givenColors: ButtonColors,
         getColors: GetColors
     ) throws {
         // Text Color
         try self.testColor(
-            givenColorProperty: givenColors.textColor,
-            givenPropertyName: "textColor",
+            givenColorProperty: givenColors.foregroundColor,
+            givenPropertyName: "foregroundColor",
             givenIntentColor: getColors.givenIntentColor,
-            expectedColorToken: getColors.expectedTextColorToken
+            expectedColorToken: getColors.expectedforegroundColorToken
         )
 
         // Background Color
@@ -174,18 +174,18 @@ private struct Tester {
         givenIntentColor: ButtonIntentColor,
         expectedColorToken: (any ColorToken)?
     ) throws {
-        let errorPrefixMessage = " \(givenPropertyName) for .\(givenIntentColor) case"
+        let errorSuffixMessage = " \(givenPropertyName) for .\(givenIntentColor) case"
 
         if let givenColorProperty {
             let color = try XCTUnwrap(givenColorProperty as? ColorTokenGeneratedMock,
-                                      "Wrong" + errorPrefixMessage)
+                                      "Wrong" + errorSuffixMessage)
             XCTAssertIdentical(color,
                                expectedColorToken as? ColorTokenGeneratedMock,
-                               "Wrong value" + errorPrefixMessage)
+                               "Wrong value" + errorSuffixMessage)
 
         } else {
             XCTAssertNil(givenColorProperty,
-                         "Should be nil" + errorPrefixMessage)
+                         "Should be nil" + errorSuffixMessage)
         }
     }
 }
@@ -195,7 +195,7 @@ private struct Tester {
 private struct GetColors {
     let givenIntentColor: ButtonIntentColor
     let givenVariant: ButtonVariant
-    let givenColorables: ButtonColorablesGeneratedMock
+    let givenColorables: ButtonColorsGeneratedMock
 
     let expectedTextColorToken: any ColorToken
     let expectedBackgroundToken: any ColorToken

@@ -8,8 +8,6 @@
 
 import Foundation
 
-// TODO: background should not be clear
-
 struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
 
     // MARK: - Methods
@@ -18,14 +16,16 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
         forIntentColor intentColor: ButtonIntentColor,
         colors: Colors,
         dims: Dims
-    ) -> ButtonColorables {
+    ) -> ButtonColors {
         let dim5 = dims.dim5
+
+        let backgroundColor = colors.base.surface
 
         switch intentColor {
         case .primary:
-            return ButtonColors(
-                textColor: colors.primary.primary,
-                backgroundColor: ColorTokenDefault.clear,
+            return ButtonColorsDefault(
+                foregroundColor: colors.primary.primary,
+                backgroundColor: backgroundColor,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.primary.primary,
                     opacity: dim5
@@ -34,9 +34,9 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: colors.primary.primary
             )
         case .secondary:
-            return ButtonColors(
-                textColor: colors.secondary.secondary,
-                backgroundColor: ColorTokenDefault.clear,
+            return ButtonColorsDefault(
+                foregroundColor: colors.secondary.secondary,
+                backgroundColor: backgroundColor,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.secondary.secondary,
                     opacity: dim5
@@ -45,9 +45,9 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: colors.secondary.secondary
             )
         case .neutral:
-            return ButtonColors(
-                textColor: colors.feedback.neutral,
-                backgroundColor: ColorTokenDefault.clear,
+            return ButtonColorsDefault(
+                foregroundColor: colors.feedback.neutral,
+                backgroundColor: backgroundColor,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.feedback.neutral,
                     opacity: dim5
@@ -56,9 +56,9 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: colors.feedback.neutral
             )
         case .alert:
-            return ButtonColors(
-                textColor: colors.feedback.alert,
-                backgroundColor: ColorTokenDefault.clear,
+            return ButtonColorsDefault(
+                foregroundColor: colors.feedback.alert,
+                backgroundColor: backgroundColor,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.feedback.alert,
                     opacity: dim5
@@ -67,9 +67,9 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: colors.feedback.alert
             )
         case .success:
-            return ButtonColors(
-                textColor: colors.feedback.success,
-                backgroundColor: ColorTokenDefault.clear,
+            return ButtonColorsDefault(
+                foregroundColor: colors.feedback.success,
+                backgroundColor: backgroundColor,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.feedback.success,
                     opacity: dim5
@@ -78,9 +78,9 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: colors.feedback.success
             )
         case .danger:
-            return ButtonColors(
-                textColor: colors.feedback.error,
-                backgroundColor: ColorTokenDefault.clear,
+            return ButtonColorsDefault(
+                foregroundColor: colors.feedback.error,
+                backgroundColor: backgroundColor,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.feedback.error,
                     opacity: dim5
@@ -89,9 +89,9 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: colors.feedback.error
             )
         case .surface:
-            return ButtonColors(
-                textColor: colors.base.surface,
-                backgroundColor: ColorTokenDefault.clear,
+            return ButtonColorsDefault(
+                foregroundColor: colors.base.surface,
+                backgroundColor: colors.base.surfaceInverse,
                 pressedBackgroundColor: FullColorTokenDefault(
                     colorToken: colors.base.surface,
                     opacity: dim5

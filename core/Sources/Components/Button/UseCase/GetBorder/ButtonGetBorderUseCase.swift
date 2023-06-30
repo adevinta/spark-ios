@@ -1,5 +1,5 @@
 //
-//  ButtonGetCornerRadiusUseCase.swift
+//  ButtonGetBorderUseCase.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 23/06/2023.
@@ -9,13 +9,13 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol ButtonGetCornerRadiusUseCaseable {
+protocol ButtonGetBorderUseCaseable {
     func execute(forShape shape: ButtonShape,
                  border: Border,
-                 variant: ButtonVariant) -> ButtonBorderProtocol
+                 variant: ButtonVariant) -> ButtonBorder
 }
 
-struct ButtonGetCornerRadiusUseCase: ButtonGetCornerRadiusUseCaseable {
+struct ButtonGetBorderUseCase: ButtonGetBorderUseCaseable {
 
     // MARK: - Methods
 
@@ -23,7 +23,7 @@ struct ButtonGetCornerRadiusUseCase: ButtonGetCornerRadiusUseCaseable {
         forShape shape: ButtonShape,
         border: Border,
         variant: ButtonVariant
-    ) -> ButtonBorderProtocol {
+    ) -> ButtonBorder {
         let radius: CGFloat
         switch shape {
         case .square:
@@ -36,7 +36,7 @@ struct ButtonGetCornerRadiusUseCase: ButtonGetCornerRadiusUseCaseable {
 
         let width = (variant == .outlined) ? border.width.small : 0
 
-        return ButtonBorder(
+        return ButtonBorderDefault(
             width: width,
             radius: radius
         )
