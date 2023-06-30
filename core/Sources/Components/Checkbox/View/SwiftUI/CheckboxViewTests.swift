@@ -120,14 +120,14 @@ final class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         hasher.combine(self.id)
     }
 
-    var title: String
+    var title: String?
     var attributedTitle: NSAttributedString?
     var id: String
     var selectionState: CheckboxSelectionState
     var state: SelectButtonState
 
     init(
-        title: String,
+        title: String? = nil,
         attributedTitle: NSAttributedString? = nil,
         id: String,
         selectionState: CheckboxSelectionState,

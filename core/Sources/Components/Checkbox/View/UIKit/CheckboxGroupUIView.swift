@@ -167,7 +167,7 @@ public final class CheckboxGroupUIView: UIView {
             if let attributedTitle = item.attributedTitle {
                 content = .left(attributedTitle)
             } else {
-                content = .right(item.title)
+                content = .right(item.title ?? "")
             }
             let checkbox = CheckboxUIView(
                 theme: theme,

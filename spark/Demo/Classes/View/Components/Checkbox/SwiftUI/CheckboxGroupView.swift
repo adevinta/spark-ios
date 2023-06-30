@@ -118,7 +118,7 @@ struct CheckboxGroupListView: View {
     }
 
     var selectedItemsText: String {
-        self.selectedItems.map { $0.title }.joined(separator: ", ")
+        self.selectedItems.map { $0.title ?? "" }.joined(separator: ", ")
     }
 }
 
@@ -139,14 +139,14 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         hasher.combine(id)
     }
 
-    var title: String
+    var title: String?
     var attributedTitle: NSAttributedString?
     var id: String
     var selectionState: CheckboxSelectionState
     var state: SelectButtonState
 
     init(
-        title: String,
+        title: String? = nil,
         id: String,
         selectionState: CheckboxSelectionState,
         state: SelectButtonState = .enabled

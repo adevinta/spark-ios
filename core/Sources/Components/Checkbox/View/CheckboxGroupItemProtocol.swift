@@ -11,7 +11,7 @@ import Foundation
 /// The protocol is used for items in checkbox groups. It describes a single item within a checkbox group.
 public protocol CheckboxGroupItemProtocol: Hashable {
     /// The checkbox title.
-    var title: String { get set }
+    var title: String? { get set }
 
     /// The attributed checkbox title.
     var attributedTitle: NSAttributedString? { get set }
