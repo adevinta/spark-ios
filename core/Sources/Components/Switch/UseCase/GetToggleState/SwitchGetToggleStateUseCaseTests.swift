@@ -12,6 +12,10 @@ import SwiftUI
 
 final class SwitchGetToggleStateUseCaseTests: XCTestCase {
 
+    // MARK: - Properties
+
+    private let dimsMock = DimsGeneratedMock.mocked()
+
     // MARK: - Tests
 
     func test_execute_when_isEnabled_is_true() throws {
@@ -24,7 +28,7 @@ final class SwitchGetToggleStateUseCaseTests: XCTestCase {
     func test_execute_when_isEnabled_is_false() throws {
         try self.testExecute(
             givenIsEnabled: false,
-            expectedInteractionState: .init(interactionEnabled: false, opacity: 0.4)
+            expectedInteractionState: .init(interactionEnabled: false, opacity: self.dimsMock.dim3)
         )
     }
 }
@@ -44,7 +48,8 @@ private extension SwitchGetToggleStateUseCaseTests {
 
         // GIVEN
         let interactionState = useCase.execute(
-            forIsEnabled: givenIsEnabled
+            forIsEnabled: givenIsEnabled,
+            dims: self.dimsMock
         )
 
         // THEN

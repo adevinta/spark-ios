@@ -10,15 +10,19 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol SwitchGetToggleStateUseCaseable {
-    func execute(forIsEnabled isEnabled: Bool) -> SwitchToggleStateable
+    func execute(forIsEnabled isEnabled: Bool,
+                 dims: Dims) -> SwitchToggleStateable
 }
 
 struct SwitchGetToggleStateUseCase: SwitchGetToggleStateUseCaseable {
 
     // MARK: - Methods
 
-    func execute(forIsEnabled isEnabled: Bool) -> SwitchToggleStateable {
-        let opacity = isEnabled ? 1 : 0.4
+    func execute(
+        forIsEnabled isEnabled: Bool,
+        dims: Dims
+    ) -> SwitchToggleStateable {
+        let opacity = isEnabled ? 1 : dims.dim3
 
         return SwitchToggleState(
             interactionEnabled: isEnabled,

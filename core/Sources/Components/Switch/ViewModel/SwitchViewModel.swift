@@ -210,7 +210,8 @@ final class SwitchViewModel: ObservableObject {
 
     private func toggleStateDidUpdate() {
         let interactionState = self.getToggleStateUseCase.execute(
-            forIsEnabled: self.isEnabled
+            forIsEnabled: self.isEnabled,
+            dims: self.theme.dims
         )
 
         self.isToggleInteractionEnabled = interactionState.interactionEnabled

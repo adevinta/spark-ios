@@ -93,7 +93,7 @@ final class SwitchViewModelTests: XCTestCase {
     }()
     private lazy var getToggleStateUseCaseMock: SwitchGetToggleStateUseCaseableGeneratedMock = {
         let mock = SwitchGetToggleStateUseCaseableGeneratedMock()
-        mock.executeWithIsEnabledReturnValue = self.toggleStateMock
+        mock.executeWithIsEnabledAndDimsReturnValue = self.toggleStateMock
         return mock
     }()
 
@@ -805,14 +805,18 @@ private extension SwitchViewModelTests {
         givenTheme: Theme,
         givenIsEnabled: Bool
     ) {
-        XCTAssertEqual(self.getToggleStateUseCaseMock.executeWithIsEnabledCallsCount,
+        XCTAssertEqual(self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getToggleStateUseCase")
 
         if numberOfCalls > 0 {
-            XCTAssertEqual(self.getToggleStateUseCaseMock.executeWithIsEnabledReceivedIsEnabled,
+            let getToggleStateUseCaseArgs = self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments
+            XCTAssertEqual(getToggleStateUseCaseArgs?.isEnabled,
                            givenIsEnabled,
                            "Wrong isEnabled parameter on execute on getToggleStateUseCase")
+            XCTAssertIdentical(try XCTUnwrap(getToggleStateUseCaseArgs?.dims as? DimsGeneratedMock),
+                               givenTheme.dims as? DimsGeneratedMock,
+                               "Wrong dims parameter on execute on getToggleStateUseCase")
         }
     }
 
@@ -838,8 +842,8 @@ private extension SwitchViewModelTests {
         self.getPositionUseCaseMock.executeWithAlignmentAndSpacingReceivedArguments = nil
         self.getPositionUseCaseMock.executeWithAlignmentAndSpacingReceivedInvocations = []
 
-        self.getToggleStateUseCaseMock.executeWithIsEnabledCallsCount = 0
-        self.getToggleStateUseCaseMock.executeWithIsEnabledReceivedIsEnabled = nil
-        self.getToggleStateUseCaseMock.executeWithIsEnabledReceivedInvocations = []
+        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount = 0
+        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments = nil
+        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedInvocations = []
     }
 }
