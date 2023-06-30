@@ -33,7 +33,7 @@ private extension Theme where Self == ThemeGeneratedMock {
     }
 }
 
-private extensicolors where Self == ColorsGeneratedMock {
+private extension Colors where Self == ColorsGeneratedMock {
     static var mock: Self {
         let colors = ColorsGeneratedMock()
         colors.base = ColorsBaseGeneratedMock.mocked()
