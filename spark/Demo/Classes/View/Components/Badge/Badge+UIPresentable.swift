@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 import SparkCore
 import Spark
@@ -23,8 +24,17 @@ struct UIBadgeView: UIViewRepresentable {
 
     var views: [BadgeUIView]
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     func makeUIView(context: Context) -> some UIView {
         let badgesStackView = UIStackView()
+        for view in self.views {
+            view.setTheme(self.theme)
+        }
         views.enumerated().forEach { index, badgeView in
             let containerView = UIView()
             containerView.translatesAutoresizingMaskIntoConstraints = false

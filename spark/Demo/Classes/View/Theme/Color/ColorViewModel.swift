@@ -12,5 +12,7 @@ struct ColorViewModel {
 
     // MARK: - Properties
 
-    let sectionViewModels: [any ColorSectionViewModelable] = ColorSectionType.allCases.map { $0.viewModel }
+    func sectionViewModels(for theme: Theme) -> [any ColorSectionViewModelable] {
+        return ColorSectionType.allCases.map { $0.viewModel(for: theme) }
+    }
 }

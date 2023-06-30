@@ -6,8 +6,9 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SwiftUI
 import Spark
+import SparkCore
+import SwiftUI
 
 struct BorderItemView: View {
 
@@ -16,6 +17,12 @@ struct BorderItemView: View {
     let viewModel: BorderItemViewModel
 
     // MARK: - View
+
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -29,7 +36,7 @@ struct BorderItemView: View {
                 .frame(height: self.viewModel.contentHeight)
                 .border(width: self.viewModel.width,
                         radius: self.viewModel.radius,
-                        colorToken: SparkTheme.shared.colors.base.surfaceInverse)
+                        colorToken: self.theme.colors.base.surfaceInverse)
         }
     }
 }

@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Spark
+import SparkCore
 import SwiftUI
 
 struct LayoutView: View {
@@ -14,10 +16,16 @@ struct LayoutView: View {
 
     private let viewModel = LayoutViewModel()
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     // MARK: - View
     
     var body: some View {
-        List(self.viewModel.spacingItemViewModels, id: \.self) {
+        List(self.viewModel.spacingItemViewModels(for: self.theme), id: \.self) {
             LayoutSpacingItemView(viewModel: $0)
         }
         .navigationBarTitle(Text("Layout"))

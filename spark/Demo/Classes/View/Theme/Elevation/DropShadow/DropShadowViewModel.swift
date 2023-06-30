@@ -10,10 +10,10 @@ import SparkCore
 import Spark
 
 struct DropShadowViewModel {
-    let itemViewModels: [DropShadowItemViewModel]
 
-    init(dropShadow: ElevationDropShadows & ElevationShadow = SparkTheme.shared.elevation.dropShadow) {
-        self.itemViewModels = [
+    func itemViewModels(for theme: Theme) -> [DropShadowItemViewModel] {
+        let dropShadow = theme.elevation.dropShadow
+        return [
             .init(name: "none", shadow: dropShadow.none),
             .init(name: "small", shadow: dropShadow.small),
             .init(name: "default", shadow: dropShadow),

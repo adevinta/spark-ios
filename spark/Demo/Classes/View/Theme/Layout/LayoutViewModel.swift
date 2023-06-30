@@ -7,19 +7,17 @@
 //
 
 import Spark
+import SparkCore
+import SwiftUI
 
 struct LayoutViewModel {
 
     // MARK: - Properties
 
-    let spacingItemViewModels: [LayoutSpacingItemViewModel]
+    func spacingItemViewModels(for theme: Theme) -> [LayoutSpacingItemViewModel] {
+        let layout = theme.layout
 
-    // MARK: - Initialization
-
-    init() {
-        let layout = SparkTheme.shared.layout
-
-        self.spacingItemViewModels = [
+        return [
             .init(name: "none", value: layout.spacing.none),
             .init(name: "small", value: layout.spacing.small),
             .init(name: "medium", value: layout.spacing.medium),
