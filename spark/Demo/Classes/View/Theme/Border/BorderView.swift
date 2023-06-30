@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Spark
+import SparkCore
 import SwiftUI
 
 struct BorderView: View {
@@ -14,10 +16,16 @@ struct BorderView: View {
 
     private let viewModel = BorderViewModel()
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     // MARK: - View
     
     var body: some View {
-        List(self.viewModel.sectionViewModels, id: \.self) { sectionViewModel in
+        List(self.viewModel.sectionViewModels(for: self.theme), id: \.self) { sectionViewModel in
             Section(header: Text(sectionViewModel.name)) {
                 ForEach(sectionViewModel.itemViewModels, id: \.self) { itemViewModel in
                     BorderItemView(viewModel: itemViewModel)

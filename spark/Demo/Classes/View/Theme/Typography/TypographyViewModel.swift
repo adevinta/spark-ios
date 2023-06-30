@@ -7,18 +7,13 @@
 //
 
 import Spark
+import SparkCore
 
 struct TypographyViewModel {
 
-    // MARK: - Properties
-
-    let itemViewModels: [[TypographyItemViewModel]]
-
-    // MARK: - Initialization
-
-    init() {
-        let typographies = SparkTheme.shared.typography
-        self.itemViewModels = [
+    func itemViewModels(for theme: Theme) -> [[TypographyItemViewModel]] {
+        let typographies = theme.typography
+        return [
             [
                 .init(name: "display1", token: typographies.display1),
                 .init(name: "display2", token: typographies.display2),

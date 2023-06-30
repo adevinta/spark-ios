@@ -38,6 +38,14 @@ final class RadioButtonUIGroupViewController: UIViewController {
         "Selected Value \(self.backingSelectedID)"
     }
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
+    private var cancellables = Set<AnyCancellable>()
+
     private lazy var radioButtonView: RadioButtonUIGroupView = {
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
@@ -68,8 +76,6 @@ final class RadioButtonUIGroupViewController: UIViewController {
         self.backingSelectedID = $0
         self.selectedValueLabel.text = self.label
     }
-
-    private let theme = SparkTheme.shared
 
     private let scrollView = UIScrollView()
 
@@ -168,6 +174,18 @@ final class RadioButtonUIGroupViewController: UIViewController {
 
         self.setupView()
         self.setupConstraints()
+
+        self.subscribe()
+    }
+
+    private func subscribe() {
+        self.themePublisher.$theme
+            .sink { [weak self] theme in
+                guard let self else { return }
+
+                self.radioButtonView.theme = theme
+            }
+            .store(in: &self.cancellables)
     }
 
     // MARK: Private Methods

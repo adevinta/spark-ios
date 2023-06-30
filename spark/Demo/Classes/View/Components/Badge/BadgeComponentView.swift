@@ -21,21 +21,27 @@ private struct BadgePreviewFormatter: BadgeFormatting {
 
 struct BadgeComponentView: View {
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     private var views = [
         BadgeUIView(
-            theme: SparkTheme.shared,
+            theme: SparkThemePublisher.shared.theme,
             intent: .alert,
             value: 6
         ),
         BadgeUIView(
-            theme: SparkTheme.shared,
+            theme: SparkThemePublisher.shared.theme,
             intent: .primary,
             size: .normal,
             value: 22,
             format: .overflowCounter(maxValue: 20)
         ),
         BadgeUIView(
-            theme: SparkTheme.shared,
+            theme: SparkThemePublisher.shared.theme,
             intent: .danger,
             value: 10,
             format: .custom(
@@ -43,31 +49,29 @@ struct BadgeComponentView: View {
             )
         ),
         BadgeUIView(
-            theme: SparkTheme.shared,
+            theme: SparkThemePublisher.shared.theme,
             intent: .info,
             value: 20
         ),
         BadgeUIView(
-            theme: SparkTheme.shared,
+            theme: SparkThemePublisher.shared.theme,
             intent: .primary
         ),
         BadgeUIView(
-            theme: SparkTheme.shared,
+            theme: SparkThemePublisher.shared.theme,
             intent: .neutral,
             isBorderVisible: false
         ),
         BadgeUIView(
-            theme: SparkTheme.shared,
+            theme: SparkThemePublisher.shared.theme,
             intent: .secondary,
             value: 23
         ),
         BadgeUIView(
-            theme: SparkTheme.shared,
+            theme: SparkThemePublisher.shared.theme,
             intent: .success
         )
     ]
-
-    @State var theme: Theme = SparkTheme.shared
 
     @State var standartBadgeValue: Int? = 3
     @State var standartBadgeIsOutlined: Bool = true
@@ -146,7 +150,7 @@ struct BadgeComponentView: View {
                         ZStack(alignment: .leading) {
                             Text("Danger Badge")
                             BadgeView(
-                                theme: SparkTheme.shared,
+                                theme: self.theme,
                                 intent: standartDangerBadgeType,
                                 value: 10
                             )
@@ -158,7 +162,7 @@ struct BadgeComponentView: View {
                         ZStack(alignment: .leading) {
                             Text("Text")
                             BadgeView(
-                                theme: SparkTheme.shared,
+                                theme: self.theme,
                                 intent: .info
                             )
                                 .offset(x: 25, y: -15)
@@ -166,7 +170,7 @@ struct BadgeComponentView: View {
                         ZStack(alignment: .leading) {
                             Text("Text")
                             BadgeView(
-                                theme: SparkTheme.shared,
+                                theme: self.theme,
                                 intent: .neutral
                             )
                                 .offset(x: 25, y: -15)
@@ -177,21 +181,21 @@ struct BadgeComponentView: View {
                         HStack {
                             Text("Text")
                             BadgeView(
-                                theme: SparkTheme.shared,
+                                theme: self.theme,
                                 intent: .primary
                             )
                         }
                         HStack {
                             Text("Text")
                             BadgeView(
-                                theme: SparkTheme.shared,
+                                theme: self.theme,
                                 intent: .secondary
                             )
                         }
                         HStack {
                             Text("Text")
                             BadgeView(
-                                theme: SparkTheme.shared,
+                                theme: self.theme,
                                 intent: .success
                             )
                         }

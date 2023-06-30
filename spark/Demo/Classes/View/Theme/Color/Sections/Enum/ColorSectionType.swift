@@ -6,6 +6,7 @@
 //
 
 import Spark
+import SparkCore
 
 enum ColorSectionType: CaseIterable {
     case primary
@@ -16,8 +17,8 @@ enum ColorSectionType: CaseIterable {
 
     // MARK: - Properties
 
-    var viewModel: any ColorSectionViewModelable {
-        let colors = SparkTheme.shared.colors
+    func viewModel(for theme: Theme) -> any ColorSectionViewModelable {
+        let colors = theme.colors
         switch self {
         case .primary:
             return ColorSectionPrimaryViewModel(color: colors.primary)

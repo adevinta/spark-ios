@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import Spark
 import SparkCore
 import SwiftUI
@@ -35,7 +36,13 @@ struct ChipComponentUIViewRepresentation: UIViewControllerRepresentable {
 
 final class ChipComponentUIViewController: UIViewController {
 
-    let theme = SparkTheme.shared
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
+    private var cancellables = Set<AnyCancellable>()
 
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -65,7 +72,24 @@ final class ChipComponentUIViewController: UIViewController {
 
         setupView()
         setupConstraints()
+
+        self.subscribe()
     }
+
+    private func subscribe() {
+        self.themePublisher.$theme
+            .sink { [weak self] theme in
+                guard let self else { return }
+
+                let chips = self.chips
+                for checkbox in chips {
+                    checkbox.theme = theme
+                }
+            }
+            .store(in: &self.cancellables)
+    }
+
+    private var chips: [ChipUIView] = []
 
     private func setupView() {
         for intent in ChipIntentColor.allCases {
@@ -77,7 +101,9 @@ final class ChipComponentUIViewController: UIViewController {
 
         self.stackView.addArrangedSubview(spacer(height: 4))
         self.stackView.addArrangedSubview(bigLabel("Chip with action"))
-        self.stackView.addArrangedSubview(chipWithComponent())
+        let chip = chipWithComponent()
+        self.chips.append(chip)
+        self.stackView.addArrangedSubview(chip)
     }
 
     private func setupConstraints() {
@@ -120,7 +146,7 @@ final class ChipComponentUIViewController: UIViewController {
         return stackView
     }
 
-    private func chipWithComponent() -> UIView {
+    private func chipWithComponent() -> ChipUIView {
         let icon = UIImage(imageLiteralResourceName: "alert")
 
         let chip = ChipUIView(theme: theme,
@@ -202,6 +228,7 @@ final class ChipComponentUIViewController: UIViewController {
                 iconImage: icon)
         ]
         chips.forEach{ $0.action = {} }
+        self.chips.append(contentsOf: chips)
 
         let stackView = UIStackView(
             arrangedSubviews: chips

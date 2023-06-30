@@ -45,10 +45,11 @@ struct TagComponentItemsUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> UIStackView {
         var tagView: TagUIView
 
+        let theme = SparkThemePublisher.shared.theme
         switch self.content {
         case .icon:
             tagView = TagUIView(
-                theme: SparkTheme.shared,
+                theme: theme,
                 intentColor: self.intentColor,
                 variant: self.variant,
                 iconImage: self.iconImage
@@ -56,7 +57,7 @@ struct TagComponentItemsUIView: UIViewRepresentable {
 
         case .text:
             tagView = TagUIView(
-                theme: SparkTheme.shared,
+                theme: theme,
                 intentColor: self.intentColor,
                 variant: self.variant,
                 text: self.viewModel.text
@@ -64,7 +65,7 @@ struct TagComponentItemsUIView: UIViewRepresentable {
 
         case .all:
             tagView = TagUIView(
-                theme: SparkTheme.shared,
+                theme: theme,
                 intentColor: self.intentColor,
                 variant: self.variant,
                 iconImage: self.iconImage,
