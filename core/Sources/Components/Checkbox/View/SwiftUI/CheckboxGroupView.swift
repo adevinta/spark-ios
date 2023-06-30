@@ -86,7 +86,7 @@ public struct CheckboxGroupView: View {
         ForEach(self.$items, id: \.id) { item in
             let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
             CheckboxView(
-                text: item.title.wrappedValue,
+                text: item.title.wrappedValue ?? "",
                 checkedImage: self.checkedImage,
                 checkboxPosition: self.checkboxPosition,
                 theme: self.theme,

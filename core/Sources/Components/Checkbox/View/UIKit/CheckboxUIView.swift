@@ -91,14 +91,26 @@ public final class CheckboxUIView: UIView {
     public weak var delegate: CheckboxUIViewDelegate?
 
     /// The text displayed in the checkbox.
-    public var text: String {
+    public var text: String? {
         get {
             return self.viewModel.text
         }
         set {
-            self.viewModel.text = newValue
-            self.textLabel.text = self.text
-            self.updateAccessibility()
+            self.update(content: .right(newValue ?? ""))
+        }
+    }
+
+    /// The attributed text displayed in the checkbox.
+    public var attributedText: NSAttributedString? {
+        get {
+            return self.viewModel.attributedText
+        }
+        set {
+            if let attributedText = newValue {
+                self.update(content: .left(attributedText))
+            } else {
+                self.update(content: .right(""))
+            }
         }
     }
 
@@ -179,7 +191,34 @@ public final class CheckboxUIView: UIView {
     ) {
         self.init(
             theme: theme,
-            text: text,
+            content: .right(text),
+            checkedImage: checkedImage,
+            colorsUseCase: CheckboxColorsUseCase(),
+            state: state,
+            selectionState: selectionState,
+            checkboxPosition: checkboxPosition
+        )
+    }
+
+    /// Initialize a new checkbox UIKit-view.
+    /// - Parameters:
+    ///   - theme: The current Spark-Theme.
+    ///   - text: The checkbox text.
+    ///   - checkedImage: The tick-checkbox image for checked-state.
+    ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
+    ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
+    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    public convenience init(
+        theme: Theme,
+        attributedText: NSAttributedString,
+        checkedImage: UIImage,
+        state: SelectButtonState = .enabled,
+        selectionState: Binding<CheckboxSelectionState>,
+        checkboxPosition: CheckboxPosition
+    ) {
+        self.init(
+            theme: theme,
+            content: .left(attributedText),
             checkedImage: checkedImage,
             colorsUseCase: CheckboxColorsUseCase(),
             state: state,
@@ -190,7 +229,7 @@ public final class CheckboxUIView: UIView {
 
     init(
         theme: Theme,
-        text: String,
+        content: Either<NSAttributedString, String>,
         checkedImage: UIImage,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
@@ -199,7 +238,7 @@ public final class CheckboxUIView: UIView {
     ) {
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
-        self.viewModel = .init(text: text, checkedImage: checkedImage, theme: theme, colorsUseCase: colorsUseCase, state: state)
+        self.viewModel = .init(text: content, checkedImage: checkedImage, theme: theme, colorsUseCase: colorsUseCase, state: state)
 
         super.init(frame: .zero)
         self.commonInit()
@@ -210,7 +249,11 @@ public final class CheckboxUIView: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.controlView.selectionState = self.selectionState
 
-        self.textLabel.text = self.text
+        if let attributedText = self.attributedText {
+            self.textLabel.attributedText = attributedText
+        } else {
+            self.textLabel.text = self.text
+        }
         self.addSubview(self.textLabel)
 
         self.addSubview(self.controlView)
@@ -222,8 +265,8 @@ public final class CheckboxUIView: UIView {
         let controlSize = self.checkboxSize
 
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium) - self.controlBorderWidth
-        let wideSpacing = bodyFontMetrics.scaledValue(for: self.spacing.xxxLarge) - self.controlBorderWidth
+        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: self.traitCollection) - self.controlBorderWidth
+        let wideSpacing = bodyFontMetrics.scaledValue(for: self.spacing.xxxLarge, compatibleWith: self.traitCollection) - self.controlBorderWidth
 
         switch self.checkboxPosition {
         case .left:
@@ -344,8 +387,8 @@ public final class CheckboxUIView: UIView {
         self.controlViewWidthConstraint?.constant = scaledSpacing
         self.controlViewHeightConstraint?.constant = scaledSpacing
 
-        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium) - controlBorderWidth
-        let wideSpacing = bodyFontMetrics.scaledValue(for: self.spacing.xxxLarge) - controlBorderWidth
+        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: self.traitCollection) - controlBorderWidth
+        let wideSpacing = bodyFontMetrics.scaledValue(for: self.spacing.xxxLarge, compatibleWith: self.traitCollection) - controlBorderWidth
 
         self.controlViewLeadingConstraint?.constant = -controlBorderWidth
         self.controlViewTrailingConstraint?.constant = controlBorderWidth
@@ -399,15 +442,30 @@ public final class CheckboxUIView: UIView {
         self.controlView.theme = self.theme
         self.controlView.colors = self.colors
 
-        let font = self.theme.typography.body1.uiFont
-        self.textLabel.font = font
         self.textLabel.adjustsFontForContentSizeCategory = true
-        self.textLabel.textColor = self.colors.textColor.uiColor
+        if self.attributedText == nil {
+            let font = self.theme.typography.body1.uiFont
+            self.textLabel.font = font
+            self.textLabel.textColor = self.colors.textColor.uiColor
+        }
 
         let captionFont = self.theme.typography.caption.uiFont
         self.supplementaryTextLabel.font = captionFont
         self.supplementaryTextLabel.adjustsFontForContentSizeCategory = true
         self.supplementaryTextLabel.textColor = self.colors.checkboxTintColor.uiColor
+    }
+
+    private func update(content: Either<NSAttributedString, String>) {
+        self.viewModel.update(content: content)
+
+        self.updateTheme()
+        switch content {
+        case .left(let attributedText):
+            self.textLabel.attributedText = attributedText
+        case .right(let text):
+            self.textLabel.text = text
+        }
+        self.updateAccessibility()
     }
 
     private func updateState() {

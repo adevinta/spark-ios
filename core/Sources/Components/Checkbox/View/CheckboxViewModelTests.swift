@@ -88,7 +88,7 @@ final class CheckboxViewModelTests: XCTestCase {
     }
 
     private func sut(state: SelectButtonState) -> CheckboxViewModel {
-        return CheckboxViewModel(text: "Text", checkedImage: self.checkedImage, theme: self.theme, state: state)
+        return CheckboxViewModel(text: .right("Text"), checkedImage: self.checkedImage, theme: self.theme, state: state)
     }
 }
 

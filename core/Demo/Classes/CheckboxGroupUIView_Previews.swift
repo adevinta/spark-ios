@@ -105,7 +105,7 @@ final class CheckboxGroupViewController: UIViewController {
     }
 
     var selectedItemsText: String {
-        self.selectedItems.map { $0.title }.joined(separator: ", ")
+        self.selectedItems.map { $0.title ?? "" }.joined(separator: ", ")
     }
 
     private var items: [any CheckboxGroupItemProtocol] = [
