@@ -25,8 +25,8 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
     private let alignment: SwitchAlignment
     private let intentColor: SwitchIntentColor
     private let isEnabled: Bool
-    private let isVariant: Bool
-    private let textContent: SwitchTextContent
+    private let isImages: Bool
+    private let textContent: SwitchTextContentDefault
 
     // MARK: - Initialization
 
@@ -38,8 +38,8 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
-        isVariant: Bool,
-        textContent: SwitchTextContent
+        isImages: Bool,
+        textContent: SwitchTextContentDefault
     ) {
         self.viewModel = viewModel
         self.attributedText = .init(
@@ -55,7 +55,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         self.alignment = alignment
         self.intentColor = intentColor
         self.isEnabled = isEnabled
-        self.isVariant = isVariant
+        self.isImages = isImages
         self.textContent = textContent
     }
 
@@ -68,14 +68,14 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         case .text:
             switchView = self.makeView(isMultilineText: false)
         case .attributedText:
-            if self.isVariant {
+            if self.isImages {
                 switchView = SwitchUIView(
                     theme: SparkTheme.shared,
                     isOn: self.isOn,
                     alignment: self.alignment,
                     intentColor: self.intentColor,
                     isEnabled: self.isEnabled,
-                    variant: self.variant(),
+                    images: self.images(),
                     attributedText: self.attributedText
                 )
             } else {
@@ -127,23 +127,23 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
             switchView.isEnabled = self.isEnabled
         }
 
-        if (switchView.variant == nil && self.isVariant) ||
-            (switchView.variant != nil && !self.isVariant) {
-            switchView.variant = self.isVariant ? self.variant() : nil
+        if (switchView.images == nil && self.isImages) ||
+            (switchView.images != nil && !self.isImages) {
+            switchView.images = self.isImages ? self.images() : nil
         }
 
-        if ((switchView.text == nil || switchView.text != self.viewModel.text(isMultilineText: self.textContent.isMultilineText)) && self.textContent.showText) ||
-            (switchView.text != nil && !self.textContent.showText) {
-            if self.textContent.showText {
+        if ((switchView.text == nil || switchView.text != self.viewModel.text(isMultilineText: self.textContent.isMultilineText)) && self.textContent.shouldShowText) ||
+            (switchView.text != nil && !self.textContent.shouldShowText) {
+            if self.textContent.shouldShowText {
                 switchView.text = self.viewModel.text(isMultilineText: self.textContent.isMultilineText)
             } else {
                 switchView.text = nil
             }
         }
 
-        if (switchView.attributedText == nil && self.textContent.showAttributeText) ||
-            (switchView.attributedText != nil && !self.textContent.showAttributeText) {
-            switchView.attributedText = self.textContent.showAttributeText ? self.attributedText : nil
+        if (switchView.attributedText == nil && self.textContent.shouldShowShowAttributeText) ||
+            (switchView.attributedText != nil && !self.textContent.shouldShowShowAttributeText) {
+            switchView.attributedText = self.textContent.shouldShowShowAttributeText ? self.attributedText : nil
         }
 
         DispatchQueue.main.async {
@@ -159,25 +159,25 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
 
     // MARK: - Getter & Maker
 
-    private func variant() -> SwitchUIVariantImages {
+    private func images() -> SwitchUIImages {
         let onImage = UIImage(named: self.viewModel.onImageNamed) ?? UIImage()
         let offImage = UIImage(named: self.viewModel.offImageNamed) ?? UIImage()
 
-        return SwitchUIVariantImages(
+        return SwitchUIImages(
             on: onImage,
             off: offImage
         )
     }
 
     private func makeView(isMultilineText: Bool) -> SwitchUIView {
-        if self.isVariant {
+        if self.isImages {
             return SwitchUIView(
                 theme: SparkTheme.shared,
                 isOn: self.isOn,
                 alignment: self.alignment,
                 intentColor: self.intentColor,
                 isEnabled: self.isEnabled,
-                variant: self.variant(),
+                images: self.images(),
                 text: self.viewModel.text(isMultilineText: isMultilineText)
             )
         } else {

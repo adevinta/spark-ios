@@ -6,14 +6,14 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-enum SwitchTextContent: CaseIterable {
+enum SwitchTextContentDefault: CaseIterable {
     case text
     case attributedText
     case multilineText
 
     // MARK: - Properties
 
-    var showText: Bool {
+    var shouldShowText: Bool {
         switch self {
         case .text, .multilineText:
             return true
@@ -22,7 +22,7 @@ enum SwitchTextContent: CaseIterable {
         }
     }
 
-    var showAttributeText: Bool {
+    var shouldShowShowAttributeText: Bool {
         switch self {
         case .attributedText:
             return true

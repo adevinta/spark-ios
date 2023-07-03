@@ -33,14 +33,14 @@ struct SwitchComponentView: View {
     @State private var isEnabledSheetIsPresented = false
     @State var isEnabled: Bool = true
 
-    @State private var isVariantSheetIsPresented = false
-    @State var isVariant: Bool = false
+    @State private var isImagesSheetIsPresented = false
+    @State var isImages: Bool = false
 
     @State private var isMultilineTextSheetIsPresented = false
     @State var isMultilineText: Bool = true
 
     @State private var textContentSheetIsPresented = false
-    @State var textContent: SwitchTextContent = .text
+    @State var textContent: SwitchTextContentDefault = .text
 
     // MARK: - View
 
@@ -122,11 +122,11 @@ struct SwitchComponentView: View {
                             .labelsHidden()
                     }
 
-                    // Is Variant
+                    // Is Images
                     HStack() {
-                        Text("Is variant: ")
+                        Text("Is images: ")
                             .bold()
-                        Toggle("", isOn: self.$isVariant)
+                        Toggle("", isOn: self.$isImages)
                             .labelsHidden()
                     }
 
@@ -138,7 +138,7 @@ struct SwitchComponentView: View {
                             self.textContentSheetIsPresented = true
                         }
                         .confirmationDialog("Select an text content", isPresented: self.$textContentSheetIsPresented) {
-                            ForEach(SwitchTextContent.allCases, id: \.self) { textContent in
+                            ForEach(SwitchTextContentDefault.allCases, id: \.self) { textContent in
                                 Button("\(textContent.name)") {
                                     self.textContent = textContent
                                 }
@@ -165,7 +165,7 @@ struct SwitchComponentView: View {
                             alignment: self.$alignment.wrappedValue,
                             intentColor: self.$intentColor.wrappedValue,
                             isEnabled: self.$isEnabled.wrappedValue,
-                            isVariant: self.$isVariant.wrappedValue,
+                            isImages: self.$isImages.wrappedValue,
                             textContent: self.$textContent.wrappedValue
                         )
                         .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .leading)
@@ -226,7 +226,7 @@ private extension SwitchIntentColor {
     }
 }
 
-private extension SwitchTextContent {
+private extension SwitchTextContentDefault {
 
     var name: String {
         switch self {

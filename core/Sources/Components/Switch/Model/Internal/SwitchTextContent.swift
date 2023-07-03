@@ -9,15 +9,15 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol SwitchTextContentable{
+protocol SwitchTextContent {
     var text: String? { get }
-    var attributedText: SwitchAttributedString? { get }
+    var attributedText: SwitchAttributedStringEither? { get }
 }
 
-struct SwitchTextContent: SwitchTextContentable {
+struct SwitchTextContentDefault: SwitchTextContent {
 
     // MARK: - Properties
 
     let text: String?
-    let attributedText: SwitchAttributedString?
+    let attributedText: SwitchAttributedStringEither?
 }

@@ -9,8 +9,6 @@
 import SwiftUI
 import UIKit
 
-public typealias SwitchUIVariantImages = (on: UIImage, off: UIImage)
-public typealias SwitchVariantImages = (on: Image, off: Image)
-
-typealias SwitchImage = Either<UIImage, Image>
-typealias SwitchAttributedString = Either<NSAttributedString, AttributedString>
+typealias SwitchImagesEither = Either<SwitchUIImages, SwitchImages>
+typealias SwitchImageEither = Either<UIImage, Image>
+typealias SwitchAttributedStringEither = Either<NSAttributedString, AttributedString>

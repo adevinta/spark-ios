@@ -12,7 +12,7 @@ import Foundation
 protocol SwitchGetColorsUseCaseable {
     func execute(forIntentColor intentColor: SwitchIntentColor,
                  colors: Colors,
-                 dims: Dims) -> SwitchColorables
+                 dims: Dims) -> SwitchColors
 }
 
 struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
@@ -31,7 +31,7 @@ struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
 
     func execute(forIntentColor intentColor: SwitchIntentColor,
                  colors: Colors,
-                 dims: Dims) -> SwitchColorables {
+                 dims: Dims) -> SwitchColors {
 
         // Get intent color from use case
         let intentColor = self.getIntentColorUseCase.execute(
@@ -39,12 +39,12 @@ struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
             colors: colors
         )
 
-        let statusAndStateColors = SwitchStatusColors(
+        let statusAndStateColors = SwitchStatusColorsDefault(
             onColorToken: intentColor,
             offColorToken: colors.base.onSurface.opacity(dims.dim4)
         )
 
-        return SwitchColors(
+        return SwitchColorsDefault(
             toggleBackgroundColors: statusAndStateColors,
             toggleDotBackgroundColor: colors.base.surface,
             toggleDotForegroundColors: statusAndStateColors,

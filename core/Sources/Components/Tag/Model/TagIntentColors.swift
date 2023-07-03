@@ -7,7 +7,7 @@
 //
 
 // sourcery: AutoMockable
-protocol TagIntentColorables {
+protocol TagIntentColors {
     var color: any ColorToken { get }
     var onColor: any ColorToken { get }
     var containerColor: any ColorToken { get }
@@ -15,7 +15,7 @@ protocol TagIntentColorables {
     var surfaceColor: any ColorToken { get }
 }
 
-struct TagIntentColors: TagIntentColorables {
+struct TagIntentColorsDefault: TagIntentColors {
 
     // MARK: - Properties
 

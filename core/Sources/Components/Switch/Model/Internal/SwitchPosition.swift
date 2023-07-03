@@ -9,12 +9,12 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol SwitchPositionable {
+protocol SwitchPosition {
     var isToggleOnLeft: Bool { get }
     var horizontalSpacing: CGFloat { get }
 }
 
-struct SwitchPosition: SwitchPositionable {
+struct SwitchPositionDefault: SwitchPosition {
 
     // MARK: - Properties
 

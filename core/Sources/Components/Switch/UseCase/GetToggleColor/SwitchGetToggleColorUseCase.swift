@@ -11,7 +11,7 @@ import Foundation
 // sourcery: AutoMockable
 protocol SwitchGetToggleColorUseCaseable {
     func execute(forIsOn isOn: Bool,
-                 statusAndStateColor: SwitchStatusColorables) -> any ColorToken
+                 statusAndStateColor: SwitchStatusColors) -> any ColorToken
 }
 
 struct SwitchGetToggleColorUseCase: SwitchGetToggleColorUseCaseable {
@@ -19,7 +19,7 @@ struct SwitchGetToggleColorUseCase: SwitchGetToggleColorUseCaseable {
     // MARK: - Methods
 
     func execute(forIsOn isOn: Bool,
-                 statusAndStateColor: SwitchStatusColorables) -> any ColorToken {
+                 statusAndStateColor: SwitchStatusColors) -> any ColorToken {
         return isOn ? statusAndStateColor.onColorToken : statusAndStateColor.offColorToken
     }
 }

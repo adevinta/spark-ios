@@ -12,7 +12,7 @@ final class TagViewModel: ObservableObject {
 
     // MARK: - Public properties
 
-    @Published var colors: TagColorables
+    @Published var colors: TagColors
     @Published var typography: Typography
     @Published var spacing: LayoutSpacing
     @Published var border: Border
@@ -102,7 +102,7 @@ final class TagViewModel: ObservableObject {
         intentColor: TagIntentColor,
         variant: TagVariant,
         useCase: any TagGetColorsUseCaseable
-    ) -> TagColorables {
+    ) -> TagColors {
         return useCase.execute(
             forTheme: theme,
             intentColor: intentColor,

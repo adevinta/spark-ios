@@ -107,12 +107,12 @@ public final class TagUIView: UIView {
     @ScaledUIMetric private var smallSpacing: CGFloat = 0
     @ScaledUIMetric private var mediumSpacing: CGFloat = 0
 
-    private var _colors: TagColorables? {
+    private var _colors: TagColors? {
         didSet {
             self.reloadUIFromColors()
         }
     }
-    private var colors: TagColorables {
+    private var colors: TagColors {
         // Init value from use case only if value is nil
         guard let colors = self._colors else {
             let colors = self.getColorsFromUseCase()
@@ -342,7 +342,7 @@ public final class TagUIView: UIView {
 
     // MARK: - Getter
 
-    private func getColorsFromUseCase() -> TagColorables {
+    private func getColorsFromUseCase() -> TagColors {
         return self.getColorsUseCase.execute(forTheme: self.theme,
                                              intentColor: self.intentColor,
                                              variant: self.variant)

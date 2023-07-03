@@ -123,8 +123,8 @@ struct TagComponentView: View {
                     TagView(theme: SparkTheme.shared)
                         .intentColor(self.intentColor)
                         .variant(self.variant)
-                        .iconImage(self.content.showIcon ? Image(self.viewModel.imageNamed) : nil)
-                        .text(self.content.showText ? self.viewModel.text : nil)
+                        .iconImage(self.content.shouldShowIcon ? Image(self.viewModel.imageNamed) : nil)
+                        .text(self.content.shouldShowText ? self.viewModel.text : nil)
                         .accessibility(identifier: "MyTag1",
                                        label: "It's my first tag")
                     

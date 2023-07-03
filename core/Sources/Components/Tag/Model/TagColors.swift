@@ -7,13 +7,13 @@
 //
 
 // sourcery: AutoMockable
-protocol TagColorables {
+protocol TagColors {
     var backgroundColor: any ColorToken { get }
     var borderColor: any ColorToken { get }
     var foregroundColor: any ColorToken { get }
 }
 
-struct TagColors: TagColorables {
+struct TagColorsDefault: TagColors {
 
     // MARK: - Properties
 

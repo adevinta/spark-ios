@@ -13,7 +13,7 @@ enum TagContent: CaseIterable {
 
     // MARK: - Properties
 
-    var showIcon: Bool {
+    var shouldShowIcon: Bool {
         switch self {
         case .icon, .all:
             return true
@@ -22,7 +22,7 @@ enum TagContent: CaseIterable {
         }
     }
 
-    var showText: Bool {
+    var shouldShowText: Bool {
         switch self {
         case .text, .all:
             return true

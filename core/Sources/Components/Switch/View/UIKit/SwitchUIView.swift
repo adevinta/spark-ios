@@ -10,8 +10,6 @@ import UIKit
 import Combine
 import SwiftUI
 
-// TODO: compression prioprity
-
 /// The delegate for the UIKit switch.
 public protocol SwitchUIViewDelegate: AnyObject {
     /// When isOn value is changed
@@ -107,8 +105,6 @@ public final class SwitchUIView: UIView {
         label.accessibilityIdentifier = AccessibilityIdentifier.text
         label.setContentCompressionResistancePriority(.required,
                                                       for: .vertical)
-        label.setContentCompressionResistancePriority(.required,
-                                                      for: .horizontal)
         return label
     }()
 
@@ -172,13 +168,13 @@ public final class SwitchUIView: UIView {
         }
     }
 
-    /// The variant images of the switch.
-    public var variant: SwitchUIVariantImages? {
+    /// The images of the switch.
+    public var images: SwitchUIImages? {
         get {
-            return self.viewModel.variant?.toUIImages()
+            return self.viewModel.images?.leftValue
         }
         set {
-            self.viewModel.set(variant: SwitchVariant(images: newValue))
+            self.viewModel.set(images: Self.getImagesEither(from: newValue))
         }
     }
 
@@ -200,7 +196,7 @@ public final class SwitchUIView: UIView {
             return self.viewModel.attributedText?.leftValue
         }
         set {
-            self.viewModel.set(attributedText: .init(left: newValue))
+            self.viewModel.set(attributedText: Self.getAttributedTextEither(from: newValue))
         }
     }
 
@@ -230,7 +226,7 @@ public final class SwitchUIView: UIView {
 
     // MARK: - Initialization
 
-    /// Initialize a new switch view without variant and with text.
+    /// Initialize a new switch view without images and with text.
     /// - Parameters:
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
@@ -252,13 +248,13 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intentColor: intentColor,
             isEnabled: isEnabled,
-            variant: nil,
+            images: nil,
             text: text,
             attributedText: nil
         )
     }
 
-    /// Initialize a new switch view without variant and with attributedText.
+    /// Initialize a new switch view without images and with attributedText.
     /// - Parameters:
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
@@ -280,20 +276,20 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intentColor: intentColor,
             isEnabled: isEnabled,
-            variant: nil,
+            images: nil,
             text: nil,
             attributedText: attributedText
         )
     }
 
-    /// Initialize a new switch view with variant and text.
+    /// Initialize a new switch view with images and text.
     /// - Parameters:
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
     ///   - alignment: The alignment of the switch.
     ///   - intentColor: The intent color of the switch.
     ///   - isEnabled: The state of the switch: enabled or not.
-    ///   - variant: The variant of the switch.
+    ///   - images: The images of the switch.
     ///   - text: The text of the switch.
     public convenience init(
         theme: Theme,
@@ -301,7 +297,7 @@ public final class SwitchUIView: UIView {
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
-        variant: SwitchUIVariantImages,
+        images: SwitchUIImages,
         text: String
     ) {
         self.init(
@@ -310,20 +306,20 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intentColor: intentColor,
             isEnabled: isEnabled,
-            variant: variant,
+            images: images,
             text: text,
             attributedText: nil
         )
     }
 
-    /// Initialize a new switch view with variant and attributed text.
+    /// Initialize a new switch view with images and attributed text.
     /// - Parameters:
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
     ///   - alignment: The alignment of the switch.
     ///   - intentColor: The intent color of the switch.
     ///   - isEnabled: The state of the switch: enabled or not.
-    ///   - variant: The variant of the switch.
+    ///   - images: The images of the switch.
     ///   - attributedText: The attributed text of the switch.
     public convenience init(
         theme: Theme,
@@ -331,7 +327,7 @@ public final class SwitchUIView: UIView {
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
-        variant: SwitchUIVariantImages,
+        images: SwitchUIImages,
         attributedText: NSAttributedString
     ) {
         self.init(
@@ -340,7 +336,7 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intentColor: intentColor,
             isEnabled: isEnabled,
-            variant: variant,
+            images: images,
             text: nil,
             attributedText: attributedText
         )
@@ -352,7 +348,7 @@ public final class SwitchUIView: UIView {
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
-        variant: SwitchUIVariantImages?,
+        images: SwitchUIImages?,
         text: String?,
         attributedText: NSAttributedString?
     ) {
@@ -362,9 +358,9 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intentColor: intentColor,
             isEnabled: isEnabled,
-            variant: SwitchVariant(images: variant),
+            images: Self.getImagesEither(from: images),
             text: text,
-            attributedText: .init(left: attributedText)
+            attributedText: Self.getAttributedTextEither(from: attributedText)
         )
 
         super.init(frame: .zero)
@@ -763,5 +759,23 @@ public final class SwitchUIView: UIView {
                                         for axis: NSLayoutConstraint.Axis) {
         self.textLabel.setContentHuggingPriority(priority,
                                                  for: axis)
+    }
+
+    // MARK: - Either Getter
+
+    private static func getImagesEither(from value: SwitchUIImages?) -> SwitchImagesEither? {
+        guard let value else {
+            return nil
+        }
+
+        return .left(value)
+    }
+
+    private static func getAttributedTextEither(from value: NSAttributedString?) -> SwitchAttributedStringEither? {
+        guard let value else {
+            return nil
+        }
+
+        return .left(value)
     }
 }

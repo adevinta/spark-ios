@@ -19,7 +19,7 @@ struct SwitchSutTests {
     let isOn: Bool
     let alignment: SwitchAlignment
     let isEnabled: Bool
-    let variant: SwitchVariant?
+    let images: SwitchImagesEither?
     private let isMultilineText: Bool
     var text: String {
         return self.isMultilineText ? "Multiline switch.\nMore text.\nAnd more text." : "Text"
@@ -34,39 +34,66 @@ struct SwitchSutTests {
             self.isOn ? "isOn" : "isOff",
             "\(self.alignment)" + "Aligment",
             self.isEnabled ? "isEnabled" : "isDisabled",
-            self.variant != nil ? "withVariant" : "withoutVariant",
+            self.images != nil ? "withImages" : "withoutImages",
             self.isMultilineText ? "isMultilineText" : "isSinglelineText",
         ].joined(separator: "-")
     }
 
     // MARK: - Cases
 
-    static func allCases(isSwiftUIComponent: Bool) throws -> [Self] {
-        let intentColorPossibilities: [SwitchIntentColor] = [.alert, .error, .info, .neutral, .primary, .secondary, .success]
-        let isOnPossibilities = [true, false]
-        let alignmentPossibilities: [SwitchAlignment] = [.left, .right]
-        let isEnabledPossibilities = [true, false]
-        let variantPossibilities: [SwitchVariant?] = try [nil, .init(isSwiftUIComponent: isSwiftUIComponent)]
-        let isMultilineTextPossibilities = [true, false]
+    /// Test all colors for all intent, isOn and IsEnabled cases
+    static func allColorsCases(isSwiftUIComponent: Bool) throws -> [Self] {
+        let intentColorPossibilities = SwitchIntentColor.allCases
+        let isOnPossibilities = Bool.allCases
+        let isEnabledPossibilities = Bool.allCases
 
         return intentColorPossibilities.flatMap { intentColor in
             isOnPossibilities.flatMap { isOn in
-                alignmentPossibilities.flatMap { alignment in
-                    isEnabledPossibilities.flatMap { isEnabled in
-                        variantPossibilities.flatMap { variant in
-                            isMultilineTextPossibilities.map { isMultilineText -> SwitchSutTests in
-                                    .init(
-                                        intentColor: intentColor,
-                                        isOn: isOn,
-                                        alignment: alignment,
-                                        isEnabled: isEnabled,
-                                        variant: variant,
-                                        isMultilineText: isMultilineText
-                                    )
-                            }
-                        }
-                    }
+                isEnabledPossibilities.map { isEnabled -> SwitchSutTests in
+                        .init(
+                            intentColor: intentColor,
+                            isOn: isOn,
+                            alignment: .left,
+                            isEnabled: isEnabled,
+                            images: nil,
+                            isMultilineText: false
+                        )
                 }
+            }
+        }
+    }
+
+    /// Test all contents for all images cases
+    static func allContentsCases(isSwiftUIComponent: Bool) throws -> [Self] {
+        let imagesPossibilities: [SwitchImagesEither?] = try [nil, isSwiftUIComponent ? .right(Image.images) : .left(UIImage.images)]
+
+        return imagesPossibilities.map { images -> SwitchSutTests in
+                .init(
+                    intentColor: .primary,
+                    isOn: true,
+                    alignment: .left,
+                    isEnabled: true,
+                    images: images,
+                    isMultilineText: false
+                )
+        }
+    }
+
+    /// Test all positions for all alignment cases
+    static func allPositionsCases(isSwiftUIComponent: Bool) throws -> [Self] {
+        let alignmentPossibilities = SwitchAlignment.allCases
+        let isMultilineTextPossibilities = Bool.allCases
+
+        return alignmentPossibilities.flatMap { alignment in
+            isMultilineTextPossibilities.map { isMultilineText -> SwitchSutTests in
+                    .init(
+                        intentColor: .primary,
+                        isOn: true,
+                        alignment: alignment,
+                        isEnabled: true,
+                        images: nil,
+                        isMultilineText: isMultilineText
+                    )
             }
         }
     }
@@ -74,20 +101,9 @@ struct SwitchSutTests {
 
 // MARK: - Private Extensions
 
-private extension SwitchVariant {
-
-    init(isSwiftUIComponent: Bool) throws {
-        if isSwiftUIComponent {
-            self = try XCTUnwrap(.init(images: Image.variant))
-        } else {
-            self = try XCTUnwrap(.init(images: UIImage.variant))
-        }
-    }
-}
-
 private extension Image {
 
-    static let variant: SwitchVariantImages = (
+    static let images: SwitchImages = .init(
         on: Image("switchOn"),
         off: Image("switchOff")
     )
@@ -95,9 +111,9 @@ private extension Image {
 
 private extension UIImage {
 
-    static var variant: SwitchUIVariantImages {
+    static var images: SwitchUIImages {
         get throws {
-            (
+            .init(
                 on: IconographyTests.shared.switchOn,
                 off: IconographyTests.shared.switchOff
             )

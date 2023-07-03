@@ -97,7 +97,7 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
 private struct Tester {
 
     static func testColorsProperties(
-        givenIntentColors: TagIntentColorables,
+        givenIntentColors: TagIntentColors,
         getIntentColors: TagGetIntentColors
     ) throws {
         // Color
