@@ -16,7 +16,7 @@ final class SwitchViewModel: ObservableObject {
 
     private(set) var theme: Theme
     private(set) var alignment: SwitchAlignment
-    private(set) var intent: SwitchIntent
+    private(set) var intentColor: SwitchIntentColor
     private(set) var isEnabled: Bool
     private(set) var images: SwitchImagesEither?
 
@@ -53,7 +53,7 @@ final class SwitchViewModel: ObservableObject {
         theme: Theme,
         isOn: Bool,
         alignment: SwitchAlignment,
-        intent: SwitchIntent,
+        intentColor: SwitchIntentColor,
         isEnabled: Bool,
         images: SwitchImagesEither?,
         dependencies: any SwitchViewModelDependenciesProtocol = SwitchViewModelDependencies()
@@ -62,7 +62,7 @@ final class SwitchViewModel: ObservableObject {
 
         self.theme = theme
         self.alignment = alignment
-        self.intent = intent
+        self.intentColor = intentColor
         self.isEnabled = isEnabled
         self.images = images
 
@@ -111,8 +111,8 @@ final class SwitchViewModel: ObservableObject {
         self.alignmentDidUpdate()
     }
 
-    func set(intent: SwitchIntent) {
-        self.intent = intent
+    func set(intentColor: SwitchIntentColor) {
+        self.intentColor = intentColor
 
         self.colorsDidUpdate(reloadColorsFromUseCase: true)
     }
@@ -144,7 +144,7 @@ final class SwitchViewModel: ObservableObject {
     private func colorsDidUpdate(reloadColorsFromUseCase: Bool = false) {
         if reloadColorsFromUseCase {
             self.colors = self.dependencies.getColorsUseCase.execute(
-                for: self.intent,
+                forIntentColor: self.intentColor,
                 colors: self.theme.colors,
                 dims: self.theme.dims
             )
@@ -155,12 +155,12 @@ final class SwitchViewModel: ObservableObject {
         }
 
         self.toggleBackgroundColorToken = self.dependencies.getToggleColorUseCase.execute(
-            for: self.isOn,
+            forIsOn: self.isOn,
             statusAndStateColor: colors.toggleBackgroundColors
         )
         self.toggleDotBackgroundColorToken = colors.toggleDotBackgroundColor
         self.toggleDotForegroundColorToken = self.dependencies.getToggleColorUseCase.execute(
-            for: self.isOn,
+            forIsOn: self.isOn,
             statusAndStateColor: colors.toggleDotForegroundColors
         )
         self.textForegroundColorTokenDidUpdate()
@@ -176,7 +176,7 @@ final class SwitchViewModel: ObservableObject {
 
     private func alignmentDidUpdate() {
         let position = self.dependencies.getPositionUseCase.execute(
-            for: self.alignment,
+            forAlignment: self.alignment,
             spacing: self.theme.layout.spacing
         )
 
@@ -186,7 +186,7 @@ final class SwitchViewModel: ObservableObject {
 
     private func toggleStateDidUpdate() {
         let interactionState = self.dependencies.getToggleStateUseCase.execute(
-            for: self.isEnabled,
+            forIsEnabled: self.isEnabled,
             dims: self.theme.dims
         )
 
@@ -197,7 +197,7 @@ final class SwitchViewModel: ObservableObject {
     private func toggleDotImageDidUpdate() {
         if let images = self.images {
             self.toggleDotImage = self.dependencies.getImageUseCase.execute(
-                for: self.isOn,
+                forIsOn: self.isOn,
                 images: images
             )
         } else {
