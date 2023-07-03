@@ -39,7 +39,7 @@ private extension SwitchGetToggleStateUseCaseTests {
 
     func testExecute(
         givenIsEnabled: Bool,
-        expectedInteractionState: SwitchToggleStateDefault
+        expectedInteractionState: SwitchToggleState
     ) throws {
         // GIVEN
         let errorPrefixMessage = " for \(givenIsEnabled) givenIsEnabled"
