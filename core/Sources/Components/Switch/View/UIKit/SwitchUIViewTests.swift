@@ -42,9 +42,10 @@ private extension SwitchUIViewTests {
 
     func test(suts: [SwitchSutTests], function: String = #function) {
         for sut in suts {
-            let view: SwitchUIView
+            var view: SwitchUIView!
 
-            if let images = sut.images {
+            // Images + Text
+            if let images = sut.images, let text = sut.text {
                 view = SwitchUIView(
                     theme: self.theme,
                     isOn: sut.isOn,
@@ -52,17 +53,38 @@ private extension SwitchUIViewTests {
                     intentColor: sut.intentColor,
                     isEnabled: sut.isEnabled,
                     images: images.leftValue,
-                    text: sut.text
+                    text: text
                 )
-            } else {
+            } else if let images = sut.images, let attributedText = sut.attributedText { // Images + Attributed Text
                 view = SwitchUIView(
                     theme: self.theme,
                     isOn: sut.isOn,
                     alignment: sut.alignment,
                     intentColor: sut.intentColor,
                     isEnabled: sut.isEnabled,
-                    text: sut.text
+                    images: images.leftValue,
+                    attributedText: attributedText.leftValue
                 )
+            } else if let text = sut.text { // Only Text
+                view = SwitchUIView(
+                    theme: self.theme,
+                    isOn: sut.isOn,
+                    alignment: sut.alignment,
+                    intentColor: sut.intentColor,
+                    isEnabled: sut.isEnabled,
+                    text: text
+                )
+            } else if let attributedText = sut.attributedText { // Only Attributed Text
+                view = SwitchUIView(
+                    theme: self.theme,
+                    isOn: sut.isOn,
+                    alignment: sut.alignment,
+                    intentColor: sut.intentColor,
+                    isEnabled: sut.isEnabled,
+                    attributedText: attributedText.leftValue
+                )
+            } else {
+                XCTFail("Missing case, view should be init")
             }
 
             view.backgroundColor = self.theme.colors.base.background.uiColor

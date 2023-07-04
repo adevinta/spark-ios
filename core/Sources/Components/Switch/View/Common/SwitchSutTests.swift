@@ -13,6 +13,10 @@ import XCTest
 
 struct SwitchSutTests {
 
+    // MARK: - Type Alias
+
+    typealias SwitchAttributedStringEither = Either<NSAttributedString, AttributedString>
+
     // MARK: - Properties
 
     let intentColor: SwitchIntentColor
@@ -20,10 +24,8 @@ struct SwitchSutTests {
     let alignment: SwitchAlignment
     let isEnabled: Bool
     let images: SwitchImagesEither?
-    private let isMultilineText: Bool
-    var text: String {
-        return self.isMultilineText ? "Multiline switch.\nMore text.\nAnd more text." : "Text"
-    }
+    let text: String?
+    let attributedText: SwitchAttributedStringEither?
 
     // MARK: - Getter
 
@@ -35,7 +37,8 @@ struct SwitchSutTests {
             "\(self.alignment)" + "Aligment",
             self.isEnabled ? "isEnabled" : "isDisabled",
             self.images != nil ? "withImages" : "withoutImages",
-            self.isMultilineText ? "isMultilineText" : "isSinglelineText",
+            self.text != nil ? "withText" : "withoutText",
+            self.attributedText != nil ? "withAttributedText" : "withoutAttributedText",
         ].joined(separator: "-")
     }
 
@@ -56,25 +59,38 @@ struct SwitchSutTests {
                             alignment: .left,
                             isEnabled: isEnabled,
                             images: nil,
-                            isMultilineText: false
+                            text: "My Color Switch",
+                            attributedText: nil
                         )
                 }
             }
         }
     }
 
-    /// Test all contents for all images cases
+    /// Test all contents for all images, text and attributedText cases
     static func allContentsCases(isSwiftUIComponent: Bool) throws -> [Self] {
-        let imagesPossibilities: [SwitchImagesEither?] = try [nil, isSwiftUIComponent ? .right(Image.images) : .left(UIImage.images)]
+        typealias ContentCases = (images: SwitchImagesEither?, text: String?, attributedText: SwitchAttributedStringEither?)
 
-        return imagesPossibilities.map { images -> SwitchSutTests in
+        let images: SwitchImagesEither = try isSwiftUIComponent ? .right(Image.images) : .left(UIImage.images)
+
+        let attributedText: SwitchAttributedStringEither = isSwiftUIComponent ? .right(AttributedString("My Attributed Switch")) : .left(.init(string: "My Attributed Switch"))
+
+        let items: [ContentCases] = [
+            (images: images, text: "My Full Content Switch", attributedText: nil), // Images + text
+            (images: nil, text: "My Content Switch", attributedText: nil), // Only text
+            (images: images, text: nil, attributedText: attributedText), // Images + attributed text
+            (images: nil, text: nil, attributedText: attributedText) // Only attributed text
+        ]
+
+        return items.map { item -> SwitchSutTests in
                 .init(
                     intentColor: .primary,
                     isOn: true,
                     alignment: .left,
                     isEnabled: true,
-                    images: images,
-                    isMultilineText: false
+                    images: item.images,
+                    text: item.text,
+                    attributedText: item.attributedText
                 )
         }
     }
@@ -92,7 +108,8 @@ struct SwitchSutTests {
                         alignment: alignment,
                         isEnabled: true,
                         images: nil,
-                        isMultilineText: isMultilineText
+                        text: isMultilineText ? "Multiline switch.\nMore text.\nAnd more text." : "My Text",
+                        attributedText: nil
                     )
             }
         }

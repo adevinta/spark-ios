@@ -25,7 +25,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
     private let alignment: SwitchAlignment
     private let intentColor: SwitchIntentColor
     private let isEnabled: Bool
-    private let isImages: Bool
+    private let hasImages: Bool
     private let textContent: SwitchTextContentDefault
 
     // MARK: - Initialization
@@ -38,14 +38,14 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         alignment: SwitchAlignment,
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
-        isImages: Bool,
+        hasImages: Bool,
         textContent: SwitchTextContentDefault
     ) {
         self.viewModel = viewModel
         self.attributedText = .init(
             string: viewModel.text,
             attributes: [
-                .underlineColor: SparkTheme.shared.colors.base.outline.uiColor,
+                .foregroundColor: SparkTheme.shared.colors.primary.primary.uiColor,
                 .font: SparkTheme.shared.typography.body2Highlight.uiFont
             ]
         )
@@ -55,7 +55,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         self.alignment = alignment
         self.intentColor = intentColor
         self.isEnabled = isEnabled
-        self.isImages = isImages
+        self.hasImages = hasImages
         self.textContent = textContent
     }
 
@@ -68,7 +68,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         case .text:
             switchView = self.makeView(isMultilineText: false)
         case .attributedText:
-            if self.isImages {
+            if self.hasImages {
                 switchView = SwitchUIView(
                     theme: SparkTheme.shared,
                     isOn: self.isOn,
@@ -97,7 +97,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
             switchView,
             UIView()
         ])
-        stackView.axis = .vertical
+        stackView.axis = .horizontal
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.widthAnchor.constraint(equalToConstant: width).isActive = true
@@ -127,23 +127,17 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
             switchView.isEnabled = self.isEnabled
         }
 
-        if (switchView.images == nil && self.isImages) ||
-            (switchView.images != nil && !self.isImages) {
-            switchView.images = self.isImages ? self.images() : nil
+        if (switchView.images == nil && self.hasImages) ||
+            (switchView.images != nil && !self.hasImages) {
+            switchView.images = self.hasImages ? self.images() : nil
         }
 
-        if ((switchView.text == nil || switchView.text != self.viewModel.text(isMultilineText: self.textContent.isMultilineText)) && self.textContent.shouldShowText) ||
-            (switchView.text != nil && !self.textContent.shouldShowText) {
-            if self.textContent.shouldShowText {
-                switchView.text = self.viewModel.text(isMultilineText: self.textContent.isMultilineText)
-            } else {
-                switchView.text = nil
-            }
+        if self.textContent.shouldShowText {
+            switchView.text = self.viewModel.text(isMultilineText: self.textContent.isMultilineText)
         }
 
-        if (switchView.attributedText == nil && self.textContent.shouldShowShowAttributeText) ||
-            (switchView.attributedText != nil && !self.textContent.shouldShowShowAttributeText) {
-            switchView.attributedText = self.textContent.shouldShowShowAttributeText ? self.attributedText : nil
+        if self.textContent.shouldShowShowAttributeText {
+            switchView.attributedText = self.attributedText
         }
 
         DispatchQueue.main.async {
@@ -170,7 +164,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
     }
 
     private func makeView(isMultilineText: Bool) -> SwitchUIView {
-        if self.isImages {
+        if self.hasImages {
             return SwitchUIView(
                 theme: SparkTheme.shared,
                 isOn: self.isOn,

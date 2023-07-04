@@ -33,8 +33,8 @@ struct SwitchComponentView: View {
     @State private var isEnabledSheetIsPresented = false
     @State var isEnabled: Bool = true
 
-    @State private var isImagesSheetIsPresented = false
-    @State var isImages: Bool = false
+    @State private var hasImagesSheetIsPresented = false
+    @State var hasImages: Bool = false
 
     @State private var isMultilineTextSheetIsPresented = false
     @State var isMultilineText: Bool = true
@@ -122,11 +122,11 @@ struct SwitchComponentView: View {
                             .labelsHidden()
                     }
 
-                    // Is Images
+                    // Has Images
                     HStack() {
-                        Text("Is images: ")
+                        Text("Has images: ")
                             .bold()
-                        Toggle("", isOn: self.$isImages)
+                        Toggle("", isOn: self.$hasImages)
                             .labelsHidden()
                     }
 
@@ -165,7 +165,7 @@ struct SwitchComponentView: View {
                             alignment: self.$alignment.wrappedValue,
                             intentColor: self.$intentColor.wrappedValue,
                             isEnabled: self.$isEnabled.wrappedValue,
-                            isImages: self.$isImages.wrappedValue,
+                            hasImages: self.$hasImages.wrappedValue,
                             textContent: self.$textContent.wrappedValue
                         )
                         .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .leading)

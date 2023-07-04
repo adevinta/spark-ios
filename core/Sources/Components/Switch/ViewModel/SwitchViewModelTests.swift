@@ -29,19 +29,11 @@ final class SwitchViewModelTests: XCTestCase {
 
     private let imageMock = IconographyTests.shared.switchOn
     private let imagesMock = SwitchUIImages(on: UIImage(), off: UIImage())
-    private let textMock = "My Text"
-    private let attributedTextMock = NSAttributedString(string: "My Attributed Text")
 
     private var colorTokenMock: ColorTokenGeneratedMock = {
         let mock = ColorTokenGeneratedMock()
         mock.underlyingColor = .orange
         mock.underlyingUiColor = .green
-        return mock
-    }()
-
-    private lazy var textContentMock: SwitchTextContentGeneratedMock = {
-        let mock = SwitchTextContentGeneratedMock()
-        mock.text = self.textMock
         return mock
     }()
 
@@ -95,7 +87,6 @@ final class SwitchViewModelTests: XCTestCase {
         mock.underlyingGetToggleColorUseCase = self.getToggleColorUseCaseMock
         mock.underlyingGetPositionUseCase = self.getPositionUseCaseMock
         mock.underlyingGetToggleStateUseCase = self.getToggleStateUseCaseMock
-        mock.makeTextContentWithTextAndAttributedTextReturnValue = self.textContentMock
         return mock
     }()
 
@@ -136,22 +127,56 @@ final class SwitchViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.images?.leftValue,
                        self.imagesMock,
                        "Wrong images value")
-        XCTAssertEqual(viewModel.text,
-                       self.textMock,
-                       "Wrong images value")
-        XCTAssertEqual(viewModel.attributedText?.leftValue,
-                       self.attributedTextMock,
-                       "Wrong images value")
 
         XCTAssertNil(viewModel.isOnChanged,
                      "Wrong isOnChanged value")
 
         // **
+        // Use Cases
+        self.testGetColorsUseCaseMock(
+            numberOfCalls: 0
+        )
+        self.testGetImageUseCaseMock(
+            numberOfCalls: 0
+        )
+        self.testGetToggleColorUseCaseMock(
+            numberOfCalls: 0
+        )
+        self.testGetPositionUseCaseMock(
+            numberOfCalls: 0
+        )
+        self.testGetToggleStateUseCaseMock(
+            numberOfCalls: 0
+        )
+        // **
+    }
+
+    // MARK: - Load Tests
+
+    func test_published_properties_on_load() throws {
+        // GIVEN
+        let isOnMock = true
+        let alignmentMock: SwitchAlignment = .left
+        let intentColorMock: SwitchIntentColor = .alert
+        let isEnabledMock = true
+
+        // WHEN
+        let viewModel = self.classToTest(
+            isOn: isOnMock,
+            alignment: alignmentMock,
+            intentColor: intentColorMock,
+            isEnabled: isEnabledMock,
+            images: self.imagesMock
+        )
+
+        viewModel.load()
+
+        // THEN
+        // **
         // Published properties
         self.testToggleState(on: viewModel)
         self.testColors(on: viewModel)
         self.testPosition(on: viewModel)
-        self.testTextContent(on: viewModel)
         self.testToggleDotImage(on: viewModel, shouldContainsImages: true)
         self.testTextFont(on: viewModel, theme: self.themeMock)
         XCTAssertTrue(viewModel.showToggleLeftSpace == true,
@@ -180,12 +205,6 @@ final class SwitchViewModelTests: XCTestCase {
             givenIsEnabled: isEnabledMock
         )
         // **
-
-        // Maker
-        self.testMakeTextContentMock(
-            givenText: self.textMock,
-            givenAttributedText: self.attributedTextMock
-        )
     }
 
     // MARK: - Toggle Tests
@@ -208,6 +227,8 @@ final class SwitchViewModelTests: XCTestCase {
             isEnabled: isEnabledMock,
             images: imagesMock
         )
+
+        viewModel.load()
 
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
@@ -238,9 +259,7 @@ final class SwitchViewModelTests: XCTestCase {
         // **
         // Use Cases
         self.testGetImageUseCaseMock(
-            numberOfCalls: 0,
-            givenIsOn: expectedIsOn,
-            givenImages: imagesMock
+            numberOfCalls: 0
         )
         self.testGetToggleColorUseCaseMock(
             givenIsOn: expectedIsOn
@@ -270,6 +289,8 @@ final class SwitchViewModelTests: XCTestCase {
             images: imagesMock
         )
 
+        viewModel.load()
+
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
 
@@ -287,18 +308,13 @@ final class SwitchViewModelTests: XCTestCase {
         // **
         // Use Cases
         self.testGetImageUseCaseMock(
-            numberOfCalls: 0,
-            givenIsOn: isOnMock,
-            givenImages: imagesMock
+            numberOfCalls: 0
         )
         self.testGetToggleColorUseCaseMock(
-            numberOfCalls: 0,
-            givenIsOn: isOnMock
+            numberOfCalls: 0
         )
         self.testGetToggleStateUseCaseMock(
-            numberOfCalls: 0,
-            givenTheme: self.themeMock,
-            givenIsEnabled: isEnabledMock
+            numberOfCalls: 0
         )
         // **
     }
@@ -352,9 +368,7 @@ final class SwitchViewModelTests: XCTestCase {
             givenIntentColor: intentColorMock
         )
         self.testGetImageUseCaseMock(
-            numberOfCalls: 0,
-            givenIsOn: isOnMock,
-            givenImages: imagesMock
+            numberOfCalls: 0
         )
         self.testGetToggleColorUseCaseMock(
             givenIsOn: isOnMock
@@ -436,63 +450,6 @@ final class SwitchViewModelTests: XCTestCase {
         // **
     }
 
-    func test_set_text() {// GIVEN
-        let newText = "New Text"
-
-        let viewModel = self.classToTest()
-
-        // Reset all UseCase mock
-        self.resetDependenciesMockAfterInitViewModel()
-
-        // WHEN
-        viewModel.set(text: newText)
-
-        // THEN
-        XCTAssertEqual(viewModel.text,
-                       newText,
-                       "Wrong text value")
-        XCTAssertNil(viewModel.attributedText,
-                     "Wrong attributedText value")
-
-        // Published properties
-        self.testTextContent(on: viewModel)
-
-        // Maker
-        self.testMakeTextContentMock(
-            givenText: newText,
-            givenAttributedText: nil
-        )
-    }
-
-    func test_set_attributedText() {
-        // GIVEN
-        let newAttributedText = NSAttributedString(string: "New Text")
-
-        let viewModel = self.classToTest()
-
-        // Reset all UseCase mock
-        self.resetDependenciesMockAfterInitViewModel()
-
-        // WHEN
-        viewModel.set(attributedText: .left(newAttributedText))
-
-        // THEN
-        XCTAssertEqual(viewModel.attributedText?.leftValue,
-                       newAttributedText,
-                       "Wrong attributedText value")
-        XCTAssertNil(viewModel.text,
-                     "Wrong text value")
-
-        // Published properties
-        self.testTextContent(on: viewModel)
-
-        // Maker
-        self.testMakeTextContentMock(
-            givenText: nil,
-            givenAttributedText: newAttributedText
-        )
-    }
-
     func test_set_isEnabled() {
         // GIVEN
         let newIsEnabledMock = false
@@ -505,6 +462,8 @@ final class SwitchViewModelTests: XCTestCase {
             intentColor: intentColorMock,
             isEnabled: true
         )
+
+        viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
@@ -526,9 +485,7 @@ final class SwitchViewModelTests: XCTestCase {
         // **
         // Use Cases
         self.testGetColorsUseCaseMock(
-            numberOfCalls: 0,
-            givenTheme: self.themeMock,
-            givenIntentColor: intentColorMock
+            numberOfCalls: 0
         )
         self.testGetToggleColorUseCaseMock(
             givenIsOn: isOnMock
@@ -596,9 +553,7 @@ final class SwitchViewModelTests: XCTestCase {
 
         // Use Cases
         self.testGetImageUseCaseMock(
-            numberOfCalls: 0,
-            givenIsOn: isOnMock,
-            givenImages: nil
+            numberOfCalls: 0
         )
     }
 }
@@ -628,8 +583,6 @@ private extension SwitchViewModelTests {
             intentColor: intentColor,
             isEnabled: isEnabled,
             images:  imagesEither,
-            text: self.textMock,
-            attributedText: .left(self.attributedTextMock),
             dependencies: self.dependenciesMock
         )
     }
@@ -672,12 +625,6 @@ private extension SwitchViewModelTests {
                        "Wrong toggleOpacity value")
     }
 
-    func testTextContent(on viewModel: SwitchViewModel) {
-        XCTAssertIdentical(viewModel.textContent as? SwitchTextContentGeneratedMock,
-                           self.textContentMock,
-                           "Wrong textContent value")
-    }
-
     func testToggleDotImage(on viewModel: SwitchViewModel, shouldContainsImages: Bool) {
         if shouldContainsImages {
             XCTAssertEqual(viewModel.toggleDotImage?.leftValue,
@@ -702,14 +649,14 @@ private extension SwitchViewModelTests {
 
     func testGetColorsUseCaseMock(
         numberOfCalls: Int = 1,
-        givenTheme: Theme,
-        givenIntentColor: SwitchIntentColor
+        givenTheme: Theme? = nil,
+        givenIntentColor: SwitchIntentColor? = nil
     ) {
         XCTAssertEqual(self.getColorsUseCaseMock.executeWithIntentColorAndColorsAndDimsCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getColorsUseCase")
 
-        if numberOfCalls > 0 {
+        if numberOfCalls > 0, let givenTheme, let givenIntentColor {
             let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithIntentColorAndColorsAndDimsReceivedArguments
             XCTAssertEqual(getColorsUseCaseArgs?.intentColor,
                            givenIntentColor,
@@ -725,14 +672,14 @@ private extension SwitchViewModelTests {
 
     func testGetImageUseCaseMock(
         numberOfCalls: Int = 1,
-        givenIsOn: Bool,
-        givenImages: SwitchUIImages?
+        givenIsOn: Bool? = nil,
+        givenImages: SwitchUIImages? = nil
     ) {
         XCTAssertEqual(self.getImageUseCaseMock.executeWithIsOnAndImagesCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getImageUseCase")
 
-        if numberOfCalls > 0 {
+        if numberOfCalls > 0, let givenIsOn {
             let getImageUseCaseArgs = self.getImageUseCaseMock.executeWithIsOnAndImagesReceivedArguments
             XCTAssertEqual(getImageUseCaseArgs?.isOn,
                            givenIsOn,
@@ -751,7 +698,7 @@ private extension SwitchViewModelTests {
 
     func testGetToggleColorUseCaseMock(
         numberOfCalls: Int = 2,
-        givenIsOn: Bool
+        givenIsOn: Bool? = nil
     ) {
         let givenStatusAndStateColors =  [
             self.colorsMock.toggleBackgroundColors,
@@ -762,7 +709,7 @@ private extension SwitchViewModelTests {
                        numberOfCalls,
                        "Wrong call number on execute on getToggleColorUseCase")
 
-        if numberOfCalls > 0 {
+        if numberOfCalls > 0, let givenIsOn {
             let getToggleColorUseCaseInvocations = self.getToggleColorUseCaseMock.executeWithIsOnAndStatusAndStateColorReceivedInvocations
 
             guard getToggleColorUseCaseInvocations.count == numberOfCalls else {
@@ -790,14 +737,14 @@ private extension SwitchViewModelTests {
 
     func testGetPositionUseCaseMock(
         numberOfCalls: Int = 1,
-        givenTheme: Theme,
-        givenAlignment: SwitchAlignment
+        givenTheme: Theme? = nil,
+        givenAlignment: SwitchAlignment? = nil
     ) {
         XCTAssertEqual(self.getPositionUseCaseMock.executeWithAlignmentAndSpacingCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getPositionUseCase")
 
-        if numberOfCalls > 0 {
+        if numberOfCalls > 0, let givenTheme, let givenAlignment {
             let getPositionUseCaseArgs = self.getPositionUseCaseMock.executeWithAlignmentAndSpacingReceivedArguments
             XCTAssertEqual(getPositionUseCaseArgs?.alignment,
                            givenAlignment,
@@ -810,14 +757,14 @@ private extension SwitchViewModelTests {
 
     func testGetToggleStateUseCaseMock(
         numberOfCalls: Int = 1,
-        givenTheme: Theme,
-        givenIsEnabled: Bool
+        givenTheme: Theme? = nil,
+        givenIsEnabled: Bool? = nil
     ) {
         XCTAssertEqual(self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getToggleStateUseCase")
 
-        if numberOfCalls > 0 {
+        if numberOfCalls > 0, let givenTheme, let givenIsEnabled {
             let getToggleStateUseCaseArgs = self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments
             XCTAssertEqual(getToggleStateUseCaseArgs?.isEnabled,
                            givenIsEnabled,
@@ -825,37 +772,6 @@ private extension SwitchViewModelTests {
             XCTAssertIdentical(try XCTUnwrap(getToggleStateUseCaseArgs?.dims as? DimsGeneratedMock),
                                givenTheme.dims as? DimsGeneratedMock,
                                "Wrong dims parameter on execute on getToggleStateUseCase")
-        }
-    }
-
-    func testMakeTextContentMock(
-        numberOfCalls: Int = 1,
-        givenText: String?,
-        givenAttributedText: NSAttributedString?
-    ) {
-        XCTAssertEqual(self.dependenciesMock.makeTextContentWithTextAndAttributedTextCallsCount,
-                       numberOfCalls,
-                       "Wrong call number on execute on makeTextContent")
-
-        if numberOfCalls > 0 {
-            let makeTextContentArgs = self.dependenciesMock.makeTextContentWithTextAndAttributedTextReceivedArguments
-            if let givenText {
-                XCTAssertEqual(makeTextContentArgs?.text,
-                               givenText,
-                               "Wrong text parameter on execute on makeTextContent")
-            } else {
-                XCTAssertNil(makeTextContentArgs?.text,
-                             "text parameter should be nil on execute on makeTextContent")
-            }
-
-            if let givenAttributedText {
-                XCTAssertEqual(makeTextContentArgs?.attributedText?.leftValue,
-                               givenAttributedText,
-                               "Wrong attributedText parameter on execute on makeTextContent")
-            } else {
-                XCTAssertNil(makeTextContentArgs?.attributedText,
-                             "attributedText parameter should be nil on execute on makeTextContent")
-            }
         }
     }
 
@@ -880,10 +796,5 @@ private extension SwitchViewModelTests {
         self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount = 0
         self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments = nil
         self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedInvocations = []
-
-        // Clear Dependencies Maker
-        self.dependenciesMock.makeTextContentWithTextAndAttributedTextCallsCount = 0
-        self.dependenciesMock.makeTextContentWithTextAndAttributedTextReceivedArguments = nil
-        self.dependenciesMock.makeTextContentWithTextAndAttributedTextReceivedInvocations = []
     }
 }

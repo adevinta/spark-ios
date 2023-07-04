@@ -10,6 +10,8 @@ import UIKit
 import Combine
 import SwiftUI
 
+// TODO: Add Pressed state (rounded rect)
+
 /// The delegate for the UIKit switch.
 public protocol SwitchUIViewDelegate: AnyObject {
     /// When isOn value is changed
@@ -179,24 +181,23 @@ public final class SwitchUIView: UIView {
     }
 
     /// The text of the switch.
-    /// If the value is set, the attributedString properties will be deleted
     public var text: String? {
         get {
-            return self.viewModel.text
+            return self.textLabel.text
         }
         set {
-            self.viewModel.set(text: newValue)
+            self.textLabel.text = newValue
+            self.viewModel.textChanged(newValue)
         }
     }
 
     /// The attributed text of the switch.
-    /// If the value is set, the text properties will be deleted
     public var attributedText: NSAttributedString? {
         get {
-            return self.viewModel.attributedText?.leftValue
+            return self.textLabel.attributedText
         }
         set {
-            self.viewModel.set(attributedText: Self.getAttributedTextEither(from: newValue))
+            self.textLabel.attributedText = newValue
         }
     }
 
@@ -358,14 +359,17 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intentColor: intentColor,
             isEnabled: isEnabled,
-            images: Self.getImagesEither(from: images),
-            text: text,
-            attributedText: Self.getAttributedTextEither(from: attributedText)
+            images: Self.getImagesEither(from: images)
         )
 
         super.init(frame: .zero)
 
+        // Setup
         self.setupView()
+        self.setupProperties(
+            text: text,
+            attributedText: attributedText
+        )
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -387,6 +391,22 @@ public final class SwitchUIView: UIView {
 
         // Setup publisher subcriptions
         self.setupSubscriptions()
+
+        // Load view model
+        self.viewModel.load()
+    }
+
+    private func setupProperties(
+        text: String?,
+        attributedText: NSAttributedString?
+    ) {
+        // Label
+        // Only one of the text/attributedText can be set in the init
+        if let text {
+            self.textLabel.text = text
+        } else if let attributedText {
+            self.textLabel.attributedText = attributedText
+        }
     }
 
     // MARK: - Layout
@@ -702,19 +722,6 @@ public final class SwitchUIView: UIView {
             }
         }
 
-        // Text Content Label
-        self.subscribeTo(self.viewModel.$textContent) { [weak self] content in
-            guard let self, let content else { return }
-
-            if let text = content.text {
-                self.textLabel.attributedText = nil
-                self.textLabel.text = text
-            } else if let attributedText = content.attributedText?.leftValue {
-                self.textLabel.text = nil
-                self.textLabel.attributedText = attributedText
-            }
-        }
-
         // Text Label Font
         self.subscribeTo(self.viewModel.$textFontToken) { [weak self] fontToken in
             guard let self, let fontToken else { return }
@@ -764,14 +771,6 @@ public final class SwitchUIView: UIView {
     // MARK: - Either Getter
 
     private static func getImagesEither(from value: SwitchUIImages?) -> SwitchImagesEither? {
-        guard let value else {
-            return nil
-        }
-
-        return .left(value)
-    }
-
-    private static func getAttributedTextEither(from value: NSAttributedString?) -> SwitchAttributedStringEither? {
         guard let value else {
             return nil
         }

@@ -19,8 +19,6 @@ final class SwitchViewModel: ObservableObject {
     private(set) var intentColor: SwitchIntentColor
     private(set) var isEnabled: Bool
     private(set) var images: SwitchImagesEither?
-    private(set) var text: String?
-    private(set) var attributedText: SwitchAttributedStringEither?
 
     // MARK: - Published Properties
 
@@ -41,7 +39,6 @@ final class SwitchViewModel: ObservableObject {
 
     @Published private (set) var toggleDotImage: SwitchImageEither?
 
-    @Published private (set) var textContent: SwitchTextContent?
     @Published private (set) var textFontToken: TypographyFontToken?
 
     // MARK: - Private Properties
@@ -59,8 +56,6 @@ final class SwitchViewModel: ObservableObject {
         intentColor: SwitchIntentColor,
         isEnabled: Bool,
         images: SwitchImagesEither?,
-        text: String?,
-        attributedText: SwitchAttributedStringEither?,
         dependencies: any SwitchViewModelDependenciesProtocol = SwitchViewModelDependencies()
     ) {
         self.isOn = isOn
@@ -70,11 +65,14 @@ final class SwitchViewModel: ObservableObject {
         self.intentColor = intentColor
         self.isEnabled = isEnabled
         self.images = images
-        self.text = text
-        self.attributedText = attributedText
 
         self.dependencies = dependencies
+    }
 
+    // MARK: - Load
+
+    func load() {
+        // Update all values when view is ready to receive published values
         self.updateAll()
     }
 
@@ -132,20 +130,6 @@ final class SwitchViewModel: ObservableObject {
         self.toggleDotImageDidUpdate()
     }
 
-    func set(text: String?) {
-        self.text = text
-        self.attributedText = nil
-
-        self.textContentDidUpdate()
-    }
-
-    func set(attributedText: SwitchAttributedStringEither?) {
-        self.attributedText = attributedText
-        self.text = nil
-
-        self.textContentDidUpdate()
-    }
-
     // MARK: - Update
 
     private func updateAll() {
@@ -154,7 +138,6 @@ final class SwitchViewModel: ObservableObject {
         self.toggleStateDidUpdate()
         self.toggleDotImageDidUpdate()
         self.toggleSpacesVisibilityDidUpdate()
-        self.textContentDidUpdate()
         self.textFontDidUpdate()
     }
 
@@ -180,6 +163,14 @@ final class SwitchViewModel: ObservableObject {
             forIsOn: self.isOn,
             statusAndStateColor: colors.toggleDotForegroundColors
         )
+        self.textForegroundColorTokenDidUpdate()
+    }
+
+    private func textForegroundColorTokenDidUpdate() {
+        guard let colors = self.colors else {
+            return
+        }
+
         self.textForegroundColorToken = colors.textForegroundColor
     }
 
@@ -218,14 +209,15 @@ final class SwitchViewModel: ObservableObject {
         self.showToggleLeftSpace = self.isOn
     }
 
-    private func textContentDidUpdate() {
-        self.textContent = self.dependencies.makeTextContent(
-            text: self.text,
-            attributedText: self.attributedText
-        )
-    }
-
     private func textFontDidUpdate() {
         self.textFontToken = self.theme.typography.body1
+    }
+
+    func textChanged(_ text: String?) {
+        // Reload text properties (font and color) if consumer set a new text
+        if text != nil {
+            self.textFontDidUpdate()
+            self.textForegroundColorTokenDidUpdate()
+        }
     }
 }
