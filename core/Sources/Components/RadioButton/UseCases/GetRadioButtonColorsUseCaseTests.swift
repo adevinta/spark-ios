@@ -71,11 +71,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.red,
              .green,
              .blue,
-             .red])
+             .clear])
     }
 
     func test_disabled_colors_when_button_is_not_selected() throws {
@@ -102,11 +102,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.yellow,
              .gray,
              .purple,
-             .yellow])
+             .clear])
     }
 
     func test_error_colors_when_button_is_not_selected() throws {
@@ -125,7 +125,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
         // When
         let colors = self.sut.execute(theme: self.theme,
-                                      state: .error(message: "Error"),
+                                      state: .error,
                                       isSelected: false)
 
         // Then
@@ -133,7 +133,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.orange,
              .purple,
              .red,
@@ -159,7 +159,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
         // When
         let colors = self.sut.execute(theme: self.theme,
-                                      state: .warning(message: "Error"),
+                                      state: .warning,
                                       isSelected: false)
 
         // Then
@@ -167,11 +167,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.gray,
              .green,
              .purple,
-             .pink])
+             .clear])
     }
 
     func test_success_colors_when_button_is_not_selected() throws {
@@ -189,7 +189,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
         // When
         let colors = self.sut.execute(theme: self.theme,
-                                      state: .success(message: "Error"),
+                                      state: .success,
                                       isSelected: false)
 
         // Then
@@ -197,11 +197,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.blue,
              .gray,
              .green,
-             .green])
+             .clear])
     }
 
     func test_enabled_colors_when_button_is_selected() throws {
@@ -228,13 +228,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.fill,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.gray,
              .green,
              .blue,
-             .blue,
-             .gray])
+             .blue])
     }
 
     func test_disabled_colors_when_button_is_selected() throws {
@@ -261,13 +259,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.fill,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.black,
              .white,
              .blue,
-             .blue,
-             .black])
+             .blue])
     }
 
     func test_error_colors_when_button_is_selected() throws {
@@ -286,7 +282,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
         // When
         let colors = self.sut.execute(theme: self.theme,
-                                      state: .error(message: "Error"),
+                                      state: .error,
                                       isSelected: true)
 
         // Then
@@ -294,11 +290,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.fill,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.white,
              .orange,
-             .green,
              .green,
              .green])
     }
@@ -322,7 +316,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
         // When
         let colors = sut.execute(theme: self.theme,
-                                 state: .warning(message: "Error"),
+                                 state: .warning,
                                  isSelected: true)
 
         // Then
@@ -330,13 +324,11 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.fill,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.gray,
              .green,
              .purple,
-             .purple,
-             .pink])
+             .purple])
     }
 
     func test_success_colors_when_button_is_selected() throws {
@@ -355,7 +347,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         
         // When
         let colors = sut.execute(theme: self.theme,
-                                 state: .success(message: "Error"),
+                                 state: .success,
                                  isSelected: true)
 
         // Then
@@ -363,11 +355,9 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [colors.halo,
              colors.label,
              colors.button,
-             colors.fill,
-             colors.subLabel].map(\.color),
+             colors.fill].map(\.color),
             [Color.white,
              .gray,
-             .green,
              .green,
              .green])
     }

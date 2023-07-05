@@ -55,6 +55,7 @@ final class RadioButtonToggleUIView: UIView {
         self.haloColor = colors.halo.uiColor
         self.buttonColor = colors.button.uiColor
         self.fillColor = colors.fill.uiColor
+        self.setNeedsDisplay()
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {

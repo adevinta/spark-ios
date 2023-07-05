@@ -70,14 +70,14 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                 id: ID,
                 label: String,
                 selectedID: Binding<ID>,
-                state: SparkSelectButtonState = .enabled,
+                groupState: RadioButtonGroupState = .enabled,
                 labelPosition: RadioButtonLabelPosition = .right) {
         let viewModel = RadioButtonViewModel(
             theme: theme,
             id: id,
             label: .right(label),
             selectedID: selectedID,
-            state: state,
+            groupState: groupState,
             labelPosition: labelPosition)
         self.init(viewModel: viewModel)
     }
@@ -104,8 +104,8 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
     // MARK: - View modifier
 
-    public func state(_ state: SparkSelectButtonState) -> Self {
-        self.viewModel.set(state: state)
+    public func groupState(_ groupState: RadioButtonGroupState) -> Self {
+        self.viewModel.set(groupState: groupState)
         return self
     }
 
@@ -125,11 +125,11 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         if self.viewModel.labelPosition == .right {
             HStack(alignment: .top, spacing: self.spacing) {
                 self.radioButton()
-                self.labelAndSublabel()
+                self.label()
             }
         } else  {
             HStack(alignment: .top, spacing: 0) {
-                self.labelAndSublabel()
+                self.label()
 
                 Spacer()
 
@@ -140,20 +140,12 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     }
 
     @ViewBuilder
-    private func labelAndSublabel() -> some View {
-        VStack(alignment: .leading) {
-            Text(self.viewModel.label.rightValue)
-                .font(self.viewModel.font.font)
-                .multilineTextAlignment(.leading)
-                .foregroundColor(self.viewModel.surfaceColor.color)
-
-            if let supplementaryLabel = self.viewModel.supplementaryText {
-                Text(supplementaryLabel)
-                    .font(self.viewModel.supplemetaryFont.font)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(self.viewModel.colors.subLabel.color)
-            }
-        }
+    private func label() -> some View {
+        Text(self.viewModel.label.rightValue)
+            .font(self.viewModel.font.font)
+            .multilineTextAlignment(.leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .foregroundColor(self.viewModel.surfaceColor.color)
     }
 
     @ViewBuilder

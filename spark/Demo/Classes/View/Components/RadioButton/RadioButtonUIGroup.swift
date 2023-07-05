@@ -152,20 +152,15 @@ final class RadioButtonUIGroupViewController: UIViewController {
         RadioButtonUIItem(id: "1",
                         label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
         RadioButtonUIItem(id: "2",
-                        label: .init("2 Radio button / Enabled"),
-                        state: .enabled),
+                        label: .init("2 Radio button")),
         RadioButtonUIItem(id: "3",
-                        label: .init("3 Radio button /  Disabled"),
-                        state: .disabled),
+                        label: .init("3 Radio button")),
         RadioButtonUIItem(id: "4",
-                        label: .init("4 Radio button / Error"),
-                        state: .error(message: "Error")),
+                        label: .init("4 Radio button")),
         RadioButtonUIItem(id: "5",
-                        label: .init("5 Radio button / Success"),
-                        state: .success(message: "Success")),
+                        label: .init("5 Radio button")),
         RadioButtonUIItem(id: "6",
-                        label: .init("6 Radio button / Warning"),
-                        state: .warning(message: "Warning")),
+                        label: .init("6 Radio button"))
     ]
 
     // MARK: Methods
@@ -193,6 +188,7 @@ final class RadioButtonUIGroupViewController: UIViewController {
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.scrollView)
 
+        self.contentView.addArrangedSubview(self.stateButton)
         self.contentView.addArrangedSubview(self.radioButtonView)
         self.contentView.addArrangedSubview(self.selectedValueLabel)
         self.contentView.addArrangedSubview(UIView())
@@ -218,6 +214,33 @@ final class RadioButtonUIGroupViewController: UIViewController {
             self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
+    }
+
+    @objc private func promptForState() {
+        let alertController = UIAlertController(title: "State", message: nil, preferredStyle: .actionSheet)
+
+        for state in RadioButtonGroupState.allCases {
+            alertController.addAction(UIAlertAction(title: state.description, style: .default, handler: self.alertAction(_:)))
+        }
+
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .destructive))
+
+        present(alertController, animated: true)
+    }
+
+    private func alertAction(_ action: UIAlertAction) {
+        let state = action.title.flatMap(RadioButtonGroupState.fromDescription) ?? RadioButtonGroupState.enabled
+        self.radioButtonView.state = state
+        self.radioButtonView.supplementaryText = state.supplementaryLabel
+        self.stateButton.setTitle(state.description, for: .normal)
+    }
+}
+
+private extension RadioButtonGroupState {
+    static func fromDescription(_ value: String) -> RadioButtonGroupState? {
+        return self.allCases.first { state in
+            state.description == value
+        }
     }
 }
 
