@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+// TODO: add test equatability on SwitchViewModel
+
 final class SwitchViewModel: ObservableObject {
 
     // MARK: - Properties
@@ -44,6 +46,7 @@ final class SwitchViewModel: ObservableObject {
     // MARK: - Private Properties
 
     private var colors: SwitchColors?
+    private let displayedTextViewModel: DisplayedTextViewModel
 
     private let dependencies: any SwitchViewModelDependenciesProtocol
 
@@ -56,6 +59,8 @@ final class SwitchViewModel: ObservableObject {
         intent: SwitchIntent,
         isEnabled: Bool,
         images: SwitchImagesEither?,
+        text: String?,
+        attributedText: AttributedStringEither?,
         dependencies: any SwitchViewModelDependenciesProtocol = SwitchViewModelDependencies()
     ) {
         self.isOn = isOn
@@ -65,6 +70,10 @@ final class SwitchViewModel: ObservableObject {
         self.intent = intent
         self.isEnabled = isEnabled
         self.images = images
+        self.displayedTextViewModel = dependencies.makeDisplayedTextViewModel(
+            text: text,
+            attributedText: attributedText
+        )
 
         self.dependencies = dependencies
     }
@@ -106,31 +115,51 @@ final class SwitchViewModel: ObservableObject {
     }
 
     func set(alignment: SwitchAlignment) {
-        self.alignment = alignment
+        if self.alignment != alignment {
+            self.alignment = alignment
 
-        self.alignmentDidUpdate()
+            self.alignmentDidUpdate()
+        }
     }
 
     func set(intent: SwitchIntent) {
-        self.intent = intent
+        if self.intent != intent {
+            self.intent = intent
 
-        self.colorsDidUpdate(reloadColorsFromUseCase: true)
+            self.colorsDidUpdate(reloadColorsFromUseCase: true)
+        }
     }
 
     func set(isEnabled: Bool) {
-        self.isEnabled = isEnabled
+        if self.isEnabled != isEnabled {
+            self.isEnabled = isEnabled
 
-        self.colorsDidUpdate()
-        self.toggleStateDidUpdate()
+            self.colorsDidUpdate()
+            self.toggleStateDidUpdate()
+        }
     }
 
     func set(images: SwitchImagesEither?) {
-        self.images = images
+        if self.images != images {
+            self.images = images
 
-        self.toggleDotImageDidUpdate()
+            self.toggleDotImageDidUpdate()
+        }
     }
 
-    // MARK: - Update
+    func set(text: String?) {
+        // Reload text properties (font and color) if consumer set a new text
+        if self.displayedTextViewModel.textChanged(text) && text != nil {
+            self.textFontDidUpdate()
+            self.textForegroundColorTokenDidUpdate()
+        }
+    }
+
+    func set(attributedText: AttributedStringEither?) {
+        self.displayedTextViewModel.attributedTextChanged(attributedText)
+    }
+
+    // MARK: - Private Update
 
     private func updateAll() {
         self.colorsDidUpdate(reloadColorsFromUseCase: true)
@@ -211,13 +240,5 @@ final class SwitchViewModel: ObservableObject {
 
     private func textFontDidUpdate() {
         self.textFontToken = self.theme.typography.body1
-    }
-
-    func textChanged(_ text: String?) {
-        // Reload text properties (font and color) if consumer set a new text
-        if text != nil {
-            self.textFontDidUpdate()
-            self.textForegroundColorTokenDidUpdate()
-        }
     }
 }
