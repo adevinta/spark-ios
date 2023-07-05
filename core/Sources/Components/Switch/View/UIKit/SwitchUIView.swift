@@ -36,6 +36,7 @@ public final class SwitchUIView: UIView {
             arrangedSubviews:
                 [
                     self.toggleView,
+                    self.spaceView,
                     self.textLabel
                 ]
         )
@@ -97,6 +98,8 @@ public final class SwitchUIView: UIView {
         view.backgroundColor = .clear
         return view
     }()
+
+    private let spaceView = UIView()
 
     private var textLabel: UILabel = {
         let label = UILabel()
@@ -218,10 +221,14 @@ public final class SwitchUIView: UIView {
     private var toggleDotTrailingConstraint: NSLayoutConstraint?
     private var toggleDotBottomConstraint: NSLayoutConstraint?
 
+    private var spaceWidthConstraint: NSLayoutConstraint?
+    private var spaceGreaterThanOrEqualWidthConstraint: NSLayoutConstraint?
+
     @ScaledUIMetric private var toggleHeight: CGFloat = Constants.ToggleSizes.height
     @ScaledUIMetric private var toggleWidth: CGFloat = Constants.ToggleSizes.width
     @ScaledUIMetric private var toggleSpacing: CGFloat = Constants.ToggleSizes.padding
     @ScaledUIMetric private var toggleDotSpacing: CGFloat = Constants.toggleDotImagePadding
+    @ScaledUIMetric private var spaceWidth: CGFloat = .zero
 
     private var subscriptions = Set<AnyCancellable>()
 
@@ -454,8 +461,11 @@ public final class SwitchUIView: UIView {
         self.setupToggleDotViewConstraints()
         self.setupToggleDotImageViewConstraints()
 
+        // Space View
+        self.setupSpaceViewConstraints()
+
         // Text Label
-        self.setuptTextLabelContraints()
+        self.setupTextLabelContraints()
     }
 
     private func setupViewConstraints() {
@@ -510,7 +520,14 @@ public final class SwitchUIView: UIView {
         self.toggleDotBottomConstraint?.isActive = true
     }
 
-    private func setuptTextLabelContraints() {
+    private func setupSpaceViewConstraints() {
+        self.spaceView.translatesAutoresizingMaskIntoConstraints = false
+
+        self.spaceWidthConstraint = self.spaceView.widthAnchor.constraint(equalToConstant: self.spaceWidth)
+        self.spaceGreaterThanOrEqualWidthConstraint = self.spaceView.widthAnchor.constraint(greaterThanOrEqualToConstant: self.spaceWidth)
+    }
+
+    private func setupTextLabelContraints() {
         self.textLabel.translatesAutoresizingMaskIntoConstraints = false
         self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: self.toggleView.heightAnchor).isActive = true
     }
@@ -583,6 +600,23 @@ public final class SwitchUIView: UIView {
             self.toggleDotBottomConstraint?.constant = -spacing
 
             self.toggleDotImageView.layoutIfNeeded()
+        }
+    }
+
+    private func updateSpaceViewWidth() {
+        // Reload spacing only if value changed and constraint is active
+        let width = self._spaceWidth.wrappedValue
+
+        if self.spaceWidthConstraint?.isActive == true &&
+            width != self.spaceWidthConstraint?.constant {
+            self.spaceWidthConstraint?.constant = width
+            self.spaceView.layoutIfNeeded()
+        }
+
+        if self.spaceGreaterThanOrEqualWidthConstraint?.isActive == true &&
+            width != self.spaceGreaterThanOrEqualWidthConstraint?.constant {
+            self.spaceGreaterThanOrEqualWidthConstraint?.constant = width
+            self.spaceView.layoutIfNeeded()
         }
     }
 
@@ -667,16 +701,16 @@ public final class SwitchUIView: UIView {
         self.subscribeTo(self.viewModel.$isToggleOnLeft) { [weak self] isToggleOnLeft in
             guard let self, let isToggleOnLeft else { return }
 
-            if isToggleOnLeft {
-                self.contentStackView.addArrangedSubview(self.textLabel)
-            } else {
-                self.contentStackView.addArrangedSubview(self.toggleView)
-            }
+            self.contentStackView.semanticContentAttribute = isToggleOnLeft ? .forceLeftToRight : .forceRightToLeft
+            self.spaceWidthConstraint?.isActive = isToggleOnLeft
+            self.spaceGreaterThanOrEqualWidthConstraint?.isActive = !isToggleOnLeft
         }
         self.subscribeTo(self.viewModel.$horizontalSpacing) { [weak self] horizontalSpacing in
             guard let self, let horizontalSpacing else { return }
 
-            self.contentStackView.spacing = horizontalSpacing
+            self.spaceWidth = horizontalSpacing
+            self._spaceWidth.update(traitCollection: self.traitCollection)
+            self.updateSpaceViewWidth()
         }
 
         // **
@@ -752,6 +786,9 @@ public final class SwitchUIView: UIView {
         self._toggleWidth.update(traitCollection: self.traitCollection)
         self._toggleHeight.update(traitCollection: self.traitCollection)
         self.updateToggleViewSize()
+
+        self._spaceWidth.update(traitCollection: self.traitCollection)
+        self.updateSpaceViewWidth()
     }
 
     // MARK: - Label priorities
