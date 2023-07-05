@@ -187,7 +187,7 @@ public final class SwitchUIView: UIView {
         }
         set {
             self.textLabel.text = newValue
-            self.viewModel.textChanged(newValue)
+            self.viewModel.set(text: newValue)
         }
     }
 
@@ -198,6 +198,7 @@ public final class SwitchUIView: UIView {
         }
         set {
             self.textLabel.attributedText = newValue
+            self.viewModel.set(attributedText: newValue.map { .left($0) })
         }
     }
 
@@ -386,7 +387,9 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intent: intent,
             isEnabled: isEnabled,
-            images: images.map { .left($0) }
+            images: images.map { .left($0) },
+            text: text,
+            attributedText: attributedText.map { .left($0) }
         )
 
         super.init(frame: .zero)

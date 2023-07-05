@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import SparkCore
 @testable import Spark
+import Combine
 
 final class SwitchViewModelTests: XCTestCase {
 
@@ -77,6 +78,21 @@ final class SwitchViewModelTests: XCTestCase {
         return mock
     }()
 
+    private var isOnChangedPublishedSinkCount = 0
+    private var isToggleInteractionEnabledPublishedSinkCount = 0
+    private var toggleOpacityPublishedSinkCount = 0
+    private var toggleBackgroundColorTokenPublishedSinkCount = 0
+    private var toggleDotBackgroundColorTokenPublishedSinkCount = 0
+    private var toggleDotForegroundColorTokenPublishedSinkCount = 0
+    private var textForegroundColorTokenPublishedSinkCount = 0
+    private var isToggleOnLeftPublishedSinkCount = 0
+    private var horizontalSpacingPublishedSinkCount = 0
+    private var showToggleLeftSpacePublishedSinkCount = 0
+    private var toggleDotImagePublishedSinkCount = 0
+    private var textFontTokenPublishedSinkCount = 0
+
+    private var subscriptions = Set<AnyCancellable>()
+
     // MARK: - Init Tests
 
     func test_properties_on_init() throws {
@@ -94,6 +110,8 @@ final class SwitchViewModelTests: XCTestCase {
             isEnabled: isEnabledMock,
             images: self.imagesMock
         )
+
+        self.subscribeAllPublishedValues(on: viewModel)
 
         // THEN
         XCTAssertEqual(viewModel.isOn,
@@ -117,6 +135,22 @@ final class SwitchViewModelTests: XCTestCase {
 
         XCTAssertNil(viewModel.isOnChanged,
                      "Wrong isOnChanged value")
+
+        // Published count
+        self.testAllPublishedSinkCount(
+            expectedIsOnChangedPublishedSinkCount: 1,
+            expectedIsToggleInteractionEnabledPublishedSinkCount: 1,
+            expectedToggleOpacityPublishedSinkCount: 1,
+            expectedToggleBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotForegroundColorTokenPublishedSinkCount: 1,
+            expectedTextForegroundColorTokenPublishedSinkCount: 1,
+            expectedIsToggleOnLeftPublishedSinkCount: 1,
+            expectedHorizontalSpacingPublishedSinkCount: 1,
+            expectedShowToggleLeftSpacePublishedSinkCount: 1,
+            expectedToggleDotImagePublishedSinkCount: 1,
+            expectedTextFontTokenPublishedSinkCount: 1
+        )
 
         // **
         // Use Cases
@@ -156,11 +190,15 @@ final class SwitchViewModelTests: XCTestCase {
             images: self.imagesMock
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
         viewModel.load()
 
         // THEN
         // **
         // Published properties
+        XCTAssertNil(viewModel.isOnChanged,
+                     "Wrong isOnChanged value")
         self.testToggleState(on: viewModel)
         self.testColors(on: viewModel)
         self.testPosition(on: viewModel)
@@ -168,6 +206,21 @@ final class SwitchViewModelTests: XCTestCase {
         self.testTextFont(on: viewModel, theme: self.themeMock)
         XCTAssertTrue(viewModel.showToggleLeftSpace == true,
                       "Wrong isToggleOnLeft value")
+
+        self.testAllPublishedSinkCount(
+            expectedIsOnChangedPublishedSinkCount: 1,
+            expectedIsToggleInteractionEnabledPublishedSinkCount: 2,
+            expectedToggleOpacityPublishedSinkCount: 2,
+            expectedToggleBackgroundColorTokenPublishedSinkCount: 2,
+            expectedToggleDotBackgroundColorTokenPublishedSinkCount: 2,
+            expectedToggleDotForegroundColorTokenPublishedSinkCount: 2,
+            expectedTextForegroundColorTokenPublishedSinkCount: 2,
+            expectedIsToggleOnLeftPublishedSinkCount: 2,
+            expectedHorizontalSpacingPublishedSinkCount: 2,
+            expectedShowToggleLeftSpacePublishedSinkCount: 2,
+            expectedToggleDotImagePublishedSinkCount: 2,
+            expectedTextFontTokenPublishedSinkCount: 2
+        )
         // **
 
         // **
@@ -215,6 +268,8 @@ final class SwitchViewModelTests: XCTestCase {
             images: imagesMock
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
         viewModel.load()
 
         // Reset all UseCase mock
@@ -228,19 +283,26 @@ final class SwitchViewModelTests: XCTestCase {
                        expectedIsOn,
                        "Wrong isOn value")
 
+        // **
+        // Published properties
         XCTAssertEqual(viewModel.isOnChanged,
                        expectedIsOn,
                        "Wrong isOnChanged value")
-
-        // **
-        // Published properties
-        self.testToggleState(on: viewModel)
-        self.testColors(on: viewModel)
-        self.testPosition(on: viewModel)
-        self.testToggleDotImage(on: viewModel, shouldContainsImages: false)
-        self.testTextFont(on: viewModel, theme: self.themeMock)
         XCTAssertTrue(viewModel.showToggleLeftSpace == true,
                       "Wrong isToggleOnLeft value")
+
+        self.testAllPublishedSinkCount(
+            expectedIsOnChangedPublishedSinkCount: 1,
+            expectedIsToggleInteractionEnabledPublishedSinkCount: 1,
+            expectedToggleOpacityPublishedSinkCount: 1,
+            expectedToggleBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotForegroundColorTokenPublishedSinkCount: 1,
+            expectedTextForegroundColorTokenPublishedSinkCount: 1,
+            expectedIsToggleOnLeftPublishedSinkCount: 1,
+            expectedShowToggleLeftSpacePublishedSinkCount: 1,
+            expectedToggleDotImagePublishedSinkCount: 1
+        )
         // **
 
         // **
@@ -276,6 +338,8 @@ final class SwitchViewModelTests: XCTestCase {
             images: imagesMock
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
         viewModel.load()
 
         // Reset all UseCase mock
@@ -289,8 +353,8 @@ final class SwitchViewModelTests: XCTestCase {
                        isOnMock,
                        "Wrong isOn value")
 
-        XCTAssertNil(viewModel.isOnChanged,
-                     "Wrong isOnChanged value")
+        // Published count
+        self.testAllPublishedSinkCount()
 
         // **
         // Use Cases
@@ -326,6 +390,10 @@ final class SwitchViewModelTests: XCTestCase {
             images: imagesMock
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
+        viewModel.load() // Needed to get colors from usecase one time
+
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
 
@@ -338,14 +406,20 @@ final class SwitchViewModelTests: XCTestCase {
                            "Wrong theme value")
 
         // **
-        // Published properties
-        self.testToggleState(on: viewModel)
-        self.testColors(on: viewModel)
-        self.testPosition(on: viewModel)
-        self.testToggleDotImage(on: viewModel, shouldContainsImages: false)
-        self.testTextFont(on: viewModel, theme: newTheme)
-        XCTAssertTrue(viewModel.showToggleLeftSpace == false,
-                      "Wrong isToggleOnLeft value")
+        // Published count
+        self.testAllPublishedSinkCount(
+            expectedIsToggleInteractionEnabledPublishedSinkCount: 1,
+            expectedToggleOpacityPublishedSinkCount: 1,
+            expectedToggleBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotForegroundColorTokenPublishedSinkCount: 1,
+            expectedTextForegroundColorTokenPublishedSinkCount: 1,
+            expectedIsToggleOnLeftPublishedSinkCount: 1,
+            expectedHorizontalSpacingPublishedSinkCount: 1,
+            expectedShowToggleLeftSpacePublishedSinkCount: 1,
+            expectedToggleDotImagePublishedSinkCount: 1,
+            expectedTextFontTokenPublishedSinkCount: 1
+        )
         // **
 
         // **
@@ -379,6 +453,10 @@ final class SwitchViewModelTests: XCTestCase {
             alignment: .left
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
+        viewModel.load() // Needed to get colors from usecase one time
+
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
 
@@ -392,6 +470,12 @@ final class SwitchViewModelTests: XCTestCase {
 
         // Published properties
         self.testPosition(on: viewModel)
+
+        // Published count
+        self.testAllPublishedSinkCount(
+            expectedIsToggleOnLeftPublishedSinkCount: 1,
+            expectedHorizontalSpacingPublishedSinkCount: 1
+        )
 
         // Use Cases
         self.testGetPositionUseCaseMock(
@@ -411,6 +495,10 @@ final class SwitchViewModelTests: XCTestCase {
             intent: .neutral
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
+        viewModel.load() // Needed to get colors from usecase one time
+
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
 
@@ -422,8 +510,13 @@ final class SwitchViewModelTests: XCTestCase {
                        newIntent,
                        "Wrong intent value")
 
-        // Published properties
-        self.testColors(on: viewModel)
+        // Published count
+        self.testAllPublishedSinkCount(
+            expectedToggleBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotForegroundColorTokenPublishedSinkCount: 1,
+            expectedTextForegroundColorTokenPublishedSinkCount: 1
+        )
 
         // **
         // Use Cases
@@ -450,6 +543,8 @@ final class SwitchViewModelTests: XCTestCase {
             isEnabled: true
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all UseCase mock
@@ -463,11 +558,15 @@ final class SwitchViewModelTests: XCTestCase {
                        newIsEnabledMock,
                        "Wrong isEnabled value")
 
-        // **
-        // Published properties
-        self.testColors(on: viewModel)
-        self.testToggleState(on: viewModel)
-        // **
+        // Published count
+        self.testAllPublishedSinkCount(
+            expectedIsToggleInteractionEnabledPublishedSinkCount: 1,
+            expectedToggleOpacityPublishedSinkCount: 1,
+            expectedToggleBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotBackgroundColorTokenPublishedSinkCount: 1,
+            expectedToggleDotForegroundColorTokenPublishedSinkCount: 1,
+            expectedTextForegroundColorTokenPublishedSinkCount: 1
+        )
 
         // **
         // Use Cases
@@ -495,6 +594,10 @@ final class SwitchViewModelTests: XCTestCase {
             images: nil
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
+        viewModel.load() // Needed to get colors from usecase one time
+
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
 
@@ -506,8 +609,17 @@ final class SwitchViewModelTests: XCTestCase {
                        newVariantMock,
                        "Wrong images value")
 
+        // **
         // Published properties
-        self.testToggleDotImage(on: viewModel, shouldContainsImages: true)
+        self.testToggleDotImage(
+            on: viewModel,
+            shouldContainsImages: true
+        )
+
+        self.testAllPublishedSinkCount(
+            expectedToggleDotImagePublishedSinkCount: 1
+        )
+        // **
 
         // Use Cases
         self.testGetImageUseCaseMock(
@@ -525,6 +637,10 @@ final class SwitchViewModelTests: XCTestCase {
             images: nil
         )
 
+        self.subscribeAllPublishedValues(on: viewModel)
+
+        viewModel.load() // Needed to get colors from usecase one time
+
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
 
@@ -535,14 +651,22 @@ final class SwitchViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.images?.leftValue,
                      "Wrong images value")
 
+        // **
         // Published properties
         self.testToggleDotImage(on: viewModel, shouldContainsImages: false)
+
+        self.testAllPublishedSinkCount(
+            expectedToggleDotImagePublishedSinkCount: 0
+        )
+        // **
 
         // Use Cases
         self.testGetImageUseCaseMock(
             numberOfCalls: 0
         )
     }
+
+    // TODO: tester textChanged
 }
 
 // MARK: - Class to test
@@ -554,13 +678,22 @@ private extension SwitchViewModelTests {
         alignment: SwitchAlignment = .left,
         intent: SwitchIntent = .alert,
         isEnabled: Bool = true,
-        images: SwitchUIImages? = nil
+        images: SwitchUIImages? = nil,
+        text: String? = nil,
+        attributedText: NSAttributedString? = nil
     ) -> SwitchViewModel {
         let imagesEither: SwitchImagesEither?
         if let images {
             imagesEither = .left(images)
         } else {
             imagesEither = nil
+        }
+
+        let attributedTextEither: AttributedStringEither?
+        if let attributedText {
+            attributedTextEither = .left(attributedText)
+        } else {
+            attributedTextEither = nil
         }
 
         return .init(
@@ -570,14 +703,124 @@ private extension SwitchViewModelTests {
             intent: intent,
             isEnabled: isEnabled,
             images:  imagesEither,
+            text: text,
+            attributedText: attributedTextEither,
             dependencies: self.dependenciesMock
         )
     }
 }
 
-// MARK: - Testing Data
+// MARK: - Testing Published
 
 private extension SwitchViewModelTests {
+
+    private func subscribeAllPublishedValues(on viewModel: SwitchViewModel) {
+        viewModel.$isOnChanged.count().sink { value in
+            print("LOGROB count \(value)")
+        }.store(in: &self.subscriptions)
+
+        viewModel.$isOnChanged.sink { _ in
+            self.isOnChangedPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$isToggleInteractionEnabled.sink { _ in
+            self.isToggleInteractionEnabledPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$toggleOpacity.sink { _ in
+            self.toggleOpacityPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$toggleBackgroundColorToken.sink { _ in
+            self.toggleBackgroundColorTokenPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$toggleDotBackgroundColorToken.sink { _ in
+            self.toggleDotBackgroundColorTokenPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$toggleDotForegroundColorToken.sink { _ in
+            self.toggleDotForegroundColorTokenPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$textForegroundColorToken.sink { _ in
+            self.textForegroundColorTokenPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$isToggleOnLeft.sink { _ in
+            self.isToggleOnLeftPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$horizontalSpacing.sink { _ in
+            self.horizontalSpacingPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$showToggleLeftSpace.sink { _ in
+            self.showToggleLeftSpacePublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$toggleDotImage.sink { _ in
+            self.toggleDotImagePublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+
+        viewModel.$textFontToken.sink { _ in
+            self.textFontTokenPublishedSinkCount += 1
+        }.store(in: &self.subscriptions)
+    }
+
+    func testAllPublishedSinkCount(
+        expectedIsOnChangedPublishedSinkCount: Int = 0,
+        expectedIsToggleInteractionEnabledPublishedSinkCount: Int = 0,
+        expectedToggleOpacityPublishedSinkCount: Int = 0,
+        expectedToggleBackgroundColorTokenPublishedSinkCount: Int = 0,
+        expectedToggleDotBackgroundColorTokenPublishedSinkCount: Int = 0,
+        expectedToggleDotForegroundColorTokenPublishedSinkCount: Int = 0,
+        expectedTextForegroundColorTokenPublishedSinkCount: Int = 0,
+        expectedIsToggleOnLeftPublishedSinkCount: Int = 0,
+        expectedHorizontalSpacingPublishedSinkCount: Int = 0,
+        expectedShowToggleLeftSpacePublishedSinkCount: Int = 0,
+        expectedToggleDotImagePublishedSinkCount: Int = 0,
+        expectedTextFontTokenPublishedSinkCount: Int = 0
+    ) {
+        XCTAssertEqual(self.isOnChangedPublishedSinkCount,
+                       expectedIsOnChangedPublishedSinkCount,
+                       "Wrong isOnChangedPublishedSinkCount value")
+
+        XCTAssertEqual(self.isToggleInteractionEnabledPublishedSinkCount,
+                       expectedIsToggleInteractionEnabledPublishedSinkCount,
+                       "Wrong isToggleInteractionEnabledPublishedSinkCount value")
+        XCTAssertEqual(self.toggleOpacityPublishedSinkCount,
+                       expectedToggleOpacityPublishedSinkCount,
+                       "Wrong toggleOpacityPublishedSinkCount value")
+
+        XCTAssertEqual(self.toggleBackgroundColorTokenPublishedSinkCount,
+                       expectedToggleBackgroundColorTokenPublishedSinkCount,
+                       "Wrong toggleBackgroundColorTokenPublishedSinkCount value")
+        XCTAssertEqual(self.toggleDotBackgroundColorTokenPublishedSinkCount,
+                       expectedToggleDotBackgroundColorTokenPublishedSinkCount,
+                       "Wrong toggleDotBackgroundColorTokenPublishedSinkCount value")
+        XCTAssertEqual(self.toggleDotForegroundColorTokenPublishedSinkCount,
+                       expectedToggleDotForegroundColorTokenPublishedSinkCount,
+                       "Wrong toggleDotForegroundColorTokenPublishedSinkCount value")
+        XCTAssertEqual(self.textForegroundColorTokenPublishedSinkCount,
+                       expectedTextForegroundColorTokenPublishedSinkCount,
+                       "Wrong textForegroundColorTokenPublishedSinkCount value")
+
+        XCTAssertEqual(self.horizontalSpacingPublishedSinkCount,
+                       expectedHorizontalSpacingPublishedSinkCount,
+                       "Wrong horizontalSpacingPublishedSinkCount value")
+        XCTAssertEqual(self.showToggleLeftSpacePublishedSinkCount,
+                       expectedShowToggleLeftSpacePublishedSinkCount,
+                       "Wrong showToggleLeftSpacePublishedSinkCount value")
+
+        XCTAssertEqual(self.toggleDotImagePublishedSinkCount,
+                       expectedToggleDotImagePublishedSinkCount,
+                       "Wrong toggleDotImagePublishedSinkCount value")
+
+        XCTAssertEqual(self.textFontTokenPublishedSinkCount,
+                       expectedTextFontTokenPublishedSinkCount,
+                       "Wrong textFontTokenPublishedSinkCount value")
+    }
 
     func testPosition(on viewModel: SwitchViewModel) {
         XCTAssertEqual(viewModel.isToggleOnLeft,
@@ -764,24 +1007,39 @@ private extension SwitchViewModelTests {
 
     func resetDependenciesMockAfterInitViewModel() {
         // Clear UseCases Mock
-        self.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsCallsCount = 0
-        self.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsReceivedArguments = nil
-        self.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsReceivedInvocations = []
+        let useCases: [ResetGeneratedMock] = [
+            self.getColorsUseCaseMock,
+            self.getImageUseCaseMock,
+            self.getToggleColorUseCaseMock,
+            self.getPositionUseCaseMock
+        ]
+        useCases.forEach { $0.reset() }
 
-        self.getImageUseCaseMock.executeWithIsOnAndImagesCallsCount = 0
-        self.getImageUseCaseMock.executeWithIsOnAndImagesReceivedArguments = nil
-        self.getImageUseCaseMock.executeWithIsOnAndImagesReceivedInvocations = []
+        // Reset published sink counter
+        self.isOnChangedPublishedSinkCount = 0
+        self.isToggleInteractionEnabledPublishedSinkCount = 0
+        self.toggleOpacityPublishedSinkCount = 0
+        self.toggleBackgroundColorTokenPublishedSinkCount = 0
+        self.toggleDotBackgroundColorTokenPublishedSinkCount = 0
+        self.toggleDotForegroundColorTokenPublishedSinkCount = 0
+        self.textForegroundColorTokenPublishedSinkCount = 0
+        self.isToggleOnLeftPublishedSinkCount = 0
+        self.horizontalSpacingPublishedSinkCount = 0
+        self.showToggleLeftSpacePublishedSinkCount = 0
+        self.toggleDotImagePublishedSinkCount = 0
+        self.textFontTokenPublishedSinkCount = 0
 
-        self.getToggleColorUseCaseMock.executeWithIsOnAndStatusAndStateColorCallsCount = 0
-        self.getToggleColorUseCaseMock.executeWithIsOnAndStatusAndStateColorReceivedArguments = nil
-        self.getToggleColorUseCaseMock.executeWithIsOnAndStatusAndStateColorReceivedInvocations = []
-
-        self.getPositionUseCaseMock.executeWithAlignmentAndSpacingCallsCount = 0
-        self.getPositionUseCaseMock.executeWithAlignmentAndSpacingReceivedArguments = nil
-        self.getPositionUseCaseMock.executeWithAlignmentAndSpacingReceivedInvocations = []
-
-        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount = 0
-        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments = nil
-        self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedInvocations = []
     }
+}
+
+extension Publisher {
+
+    func azd() {
+        self.count()
+    }
+
+
+
+
+
 }
