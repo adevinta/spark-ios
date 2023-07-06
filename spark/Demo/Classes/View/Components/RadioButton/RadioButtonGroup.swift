@@ -14,17 +14,16 @@ struct RadioButtonGroup: View {
     // MARK: - Properties
 
     @State var selectedID: Int = 1
+    @State var rightTextAligment: Bool = false
+    @State var dummyBinding: Int = 1
+    @State var groupState: RadioButtonGroupState = .enabled
+    @State var stateSheetIsPresented = false
 
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     var theme: Theme {
         self.themePublisher.theme
     }
-
-    @State var rightTextAligment: Bool = false
-    @State var dummyBinding: Int = 1
-    @State var groupState: RadioButtonGroupState = .enabled
-    @State var stateSheetIsPresented = false
 
     // MARK: - View
     var body: some View {

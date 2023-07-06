@@ -14,7 +14,6 @@ import SwiftUI
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
 
     // MARK: - Private Properties
-    private let items: [RadioButtonUIItem<ID>]
     private var itemSpacingConstraints = [NSLayoutConstraint]()
     private var itemLabelSpacingConstraints = [NSLayoutConstraint]()
     private var allConstraints = [NSLayoutConstraint]()
@@ -56,6 +55,12 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }()
 
     // MARK: - Public Properties
+    public var items: [RadioButtonUIItem<ID>] {
+        didSet {
+            self.didUpdateItems()
+        }
+    }
+
 
     public var title: String? {
         didSet {
@@ -213,17 +218,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     // MARK: Private Methods
 
     private func arrangeView() {
-        self.radioButtonViews = items.map {
-            let radioButtonView = RadioButtonUIView(theme: theme,
-                                                    id: $0.id,
-                                                    label: $0.label,
-                                                    selectedID: self.backingSelectedID,
-                                                    groupState: self.viewModel.state,
-                                                    labelPosition: self.radioButtonLabelPosition
-            )
-            radioButtonView.translatesAutoresizingMaskIntoConstraints = false
-            return radioButtonView
-        }
+        self.createRadioButtonViews()
 
         self.setTextOf(label: self.titleLabel,
                        title: self.title,
@@ -238,6 +233,32 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                        title: self.supplementaryText,
                        font: self.viewModel.sublabelFont.uiFont,
                        color: self.viewModel.sublabelColor.uiColor)
+    }
+
+    private func didUpdateItems() {
+        NSLayoutConstraint.deactivate(self.allConstraints)
+        for view in self.radioButtonViews {
+            view.removeFromSuperview()
+        }
+        createRadioButtonViews()
+        for radioButtonView in radioButtonViews {
+            self.addSubview(radioButtonView)
+        }
+        setupConstraints()
+    }
+
+    private func createRadioButtonViews() {
+        self.radioButtonViews = items.map {
+            let radioButtonView = RadioButtonUIView(theme: theme,
+                                                    id: $0.id,
+                                                    label: $0.label,
+                                                    selectedID: self.backingSelectedID,
+                                                    groupState: self.viewModel.state,
+                                                    labelPosition: self.radioButtonLabelPosition
+            )
+            radioButtonView.translatesAutoresizingMaskIntoConstraints = false
+            return radioButtonView
+        }
     }
 
     private func setupConstraints() {
@@ -319,7 +340,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             }
             constraints.append(topConstraint)
             radioButtonAnchors.append(radioButtonView.bottomAnchor)
-//            constraints.append(radioButtonView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor))
 
             if index == 0 {
                 constraints.append(radioButtonView.leadingAnchor.constraint(equalTo: previousLayoutLeadingAnchor))
@@ -370,15 +390,13 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
 
         self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
-            self?.itemSpacingConstraints.forEach{ constraint in
-                constraint.constant = spacing
-            }
+            self?._spacing = ScaledUIMetric(wrappedValue: spacing)
+            self?.updateConstraints()
         }
 
         self.viewModel.$labelSpacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
-            self?.itemLabelSpacingConstraints.forEach{ constraint in
-                constraint.constant = spacing
-            }
+            self?._labelSpacing = ScaledUIMetric(wrappedValue: spacing)
+            self?.updateConstraints()
         }
     }
     

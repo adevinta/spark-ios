@@ -45,7 +45,6 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
 
     @ScaledMetric private var spacing: CGFloat
     @ScaledMetric private var titleSpacing: CGFloat
-//    @ScaledMetric private var titlePadding = RadioButtonConstants.radioButtonPadding
 
     // MARK: - Initialization
 
