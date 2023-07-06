@@ -59,10 +59,10 @@ public final class BadgeViewModel: ObservableObject {
     // MARK: - Internal Published Properties
     @Published var text: String
     @Published var textFont: TypographyFontToken
-    @Published var textColor: ColorToken
+    @Published var textColor: any ColorToken
     @Published var isBadgeEmpty: Bool
 
-    @Published var backgroundColor: ColorToken
+    @Published var backgroundColor: any ColorToken
     @Published var border: BadgeBorder
 
     @Published var isBorderVisible: Bool

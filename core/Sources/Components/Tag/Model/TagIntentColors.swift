@@ -8,20 +8,20 @@
 
 // sourcery: AutoMockable
 protocol TagIntentColorables {
-    var color: ColorToken { get }
-    var onColor: ColorToken { get }
-    var containerColor: ColorToken { get }
-    var onContainerColor: ColorToken { get }
-    var surfaceColor: ColorToken { get }
+    var color: any ColorToken { get }
+    var onColor: any ColorToken { get }
+    var containerColor: any ColorToken { get }
+    var onContainerColor: any ColorToken { get }
+    var surfaceColor: any ColorToken { get }
 }
 
 struct TagIntentColors: TagIntentColorables {
 
     // MARK: - Properties
 
-    let color: ColorToken
-    let onColor: ColorToken
-    let containerColor: ColorToken
-    let onContainerColor: ColorToken
-    let surfaceColor: ColorToken
+    let color: any ColorToken
+    let onColor: any ColorToken
+    let containerColor: any ColorToken
+    let onContainerColor: any ColorToken
+    let surfaceColor: any ColorToken
 }

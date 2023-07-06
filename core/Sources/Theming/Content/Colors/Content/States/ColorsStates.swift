@@ -11,32 +11,32 @@ public protocol ColorsStates {
 
     // MARK: - Primary
 
-    var primaryPressed: ColorToken { get }
-    var primaryVariantPressed: ColorToken { get }
-    var primaryContainerPressed: ColorToken { get }
+    var primaryPressed: any ColorToken { get }
+    var primaryVariantPressed: any ColorToken { get }
+    var primaryContainerPressed: any ColorToken { get }
 
     // MARK: - Secondary
 
-    var secondaryPressed: ColorToken { get }
-    var secondaryVariantPressed: ColorToken { get }
-    var secondaryContainerPressed: ColorToken { get }
+    var secondaryPressed: any ColorToken { get }
+    var secondaryVariantPressed: any ColorToken { get }
+    var secondaryContainerPressed: any ColorToken { get }
 
     // MARK: - Base
 
-    var surfacePressed: ColorToken { get }
-    var surfaceInversePressed: ColorToken { get }
-    var outlinePressed: ColorToken { get }
+    var surfacePressed: any ColorToken { get }
+    var surfaceInversePressed: any ColorToken { get }
+    var outlinePressed: any ColorToken { get }
 
     // MARK: - Feedback
 
-    var successPressed: ColorToken { get }
-    var successContainerPressed: ColorToken { get }
-    var alertPressed: ColorToken { get }
-    var alertContainerPressed: ColorToken { get }
-    var errorPressed: ColorToken { get }
-    var errorContainerPressed: ColorToken { get }
-    var infoPressed: ColorToken { get }
-    var infoContainerPressed: ColorToken { get }
-    var neutralPressed: ColorToken { get }
-    var neutralContainerPressed: ColorToken { get }
+    var successPressed: any ColorToken { get }
+    var successContainerPressed: any ColorToken { get }
+    var alertPressed: any ColorToken { get }
+    var alertContainerPressed: any ColorToken { get }
+    var errorPressed: any ColorToken { get }
+    var errorContainerPressed: any ColorToken { get }
+    var infoPressed: any ColorToken { get }
+    var infoContainerPressed: any ColorToken { get }
+    var neutralPressed: any ColorToken { get }
+    var neutralContainerPressed: any ColorToken { get }
 }

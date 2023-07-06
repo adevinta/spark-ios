@@ -12,7 +12,7 @@ import SparkCore
 
 final class SparkColorsTests: XCTestCase {
 
-    private lazy var tokens: [SparkCore.ColorToken] = self.getAllColorTokens()
+    private lazy var tokens: [any ColorToken] = self.getAllColorTokens()
 
     // MARK: - Tests
     func testUIColors() {
@@ -36,17 +36,17 @@ final class SparkColorsTests: XCTestCase {
     }
 
     // MARK: - Get Colors
-    private func getAllColorTokens() -> [SparkCore.ColorToken] {
+    private func getAllColorTokens() -> [any ColorToken] {
         let mirror = Mirror(reflecting: SparkColors())
         return mirror.children.flatMap { (_, value: Any) in
             return self.getColorTokens(from: value)
         }
     }
 
-    private func getColorTokens(from object: Any) -> [SparkCore.ColorToken] {
+    private func getColorTokens(from object: Any) -> [any ColorToken] {
         let mirror = Mirror(reflecting: object)
         return mirror.children.compactMap { (_, value: Any) in
-            return value as? SparkCore.ColorToken
+            return value as? any ColorToken
         }
     }
 }

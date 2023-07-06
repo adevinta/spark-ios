@@ -11,25 +11,25 @@ public protocol ColorsBase {
 
     // MARK: - Background
 
-    var background: ColorToken { get }
-    var onBackground: ColorToken { get }
-    var backgroundVariant: ColorToken { get }
-    var onBackgroundVariant: ColorToken { get }
+    var background: any ColorToken { get }
+    var onBackground: any ColorToken { get }
+    var backgroundVariant: any ColorToken { get }
+    var onBackgroundVariant: any ColorToken { get }
 
     // MARK: - Surface
 
-    var surface: ColorToken { get }
-    var onSurface: ColorToken { get }
-    var surfaceInverse: ColorToken { get }
-    var onSurfaceInverse: ColorToken { get }
+    var surface: any ColorToken { get }
+    var onSurface: any ColorToken { get }
+    var surfaceInverse: any ColorToken { get }
+    var onSurfaceInverse: any ColorToken { get }
 
     // MARK: - Outline
 
-    var outline: ColorToken { get }
-    var outlineHigh: ColorToken { get }
+    var outline: any ColorToken { get }
+    var outlineHigh: any ColorToken { get }
 
     // MARK: - Overlay
 
-    var overlay: ColorToken { get }
-    var onOverlay: ColorToken { get }
+    var overlay: any ColorToken { get }
+    var onOverlay: any ColorToken { get }
 }

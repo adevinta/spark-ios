@@ -10,7 +10,7 @@ import UIKit
 
 extension UIView {
 
-    func setBorderColor(from colorToken: ColorToken) {
+    func setBorderColor(from colorToken: any ColorToken) {
         self.layer.borderColor = colorToken.uiColor.cgColor
     }
 

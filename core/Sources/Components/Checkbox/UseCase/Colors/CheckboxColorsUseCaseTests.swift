@@ -17,7 +17,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
     func test_execute_for_all_variant_cases() throws {
         // GIVEN
         let intentColorsMock = CheckboxStateColorablesGeneratedMock()
-        intentColorsMock.underlyingTextColor  = ColorTokenGeneratedMock()
+        intentColorsMock.underlyingTextColor = ColorTokenGeneratedMock()
         intentColorsMock.underlyingPressedBorderColor = ColorTokenGeneratedMock()
         intentColorsMock.underlyingCheckboxColor = ColorTokenGeneratedMock()
         intentColorsMock.underlyingCheckboxIconColor = ColorTokenGeneratedMock()
@@ -120,10 +120,10 @@ private struct Tester {
     }
 
     private static func testColor(
-        givenColorProperty: ColorToken?,
+        givenColorProperty: (any ColorToken)?,
         givenPropertyName: String,
         givenState: SelectButtonState,
-        expectedColorToken: ColorToken?
+        expectedColorToken: (any ColorToken)?
     ) throws {
         let errorPrefixMessage = " \(givenPropertyName) for .\(givenState) case"
 
@@ -146,8 +146,8 @@ private struct Tester {
 private struct GetColors {
     let givenState: SelectButtonState
 
-    let expectedTextColorToken: ColorToken
-    let expectedPressedBorderToken: ColorToken?
-    let expectedCheckboxTintToken: ColorToken
-    let expectedCheckboxIconToken: ColorToken
+    let expectedTextColorToken: any ColorToken
+    let expectedPressedBorderToken: (any ColorToken)?
+    let expectedCheckboxTintToken: any ColorToken
+    let expectedCheckboxIconToken: any ColorToken
 }

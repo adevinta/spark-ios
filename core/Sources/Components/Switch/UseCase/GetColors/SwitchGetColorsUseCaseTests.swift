@@ -25,8 +25,8 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         let getIntentColorUseCaseMock = SwitchGetIntentColorUseCaseableGeneratedMock()
         getIntentColorUseCaseMock.executeWithIntentColorAndColorsReturnValue = intentColorTokenMock
 
-        let expectedOnColorToken = FullColorTokenDefault(colorToken: intentColorTokenMock, opacity: 1)
-        let expectedOffColorToken = FullColorTokenDefault(colorToken: colorsMock.base.onSurface, opacity: dimsMock.dim4)
+        let expectedOnColorToken = intentColorTokenMock
+        let expectedOffColorToken = colorsMock.base.onSurface.opacity(dimsMock.dim4)
 
         let useCase = SwitchGetColorsUseCase(getIntentColorUseCase: getIntentColorUseCaseMock)
 
@@ -41,43 +41,43 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         // **
         // Status background colors
         XCTAssertEqual(
-            colors.toggleBackgroundColors.onColorToken as? FullColorTokenDefault,
-            expectedOnColorToken,
+            colors.toggleBackgroundColors.onColorToken.hashValue,
+            expectedOnColorToken.hashValue,
             "Wrong onColorToken on toggleBackgroundColors"
         )
         XCTAssertEqual(
-            colors.toggleBackgroundColors.offColorToken as? FullColorTokenDefault,
-            expectedOffColorToken,
+            colors.toggleBackgroundColors.offColorToken.hashValue,
+            expectedOffColorToken.hashValue,
             "Wrong offColorToken on toggleBackgroundColors"
         )
         // **
 
-        XCTAssertIdentical(
-            colors.toggleDotBackgroundColor as? ColorTokenGeneratedMock,
-            colorsMock.base.surface as? ColorTokenGeneratedMock,
+        XCTAssertEqual(
+            colors.toggleDotBackgroundColor.hashValue,
+            colorsMock.base.surface.hashValue,
             "Wrong toggleBackgroundColor color"
         )
 
         // **
         // State foreground colors
         XCTAssertEqual(
-            colors.toggleDotForegroundColors.onColorToken as? FullColorTokenDefault,
-            expectedOnColorToken,
+            colors.toggleDotForegroundColors.onColorToken.hashValue,
+            expectedOnColorToken.hashValue,
             "Wrong onColorToken on toggleDotForegroundColors"
         )
         XCTAssertEqual(
-            colors.toggleDotForegroundColors.offColorToken as? FullColorTokenDefault,
-            expectedOffColorToken,
+            colors.toggleDotForegroundColors.offColorToken.hashValue,
+            expectedOffColorToken.hashValue,
             "Wrong offColorToken on toggleDotForegroundColors"
         )
         // **
 
-        XCTAssertIdentical(
-            colors.textForegroundColor as? ColorTokenGeneratedMock,
-            colorsMock.base.onSurface as? ColorTokenGeneratedMock,
+        XCTAssertEqual(
+            colors.textForegroundColor.hashValue,
+            colorsMock.base.onSurface.hashValue,
             "Wrong textForegroundColor color"
         )
-        
+
         // **
         // GetIntentColorUseCase
         let getIntentColorUseCaseArgs = getIntentColorUseCaseMock.executeWithIntentColorAndColorsReceivedArguments

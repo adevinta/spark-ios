@@ -17,13 +17,13 @@ import Foundation
 public struct BadgeBorder {
     var width: CGFloat
     let radius: CGFloat
-    var color: ColorToken
+    var color: any ColorToken
 
     mutating func setWidth(_ width: CGFloat) {
         self.width = width
     }
 
-    mutating func setColor(_ color: ColorToken) {
+    mutating func setColor(_ color: any ColorToken) {
         self.color = color
     }
 }

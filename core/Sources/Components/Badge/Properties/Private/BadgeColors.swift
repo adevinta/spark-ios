@@ -13,8 +13,8 @@ struct BadgeColors {
 
     // MARK: - Properties
 
-    let backgroundColor: ColorToken
-    let borderColor: ColorToken
-    let foregroundColor: ColorToken
+    let backgroundColor: any ColorToken
+    let borderColor: any ColorToken
+    let foregroundColor: any ColorToken
 }
 

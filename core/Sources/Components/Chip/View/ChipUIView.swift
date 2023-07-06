@@ -392,7 +392,7 @@ public final class ChipUIView: UIView {
         self.dashBorder = nil
     }
 
-    private func addDashedBorder(borderColor: ColorToken) {
+    private func addDashedBorder(borderColor: any ColorToken) {
         self.dashBorder?.removeFromSuperlayer()
 
         let dashBorder = CAShapeLayer()

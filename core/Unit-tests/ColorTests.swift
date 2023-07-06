@@ -41,7 +41,7 @@ final class ColorTests: TestCase {
         self.testAllColors(colors: self.getColors(for: mirror))
     }
 
-    private func testAllColors(colors: [String: ColorToken], testName: String = #function) {
+    private func testAllColors(colors: [String: any ColorToken], testName: String = #function) {
         for value in colors {
             let view = Spacer().background(value.value.color)
             let vc = UIHostingController(rootView: view)
@@ -54,10 +54,10 @@ final class ColorTests: TestCase {
         }
     }
 
-    private func getColors(for mirror: Mirror) -> [String: ColorToken] {
-        var dictionary: [String: ColorToken] = [:]
+    private func getColors(for mirror: Mirror) -> [String: any ColorToken] {
+        var dictionary: [String: any ColorToken] = [:]
         for child in mirror.children {
-            guard let label = child.label, let color = child.value as? ColorToken else { continue }
+            guard let label = child.label, let color = child.value as? (any ColorToken) else { continue }
 
             dictionary[label] = color
         }

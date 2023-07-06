@@ -10,21 +10,21 @@ public struct ColorsPrimaryDefault: ColorsPrimary {
 
     // MARK: - Properties
 
-    public let primary: ColorToken
-    public let onPrimary: ColorToken
-    public let primaryVariant: ColorToken
-    public let onPrimaryVariant: ColorToken
-    public let primaryContainer: ColorToken
-    public let onPrimaryContainer: ColorToken
+    public let primary: any ColorToken
+    public let onPrimary: any ColorToken
+    public let primaryVariant: any ColorToken
+    public let onPrimaryVariant: any ColorToken
+    public let primaryContainer: any ColorToken
+    public let onPrimaryContainer: any ColorToken
 
     // MARK: - Init
 
-    public init(primary: ColorToken,
-                onPrimary: ColorToken,
-                primaryVariant: ColorToken,
-                onPrimaryVariant: ColorToken,
-                primaryContainer: ColorToken,
-                onPrimaryContainer: ColorToken) {
+    public init(primary: any ColorToken,
+                onPrimary: any ColorToken,
+                primaryVariant: any ColorToken,
+                onPrimaryVariant: any ColorToken,
+                primaryContainer: any ColorToken,
+                onPrimaryContainer: any ColorToken) {
         self.primary = primary
         self.onPrimary = onPrimary
         self.primaryVariant = primaryVariant

@@ -27,10 +27,10 @@ final class SwitchViewModel: ObservableObject {
     @Published private (set) var isToggleInteractionEnabled: Bool?
     @Published private (set) var toggleOpacity: CGFloat?
 
-    @Published private (set) var toggleBackgroundColorToken: ColorToken?
-    @Published private (set) var toggleDotBackgroundColorToken: ColorToken?
-    @Published private (set) var toggleDotForegroundColorToken: ColorToken?
-    @Published private (set) var textForegroundColorToken: ColorToken?
+    @Published private (set) var toggleBackgroundColorToken: (any ColorToken)?
+    @Published private (set) var toggleDotBackgroundColorToken: (any ColorToken)?
+    @Published private (set) var toggleDotForegroundColorToken: (any ColorToken)?
+    @Published private (set) var textForegroundColorToken: (any ColorToken)?
 
     @Published private (set) var isToggleOnLeft: Bool?
     @Published private (set) var horizontalSpacing: CGFloat?

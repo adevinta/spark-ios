@@ -141,10 +141,10 @@ private struct Tester {
     }
 
     private static func testColor(
-        givenColorProperty: ColorToken,
+        givenColorProperty: any ColorToken,
         givenPropertyName: String,
         givenIntentColor: TagIntentColor,
-        expectedColorToken: ColorToken
+        expectedColorToken: any ColorToken
     ) throws {
         let errorPrefixMessage = " \(givenPropertyName) for .\(givenIntentColor) case"
 
@@ -162,9 +162,9 @@ private struct TagGetIntentColors {
 
     let givenIntentColor: TagIntentColor
 
-    let expectedColor: ColorToken
-    let expectedOnColor: ColorToken
-    let expectedContainerColor: ColorToken
-    let expectedOnContainerColor: ColorToken
-    let expectedSurfaceColor: ColorToken
+    let expectedColor: any ColorToken
+    let expectedOnColor: any ColorToken
+    let expectedContainerColor: any ColorToken
+    let expectedOnContainerColor: any ColorToken
+    let expectedSurfaceColor: any ColorToken
 }

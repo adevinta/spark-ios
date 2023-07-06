@@ -44,7 +44,7 @@ private extension SwitchGetToggleColorUseCaseTests {
 
     func testExecute(
         givenIsOn: Bool,
-        expectedColorToken: ColorToken
+        expectedColorToken: any ColorToken
     ) throws {
         // GIVEN
         let errorPrefixMessage = " for \(givenIsOn) isOn"

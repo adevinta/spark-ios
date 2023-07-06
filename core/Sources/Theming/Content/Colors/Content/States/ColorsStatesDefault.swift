@@ -10,47 +10,47 @@ public struct ColorsStatesDefault: ColorsStates {
 
     // MARK: - Properties
 
-    public let primaryPressed: ColorToken
-    public let primaryVariantPressed: ColorToken
-    public let primaryContainerPressed: ColorToken
-    public let secondaryPressed: ColorToken
-    public let secondaryVariantPressed: ColorToken
-    public let secondaryContainerPressed: ColorToken
-    public let surfacePressed: ColorToken
-    public let surfaceInversePressed: ColorToken
-    public let outlinePressed: ColorToken
-    public let successPressed: ColorToken
-    public let successContainerPressed: ColorToken
-    public let alertPressed: ColorToken
-    public let alertContainerPressed: ColorToken
-    public let errorPressed: ColorToken
-    public let errorContainerPressed: ColorToken
-    public let infoPressed: ColorToken
-    public let infoContainerPressed: ColorToken
-    public let neutralPressed: ColorToken
-    public let neutralContainerPressed: ColorToken
+    public let primaryPressed: any ColorToken
+    public let primaryVariantPressed: any ColorToken
+    public let primaryContainerPressed: any ColorToken
+    public let secondaryPressed: any ColorToken
+    public let secondaryVariantPressed: any ColorToken
+    public let secondaryContainerPressed: any ColorToken
+    public let surfacePressed: any ColorToken
+    public let surfaceInversePressed: any ColorToken
+    public let outlinePressed: any ColorToken
+    public let successPressed: any ColorToken
+    public let successContainerPressed: any ColorToken
+    public let alertPressed: any ColorToken
+    public let alertContainerPressed: any ColorToken
+    public let errorPressed: any ColorToken
+    public let errorContainerPressed: any ColorToken
+    public let infoPressed: any ColorToken
+    public let infoContainerPressed: any ColorToken
+    public let neutralPressed: any ColorToken
+    public let neutralContainerPressed: any ColorToken
 
     // MARK: - Init
 
-    public init(primaryPressed: ColorToken,
-                primaryVariantPressed: ColorToken,
-                primaryContainerPressed: ColorToken,
-                secondaryPressed: ColorToken,
-                secondaryVariantPressed: ColorToken,
-                secondaryContainerPressed: ColorToken,
-                surfacePressed: ColorToken,
-                surfaceInversePressed: ColorToken,
-                outlinePressed: ColorToken,
-                successPressed: ColorToken,
-                successContainerPressed: ColorToken,
-                alertPressed: ColorToken,
-                alertContainerPressed: ColorToken,
-                errorPressed: ColorToken,
-                errorContainerPressed: ColorToken,
-                infoPressed: ColorToken,
-                infoContainerPressed: ColorToken,
-                neutralPressed: ColorToken,
-                neutralContainerPressed: ColorToken) {
+    public init(primaryPressed: any ColorToken,
+                primaryVariantPressed: any ColorToken,
+                primaryContainerPressed: any ColorToken,
+                secondaryPressed: any ColorToken,
+                secondaryVariantPressed: any ColorToken,
+                secondaryContainerPressed: any ColorToken,
+                surfacePressed: any ColorToken,
+                surfaceInversePressed: any ColorToken,
+                outlinePressed: any ColorToken,
+                successPressed: any ColorToken,
+                successContainerPressed: any ColorToken,
+                alertPressed: any ColorToken,
+                alertContainerPressed: any ColorToken,
+                errorPressed: any ColorToken,
+                errorContainerPressed: any ColorToken,
+                infoPressed: any ColorToken,
+                infoContainerPressed: any ColorToken,
+                neutralPressed: any ColorToken,
+                neutralContainerPressed: any ColorToken) {
         self.primaryPressed = primaryPressed
         self.primaryVariantPressed = primaryVariantPressed
         self.primaryContainerPressed = primaryContainerPressed

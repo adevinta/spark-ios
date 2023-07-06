@@ -74,7 +74,7 @@ private extension SwitchGetIntentColorUseCaseTests {
 
     func testExecute(
         givenIntentColor: SwitchIntentColor,
-        expectedColorToken: ColorToken
+        expectedColorToken: any ColorToken
     ) throws {
         // GIVEN
         let useCase = SwitchGetIntentColorUseCase()

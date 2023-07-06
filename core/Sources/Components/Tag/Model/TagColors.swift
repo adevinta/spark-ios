@@ -8,16 +8,16 @@
 
 // sourcery: AutoMockable
 protocol TagColorables {
-    var backgroundColor: ColorToken { get }
-    var borderColor: ColorToken { get }
-    var foregroundColor: ColorToken { get }
+    var backgroundColor: any ColorToken { get }
+    var borderColor: any ColorToken { get }
+    var foregroundColor: any ColorToken { get }
 }
 
 struct TagColors: TagColorables {
 
     // MARK: - Properties
 
-    let backgroundColor: ColorToken
-    let borderColor: ColorToken
-    let foregroundColor: ColorToken
+    let backgroundColor: any ColorToken
+    let borderColor: any ColorToken
+    let foregroundColor: any ColorToken
 }

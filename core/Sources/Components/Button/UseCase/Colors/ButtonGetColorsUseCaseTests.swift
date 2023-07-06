@@ -169,10 +169,10 @@ private struct Tester {
     }
 
     private static func testColor(
-        givenColorProperty: ColorToken?,
+        givenColorProperty: (any ColorToken)?,
         givenPropertyName: String,
         givenIntentColor: ButtonIntentColor,
-        expectedColorToken: ColorToken?
+        expectedColorToken: (any ColorToken)?
     ) throws {
         let errorPrefixMessage = " \(givenPropertyName) for .\(givenIntentColor) case"
 
@@ -197,9 +197,9 @@ private struct GetColors {
     let givenVariant: ButtonVariant
     let givenColorables: ButtonColorablesGeneratedMock
 
-    let expectedTextColorToken: ColorToken
-    let expectedBackgroundToken: ColorToken
-    let expectedPressedBackgroundToken: ColorToken
-    let expectedBorderToken: ColorToken
-    let expectedPressedBorderToken: ColorToken
+    let expectedTextColorToken: any ColorToken
+    let expectedBackgroundToken: any ColorToken
+    let expectedPressedBackgroundToken: any ColorToken
+    let expectedBorderToken: any ColorToken
+    let expectedPressedBorderToken: any ColorToken
 }

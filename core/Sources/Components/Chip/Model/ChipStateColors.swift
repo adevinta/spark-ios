@@ -8,7 +8,15 @@
 
 /// The colors definie a chip
 struct ChipStateColors {
-    let background: ColorToken
-    let border: ColorToken
-    let foreground: ColorToken
+    let background: any ColorToken
+    let border: any ColorToken
+    let foreground: any ColorToken
+}
+
+extension ChipStateColors: Equatable {
+    static func == (lhs: ChipStateColors, rhs: ChipStateColors) -> Bool {
+        return lhs.background.hashValue == rhs.background.hashValue &&
+        lhs.border.hashValue  == rhs.border.hashValue &&
+        lhs.foreground.hashValue  == rhs.foreground.hashValue
+    }
 }
