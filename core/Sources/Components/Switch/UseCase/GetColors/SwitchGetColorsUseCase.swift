@@ -46,8 +46,8 @@ struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
 
         return SwitchColorsDefault(
             toggleBackgroundColors: statusAndStateColors,
-            toggleDotBackgroundColor: colors.base.surface,
             toggleDotForegroundColors: statusAndStateColors,
+            toggleDotBackgroundColor: colors.base.surface,
             textForegroundColor: colors.base.onSurface
         )
     }
