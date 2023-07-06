@@ -587,7 +587,7 @@ public final class SwitchUIView: UIView {
         }
     }
 
-    private func updateStackViewSpacing() {
+    private func updateContentStackViewSpacing() {
         // Reload spacing only if value changed and constraint is active
         let spacing = self._contentStackViewSpacing.wrappedValue
 
@@ -684,7 +684,7 @@ public final class SwitchUIView: UIView {
 
             self.contentStackViewSpacing = horizontalSpacing
             self._contentStackViewSpacing.update(traitCollection: self.traitCollection)
-            self.updateStackViewSpacing()
+            self.updateContentStackViewSpacing()
         }
 
         // **
@@ -754,7 +754,7 @@ public final class SwitchUIView: UIView {
 
         // Update size content
         self._contentStackViewSpacing.update(traitCollection: self.traitCollection)
-        self.updateStackViewSpacing()
+        self.updateContentStackViewSpacing()
 
         self._toggleSpacing.update(traitCollection: self.traitCollection)
         self.updateToggleContentViewSpacings()
