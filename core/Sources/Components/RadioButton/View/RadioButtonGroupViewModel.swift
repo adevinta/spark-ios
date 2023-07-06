@@ -51,7 +51,7 @@ final class RadioButtonGroupViewModel: ObservableObject {
         self.state = state
         self.useCase = useCase
 
-        self.sublabelFont =   self.theme.typography.caption
+        self.sublabelFont = self.theme.typography.caption
         self.titleFont = self.theme.typography.subhead
         self.titleColor = self.theme.colors.base.onSurface
         self.sublabelColor = useCase.execute(colors: theme.colors, state: state)

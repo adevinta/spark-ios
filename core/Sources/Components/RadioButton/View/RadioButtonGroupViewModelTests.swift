@@ -6,31 +6,79 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
+@testable import SparkCore
 import XCTest
 
-final class RadioButtonGroupViewModelTests: TestCase {
+final class RadioButtonGroupViewModelTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    var subscriptions = Set<AnyCancellable>()
+
+    // MARK: - Tests
+    public func test_expect_all_values_published_on_setup() {
+        // Given
+        let sut = sut(state: .enabled)
+        let expectation = expectation(description: "Wait for subscriptions to be published")
+        expectation.expectedFulfillmentCount = 1
+
+        let publisher = Publishers.Zip(
+            Publishers.Zip4(sut.$sublabelFont, sut.$titleFont, sut.$titleColor, sut.$sublabelColor),
+            Publishers.Zip(sut.$spacing, sut.$labelSpacing)
+        )
+
+        publisher.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        wait(for: [expectation])
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    public func test_theme_change() {
+        // Given
+        let sut = sut(state: .enabled)
+        let expectation = expectation(description: "Wait for subscriptions to be published")
+        expectation.expectedFulfillmentCount = 2
+
+        let publisher = Publishers.Zip(
+            Publishers.Zip4(sut.$sublabelFont, sut.$titleFont, sut.$titleColor, sut.$sublabelColor),
+            Publishers.Zip(sut.$spacing, sut.$labelSpacing)
+        )
+
+        publisher.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        sut.theme = ThemeGeneratedMock.mocked()
+
+        wait(for: [expectation], timeout: 0.1)
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    public func test_state_change() {
+        // Given
+        let sut = sut(state: .enabled)
+        let expectation = expectation(description: "Wait for sublabel color to be published")
+        expectation.expectedFulfillmentCount = 2
+
+
+        sut.$sublabelColor.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        sut.state = .error
+
+        wait(for: [expectation], timeout: 0.1)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+    // MARK: - Private helpers
+    private func sut(state: RadioButtonGroupState) -> RadioButtonGroupViewModel {
+        let useCase = GetRadioButtonGroupColorUseCaseableGeneratedMock()
+        useCase.executeWithColorsAndStateReturnValue = ColorTokenGeneratedMock.random()
+        let theme = ThemeGeneratedMock.mocked()
 
+        let sut = RadioButtonGroupViewModel(theme: theme,
+                                            state: state,
+                                            useCase: useCase)
+
+        return sut
+    }
 }
