@@ -23,7 +23,7 @@ private enum Constants {
 /// - A unique ID
 /// - A label representing the value to be selected
 /// - The current selected ID: this is a binding and will change, when the button is selected.
-/// - State: see ``SparkSelectButtonState``. The default state is ``.enabled``
+/// - State: see ``RadioButtonGroupState``. The default state is ``.enabled``
 ///
 /// **Example**
 /// ```swift
