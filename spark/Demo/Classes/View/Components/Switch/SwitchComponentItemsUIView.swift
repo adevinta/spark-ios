@@ -61,7 +61,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
 
     // MARK: - Maker
 
-    func makeUIView(context: Context) -> UIStackView {
+    func makeUIView(context: Context) -> UIView {
         var switchView: SwitchUIView
 
         switch self.textContent {
@@ -93,21 +93,23 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         }
         switchView.delegate = context.coordinator
 
-        let stackView = UIStackView(arrangedSubviews: [
-            switchView,
-            UIView()
-        ])
-        stackView.axis = .horizontal
-        stackView.alignment = .leading
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.widthAnchor.constraint(equalToConstant: width).isActive = true
-        stackView.heightAnchor.constraint(equalTo: switchView.heightAnchor).isActive = true
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.widthAnchor.constraint(equalToConstant: width).isActive = true
+        view.addSubview(switchView)
 
-        return stackView
+        switchView.translatesAutoresizingMaskIntoConstraints = false
+        switchView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        switchView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        switchView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        switchView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        view.heightAnchor.constraint(equalTo: switchView.heightAnchor).isActive = true
+
+        return view
     }
 
-    func updateUIView(_ stackView: UIStackView, context: Context) {
-        guard let switchView = stackView.arrangedSubviews.compactMap({ $0 as? SwitchUIView }).first else {
+    func updateUIView(_ stackView: UIView, context: Context) {
+        guard let switchView = stackView.subviews.compactMap({ $0 as? SwitchUIView }).first else {
             return
         }
 
