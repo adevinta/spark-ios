@@ -173,7 +173,7 @@ final class ButtonViewModel: ObservableObject {
     }
 
     func set(attributedText: AttributedStringEither?) {
-        if self.attributedText.isEqual(to: attributedText) == false {
+        if self.attributedText != attributedText {
             self.attributedText = attributedText
 
             // Should be called before *DidUpdate* methods
@@ -186,7 +186,7 @@ final class ButtonViewModel: ObservableObject {
     }
 
     func set(iconImage: ImageEither?) {
-        if self.iconImage.isEqual(to: iconImage) == false {
+        if self.iconImage != iconImage {
             self.iconImage = iconImage
             
             // Should be called before *DidUpdate* methods

@@ -13,6 +13,22 @@ enum Either<Left, Right> {
     case right(Right)
 }
 
+// MARK: - Equatable
+
+extension Either: Equatable where Left: Equatable, Right: Equatable {
+    
+    static func == (lhs: Either<Left, Right>, rhs: Either<Left, Right>) -> Bool {
+        switch (rhs, lhs) {
+        case let (.left(lhs), .left(rhs)):
+            return lhs == rhs
+        case let (.right(lhs), .right(rhs)):
+            return lhs == rhs
+        default:
+            return false
+        }
+    }
+}
+
 // MARK: - Properties
 
 extension Either {
