@@ -30,7 +30,7 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
             expectation.fulfill()
         }.store(in: &self.subscriptions)
 
-        wait(for: [expectation])
+        wait(for: [expectation], timeout: 0.1)
     }
 
     public func test_theme_change() {

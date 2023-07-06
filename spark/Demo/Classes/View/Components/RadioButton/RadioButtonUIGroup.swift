@@ -276,11 +276,9 @@ final class RadioButtonUIGroupViewController: UIViewController {
     }
 
     @objc private func removeRandomItem() {
-        var items = self.radioButtonGroupView.items
-        if items.count > 2 {
-            items.remove(at: Int.random(in: 0..<items.count))
+        if self.radioButtonGroupView.items.count > 2 {
+            self.radioButtonGroupView.items.remove(at: Int.random(in: 0..<self.radioButtonGroupView.items.count))
         }
-        self.radioButtonGroupView.items = items
     }
 
     private func alertAction(_ action: UIAlertAction) {

@@ -167,6 +167,21 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
             assertSnapshotInDarkAndLight(matching: sut)
         }
     }
+
+    func test_accessibility_idetifier_propagated_to_items() {
+        let sut = RadioButtonUIGroupView(
+            theme: SparkTheme.shared,
+            title: "Title",
+            selectedID: self.selectedID,
+            items: self.items,
+            state: .enabled)
+
+        sut.accessibilityIdentifier = "XXX"
+        let radioButtonView = sut.subviews.first { view in
+            return (view is RadioButtonUIView<String>)
+        }
+        XCTAssertEqual(radioButtonView?.accessibilityIdentifier, "XXX-0")
+    }
 }
 
 private extension RadioButtonGroupState {

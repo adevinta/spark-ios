@@ -31,7 +31,7 @@ struct RadioButtonGroup: View {
             Button(self.groupState.description) {
                 self.stateSheetIsPresented = true
             }
-            .confirmationDialog("Select a astate", isPresented: self.$stateSheetIsPresented) {
+            .confirmationDialog("Select a state", isPresented: self.$stateSheetIsPresented) {
                 ForEach(RadioButtonGroupState.allCases, id: \.self) { state in
                     Button(state.description) {
                         self.groupState = state

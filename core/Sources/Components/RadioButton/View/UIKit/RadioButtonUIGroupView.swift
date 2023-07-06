@@ -61,7 +61,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
-
     public var title: String? {
         didSet {
             if self.setTextOf(label: self.titleLabel,
@@ -143,6 +142,15 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     /// A change of the selected item will be published. This is an alternative method to the `delegate` of being notified of changes to the selected item.
     public var publisher: any Publisher<ID, Never> {
         return self.valueSubject
+    }
+
+    public override var accessibilityIdentifier: String? {
+        didSet {
+            guard let identifier = accessibilityIdentifier else { return }
+            for (index, radioButtonView) in radioButtonViews.enumerated() {
+                radioButtonView.accessibilityIdentifier = "\(identifier)-\(index)"
+            }
+        }
     }
 
     // MARK: Initializers
