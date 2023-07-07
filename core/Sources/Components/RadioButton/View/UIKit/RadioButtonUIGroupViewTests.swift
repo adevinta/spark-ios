@@ -92,7 +92,8 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
                 selectedID: self.selectedID,
                 items: self.items,
                 groupLayout: .horizontal,
-                state: state
+                state: state,
+                supplementaryText: state.supplementaryText
             )
 
             sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
@@ -102,6 +103,7 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
         }
     }
 
+
     func test_uikit_radioButtonGroup_vertical_with_title() throws {
         for state in RadioButtonGroupState.allCases {
             let sut = RadioButtonUIGroupView(
@@ -109,8 +111,9 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
                 title: "Title",
                 selectedID: self.selectedID,
                 items: self.items,
-                groupLayout: .horizontal,
-                state: state
+                groupLayout: .vertical,
+                state: state,
+                supplementaryText: state.supplementaryText
             )
 
             sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor

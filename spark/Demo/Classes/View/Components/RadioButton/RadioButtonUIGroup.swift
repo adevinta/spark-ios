@@ -140,7 +140,9 @@ final class RadioButtonUIGroupViewController: UIViewController {
             selectedID: self.labelPosition == .right,
             items: items,
             radioButtonLabelPosition: .right,
-            groupLayout: .horizontal
+            groupLayout: .horizontal,
+            state: .success,
+            supplementaryText: "Supplementary Text"
         )
 
         groupView.publisher.sink { [weak self] item in

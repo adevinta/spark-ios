@@ -336,7 +336,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             constraints.append(self.titleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
             constraints.append(self.titleLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor))
             previousLayoutTopAnchor = self.titleLabel.bottomAnchor
-            spacing = self.spacing
+            spacing = self.labelSpacing
         }
 
         var radioButtonAnchors = [NSLayoutYAxisAnchor]()
@@ -344,7 +344,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         for (index, radioButtonView) in radioButtonViews.enumerated() {
             let topConstraint = radioButtonView.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: spacing)
             if spacing != 0 {
-                self.itemSpacingConstraints.append(topConstraint)
+                self.itemLabelSpacingConstraints.append(topConstraint)
             }
             constraints.append(topConstraint)
             radioButtonAnchors.append(radioButtonView.bottomAnchor)
@@ -360,20 +360,23 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
         constraints.append(previousLayoutLeadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
 
-        var bottomAnchor: NSLayoutYAxisAnchor
+        var bottomAnchor: NSLayoutYAxisAnchor = self.safeAreaLayoutGuide.bottomAnchor
+        var labelSpacing: CGFloat = 0
 
         if self.supplementaryText !=  nil {
             bottomAnchor = self.supplementaryLabel.topAnchor
+            labelSpacing = self.labelSpacing
             constraints.append(self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
             constraints.append(self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
-            constraints.append(self.supplementaryLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor))
-            previousLayoutTopAnchor = self.supplementaryLabel.bottomAnchor
-        } else {
-            bottomAnchor = self.safeAreaLayoutGuide.bottomAnchor
+            constraints.append(self.supplementaryLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor))
         }
 
         for anchor in radioButtonAnchors {
-            constraints.append(anchor.constraint(equalTo: bottomAnchor))
+            let bottomConstraint = bottomAnchor.constraint(equalTo: anchor, constant: labelSpacing)
+            constraints.append(bottomConstraint)
+            if labelSpacing != 0 {
+                self.itemLabelSpacingConstraints.append(bottomConstraint)
+            }
         }
 
         self.allConstraints = constraints
