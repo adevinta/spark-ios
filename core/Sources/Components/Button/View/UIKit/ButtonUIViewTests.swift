@@ -48,7 +48,7 @@ private extension ButtonUIViewTests {
             if let iconImage = sut.iconImage, let text = sut.text {
                 view = ButtonUIView(
                     theme: self.theme,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     variant: sut.variant,
                     size: sut.size,
                     shape: sut.shape,
@@ -61,7 +61,7 @@ private extension ButtonUIViewTests {
             } else if let iconImage = sut.iconImage, let attributedText = sut.attributedText { // Icon + Attributed Text
                 view = ButtonUIView(
                     theme: self.theme,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     variant: sut.variant,
                     size: sut.size,
                     shape: sut.shape,
@@ -74,7 +74,7 @@ private extension ButtonUIViewTests {
             } else if let iconImage = sut.iconImage { // Only Icon
                 view = ButtonUIView(
                     theme: self.theme,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     variant: sut.variant,
                     size: sut.size,
                     shape: sut.shape,
@@ -86,7 +86,7 @@ private extension ButtonUIViewTests {
             } else if let text = sut.text { // Only Text
                 view = ButtonUIView(
                     theme: self.theme,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     variant: sut.variant,
                     size: sut.size,
                     shape: sut.shape,
@@ -98,7 +98,7 @@ private extension ButtonUIViewTests {
             } else if let attributedText = sut.attributedText { // Only Attributed Text
                 view = ButtonUIView(
                     theme: self.theme,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     variant: sut.variant,
                     size: sut.size,
                     shape: sut.shape,

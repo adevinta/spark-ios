@@ -18,22 +18,17 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
         // GIVEN
         let variants: [ButtonVariant] = [.filled, .outlined, .contrast, .tinted, .ghost]
         let items = variants.map {
-            let intentColorsMock = ButtonColorsGeneratedMock()
-            intentColorsMock.underlyingForegroundColor = ColorTokenGeneratedMock.random()
-            intentColorsMock.underlyingBackgroundColor = ColorTokenGeneratedMock.random()
-            intentColorsMock.underlyingPressedBackgroundColor = ColorTokenGeneratedMock.random()
-            intentColorsMock.underlyingBorderColor = ColorTokenGeneratedMock.random()
-            intentColorsMock.underlyingPressedBorderColor = ColorTokenGeneratedMock.random()
+            let intentsMock = ButtonColors.mocked()
 
             return GetColors(
-                givenIntentColor: .primary,
+                givenIntent: .primary,
                 givenVariant: $0,
-                givenColorables: intentColorsMock,
-                expectedforegroundColorToken: intentColorsMock.foregroundColor,
-                expectedBackgroundToken: intentColorsMock.backgroundColor,
-                expectedPressedBackgroundToken: intentColorsMock.pressedBackgroundColor,
-                expectedBorderToken: intentColorsMock.borderColor,
-                expectedPressedBorderToken: intentColorsMock.pressedBorderColor
+                givenColors: intentsMock,
+                expectedforegroundColorToken: intentsMock.foregroundColor,
+                expectedBackgroundToken: intentsMock.backgroundColor,
+                expectedPressedBackgroundToken: intentsMock.pressedBackgroundColor,
+                expectedBorderToken: intentsMock.borderColor,
+                expectedPressedBorderToken: intentsMock.pressedBorderColor
             )
         }
 
@@ -66,9 +61,9 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
             case .tinted:
                 mockedUseCase = getTintedUseCaseMock
             }
-            mockedUseCase.colorsWithIntentColorAndColorsAndDimsReturnValue = item.givenColorables
+            mockedUseCase.colorsWithIntentAndColorsAndDimsReturnValue = item.givenColors
 
-            let getIntentColorsUseCaseMock = ButtonGetColorsUseCase(
+            let getIntentsUseCaseMock = ButtonGetColorsUseCase(
                 getContrastUseCase: getContrastUseCaseMock,
                 getFilledUseCase: getFilledUseCaseMock,
                 getGhostUseCase: getGhostUseCaseMock,
@@ -77,16 +72,16 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
             )
 
             // WHEN
-            let colors = getIntentColorsUseCaseMock.execute(
-                forTheme: themeMock,
-                intentColor: item.givenIntentColor,
+            let colors = getIntentsUseCaseMock.execute(
+                for: themeMock,
+                intent: item.givenIntent,
                 variant: item.givenVariant
             )
 
             // Other UseCase
             Tester.testColorsUseCaseExecuteCalling(
                 givenColorsUseCase: mockedUseCase,
-                givenIntentColor: item.givenIntentColor,
+                givenIntent: item.givenIntent,
                 givenColors: themeColorsMock,
                 givenDims: dimsMock
             )
@@ -104,17 +99,17 @@ private struct Tester {
 
     static func testColorsUseCaseExecuteCalling(
         givenColorsUseCase: ButtonGetVariantUseCaseableGeneratedMock,
-        givenIntentColor: ButtonIntentColor,
+        givenIntent: ButtonIntent,
         givenColors: ColorsGeneratedMock,
         givenDims: DimsGeneratedMock
     ) {
-        let arguments = givenColorsUseCase.colorsWithIntentColorAndColorsAndDimsReceivedArguments
-        XCTAssertEqual(givenColorsUseCase.colorsWithIntentColorAndColorsAndDimsCallsCount,
+        let arguments = givenColorsUseCase.colorsWithIntentAndColorsAndDimsReceivedArguments
+        XCTAssertEqual(givenColorsUseCase.colorsWithIntentAndColorsAndDimsCallsCount,
                        1,
                        "Wrong call number on execute")
-        XCTAssertEqual(arguments?.intentColor,
-                       givenIntentColor,
-                       "Wrong intentColor parameter on execute")
+        XCTAssertEqual(arguments?.intent,
+                       givenIntent,
+                       "Wrong intent parameter on execute")
         XCTAssertIdentical(arguments?.colors as? ColorsGeneratedMock,
                            givenColors,
                            "Wrong colors parameter on execute")
@@ -131,7 +126,7 @@ private struct Tester {
         try self.testColor(
             givenColorProperty: givenColors.foregroundColor,
             givenPropertyName: "foregroundColor",
-            givenIntentColor: getColors.givenIntentColor,
+            givenIntent: getColors.givenIntent,
             expectedColorToken: getColors.expectedforegroundColorToken
         )
 
@@ -139,7 +134,7 @@ private struct Tester {
         try self.testColor(
             givenColorProperty: givenColors.backgroundColor,
             givenPropertyName: "backgroundColor",
-            givenIntentColor: getColors.givenIntentColor,
+            givenIntent: getColors.givenIntent,
             expectedColorToken: getColors.expectedBackgroundToken
         )
 
@@ -147,7 +142,7 @@ private struct Tester {
         try self.testColor(
             givenColorProperty: givenColors.pressedBackgroundColor,
             givenPropertyName: "pressedBackgroundColor",
-            givenIntentColor: getColors.givenIntentColor,
+            givenIntent: getColors.givenIntent,
             expectedColorToken: getColors.expectedPressedBackgroundToken
         )
 
@@ -155,7 +150,7 @@ private struct Tester {
         try self.testColor(
             givenColorProperty: givenColors.borderColor,
             givenPropertyName: "borderColor",
-            givenIntentColor: getColors.givenIntentColor,
+            givenIntent: getColors.givenIntent,
             expectedColorToken: getColors.expectedBorderToken
         )
 
@@ -163,18 +158,18 @@ private struct Tester {
         try self.testColor(
             givenColorProperty: givenColors.pressedBorderColor,
             givenPropertyName: "pressedBorderColor",
-            givenIntentColor: getColors.givenIntentColor,
+            givenIntent: getColors.givenIntent,
             expectedColorToken: getColors.expectedPressedBorderToken
         )
     }
 
     private static func testColor(
-        givenColorProperty: ColorToken?,
+        givenColorProperty: (any ColorToken)?,
         givenPropertyName: String,
-        givenIntentColor: ButtonIntentColor,
-        expectedColorToken: ColorToken?
+        givenIntent: ButtonIntent,
+        expectedColorToken: (any ColorToken)?
     ) throws {
-        let errorSuffixMessage = " \(givenPropertyName) for .\(givenIntentColor) case"
+        let errorSuffixMessage = " \(givenPropertyName) for .\(givenIntent) case"
 
         if let givenColorProperty {
             let color = try XCTUnwrap(givenColorProperty as? ColorTokenGeneratedMock,
@@ -193,13 +188,13 @@ private struct Tester {
 // MARK: - Others Strucs
 
 private struct GetColors {
-    let givenIntentColor: ButtonIntentColor
+    let givenIntent: ButtonIntent
     let givenVariant: ButtonVariant
-    let givenColorables: ButtonColorsGeneratedMock
+    let givenColors: ButtonColors
 
-    let expectedforegroundColorToken: ColorToken
-    let expectedBackgroundToken: ColorToken
-    let expectedPressedBackgroundToken: ColorToken
-    let expectedBorderToken: ColorToken
-    let expectedPressedBorderToken: ColorToken
+    let expectedforegroundColorToken: any ColorToken
+    let expectedBackgroundToken: any ColorToken
+    let expectedPressedBackgroundToken: any ColorToken
+    let expectedBorderToken: any ColorToken
+    let expectedPressedBorderToken: any ColorToken
 }

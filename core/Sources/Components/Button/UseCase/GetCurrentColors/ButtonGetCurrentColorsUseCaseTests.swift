@@ -20,14 +20,14 @@ final class ButtonGetCurrentColorsUseCaseTests: XCTestCase {
     private let borderColorMock = ColorTokenGeneratedMock()
     private let pressedBorderColorMock = ColorTokenGeneratedMock()
 
-    private lazy var colorsMock: ButtonColorsGeneratedMock = {
-        let mock = ButtonColorsGeneratedMock()
-        mock.underlyingForegroundColor = self.foregroundColorMock
-        mock.underlyingBackgroundColor = self.backgroundColorMock
-        mock.underlyingPressedBackgroundColor = self.pressedBackgroundColorMock
-        mock.underlyingBorderColor = self.borderColorMock
-        mock.underlyingPressedBorderColor = self.pressedBorderColorMock
-        return mock
+    private lazy var colorsMock: ButtonColors = {
+        return .init(
+            foregroundColor: self.foregroundColorMock,
+            backgroundColor: self.backgroundColorMock,
+            pressedBackgroundColor: self.pressedBackgroundColorMock,
+            borderColor: self.borderColorMock,
+            pressedBorderColor: self.pressedBorderColorMock
+        )
     }()
 
     // MARK: - Tests
@@ -68,7 +68,7 @@ private extension ButtonGetCurrentColorsUseCaseTests {
 
         // GIVEN
         let currentColors = useCase.execute(
-            forColors: self.colorsMock,
+            for: self.colorsMock,
             isPressed: givenIsPressed
         )
 

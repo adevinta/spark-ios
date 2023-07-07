@@ -8,13 +8,7 @@
 
 import Foundation
 
-// sourcery: AutoMockable
-protocol ButtonSizes {
-    var height: CGFloat { get }
-    var iconSize: CGFloat { get }
-}
-
-struct ButtonSizesDefault: ButtonSizes {
+struct ButtonSizes: Equatable {
 
     // MARK: - Properties
 

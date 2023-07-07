@@ -13,16 +13,16 @@ struct ButtonGetVariantFilledUseCase: ButtonGetVariantUseCaseable {
     // MARK: - Methods
 
     func colors(
-        forIntentColor intentColor: ButtonIntentColor,
+        for intent: ButtonIntent,
         colors: Colors,
         dims: Dims
     ) -> ButtonColors {
         let borderColor = ColorTokenDefault.clear
         let pressedBorderColor = ColorTokenDefault.clear
 
-        switch intentColor {
+        switch intent {
         case .primary:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.primary.onPrimary,
                 backgroundColor: colors.primary.primary,
                 pressedBackgroundColor: colors.states.primaryPressed,
@@ -30,7 +30,7 @@ struct ButtonGetVariantFilledUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .secondary:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.secondary.onSecondary,
                 backgroundColor: colors.secondary.secondary,
                 pressedBackgroundColor: colors.states.secondaryPressed,
@@ -38,7 +38,7 @@ struct ButtonGetVariantFilledUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .neutral:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.feedback.onNeutral,
                 backgroundColor: colors.feedback.neutral,
                 pressedBackgroundColor: colors.states.neutralPressed,
@@ -46,7 +46,7 @@ struct ButtonGetVariantFilledUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .alert:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.feedback.onAlert,
                 backgroundColor: colors.feedback.alert,
                 pressedBackgroundColor: colors.states.alertPressed,
@@ -54,7 +54,7 @@ struct ButtonGetVariantFilledUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .success:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.feedback.onSuccess,
                 backgroundColor: colors.feedback.success,
                 pressedBackgroundColor: colors.states.successPressed,
@@ -62,7 +62,7 @@ struct ButtonGetVariantFilledUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .danger:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.feedback.onError,
                 backgroundColor: colors.feedback.error,
                 pressedBackgroundColor: colors.states.errorPressed,
@@ -70,7 +70,7 @@ struct ButtonGetVariantFilledUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .surface:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.base.onSurface,
                 backgroundColor: colors.base.surface,
                 pressedBackgroundColor: colors.states.surfacePressed,

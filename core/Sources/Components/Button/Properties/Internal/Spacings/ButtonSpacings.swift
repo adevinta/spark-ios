@@ -8,14 +8,7 @@
 
 import Foundation
 
-// sourcery: AutoMockable
-protocol ButtonSpacings {
-    var verticalSpacing: CGFloat { get }
-    var horizontalSpacing: CGFloat { get }
-    var horizontalPadding: CGFloat { get }
-}
-
-struct ButtonSpacingsDefault: ButtonSpacings {
+struct ButtonSpacings: Equatable {
 
     // MARK: - Properties
 

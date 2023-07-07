@@ -20,7 +20,7 @@ final class ButtonGetSizesUseCaseTests: XCTestCase {
 
         // WHEN
         let sizes = useCase.execute(
-            forSize: .small,
+            for: .small,
             isOnlyIcon: true
         )
 
@@ -35,7 +35,7 @@ final class ButtonGetSizesUseCaseTests: XCTestCase {
 
         // WHEN
         let sizes = useCase.execute(
-            forSize: .medium,
+            for: .medium,
             isOnlyIcon: true
         )
 
@@ -50,7 +50,7 @@ final class ButtonGetSizesUseCaseTests: XCTestCase {
 
         // WHEN
         let sizes = useCase.execute(
-            forSize: .large,
+            for: .large,
             isOnlyIcon: true
         )
 
@@ -67,7 +67,7 @@ final class ButtonGetSizesUseCaseTests: XCTestCase {
 
         // WHEN
         let sizes = useCase.execute(
-            forSize: .small,
+            for: .small,
             isOnlyIcon: false
         )
 
@@ -82,7 +82,7 @@ final class ButtonGetSizesUseCaseTests: XCTestCase {
 
         // WHEN
         let sizes = useCase.execute(
-            forSize: .medium,
+            for: .medium,
             isOnlyIcon: false
         )
 
@@ -97,7 +97,7 @@ final class ButtonGetSizesUseCaseTests: XCTestCase {
 
         // WHEN
         let sizes = useCase.execute(
-            forSize: .large,
+            for: .large,
             isOnlyIcon: false
         )
 

@@ -13,7 +13,7 @@ final class ButtonViewModel: ObservableObject {
     // MARK: - Properties
 
     private(set) var theme: Theme
-    private(set) var intentColor: ButtonIntentColor
+    private(set) var intent: ButtonIntent
     private(set) var variant: ButtonVariant
     private(set) var size: ButtonSize
     private(set) var shape: ButtonShape
@@ -38,10 +38,17 @@ final class ButtonViewModel: ObservableObject {
 
     private var colors: ButtonColors?
 
-    private var isIconOnly: Bool = false // Reset on init with setIsOnlyIcon func
+    private var isIconOnly: Bool {
+        return self.dependencies.getIsIconOnlyUseCase.execute(
+            for: self.iconImage,
+            text: self.text,
+            attributedText: self.attributedText
+        )
+    }
+
     private var text: String?
     private var attributedText: AttributedStringEither?
-    private var textIsDisplayed: Bool // True when text is displayed, false when attributed text is displayed
+    private var displayedTextType: ButtonDisplayedTextType
 
     private var isPressed: Bool = false
 
@@ -51,7 +58,7 @@ final class ButtonViewModel: ObservableObject {
 
     init(
         theme: Theme,
-        intentColor: ButtonIntentColor,
+        intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
@@ -63,7 +70,7 @@ final class ButtonViewModel: ObservableObject {
         dependencies: any ButtonViewModelDependenciesProtocol = ButtonViewModelDependencies()
     ) {
         self.theme = theme
-        self.intentColor = intentColor
+        self.intent = intent
         self.variant = variant
         self.size = size
         self.shape = shape
@@ -73,7 +80,14 @@ final class ButtonViewModel: ObservableObject {
         self.attributedText = attributedText
         self.isEnabled = isEnabled
 
-        self.textIsDisplayed = text != nil
+        switch (text, attributedText) {
+        case (nil, nil):
+            self.displayedTextType = .none
+        case (nil, _):
+            self.displayedTextType = .attributedText
+        case (_, nil), (_, _):
+            self.displayedTextType = .text
+        }
 
         self.dependencies = dependencies
     }
@@ -81,8 +95,6 @@ final class ButtonViewModel: ObservableObject {
     // MARK: - Load
 
     func load() {
-        self.setIsOnlyIcon()
-
         // Update all values when view is ready to receive published values
         self.updateAll()
     }
@@ -115,9 +127,9 @@ final class ButtonViewModel: ObservableObject {
         self.updateAll(themeChanged: true)
     }
 
-    func set(intentColor: ButtonIntentColor) {
-        if self.intentColor != intentColor {
-            self.intentColor = intentColor
+    func set(intent: ButtonIntent) {
+        if self.intent != intent {
+            self.intent = intent
 
             self.colorsDidUpdate(reloadColorsFromUseCase: true)
         }
@@ -157,12 +169,10 @@ final class ButtonViewModel: ObservableObject {
     }
 
     func set(text: String?) {
-        if self.text != text || !self.textIsDisplayed {
+        // Text changed or is not currently displayed ?
+        if self.text != text || self.displayedTextType != .text {
             self.text = text
-            self.textIsDisplayed = true
-
-            // Should be called before *DidUpdate* methods
-            self.setIsOnlyIcon()
+            self.displayedTextType = text != nil ? .text : .none
 
             self.contentDidUpdate()
             self.sizesDidUpdate()
@@ -177,12 +187,10 @@ final class ButtonViewModel: ObservableObject {
     }
 
     func set(attributedText: AttributedStringEither?) {
-        if self.attributedText != attributedText || self.textIsDisplayed {
+        // AttributedText changed or is not currently displayed ?
+        if self.attributedText != attributedText || self.displayedTextType != .attributedText {
             self.attributedText = attributedText
-            self.textIsDisplayed = false
-
-            // Should be called before *DidUpdate* methods
-            self.setIsOnlyIcon()
+            self.displayedTextType = attributedText != nil ? .attributedText : .none
 
             self.contentDidUpdate()
             self.sizesDidUpdate()
@@ -193,9 +201,6 @@ final class ButtonViewModel: ObservableObject {
     func set(iconImage: ImageEither?) {
         if self.iconImage != iconImage {
             self.iconImage = iconImage
-            
-            // Should be called before *DidUpdate* methods
-            self.setIsOnlyIcon()
             
             self.contentDidUpdate()
             self.sizesDidUpdate()
@@ -209,16 +214,6 @@ final class ButtonViewModel: ObservableObject {
 
             self.stateDidUpdate()
         }
-    }
-
-    // MARK: - Private Setter
-
-    private func setIsOnlyIcon() {
-        self.isIconOnly = self.dependencies.getIsIconOnlyUseCase.execute(
-            forIconImage: self.iconImage,
-            text: self.text,
-            attributedText: self.attributedText
-        )
     }
 
     // MARK: - Private Update
@@ -237,7 +232,7 @@ final class ButtonViewModel: ObservableObject {
 
     private func stateDidUpdate() {
         self.state = self.dependencies.getStateUseCase.execute(
-            forIsEnabled: self.isEnabled,
+            for: self.isEnabled,
             dims: self.theme.dims
         )
     }
@@ -247,8 +242,8 @@ final class ButtonViewModel: ObservableObject {
     ) {
         if reloadColorsFromUseCase {
             self.colors = self.dependencies.getColorsUseCase.execute(
-                forTheme: self.theme,
-                intentColor: self.intentColor,
+                for: self.theme,
+                intent: self.intent,
                 variant: self.variant
             )
         }
@@ -258,21 +253,21 @@ final class ButtonViewModel: ObservableObject {
         }
 
         self.currentColors = self.dependencies.getCurrentColorsUseCase.execute(
-            forColors: colors,
+            for: colors,
             isPressed: self.isPressed
         )
     }
 
     private func sizesDidUpdate() {
         self.sizes = self.dependencies.getSizesUseCase.execute(
-            forSize: self.size,
+            for: self.size,
             isOnlyIcon: self.isIconOnly
         )
     }
 
     private func borderDidUpdate() {
         self.border = self.dependencies.getBorderUseCase.execute(
-            forShape: self.shape,
+            for: self.shape,
             border: self.theme.border,
             variant: self.variant
         )
@@ -280,14 +275,14 @@ final class ButtonViewModel: ObservableObject {
 
     private func spacingsDidUpdate() {
         self.spacings = self.dependencies.getSpacingsUseCase.execute(
-            forSpacing: self.theme.layout.spacing,
+            for: self.theme.layout.spacing,
             isOnlyIcon: self.isIconOnly
         )
     }
 
     private func contentDidUpdate() {
         self.content = self.dependencies.getContentUseCase.execute(
-            forAlignment: self.alignment,
+            for: self.alignment,
             iconImage: self.iconImage,
             text: self.text,
             attributedText: self.attributedText
@@ -297,4 +292,12 @@ final class ButtonViewModel: ObservableObject {
     private func textFontDidUpdate() {
         self.textFontToken = self.theme.typography.callout
     }
+}
+
+// MARK: - Private Enum
+
+private enum ButtonDisplayedTextType {
+    case none
+    case text
+    case attributedText
 }

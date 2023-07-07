@@ -18,7 +18,7 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(forIntentColor: .primary, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(for: .primary, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -40,7 +40,7 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(forIntentColor: .secondary, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(for: .secondary, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -62,7 +62,7 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(forIntentColor: .neutral, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(for: .neutral, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -84,7 +84,7 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(forIntentColor: .alert, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(for: .alert, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -106,7 +106,7 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(forIntentColor: .success, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(for: .success, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -128,7 +128,7 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(forIntentColor: .danger, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(for: .danger, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -150,7 +150,7 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.colors(forIntentColor: .surface, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.colors(for: .surface, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(

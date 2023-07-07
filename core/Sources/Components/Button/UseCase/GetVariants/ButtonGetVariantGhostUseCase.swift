@@ -13,7 +13,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
     // MARK: - Methods
 
     func colors(
-        forIntentColor intentColor: ButtonIntentColor,
+        for intent: ButtonIntent,
         colors: Colors,
         dims: Dims
     ) -> ButtonColors {
@@ -22,9 +22,9 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
 
         let dim5 = dims.dim5
 
-        switch intentColor {
+        switch intent {
         case .primary:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.primary.primary,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: colors.primary.primary.opacity(dim5),
@@ -32,7 +32,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .secondary:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.secondary.secondary,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: colors.secondary.secondary.opacity(dim5),
@@ -40,7 +40,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .neutral:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.feedback.neutral,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: colors.feedback.neutral.opacity(dim5),
@@ -48,7 +48,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .alert:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.feedback.alert,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: colors.feedback.alert.opacity(dim5),
@@ -56,7 +56,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .success:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.feedback.success,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: colors.feedback.success.opacity(dim5),
@@ -64,7 +64,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .danger:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.feedback.error,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: colors.feedback.error.opacity(dim5),
@@ -72,7 +72,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 pressedBorderColor: pressedBorderColor
             )
         case .surface:
-            return ButtonColorsDefault(
+            return .init(
                 foregroundColor: colors.base.surface,
                 backgroundColor: ColorTokenDefault.clear,
                 pressedBackgroundColor: colors.base.surface.opacity(dim5),

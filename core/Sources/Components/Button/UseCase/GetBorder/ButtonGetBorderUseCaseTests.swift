@@ -92,7 +92,7 @@ private extension ButtonGetBorderUseCaseTests {
 
         // WHEN
         let border = useCase.execute(
-            forShape: givenShape,
+            for: givenShape,
             border: self.borderMock,
             variant: .filled
         )
@@ -114,7 +114,7 @@ private extension ButtonGetBorderUseCaseTests {
 
         // WHEN
         let border = useCase.execute(
-            forShape: .pill,
+            for: .pill,
             border: self.borderMock,
             variant: givenVariant
         )

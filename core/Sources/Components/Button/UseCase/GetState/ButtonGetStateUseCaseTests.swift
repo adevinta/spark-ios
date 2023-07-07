@@ -39,7 +39,7 @@ private extension ButtonGetStateUseCaseTests {
 
     func testExecute(
         givenIsEnabled: Bool,
-        expectedIsInteractionState: ButtonStateDefault
+        expectedIsInteractionState: ButtonState
     ) {
         // GIVEN
         let errorSuffixMessage = " for \(givenIsEnabled) givenIsEnabled"
@@ -48,7 +48,7 @@ private extension ButtonGetStateUseCaseTests {
 
         // GIVEN
         let interactionState = useCase.execute(
-            forIsEnabled: givenIsEnabled,
+            for: givenIsEnabled,
             dims: self.dimsMock
         )
 

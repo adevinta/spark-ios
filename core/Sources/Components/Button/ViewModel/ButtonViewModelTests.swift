@@ -21,24 +21,16 @@ final class ButtonViewModelTests: XCTestCase {
 
     private let themeMock = ThemeGeneratedMock.mocked()
 
-    private let borderMock = ButtonBorderGeneratedMock()
+    private let borderMock = ButtonBorder.mocked()
 
-    private var colorsMock: ButtonColorsGeneratedMock = {
-        let mock = ButtonColorsGeneratedMock()
-        mock.underlyingForegroundColor = ColorTokenGeneratedMock()
-        mock.underlyingBackgroundColor = ColorTokenGeneratedMock()
-        mock.underlyingPressedBackgroundColor = ColorTokenGeneratedMock()
-        mock.underlyingBorderColor = ColorTokenGeneratedMock()
-        mock.underlyingPressedBorderColor = ColorTokenGeneratedMock()
-        return mock
-    }()
+    private let colorsMock = ButtonColors.mocked()
 
-    private let contentMock = ButtonContentGeneratedMock()
-    private let currentColorsMock = ButtonCurrentColorsGeneratedMock()
+    private let contentMock = ButtonContent.mocked()
+    private let currentColorsMock = ButtonCurrentColors.mocked()
     private let isIconOnlyMock = false
-    private let sizesMock = ButtonSizesGeneratedMock()
-    private let spacingsMock = ButtonSpacingsGeneratedMock()
-    private let stateMock = ButtonStateGeneratedMock()
+    private let sizesMock = ButtonSizes.mocked()
+    private let spacingsMock = ButtonSpacings.mocked()
+    private let stateMock = ButtonState.mocked()
 
     private lazy var getBorderUseCaseMock: ButtonGetBorderUseCaseableGeneratedMock = {
         let mock = ButtonGetBorderUseCaseableGeneratedMock()
@@ -47,7 +39,7 @@ final class ButtonViewModelTests: XCTestCase {
     }()
     private lazy var getColorsUseCaseMock: ButtonGetColorsUseCaseableGeneratedMock = {
         let mock = ButtonGetColorsUseCaseableGeneratedMock()
-        mock.executeWithThemeAndIntentColorAndVariantReturnValue = self.colorsMock
+        mock.executeWithThemeAndIntentAndVariantReturnValue = self.colorsMock
         return mock
     }()
     private lazy var getContentUseCaseMock: ButtonGetContentUseCaseableGeneratedMock = {
@@ -108,7 +100,7 @@ final class ButtonViewModelTests: XCTestCase {
 
     func test_properties_on_init() throws {
         // GIVEN
-        let intentColorMock: ButtonIntentColor = .danger
+        let intentMock: ButtonIntent = .danger
         let variantMock: ButtonVariant = .filled
         let sizeMock: ButtonSize = .large
         let shapeMock: ButtonShape = .pill
@@ -119,7 +111,7 @@ final class ButtonViewModelTests: XCTestCase {
 
         // WHEN
         let viewModel = self.classToTest(
-            intentColor: intentColorMock,
+            intent: intentMock,
             variant: variantMock,
             size: sizeMock,
             shape: shapeMock,
@@ -136,9 +128,9 @@ final class ButtonViewModelTests: XCTestCase {
         XCTAssertIdentical(viewModel.theme as? ThemeGeneratedMock,
                            self.themeMock,
                            "Wrong theme value")
-        XCTAssertEqual(viewModel.intentColor,
-                       intentColorMock,
-                       "Wrong intentColor value")
+        XCTAssertEqual(viewModel.intent,
+                       intentMock,
+                       "Wrong intent value")
         XCTAssertEqual(viewModel.variant,
                        variantMock,
                        "Wrong variant value")
@@ -215,7 +207,7 @@ final class ButtonViewModelTests: XCTestCase {
 
     func test_published_properties_on_load() throws {
         // GIVEN
-        let intentColorMock: ButtonIntentColor = .secondary
+        let intentMock: ButtonIntent = .secondary
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
@@ -226,7 +218,7 @@ final class ButtonViewModelTests: XCTestCase {
 
         // WHEN
         let viewModel = self.classToTest(
-            intentColor: intentColorMock,
+            intent: intentMock,
             variant: variantMock,
             size: sizeMock,
             shape: shapeMock,
@@ -284,7 +276,7 @@ final class ButtonViewModelTests: XCTestCase {
         )
         self.testGetColorsUseCaseMock(
             givenTheme: self.themeMock,
-            givenIntentColor: intentColorMock,
+            givenIntent: intentMock,
             givenVariant: variantMock
         )
         self.testGetContentUseCaseMock(
@@ -406,7 +398,7 @@ final class ButtonViewModelTests: XCTestCase {
         // GIVEN
         let newThemeMock = themeMock
 
-        let intentColorMock: ButtonIntentColor = .secondary
+        let intentMock: ButtonIntent = .secondary
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
@@ -416,7 +408,7 @@ final class ButtonViewModelTests: XCTestCase {
         let isEnabledMock = false
 
         let viewModel = self.classToTest(
-            intentColor: intentColorMock,
+            intent: intentMock,
             variant: variantMock,
             size: sizeMock,
             shape: shapeMock,
@@ -469,7 +461,7 @@ final class ButtonViewModelTests: XCTestCase {
         )
         self.testGetColorsUseCaseMock(
             givenTheme: newThemeMock,
-            givenIntentColor: intentColorMock,
+            givenIntent: intentMock,
             givenVariant: variantMock
         )
         self.testGetCurrentColorsUseCaseMock(
@@ -491,24 +483,24 @@ final class ButtonViewModelTests: XCTestCase {
         // **
     }
 
-    func test_set_intentColor_with_new_value() {
-        self.testSetIntentColor(
+    func test_set_intent_with_new_value() {
+        self.testSetIntent(
             givenValue: .danger,
             givenNewValue: .primary
         )
     }
     
-    func test_set_intentColor_without_new_value() {
-        let valueMock: ButtonIntentColor = .primary
-        self.testSetIntentColor(
+    func test_set_intent_without_new_value() {
+        let valueMock: ButtonIntent = .primary
+        self.testSetIntent(
             givenValue: valueMock,
             givenNewValue: valueMock
         )
     }
 
-    private func testSetIntentColor(
-        givenValue: ButtonIntentColor,
-        givenNewValue: ButtonIntentColor
+    private func testSetIntent(
+        givenValue: ButtonIntent,
+        givenNewValue: ButtonIntent
     ) {
         // GIVEN
         let isNewValue = givenValue != givenNewValue
@@ -516,7 +508,7 @@ final class ButtonViewModelTests: XCTestCase {
         let variantMock: ButtonVariant = .outlined
 
         let viewModel = self.classToTest(
-            intentColor: givenValue,
+            intent: givenValue,
             variant: variantMock
         )
 
@@ -528,7 +520,7 @@ final class ButtonViewModelTests: XCTestCase {
         self.resetMockedData()
 
         // WHEN
-        viewModel.set(intentColor: givenNewValue)
+        viewModel.set(intent: givenNewValue)
 
         // THEN
 
@@ -542,7 +534,7 @@ final class ButtonViewModelTests: XCTestCase {
         self.testGetColorsUseCaseMock(
             numberOfCalls: isNewValue ? 1 : 0,
             givenTheme: self.themeMock,
-            givenIntentColor: givenNewValue,
+            givenIntent: givenNewValue,
             givenVariant: variantMock
         )
         self.testGetCurrentColorsUseCaseMock(
@@ -575,11 +567,11 @@ final class ButtonViewModelTests: XCTestCase {
         // GIVEN
         let isNewValue = givenValue != givenNewValue
 
-        let intentColorMock: ButtonIntentColor = .success
+        let intentMock: ButtonIntent = .success
         let shapeMock: ButtonShape = .square
 
         let viewModel = self.classToTest(
-            intentColor: intentColorMock,
+            intent: intentMock,
             variant: givenValue,
             shape: shapeMock
         )
@@ -610,7 +602,7 @@ final class ButtonViewModelTests: XCTestCase {
         self.testGetColorsUseCaseMock(
             numberOfCalls: isNewValue ? 1 : 0,
             givenTheme: self.themeMock,
-            givenIntentColor: intentColorMock,
+            givenIntent: intentMock,
             givenVariant: givenNewValue
         )
         self.testGetCurrentColorsUseCaseMock(
@@ -863,7 +855,7 @@ final class ButtonViewModelTests: XCTestCase {
         // **
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: isNewValue ? 2 : 0,
             givenIconImage: nil,
             givenText: givenNewValue,
             givenAttributedText: nil
@@ -948,7 +940,7 @@ final class ButtonViewModelTests: XCTestCase {
         // **
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: isNewValue ? 2 : 0,
             givenIconImage: nil,
             givenText: nil,
             givenAttributedText: givenNewValue
@@ -1035,7 +1027,7 @@ final class ButtonViewModelTests: XCTestCase {
         // **
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: isNewValue ? 2 : 0,
             givenIconImage: givenNewValue,
             givenText: nil,
             givenAttributedText: nil
@@ -1122,7 +1114,7 @@ final class ButtonViewModelTests: XCTestCase {
 private extension ButtonViewModelTests {
 
     private func classToTest(
-        intentColor: ButtonIntentColor = .primary,
+        intent: ButtonIntent = .primary,
         variant: ButtonVariant = .tinted,
         size: ButtonSize = .medium,
         shape: ButtonShape = .rounded,
@@ -1148,7 +1140,7 @@ private extension ButtonViewModelTests {
 
         return .init(
             theme: self.themeMock,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             size: size,
             shape: shape,
@@ -1197,37 +1189,37 @@ private extension ButtonViewModelTests {
     }
 
     private func testState(on viewModel: ButtonViewModel) {
-        XCTAssertIdentical(viewModel.state as? ButtonStateGeneratedMock,
+        XCTAssertEqual(viewModel.state,
                            self.stateMock,
                            "Wrong state value")
     }
 
     private func testCurrentColors(on viewModel: ButtonViewModel) {
-        XCTAssertIdentical(viewModel.currentColors as? ButtonCurrentColorsGeneratedMock,
+        XCTAssertEqual(viewModel.currentColors,
                            self.currentColorsMock,
                            "Wrong currentColors value")
     }
 
     private func testSizes(on viewModel: ButtonViewModel) {
-        XCTAssertIdentical(viewModel.sizes as? ButtonSizesGeneratedMock,
+        XCTAssertEqual(viewModel.sizes,
                            self.sizesMock,
                            "Wrong sizes value")
     }
 
     private func testBorder(on viewModel: ButtonViewModel) {
-        XCTAssertIdentical(viewModel.border as? ButtonBorderGeneratedMock,
+        XCTAssertEqual(viewModel.border,
                            self.borderMock,
                            "Wrong border value")
     }
 
     private func testSpacings(on viewModel: ButtonViewModel) {
-        XCTAssertIdentical(viewModel.spacings as? ButtonSpacingsGeneratedMock,
+        XCTAssertEqual(viewModel.spacings,
                            self.spacingsMock,
                            "Wrong spacings value")
     }
 
     private func testContent(on viewModel: ButtonViewModel) {
-        XCTAssertIdentical(viewModel.content as? ButtonContentGeneratedMock,
+        XCTAssertEqual(viewModel.content,
                            self.contentMock,
                            "Wrong content value")
     }
@@ -1270,21 +1262,21 @@ private extension ButtonViewModelTests {
     private func testGetColorsUseCaseMock(
         numberOfCalls: Int = 1,
         givenTheme: ThemeGeneratedMock? = nil,
-        givenIntentColor: ButtonIntentColor? = nil,
+        givenIntent: ButtonIntent? = nil,
         givenVariant: ButtonVariant? = nil
     ) {
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantCallsCount,
+        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getColorsUseCase")
 
-        if numberOfCalls > 0, let givenTheme, let givenIntentColor, let givenVariant {
-            let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantReceivedArguments
+        if numberOfCalls > 0, let givenTheme, let givenIntent, let givenVariant {
+            let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
             XCTAssertIdentical(try XCTUnwrap(getColorsUseCaseArgs?.theme as? ThemeGeneratedMock),
                                givenTheme,
                                "Wrong theme parameter on execute on getColorsUseCase")
-            XCTAssertEqual(getColorsUseCaseArgs?.intentColor,
-                           givenIntentColor,
-                           "Wrong intentColor parameter on execute on getColorsUseCase")
+            XCTAssertEqual(getColorsUseCaseArgs?.intent,
+                           givenIntent,
+                           "Wrong intent parameter on execute on getColorsUseCase")
             XCTAssertEqual(getColorsUseCaseArgs?.variant,
                            givenVariant,
                            "Wrong variant parameter on execute on getColorsUseCase")
@@ -1321,7 +1313,7 @@ private extension ButtonViewModelTests {
 
     private func testGetCurrentColorsUseCaseMock(
         numberOfCalls: Int = 1,
-        givenColors: ButtonColorsGeneratedMock? = nil,
+        givenColors: ButtonColors? = nil,
         givenIsPressed: Bool? = nil
     ) {
         XCTAssertEqual(self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedCallsCount,
@@ -1330,7 +1322,7 @@ private extension ButtonViewModelTests {
 
         if numberOfCalls > 0, let givenColors, let givenIsPressed {
             let getCurrentColorsUseCaseArgs = self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedReceivedArguments
-            XCTAssertIdentical(try XCTUnwrap(getCurrentColorsUseCaseArgs?.colors as? ButtonColorsGeneratedMock),
+            XCTAssertEqual(try XCTUnwrap(getCurrentColorsUseCaseArgs?.colors),
                                givenColors,
                                "Wrong colors parameter on execute on getCurrentColorsUseCase")
             XCTAssertEqual(getCurrentColorsUseCaseArgs?.isPressed,
@@ -1340,7 +1332,7 @@ private extension ButtonViewModelTests {
     }
 
     private func testGetIsIconOnlyUseCaseMock(
-        numberOfCalls: Int = 1,
+        numberOfCalls: Int = 2,
         givenIconImage: UIImage? = nil,
         givenText: String? = nil,
         givenAttributedText: NSAttributedString? = nil
@@ -1429,9 +1421,9 @@ private extension ButtonViewModelTests {
         self.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantReceivedArguments = nil
         self.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantReceivedInvocations = []
 
-        self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantCallsCount = 0
-        self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantReceivedArguments = nil
-        self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantReceivedInvocations = []
+        self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount = 0
+        self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments = nil
+        self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedInvocations = []
 
         self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextCallsCount = 0
         self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReceivedArguments = nil

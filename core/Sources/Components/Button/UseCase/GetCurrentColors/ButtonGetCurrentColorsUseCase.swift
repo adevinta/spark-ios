@@ -8,7 +8,7 @@
 
 // sourcery: AutoMockable
 protocol ButtonGetCurrentColorsUseCaseable {
-    func execute(forColors colors: any ButtonColors, isPressed: Bool) -> ButtonCurrentColors
+    func execute(for colors: ButtonColors, isPressed: Bool) -> ButtonCurrentColors
 }
 
 struct ButtonGetCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable {
@@ -16,17 +16,17 @@ struct ButtonGetCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable {
     // MARK: - Methods
 
     func execute(
-        forColors colors: any ButtonColors,
+        for colors: ButtonColors,
         isPressed: Bool
     ) -> ButtonCurrentColors {
         if isPressed {
-            return ButtonCurrentColorsDefault(
+            return .init(
                 foregroundColor: colors.foregroundColor,
                 backgroundColor: colors.pressedBackgroundColor,
                 borderColor: colors.pressedBorderColor
             )
         } else {
-            return ButtonCurrentColorsDefault(
+            return .init(
                 foregroundColor: colors.foregroundColor,
                 backgroundColor: colors.backgroundColor,
                 borderColor: colors.borderColor

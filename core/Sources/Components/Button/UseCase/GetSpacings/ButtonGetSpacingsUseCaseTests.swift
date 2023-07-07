@@ -22,7 +22,7 @@ final class ButtonGetSpacingsUseCaseTests: XCTestCase {
 
         // WHEN
         let spacings = useCase.execute(
-            forSpacing: spacingMock,
+            for: spacingMock,
             isOnlyIcon: true
         )
 
@@ -46,7 +46,7 @@ final class ButtonGetSpacingsUseCaseTests: XCTestCase {
 
         // WHEN
         let spacings = useCase.execute(
-            forSpacing: spacingMock,
+            for: spacingMock,
             isOnlyIcon: false
         )
 

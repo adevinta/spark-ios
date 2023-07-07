@@ -192,12 +192,6 @@ final class SwitchViewModelTests: XCTestCase {
             givenIsEnabled: isEnabledMock
         )
         // **
-
-        // Maker
-        self.testMakeTextContentMock(
-            givenText: self.textMock,
-            givenAttributedText: self.attributedTextMock
-        )
     }
 
     // MARK: - Toggle Tests
@@ -789,10 +783,5 @@ private extension SwitchViewModelTests {
         self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount = 0
         self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments = nil
         self.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsReceivedInvocations = []
-
-        // Clear Dependencies Maker
-        self.dependenciesMock.makeTextContentWithTextAndAttributedTextCallsCount = 0
-        self.dependenciesMock.makeTextContentWithTextAndAttributedTextReceivedArguments = nil
-        self.dependenciesMock.makeTextContentWithTextAndAttributedTextReceivedInvocations = []
     }
 }

@@ -21,8 +21,8 @@ struct ButtonComponentView: View {
     @State private var versionSheetIsPresented = false
     @State var version: ComponentVersion = .uiKit
 
-    @State private var intentColorSheetIsPresented = false
-    @State var intentColor: ButtonIntentColor = .primary 
+    @State private var intentSheetIsPresented = false
+    @State var intent: ButtonIntent = .primary 
 
     @State private var variantSheetIsPresented = false
     @State var variant: ButtonVariant = .filled
@@ -69,7 +69,7 @@ struct ButtonComponentView: View {
                                 }
                             }
                         }
-                        .onChange(of: self.intentColor) { newValue in
+                        .onChange(of: self.intent) { newValue in
                             self.shouldShowReverseBackgroundColor = (newValue == .surface)
                         }
                     }
@@ -80,13 +80,13 @@ struct ButtonComponentView: View {
                     HStack() {
                         Text("Intent: ")
                             .bold()
-                        Button("\(self.intentColor.name)") {
-                            self.intentColorSheetIsPresented = true
+                        Button("\(self.intent.name)") {
+                            self.intentSheetIsPresented = true
                         }
-                        .confirmationDialog("Select an intent", isPresented: self.$intentColorSheetIsPresented) {
-                            ForEach(ButtonIntentColor.allCases, id: \.self) { intentColor in
-                                Button("\(intentColor.name)") {
-                                    self.intentColor = intentColor
+                        .confirmationDialog("Select an intent", isPresented: self.$intentSheetIsPresented) {
+                            ForEach(ButtonIntent.allCases, id: \.self) { intent in
+                                Button("\(intent.name)") {
+                                    self.intent = intent
                                 }
                             }
                         }
@@ -206,7 +206,7 @@ struct ButtonComponentView: View {
                             viewModel: self.viewModel,
                             width: geometry.size.width,
                             height: self.$uiKitViewHeight,
-                            intentColor: self.$intentColor.wrappedValue,
+                            intent: self.$intent.wrappedValue,
                             variant: self.$variant.wrappedValue,
                             size: self.$size.wrappedValue,
                             shape: self.$shape.wrappedValue,
@@ -237,7 +237,7 @@ struct ButtonComponentView_Previews: PreviewProvider {
 
 // MARK: - Extension
 
-private extension ButtonIntentColor {
+private extension ButtonIntent {
 
     var name: String {
         switch self {

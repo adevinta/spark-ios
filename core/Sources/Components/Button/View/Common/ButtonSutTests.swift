@@ -15,7 +15,7 @@ struct ButtonSutTests {
 
     // MARK: - Properties
 
-    let intentColor: ButtonIntentColor
+    let intent: ButtonIntent
     let variant: ButtonVariant
     let size: ButtonSize
     let shape: ButtonShape
@@ -31,7 +31,7 @@ struct ButtonSutTests {
     func testName(on function: String = #function) -> String {
         return [
             function,
-            "\(self.intentColor)",
+            "\(self.intent)",
             "\(self.variant)",
             "\(self.size)",
             "\(self.shape)",
@@ -47,17 +47,17 @@ struct ButtonSutTests {
     // MARK: - Cases
 
     static func allColorsCases() -> [Self] {
-        let intentColorPossibilities = ButtonIntentColor.allCases
+        let intentPossibilities = ButtonIntent.allCases
         let variantPossibilities = ButtonVariant.allCases
         let isEnabledPossibilities = Bool.allCases
         let isPressedPossibilities = Bool.allCases
 
-        return intentColorPossibilities.flatMap { intentColor in
+        return intentPossibilities.flatMap { intent in
             variantPossibilities.flatMap { variant in
                 isEnabledPossibilities.flatMap { isEnabled in
                     isPressedPossibilities.map { isPressed in
                             .init(
-                                intentColor: intentColor,
+                                intent: intent,
                                 variant: variant,
                                 size: .medium,
                                 shape: .rounded,
@@ -81,7 +81,7 @@ struct ButtonSutTests {
         return sizePossibilities.flatMap { size in
             shapePossibilities.map { shape in
                     .init(
-                        intentColor: .primary,
+                        intent: .primary,
                         variant: .filled,
                         size: size,
                         shape: shape,
@@ -112,7 +112,7 @@ struct ButtonSutTests {
 
         return items.map { item in
             .init(
-                intentColor: .primary,
+                intent: .primary,
                 variant: .filled,
                 size: .medium,
                 shape: .rounded,

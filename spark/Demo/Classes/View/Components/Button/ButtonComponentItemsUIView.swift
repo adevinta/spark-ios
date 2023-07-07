@@ -22,7 +22,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     var width: CGFloat
     @Binding var height: CGFloat
 
-    private let intentColor: ButtonIntentColor
+    private let intent: ButtonIntent
     private let variant: ButtonVariant
     private let size: ButtonSize
     private let shape: ButtonShape
@@ -36,7 +36,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         viewModel: ButtonComponentViewModel,
         width: CGFloat,
         height: Binding<CGFloat>,
-        intentColor: ButtonIntentColor,
+        intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
@@ -55,7 +55,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         )
         self.width = width
         self._height = height
-        self.intentColor = intentColor
+        self.intent = intent
         self.variant = variant
         self.size = size
         self.shape = shape
@@ -73,7 +73,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         case .icon:
             buttonView = ButtonUIView(
                 theme: SparkTheme.shared,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 variant: self.variant,
                 size: self.size,
                 shape: self.shape,
@@ -85,7 +85,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         case .text:
             buttonView = ButtonUIView(
                 theme: SparkTheme.shared,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 variant: self.variant,
                 size: self.size,
                 shape: self.shape,
@@ -97,7 +97,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         case .attributedText:
             buttonView = ButtonUIView(
                 theme: SparkTheme.shared,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 variant: self.variant,
                 size: self.size,
                 shape: self.shape,
@@ -109,7 +109,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         case .iconAndText:
             buttonView = ButtonUIView(
                 theme: SparkTheme.shared,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 variant: self.variant,
                 size: self.size,
                 shape: self.shape,
@@ -122,7 +122,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         case .iconAndAttributedText:
             buttonView = ButtonUIView(
                 theme: SparkTheme.shared,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 variant: self.variant,
                 size: self.size,
                 shape: self.shape,
@@ -151,8 +151,8 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
             return
         }
 
-        if buttonView.intentColor != self.intentColor {
-            buttonView.intentColor = self.intentColor
+        if buttonView.intent != self.intent {
+            buttonView.intent = self.intent
         }
 
         if buttonView.variant != self.variant {

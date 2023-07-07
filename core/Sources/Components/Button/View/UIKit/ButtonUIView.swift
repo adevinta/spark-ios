@@ -106,13 +106,13 @@ public final class ButtonUIView: UIView {
         }
     }
 
-    /// The intentColor of the button.
-    public var intentColor: ButtonIntentColor {
+    /// The intent of the button.
+    public var intent: ButtonIntent {
         get {
-            return self.viewModel.intentColor
+            return self.viewModel.intent
         }
         set {
-            self.viewModel.set(intentColor: newValue)
+            self.viewModel.set(intent: newValue)
         }
     }
 
@@ -241,7 +241,7 @@ public final class ButtonUIView: UIView {
     /// Initialize a new button view with a text.
     /// - Parameters:
     ///   - theme: The spark theme of the button.
-    ///   - intentColor: The intent color of the button.
+    ///   - intent: The intent of the button.
     ///   - variant: The variant of the button.
     ///   - size: The size of the button.
     ///   - shape: The shape of the button.
@@ -250,7 +250,7 @@ public final class ButtonUIView: UIView {
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
         theme: Theme,
-        intentColor: ButtonIntentColor,
+        intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
@@ -260,7 +260,7 @@ public final class ButtonUIView: UIView {
     ) {
         self.init(
             theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             size: size,
             shape: shape,
@@ -275,7 +275,7 @@ public final class ButtonUIView: UIView {
     /// Initialize a new button view with an attributed text.
     /// - Parameters:
     ///   - theme: The spark theme of the button.
-    ///   - intentColor: The intent color of the button.
+    ///   - intent: The intent of the button.
     ///   - variant: The variant of the button.
     ///   - size: The size of the button.
     ///   - shape: The shape of the button.
@@ -284,7 +284,7 @@ public final class ButtonUIView: UIView {
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
         theme: Theme,
-        intentColor: ButtonIntentColor,
+        intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
@@ -294,7 +294,7 @@ public final class ButtonUIView: UIView {
     ) {
         self.init(
             theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             size: size,
             shape: shape,
@@ -309,7 +309,7 @@ public final class ButtonUIView: UIView {
     /// Initialize a new button view with an icon image.
     /// - Parameters:
     ///   - theme: The spark theme of the button.
-    ///   - intentColor: The intent color of the button.
+    ///   - intent: The intent of the button.
     ///   - variant: The variant of the button.
     ///   - size: The size of the button.
     ///   - shape: The shape of the button.
@@ -318,7 +318,7 @@ public final class ButtonUIView: UIView {
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
         theme: Theme,
-        intentColor: ButtonIntentColor,
+        intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
@@ -328,7 +328,7 @@ public final class ButtonUIView: UIView {
     ) {
         self.init(
             theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             size: size,
             shape: shape,
@@ -343,7 +343,7 @@ public final class ButtonUIView: UIView {
     /// Initialize a new button view with an icon image and a text.
     /// - Parameters:
     ///   - theme: The spark theme of the button.
-    ///   - intentColor: The intent color of the button.
+    ///   - intent: The intent of the button.
     ///   - variant: The variant of the button.
     ///   - size: The size of the button.
     ///   - shape: The shape of the button.
@@ -353,7 +353,7 @@ public final class ButtonUIView: UIView {
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
         theme: Theme,
-        intentColor: ButtonIntentColor,
+        intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
@@ -364,7 +364,7 @@ public final class ButtonUIView: UIView {
     ) {
         self.init(
             theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             size: size,
             shape: shape,
@@ -379,7 +379,7 @@ public final class ButtonUIView: UIView {
     /// Initialize a new button view with an icon image and an attributed text.
     /// - Parameters:
     ///   - theme: The spark theme of the button.
-    ///   - intentColor: The intent color of the button.
+    ///   - intent: The intent of the button.
     ///   - variant: The variant of the button.
     ///   - size: The size of the button.
     ///   - shape: The shape of the button.
@@ -389,7 +389,7 @@ public final class ButtonUIView: UIView {
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
         theme: Theme,
-        intentColor: ButtonIntentColor,
+        intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
@@ -400,7 +400,7 @@ public final class ButtonUIView: UIView {
     ) {
         self.init(
             theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             size: size,
             shape: shape,
@@ -414,7 +414,7 @@ public final class ButtonUIView: UIView {
 
     private init(
         _ theme: Theme,
-        intentColor: ButtonIntentColor,
+        intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
@@ -426,7 +426,7 @@ public final class ButtonUIView: UIView {
     ) {
         self.viewModel = .init(
             theme: theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             size: size,
             shape: shape,
@@ -697,12 +697,12 @@ public final class ButtonUIView: UIView {
 
                 self.firstContentStackViewSubviewAnimation = false
 
-                if self.iconView.isHidden == content.showIconImage {
-                    self.iconView.isHidden = !content.showIconImage
+                if self.iconView.isHidden == content.shouldShowIconImage {
+                    self.iconView.isHidden = !content.shouldShowIconImage
                 }
 
-                if self.textLabel.isHidden == content.showText {
-                    self.textLabel.isHidden = !content.showText
+                if self.textLabel.isHidden == content.shouldShowText {
+                    self.textLabel.isHidden = !content.shouldShowText
                 }
                 self.contentStackView.layoutIfNeeded()
             }

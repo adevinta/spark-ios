@@ -8,8 +8,8 @@
 
 // sourcery: AutoMockable
 protocol ButtonGetColorsUseCaseable {
-    func execute(forTheme theme: Theme,
-                 intentColor: ButtonIntentColor,
+    func execute(for theme: Theme,
+                 intent: ButtonIntent,
                  variant: ButtonVariant) -> ButtonColors
 }
 
@@ -41,8 +41,8 @@ struct ButtonGetColorsUseCase: ButtonGetColorsUseCaseable {
 
     // MARK: - Methods
     func execute(
-        forTheme theme: Theme,
-        intentColor: ButtonIntentColor,
+        for theme: Theme,
+        intent: ButtonIntent,
         variant: ButtonVariant
     ) -> ButtonColors {
         let colors = theme.colors
@@ -63,7 +63,7 @@ struct ButtonGetColorsUseCase: ButtonGetColorsUseCaseable {
         }
         
         return useCase.colors(
-            forIntentColor: intentColor,
+            for: intent,
             colors: colors,
             dims: dims
         )

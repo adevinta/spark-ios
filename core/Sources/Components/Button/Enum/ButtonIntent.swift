@@ -1,5 +1,5 @@
 //
-//  ButtonIntentColor.swift
+//  ButtonIntent.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 02.05.23.
@@ -10,7 +10,7 @@ import Foundation
 
 /// A button intent is used to apply a color scheme to a button.
 @frozen
-public enum ButtonIntentColor: CaseIterable {
+public enum ButtonIntent: CaseIterable {
     /// Intent used for warning-feedback.
     case alert
 

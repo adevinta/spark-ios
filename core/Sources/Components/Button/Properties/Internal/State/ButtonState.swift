@@ -8,13 +8,7 @@
 
 import Foundation
 
-// sourcery: AutoMockable
-protocol ButtonState {
-    var isInteractionEnabled: Bool { get }
-    var opacity: CGFloat { get }
-}
-
-struct ButtonStateDefault: ButtonState {
+struct ButtonState: Equatable {
 
     // MARK: - Properties
 

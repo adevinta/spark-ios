@@ -27,10 +27,10 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenText: nil,
             givenAttributedText: nil,
             expectedContent: .init(
-                showIconImage: true,
+                shouldShowIconImage: true,
                 isIconImageOnRight: false,
                 iconImage: .left(self.imageMock),
-                showText: false
+                shouldShowText: false
             )
         )
     }
@@ -42,10 +42,10 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenText: nil,
             givenAttributedText: nil,
             expectedContent: .init(
-                showIconImage: true,
+                shouldShowIconImage: true,
                 isIconImageOnRight: true,
                 iconImage: .left(self.imageMock),
-                showText: false
+                shouldShowText: false
             )
         )
     }
@@ -57,10 +57,10 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenText: self.textMock,
             givenAttributedText: nil,
             expectedContent: .init(
-                showIconImage: true,
+                shouldShowIconImage: true,
                 isIconImageOnRight: false,
                 iconImage: .left(self.imageMock),
-                showText: true
+                shouldShowText: true
             )
         )
     }
@@ -72,10 +72,10 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenText: nil,
             givenAttributedText: self.attributedText,
             expectedContent: .init(
-                showIconImage: true,
+                shouldShowIconImage: true,
                 isIconImageOnRight: false,
                 iconImage: .left(self.imageMock),
-                showText: true
+                shouldShowText: true
             )
         )
     }
@@ -87,10 +87,10 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenText: self.textMock,
             givenAttributedText: nil,
             expectedContent: .init(
-                showIconImage: false,
+                shouldShowIconImage: false,
                 isIconImageOnRight: false,
                 iconImage: nil,
-                showText: true
+                shouldShowText: true
             )
         )
     }
@@ -102,10 +102,10 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenText: nil,
             givenAttributedText: self.attributedText,
             expectedContent: .init(
-                showIconImage: false,
+                shouldShowIconImage: false,
                 isIconImageOnRight: false,
                 iconImage: nil,
-                showText: true
+                shouldShowText: true
             )
         )
     }
@@ -120,7 +120,7 @@ private extension ButtonGetContentUseCaseTests {
         givenIconImage: UIImage?,
         givenText: String?,
         givenAttributedText: NSAttributedString?,
-        expectedContent: ButtonContentDefault
+        expectedContent: ButtonContent
     ) {
         // GIVEN
         var errorSuffixMessage = " for \(givenAlignment) alignment case"
@@ -152,16 +152,16 @@ private extension ButtonGetContentUseCaseTests {
 
         // GIVEN
         let content = useCase.execute(
-            forAlignment: givenAlignment,
+            for: givenAlignment,
             iconImage: iconImage,
             text: givenText,
             attributedText: attributedString
         )
 
         // THEN
-        XCTAssertEqual(content.showIconImage,
-                       expectedContent.showIconImage,
-                       "Wrong showIconImage" + errorSuffixMessage)
+        XCTAssertEqual(content.shouldShowIconImage,
+                       expectedContent.shouldShowIconImage,
+                       "Wrong shouldShowIconImage" + errorSuffixMessage)
         XCTAssertEqual(content.isIconImageOnRight,
                        expectedContent.isIconImageOnRight,
                        "Wrong isIconImageOnRight" + errorSuffixMessage)
@@ -169,8 +169,8 @@ private extension ButtonGetContentUseCaseTests {
                        expectedContent.iconImage?.leftValue,
                        "Wrong iconImage" + errorSuffixMessage)
 
-        XCTAssertEqual(content.showText,
-                       expectedContent.showText,
-                       "Wrong showText" + errorSuffixMessage)
+        XCTAssertEqual(content.shouldShowText,
+                       expectedContent.shouldShowText,
+                       "Wrong shouldShowText" + errorSuffixMessage)
     }
 }
