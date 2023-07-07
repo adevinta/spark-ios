@@ -82,12 +82,16 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
             let useCase = TagGetIntentColorsUseCase()
 
             // WHEN
-            let intentColors = useCase.execute(forIntentColor: item.givenIntentColor,
-                                               colors: colorsMock)
-
+            let intentColors = useCase.execute(
+                for: item.givenIntentColor,
+                colors: colorsMock
+            )
+            
             //  Intent Colors Properties
-            try Tester.testColorsProperties(givenIntentColors: intentColors,
-                                            getIntentColors: item)
+            try Tester.testColorsProperties(
+                givenIntentColors: intentColors,
+                getIntentColors: item
+            )
         }
     }
 }

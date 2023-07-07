@@ -8,7 +8,7 @@
 
 // sourcery: AutoMockable
 protocol TagGetColorsUseCaseable {
-    func execute(forTheme theme: Theme,
+    func execute(for theme: Theme,
                  intentColor: TagIntentColor,
                  variant: TagVariant) -> TagColors
 }
@@ -27,31 +27,31 @@ struct TagGetColorsUseCase: TagGetColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(forTheme theme: Theme,
+    func execute(for theme: Theme,
                  intentColor: TagIntentColor,
                  variant: TagVariant) -> TagColors {
         let intentColors = self.getIntentColorsUseCase.execute(
-            forIntentColor: intentColor,
+            for: intentColor,
             colors: theme.colors
         )
 
         switch variant {
         case .filled:
-            return TagColorsDefault(
+            return .init(
                 backgroundColor: intentColors.color,
                 borderColor: intentColors.color,
                 foregroundColor: intentColors.onColor
             )
 
         case .outlined:
-            return TagColorsDefault(
+            return .init(
                 backgroundColor: intentColors.surfaceColor,
                 borderColor: intentColors.color,
                 foregroundColor: intentColors.color
             )
 
         case .tinted:
-            return TagColorsDefault(
+            return .init(
                 backgroundColor: intentColors.containerColor,
                 borderColor: intentColors.containerColor,
                 foregroundColor: intentColors.onContainerColor
