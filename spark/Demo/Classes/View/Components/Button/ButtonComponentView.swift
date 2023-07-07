@@ -76,14 +76,14 @@ struct ButtonComponentView: View {
                     // **
 
                     // **
-                    // Intent Color
+                    // Intent
                     HStack() {
-                        Text("Intent color: ")
+                        Text("Intent: ")
                             .bold()
                         Button("\(self.intentColor.name)") {
                             self.intentColorSheetIsPresented = true
                         }
-                        .confirmationDialog("Select an intent color", isPresented: self.$intentColorSheetIsPresented) {
+                        .confirmationDialog("Select an intent", isPresented: self.$intentColorSheetIsPresented) {
                             ForEach(ButtonIntentColor.allCases, id: \.self) { intentColor in
                                 Button("\(intentColor.name)") {
                                     self.intentColor = intentColor

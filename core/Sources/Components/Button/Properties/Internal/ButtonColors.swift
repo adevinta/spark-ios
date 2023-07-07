@@ -8,7 +8,7 @@
 
 // sourcery: AutoMockable
 protocol ButtonColors {
-    var textColor: any ColorToken { get }
+    var foregroundColor: any ColorToken { get }
     var backgroundColor: any ColorToken { get }
     var pressedBackgroundColor: any ColorToken { get }
     var borderColor: any ColorToken { get }
@@ -20,7 +20,7 @@ struct ButtonColorsDefault: ButtonColors {
 
     // MARK: - Properties
 
-    let textColor: any ColorToken
+    let foregroundColor: any ColorToken
     let backgroundColor: any ColorToken
     let pressedBackgroundColor: any ColorToken
     let borderColor: any ColorToken

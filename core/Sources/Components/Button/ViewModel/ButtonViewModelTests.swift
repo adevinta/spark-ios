@@ -838,6 +838,7 @@ final class ButtonViewModelTests: XCTestCase {
 
         // WHEN
         viewModel.set(text: givenNewValue)
+        viewModel.set(text: givenNewValue) // The second call should do nothing
 
         // THEN
         // **
@@ -928,6 +929,7 @@ final class ButtonViewModelTests: XCTestCase {
 
         // WHEN
         viewModel.set(attributedText: .left(givenNewValue))
+        viewModel.set(attributedText: .left(givenNewValue)) // The second call should do nothing
 
         // THEN
         // **

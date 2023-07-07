@@ -27,10 +27,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.primary.primary,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.primary.primary,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.primary.primary.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -38,10 +35,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.secondary.secondary,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.secondary.secondary,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.secondary.secondary.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -49,10 +43,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.feedback.neutral,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.feedback.neutral,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.feedback.neutral.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -60,10 +51,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.feedback.alert,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.feedback.alert,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.feedback.alert.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -71,10 +59,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.feedback.success,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.feedback.success,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.feedback.success.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -82,10 +67,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.feedback.error,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.feedback.error,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.feedback.error.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
@@ -93,10 +75,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.base.surface,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.base.surface,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.base.surface.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )

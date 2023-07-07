@@ -10,8 +10,6 @@ import Foundation
 
 struct ButtonVariantGetContrastUseCase: ButtonGetVariantUseCaseable {
 
-struct ButtonVariantGetContrastUseCase: ButtonGetVariantUseCaseable {
-
     // MARK: - Methods
 
     func colors(

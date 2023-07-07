@@ -26,10 +26,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.primary.primary,
                 backgroundColor: backgroundColor,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.primary.primary,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.primary.primary.opacity(dim5),
                 borderColor: colors.primary.primary,
                 pressedBorderColor: colors.primary.primary
             )
@@ -37,10 +34,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.secondary.secondary,
                 backgroundColor: backgroundColor,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.secondary.secondary,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.secondary.secondary.opacity(dim5),
                 borderColor: colors.secondary.secondary,
                 pressedBorderColor: colors.secondary.secondary
             )
@@ -48,10 +42,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.feedback.neutral,
                 backgroundColor: backgroundColor,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.feedback.neutral,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.feedback.neutral.opacity(dim5),
                 borderColor: colors.feedback.neutral,
                 pressedBorderColor: colors.feedback.neutral
             )
@@ -59,10 +50,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.feedback.alert,
                 backgroundColor: backgroundColor,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.feedback.alert,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.feedback.alert.opacity(dim5),
                 borderColor: colors.feedback.alert,
                 pressedBorderColor: colors.feedback.alert
             )
@@ -70,10 +58,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.feedback.success,
                 backgroundColor: backgroundColor,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.feedback.success,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.feedback.success.opacity(dim5),
                 borderColor: colors.feedback.success,
                 pressedBorderColor: colors.feedback.success
             )
@@ -81,10 +66,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.feedback.error,
                 backgroundColor: backgroundColor,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.feedback.error,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.feedback.error.opacity(dim5),
                 borderColor: colors.feedback.error,
                 pressedBorderColor: colors.feedback.error
             )
@@ -92,10 +74,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
             return ButtonColorsDefault(
                 foregroundColor: colors.base.surface,
                 backgroundColor: colors.base.surfaceInverse,
-                pressedBackgroundColor: FullColorTokenDefault(
-                    colorToken: colors.base.surface,
-                    opacity: dim5
-                ),
+                pressedBackgroundColor: colors.base.surface.opacity(dim5),
                 borderColor: colors.base.surface,
                 pressedBorderColor: colors.base.surface
             )

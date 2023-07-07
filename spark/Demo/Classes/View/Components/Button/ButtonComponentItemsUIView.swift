@@ -179,21 +179,17 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
 
         case .text:
             buttonView.iconImage = nil
-            buttonView.attributedText = nil
             buttonView.text = self.viewModel.text
 
         case .attributedText:
             buttonView.iconImage = nil
-            buttonView.text = nil
             buttonView.attributedText = self.attributedText
 
         case .iconAndText:
-            buttonView.attributedText = nil
             buttonView.iconImage = self.iconImage
             buttonView.text = self.viewModel.text
 
         case .iconAndAttributedText:
-            buttonView.text = nil
             buttonView.iconImage = self.iconImage
             buttonView.attributedText = self.attributedText
         }

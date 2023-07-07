@@ -41,6 +41,7 @@ final class ButtonViewModel: ObservableObject {
     private var isIconOnly: Bool = false // Reset on init with setIsOnlyIcon func
     private var text: String?
     private var attributedText: AttributedStringEither?
+    private var textIsDisplayed: Bool // True when text is displayed, false when attributed text is displayed
 
     private var isPressed: Bool = false
 
@@ -71,6 +72,8 @@ final class ButtonViewModel: ObservableObject {
         self.text = text
         self.attributedText = attributedText
         self.isEnabled = isEnabled
+
+        self.textIsDisplayed = text != nil
 
         self.dependencies = dependencies
     }
@@ -154,8 +157,9 @@ final class ButtonViewModel: ObservableObject {
     }
 
     func set(text: String?) {
-        if self.text != text {
+        if self.text != text || !self.textIsDisplayed {
             self.text = text
+            self.textIsDisplayed = true
 
             // Should be called before *DidUpdate* methods
             self.setIsOnlyIcon()
@@ -173,8 +177,9 @@ final class ButtonViewModel: ObservableObject {
     }
 
     func set(attributedText: AttributedStringEither?) {
-        if self.attributedText != attributedText {
+        if self.attributedText != attributedText || self.textIsDisplayed {
             self.attributedText = attributedText
+            self.textIsDisplayed = false
 
             // Should be called before *DidUpdate* methods
             self.setIsOnlyIcon()

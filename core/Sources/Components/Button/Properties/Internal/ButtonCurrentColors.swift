@@ -8,9 +8,9 @@
 
 // sourcery: AutoMockable
 protocol ButtonCurrentColors {
-    var foregroundColor: ColorToken { get }
-    var backgroundColor: ColorToken { get }
-    var borderColor: ColorToken { get }
+    var foregroundColor: any ColorToken { get }
+    var backgroundColor: any ColorToken { get }
+    var borderColor: any ColorToken { get }
 }
 
 /// Current Button Colors properties from a button colors and state
@@ -18,7 +18,7 @@ struct ButtonCurrentColorsDefault: ButtonCurrentColors {
 
     // MARK: - Properties
 
-    let foregroundColor: ColorToken
-    let backgroundColor: ColorToken
-    let borderColor: ColorToken
+    let foregroundColor: any ColorToken
+    let backgroundColor: any ColorToken
+    let borderColor: any ColorToken
 }
