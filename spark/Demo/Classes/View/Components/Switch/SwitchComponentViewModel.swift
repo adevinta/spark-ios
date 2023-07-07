@@ -12,7 +12,7 @@ struct SwitchComponentViewModel {
 
     // MARK: - Properties
 
-    private let text: String = "Text"
+    let text: String = "Text"
     private let multilineText: String = "This is an example of a multi-line text which is very long and in which the user should read all the information."
     let onImageNamed: String = "check"
     let offImageNamed: String = "close"

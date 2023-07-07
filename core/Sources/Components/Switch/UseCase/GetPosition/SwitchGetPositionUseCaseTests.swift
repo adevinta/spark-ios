@@ -45,7 +45,7 @@ private extension SwitchGetPositionUseCaseTests {
 
     func testExecute(
         givenAlignment: SwitchAlignment,
-        expectedPosition: SwitchPosition
+        expectedPosition: SwitchPositionDefault
     ) throws {
         // GIVEN
         let errorPrefixMessage = " for .\(givenAlignment) case"

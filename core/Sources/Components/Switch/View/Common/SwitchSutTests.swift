@@ -13,17 +13,19 @@ import XCTest
 
 struct SwitchSutTests {
 
+    // MARK: - Type Alias
+
+    typealias SwitchAttributedStringEither = Either<NSAttributedString, AttributedString>
+
     // MARK: - Properties
 
     let intentColor: SwitchIntentColor
     let isOn: Bool
     let alignment: SwitchAlignment
     let isEnabled: Bool
-    let variant: SwitchVariant?
-    private let isMultilineText: Bool
-    var text: String {
-        return self.isMultilineText ? "Multiline switch.\nMore text.\nAnd more text." : "Text"
-    }
+    let images: SwitchImagesEither?
+    let text: String?
+    let attributedText: SwitchAttributedStringEither?
 
     // MARK: - Getter
 
@@ -34,39 +36,81 @@ struct SwitchSutTests {
             self.isOn ? "isOn" : "isOff",
             "\(self.alignment)" + "Aligment",
             self.isEnabled ? "isEnabled" : "isDisabled",
-            self.variant != nil ? "withVariant" : "withoutVariant",
-            self.isMultilineText ? "isMultilineText" : "isSinglelineText",
+            self.images != nil ? "withImages" : "withoutImages",
+            self.text != nil ? "withText" : "withoutText",
+            self.attributedText != nil ? "withAttributedText" : "withoutAttributedText",
         ].joined(separator: "-")
     }
 
     // MARK: - Cases
 
-    static func allCases(isSwiftUIComponent: Bool) throws -> [Self] {
-        let intentColorPossibilities: [SwitchIntentColor] = [.alert, .error, .info, .neutral, .primary, .secondary, .success]
-        let isOnPossibilities = [true, false]
-        let alignmentPossibilities: [SwitchAlignment] = [.left, .right]
-        let isEnabledPossibilities = [true, false]
-        let variantPossibilities: [SwitchVariant?] = try [nil, .init(isSwiftUIComponent: isSwiftUIComponent)]
-        let isMultilineTextPossibilities = [true, false]
+    /// Test all colors for all intent, isOn and IsEnabled cases
+    static func allColorsCases(isSwiftUIComponent: Bool) throws -> [Self] {
+        let intentColorPossibilities = SwitchIntentColor.allCases
+        let isOnPossibilities = Bool.allCases
+        let isEnabledPossibilities = Bool.allCases
 
         return intentColorPossibilities.flatMap { intentColor in
             isOnPossibilities.flatMap { isOn in
-                alignmentPossibilities.flatMap { alignment in
-                    isEnabledPossibilities.flatMap { isEnabled in
-                        variantPossibilities.flatMap { variant in
-                            isMultilineTextPossibilities.map { isMultilineText -> SwitchSutTests in
-                                    .init(
-                                        intentColor: intentColor,
-                                        isOn: isOn,
-                                        alignment: alignment,
-                                        isEnabled: isEnabled,
-                                        variant: variant,
-                                        isMultilineText: isMultilineText
-                                    )
-                            }
-                        }
-                    }
+                isEnabledPossibilities.map { isEnabled -> SwitchSutTests in
+                        .init(
+                            intentColor: intentColor,
+                            isOn: isOn,
+                            alignment: .left,
+                            isEnabled: isEnabled,
+                            images: nil,
+                            text: "My Color Switch",
+                            attributedText: nil
+                        )
                 }
+            }
+        }
+    }
+
+    /// Test all contents for all images, text and attributedText cases
+    static func allContentsCases(isSwiftUIComponent: Bool) throws -> [Self] {
+        typealias ContentCases = (images: SwitchImagesEither?, text: String?, attributedText: SwitchAttributedStringEither?)
+
+        let images: SwitchImagesEither = try isSwiftUIComponent ? .right(Image.images) : .left(UIImage.images)
+
+        let attributedText: SwitchAttributedStringEither = isSwiftUIComponent ? .right(AttributedString("My Attributed Switch")) : .left(.init(string: "My Attributed Switch"))
+
+        let items: [ContentCases] = [
+            (images: images, text: "My Full Content Switch", attributedText: nil), // Images + text
+            (images: nil, text: "My Content Switch", attributedText: nil), // Only text
+            (images: images, text: nil, attributedText: attributedText), // Images + attributed text
+            (images: nil, text: nil, attributedText: attributedText) // Only attributed text
+        ]
+
+        return items.map { item -> SwitchSutTests in
+                .init(
+                    intentColor: .primary,
+                    isOn: true,
+                    alignment: .left,
+                    isEnabled: true,
+                    images: item.images,
+                    text: item.text,
+                    attributedText: item.attributedText
+                )
+        }
+    }
+
+    /// Test all positions for all alignment cases
+    static func allPositionsCases(isSwiftUIComponent: Bool) throws -> [Self] {
+        let alignmentPossibilities = SwitchAlignment.allCases
+        let isMultilineTextPossibilities = Bool.allCases
+
+        return alignmentPossibilities.flatMap { alignment in
+            isMultilineTextPossibilities.map { isMultilineText -> SwitchSutTests in
+                    .init(
+                        intentColor: .primary,
+                        isOn: true,
+                        alignment: alignment,
+                        isEnabled: true,
+                        images: nil,
+                        text: isMultilineText ? "Multiline switch.\nMore text.\nAnd more text." : "My Text",
+                        attributedText: nil
+                    )
             }
         }
     }
@@ -74,28 +118,21 @@ struct SwitchSutTests {
 
 // MARK: - Private Extensions
 
-private extension SwitchVariant {
-
-    init(isSwiftUIComponent: Bool) throws {
-        self = try isSwiftUIComponent ? Image.variant : UIImage.variant
-    }
-}
-
 private extension Image {
 
-    static let variant: SwitchVariant = .init(
-        onImage: Image("switchOn"),
-        offImage: Image("switchOff")
+    static let images: SwitchImages = .init(
+        on: Image("switchOn"),
+        off: Image("switchOff")
     )
 }
 
 private extension UIImage {
 
-    static var variant: SwitchVariant {
+    static var images: SwitchUIImages {
         get throws {
             .init(
-                onImage: IconographyTests.shared.switchOn,
-                offImage: IconographyTests.shared.switchOff
+                on: IconographyTests.shared.switchOn,
+                off: IconographyTests.shared.switchOff
             )
         }
     }

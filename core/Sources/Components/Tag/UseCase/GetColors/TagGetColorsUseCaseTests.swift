@@ -16,7 +16,7 @@ final class TagGetColorsUseCaseTests: XCTestCase {
 
     func test_execute_for_all_variant_cases() throws {
         // GIVEN
-        let intentColorsMock = TagIntentColorablesGeneratedMock()
+        let intentColorsMock = TagIntentColorsGeneratedMock()
         intentColorsMock.underlyingColor = ColorTokenGeneratedMock()
         intentColorsMock.underlyingOnColor = ColorTokenGeneratedMock()
         intentColorsMock.underlyingSurfaceColor = ColorTokenGeneratedMock()
@@ -98,7 +98,7 @@ private struct Tester {
     }
 
     static func testColorsProperties(
-        givenColors: TagColorables,
+        givenColors: TagColors,
         getColors: TagGetColors
     ) throws {
         // Background Color

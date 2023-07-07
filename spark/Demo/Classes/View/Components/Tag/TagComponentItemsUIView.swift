@@ -98,14 +98,14 @@ struct TagComponentItemsUIView: UIViewRepresentable {
             tagView.variant = self.variant
         }
 
-        if (tagView.iconImage == nil && self.content.showIcon) ||
-            (tagView.iconImage != nil && !self.content.showIcon) {
-            tagView.iconImage = self.content.showIcon ? self.iconImage : nil
+        if (tagView.iconImage == nil && self.content.shouldShowIcon) ||
+            (tagView.iconImage != nil && !self.content.shouldShowIcon) {
+            tagView.iconImage = self.content.shouldShowIcon ? self.iconImage : nil
         }
 
-        if (tagView.text == nil && self.content.showText) ||
-            (tagView.text != nil && !self.content.showText) {
-            tagView.text = self.content.showText ? self.viewModel.text : nil
+        if (tagView.text == nil && self.content.shouldShowText) ||
+            (tagView.text != nil && !self.content.shouldShowText) {
+            tagView.text = self.content.shouldShowText ? self.viewModel.text : nil
         }
 
         DispatchQueue.main.async {

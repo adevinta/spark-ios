@@ -13,11 +13,13 @@ enum Either<Left, Right> {
     case right(Right)
 }
 
+// MARK: - Properties
+
 extension Either {
     var rightValue: Right {
         switch self {
         case let .right(value): return value
-        case .left: fatalError("No right value")
+        case .left: fatalError("No value for right part")
         }
     }
 

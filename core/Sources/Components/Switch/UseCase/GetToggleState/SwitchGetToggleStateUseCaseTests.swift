@@ -21,14 +21,14 @@ final class SwitchGetToggleStateUseCaseTests: XCTestCase {
     func test_execute_when_isEnabled_is_true() throws {
         try self.testExecute(
             givenIsEnabled: true,
-            expectedInteractionState: .init(interactionEnabled: true, opacity: 1)
+            expectedInteractionState: .init(interactionEnabled: true, opacity: self.dimsMock.none)
         )
     }
 
     func test_execute_when_isEnabled_is_false() throws {
         try self.testExecute(
             givenIsEnabled: false,
-            expectedInteractionState: .init(interactionEnabled: false, opacity: dimsMock.dim3)
+            expectedInteractionState: .init(interactionEnabled: false, opacity: self.dimsMock.dim3)
         )
     }
 }
@@ -39,12 +39,9 @@ private extension SwitchGetToggleStateUseCaseTests {
 
     func testExecute(
         givenIsEnabled: Bool,
-        expectedInteractionState: SwitchToggleState
+        expectedInteractionState: SwitchToggleStateDefault
     ) throws {
         // GIVEN
-        let dimsMock = DimsGeneratedMock.mocked()
-
-
         let errorPrefixMessage = " for \(givenIsEnabled) givenIsEnabled"
 
         let useCase = SwitchGetToggleStateUseCase()
@@ -52,7 +49,7 @@ private extension SwitchGetToggleStateUseCaseTests {
         // GIVEN
         let interactionState = useCase.execute(
             forIsEnabled: givenIsEnabled,
-            dims: dimsMock
+            dims: self.dimsMock
         )
 
         // THEN

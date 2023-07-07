@@ -14,8 +14,8 @@ final class SwitchGetToggleColorUseCaseTests: XCTestCase {
 
     // MARK: - Properties
 
-    private var statusAndStateColorMock: SwitchStatusColorablesGeneratedMock = {
-        let mock = SwitchStatusColorablesGeneratedMock()
+    private var statusAndStateColorMock: SwitchStatusColorsGeneratedMock = {
+        let mock = SwitchStatusColorsGeneratedMock()
         mock.underlyingOnColorToken = ColorTokenGeneratedMock()
         mock.underlyingOffColorToken = ColorTokenGeneratedMock()
         return mock

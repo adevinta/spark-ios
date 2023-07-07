@@ -6,13 +6,11 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-// TODO: rename paremeters
-
 // sourcery: AutoMockable
 protocol TagGetColorsUseCaseable {
     func execute(forTheme theme: Theme,
                  intentColor: TagIntentColor,
-                 variant: TagVariant) -> TagColorables
+                 variant: TagVariant) -> TagColors
 }
 
 struct TagGetColorsUseCase: TagGetColorsUseCaseable {
@@ -31,7 +29,7 @@ struct TagGetColorsUseCase: TagGetColorsUseCaseable {
 
     func execute(forTheme theme: Theme,
                  intentColor: TagIntentColor,
-                 variant: TagVariant) -> TagColorables {
+                 variant: TagVariant) -> TagColors {
         let intentColors = self.getIntentColorsUseCase.execute(
             forIntentColor: intentColor,
             colors: theme.colors
@@ -39,21 +37,21 @@ struct TagGetColorsUseCase: TagGetColorsUseCaseable {
 
         switch variant {
         case .filled:
-            return TagColors(
+            return TagColorsDefault(
                 backgroundColor: intentColors.color,
                 borderColor: intentColors.color,
                 foregroundColor: intentColors.onColor
             )
 
         case .outlined:
-            return TagColors(
+            return TagColorsDefault(
                 backgroundColor: intentColors.surfaceColor,
                 borderColor: intentColors.color,
                 foregroundColor: intentColors.color
             )
 
         case .tinted:
-            return TagColors(
+            return TagColorsDefault(
                 backgroundColor: intentColors.containerColor,
                 borderColor: intentColors.containerColor,
                 foregroundColor: intentColors.onContainerColor

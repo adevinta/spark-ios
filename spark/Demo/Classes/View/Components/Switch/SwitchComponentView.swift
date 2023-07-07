@@ -33,11 +33,14 @@ struct SwitchComponentView: View {
     @State private var isEnabledSheetIsPresented = false
     @State var isEnabled: Bool = true
 
-    @State private var isVariantSheetIsPresented = false
-    @State var isVariant: Bool = false
+    @State private var hasImagesSheetIsPresented = false
+    @State var hasImages: Bool = false
 
     @State private var isMultilineTextSheetIsPresented = false
     @State var isMultilineText: Bool = true
+
+    @State private var textContentSheetIsPresented = false
+    @State var textContent: SwitchTextContentDefault = .text
 
     // MARK: - View
 
@@ -119,20 +122,28 @@ struct SwitchComponentView: View {
                             .labelsHidden()
                     }
 
-                    // Is Variant
+                    // Has Images
                     HStack() {
-                        Text("Is variant: ")
+                        Text("Has images: ")
                             .bold()
-                        Toggle("", isOn: self.$isVariant)
+                        Toggle("", isOn: self.$hasImages)
                             .labelsHidden()
                     }
 
-                    // Is Multiline text
+                    // Text Content
                     HStack() {
-                        Text("Is multiline text: ")
+                        Text("Text content: ")
                             .bold()
-                        Toggle("", isOn: self.$isMultilineText)
-                            .labelsHidden()
+                        Button("\(self.textContent.name)") {
+                            self.textContentSheetIsPresented = true
+                        }
+                        .confirmationDialog("Select an text content", isPresented: self.$textContentSheetIsPresented) {
+                            ForEach(SwitchTextContentDefault.allCases, id: \.self) { textContent in
+                                Button("\(textContent.name)") {
+                                    self.textContent = textContent
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -154,8 +165,8 @@ struct SwitchComponentView: View {
                             alignment: self.$alignment.wrappedValue,
                             intentColor: self.$intentColor.wrappedValue,
                             isEnabled: self.$isEnabled.wrappedValue,
-                            isVariant: self.$isVariant.wrappedValue,
-                            isMultilineText: self.$isMultilineText.wrappedValue
+                            hasImages: self.$hasImages.wrappedValue,
+                            textContent: self.$textContent.wrappedValue
                         )
                         .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .leading)
                     }
@@ -211,6 +222,20 @@ private extension SwitchIntentColor {
             return "Success"
         @unknown default:
             return "Please, add this unknow intent color value"
+        }
+    }
+}
+
+private extension SwitchTextContentDefault {
+
+    var name: String {
+        switch self {
+        case .text:
+            return "Text"
+        case .attributedText:
+            return "Attributed Text"
+        case .multilineText:
+            return "Multiline Text"
         }
     }
 }
