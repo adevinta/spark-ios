@@ -12,13 +12,13 @@ struct TagSutTests {
 
     // MARK: - Properties
 
-    let intentColor: TagIntentColor
+    let intent: TagIntent
     let variant: TagVariant
 
     // MARK: - Getter
 
     func testName(on function: String = #function) -> String {
-        return "\(function)-\(self.intentColor)-\(self.variant)"
+        return "\(function)-\(self.intent)-\(self.variant)"
     }
 
     // MARK: - Cases
@@ -33,11 +33,11 @@ struct TagSutTests {
         Self.allVariantCases(for: .success)
     }
 
-    private static func allVariantCases(for intentColor: TagIntentColor) -> [Self] {
+    private static func allVariantCases(for intent: TagIntent) -> [Self] {
         return [
-            .init(intentColor: intentColor, variant: .filled),
-            .init(intentColor: intentColor, variant: .outlined),
-            .init(intentColor: intentColor, variant: .tinted)
+            .init(intent: intent, variant: .filled),
+            .init(intent: intent, variant: .outlined),
+            .init(intent: intent, variant: .tinted)
         ]
     }
 }

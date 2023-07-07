@@ -23,7 +23,7 @@ final class TagViewModel: ObservableObject {
     // MARK: - Private properties
 
     private let theme: Theme
-    private var intentColor: TagIntentColor {
+    private var intent: TagIntent {
         didSet {
             self.reloadColors()
         }
@@ -40,7 +40,7 @@ final class TagViewModel: ObservableObject {
 
     init(
         theme: Theme,
-        intentColor: TagIntentColor = .primary,
+        intent: TagIntent = .primary,
         variant: TagVariant = .filled,
         iconImage: Image? = nil,
         text: String? = nil,
@@ -48,7 +48,7 @@ final class TagViewModel: ObservableObject {
     ) {
         self.colors = Self.getColors(
             for: theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             useCase: getColorsUseCase
         )
@@ -60,7 +60,7 @@ final class TagViewModel: ObservableObject {
         self.text = text
 
         self.theme = theme
-        self.intentColor = intentColor
+        self.intent = intent
         self.variant = variant
 
         self.getColorsUseCase = getColorsUseCase
@@ -71,7 +71,7 @@ final class TagViewModel: ObservableObject {
     private func reloadColors() {
         self.colors = Self.getColors(
             for: self.theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant,
             useCase: getColorsUseCase
         )
@@ -79,8 +79,8 @@ final class TagViewModel: ObservableObject {
 
     // MARK: - Public Setter
 
-    func setIntentColor(_ intentColor: TagIntentColor) {
-        self.intentColor = intentColor
+    func setIntent(_ intent: TagIntent) {
+        self.intent = intent
     }
 
     func setVariant(_ variant: TagVariant) {
@@ -99,13 +99,13 @@ final class TagViewModel: ObservableObject {
 
     private static func getColors(
         for theme: Theme,
-        intentColor: TagIntentColor,
+        intent: TagIntent,
         variant: TagVariant,
         useCase: any TagGetColorsUseCaseable
     ) -> TagColors {
         return useCase.execute(
             for: theme,
-            intentColor: intentColor,
+            intent: intent,
             variant: variant
         )
     }

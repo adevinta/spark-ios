@@ -1,12 +1,12 @@
 //
-//  TagIntentColors.swift
+//  TagContentColors.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 29/03/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-struct TagIntentColors {
+struct TagContentColors {
 
     // MARK: - Properties
 
@@ -19,7 +19,7 @@ struct TagIntentColors {
 
 // MARK: Hashable & Equatable
 
-extension TagIntentColors: Hashable, Equatable {
+extension TagContentColors: Hashable, Equatable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.color)
@@ -29,7 +29,7 @@ extension TagIntentColors: Hashable, Equatable {
         hasher.combine(self.surfaceColor)
     }
 
-    static func == (lhs: TagIntentColors, rhs: TagIntentColors) -> Bool {
+    static func == (lhs: TagContentColors, rhs: TagContentColors) -> Bool {
         return lhs.hashValue == rhs.hashValue
     }
 }

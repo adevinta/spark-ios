@@ -1,5 +1,5 @@
 //
-//  TagGetIntentColorsUseCase.swift
+//  TagGetContentColorsUseCase.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 29/03/2023.
@@ -7,20 +7,20 @@
 //
 
 // sourcery: AutoMockable
-protocol TagGetIntentColorsUseCaseable {
-    func execute(for intentColor: TagIntentColor,
-                 colors: Colors) -> TagIntentColors
+protocol TagGetContentColorsUseCaseable {
+    func execute(for intent: TagIntent,
+                 colors: Colors) -> TagContentColors
 }
 
-struct TagGetIntentColorsUseCase: TagGetIntentColorsUseCaseable {
+struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for intentColor: TagIntentColor,
-                 colors: Colors) -> TagIntentColors {
+    func execute(for intent: TagIntent,
+                 colors: Colors) -> TagContentColors {
         let surfaceColor = colors.base.surface
 
-        switch intentColor {
+        switch intent {
         case .alert:
             return .init(
                 color: colors.feedback.alert,

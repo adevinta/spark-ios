@@ -19,7 +19,7 @@ struct TagComponentItemsUIView: UIViewRepresentable {
 
     @Binding var height: CGFloat
 
-    private let intentColor: TagIntentColor
+    private let intent: TagIntent
     private let variant: TagVariant
     private let content: TagContent
 
@@ -28,14 +28,14 @@ struct TagComponentItemsUIView: UIViewRepresentable {
     init(
         viewModel: TagComponentViewModel,
         height: Binding<CGFloat>,
-        intentColor: TagIntentColor,
+        intent: TagIntent,
         variant: TagVariant,
         content: TagContent
     ) {
         self.viewModel = viewModel
         self.iconImage = UIImage(named: viewModel.imageNamed) ?? UIImage()
         self._height = height
-        self.intentColor = intentColor
+        self.intent = intent
         self.variant = variant
         self.content = content
     }
@@ -50,7 +50,7 @@ struct TagComponentItemsUIView: UIViewRepresentable {
         case .icon:
             tagView = TagUIView(
                 theme: theme,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 variant: self.variant,
                 iconImage: self.iconImage
             )
@@ -58,7 +58,7 @@ struct TagComponentItemsUIView: UIViewRepresentable {
         case .text:
             tagView = TagUIView(
                 theme: theme,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 variant: self.variant,
                 text: self.viewModel.text
             )
@@ -66,7 +66,7 @@ struct TagComponentItemsUIView: UIViewRepresentable {
         case .all:
             tagView = TagUIView(
                 theme: theme,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 variant: self.variant,
                 iconImage: self.iconImage,
                 text: self.viewModel.text
@@ -90,8 +90,8 @@ struct TagComponentItemsUIView: UIViewRepresentable {
             return
         }
 
-        if tagView.intentColor != self.intentColor {
-            tagView.intentColor = self.intentColor
+        if tagView.intent != self.intent {
+            tagView.intent = self.intent
         }
 
         if tagView.variant != self.variant {

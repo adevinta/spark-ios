@@ -62,8 +62,8 @@ public final class TagUIView: UIView {
         }
     }
 
-    /// The intentColor of the tag.
-    public var intentColor: TagIntentColor {
+    /// The intent of the tag.
+    public var intent: TagIntent {
         didSet {
             self._colors = self.getColorsFromUseCase()
         }
@@ -130,15 +130,15 @@ public final class TagUIView: UIView {
     /// Initialize a new tag view with icon image.
     /// - Parameters:
     ///   - theme: The spark theme of the tag.
-    ///   - intentColor: The intentColor of the tag.
+    ///   - intent: The intent of the tag.
     ///   - variant: The variant of the tag.
     ///   - iconImage: The icon image of the tag.
     public convenience init(theme: Theme,
-                            intentColor: TagIntentColor,
+                            intent: TagIntent,
                             variant: TagVariant,
                             iconImage: UIImage) {
         self.init(theme,
-                  intentColor: intentColor,
+                  intent: intent,
                   variant: variant,
                   iconImage: iconImage,
                   text: nil)
@@ -147,15 +147,15 @@ public final class TagUIView: UIView {
     /// Initialize a new tag view with text.
     /// - Parameters:
     ///   - theme: The spark theme of the tag.
-    ///   - intentColor: The intentColor of the tag.
+    ///   - intent: The intent of the tag.
     ///   - variant: The variant of the tag.
     ///   - text: The text of the tag.
     public convenience init(theme: Theme,
-                            intentColor: TagIntentColor,
+                            intent: TagIntent,
                             variant: TagVariant,
                             text: String) {
         self.init(theme,
-                  intentColor: intentColor,
+                  intent: intent,
                   variant: variant,
                   iconImage: nil,
                   text: text)
@@ -164,30 +164,30 @@ public final class TagUIView: UIView {
     /// Initialize a new tag view with icon image and text.
     /// - Parameters:
     ///   - theme: The spark theme of the tag.
-    ///   - intentColor: The intentColor of the tag.
+    ///   - intent: The intent of the tag.
     ///   - variant: The variant of the tag.
     ///   - iconImage: The icon image of the tag.
     ///   - text: The text of the tag.
     public convenience init(theme: Theme,
-                            intentColor: TagIntentColor,
+                            intent: TagIntent,
                             variant: TagVariant,
                             iconImage: UIImage,
                             text: String) {
         self.init(theme,
-                  intentColor: intentColor,
+                  intent: intent,
                   variant: variant,
                   iconImage: iconImage,
                   text: text)
     }
 
     private init(_ theme: Theme,
-                 intentColor: TagIntentColor,
+                 intent: TagIntent,
                  variant: TagVariant,
                  iconImage: UIImage?,
                  text: String?,
                  getColorsUseCase: any TagGetColorsUseCaseable = TagGetColorsUseCase()) {
         self.theme = theme
-        self.intentColor = intentColor
+        self.intent = intent
         self.variant = variant
         self.iconImage = iconImage
         self.text = text
@@ -344,7 +344,7 @@ public final class TagUIView: UIView {
 
     private func getColorsFromUseCase() -> TagColors {
         return self.getColorsUseCase.execute(for: self.theme,
-                                             intentColor: self.intentColor,
+                                             intent: self.intent,
                                              variant: self.variant)
     }
 
