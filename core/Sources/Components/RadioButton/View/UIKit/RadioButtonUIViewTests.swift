@@ -20,7 +20,7 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
     // MARK: - Tests
     func test_multiline_label() throws {
         let label = NSAttributedString(string: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
-        let sut = sut(state: .enabled, isSelected: false, label: label)
+        let sut = sut(groupState: .enabled, isSelected: false, label: label)
 
         sut.translatesAutoresizingMaskIntoConstraints = false
 
@@ -39,57 +39,57 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
     }
 
     func test_enabled_selected() throws {
-        let view = sut(state: .enabled, isSelected: true).fixedSize()
+        let view = sut(groupState: .enabled, isSelected: true).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_enabled_not_selected() throws {
-        let view = sut(state: .enabled, isSelected: false).fixedSize()
+        let view = sut(groupState: .enabled, isSelected: false).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_disabled_not_selected() throws {
-        let view = sut(state: .disabled, isSelected: false).fixedSize()
+        let view = sut(groupState: .disabled, isSelected: false).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_disabled_selected() throws {
-        let view = sut(state: .disabled, isSelected: true).fixedSize()
+        let view = sut(groupState: .disabled, isSelected: true).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_success_not_selected() throws {
-        let view = sut(state: .success(message: "Message"), isSelected: false).fixedSize()
+        let view = sut(groupState: .success, isSelected: false).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_success_selected() throws {
-        let view = sut(state: .success(message: "Message"), isSelected: true).fixedSize()
+        let view = sut(groupState: .success, isSelected: true).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_warning_not_selected() throws {
-        let view = sut(state: .warning(message: "Message"), isSelected: false).fixedSize()
+        let view = sut(groupState: .warning, isSelected: false).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_warning_selected() throws {
-        let view = sut(state: .warning(message: "Message"), isSelected: true).fixedSize()
+        let view = sut(groupState: .warning, isSelected: true).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_error_not_selected() throws {
-        let view = sut(state: .error(message: "Message"), isSelected: false).fixedSize()
+        let view = sut(groupState: .error, isSelected: false).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_error_selected() throws {
-        let view = sut(state: .error(message: "Message"), isSelected: true).fixedSize()
+        let view = sut(groupState: .error, isSelected: true).fixedSize()
         assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_label_right() throws {
-        let view = sut(state: .enabled,
+        let view = sut(groupState: .enabled,
                        isSelected: true,
                        label: NSAttributedString(string: "Label"),
                        labelPosition: .left).fixedSize()
@@ -97,7 +97,7 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
     }
 
     func test_label_with_sublabel_right() throws {
-        let view = sut(state: .error(message: "Error"),
+        let view = sut(groupState: .error,
                        isSelected: true,
                        label: NSAttributedString(string: "Label"),
                        labelPosition: .left).fixedSize()
@@ -110,7 +110,7 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
             .symbol("square.and.arrow.up.on.square.fill")
             .text(" green ", color: UIColor.green)
 
-        let view = sut(state: .enabled,
+        let view = sut(groupState: .enabled,
                        isSelected: true,
                        label: label,
                        labelPosition: .left).fixedSize()
@@ -123,7 +123,7 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
             .symbol("square.and.arrow.up.circle.fill")
             .text(" blue ", color: UIColor.blue)
 
-        let view = sut(state: .error(message: "Error"),
+        let view = sut(groupState: .error,
                        isSelected: true,
                        label: label,
                        labelPosition: .left).fixedSize()
@@ -131,7 +131,7 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
     }
 
     // MARK: - Private Helper Functions
-    func sut(state: SparkSelectButtonState, isSelected: Bool,
+    func sut(groupState: RadioButtonGroupState, isSelected: Bool,
              label: NSAttributedString? = nil,
              labelPosition: RadioButtonLabelPosition = .right) -> RadioButtonUIView<Int> {
         let selectedID = Binding<Int> (
@@ -142,9 +142,9 @@ final class RadioButtonUIViewTests: UIKitComponentTestCase {
         let view = RadioButtonUIView(
             theme: SparkTheme.shared,
             id: isSelected ? self.boundSelectedID : 1,
-            label: label ?? state.label(isSelected: isSelected),
+            label: label ?? groupState.label(isSelected: isSelected),
             selectedID: selectedID,
-            state: state,
+            groupState: groupState,
             labelPosition: labelPosition
         )
 
@@ -166,7 +166,7 @@ private extension UIView {
     }
 }
 
-private extension SparkSelectButtonState {
+private extension RadioButtonGroupState {
     func label(isSelected: Bool) -> NSAttributedString {
         let selected = isSelected ? "Selected" : "Not Selected"
 

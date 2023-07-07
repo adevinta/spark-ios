@@ -14,6 +14,10 @@ struct RadioButtonGroup: View {
     // MARK: - Properties
 
     @State var selectedID: Int = 1
+    @State var rightTextAligment: Bool = false
+    @State var dummyBinding: Int = 1
+    @State var groupState: RadioButtonGroupState = .enabled
+    @State var stateSheetIsPresented = false
 
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
@@ -21,12 +25,21 @@ struct RadioButtonGroup: View {
         self.themePublisher.theme
     }
 
-    @State var rightTextAligment: Bool = false
-    @State var dummyBinding: Int = 1
-
     // MARK: - View
     var body: some View {
         VStack(alignment: .leading) {
+            Button(self.groupState.description) {
+                self.stateSheetIsPresented = true
+            }
+            .confirmationDialog("Select a state", isPresented: self.$stateSheetIsPresented) {
+                ForEach(RadioButtonGroupState.allCases, id: \.self) { state in
+                    Button(state.description) {
+                        self.groupState = state
+                    }
+                }
+            }
+            .padding(.bottom, 20)
+
             RadioButtonGroupView(
                 theme: self.theme,
                 title: "Radio Button Group (SwiftUI)",
@@ -35,25 +48,26 @@ struct RadioButtonGroup: View {
                     RadioButtonItem(id: 1,
                                     label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
                     RadioButtonItem(id: 2,
-                                    label: .init("2 Radio button / Enabled"),
-                                    state: .enabled),
+                                    label: .init("2 Radio button")),
                     RadioButtonItem(id: 3,
-                                    label: .init("3 Radio button / Disabed"),
-                                    state: .disabled),
+                                    label: .init("3 Radio button")),
                     RadioButtonItem(id: 4,
-                                    label: .init("4 Radio button / Error"),
-                                    state: .error(message: "Error")),
+                                    label: .init("4 Radio button")),
                     RadioButtonItem(id: 5,
-                                    label: .init("5 Radio button / Success"),
-                                    state: .success(message: "Success")),
+                                    label: .init("5 Radio button")),
                     RadioButtonItem(id: 6,
-                                    label: .init("6 Radio button / Warning"),
-                                    state: .warning(message: "Warning")),
+                                    label: .init("6 Radio button")),
                 ],
-                radioButtonLabelPosition: .right
+                radioButtonLabelPosition: .right,
+                state: self.groupState,
+                supplementaryLabel: self.groupState.supplementaryLabel
             )
+            .padding(.bottom, 20)
+
             Text("Selected Value \(selectedID)")
                 .padding(.bottom, 20)
+
+            Divider()
 
             Text("Toggle label value")
 
@@ -91,18 +105,5 @@ struct RadioButtonGroup: View {
 struct RadioButtonGroupView_Previews: PreviewProvider {
     static var previews: some View {
         RadioButtonGroup()
-    }
-}
-
-private extension AttributedString {
-    func label(_ label: String, _ color: UIColor) -> AttributedString {
-        var attributedString = AttributedString(label)
-        var container = AttributeContainer()
-        container.foregroundColor = .red
-
-        var string = self
-        string.append(attributedString)
-
-        return string
     }
 }

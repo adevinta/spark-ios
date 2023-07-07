@@ -38,15 +38,31 @@ final class RadioButtonUIGroupViewController: UIViewController {
         "Selected Value \(self.backingSelectedID)"
     }
 
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+    private lazy var stateButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(self.radioButtonGroupView.state.description, for: .normal)
+        button.addTarget(self, action: #selector(promptForState), for: .touchUpInside)
+        return button
+    }()
 
-    var theme: Theme {
-        self.themePublisher.theme
-    }
+    private lazy var shuffleButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Shuffle", for: .normal)
+        button.addTarget(self, action: #selector(reshuffleItems), for: .touchUpInside)
+        return button
+    }()
 
-    private var cancellables = Set<AnyCancellable>()
+    private lazy var removeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Remove Item", for: .normal)
+        button.addTarget(self, action: #selector(removeRandomItem), for: .touchUpInside)
+        return button
+    }()
 
-    private lazy var radioButtonView: RadioButtonUIGroupView = {
+    private lazy var radioButtonGroupView: RadioButtonUIGroupView = {
         let groupView = RadioButtonUIGroupView(
             theme: self.theme,
             title: "Radio Button Group (UIKit)",
@@ -75,6 +91,12 @@ final class RadioButtonUIGroupViewController: UIViewController {
     private lazy var radioButtonItemDelegate = RadioButtonItemDelegate{
         self.backingSelectedID = $0
         self.selectedValueLabel.text = self.label
+    }
+
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
     }
 
     private let scrollView = UIScrollView()
@@ -118,7 +140,9 @@ final class RadioButtonUIGroupViewController: UIViewController {
             selectedID: self.labelPosition == .right,
             items: items,
             radioButtonLabelPosition: .right,
-            groupLayout: .horizontal
+            groupLayout: .horizontal,
+            state: .success,
+            supplementaryText: "Supplementary Text"
         )
 
         groupView.publisher.sink { [weak self] item in
@@ -152,20 +176,15 @@ final class RadioButtonUIGroupViewController: UIViewController {
         RadioButtonUIItem(id: "1",
                         label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
         RadioButtonUIItem(id: "2",
-                        label: .init("2 Radio button / Enabled"),
-                        state: .enabled),
+                        label: .init("2 Radio button")),
         RadioButtonUIItem(id: "3",
-                        label: .init("3 Radio button /  Disabled"),
-                        state: .disabled),
+                        label: .init("3 Radio button")),
         RadioButtonUIItem(id: "4",
-                        label: .init("4 Radio button / Error"),
-                        state: .error(message: "Error")),
+                        label: .init("4 Radio button")),
         RadioButtonUIItem(id: "5",
-                        label: .init("5 Radio button / Success"),
-                        state: .success(message: "Success")),
+                        label: .init("5 Radio button")),
         RadioButtonUIItem(id: "6",
-                        label: .init("6 Radio button / Warning"),
-                        state: .warning(message: "Warning")),
+                        label: .init("6 Radio button"))
     ]
 
     // MARK: Methods
@@ -174,18 +193,7 @@ final class RadioButtonUIGroupViewController: UIViewController {
 
         self.setupView()
         self.setupConstraints()
-
-        self.subscribe()
-    }
-
-    private func subscribe() {
-        self.themePublisher.$theme
-            .sink { [weak self] theme in
-                guard let self else { return }
-
-                self.radioButtonView.theme = theme
-            }
-            .store(in: &self.cancellables)
+        self.setupSubscription()
     }
 
     // MARK: Private Methods
@@ -193,7 +201,15 @@ final class RadioButtonUIGroupViewController: UIViewController {
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.scrollView)
 
-        self.contentView.addArrangedSubview(self.radioButtonView)
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 20
+        stackView.addArrangedSubview(self.stateButton)
+        stackView.addArrangedSubview(self.shuffleButton)
+        stackView.addArrangedSubview(self.removeButton)
+
+        self.contentView.addArrangedSubview(stackView)
+        self.contentView.addArrangedSubview(self.radioButtonGroupView)
         self.contentView.addArrangedSubview(self.selectedValueLabel)
         self.contentView.addArrangedSubview(UIView())
 
@@ -203,6 +219,16 @@ final class RadioButtonUIGroupViewController: UIViewController {
         self.contentView.addArrangedSubview(self.labelRadioButton)
 
         self.scrollView.addSubview(self.contentView)
+    }
+
+    private func setupSubscription() {
+        self.themePublisher.$theme
+            .sink { [weak self] theme in
+                self?.radioButtonGroupView.theme = theme
+                self?.labelRadioButton.theme = theme
+                self?.leftRightRadioButtonGroup.theme = theme
+            }
+            .store(in: &self.subscriptions)
     }
 
     private func setupConstraints() {
@@ -218,6 +244,58 @@ final class RadioButtonUIGroupViewController: UIViewController {
             self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
+    }
+
+    @objc private func promptForState() {
+        let alertController = UIAlertController(title: "State", message: nil, preferredStyle: .actionSheet)
+
+        for state in RadioButtonGroupState.allCases {
+            alertController.addAction(UIAlertAction(title: state.description, style: .default, handler: self.alertAction(_:)))
+        }
+
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .destructive))
+
+        present(alertController, animated: true)
+    }
+
+    @objc private func reshuffleItems() {
+        let selections = [
+            ["Cat", "Dog", "Horse", "Rabbit", "Goldfish", "Hamster"],
+            ["Apple", "Grape", "Grapefruit", "Orange", "Lemon", "Banana", "Pear", "Cherry", "Plum", "Apricot"],
+            ["Male", "Female", "Diverse"],
+        ]
+
+        var selectionGroups: [[RadioButtonUIItem<String>]] = selections.map { groups in
+            groups.map { name in
+                RadioButtonUIItem(id: name, label: name)
+            }
+        }
+        selectionGroups.append(self.radioButtonItems)
+
+        let newItems = selectionGroups[Int.random(in: 0..<selectionGroups.count)]
+
+        radioButtonGroupView.items = newItems
+    }
+
+    @objc private func removeRandomItem() {
+        if self.radioButtonGroupView.items.count > 2 {
+            self.radioButtonGroupView.items.remove(at: Int.random(in: 0..<self.radioButtonGroupView.items.count))
+        }
+    }
+
+    private func alertAction(_ action: UIAlertAction) {
+        let state = action.title.flatMap(RadioButtonGroupState.fromDescription) ?? RadioButtonGroupState.enabled
+        self.radioButtonGroupView.state = state
+        self.radioButtonGroupView.supplementaryText = state.supplementaryLabel
+        self.stateButton.setTitle(state.description, for: .normal)
+    }
+}
+
+private extension RadioButtonGroupState {
+    static func fromDescription(_ value: String) -> RadioButtonGroupState? {
+        return self.allCases.first { state in
+            state.description == value
+        }
     }
 }
 

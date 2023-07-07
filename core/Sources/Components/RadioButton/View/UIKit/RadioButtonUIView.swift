@@ -37,13 +37,13 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
-    /// The current state
-    public var state: SparkSelectButtonState {
+    /// The current groupState
+    public var groupState: RadioButtonGroupState {
         get {
-            return self.viewModel.state
+            return self.viewModel.groupState
         }
         set {
-            self.viewModel.set(state: newValue)
+            self.viewModel.set(groupState: newValue)
         }
     }
 
@@ -88,7 +88,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }()
 
     private let textLabel = UILabel.standard
-    private let supplementaryLabel = UILabel.standard
     private let button = UIButton(type: .custom)
 
     // MARK: - Constraint properties
@@ -110,19 +109,19 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     /// - id: The value of the radio button
     /// - label: The text rendered to describe the value
     /// - selectedID: A binding which is triggered when the radio button is selected
-    /// - state: the current state
+    /// - groupState: the state of the radiobutton grup
     public convenience init(theme: Theme,
                             id: ID,
                             label: NSAttributedString,
                             selectedID: Binding<ID>,
-                            state: SparkSelectButtonState = .enabled,
+                            groupState: RadioButtonGroupState = .enabled,
                             labelPosition: RadioButtonLabelPosition = .right
     ) {
         let viewModel = RadioButtonViewModel(theme: theme,
                                              id: id,
                                              label: .left(label),
                                              selectedID: selectedID,
-                                             state: state,
+                                             groupState: groupState,
                                              labelPosition: labelPosition)
 
         self.init(viewModel: viewModel)
@@ -174,56 +173,40 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     // MARK: - Private functions
 
     private func setupSubscriptions() {
-        self.subscribeTo(self.viewModel.$opacity) { [weak self] opacity in
+
+        self.viewModel.$opacity.subscribe(in: &self.subscriptions) { [weak self] opacity in
             self?.alpha = opacity
         }
 
-        self.subscribeTo(self.viewModel.$colors) { [weak self] colors in
+        self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
             guard let self else { return }
             self.updateColors(colors)
             self.textLabel.attributedText = self.viewModel.label.leftValue
         }
 
-        self.subscribeTo(self.viewModel.$isDisabled) { [weak self] isDisabled in
+        self.viewModel.$isDisabled.subscribe(in: &self.subscriptions) { [weak self] isDisabled in
             self?.setupButtonActions(isDisabled: isDisabled)
         }
 
-        self.subscribeTo(self.viewModel.$font) { [weak self] font in
+        self.viewModel.$font.subscribe(in: &self.subscriptions) { [weak self] font in
             guard let self else { return }
             self.textLabel.font = font.uiFont
             self.textLabel.attributedText = self.viewModel.label.leftValue
         }
 
-        self.subscribeTo(self.viewModel.$supplemetaryFont) { [weak self] supplementaryFont in
-            self?.supplementaryLabel.font = supplementaryFont.uiFont
-        }
-
-        self.subscribeTo(self.viewModel.$supplementaryText) { [weak self] supplementaryText in
-            self?.supplementaryLabel.text = supplementaryText
-        }
-
-        self.subscribeTo(self.viewModel.$label) { [weak self] label in
+        self.viewModel.$label.subscribe(in: &self.subscriptions) { [weak self] label in
             self?.textLabel.attributedText = label.leftValue
         }
 
-        self.subscribeTo(self.viewModel.$labelPosition) { [weak self] _ in
+        self.viewModel.$labelPosition.subscribe(in: &self.subscriptions) { [weak self] _ in
             self?.updatePositionConstraints()
         }
 
-        self.subscribeTo(self.viewModel.$spacing) { [weak self] spacing in
+        self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
             guard let self else { return }
             self._spacing = ScaledUIMetric(wrappedValue: spacing)
             self.updatePositionConstraints()
         }
-    }
-
-    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void ) {
-        publisher
-            .receive(on: RunLoop.main)
-            .sink { value in
-                action(value)
-            }
-            .store(in: &self.subscriptions)
     }
 
     private func arrangeViews() {
@@ -231,7 +214,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
         self.addSubview(self.toggleView)
         self.addSubview(self.textLabel)
-        self.addSubview(self.supplementaryLabel)
 
         self.button.translatesAutoresizingMaskIntoConstraints = true
         self.button.frame = self.bounds
@@ -249,8 +231,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.textLabel.attributedText = self.viewModel.label.leftValue
         self.textLabel.font = self.viewModel.font.uiFont
 
-        self.supplementaryLabel.text = self.viewModel.supplementaryText
-        self.supplementaryLabel.font = self.viewModel.supplemetaryFont.uiFont
         self.alpha = self.viewModel.opacity
     }
 
@@ -258,7 +238,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.toggleView.setColors(colors)
         self.textLabel.textColor = colors.label.uiColor
         self.textLabel.textColor = colors.label.uiColor
-        self.supplementaryLabel.textColor = colors.subLabel.uiColor
     }
 
     private func setupButtonActions(isDisabled: Bool) {
@@ -290,7 +269,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
             equalTo: self.toggleView.topAnchor, constant: self.textLabelTopSpacing)
         let toggleViewTopConstraint = self.toggleView.topAnchor.constraint(
             equalTo: self.safeAreaLayoutGuide.topAnchor, constant: -(self.haloWidth))
-        let bottomViewConstraint = self.supplementaryLabel.bottomAnchor.constraint(
+        let bottomViewConstraint = self.textLabel.bottomAnchor.constraint(
             equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: 0)
 
         let labelPositionConstraints = calculatePositionConstraints()
@@ -301,10 +280,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
             toggleViewSpacingConstraint,
             toggleViewTopConstraint,
             labelViewTopConstraint,
-
-            self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.textLabel.leadingAnchor),
-            self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.textLabel.trailingAnchor),
-            self.supplementaryLabel.topAnchor.constraint(equalTo: self.textLabel.bottomAnchor),
             bottomViewConstraint
         ] + labelPositionConstraints
 
