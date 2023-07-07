@@ -50,7 +50,7 @@ private extension SwitchUIViewTests {
                     theme: self.theme,
                     isOn: sut.isOn,
                     alignment: sut.alignment,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     isEnabled: sut.isEnabled,
                     images: images.leftValue,
                     text: text
@@ -60,7 +60,7 @@ private extension SwitchUIViewTests {
                     theme: self.theme,
                     isOn: sut.isOn,
                     alignment: sut.alignment,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     isEnabled: sut.isEnabled,
                     images: images.leftValue,
                     attributedText: attributedText.leftValue
@@ -70,7 +70,7 @@ private extension SwitchUIViewTests {
                     theme: self.theme,
                     isOn: sut.isOn,
                     alignment: sut.alignment,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     isEnabled: sut.isEnabled,
                     text: text
                 )
@@ -79,7 +79,7 @@ private extension SwitchUIViewTests {
                     theme: self.theme,
                     isOn: sut.isOn,
                     alignment: sut.alignment,
-                    intentColor: sut.intentColor,
+                    intent: sut.intent,
                     isEnabled: sut.isEnabled,
                     attributedText: attributedText.leftValue
                 )

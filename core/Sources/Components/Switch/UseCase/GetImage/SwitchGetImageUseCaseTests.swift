@@ -98,7 +98,7 @@ private extension SwitchGetImageUseCaseTests {
 
         // WHEN
         let image = useCase.execute(
-            forIsOn: givenIsOn,
+            for: givenIsOn,
             images: givenImages
         )
 

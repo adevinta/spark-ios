@@ -1,5 +1,5 @@
 //
-//  SwitchGetColorUseCaseTests.swift
+//  SwitchGetColorsUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 12/05/2023.
@@ -10,30 +10,30 @@ import XCTest
 import SwiftUI
 @testable import SparkCore
 
-final class SwitchGetColorUseCaseTests: XCTestCase {
+final class SwitchGetColorsUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
     func test_execute() throws {
         // GIVEN
-        let intentColorMock = SwitchIntentColor.alert
-        let intentColorTokenMock = ColorTokenGeneratedMock.random()
+        let intentMock = SwitchIntent.alert
+        let colorTokenMock = ColorTokenGeneratedMock.random()
 
         let colorsMock = ColorsGeneratedMock.mocked()
         let dimsMock = DimsGeneratedMock.mocked()
 
-        let getIntentColorUseCaseMock = SwitchGetIntentColorUseCaseableGeneratedMock()
-        getIntentColorUseCaseMock.executeWithIntentColorAndColorsReturnValue = intentColorTokenMock
+        let getColorUseCaseMock = SwitchGetColorUseCaseableGeneratedMock()
+        getColorUseCaseMock.executeWithIntentAndColorsReturnValue = colorTokenMock
 
-        let expectedOnColorToken = intentColorTokenMock
+        let expectedOnColorToken = colorTokenMock
         let expectedOffColorToken = colorsMock.base.onSurface.opacity(dimsMock.dim4)
 
-        let useCase = SwitchGetColorsUseCase(getIntentColorUseCase: getIntentColorUseCaseMock)
+        let useCase = SwitchGetColorsUseCase(getColorUseCase: getColorUseCaseMock)
 
         // WHEN
 
         let colors = useCase.execute(
-            forIntentColor: intentColorMock,
+            for: intentMock,
             colors: colorsMock,
             dims: dimsMock
         )
@@ -79,22 +79,22 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         )
 
         // **
-        // GetIntentColorUseCase
-        let getIntentColorUseCaseArgs = getIntentColorUseCaseMock.executeWithIntentColorAndColorsReceivedArguments
+        // GetColorUseCase
+        let getColorUseCaseArgs = getColorUseCaseMock.executeWithIntentAndColorsReceivedArguments
         XCTAssertEqual(
-            getIntentColorUseCaseMock.executeWithIntentColorAndColorsCallsCount,
+            getColorUseCaseMock.executeWithIntentAndColorsCallsCount,
             1,
-            "Wrong call number on execute on getIntentColorUseCase"
+            "Wrong call number on execute on getColorUseCase"
         )
         XCTAssertEqual(
-            getIntentColorUseCaseArgs?.intentColor,
-            intentColorMock,
-            "Wrong intentColor parameter on execute on getIntentColorUseCaseMock"
+            getColorUseCaseArgs?.intent,
+            intentMock,
+            "Wrong intent parameter on execute on getColorUseCaseMock"
         )
         XCTAssertIdentical(
-            getIntentColorUseCaseArgs?.colors as? ColorsGeneratedMock,
+            getColorUseCaseArgs?.colors as? ColorsGeneratedMock,
             colorsMock,
-            "Wrong colors parameter on execute on getIntentColorUseCaseMock"
+            "Wrong colors parameter on execute on getColorUseCaseMock"
         )
         // **
     }

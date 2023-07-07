@@ -150,13 +150,13 @@ public final class SwitchUIView: UIView {
         }
     }
 
-    /// The intentColor of the switch.
-    public var intentColor: SwitchIntentColor {
+    /// The intent of the switch.
+    public var intent: SwitchIntent {
         get {
-            return self.viewModel.intentColor
+            return self.viewModel.intent
         }
         set {
-            self.viewModel.set(intentColor: newValue)
+            self.viewModel.set(intent: newValue)
         }
     }
 
@@ -233,14 +233,14 @@ public final class SwitchUIView: UIView {
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
     ///   - alignment: The alignment of the switch.
-    ///   - intentColor: The intent color of the switch.
+    ///   - intent: The intent of the switch.
     ///   - isEnabled: The state of the switch: enabled or not.
     ///   - text: The text of the switch.
     public convenience init(
         theme: Theme,
         isOn: Bool,
         alignment: SwitchAlignment,
-        intentColor: SwitchIntentColor,
+        intent: SwitchIntent,
         isEnabled: Bool,
         text: String
     ) {
@@ -248,7 +248,7 @@ public final class SwitchUIView: UIView {
             theme,
             isOn: isOn,
             alignment: alignment,
-            intentColor: intentColor,
+            intent: intent,
             isEnabled: isEnabled,
             images: nil,
             text: text,
@@ -261,14 +261,14 @@ public final class SwitchUIView: UIView {
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
     ///   - alignment: The alignment of the switch.
-    ///   - intentColor: The intent color of the switch.
+    ///   - intent: The intent of the switch.
     ///   - isEnabled: The state of the switch: enabled or not.
     ///   - attributedText: The attributed text of the switch.
     public convenience init(
         theme: Theme,
         isOn: Bool,
         alignment: SwitchAlignment,
-        intentColor: SwitchIntentColor,
+        intent: SwitchIntent,
         isEnabled: Bool,
         attributedText: NSAttributedString
     ) {
@@ -276,7 +276,7 @@ public final class SwitchUIView: UIView {
             theme,
             isOn: isOn,
             alignment: alignment,
-            intentColor: intentColor,
+            intent: intent,
             isEnabled: isEnabled,
             images: nil,
             text: nil,
@@ -289,7 +289,7 @@ public final class SwitchUIView: UIView {
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
     ///   - alignment: The alignment of the switch.
-    ///   - intentColor: The intent color of the switch.
+    ///   - intent: The intent of the switch.
     ///   - isEnabled: The state of the switch: enabled or not.
     ///   - images: The images of the switch.
     ///   - text: The text of the switch.
@@ -297,7 +297,7 @@ public final class SwitchUIView: UIView {
         theme: Theme,
         isOn: Bool,
         alignment: SwitchAlignment,
-        intentColor: SwitchIntentColor,
+        intent: SwitchIntent,
         isEnabled: Bool,
         images: SwitchUIImages,
         text: String
@@ -306,7 +306,7 @@ public final class SwitchUIView: UIView {
             theme,
             isOn: isOn,
             alignment: alignment,
-            intentColor: intentColor,
+            intent: intent,
             isEnabled: isEnabled,
             images: images,
             text: text,
@@ -319,7 +319,7 @@ public final class SwitchUIView: UIView {
     ///   - theme: The spark theme of the switch.
     ///   - isOn: The value of the switch.
     ///   - alignment: The alignment of the switch.
-    ///   - intentColor: The intent color of the switch.
+    ///   - intent: The intent of the switch.
     ///   - isEnabled: The state of the switch: enabled or not.
     ///   - images: The images of the switch.
     ///   - attributedText: The attributed text of the switch.
@@ -327,7 +327,7 @@ public final class SwitchUIView: UIView {
         theme: Theme,
         isOn: Bool,
         alignment: SwitchAlignment,
-        intentColor: SwitchIntentColor,
+        intent: SwitchIntent,
         isEnabled: Bool,
         images: SwitchUIImages,
         attributedText: NSAttributedString
@@ -336,7 +336,7 @@ public final class SwitchUIView: UIView {
             theme,
             isOn: isOn,
             alignment: alignment,
-            intentColor: intentColor,
+            intent: intent,
             isEnabled: isEnabled,
             images: images,
             text: nil,
@@ -348,7 +348,7 @@ public final class SwitchUIView: UIView {
         _ theme: Theme,
         isOn: Bool,
         alignment: SwitchAlignment,
-        intentColor: SwitchIntentColor,
+        intent: SwitchIntent,
         isEnabled: Bool,
         images: SwitchUIImages?,
         text: String?,
@@ -358,7 +358,7 @@ public final class SwitchUIView: UIView {
             theme: theme,
             isOn: isOn,
             alignment: alignment,
-            intentColor: intentColor,
+            intent: intent,
             isEnabled: isEnabled,
             images: Self.getImagesEither(from: images)
         )
