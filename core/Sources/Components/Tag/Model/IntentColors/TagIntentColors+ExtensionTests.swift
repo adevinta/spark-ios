@@ -12,13 +12,19 @@ extension TagIntentColors {
 
     // MARK: - Properties
 
-    static func mocked() -> Self {
+    static func mocked(
+        color: any ColorToken = ColorTokenGeneratedMock.random(),
+        onColor: any ColorToken = ColorTokenGeneratedMock.random(),
+        containerColor: any ColorToken = ColorTokenGeneratedMock.random(),
+        onContainerColor: any ColorToken = ColorTokenGeneratedMock.random(),
+        surfaceColor: any ColorToken = ColorTokenGeneratedMock.random()
+    ) -> Self {
         return .init(
-            color: ColorTokenGeneratedMock.random(),
-            onColor: ColorTokenGeneratedMock.random(),
-            containerColor: ColorTokenGeneratedMock.random(),
-            onContainerColor: ColorTokenGeneratedMock.random(),
-            surfaceColor: ColorTokenGeneratedMock.random()
+            color: color,
+            onColor: onColor,
+            containerColor: containerColor,
+            onContainerColor: onContainerColor,
+            surfaceColor: surfaceColor
         )
     }
 }

@@ -8,13 +8,7 @@
 
 import Foundation
 
-// sourcery: AutoMockable
-protocol SwitchToggleState {
-    var interactionEnabled: Bool { get }
-    var opacity: CGFloat { get }
-}
-
-struct SwitchToggleStateDefault: SwitchToggleState {
+struct SwitchToggleState: Equatable {
 
     // MARK: - Properties
 

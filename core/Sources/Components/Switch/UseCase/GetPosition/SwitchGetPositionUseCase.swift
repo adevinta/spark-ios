@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol SwitchGetPositionUseCaseable {
-    func execute(forAlignment alignment: SwitchAlignment,
+    func execute(for alignment: SwitchAlignment,
                  spacing: LayoutSpacing) -> SwitchPosition
 }
 
@@ -18,7 +18,7 @@ struct SwitchGetPositionUseCase: SwitchGetPositionUseCaseable {
 
     // MARK: - Methods
 
-    func execute(forAlignment alignment: SwitchAlignment,
+    func execute(for alignment: SwitchAlignment,
                  spacing: LayoutSpacing) -> SwitchPosition {
         let horizontalSpacing: CGFloat
         let isToggleOnLeft: Bool
@@ -32,7 +32,7 @@ struct SwitchGetPositionUseCase: SwitchGetPositionUseCaseable {
             isToggleOnLeft = false
         }
 
-        return SwitchPositionDefault(
+        return .init(
             isToggleOnLeft: isToggleOnLeft,
             horizontalSpacing: horizontalSpacing
         )

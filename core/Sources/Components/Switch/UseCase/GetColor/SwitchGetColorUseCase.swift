@@ -1,5 +1,5 @@
 //
-//  SwitchGetIntentColorUseCase.swift
+//  SwitchGetColorUseCase.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 12/05/2023.
@@ -7,18 +7,18 @@
 //
 
 // sourcery: AutoMockable
-protocol SwitchGetIntentColorUseCaseable {
-    func execute(forIntentColor intentColor: SwitchIntentColor,
+protocol SwitchGetColorUseCaseable {
+    func execute(for intent: SwitchIntent,
                  colors: Colors) -> any ColorToken
 }
 
-struct SwitchGetIntentColorUseCase: SwitchGetIntentColorUseCaseable {
+struct SwitchGetColorUseCase: SwitchGetColorUseCaseable {
 
     // MARK: - Methods
 
-    func execute(forIntentColor intentColor: SwitchIntentColor,
+    func execute(for intent: SwitchIntent,
                  colors: Colors) -> any ColorToken {
-        switch intentColor {
+        switch intent {
         case .alert:
             return colors.feedback.alert
 

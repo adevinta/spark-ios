@@ -45,7 +45,7 @@ private extension SwitchGetPositionUseCaseTests {
 
     func testExecute(
         givenAlignment: SwitchAlignment,
-        expectedPosition: SwitchPositionDefault
+        expectedPosition: SwitchPosition
     ) throws {
         // GIVEN
         let errorPrefixMessage = " for .\(givenAlignment) case"
@@ -54,7 +54,7 @@ private extension SwitchGetPositionUseCaseTests {
 
         // WHEN
         let position = useCase.execute(
-            forAlignment: givenAlignment,
+            for: givenAlignment,
             spacing: self.spacingMock
         )
 

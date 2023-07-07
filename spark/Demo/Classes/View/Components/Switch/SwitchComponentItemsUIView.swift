@@ -23,7 +23,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
 
     @Binding var isOn: Bool
     private let alignment: SwitchAlignment
-    private let intentColor: SwitchIntentColor
+    private let intent: SwitchIntent
     private let isEnabled: Bool
     private let hasImages: Bool
     private let textContent: SwitchTextContentDefault
@@ -36,7 +36,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         height: Binding<CGFloat>,
         isOn: Binding<Bool>,
         alignment: SwitchAlignment,
-        intentColor: SwitchIntentColor,
+        intent: SwitchIntent,
         isEnabled: Bool,
         hasImages: Bool,
         textContent: SwitchTextContentDefault
@@ -53,7 +53,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         self._height = height
         self._isOn = isOn
         self.alignment = alignment
-        self.intentColor = intentColor
+        self.intent = intent
         self.isEnabled = isEnabled
         self.hasImages = hasImages
         self.textContent = textContent
@@ -73,7 +73,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
                     theme: SparkTheme.shared,
                     isOn: self.isOn,
                     alignment: self.alignment,
-                    intentColor: self.intentColor,
+                    intent: self.intent,
                     isEnabled: self.isEnabled,
                     images: self.images(),
                     attributedText: self.attributedText
@@ -83,7 +83,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
                     theme: SparkTheme.shared,
                     isOn: self.isOn,
                     alignment: self.alignment,
-                    intentColor: self.intentColor,
+                    intent: self.intent,
                     isEnabled: self.isEnabled,
                     attributedText: self.attributedText
                 )
@@ -121,8 +121,8 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
             switchView.alignment = self.alignment
         }
 
-        if switchView.intentColor != self.intentColor {
-            switchView.intentColor = self.intentColor
+        if switchView.intent != self.intent {
+            switchView.intent = self.intent
         }
 
         if switchView.isEnabled != self.isEnabled {
@@ -171,7 +171,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
                 theme: SparkTheme.shared,
                 isOn: self.isOn,
                 alignment: self.alignment,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 isEnabled: self.isEnabled,
                 images: self.images(),
                 text: self.viewModel.text(isMultilineText: isMultilineText)
@@ -181,7 +181,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
                 theme: SparkTheme.shared,
                 isOn: self.isOn,
                 alignment: self.alignment,
-                intentColor: self.intentColor,
+                intent: self.intent,
                 isEnabled: self.isEnabled,
                 text: self.viewModel.text(isMultilineText: isMultilineText)
             )

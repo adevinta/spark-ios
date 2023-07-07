@@ -27,8 +27,8 @@ struct SwitchComponentView: View {
     @State private var alignmentSheetIsPresented = false
     @State var alignment: SwitchAlignment = .left
 
-    @State private var intentColorSheetIsPresented = false
-    @State var intentColor: SwitchIntentColor = .primary
+    @State private var intentSheetIsPresented = false
+    @State var intent: SwitchIntent = .primary
 
     @State private var isEnabledSheetIsPresented = false
     @State var isEnabled: Bool = true
@@ -97,17 +97,17 @@ struct SwitchComponentView: View {
                     // **
 
                     // **
-                    // Intent Color
+                    // Intent
                     HStack() {
-                        Text("Intent color: ")
+                        Text("Intent: ")
                             .bold()
-                        Button("\(self.intentColor.name)") {
-                            self.intentColorSheetIsPresented = true
+                        Button("\(self.intent.name)") {
+                            self.intentSheetIsPresented = true
                         }
-                        .confirmationDialog("Select an intent color", isPresented: self.$intentColorSheetIsPresented) {
-                            ForEach(SwitchIntentColor.allCases, id: \.self) { intentColor in
-                                Button("\(intentColor.name)") {
-                                    self.intentColor = intentColor
+                        .confirmationDialog("Select an intent", isPresented: self.$intentSheetIsPresented) {
+                            ForEach(SwitchIntent.allCases, id: \.self) { intent in
+                                Button("\(intent.name)") {
+                                    self.intent = intent
                                 }
                             }
                         }
@@ -163,7 +163,7 @@ struct SwitchComponentView: View {
                             height: self.$uiKitViewHeight,
                             isOn: self.$isOn,
                             alignment: self.$alignment.wrappedValue,
-                            intentColor: self.$intentColor.wrappedValue,
+                            intent: self.$intent.wrappedValue,
                             isEnabled: self.$isEnabled.wrappedValue,
                             hasImages: self.$hasImages.wrappedValue,
                             textContent: self.$textContent.wrappedValue
@@ -202,7 +202,7 @@ private extension SwitchAlignment {
     }
 }
 
-private extension SwitchIntentColor {
+private extension SwitchIntent {
 
     var name: String {
         switch self {
@@ -221,7 +221,7 @@ private extension SwitchIntentColor {
         case .success:
             return "Success"
         @unknown default:
-            return "Please, add this unknow intent color value"
+            return "Please, add this unknow intent value"
         }
     }
 }

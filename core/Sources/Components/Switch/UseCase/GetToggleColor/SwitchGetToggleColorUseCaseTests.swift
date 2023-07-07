@@ -14,12 +14,7 @@ final class SwitchGetToggleColorUseCaseTests: XCTestCase {
 
     // MARK: - Properties
 
-    private var statusAndStateColorMock: SwitchStatusColorsGeneratedMock = {
-        let mock = SwitchStatusColorsGeneratedMock()
-        mock.underlyingOnColorToken = ColorTokenGeneratedMock()
-        mock.underlyingOffColorToken = ColorTokenGeneratedMock()
-        return mock
-    }()
+    private var statusAndStateColorMock = SwitchStatusColors.mocked()
 
     // MARK: - Tests
 
@@ -53,13 +48,13 @@ private extension SwitchGetToggleColorUseCaseTests {
 
         // WHEN
         let colorToken = useCase.execute(
-            forIsOn: givenIsOn,
+            for: givenIsOn,
             statusAndStateColor: statusAndStateColorMock
         )
 
         // THEN
-        XCTAssertIdentical(colorToken as? ColorTokenGeneratedMock,
-                           expectedColorToken as? ColorTokenGeneratedMock,
-                           "Wrong interactionEnabled" + errorPrefixMessage)
+        XCTAssertEqual(colorToken as? ColorTokenGeneratedMock,
+                       expectedColorToken as? ColorTokenGeneratedMock,
+                       "Wrong interactionEnabled" + errorPrefixMessage)
     }
 }

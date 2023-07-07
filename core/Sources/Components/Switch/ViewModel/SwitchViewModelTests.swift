@@ -18,14 +18,7 @@ final class SwitchViewModelTests: XCTestCase {
 
     private let themeMock = ThemeGeneratedMock.mocked()
 
-    private let colorsMock: SwitchColorsGeneratedMock = {
-        let mock = SwitchColorsGeneratedMock()
-        mock.underlyingToggleBackgroundColors = SwitchStatusColorsGeneratedMock()
-        mock.underlyingToggleDotBackgroundColor = ColorTokenGeneratedMock()
-        mock.underlyingToggleDotForegroundColors = SwitchStatusColorsGeneratedMock()
-        mock.underlyingTextForegroundColor = ColorTokenGeneratedMock()
-        return mock
-    }()
+    private let colorsMock = SwitchColors.mocked()
 
     private let imageMock = IconographyTests.shared.switchOn
     private let imagesMock = SwitchUIImages(on: UIImage(), off: UIImage())
@@ -37,25 +30,19 @@ final class SwitchViewModelTests: XCTestCase {
         return mock
     }()
 
-    private var positionMock: SwitchPositionGeneratedMock = {
-        let mock = SwitchPositionGeneratedMock()
-        mock.underlyingIsToggleOnLeft = true
-        mock.underlyingHorizontalSpacing = 10
-        return mock
-    }()
+    private var positionMock = SwitchPosition.mocked()
 
     private var userInteractionEnabledMock = true
 
-    private lazy var toggleStateMock: SwitchToggleStateGeneratedMock = {
-        let mock = SwitchToggleStateGeneratedMock()
-        mock.underlyingOpacity = 0.5
-        mock.underlyingInteractionEnabled = self.userInteractionEnabledMock
-        return mock
+    private lazy var toggleStateMock: SwitchToggleState = {
+        return .mocked(
+            interactionEnabled: self.userInteractionEnabledMock
+        )
     }()
 
     private lazy var getColorsUseCaseMock: SwitchGetColorsUseCaseableGeneratedMock = {
         let mock = SwitchGetColorsUseCaseableGeneratedMock()
-        mock.executeWithIntentColorAndColorsAndDimsReturnValue = self.colorsMock
+        mock.executeWithIntentAndColorsAndDimsReturnValue = self.colorsMock
         return mock
     }()
     private lazy var getImageUseCaseMock: SwitchGetImageUseCaseableGeneratedMock = {
@@ -96,14 +83,14 @@ final class SwitchViewModelTests: XCTestCase {
         // GIVEN
         let isOnMock = true
         let alignmentMock: SwitchAlignment = .left
-        let intentColorMock: SwitchIntentColor = .alert
+        let intentMock: SwitchIntent = .alert
         let isEnabledMock = true
 
         // WHEN
         let viewModel = self.classToTest(
             isOn: isOnMock,
             alignment: alignmentMock,
-            intentColor: intentColorMock,
+            intent: intentMock,
             isEnabled: isEnabledMock,
             images: self.imagesMock
         )
@@ -118,9 +105,9 @@ final class SwitchViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.alignment,
                        alignmentMock,
                        "Wrong alignment value")
-        XCTAssertEqual(viewModel.intentColor,
-                       intentColorMock,
-                       "Wrong intentColor value")
+        XCTAssertEqual(viewModel.intent,
+                       intentMock,
+                       "Wrong intent value")
         XCTAssertEqual(viewModel.isEnabled,
                        isEnabledMock,
                        "Wrong isEnabled value")
@@ -157,14 +144,14 @@ final class SwitchViewModelTests: XCTestCase {
         // GIVEN
         let isOnMock = true
         let alignmentMock: SwitchAlignment = .left
-        let intentColorMock: SwitchIntentColor = .alert
+        let intentMock: SwitchIntent = .alert
         let isEnabledMock = true
 
         // WHEN
         let viewModel = self.classToTest(
             isOn: isOnMock,
             alignment: alignmentMock,
-            intentColor: intentColorMock,
+            intent: intentMock,
             isEnabled: isEnabledMock,
             images: self.imagesMock
         )
@@ -187,7 +174,7 @@ final class SwitchViewModelTests: XCTestCase {
         // Use Cases
         self.testGetColorsUseCaseMock(
             givenTheme: self.themeMock,
-            givenIntentColor: intentColorMock
+            givenIntent: intentMock
         )
         self.testGetImageUseCaseMock(
             givenIsOn: isOnMock,
@@ -216,14 +203,14 @@ final class SwitchViewModelTests: XCTestCase {
         let expectedIsOn = true
 
         let alignmentMock: SwitchAlignment = .right
-        let intentColorMock: SwitchIntentColor = .secondary
+        let intentMock: SwitchIntent = .secondary
         let isEnabledMock = false
         let imagesMock: SwitchUIImages? = nil
 
         let viewModel = self.classToTest(
             isOn: false,
             alignment: alignmentMock,
-            intentColor: intentColorMock,
+            intent: intentMock,
             isEnabled: isEnabledMock,
             images: imagesMock
         )
@@ -277,14 +264,14 @@ final class SwitchViewModelTests: XCTestCase {
 
         let isOnMock = false
         let alignmentMock: SwitchAlignment = .right
-        let intentColorMock: SwitchIntentColor = .secondary
+        let intentMock: SwitchIntent = .secondary
         let isEnabledMock = false
         let imagesMock: SwitchUIImages? = nil
 
         let viewModel = self.classToTest(
             isOn: isOnMock,
             alignment: alignmentMock,
-            intentColor: intentColorMock,
+            intent: intentMock,
             isEnabled: isEnabledMock,
             images: imagesMock
         )
@@ -327,14 +314,14 @@ final class SwitchViewModelTests: XCTestCase {
 
         let isOnMock = false
         let alignmentMock: SwitchAlignment = .right
-        let intentColorMock: SwitchIntentColor = .secondary
+        let intentMock: SwitchIntent = .secondary
         let isEnabledMock = false
         let imagesMock: SwitchUIImages? = nil
 
         let viewModel = self.classToTest(
             isOn: isOnMock,
             alignment: alignmentMock,
-            intentColor: intentColorMock,
+            intent: intentMock,
             isEnabled: isEnabledMock,
             images: imagesMock
         )
@@ -365,7 +352,7 @@ final class SwitchViewModelTests: XCTestCase {
         // Use Cases
         self.testGetColorsUseCaseMock(
             givenTheme: newTheme,
-            givenIntentColor: intentColorMock
+            givenIntent: intentMock
         )
         self.testGetImageUseCaseMock(
             numberOfCalls: 0
@@ -413,27 +400,27 @@ final class SwitchViewModelTests: XCTestCase {
         )
     }
 
-    func test_set_intentColor() {
+    func test_set_intent() {
         // GIVEN
-        let newIntentColor: SwitchIntentColor = .primary
+        let newIntent: SwitchIntent = .primary
 
         let isOnMock = true
 
         let viewModel = self.classToTest(
             isOn: isOnMock,
-            intentColor: .neutral
+            intent: .neutral
         )
 
         // Reset all UseCase mock
         self.resetDependenciesMockAfterInitViewModel()
 
         // WHEN
-        viewModel.set(intentColor: newIntentColor)
+        viewModel.set(intent: newIntent)
 
         // THEN
-        XCTAssertEqual(viewModel.intentColor,
-                       newIntentColor,
-                       "Wrong intentColor value")
+        XCTAssertEqual(viewModel.intent,
+                       newIntent,
+                       "Wrong intent value")
 
         // Published properties
         self.testColors(on: viewModel)
@@ -442,7 +429,7 @@ final class SwitchViewModelTests: XCTestCase {
         // Use Cases
         self.testGetColorsUseCaseMock(
             givenTheme: self.themeMock,
-            givenIntentColor: newIntentColor
+            givenIntent: newIntent
         )
         self.testGetToggleColorUseCaseMock(
             givenIsOn: isOnMock
@@ -454,12 +441,12 @@ final class SwitchViewModelTests: XCTestCase {
         // GIVEN
         let newIsEnabledMock = false
 
-        let intentColorMock: SwitchIntentColor = .neutral
+        let intentMock: SwitchIntent = .neutral
         let isOnMock = true
 
         let viewModel = self.classToTest(
             isOn: isOnMock,
-            intentColor: intentColorMock,
+            intent: intentMock,
             isEnabled: true
         )
 
@@ -565,7 +552,7 @@ private extension SwitchViewModelTests {
     func classToTest(
         isOn: Bool = true,
         alignment: SwitchAlignment = .left,
-        intentColor: SwitchIntentColor = .alert,
+        intent: SwitchIntent = .alert,
         isEnabled: Bool = true,
         images: SwitchUIImages? = nil
     ) -> SwitchViewModel {
@@ -580,7 +567,7 @@ private extension SwitchViewModelTests {
             theme: self.themeMock,
             isOn: isOn,
             alignment: alignment,
-            intentColor: intentColor,
+            intent: intent,
             isEnabled: isEnabled,
             images:  imagesEither,
             dependencies: self.dependenciesMock
@@ -650,17 +637,17 @@ private extension SwitchViewModelTests {
     func testGetColorsUseCaseMock(
         numberOfCalls: Int = 1,
         givenTheme: Theme? = nil,
-        givenIntentColor: SwitchIntentColor? = nil
+        givenIntent: SwitchIntent? = nil
     ) {
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithIntentColorAndColorsAndDimsCallsCount,
+        XCTAssertEqual(self.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getColorsUseCase")
 
-        if numberOfCalls > 0, let givenTheme, let givenIntentColor {
-            let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithIntentColorAndColorsAndDimsReceivedArguments
-            XCTAssertEqual(getColorsUseCaseArgs?.intentColor,
-                           givenIntentColor,
-                           "Wrong intentColor parameter on execute on getColorsUseCase")
+        if numberOfCalls > 0, let givenTheme, let givenIntent {
+            let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsReceivedArguments
+            XCTAssertEqual(getColorsUseCaseArgs?.intent,
+                           givenIntent,
+                           "Wrong intent parameter on execute on getColorsUseCase")
             XCTAssertIdentical(try XCTUnwrap(getColorsUseCaseArgs?.colors as? ColorsGeneratedMock),
                                givenTheme.colors as? ColorsGeneratedMock,
                                "Wrong colors parameter on execute on getColorsUseCase")
@@ -728,9 +715,9 @@ private extension SwitchViewModelTests {
                 XCTAssertEqual(args.isOn,
                                givenIsOn,
                                "Wrong isOn parameter on \(index) execute on getToggleColorUseCase")
-                XCTAssertIdentical(try XCTUnwrap(args.statusAndStateColor as? SwitchStatusColorsGeneratedMock),
-                                   givenStatusAndStateColors[givenStatusAndStateColorsIndex] as? SwitchStatusColorsGeneratedMock,
-                                   "Wrong statusAndStateColor parameter on \(index) execute on getToggleColorUseCase")
+                XCTAssertEqual(try XCTUnwrap(args.statusAndStateColor),
+                               givenStatusAndStateColors[givenStatusAndStateColorsIndex],
+                               "Wrong statusAndStateColor parameter on \(index) execute on getToggleColorUseCase")
             }
         }
     }
@@ -777,9 +764,9 @@ private extension SwitchViewModelTests {
 
     func resetDependenciesMockAfterInitViewModel() {
         // Clear UseCases Mock
-        self.getColorsUseCaseMock.executeWithIntentColorAndColorsAndDimsCallsCount = 0
-        self.getColorsUseCaseMock.executeWithIntentColorAndColorsAndDimsReceivedArguments = nil
-        self.getColorsUseCaseMock.executeWithIntentColorAndColorsAndDimsReceivedInvocations = []
+        self.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsCallsCount = 0
+        self.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsReceivedArguments = nil
+        self.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsReceivedInvocations = []
 
         self.getImageUseCaseMock.executeWithIsOnAndImagesCallsCount = 0
         self.getImageUseCaseMock.executeWithIsOnAndImagesReceivedArguments = nil

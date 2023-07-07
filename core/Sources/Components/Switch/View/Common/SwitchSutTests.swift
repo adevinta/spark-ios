@@ -19,7 +19,7 @@ struct SwitchSutTests {
 
     // MARK: - Properties
 
-    let intentColor: SwitchIntentColor
+    let intent: SwitchIntent
     let isOn: Bool
     let alignment: SwitchAlignment
     let isEnabled: Bool
@@ -32,7 +32,7 @@ struct SwitchSutTests {
     func testName(on function: String = #function) -> String {
         return [
             function,
-            "\(self.intentColor)",
+            "\(self.intent)",
             self.isOn ? "isOn" : "isOff",
             "\(self.alignment)" + "Aligment",
             self.isEnabled ? "isEnabled" : "isDisabled",
@@ -46,15 +46,15 @@ struct SwitchSutTests {
 
     /// Test all colors for all intent, isOn and IsEnabled cases
     static func allColorsCases(isSwiftUIComponent: Bool) throws -> [Self] {
-        let intentColorPossibilities = SwitchIntentColor.allCases
+        let intentPossibilities = SwitchIntent.allCases
         let isOnPossibilities = Bool.allCases
         let isEnabledPossibilities = Bool.allCases
 
-        return intentColorPossibilities.flatMap { intentColor in
+        return intentPossibilities.flatMap { intent in
             isOnPossibilities.flatMap { isOn in
                 isEnabledPossibilities.map { isEnabled -> SwitchSutTests in
                         .init(
-                            intentColor: intentColor,
+                            intent: intent,
                             isOn: isOn,
                             alignment: .left,
                             isEnabled: isEnabled,
@@ -84,7 +84,7 @@ struct SwitchSutTests {
 
         return items.map { item -> SwitchSutTests in
                 .init(
-                    intentColor: .primary,
+                    intent: .primary,
                     isOn: true,
                     alignment: .left,
                     isEnabled: true,
@@ -103,7 +103,7 @@ struct SwitchSutTests {
         return alignmentPossibilities.flatMap { alignment in
             isMultilineTextPossibilities.map { isMultilineText -> SwitchSutTests in
                     .init(
-                        intentColor: .primary,
+                        intent: .primary,
                         isOn: true,
                         alignment: alignment,
                         isEnabled: true,
