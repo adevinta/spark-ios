@@ -137,7 +137,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
             [Color.orange,
              .purple,
              .red,
-             .red])
+             .clear])
     }
 
     func test_warn_colors_when_button_is_not_selected() throws {

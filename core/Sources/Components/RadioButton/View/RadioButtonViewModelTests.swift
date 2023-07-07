@@ -33,7 +33,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let opacities = sutValues(for: \.opacity)
 
         // Then
-        XCTAssertEqual(opacities, [0.40, 1.0, 1.0, 1.0, 1.0])
+        XCTAssertEqual(opacities, [1.0, 0.40, 1.0, 1.0, 1.0])
     }
 
     func test_is_disabled() {
@@ -41,7 +41,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let disabledStates = sutValues(for: \.isDisabled)
 
         // Then
-        XCTAssertEqual(disabledStates, [true, false, false, false, false])
+        XCTAssertEqual(disabledStates, [false, true, false, false, false])
     }
 
     func test_spacings() {
