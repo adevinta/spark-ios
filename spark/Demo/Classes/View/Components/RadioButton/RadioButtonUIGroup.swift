@@ -272,9 +272,7 @@ final class RadioButtonUIGroupViewController: UIViewController {
         }
         selectionGroups.append(self.radioButtonItems)
 
-        let newItems = selectionGroups[Int.random(in: 0..<selectionGroups.count)]
-
-        radioButtonGroupView.items = newItems
+        radioButtonGroupView.items = selectionGroups.randomElement()
     }
 
     @objc private func removeRandomItem() {
