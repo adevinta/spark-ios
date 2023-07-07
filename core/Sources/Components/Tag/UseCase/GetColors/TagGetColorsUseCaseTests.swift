@@ -16,12 +16,7 @@ final class TagGetColorsUseCaseTests: XCTestCase {
 
     func test_execute_for_all_variant_cases() throws {
         // GIVEN
-        let intentColorsMock = TagIntentColorsGeneratedMock()
-        intentColorsMock.underlyingColor = ColorTokenGeneratedMock()
-        intentColorsMock.underlyingOnColor = ColorTokenGeneratedMock()
-        intentColorsMock.underlyingSurfaceColor = ColorTokenGeneratedMock()
-        intentColorsMock.underlyingContainerColor = ColorTokenGeneratedMock()
-        intentColorsMock.underlyingOnContainerColor = ColorTokenGeneratedMock()
+        let intentColorsMock = TagIntentColors.mocked()
 
         let items: [TagGetColors] = [
             .init(
@@ -58,9 +53,11 @@ final class TagGetColorsUseCaseTests: XCTestCase {
             let useCase = TagGetColorsUseCase(getIntentColorsUseCase: getIntentColorsUseCaseMock)
 
             // WHEN
-            let colors = useCase.execute(forTheme: themeMock,
-                                         intentColor: intentColorMock,
-                                         variant: item.givenVariant)
+            let colors = useCase.execute(
+                for: themeMock,
+                intentColor: intentColorMock,
+                variant: item.givenVariant
+            )
 
             // Other UseCase
             Tester.testGetIntentColorsUseCaseExecuteCalling(

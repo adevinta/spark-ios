@@ -343,7 +343,7 @@ public final class TagUIView: UIView {
     // MARK: - Getter
 
     private func getColorsFromUseCase() -> TagColors {
-        return self.getColorsUseCase.execute(forTheme: self.theme,
+        return self.getColorsUseCase.execute(for: self.theme,
                                              intentColor: self.intentColor,
                                              variant: self.variant)
     }
