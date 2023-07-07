@@ -1,5 +1,5 @@
 //
-//  TagIntentColors+ExtensionTests.swift
+//  TagContentColors+ExtensionTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 07/07/2023.
@@ -8,7 +8,7 @@
 
 @testable import SparkCore
 
-extension TagIntentColors {
+extension TagContentColors {
 
     // MARK: - Properties
 

@@ -28,7 +28,7 @@ public struct TagView: View {
     /// - Parameters:
     ///   - theme: The spark theme.
     /// - Default values are:
-    ///   - intentColor is .primary case.
+    ///   - intent is .primary case.
     ///   - variant is .filled case.
     ///   - iconImage is nil.
     ///   - text is nil.
@@ -85,12 +85,12 @@ public struct TagView: View {
                                                 label: label ?? self.viewModel.text))
     }
 
-    /// Set the intentColor on tag.
+    /// Set the intent on tag.
     /// - Parameters:
-    ///   - intentColor: The intentColor of the tag.
+    ///   - intent: The intent of the tag.
     /// - Returns: Current Tag View.
-    public func intentColor(_ intentColor: TagIntentColor) -> Self {
-        self.viewModel.setIntentColor(intentColor)
+    public func intent(_ intent: TagIntent) -> Self {
+        self.viewModel.setIntent(intent)
         return self
     }
 

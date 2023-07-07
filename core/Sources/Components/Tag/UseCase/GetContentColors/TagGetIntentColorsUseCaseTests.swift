@@ -1,5 +1,5 @@
 //
-//  TagGetIntentColorsUseCaseTests.swift
+//  TagGetContentColorsUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 06/04/2023.
@@ -10,17 +10,17 @@ import XCTest
 import SwiftUI
 @testable import SparkCore
 
-final class  TagGetIntentColorsUseCaseTests: XCTestCase {
+final class  TagGetContentColorsUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_for_all_intentColor_cases() throws {
+    func test_execute_for_all_intent_cases() throws {
         // GIVEN
         let colorsMock = ColorsGeneratedMock.mocked()
 
-        let items: [TagGetIntentColors] = [
+        let items: [TagGetContentColors] = [
             .init(
-                givenIntentColor: .alert,
+                givenIntent: .alert,
                 expectedColor: colorsMock.feedback.alert,
                 expectedOnColor: colorsMock.feedback.onAlert,
                 expectedContainerColor: colorsMock.feedback.alertContainer,
@@ -28,7 +28,7 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
                 expectedSurfaceColor: colorsMock.base.surface
             ),
             .init(
-                givenIntentColor: .danger,
+                givenIntent: .danger,
                 expectedColor: colorsMock.feedback.error,
                 expectedOnColor: colorsMock.feedback.onError,
                 expectedContainerColor: colorsMock.feedback.errorContainer,
@@ -36,7 +36,7 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
                 expectedSurfaceColor: colorsMock.base.surface
             ),
             .init(
-                givenIntentColor: .info,
+                givenIntent: .info,
                 expectedColor: colorsMock.feedback.info,
                 expectedOnColor: colorsMock.feedback.onInfo,
                 expectedContainerColor: colorsMock.feedback.infoContainer,
@@ -44,7 +44,7 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
                 expectedSurfaceColor: colorsMock.base.surface
             ),
             .init(
-                givenIntentColor: .neutral,
+                givenIntent: .neutral,
                 expectedColor: colorsMock.feedback.neutral,
                 expectedOnColor: colorsMock.feedback.onNeutral,
                 expectedContainerColor: colorsMock.feedback.neutralContainer,
@@ -52,7 +52,7 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
                 expectedSurfaceColor: colorsMock.base.surface
             ),
             .init(
-                givenIntentColor: .primary,
+                givenIntent: .primary,
                 expectedColor: colorsMock.primary.primary,
                 expectedOnColor: colorsMock.primary.onPrimary,
                 expectedContainerColor: colorsMock.primary.primaryContainer,
@@ -60,7 +60,7 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
                 expectedSurfaceColor: colorsMock.base.surface
             ),
             .init(
-                givenIntentColor: .secondary,
+                givenIntent: .secondary,
                 expectedColor: colorsMock.secondary.secondary,
                 expectedOnColor: colorsMock.secondary.onSecondary,
                 expectedContainerColor: colorsMock.secondary.secondaryContainer,
@@ -68,7 +68,7 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
                 expectedSurfaceColor: colorsMock.base.surface
             ),
             .init(
-                givenIntentColor: .success,
+                givenIntent: .success,
                 expectedColor: colorsMock.feedback.success,
                 expectedOnColor: colorsMock.feedback.onSuccess,
                 expectedContainerColor: colorsMock.feedback.successContainer,
@@ -79,18 +79,18 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
 
         for item in items {
 
-            let useCase = TagGetIntentColorsUseCase()
+            let useCase = TagGetContentColorsUseCase()
 
             // WHEN
-            let intentColors = useCase.execute(
-                for: item.givenIntentColor,
+            let contentColors = useCase.execute(
+                for: item.givenIntent,
                 colors: colorsMock
             )
             
-            //  Intent Colors Properties
-            try Tester.testColorsProperties(
-                givenIntentColors: intentColors,
-                getIntentColors: item
+            //  Content Colors Properties
+            try Tester.testContentColorsProperties(
+                givenContentColors: contentColors,
+                getContentColors: item
             )
         }
     }
@@ -100,57 +100,57 @@ final class  TagGetIntentColorsUseCaseTests: XCTestCase {
 
 private struct Tester {
 
-    static func testColorsProperties(
-        givenIntentColors: TagIntentColors,
-        getIntentColors: TagGetIntentColors
+    static func testContentColorsProperties(
+        givenContentColors: TagContentColors,
+        getContentColors: TagGetContentColors
     ) throws {
         // Color
         try self.testColor(
-            givenColorProperty: givenIntentColors.color,
+            givenColorProperty: givenContentColors.color,
             givenPropertyName: "color",
-            givenIntentColor: getIntentColors.givenIntentColor,
-            expectedColorToken: getIntentColors.expectedColor
+            givenIntent: getContentColors.givenIntent,
+            expectedColorToken: getContentColors.expectedColor
         )
         // On Color
         try self.testColor(
-            givenColorProperty: givenIntentColors.onColor,
+            givenColorProperty: givenContentColors.onColor,
             givenPropertyName: "onColor",
-            givenIntentColor: getIntentColors.givenIntentColor,
-            expectedColorToken: getIntentColors.expectedOnColor
+            givenIntent: getContentColors.givenIntent,
+            expectedColorToken: getContentColors.expectedOnColor
         )
 
         // Container Color
         try self.testColor(
-            givenColorProperty: givenIntentColors.containerColor,
+            givenColorProperty: givenContentColors.containerColor,
             givenPropertyName: "containerColor",
-            givenIntentColor: getIntentColors.givenIntentColor,
-            expectedColorToken: getIntentColors.expectedContainerColor
+            givenIntent: getContentColors.givenIntent,
+            expectedColorToken: getContentColors.expectedContainerColor
         )
 
         // On Container Color
         try self.testColor(
-            givenColorProperty: givenIntentColors.onContainerColor,
+            givenColorProperty: givenContentColors.onContainerColor,
             givenPropertyName: "onContainerColor",
-            givenIntentColor: getIntentColors.givenIntentColor,
-            expectedColorToken: getIntentColors.expectedOnContainerColor
+            givenIntent: getContentColors.givenIntent,
+            expectedColorToken: getContentColors.expectedOnContainerColor
         )
 
         // Surface Color
         try self.testColor(
-            givenColorProperty: givenIntentColors.surfaceColor,
+            givenColorProperty: givenContentColors.surfaceColor,
             givenPropertyName: "surfaceColor",
-            givenIntentColor: getIntentColors.givenIntentColor,
-            expectedColorToken: getIntentColors.expectedSurfaceColor
+            givenIntent: getContentColors.givenIntent,
+            expectedColorToken: getContentColors.expectedSurfaceColor
         )
     }
 
     private static func testColor(
         givenColorProperty: any ColorToken,
         givenPropertyName: String,
-        givenIntentColor: TagIntentColor,
+        givenIntent: TagIntent,
         expectedColorToken: any ColorToken
     ) throws {
-        let errorPrefixMessage = " \(givenPropertyName) for .\(givenIntentColor) case"
+        let errorPrefixMessage = " \(givenPropertyName) for .\(givenIntent) case"
 
         let color = try XCTUnwrap(givenColorProperty as? ColorTokenGeneratedMock,
                                   "Wrong" + errorPrefixMessage)
@@ -162,9 +162,9 @@ private struct Tester {
 
 // MARK: - Others Strucs
 
-private struct TagGetIntentColors {
+private struct TagGetContentColors {
 
-    let givenIntentColor: TagIntentColor
+    let givenIntent: TagIntent
 
     let expectedColor: any ColorToken
     let expectedOnColor: any ColorToken

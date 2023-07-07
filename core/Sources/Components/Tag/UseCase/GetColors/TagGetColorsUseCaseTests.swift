@@ -16,53 +16,53 @@ final class TagGetColorsUseCaseTests: XCTestCase {
 
     func test_execute_for_all_variant_cases() throws {
         // GIVEN
-        let intentColorsMock = TagIntentColors.mocked()
+        let contentColorsMock = TagContentColors.mocked()
 
         let items: [TagGetColors] = [
             .init(
                 givenVariant: .filled,
-                expectedBackgroundToken: intentColorsMock.color,
-                expectedBorderToken: intentColorsMock.color,
-                expectedForegroundToken: intentColorsMock.onColor
+                expectedBackgroundToken: contentColorsMock.color,
+                expectedBorderToken: contentColorsMock.color,
+                expectedForegroundToken: contentColorsMock.onColor
             ),
             .init(
                 givenVariant: .outlined,
-                expectedBackgroundToken: intentColorsMock.surfaceColor,
-                expectedBorderToken: intentColorsMock.color,
-                expectedForegroundToken: intentColorsMock.color
+                expectedBackgroundToken: contentColorsMock.surfaceColor,
+                expectedBorderToken: contentColorsMock.color,
+                expectedForegroundToken: contentColorsMock.color
             ),
             .init(
                 givenVariant: .tinted,
-                expectedBackgroundToken: intentColorsMock.containerColor,
-                expectedBorderToken: intentColorsMock.containerColor,
-                expectedForegroundToken: intentColorsMock.onContainerColor
+                expectedBackgroundToken: contentColorsMock.containerColor,
+                expectedBorderToken: contentColorsMock.containerColor,
+                expectedForegroundToken: contentColorsMock.onContainerColor
             )
         ]
 
         for item in items {
-            let intentColorMock: TagIntentColor = .success
+            let intentMock: TagIntent = .success
 
             let themeColorsMock = ColorsGeneratedMock()
 
             let themeMock = ThemeGeneratedMock()
             themeMock.underlyingColors = themeColorsMock
 
-            let getIntentColorsUseCaseMock = TagGetIntentColorsUseCaseableGeneratedMock()
-            getIntentColorsUseCaseMock.executeWithIntentColorAndColorsReturnValue = intentColorsMock
+            let getContentColorsUseCaseMock = TagGetContentColorsUseCaseableGeneratedMock()
+            getContentColorsUseCaseMock.executeWithIntentAndColorsReturnValue = contentColorsMock
 
-            let useCase = TagGetColorsUseCase(getIntentColorsUseCase: getIntentColorsUseCaseMock)
+            let useCase = TagGetColorsUseCase(getContentColorsUseCase: getContentColorsUseCaseMock)
 
             // WHEN
             let colors = useCase.execute(
                 for: themeMock,
-                intentColor: intentColorMock,
+                intent: intentMock,
                 variant: item.givenVariant
             )
 
             // Other UseCase
-            Tester.testGetIntentColorsUseCaseExecuteCalling(
-                givenGetIntentColorsUseCase: getIntentColorsUseCaseMock,
-                givenIntentColor: intentColorMock,
+            Tester.testGetContentColorsUseCaseExecuteCalling(
+                givenGetContentColorsUseCase: getContentColorsUseCaseMock,
+                givenIntent: intentMock,
                 givenThemeColors: themeColorsMock
             )
 
@@ -77,21 +77,21 @@ final class TagGetColorsUseCaseTests: XCTestCase {
 
 private struct Tester {
 
-    static func testGetIntentColorsUseCaseExecuteCalling(
-        givenGetIntentColorsUseCase: TagGetIntentColorsUseCaseableGeneratedMock,
-        givenIntentColor: TagIntentColor,
+    static func testGetContentColorsUseCaseExecuteCalling(
+        givenGetContentColorsUseCase: TagGetContentColorsUseCaseableGeneratedMock,
+        givenIntent: TagIntent,
         givenThemeColors: ColorsGeneratedMock
     ) {
-        let getIntentColorsUseCaseArgs = givenGetIntentColorsUseCase.executeWithIntentColorAndColorsReceivedArguments
-        XCTAssertEqual(givenGetIntentColorsUseCase.executeWithIntentColorAndColorsCallsCount,
+        let getContentColorsUseCaseArgs = givenGetContentColorsUseCase.executeWithIntentAndColorsReceivedArguments
+        XCTAssertEqual(givenGetContentColorsUseCase.executeWithIntentAndColorsCallsCount,
                        1,
-                       "Wrong call number on execute on getIntentColorsUseCase")
-        XCTAssertEqual(getIntentColorsUseCaseArgs?.intentColor,
-                       givenIntentColor,
-                       "Wrong intentColor parameter on execute on getIntentColorsUseCase")
-        XCTAssertIdentical(getIntentColorsUseCaseArgs?.colors as? ColorsGeneratedMock,
+                       "Wrong call number on execute on getContentColorsUseCase")
+        XCTAssertEqual(getContentColorsUseCaseArgs?.intent,
+                       givenIntent,
+                       "Wrong intent parameter on execute on getContentColorsUseCase")
+        XCTAssertIdentical(getContentColorsUseCaseArgs?.colors as? ColorsGeneratedMock,
                            givenThemeColors,
-                           "Wrong colors parameter on execute on getIntentColorsUseCase")
+                           "Wrong colors parameter on execute on getContentColorsUseCase")
     }
 
     static func testColorsProperties(

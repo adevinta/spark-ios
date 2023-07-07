@@ -23,11 +23,11 @@ final class TagViewTests: SwiftUIComponentTestCase {
 
     // MARK: - Tests
 
-    func test_swiftUI_tag_with_only_image_for_all_intentColor_and_variant() throws {
+    func test_swiftUI_tag_with_only_image_for_all_intent_and_variant() throws {
         let suts = TagSutTests.allCases
         for sut in suts {
             let view = TagView(theme: self.theme)
-                .intentColor(sut.intentColor)
+                .intent(sut.intent)
                 .variant(sut.variant)
                 .iconImage(self.iconImage)
                 .fixedSize()
@@ -39,11 +39,11 @@ final class TagViewTests: SwiftUIComponentTestCase {
         }
     }
 
-    func test_swiftUI_tag_with_only_text_for_all_intentColor_and_variant() {
+    func test_swiftUI_tag_with_only_text_for_all_intent_and_variant() {
         let suts = TagSutTests.allCases
         for sut in suts {
             let view = TagView(theme: self.theme)
-                .intentColor(sut.intentColor)
+                .intent(sut.intent)
                 .variant(sut.variant)
                 .text(self.text)
                 .fixedSize()
@@ -55,11 +55,11 @@ final class TagViewTests: SwiftUIComponentTestCase {
         }
     }
 
-    func test_swiftUI_tag_with_image_and_text_for_all_intentColor_and_variant() throws {
+    func test_swiftUI_tag_with_image_and_text_for_all_intent_and_variant() throws {
         let suts = TagSutTests.allCases
         for sut in suts {
             let view = TagView(theme: self.theme)
-                .intentColor(sut.intentColor)
+                .intent(sut.intent)
                 .variant(sut.variant)
                 .iconImage(self.iconImage)
                 .text(self.text)

@@ -33,7 +33,7 @@ final class TagViewModelTests: XCTestCase {
     private let tagColorsMock = TagColors.mocked()
     private lazy var getColorsUseCaseMock: TagGetColorsUseCaseableGeneratedMock = {
         let mock = TagGetColorsUseCaseableGeneratedMock()
-        mock.executeWithThemeAndIntentColorAndVariantReturnValue = self.tagColorsMock
+        mock.executeWithThemeAndIntentAndVariantReturnValue = self.tagColorsMock
         return mock
     }()
 
@@ -49,7 +49,7 @@ final class TagViewModelTests: XCTestCase {
         // THEN
         self.testProperties(
             on: viewModel,
-            expectedIntentColor: .primary,
+            expectedIntent: .primary,
             expectedVariant: .filled,
             expectedIconImage: nil,
             expectedText: nil
@@ -58,14 +58,14 @@ final class TagViewModelTests: XCTestCase {
 
     func test_properties() {
         // GIVEN / WHEN
-        let intentColorMock: TagIntentColor = .alert
+        let intentMock: TagIntent = .alert
         let variantMock: TagVariant = .outlined
         let iconImageMock = Image(systemName: "square.and.arrow.up")
         let textMock = "Text"
 
         let viewModel = TagViewModel(
             theme: self.themeMock,
-            intentColor: intentColorMock,
+            intent: intentMock,
             variant: variantMock,
             iconImage: iconImageMock,
             text: textMock,
@@ -75,7 +75,7 @@ final class TagViewModelTests: XCTestCase {
         // THEN
         self.testProperties(
             on: viewModel,
-            expectedIntentColor: intentColorMock,
+            expectedIntent: intentMock,
             expectedVariant: variantMock,
             expectedIconImage: iconImageMock,
             expectedText: textMock
@@ -84,7 +84,7 @@ final class TagViewModelTests: XCTestCase {
 
     func testProperties(
         on givenViewModel: TagViewModel,
-        expectedIntentColor: TagIntentColor,
+        expectedIntent: TagIntent,
         expectedVariant: TagVariant,
         expectedIconImage: Image?,
         expectedText: String?
@@ -110,17 +110,17 @@ final class TagViewModelTests: XCTestCase {
 
         // **
         // GetColorsUseCase
-        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantReceivedArguments
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantCallsCount,
+        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
+        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
                        1,
                        "Wrong call number on execute on getColorsUseCase")
 
         XCTAssertIdentical(getColorsUseCaseArgs?.theme as? ThemeGeneratedMock,
                            themeMock,
                            "Wrong theme parameter on execute on getColorsUseCase")
-        XCTAssertEqual(getColorsUseCaseArgs?.intentColor,
-                       expectedIntentColor,
-                       "Wrong intentColor parameter on execute on getColorsUseCase")
+        XCTAssertEqual(getColorsUseCaseArgs?.intent,
+                       expectedIntent,
+                       "Wrong intent parameter on execute on getColorsUseCase")
         XCTAssertEqual(getColorsUseCaseArgs?.variant,
                        expectedVariant,
                        "Wrong variant parameter on execute on getColorsUseCase")
@@ -129,14 +129,14 @@ final class TagViewModelTests: XCTestCase {
 
     // MARK: - Public Setter Tests
 
-    func test_setIntentColor_should_update_colors() {
+    func test_setIntent_should_update_colors() {
         // GIVEN
-        let intentColorMock: TagIntentColor = .danger
+        let intentMock: TagIntent = .danger
 
         let newTagColorsMock = TagColors.mocked()
 
-        self.getColorsUseCaseMock._executeWithThemeAndIntentColorAndVariant = { theme, intentColor, variant in
-            if self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantCallsCount == 0 {
+        self.getColorsUseCaseMock._executeWithThemeAndIntentAndVariant = { theme, intent, variant in
+            if self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount == 0 {
                 return self.tagColorsMock
             } else {
                 return newTagColorsMock
@@ -149,7 +149,7 @@ final class TagViewModelTests: XCTestCase {
         )
 
         // WHEN
-        viewModel.setIntentColor(intentColorMock)
+        viewModel.setIntent(intentMock)
 
         // THEN
         XCTAssertEqual(viewModel.colors,
@@ -158,14 +158,14 @@ final class TagViewModelTests: XCTestCase {
 
         // **
         // GetColorsUseCase
-        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantReceivedArguments
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantCallsCount,
+        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
+        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
                        2,
                        "Wrong call number on execute on getColorsUseCase")
 
-        XCTAssertEqual(getColorsUseCaseArgs?.intentColor,
-                       intentColorMock,
-                       "Wrong intentColor parameter on execute on getColorsUseCase")
+        XCTAssertEqual(getColorsUseCaseArgs?.intent,
+                       intentMock,
+                       "Wrong intent parameter on execute on getColorsUseCase")
         // **
     }
 
@@ -175,8 +175,8 @@ final class TagViewModelTests: XCTestCase {
 
         let newTagColorsMock = TagColors.mocked()
 
-        self.getColorsUseCaseMock._executeWithThemeAndIntentColorAndVariant = { theme, intentColor, variant in
-            if self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantCallsCount == 0 {
+        self.getColorsUseCaseMock._executeWithThemeAndIntentAndVariant = { theme, intent, variant in
+            if self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount == 0 {
                 return self.tagColorsMock
             } else {
                 return newTagColorsMock
@@ -198,8 +198,8 @@ final class TagViewModelTests: XCTestCase {
 
         // **
         // GetColorsUseCase
-        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantReceivedArguments
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentColorAndVariantCallsCount,
+        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
+        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
                        2,
                        "Wrong call number on execute on getColorsUseCase")
 
