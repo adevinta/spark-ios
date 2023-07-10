@@ -14,24 +14,16 @@ import SwiftUI
 struct UISpinnerView: UIViewRepresentable {
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
-    private var isSpinning: Bool = false
-
     var theme: Theme {
         self.themePublisher.theme
     }
 
-    init(isSpinning: Bool) {
-        self.isSpinning = isSpinning
-    }
-    
+    var spinnerIntent = SpinnerIntent.primary
+    var spinnerSize = SpinnerSize.medium
+
     func makeUIView(context: Context) -> some UIView {
-        let view = SpinnerUIView(theme: self.theme)
-        if isSpinning {
-            view.start()
-        }
-        return view
+        return SpinnerUIView(theme: self.theme, intent: spinnerIntent, spinnerSize: spinnerSize)
     }
 
-    func updateUIView(_ uiView: UIViewType, context: Context) {
-    }
+    func updateUIView(_ uiView: UIViewType, context: Context) {}
 }

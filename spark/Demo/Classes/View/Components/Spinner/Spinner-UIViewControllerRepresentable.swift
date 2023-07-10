@@ -31,8 +31,13 @@ final class SpinnerViewController: UIViewController {
         self.themePublisher.theme
     }
 
+    var spinnerIntent = SpinnerIntent.primary
+    var spinnerSize = SpinnerSize.medium
+
     private lazy var spinner: UIView = {
-        let view = SpinnerUIView(theme: self.theme)
+        let view = SpinnerUIView(theme: self.theme,
+                                 intent: spinnerIntent,
+                                 spinnerSize: spinnerSize)
         view.start()
         return view
     }()

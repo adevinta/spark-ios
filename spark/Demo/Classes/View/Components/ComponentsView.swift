@@ -41,7 +41,7 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Spinner") {
-                    SpinnerUI()
+                    SpinnerComponent()
                 }
             }
             .navigationBarTitle(Text("Components"))

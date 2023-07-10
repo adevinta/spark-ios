@@ -15,7 +15,7 @@ struct SpinnerComponentView: View {
     var body: some View {
         VStack {
             HStack {
-                UISpinnerView(isSpinning: spinnerStarted)
+                UISpinnerView()
                 Button(spinnerStarted ? "Stop " : "Start") {
                     self.spinnerStarted.toggle()
                 }
