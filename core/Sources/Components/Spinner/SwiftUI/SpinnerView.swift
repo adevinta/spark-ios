@@ -8,13 +8,23 @@
 
 import SwiftUI
 
+/// SpinnerView is a single indeterminate spinner.
+/// The spinner can have a size of `small` or `medium` and have different intents which determine the color of the spinner.
+/// The spinner spin animation is 1 second linear infinite.
 public struct SpinnerView: View {
+    // MARK: - Private Properties
     @ObservedObject private var viewModel: SpinnerViewModel
     @State private var rotationDegrees = 0.0
 
     @ScaledMetric private var size: CGFloat
     @ScaledMetric private var strokeWidth: CGFloat
 
+    // MARK: - Init
+    /// init
+    /// Parameters:
+    /// - theme: The current `Theme`
+    /// - intent: The `SpinnerIntent` intent used for coloring the spinner
+    /// - spinnerSize: The defined size of the spinner`SpinnerSize`
     public init(theme: Theme,
                 intent: SpinnerIntent,
                 spinnerSize: SpinnerSize
@@ -36,13 +46,14 @@ public struct SpinnerView: View {
                 .frame(width: self.viewModel.size, height: self.viewModel.size)
                 .offset(y: 0)
                 .rotationEffect(.degrees(self.rotationDegrees))
-                .animation(self.animation(isSpinning: self.viewModel.isSpinning), value: self.viewModel.isSpinning)
+                .animation(self.animation(), value: self.viewModel.isSpinning)
                 .task {
                     self.rotationDegrees = 360.0
                     self.viewModel.isSpinning = true
                 }
     }
 
+    // MARK: - Public modifiers
     public func theme(_ theme: Theme) -> Self {
         self.viewModel.theme = theme
         return self
@@ -58,8 +69,9 @@ public struct SpinnerView: View {
         return self
     }
 
-    private func animation(isSpinning: Bool) -> Animation? {
-        guard isSpinning else {
+    // MARK: - Private helpers
+    private func animation() -> Animation? {
+        guard self.viewModel.isSpinning else {
             return nil
         }
         return .linear(duration: self.viewModel.duration)

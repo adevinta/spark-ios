@@ -11,15 +11,18 @@ import XCTest
 
 final class GetSpinnerIntentColorUseCaseTests: TestCase {
 
+    // MARK: - Private properties
     private var sut: GetSpinnerIntentColorUseCase!
     private var colors: ColorsGeneratedMock!
 
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
         self.sut = GetSpinnerIntentColorUseCase()
         self.colors = ColorsGeneratedMock.mocked()
     }
 
+    // MARK: - Tests
     func test_execute_primary() {
         XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .primary).color, self.colors.primary.primary.color)
     }

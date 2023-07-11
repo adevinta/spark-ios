@@ -13,9 +13,11 @@ import SwiftUI
 
 final class SpinnerViewModelTests: XCTestCase {
 
+    // MARK: - Private properties
     private var useCase: GetSpinnerIntentColorUseCasableGeneratedMock!
     private var subscriptions = Set<AnyCancellable>()
 
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
 
@@ -24,6 +26,7 @@ final class SpinnerViewModelTests: XCTestCase {
         self.useCase.executeWithColorsAndIntentReturnValue = colorToken
     }
 
+    // MARK: - Tests
     func test_variables_published_on_init() {
         let sut = sut(intent: .primary, spinnerSize: .small)
         let expect = expectation(description: "All publisher should have published")
@@ -70,6 +73,7 @@ final class SpinnerViewModelTests: XCTestCase {
         wait(for: [expect])
     }
 
+    // MARK: - Private helper function
     private func sut(intent: SpinnerIntent, spinnerSize: SpinnerSize) -> SpinnerViewModel {
         return .init(theme: ThemeGeneratedMock.mocked(),
                      intent: intent,

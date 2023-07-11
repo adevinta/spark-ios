@@ -12,11 +12,22 @@ import QuartzCore
 import UIKit
 import SwiftUI
 
+/// SpinnerView is a single indeterminate spinner.
+/// The spinner can have a size of `small` or `medium` and have different intents which determine the color of the spinner.
+/// The spinner spin animation is 1 second linear infinite.
 public final class SpinnerUIView: UIView {
 
+    // MARK: - Private attributes
     private let viewModel: SpinnerViewModel
     private var subscriptions = Set<AnyCancellable>()
 
+    @ScaledUIMetric private var size: CGFloat
+    @ScaledUIMetric private var strokeWidth: CGFloat
+
+    private let arc: SpinnerArcUIView
+    private var spinnerSizeConstraints = [NSLayoutConstraint]()
+
+    // MARK: - Public modifiable attributes
     public var theme: Theme {
         get { return self.viewModel.theme }
         set { self.viewModel.theme = newValue }
@@ -32,12 +43,12 @@ public final class SpinnerUIView: UIView {
         set { self.viewModel.intent = newValue}
     }
 
-    @ScaledUIMetric private var size: CGFloat
-    @ScaledUIMetric private var strokeWidth: CGFloat
-
-    private let arc: SpinnerArcUIView
-    private var spinnerSizeConstraints = [NSLayoutConstraint]()
-
+    // MARK: - Init
+    /// init
+    /// Parameters:
+    /// - theme: The current `Theme`
+    /// - intent: The `SpinnerIntent` intent used for coloring the spinner
+    /// - spinnerSize: The defined size of the spinner`SpinnerSize`
     public convenience init(theme: Theme, intent: SpinnerIntent, spinnerSize: SpinnerSize) {
         self.init(viewModel: SpinnerViewModel(theme: theme, intent: intent, spinnerSize: spinnerSize))
     }
@@ -58,7 +69,7 @@ public final class SpinnerUIView: UIView {
         self.setContentHuggingPriority(.required, for: .vertical)
         self.backgroundColor = .clear
 
-        self.start()
+        self.animate()
     }
 
     required init?(coder: NSCoder) {
@@ -76,6 +87,7 @@ public final class SpinnerUIView: UIView {
         self._strokeWidth.update(traitCollection: self.traitCollection)
     }
 
+    // MARK: - Private functions
     private func setupView() {
         self.arc.backgroundColor = .clear
         self.arc.translatesAutoresizingMaskIntoConstraints = false
@@ -118,14 +130,6 @@ public final class SpinnerUIView: UIView {
         }
     }
 
-    public func start() {
-        animate()
-    }
-
-    public func stop() {
-        self.arc.layer.removeAnimation(forKey: "Spinner.360")
-    }
-
     private func animate() {
         let fullRotation = CABasicAnimation(keyPath:  "transform.rotation.z")
         fullRotation.fromValue = 0
@@ -137,7 +141,8 @@ public final class SpinnerUIView: UIView {
     }
 }
 
-
+// MARK: - Private helper classes
+/// Private helper view just to draw the arc which will be used in the spinner view
 private final class SpinnerArcUIView: UIView {
     var strokeWidth: CGFloat
     var color: UIColor
@@ -169,6 +174,7 @@ private final class SpinnerArcUIView: UIView {
     }
 }
 
+// MARK: - Private helper extensions
 private extension UIBezierPath {
     static func arc(arcCenter: CGPoint,
                        radius: CGFloat) ->  UIBezierPath {

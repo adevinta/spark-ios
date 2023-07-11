@@ -16,10 +16,15 @@ private enum Constants {
     static let duration = 1.0
 }
 
+/// `SpinnerViewModel` is the view model for both the SwiftUI `SpinnerView` as well as the UIKit `SpinnerUIView`.
+/// The view model is responsible for returning the varying attributes to the views, i.e. colors and size. These are determined by the theme, intent and spinnerSize.
+/// When the theme or the intent change the new values are calculated and published.
 final class SpinnerViewModel: ObservableObject {
 
+    // MARK: - Private attributes
     private let useCase: any GetSpinnerIntentColorUseCasable
 
+    // MARK: - Public attribues
     var theme: Theme {
         didSet {
             self.intentColor = self.useCase.execute(colors: theme.colors, intent: intent)
@@ -40,13 +45,21 @@ final class SpinnerViewModel: ObservableObject {
         }
     }
 
+    let duration = Constants.duration
+    let strokeWidth = Constants.stroke
+
+    // MARK: Published attribues
     @Published var size: CGFloat
     @Published var intentColor: any ColorToken
     @Published var isSpinning: Bool = false
-    let duration = Constants.duration
 
-    let strokeWidth = Constants.stroke
-
+    // MARK: Init
+    /// Init
+    /// Parameters:
+    /// - theme: the current `Theme`
+    /// - intent: the `SpinnerIntent`, which will determine the color of the spinner
+    /// - spinnerSize: the `SpinnerSize`
+    /// - userCase: `GetSpinnerIntentColorUseCasable` has a default value `GetSpinnerIntentColorUseCase`
     init(theme: Theme,
          intent: SpinnerIntent,
          spinnerSize: SpinnerSize,
@@ -60,6 +73,7 @@ final class SpinnerViewModel: ObservableObject {
     }
 }
 
+// MARK: - Private helpers
 private extension SpinnerSize {
     var numeric: CGFloat {
         switch self {

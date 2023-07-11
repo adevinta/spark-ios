@@ -13,7 +13,21 @@ protocol GetSpinnerIntentColorUseCasable {
     func execute(colors: any Colors, intent: SpinnerIntent) -> any ColorToken
 }
 
+/// GetSpinnerIntentColorUseCase
+/// Use case to determin the colors of the Spinner by the intent
+/// Functions:
+/// - execute: returns a color token for given colors and an intent
 struct GetSpinnerIntentColorUseCase: GetSpinnerIntentColorUseCasable {
+
+    // MARK: - Functions
+    ///
+    /// Calculate the color of the spinner depending on the intent
+    ///
+    /// - Parameters:
+    ///    - colors: Colors from the theme
+    ///    - intent: `SpinnerIntent`.
+    ///
+    /// - Returns: ``RadioButtonColors`` which contains the various colors of the radio button.
     func execute(colors: any Colors, intent: SpinnerIntent) -> any ColorToken {
         switch intent {
         case .primary: return colors.primary.primary
