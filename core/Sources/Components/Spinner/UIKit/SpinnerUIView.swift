@@ -24,9 +24,6 @@ public final class SpinnerUIView: UIView {
     @ScaledUIMetric private var size: CGFloat
     @ScaledUIMetric private var strokeWidth: CGFloat
 
-    private let arc: SpinnerArcUIView
-    private var spinnerSizeConstraints = [NSLayoutConstraint]()
-
     // MARK: - Public modifiable attributes
     public var theme: Theme {
         get { return self.viewModel.theme }
@@ -55,21 +52,22 @@ public final class SpinnerUIView: UIView {
 
     init(viewModel: SpinnerViewModel) {
         self.viewModel = viewModel
-        self._size = ScaledUIMetric(wrappedValue: viewModel.size)
+        let size = ScaledUIMetric(wrappedValue: viewModel.size)
+        self._size = size
         let strokeWidth = ScaledUIMetric<CGFloat>(wrappedValue: viewModel.strokeWidth)
-        self.arc = SpinnerArcUIView(strokeWidth: strokeWidth.wrappedValue, color: viewModel.intentColor.uiColor)
         self._strokeWidth = strokeWidth
 
         super.init(frame: CGRect.zero)
 
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.setupView()
-        self.setupConstraints()
         self.setContentHuggingPriority(.required, for: .horizontal)
         self.setContentHuggingPriority(.required, for: .vertical)
+        self.setContentCompressionResistancePriority(.required, for: .horizontal)
+        self.setContentCompressionResistancePriority(.required, for: .vertical)
         self.backgroundColor = .clear
 
         self.animate()
+        self.setupSubscriptions()
     }
 
     required init?(coder: NSCoder) {
@@ -83,78 +81,15 @@ public final class SpinnerUIView: UIView {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
+        let oldSize = self.size
+        let oldStrokeWidth = self.strokeWidth
+
         self._size.update(traitCollection: self.traitCollection)
         self._strokeWidth.update(traitCollection: self.traitCollection)
-    }
 
-    // MARK: - Private functions
-    private func setupView() {
-        self.arc.backgroundColor = .clear
-        self.arc.translatesAutoresizingMaskIntoConstraints = false
-        self.arc.frame = self.bounds
-        self.arc.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.addSubview(self.arc)
-    }
-    
-    private func setupConstraints() {
-        let widthConstraint = self.widthAnchor.constraint(equalToConstant: self.size)
-        let heightConstraint = self.heightAnchor.constraint(equalToConstant: self.size)
-        widthConstraint.priority = .required
-        heightConstraint.priority = .required
-
-        let constraints = [widthConstraint, heightConstraint]
-
-        NSLayoutConstraint.activate(constraints)
-
-        self.spinnerSizeConstraints = constraints
-    }
-
-    private func setupSubscriptions() {
-        self.viewModel.$size.subscribe(in: &self.subscriptions) { [weak self] size in
-            guard let self else { return }
-            self.size = size
-            self.updateSizeConstraints()
+        if self.size != oldSize || self.strokeWidth != oldStrokeWidth {
             self.setNeedsLayout()
         }
-
-        self.viewModel.$intentColor.subscribe(in: &self.subscriptions) { [weak self] color in
-            guard let self else { return }
-            self.arc.color = color.uiColor
-            self.arc.setNeedsDisplay()
-        }
-    }
-
-    private func updateSizeConstraints() {
-        for constraint in self.spinnerSizeConstraints {
-            constraint.constant = self.size
-        }
-    }
-
-    private func animate() {
-        let fullRotation = CABasicAnimation(keyPath:  "transform.rotation.z")
-        fullRotation.fromValue = 0
-        fullRotation.toValue = 2 * CGFloat.pi
-        fullRotation.duration = self.viewModel.duration
-        fullRotation.repeatCount = .infinity
-
-        self.arc.layer.add(fullRotation, forKey: "Spinner.360")
-    }
-}
-
-// MARK: - Private helper classes
-/// Private helper view just to draw the arc which will be used in the spinner view
-private final class SpinnerArcUIView: UIView {
-    var strokeWidth: CGFloat
-    var color: UIColor
-
-    init(strokeWidth: CGFloat, color: UIColor) {
-        self.strokeWidth = strokeWidth
-        self.color = color
-        super.init(frame: .zero)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     public override func draw(_ rect: CGRect) {
@@ -167,10 +102,38 @@ private final class SpinnerArcUIView: UIView {
         let center = rect.width / 2
         let centerPoint = CGPoint(x: center, y: center)
 
-        let spinnerArc = UIBezierPath.arc(arcCenter: centerPoint, radius: (rect.height - self.strokeWidth)/2 )
+        let spinnerArc = UIBezierPath.arc(arcCenter: centerPoint, radius: (rect.width - self.strokeWidth)/2 )
         spinnerArc.lineWidth = self.strokeWidth
-        ctx.setStrokeColor(self.color.cgColor)
+        ctx.setStrokeColor(self.viewModel.intentColor.uiColor.cgColor)
         spinnerArc.stroke()
+    }
+
+    // MARK: - Private functions
+    private func setupSubscriptions() {
+        self.viewModel.$size.subscribe(in: &self.subscriptions) { [weak self] size in
+            guard let self else { return }
+            let oldSize = self.size
+            self.size = size
+
+            if oldSize != self.size {
+                self.invalidateIntrinsicContentSize()
+            }
+        }
+
+        self.viewModel.$intentColor.subscribe(in: &self.subscriptions) { [weak self] _ in
+            self?.setNeedsDisplay()
+        }
+    }
+
+    private func animate() {
+        let fullRotation = CABasicAnimation(keyPath:  "transform.rotation.z")
+        fullRotation.fromValue = 0
+        fullRotation.toValue = 2 * CGFloat.pi
+        fullRotation.duration = self.viewModel.duration
+        fullRotation.repeatCount = .infinity
+
+        //        self.arc.layer.add(fullRotation, forKey: "Spinner.360")
+        self.layer.add(fullRotation, forKey: "Spinner.360")
     }
 }
 

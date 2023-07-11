@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum SpinnerSize {
+public enum SpinnerSize: CaseIterable {
     case medium
     case small
 }

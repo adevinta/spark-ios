@@ -24,7 +24,11 @@ class ViewController: UIViewController {
 
     private lazy var spinner: UIView = {
         let view = SpinnerUIView(theme: self.theme, intent: .alert, spinnerSize: .medium)
-        view.start()
+        return view
+    }()
+
+    private lazy var spinnerSmall: UIView = {
+        let view = SpinnerUIView(theme: self.theme, intent: .alert, spinnerSize: .small)
         return view
     }()
 
@@ -32,7 +36,7 @@ class ViewController: UIViewController {
 
     private let contentView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .vertical
+        stackView.axis = .horizontal
         stackView.alignment = .leading
         stackView.spacing = 24
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -54,6 +58,7 @@ class ViewController: UIViewController {
         self.view.addSubview(self.scrollView)
 
         self.contentView.addArrangedSubview(self.spinner)
+        self.contentView.addArrangedSubview(self.spinnerSmall)
         self.contentView.addArrangedSubview(self.label)
         self.contentView.addArrangedSubview(UIView())
 

@@ -76,7 +76,6 @@ public struct SpinnerView: View {
         }
         return .linear(duration: self.viewModel.duration)
             .repeatForever(autoreverses: false)
-            .speed(self.viewModel.duration)
     }
 }
 
