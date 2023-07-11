@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// `SpinnerSize` is the size of the spinner. At the moment, only two sizes are available, medium and small.
 public enum SpinnerSize: CaseIterable {
     case medium
     case small

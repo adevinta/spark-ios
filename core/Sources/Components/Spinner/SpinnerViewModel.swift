@@ -21,10 +21,10 @@ private enum Constants {
 /// When the theme or the intent change the new values are calculated and published.
 final class SpinnerViewModel: ObservableObject {
 
-    // MARK: - Private attributes
+    // MARK: - Private Properties
     private let useCase: any GetSpinnerIntentColorUseCasable
 
-    // MARK: - Public attribues
+    // MARK: - Public Properties
     var theme: Theme {
         didSet {
             self.intentColor = self.useCase.execute(colors: theme.colors, intent: intent)
@@ -48,7 +48,7 @@ final class SpinnerViewModel: ObservableObject {
     let duration = Constants.duration
     let strokeWidth = Constants.stroke
 
-    // MARK: Published attribues
+    // MARK: Published Properties
     @Published var size: CGFloat
     @Published var intentColor: any ColorToken
     @Published var isSpinning: Bool = false

@@ -38,7 +38,7 @@ final class SpinnerViewModelTests: XCTestCase {
             expect.fulfill()
         }
 
-        wait(for: [expect])
+        wait(for: [expect], timeout: 0.1)
     }
 
     func test_colors_republished_on_theme_update() {
@@ -53,7 +53,7 @@ final class SpinnerViewModelTests: XCTestCase {
 
         sut.theme = ThemeGeneratedMock.mocked()
 
-        wait(for: [expect])
+        wait(for: [expect], timeout: 0.1)
     }
 
     func test_size_republished_on_size_update() {
@@ -70,7 +70,7 @@ final class SpinnerViewModelTests: XCTestCase {
 
         sut.spinnerSize = .medium
 
-        wait(for: [expect])
+        wait(for: [expect], timeout: 0.1)
     }
 
     // MARK: - Private helper function

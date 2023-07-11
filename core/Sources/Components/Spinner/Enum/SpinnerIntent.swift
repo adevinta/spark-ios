@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// `SpinnerIntent` determines the color of the spinner according to the theme.
 public enum SpinnerIntent: CaseIterable {
     case alert
     case error
