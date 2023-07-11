@@ -27,8 +27,7 @@ public struct SpinnerView: View {
     /// - spinnerSize: The defined size of the spinner`SpinnerSize`
     public init(theme: Theme,
                 intent: SpinnerIntent,
-                spinnerSize: SpinnerSize
-    ) {
+                spinnerSize: SpinnerSize) {
         self.init(viewModel: SpinnerViewModel(theme: theme, intent: intent, spinnerSize: spinnerSize))
     }
 
@@ -39,18 +38,17 @@ public struct SpinnerView: View {
     }
 
     public var body: some View {
-            Circle()
-                .trim(from: 0, to: 0.5)
-                .stroke(lineWidth: self.viewModel.strokeWidth)
-                .foregroundColor(self.viewModel.intentColor.color)
-                .frame(width: self.viewModel.size, height: self.viewModel.size)
-                .offset(y: 0)
-                .rotationEffect(.degrees(self.rotationDegrees))
-                .animation(self.animation(), value: self.viewModel.isSpinning)
-                .task {
-                    self.rotationDegrees = 360.0
-                    self.viewModel.isSpinning = true
-                }
+        Circle()
+            .trim(from: 0, to: 0.5)
+            .stroke(lineWidth: self.viewModel.strokeWidth)
+            .foregroundColor(self.viewModel.intentColor.color)
+            .frame(width: self.viewModel.size, height: self.viewModel.size)
+            .rotationEffect(.degrees(self.rotationDegrees))
+            .animation(self.animation(), value: self.viewModel.isSpinning)
+            .task {
+                self.rotationDegrees = 360.0
+                self.viewModel.isSpinning = true
+            }
     }
 
     // MARK: - Public modifiers

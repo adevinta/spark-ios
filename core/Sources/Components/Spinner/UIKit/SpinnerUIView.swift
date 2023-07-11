@@ -132,7 +132,6 @@ public final class SpinnerUIView: UIView {
         fullRotation.duration = self.viewModel.duration
         fullRotation.repeatCount = .infinity
 
-        //        self.arc.layer.add(fullRotation, forKey: "Spinner.360")
         self.layer.add(fullRotation, forKey: "Spinner.360")
     }
 }

@@ -59,7 +59,7 @@ struct SpinnerComponent: View {
             UISpinnerView(theme: self.theme,
                           intent: self.intent,
                           spinnerSize: self.spinnerSize)
-            Text("The UIKit spinner does not animate in a view representable, but works fine in a standard UIView view hierarchy.")
+            Text("*The UIKit spinner does not animate in a view representable, but works fine in a standard UIView view hierarchy.")
                 .font(.footnote)
             Spacer()
         }

@@ -349,8 +349,8 @@ private class NSAttributedStringBuilder {
 
 // MARK: - Preview
 //
-//struct RadioButtonUIGroup_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RadioButtonUIGroup()
-//    }
-//}
+struct RadioButtonUIGroup_Previews: PreviewProvider {
+    static var previews: some View {
+        RadioButtonUIGroup()
+    }
+}
