@@ -11,24 +11,21 @@ import SwiftUI
 public struct SpinnerView: View {
     @ObservedObject private var viewModel: SpinnerViewModel
     @State private var rotationDegrees = 0.0
-    @Binding private var isSpinning: Bool
 
     @ScaledMetric private var size: CGFloat
     @ScaledMetric private var strokeWidth: CGFloat
 
     public init(theme: Theme,
                 intent: SpinnerIntent,
-                spinnerSize: SpinnerSize,
-                isSpinning: Binding<Bool>
+                spinnerSize: SpinnerSize
     ) {
-        self.init(viewModel: SpinnerViewModel(theme: theme, intent: intent, spinnerSize: spinnerSize), isSpinning: isSpinning)
+        self.init(viewModel: SpinnerViewModel(theme: theme, intent: intent, spinnerSize: spinnerSize))
     }
 
-    init(viewModel: SpinnerViewModel, isSpinning: Binding<Bool>) {
+    init(viewModel: SpinnerViewModel) {
         self.viewModel = viewModel
         self._size = ScaledMetric(wrappedValue: viewModel.size)
         self._strokeWidth = ScaledMetric(wrappedValue: viewModel.strokeWidth)
-        self._isSpinning = isSpinning
     }
 
     public var body: some View {
@@ -42,11 +39,7 @@ public struct SpinnerView: View {
                 .animation(self.animation(isSpinning: self.viewModel.isSpinning), value: self.viewModel.isSpinning)
                 .task {
                     self.rotationDegrees = 360.0
-                    self.viewModel.isSpinning = self.isSpinning
-                }
-                .onChange(of: self.isSpinning) { newValue in
-                    print("Value changed of isSpinning = \(newValue)")
-                    self.viewModel.isSpinning = newValue
+                    self.viewModel.isSpinning = true
                 }
     }
 
@@ -67,25 +60,11 @@ public struct SpinnerView: View {
 
     private func animation(isSpinning: Bool) -> Animation? {
         guard isSpinning else {
-            print("returning nil")
             return nil
         }
-        print("Created new animation isSpinning = \(isSpinning)")
         return .linear(duration: self.viewModel.duration)
-            .repeat(while: isSpinning)
+            .repeatForever(autoreverses: false)
             .speed(self.viewModel.duration)
     }
-
 }
 
-extension Animation {
-    func `repeat`(while expression: Bool, autoreverses: Bool = false) -> Animation {
-        if expression {
-            print("Animation should start")
-            return self.repeatForever(autoreverses: autoreverses)
-        } else {
-            print("Animation should stop")
-            return self
-        }
-    }
-}

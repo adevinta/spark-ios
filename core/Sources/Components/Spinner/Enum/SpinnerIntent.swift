@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum SpinnerIntent {
+public enum SpinnerIntent: CaseIterable {
     case alert
     case error
     case info

@@ -50,13 +50,13 @@ final class SpinnerViewModel: ObservableObject {
     init(theme: Theme,
          intent: SpinnerIntent,
          spinnerSize: SpinnerSize,
-         userCase: any GetSpinnerIntentColorUseCasable = GetSpinnerIntentColorUseCase()) {
+         useCase: any GetSpinnerIntentColorUseCasable = GetSpinnerIntentColorUseCase()) {
         self.theme = theme
         self.intent = intent
         self.spinnerSize = spinnerSize
-        self.useCase = userCase
+        self.useCase = useCase
         self.size = spinnerSize.numeric
-        self.intentColor = userCase.execute(colors: theme.colors, intent: intent)
+        self.intentColor = useCase.execute(colors: theme.colors, intent: intent)
     }
 }
 

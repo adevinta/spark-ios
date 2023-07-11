@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol GetSpinnerIntentColorUseCasable {
     func execute(colors: any Colors, intent: SpinnerIntent) -> any ColorToken
 }

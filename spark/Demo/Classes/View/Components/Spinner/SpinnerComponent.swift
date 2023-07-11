@@ -20,23 +20,17 @@ struct SpinnerComponent: View {
 
     @State var intent: SpinnerIntent = .primary
     @State var spinnerSize: SpinnerSize = .medium
-    @State var isSpinning: Bool = true
 
     var body: some View {
         VStack {
-            Button(isSpinning ? "Stop" : "Start") {
-                self.isSpinning.toggle()
-            }
-            Spacer()
             Text("SwiftUI")
             SpinnerView(theme: self.theme,
                         intent: self.intent,
-                        spinnerSize: self.spinnerSize,
-                        isSpinning: self.$isSpinning
+                        spinnerSize: self.spinnerSize
             )
-//            Divider()
-//            Text("UIKit")
-//            UISpinnerView()
+            Divider()
+            Text("UIKit")
+            UISpinnerView()
             Spacer()
         }
     }
