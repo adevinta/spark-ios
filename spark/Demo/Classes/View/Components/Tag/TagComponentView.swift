@@ -21,8 +21,8 @@ struct TagComponentView: View {
     @State private var versionSheetIsPresented = false
     @State var version: ComponentVersion = .swiftUI
 
-    @State private var intentColorSheetIsPresented = false
-    @State var intentColor: TagIntentColor = .primary
+    @State private var intentSheetIsPresented = false
+    @State var intent: TagIntent = .primary
 
     @State private var variantSheetIsPresented = false
     @State var variant: TagVariant = .filled
@@ -59,17 +59,17 @@ struct TagComponentView: View {
                     // **
 
                     // **
-                    // Intent Color
+                    // Intent
                     HStack() {
-                        Text("Intent color: ")
+                        Text("Intent: ")
                             .bold()
-                        Button("\(self.intentColor.name)") {
-                            self.intentColorSheetIsPresented = true
+                        Button("\(self.intent.name)") {
+                            self.intentSheetIsPresented = true
                         }
-                        .confirmationDialog("Select an intent color", isPresented: self.$intentColorSheetIsPresented) {
-                            ForEach(TagIntentColor.allCases, id: \.self) { intentColor in
-                                Button("\(intentColor.name)") {
-                                    self.intentColor = intentColor
+                        .confirmationDialog("Select an intent", isPresented: self.$intentSheetIsPresented) {
+                            ForEach(TagIntent.allCases, id: \.self) { intent in
+                                Button("\(intent.name)") {
+                                    self.intent = intent
                                 }
                             }
                         }
@@ -121,10 +121,10 @@ struct TagComponentView: View {
 
                 if self.version == .swiftUI {
                     TagView(theme: SparkTheme.shared)
-                        .intentColor(self.intentColor)
+                        .intent(self.intent)
                         .variant(self.variant)
-                        .iconImage(self.content.showIcon ? Image(self.viewModel.imageNamed) : nil)
-                        .text(self.content.showText ? self.viewModel.text : nil)
+                        .iconImage(self.content.shouldShowIcon ? Image(self.viewModel.imageNamed) : nil)
+                        .text(self.content.shouldShowText ? self.viewModel.text : nil)
                         .accessibility(identifier: "MyTag1",
                                        label: "It's my first tag")
                     
@@ -133,7 +133,7 @@ struct TagComponentView: View {
                         TagComponentItemsUIView(
                             viewModel: self.viewModel,
                             height: self.$uiKitViewHeight,
-                            intentColor: self.intentColor,
+                            intent: self.intent,
                             variant: self.variant,
                             content: self.content
                         )
@@ -157,7 +157,7 @@ struct TagComponentView_Previews: PreviewProvider {
 
 // MARK: - Extension
 
-private extension TagIntentColor {
+private extension TagIntent {
 
     var name: String {
         switch self {
@@ -176,7 +176,7 @@ private extension TagIntentColor {
         case .success:
             return "Success"
         @unknown default:
-            return "Please, add this unknow intent color value"
+            return "Please, add this unknow intent value"
         }
     }
 }

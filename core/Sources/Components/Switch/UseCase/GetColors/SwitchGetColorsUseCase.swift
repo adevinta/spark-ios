@@ -10,44 +10,44 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol SwitchGetColorsUseCaseable {
-    func execute(forIntentColor intentColor: SwitchIntentColor,
+    func execute(for intent: SwitchIntent,
                  colors: Colors,
-                 dims: Dims) -> SwitchColorables
+                 dims: Dims) -> SwitchColors
 }
 
 struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
 
     // MARK: - Properties
 
-    private let getIntentColorUseCase: any SwitchGetIntentColorUseCaseable
+    private let getColorUseCase: any SwitchGetColorUseCaseable
 
     // MARK: - Initialization
 
-    init(getIntentColorUseCase: any SwitchGetIntentColorUseCaseable = SwitchGetIntentColorUseCase()) {
-        self.getIntentColorUseCase = getIntentColorUseCase
+    init(getColorUseCase: any SwitchGetColorUseCaseable = SwitchGetColorUseCase()) {
+        self.getColorUseCase = getColorUseCase
     }
 
     // MARK: - Methods
 
-    func execute(forIntentColor intentColor: SwitchIntentColor,
+    func execute(for intent: SwitchIntent,
                  colors: Colors,
-                 dims: Dims) -> SwitchColorables {
+                 dims: Dims) -> SwitchColors {
 
-        // Get intent color from use case
-        let intentColor = self.getIntentColorUseCase.execute(
-            forIntentColor: intentColor,
+        // Get color from use case
+        let color = self.getColorUseCase.execute(
+            for: intent,
             colors: colors
         )
 
         let statusAndStateColors = SwitchStatusColors(
-            onColorToken: FullColorTokenDefault(colorToken: intentColor, opacity: 1),
-            offColorToken: FullColorTokenDefault(colorToken: colors.base.onSurface, opacity: dims.dim4)
+            onColorToken: color,
+            offColorToken: colors.base.onSurface.opacity(dims.dim4)
         )
 
-        return SwitchColors(
+        return .init(
             toggleBackgroundColors: statusAndStateColors,
-            toggleDotBackgroundColor: colors.base.surface,
             toggleDotForegroundColors: statusAndStateColors,
+            toggleDotBackgroundColor: colors.base.surface,
             textForegroundColor: colors.base.onSurface
         )
     }

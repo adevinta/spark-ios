@@ -34,33 +34,32 @@ final class RadioButtonGroupViewTests: SwiftUIComponentTestCase {
         RadioButtonItem(id: 1,
                         label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
         RadioButtonItem(id: 2,
-                        label: "2 Radio button / Enabled",
-                        state: .enabled),
+                        label: "2 Radio button"),
         RadioButtonItem(id: 3,
-                        label: "3 Radio button / Disabled",
-                        state: .disabled),
+                        label: "3 Radio button"),
         RadioButtonItem(id: 4,
-                        label: "4 Radio button / Error",
-                        state: .error(message: "Error")),
+                        label: "4 Radio button"),
         RadioButtonItem(id: 5,
-                        label: "5 Radio button / Success",
-                        state: .success(message: "Success")),
+                        label: "5 Radio button"),
         RadioButtonItem(id: 6,
-                        label: "6 Radio button / Warning",
-                        state: .warning(message: "Warning"))
+                        label: "6 Radio button")
     ]
 
     // MARK: - Tests
-    func test_group() {
-        let sut = RadioButtonGroupView(
-            theme: SparkTheme.shared,
-            title: "Radio Button Group (SwiftUI)",
-            selectedID: self.selectedID,
-            items: self.allItems)
-            .frame(width: 400)
-            .fixedSize(horizontal: false, vertical: true)
+    func test_group_all_states() {
+        for state in RadioButtonGroupState.allCases {
+            let sut = RadioButtonGroupView(
+                theme: SparkTheme.shared,
+                title: "Radio Button Group (SwiftUI)",
+                selectedID: self.selectedID,
+                items: self.allItems,
+                state: state,
+                supplementaryLabel: state.supplementaryText)
+                .frame(width: 400)
+                .fixedSize(horizontal: false, vertical: true)
 
-        assertSnapshotInDarkAndLight(matching: sut)
+            assertSnapshotInDarkAndLight(matching: sut)
+        }
     }
 
     // MARK: - Tests
@@ -110,5 +109,17 @@ final class RadioButtonGroupViewTests: SwiftUIComponentTestCase {
         ).fixedSize()
 
         assertSnapshotInDarkAndLight(matching: sut)
+    }
+}
+
+private extension RadioButtonGroupState {
+    var supplementaryText: String? {
+        switch self {
+        case .disabled: return nil
+        case .enabled: return nil
+        case .error: return "Error"
+        case .warning: return "Warning"
+        case .success: return "Success"
+        }
     }
 }

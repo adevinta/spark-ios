@@ -17,7 +17,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     private let useCase: GetRadioButtonColorsUseCaseable
 
     private (set) var theme: Theme
-    private (set) var state: SparkSelectButtonState
+    private (set) var groupState: RadioButtonGroupState
 
     @Binding private (set) var selectedID: ID
 
@@ -25,12 +25,10 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     @Published var colors: RadioButtonColors
     @Published var isDisabled: Bool
-    @Published var supplementaryText: String?
     @Published var opacity: CGFloat
     @Published var spacing: CGFloat
     @Published var font: TypographyFontToken
-    @Published var supplemetaryFont: TypographyFontToken
-    @Published var surfaceColor: ColorToken
+    @Published var surfaceColor: any ColorToken
     @Published var labelPosition: RadioButtonLabelPosition
 
     // MARK: - Initialization
@@ -39,14 +37,14 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
                      id: ID,
                      label: Either<NSAttributedString, String>,
                      selectedID: Binding<ID>,
-                     state: SparkSelectButtonState,
+                     groupState: RadioButtonGroupState,
                      labelPosition: RadioButtonLabelPosition = .right) {
         let useCase = GetRadioButtonColorsUseCase()
         self.init(theme: theme,
                   id: id,
                   label: label,
                   selectedID: selectedID,
-                  state: state,
+                  groupState: groupState,
                   labelPosition: labelPosition,
                   useCase: useCase)
         }
@@ -55,7 +53,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
          id: ID,
          label: Either<NSAttributedString, String>,
          selectedID: Binding<ID>,
-         state: SparkSelectButtonState,
+         groupState: RadioButtonGroupState,
          labelPosition: RadioButtonLabelPosition,
          useCase: GetRadioButtonColorsUseCase) {
         self.theme = theme
@@ -63,20 +61,18 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.label = label
         self._selectedID = selectedID
         self.useCase = useCase
-        self.state = state
+        self.groupState = groupState
         self.labelPosition = labelPosition
 
-        self.isDisabled = self.state == .disabled
-        self.supplementaryText = self.state.supplementaryText
+        self.isDisabled = self.groupState == .disabled
 
-        self.opacity = self.theme.opacity(state: self.state)
+        self.opacity = self.theme.opacity(state: self.groupState)
         self.spacing = self.theme.spacing(for: labelPosition)
         self.font = self.theme.typography.body1
-        self.supplemetaryFont = self.theme.typography.caption
         self.surfaceColor = self.theme.colors.base.onSurface
 
         self.colors = useCase
-            .execute(theme: theme, state: self.state, isSelected: selectedID.wrappedValue == id)
+            .execute(theme: theme, state: self.groupState, isSelected: selectedID.wrappedValue == id)
     }
 
     // MARK: - Functions
@@ -94,9 +90,9 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.labelPositionDidUpdate()
     }
 
-    func set(state: SparkSelectButtonState) {
-        if self.state != state {
-            self.state = state
+    func set(groupState: RadioButtonGroupState) {
+        if self.groupState != groupState {
+            self.groupState = groupState
             self.stateDidUpdate()
         }
     }
@@ -109,22 +105,20 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     }
 
     func updateColors() {
+        self.opacity = self.theme.opacity(state: self.groupState)
         self.colors = useCase
-            .execute(theme: self.theme, state: self.state, isSelected: selectedID == id)
+            .execute(theme: self.theme, state: self.groupState, isSelected: selectedID == id)
     }
 
     // MARK: - Private Functions
 
     private func stateDidUpdate() {
-        self.isDisabled = self.state == .disabled
-        self.supplementaryText = self.state.supplementaryText
+        self.isDisabled = self.groupState == .disabled
         self.updateColors()
     }
 
     private func themeDidUpdate() {
-        self.opacity = self.theme.opacity(state: self.state)
         self.font = self.theme.typography.body1
-        self.supplemetaryFont = self.theme.typography.caption
         self.surfaceColor = self.theme.colors.base.onSurface
         self.updateColors()
     }
@@ -136,7 +130,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
 // MARK: - Private Helpers
 private extension Theme {
-    func opacity(state: SparkSelectButtonState) -> CGFloat {
+    func opacity(state: RadioButtonGroupState) -> CGFloat {
         switch state {
         case .disabled: return self.dims.dim3
         case .warning, .error, .success, .enabled: return 1
@@ -145,16 +139,5 @@ private extension Theme {
 
     func spacing(for labelPosition: RadioButtonLabelPosition) -> CGFloat {
         return labelPosition == .right ? self.layout.spacing.medium : self.layout.spacing.xxxLarge
-    }
-}
-
-private extension SparkSelectButtonState {
-    var supplementaryText: String? {
-        switch self {
-        case let .warning(message: message),
-            let .error(message: message),
-            let .success(message: message): return message
-        case .disabled, .enabled: return nil
-        }
     }
 }

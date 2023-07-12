@@ -13,8 +13,8 @@ struct ChipIntentColors {
 
     // MARK: - Properties
     
-    let principal: ColorToken
-    let subordinate: ColorToken
-    let tintedPrincipal: ColorToken
-    let tintedSubordinate: ColorToken
+    let principal: any ColorToken
+    let subordinate: any ColorToken
+    let tintedPrincipal: any ColorToken
+    let tintedSubordinate: any ColorToken
 }

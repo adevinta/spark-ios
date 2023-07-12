@@ -10,15 +10,15 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol CheckboxColorables {
-    var textColor: ColorToken { get }
-    var checkboxTintColor: ColorToken { get }
-    var checkboxIconColor: ColorToken { get }
-    var pressedBorderColor: ColorToken { get }
+    var textColor: any ColorToken { get }
+    var checkboxTintColor: any ColorToken { get }
+    var checkboxIconColor: any ColorToken { get }
+    var pressedBorderColor: any ColorToken { get }
 }
 
 struct CheckboxColors: CheckboxColorables {
-    let textColor: ColorToken
-    let checkboxTintColor: ColorToken
-    let checkboxIconColor: ColorToken
-    let pressedBorderColor: ColorToken
+    let textColor: any ColorToken
+    let checkboxTintColor: any ColorToken
+    let checkboxIconColor: any ColorToken
+    let pressedBorderColor: any ColorToken
 }

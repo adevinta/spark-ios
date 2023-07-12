@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Spark
+import SparkCore
 import SwiftUI
 
 struct ColorView: View {
@@ -14,10 +16,16 @@ struct ColorView: View {
 
     private let viewModel = ColorViewModel()
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     // MARK: - View
     
     var body: some View {
-        List(self.viewModel.sectionViewModels, id: \.name) { sectionViewModel in
+        List(self.viewModel.sectionViewModels(for: self.theme), id: \.name) { sectionViewModel in
             NavigationLink(sectionViewModel.name) {
                 ColorSectionView(viewModel: sectionViewModel)
             }

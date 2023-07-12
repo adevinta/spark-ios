@@ -39,7 +39,7 @@ struct PurpleDropShadow: ElevationDropShadows & ElevationShadow {
 
     let offset: CGPoint = .init(x: 0, y: 4)
     let blur: CGFloat = 8
-    let colorToken: ColorToken = PurpleColorTokenShadow()
+    let colorToken: any ColorToken = PurpleColorTokenShadow()
     let opacity: Float = 0.20
 }
 

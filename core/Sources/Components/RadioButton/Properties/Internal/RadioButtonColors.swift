@@ -15,9 +15,8 @@ import Foundation
 /// - Label: The color of the adjoining label
 /// - Sublabel: The color of the sub-label. This is only used for specific states of the radio button (`error`, `success` & `warning`)
 struct RadioButtonColors {
-    let button: ColorToken
-    let label: ColorToken
-    let halo: ColorToken
-    let fill: ColorToken
-    let subLabel: ColorToken
+    let button: any ColorToken
+    let label: any ColorToken
+    let halo: any ColorToken
+    let fill: any ColorToken
 }

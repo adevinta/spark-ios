@@ -85,7 +85,7 @@ public struct CheckboxView: View {
         self._selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.viewModel = .init(
-            text: text,
+            text: .right(text),
             checkedImage: checkedImage,
             theme: theme,
             colorsUseCase: colorsUseCase,
@@ -207,7 +207,7 @@ public struct CheckboxView: View {
 
     private var labelView: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(self.viewModel.text)
+            Text(self.viewModel.text ?? "")
                 .font(self.theme.typography.body1.font)
                 .foregroundColor(self.colors.textColor.color)
 

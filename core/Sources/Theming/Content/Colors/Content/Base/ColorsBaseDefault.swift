@@ -10,33 +10,33 @@ public struct ColorsBaseDefault: ColorsBase {
 
     // MARK: - Properties
 
-    public let background: ColorToken
-    public let onBackground: ColorToken
-    public let backgroundVariant: ColorToken
-    public let onBackgroundVariant: ColorToken
-    public let surface: ColorToken
-    public let onSurface: ColorToken
-    public let surfaceInverse: ColorToken
-    public let onSurfaceInverse: ColorToken
-    public let outline: ColorToken
-    public let outlineHigh: ColorToken
-    public let overlay: ColorToken
-    public let onOverlay: ColorToken
+    public let background: any ColorToken
+    public let onBackground: any ColorToken
+    public let backgroundVariant: any ColorToken
+    public let onBackgroundVariant: any ColorToken
+    public let surface: any ColorToken
+    public let onSurface: any ColorToken
+    public let surfaceInverse: any ColorToken
+    public let onSurfaceInverse: any ColorToken
+    public let outline: any ColorToken
+    public let outlineHigh: any ColorToken
+    public let overlay: any ColorToken
+    public let onOverlay: any ColorToken
 
     // MARK: - Init
 
-    public init(background: ColorToken,
-                onBackground: ColorToken,
-                backgroundVariant: ColorToken,
-                onBackgroundVariant: ColorToken,
-                surface: ColorToken,
-                onSurface: ColorToken,
-                surfaceInverse: ColorToken,
-                onSurfaceInverse: ColorToken,
-                outline: ColorToken,
-                outlineHigh: ColorToken,
-                overlay: ColorToken,
-                onOverlay: ColorToken) {
+    public init(background: any ColorToken,
+                onBackground: any ColorToken,
+                backgroundVariant: any ColorToken,
+                onBackgroundVariant: any ColorToken,
+                surface: any ColorToken,
+                onSurface: any ColorToken,
+                surfaceInverse: any ColorToken,
+                onSurfaceInverse: any ColorToken,
+                outline: any ColorToken,
+                outlineHigh: any ColorToken,
+                overlay: any ColorToken,
+                onOverlay: any ColorToken) {
         self.background = background
         self.onBackground = onBackground
         self.backgroundVariant = backgroundVariant

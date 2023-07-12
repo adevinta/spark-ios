@@ -35,20 +35,15 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
             RadioButtonUIItem(id: "1",
                               label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
             RadioButtonUIItem(id: "2",
-                              label: "2 Radio button / Enabled",
-                              state: .enabled),
+                              label: "2 Radio button"),
             RadioButtonUIItem(id: "3",
-                              label: "3 Radio button / Disabled",
-                              state: .disabled),
+                              label: "3 Radio button"),
             RadioButtonUIItem(id: "4",
-                              label: "4 Radio button / Error",
-                              state: .error(message: "Error")),
+                              label: "4 Radio button"),
             RadioButtonUIItem(id: "5",
-                              label: "5 Radio button / Success",
-                              state: .success(message: "Success")),
+                              label: "5 Radio button"),
             RadioButtonUIItem(id: "6",
-                              label: "6 Radio button / Warning",
-                              state: .warning(message: "Warning")),
+                              label: "6 Radio button")
         ]
 
         let sut = RadioButtonUIGroupView(
@@ -90,18 +85,42 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
     }
 
     func test_uikit_radioButtonGroup_horizontal_with_title() throws {
-        let sut = RadioButtonUIGroupView(
-            theme: SparkTheme.shared,
-            title: "Title",
-            selectedID: self.selectedID,
-            items: self.items,
-            groupLayout: .horizontal
-        )
+        for state in RadioButtonGroupState.allCases {
+            let sut = RadioButtonUIGroupView(
+                theme: SparkTheme.shared,
+                title: "Title",
+                selectedID: self.selectedID,
+                items: self.items,
+                groupLayout: .horizontal,
+                state: state,
+                supplementaryText: state.supplementaryText
+            )
 
-        sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
-        sut.translatesAutoresizingMaskIntoConstraints = false
+            sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
+            sut.translatesAutoresizingMaskIntoConstraints = false
 
-        assertSnapshotInDarkAndLight(matching: sut)
+            assertSnapshotInDarkAndLight(matching: sut)
+        }
+    }
+
+
+    func test_uikit_radioButtonGroup_vertical_with_title() throws {
+        for state in RadioButtonGroupState.allCases {
+            let sut = RadioButtonUIGroupView(
+                theme: SparkTheme.shared,
+                title: "Title",
+                selectedID: self.selectedID,
+                items: self.items,
+                groupLayout: .vertical,
+                state: state,
+                supplementaryText: state.supplementaryText
+            )
+
+            sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
+            sut.translatesAutoresizingMaskIntoConstraints = false
+
+            assertSnapshotInDarkAndLight(matching: sut)
+        }
     }
 
     func test_uikit_radioButtonGroup_label_left() throws {
@@ -135,4 +154,47 @@ final class RadioButtonUIGroupViewTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut)
     }
 
+    func test_uikit_radioButtonGroup_all_states() {
+        for state in RadioButtonGroupState.allCases {
+            let sut = RadioButtonUIGroupView(
+                theme: SparkTheme.shared,
+                title: "Title",
+                selectedID: self.selectedID,
+                items: self.items,
+                state: state,
+                supplementaryText: state.supplementaryText)
+
+            sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
+            sut.translatesAutoresizingMaskIntoConstraints = false
+
+            assertSnapshotInDarkAndLight(matching: sut)
+        }
+    }
+
+    func test_accessibility_idetifier_propagated_to_items() {
+        let sut = RadioButtonUIGroupView(
+            theme: SparkTheme.shared,
+            title: "Title",
+            selectedID: self.selectedID,
+            items: self.items,
+            state: .enabled)
+
+        sut.accessibilityIdentifier = "XXX"
+        let radioButtonView = sut.subviews.first { view in
+            return (view is RadioButtonUIView<String>)
+        }
+        XCTAssertEqual(radioButtonView?.accessibilityIdentifier, "XXX-0")
+    }
+}
+
+private extension RadioButtonGroupState {
+    var supplementaryText: String? {
+        switch self {
+        case .disabled: return nil
+        case .enabled: return nil
+        case .error: return "Error"
+        case .warning: return "Warning"
+        case .success: return "Success"
+        }
+    }
 }

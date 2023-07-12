@@ -16,9 +16,9 @@ final class SwitchViewModel: ObservableObject {
 
     private(set) var theme: Theme
     private(set) var alignment: SwitchAlignment
-    private(set) var intentColor: SwitchIntentColor
+    private(set) var intent: SwitchIntent
     private(set) var isEnabled: Bool
-    private(set) var variant: SwitchVariant?
+    private(set) var images: SwitchImagesEither?
 
     // MARK: - Published Properties
 
@@ -27,29 +27,25 @@ final class SwitchViewModel: ObservableObject {
     @Published private (set) var isToggleInteractionEnabled: Bool?
     @Published private (set) var toggleOpacity: CGFloat?
 
-    @Published private (set) var toggleBackgroundColorToken: ColorToken?
-    @Published private (set) var toggleDotBackgroundColorToken: ColorToken?
-    @Published private (set) var toggleDotForegroundColorToken: ColorToken?
-    @Published private (set) var textForegroundColorToken: ColorToken?
+    @Published private (set) var toggleBackgroundColorToken: (any ColorToken)?
+    @Published private (set) var toggleDotBackgroundColorToken: (any ColorToken)?
+    @Published private (set) var toggleDotForegroundColorToken: (any ColorToken)?
+    @Published private (set) var textForegroundColorToken: (any ColorToken)?
 
     @Published private (set) var isToggleOnLeft: Bool?
     @Published private (set) var horizontalSpacing: CGFloat?
 
     @Published private (set) var showToggleLeftSpace: Bool?
 
-    @Published private (set) var toggleDotImage: SwitchImageable?
+    @Published private (set) var toggleDotImage: SwitchImageEither?
 
     @Published private (set) var textFontToken: TypographyFontToken?
 
     // MARK: - Private Properties
 
-    private var colors: SwitchColorables?
+    private var colors: SwitchColors?
 
-    private let getColorsUseCase: any SwitchGetColorsUseCaseable
-    private let getImageUseCase: any SwitchGetImageUseCaseable
-    private let getToggleColorUseCase: any SwitchGetToggleColorUseCaseable
-    private let getPositionUseCase: any SwitchGetPositionUseCaseable
-    private let getToggleStateUseCase: any SwitchGetToggleStateUseCaseable
+    private let dependencies: any SwitchViewModelDependenciesProtocol
 
     // MARK: - Initialization
 
@@ -57,29 +53,26 @@ final class SwitchViewModel: ObservableObject {
         theme: Theme,
         isOn: Bool,
         alignment: SwitchAlignment,
-        intentColor: SwitchIntentColor,
+        intent: SwitchIntent,
         isEnabled: Bool,
-        variant: SwitchVariant?,
-        getColorsUseCase: any SwitchGetColorsUseCaseable = SwitchGetColorsUseCase(),
-        getImageUseCase: any SwitchGetImageUseCaseable = SwitchGetImageUseCase(),
-        getToggleColorUseCase: any SwitchGetToggleColorUseCaseable = SwitchGetToggleColorUseCase(),
-        getPositionUseCase: any SwitchGetPositionUseCaseable = SwitchGetPositionUseCase(),
-        getToggleStateUseCase: any SwitchGetToggleStateUseCaseable = SwitchGetToggleStateUseCase()
+        images: SwitchImagesEither?,
+        dependencies: any SwitchViewModelDependenciesProtocol = SwitchViewModelDependencies()
     ) {
         self.isOn = isOn
 
         self.theme = theme
         self.alignment = alignment
-        self.intentColor = intentColor
+        self.intent = intent
         self.isEnabled = isEnabled
-        self.variant = variant
+        self.images = images
 
-        self.getColorsUseCase = getColorsUseCase
-        self.getImageUseCase = getImageUseCase
-        self.getToggleColorUseCase = getToggleColorUseCase
-        self.getPositionUseCase = getPositionUseCase
-        self.getToggleStateUseCase = getToggleStateUseCase
+        self.dependencies = dependencies
+    }
 
+    // MARK: - Load
+
+    func load() {
+        // Update all values when view is ready to receive published values
         self.updateAll()
     }
 
@@ -118,8 +111,8 @@ final class SwitchViewModel: ObservableObject {
         self.alignmentDidUpdate()
     }
 
-    func set(intentColor: SwitchIntentColor) {
-        self.intentColor = intentColor
+    func set(intent: SwitchIntent) {
+        self.intent = intent
 
         self.colorsDidUpdate(reloadColorsFromUseCase: true)
     }
@@ -131,8 +124,8 @@ final class SwitchViewModel: ObservableObject {
         self.toggleStateDidUpdate()
     }
 
-    func set(variant: SwitchVariant?) {
-        self.variant = variant
+    func set(images: SwitchImagesEither?) {
+        self.images = images
 
         self.toggleDotImageDidUpdate()
     }
@@ -150,8 +143,8 @@ final class SwitchViewModel: ObservableObject {
 
     private func colorsDidUpdate(reloadColorsFromUseCase: Bool = false) {
         if reloadColorsFromUseCase {
-            self.colors = self.getColorsUseCase.execute(
-                forIntentColor: self.intentColor,
+            self.colors = self.dependencies.getColorsUseCase.execute(
+                for: self.intent,
                 colors: self.theme.colors,
                 dims: self.theme.dims
             )
@@ -161,21 +154,29 @@ final class SwitchViewModel: ObservableObject {
             return
         }
 
-        self.toggleBackgroundColorToken = self.getToggleColorUseCase.execute(
-            forIsOn: self.isOn,
+        self.toggleBackgroundColorToken = self.dependencies.getToggleColorUseCase.execute(
+            for: self.isOn,
             statusAndStateColor: colors.toggleBackgroundColors
         )
         self.toggleDotBackgroundColorToken = colors.toggleDotBackgroundColor
-        self.toggleDotForegroundColorToken = self.getToggleColorUseCase.execute(
-            forIsOn: self.isOn,
+        self.toggleDotForegroundColorToken = self.dependencies.getToggleColorUseCase.execute(
+            for: self.isOn,
             statusAndStateColor: colors.toggleDotForegroundColors
         )
+        self.textForegroundColorTokenDidUpdate()
+    }
+
+    private func textForegroundColorTokenDidUpdate() {
+        guard let colors = self.colors else {
+            return
+        }
+
         self.textForegroundColorToken = colors.textForegroundColor
     }
 
     private func alignmentDidUpdate() {
-        let position = self.getPositionUseCase.execute(
-            forAlignment: self.alignment,
+        let position = self.dependencies.getPositionUseCase.execute(
+            for: self.alignment,
             spacing: self.theme.layout.spacing
         )
 
@@ -184,8 +185,8 @@ final class SwitchViewModel: ObservableObject {
     }
 
     private func toggleStateDidUpdate() {
-        let interactionState = self.getToggleStateUseCase.execute(
-            forIsEnabled: self.isEnabled,
+        let interactionState = self.dependencies.getToggleStateUseCase.execute(
+            for: self.isEnabled,
             dims: self.theme.dims
         )
 
@@ -194,10 +195,14 @@ final class SwitchViewModel: ObservableObject {
     }
 
     private func toggleDotImageDidUpdate() {
-        self.toggleDotImage = self.getImageUseCase.execute(
-            forIsOn: self.isOn,
-            variant: self.variant
-        )
+        if let images = self.images {
+            self.toggleDotImage = self.dependencies.getImageUseCase.execute(
+                for: self.isOn,
+                images: images
+            )
+        } else {
+            self.toggleDotImage = nil
+        }
     }
 
     private func toggleSpacesVisibilityDidUpdate() {
@@ -206,5 +211,13 @@ final class SwitchViewModel: ObservableObject {
 
     private func textFontDidUpdate() {
         self.textFontToken = self.theme.typography.body1
+    }
+
+    func textChanged(_ text: String?) {
+        // Reload text properties (font and color) if consumer set a new text
+        if text != nil {
+            self.textFontDidUpdate()
+            self.textForegroundColorTokenDidUpdate()
+        }
     }
 }

@@ -10,21 +10,21 @@ public struct ColorsSecondaryDefault: ColorsSecondary {
 
     // MARK: - Properties
 
-    public let secondary: ColorToken
-    public let onSecondary: ColorToken
-    public let secondaryVariant: ColorToken
-    public let onSecondaryVariant: ColorToken
-    public let secondaryContainer: ColorToken
-    public let onSecondaryContainer: ColorToken
+    public let secondary: any ColorToken
+    public let onSecondary: any ColorToken
+    public let secondaryVariant: any ColorToken
+    public let onSecondaryVariant: any ColorToken
+    public let secondaryContainer: any ColorToken
+    public let onSecondaryContainer: any ColorToken
 
     // MARK: - Init
 
-    public init(secondary: ColorToken,
-                onSecondary: ColorToken,
-                secondaryVariant: ColorToken,
-                onSecondaryVariant: ColorToken,
-                secondaryContainer: ColorToken,
-                onSecondaryContainer: ColorToken) {
+    public init(secondary: any ColorToken,
+                onSecondary: any ColorToken,
+                secondaryVariant: any ColorToken,
+                onSecondaryVariant: any ColorToken,
+                secondaryContainer: any ColorToken,
+                onSecondaryContainer: any ColorToken) {
         self.secondary = secondary
         self.onSecondary = onSecondary
         self.secondaryVariant = secondaryVariant

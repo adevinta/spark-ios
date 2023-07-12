@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol GetRadioButtonColorsUseCaseable {
-    func execute(theme: Theme, state: SparkSelectButtonState, isSelected: Bool) -> RadioButtonColors
+    func execute(theme: Theme, state: RadioButtonGroupState, isSelected: Bool) -> RadioButtonColors
 }
 
 /// A use case to determine the colors of a radio button.
@@ -30,7 +30,7 @@ struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
     ///
     /// - Returns: ``RadioButtonColors`` which contains the various colors of the radio button.
     func execute(theme: Theme,
-                 state: SparkSelectButtonState,
+                 state: RadioButtonGroupState,
                  isSelected: Bool) -> RadioButtonColors {
         let buttonColor = theme.buttonColor(state: state, isSelected: isSelected)
 
@@ -38,16 +38,15 @@ struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
             button: buttonColor,
             label: theme.colors.base.onSurface,
             halo: theme.haloColor(state: state),
-            fill: isSelected ? buttonColor : ColorTokenDefault.clear,
-            subLabel: theme.supplementaryTextColor(state: state)
+            fill: isSelected ? buttonColor : ColorTokenDefault.clear
         )
     }
 }
 
 // MARK: - Private Extensions
 private extension Theme {
-    func buttonColor(state: SparkSelectButtonState,
-                     isSelected: Bool) -> ColorToken {
+    func buttonColor(state: RadioButtonGroupState,
+                     isSelected: Bool) -> any ColorToken {
         switch state {
         case .warning: return self.colors.feedback.alert
         case .error: return self.colors.feedback.error
@@ -56,17 +55,7 @@ private extension Theme {
         }
     }
 
-    func supplementaryTextColor(state: SparkSelectButtonState) -> ColorToken {
-        switch state {
-        case .warning: return self.colors.feedback.onAlertContainer
-        case .error: return self.colors.feedback.error
-        case .success: return self.colors.feedback.success
-        case .enabled: return self.colors.primary.primaryContainer
-        case .disabled: return self.colors.primary.primaryContainer
-        }
-    }
-
-    func haloColor(state: SparkSelectButtonState) -> ColorToken {
+    func haloColor(state: RadioButtonGroupState) -> any ColorToken {
         switch state {
         case .warning: return self.colors.feedback.alertContainer
         case .error: return self.colors.feedback.errorContainer

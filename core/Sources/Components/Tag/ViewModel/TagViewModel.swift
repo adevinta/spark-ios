@@ -12,7 +12,7 @@ final class TagViewModel: ObservableObject {
 
     // MARK: - Public properties
 
-    @Published var colors: TagColorables
+    @Published var colors: TagColors
     @Published var typography: Typography
     @Published var spacing: LayoutSpacing
     @Published var border: Border
@@ -23,7 +23,7 @@ final class TagViewModel: ObservableObject {
     // MARK: - Private properties
 
     private let theme: Theme
-    private var intentColor: TagIntentColor {
+    private var intent: TagIntent {
         didSet {
             self.reloadColors()
         }
@@ -40,15 +40,15 @@ final class TagViewModel: ObservableObject {
 
     init(
         theme: Theme,
-        intentColor: TagIntentColor = .primary,
+        intent: TagIntent = .primary,
         variant: TagVariant = .filled,
         iconImage: Image? = nil,
         text: String? = nil,
         getColorsUseCase: any TagGetColorsUseCaseable = TagGetColorsUseCase()
     ) {
         self.colors = Self.getColors(
-            forTheme: theme,
-            intentColor: intentColor,
+            for: theme,
+            intent: intent,
             variant: variant,
             useCase: getColorsUseCase
         )
@@ -60,7 +60,7 @@ final class TagViewModel: ObservableObject {
         self.text = text
 
         self.theme = theme
-        self.intentColor = intentColor
+        self.intent = intent
         self.variant = variant
 
         self.getColorsUseCase = getColorsUseCase
@@ -70,8 +70,8 @@ final class TagViewModel: ObservableObject {
 
     private func reloadColors() {
         self.colors = Self.getColors(
-            forTheme: self.theme,
-            intentColor: intentColor,
+            for: self.theme,
+            intent: intent,
             variant: variant,
             useCase: getColorsUseCase
         )
@@ -79,8 +79,8 @@ final class TagViewModel: ObservableObject {
 
     // MARK: - Public Setter
 
-    func setIntentColor(_ intentColor: TagIntentColor) {
-        self.intentColor = intentColor
+    func setIntent(_ intent: TagIntent) {
+        self.intent = intent
     }
 
     func setVariant(_ variant: TagVariant) {
@@ -98,14 +98,14 @@ final class TagViewModel: ObservableObject {
     // MARK: - Getter
 
     private static func getColors(
-        forTheme theme: Theme,
-        intentColor: TagIntentColor,
+        for theme: Theme,
+        intent: TagIntent,
         variant: TagVariant,
         useCase: any TagGetColorsUseCaseable
-    ) -> TagColorables {
+    ) -> TagColors {
         return useCase.execute(
-            forTheme: theme,
-            intentColor: intentColor,
+            for: theme,
+            intent: intent,
             variant: variant
         )
     }

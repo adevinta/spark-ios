@@ -20,7 +20,7 @@ struct ColorItemViewModel: Hashable {
     // MARK: - Initialization
 
     init(name: String,
-         colorToken: ColorToken) {
+         colorToken: any ColorToken) {
         self.name = name
         self.foregroundColor = Self.makeForegroundColor(colorToken: colorToken)
         self.color = colorToken.color
@@ -34,7 +34,7 @@ struct ColorItemViewModel: Hashable {
 
     // MARK: - Color
 
-    private static func makeForegroundColor(colorToken: ColorToken) -> Color {
+    private static func makeForegroundColor(colorToken: any ColorToken) -> Color {
         let uiColor = colorToken.uiColor
         return uiColor.isLight ? .black : .white
     }

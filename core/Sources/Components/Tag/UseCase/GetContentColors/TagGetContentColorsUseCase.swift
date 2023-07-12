@@ -1,5 +1,5 @@
 //
-//  TagGetIntentColorsUseCase.swift
+//  TagGetContentColorsUseCase.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 29/03/2023.
@@ -7,22 +7,22 @@
 //
 
 // sourcery: AutoMockable
-protocol TagGetIntentColorsUseCaseable {
-    func execute(forIntentColor intentColor: TagIntentColor,
-                 colors: Colors) -> TagIntentColorables
+protocol TagGetContentColorsUseCaseable {
+    func execute(for intent: TagIntent,
+                 colors: Colors) -> TagContentColors
 }
 
-struct TagGetIntentColorsUseCase: TagGetIntentColorsUseCaseable {
+struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(forIntentColor intentColor: TagIntentColor,
-                 colors: Colors) -> TagIntentColorables {
+    func execute(for intent: TagIntent,
+                 colors: Colors) -> TagContentColors {
         let surfaceColor = colors.base.surface
 
-        switch intentColor {
+        switch intent {
         case .alert:
-            return TagIntentColors(
+            return .init(
                 color: colors.feedback.alert,
                 onColor: colors.feedback.onAlert,
                 containerColor: colors.feedback.alertContainer,
@@ -31,7 +31,7 @@ struct TagGetIntentColorsUseCase: TagGetIntentColorsUseCaseable {
             )
 
         case .danger:
-            return TagIntentColors(
+            return .init(
                 color: colors.feedback.error,
                 onColor: colors.feedback.onError,
                 containerColor: colors.feedback.errorContainer,
@@ -40,7 +40,7 @@ struct TagGetIntentColorsUseCase: TagGetIntentColorsUseCaseable {
             )
 
         case .info:
-            return TagIntentColors(
+            return .init(
                 color: colors.feedback.info,
                 onColor: colors.feedback.onInfo,
                 containerColor: colors.feedback.infoContainer,
@@ -49,7 +49,7 @@ struct TagGetIntentColorsUseCase: TagGetIntentColorsUseCaseable {
             )
 
         case .neutral:
-            return TagIntentColors(
+            return .init(
                 color: colors.feedback.neutral,
                 onColor: colors.feedback.onNeutral,
                 containerColor: colors.feedback.neutralContainer,
@@ -58,7 +58,7 @@ struct TagGetIntentColorsUseCase: TagGetIntentColorsUseCaseable {
             )
 
         case .primary:
-            return TagIntentColors(
+            return .init(
                 color: colors.primary.primary,
                 onColor: colors.primary.onPrimary,
                 containerColor: colors.primary.primaryContainer,
@@ -67,7 +67,7 @@ struct TagGetIntentColorsUseCase: TagGetIntentColorsUseCaseable {
             )
 
         case .secondary:
-            return TagIntentColors(
+            return .init(
                 color: colors.secondary.secondary,
                 onColor: colors.secondary.onSecondary,
                 containerColor: colors.secondary.secondaryContainer,
@@ -76,7 +76,7 @@ struct TagGetIntentColorsUseCase: TagGetIntentColorsUseCaseable {
             )
 
         case .success:
-            return TagIntentColors(
+            return .init(
                 color: colors.feedback.success,
                 onColor: colors.feedback.onSuccess,
                 containerColor: colors.feedback.successContainer,

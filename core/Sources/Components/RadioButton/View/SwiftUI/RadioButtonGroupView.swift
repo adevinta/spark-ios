@@ -33,16 +33,18 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     // MARK: - Injected properties
 
     private var selectedID: Binding<ID>
-    private let theme: Theme
     private let items: [RadioButtonItem<ID>]
     private let title: String?
     private let groupLayout: RadioButtonGroupLayout
     private let radioButtonLabelPosition: RadioButtonLabelPosition
+    private let state: RadioButtonGroupState
+    private let supplementaryLabel: String?
+    private let viewModel: RadioButtonGroupViewModel
 
     // MARK: - Local properties
 
     @ScaledMetric private var spacing: CGFloat
-    @ScaledMetric private var titlePadding = RadioButtonConstants.radioButtonPadding
+    @ScaledMetric private var titleSpacing: CGFloat
 
     // MARK: - Initialization
 
@@ -56,42 +58,63 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                 selectedID: Binding<ID>,
                 items: [RadioButtonItem<ID>],
                 radioButtonLabelPosition: RadioButtonLabelPosition = .right,
-                groupLayout: RadioButtonGroupLayout = .vertical) {
-        self.theme = theme
+                groupLayout: RadioButtonGroupLayout = .vertical,
+                state: RadioButtonGroupState = .enabled,
+                supplementaryLabel: String? = nil
+    ) {
         self.items = items
         self.selectedID = selectedID
         self.title = title
         self.groupLayout = groupLayout
         self.radioButtonLabelPosition = radioButtonLabelPosition
-        self._spacing = ScaledMetric(wrappedValue: theme.layout.spacing.xLarge)
+        self.supplementaryLabel = supplementaryLabel
+        self.state = state
+        self.viewModel = RadioButtonGroupViewModel(theme: theme, state: state)
+        self._spacing = ScaledMetric(wrappedValue: self.viewModel.spacing)
+        self._titleSpacing = ScaledMetric(wrappedValue: self.viewModel.labelSpacing)
     }
 
     // MARK: - Content
 
     public var body: some View {
 
-        if let title = self.title {
-            VStack(alignment: .leading, spacing: self.spacing) {
+        VStack(alignment: .leading, spacing: 0) {
+            if let title = self.title {
                 radioButtonTitle(title)
-
-                if self.groupLayout == .vertical {
-                    radioButtonItems
-                } else {
-                    horizontalRadioButtons
-                }
+                    .padding(.bottom, self.titleSpacing)
             }
-        } else if groupLayout == .vertical {
-            verticalRadioButtons
-        } else {
-            horizontalRadioButtons
+
+            if groupLayout == .vertical {
+                radioButtonItems
+            } else {
+                horizontalRadioButtons
+            }
+
+            if let supplementaryLabel = self.supplementaryLabel {
+                radioButtonSublabel(supplementaryLabel)
+                    .padding(.top, self.titleSpacing)
+            }
         }
+    }
+
+    public func theme(_ theme: Theme) -> Self {
+        self.viewModel.theme = theme
+        return self
     }
 
     @ViewBuilder
     private func radioButtonTitle(_ title: String) -> some View {
         Text(title)
-            .font(self.theme.typography.subhead.font)
-            .foregroundColor(self.theme.colors.base.onSurface.color)
+            .fixedSize(horizontal: false, vertical: true)
+            .font(self.viewModel.titleFont.font)
+            .foregroundColor(self.viewModel.titleColor.color)
+    }
+
+    @ViewBuilder
+    private func radioButtonSublabel(_ label: String) -> some View {
+        Text(label)
+            .font(self.viewModel.sublabelFont.font)
+            .foregroundColor(self.viewModel.sublabelColor.color)
     }
 
     @ViewBuilder
@@ -102,24 +125,26 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     }
 
     @ViewBuilder
-    private var verticalRadioButtons: some View {
-        VStack(alignment: .leading, spacing: self.spacing) {
-            radioButtonItems
-        }
-    }
-
-    @ViewBuilder
     private var radioButtonItems: some View {
-        ForEach(items, id: \.id) { item in
+        ForEach(self.items, id: \.id) { item in
             RadioButtonView(
-                theme: theme,
+                theme: self.viewModel.theme,
                 id: item.id,
                 label: item.label,
                 selectedID: self.selectedID,
-                state: item.state,
+                groupState: self.state,
                 labelPosition: self.radioButtonLabelPosition
             )
             .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: item.id))
+            .padding(.bottom, self.bottomPadding(of: item))
+        }
+    }
+
+    private func bottomPadding(of item: RadioButtonItem<ID>) -> CGFloat {
+        if item.id == items.last?.id {
+            return 0
+        } else {
+            return self.viewModel.spacing
         }
     }
 }

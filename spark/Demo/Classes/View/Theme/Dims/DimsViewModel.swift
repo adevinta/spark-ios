@@ -7,24 +7,20 @@
 //
 
 import Spark
+import SparkCore
+import SwiftUI
 
 struct DimsViewModel {
 
     // MARK: - Properties
 
-    let dimItemViewModels: [DimItemViewModel]
-
-    // MARK: - Initialization
-
-    init() {
-        let dims = SparkTheme.shared.dims
-
-        self.dimItemViewModels = [
-            .init(name: "dim1", value: dims.dim1),
-            .init(name: "dim2", value: dims.dim2),
-            .init(name: "dim3", value: dims.dim3),
-            .init(name: "dim4", value: dims.dim4),
-            .init(name: "dim5", value: dims.dim5),
+    func dimItemViewModels(for theme: Theme) -> [DimItemViewModel] {
+        [
+            .init(name: "dim1", value: theme.dims.dim1),
+            .init(name: "dim2", value: theme.dims.dim2),
+            .init(name: "dim3", value: theme.dims.dim3),
+            .init(name: "dim4", value: theme.dims.dim4),
+            .init(name: "dim5", value: theme.dims.dim5),
         ]
     }
 }

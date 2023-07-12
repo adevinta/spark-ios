@@ -6,14 +6,22 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Spark
+import SparkCore
 import SwiftUI
 
 struct DropShadowView: View {
 
     private let viewModel = DropShadowViewModel()
 
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     var body: some View {
-        ForEach(viewModel.itemViewModels, id: \.id) { itemViewModel in
+        ForEach(viewModel.itemViewModels(for: self.theme), id: \.id) { itemViewModel in
             DropShadowItemView(itemViewModel: itemViewModel)
         }
     }

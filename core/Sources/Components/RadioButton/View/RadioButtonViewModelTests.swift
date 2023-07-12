@@ -33,7 +33,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let opacities = sutValues(for: \.opacity)
 
         // Then
-        XCTAssertEqual(opacities, [0.40, 1.0, 1.0, 1.0, 1.0])
+        XCTAssertEqual(opacities, [1.0, 0.40, 1.0, 1.0, 1.0])
     }
 
     func test_is_disabled() {
@@ -41,7 +41,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let disabledStates = sutValues(for: \.isDisabled)
 
         // Then
-        XCTAssertEqual(disabledStates, [true, false, false, false, false])
+        XCTAssertEqual(disabledStates, [false, true, false, false, false])
     }
 
     func test_spacings() {
@@ -60,14 +60,6 @@ final class RadioButtonViewModelTests: XCTestCase {
         XCTAssertEqual(fonts, Array(repeating: Font.body, count: 5))
     }
 
-    func test_supplementaryFonts() {
-        // When
-        let fonts = sutValues(for: \.supplemetaryFont.font)
-
-        // Then
-        XCTAssertEqual(fonts, Array(repeating: Font.caption, count: 5))
-    }
-
     func test_surfaceColors() {
         // Given
         let onSurfaceColors = self.theme.colors.base.onSurface as! ColorTokenGeneratedMock
@@ -78,14 +70,6 @@ final class RadioButtonViewModelTests: XCTestCase {
 
         // Then
         XCTAssertEqual(surfaceColors, Array(repeating: Color.red, count: 5))
-    }
-
-    func test_supplementaryTexts() {
-        // When
-        let supplementaryTexts = sutValues(for: \.supplementaryText)
-
-        // Then
-        XCTAssertEqual(supplementaryTexts, [nil, nil, "Success", "Warning", "Error"])
     }
 
     func test_colors_reset_when_selected_value_set() {
@@ -112,10 +96,9 @@ final class RadioButtonViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Changes to theme publishes value changes.")
         expectation.expectedFulfillmentCount = 2
 
-        let publishers = Publishers.Zip4(sut.$opacity, sut.$spacing, sut.$font, sut.$supplemetaryFont)
-        let morePublishers = Publishers.Zip(sut.$surfaceColor, sut.$colors)
+        let publishers = Publishers.Zip4(sut.$opacity, sut.$spacing, sut.$font, sut.$surfaceColor)
 
-        Publishers.Zip(publishers, morePublishers).sink { _ in
+        Publishers.Zip(publishers, sut.$colors).sink { _ in
             expectation.fulfill()
         }.store(in: &self.subscriptions)
 
@@ -132,12 +115,12 @@ final class RadioButtonViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Changes to state publishes value changes.")
         expectation.expectedFulfillmentCount = 2
 
-        Publishers.Zip3(sut.$isDisabled, sut.$supplementaryText, sut.$colors).sink { _ in
+        Publishers.Zip(sut.$isDisabled, sut.$colors).sink { _ in
             expectation.fulfill()
         }.store(in: &self.subscriptions)
 
         // When
-        sut.set(state: .disabled)
+        sut.set(groupState: .disabled)
 
         // Then
         wait(for: [expectation], timeout: 0.5)
@@ -164,25 +147,16 @@ final class RadioButtonViewModelTests: XCTestCase {
 
         XCTAssertEqual(spacings, [self.theme.layout.spacing.medium, self.theme.layout.spacing.xxxLarge])
     }
+
     // MARK: - Private Helper Functions
 
     private func sutValues<T>(for keyPath: KeyPath<RadioButtonViewModel<Int>, T>) -> [T] {
-        // Given
-        let statesToTest: [SparkSelectButtonState] = [
-            .disabled,
-            .enabled,
-            .success(message: "Success"),
-            .warning(message: "Warning"),
-            .error(message: "Error")
-        ]
-
-        return statesToTest
+        return RadioButtonGroupState.allCases
             .map(self.sut(state:))
             .map{ $0[keyPath: keyPath] }
-
     }
 
-    private func sut(state: SparkSelectButtonState) -> RadioButtonViewModel<Int> {
+    private func sut(state: RadioButtonGroupState) -> RadioButtonViewModel<Int> {
         let seletedId = Binding(
             get: { self.bindingValue },
             set: { self.bindingValue = $0 }
@@ -192,7 +166,7 @@ final class RadioButtonViewModelTests: XCTestCase {
                                     id: 1,
                                     label: .right("Test"),
                                     selectedID: seletedId,
-                                    state: state)
+                                    groupState: state)
 
     }
 }

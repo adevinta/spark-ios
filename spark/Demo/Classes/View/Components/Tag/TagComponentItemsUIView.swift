@@ -19,7 +19,7 @@ struct TagComponentItemsUIView: UIViewRepresentable {
 
     @Binding var height: CGFloat
 
-    private let intentColor: TagIntentColor
+    private let intent: TagIntent
     private let variant: TagVariant
     private let content: TagContent
 
@@ -28,14 +28,14 @@ struct TagComponentItemsUIView: UIViewRepresentable {
     init(
         viewModel: TagComponentViewModel,
         height: Binding<CGFloat>,
-        intentColor: TagIntentColor,
+        intent: TagIntent,
         variant: TagVariant,
         content: TagContent
     ) {
         self.viewModel = viewModel
         self.iconImage = UIImage(named: viewModel.imageNamed) ?? UIImage()
         self._height = height
-        self.intentColor = intentColor
+        self.intent = intent
         self.variant = variant
         self.content = content
     }
@@ -45,27 +45,28 @@ struct TagComponentItemsUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> UIStackView {
         var tagView: TagUIView
 
+        let theme = SparkThemePublisher.shared.theme
         switch self.content {
         case .icon:
             tagView = TagUIView(
-                theme: SparkTheme.shared,
-                intentColor: self.intentColor,
+                theme: theme,
+                intent: self.intent,
                 variant: self.variant,
                 iconImage: self.iconImage
             )
 
         case .text:
             tagView = TagUIView(
-                theme: SparkTheme.shared,
-                intentColor: self.intentColor,
+                theme: theme,
+                intent: self.intent,
                 variant: self.variant,
                 text: self.viewModel.text
             )
 
         case .all:
             tagView = TagUIView(
-                theme: SparkTheme.shared,
-                intentColor: self.intentColor,
+                theme: theme,
+                intent: self.intent,
                 variant: self.variant,
                 iconImage: self.iconImage,
                 text: self.viewModel.text
@@ -89,22 +90,22 @@ struct TagComponentItemsUIView: UIViewRepresentable {
             return
         }
 
-        if tagView.intentColor != self.intentColor {
-            tagView.intentColor = self.intentColor
+        if tagView.intent != self.intent {
+            tagView.intent = self.intent
         }
 
         if tagView.variant != self.variant {
             tagView.variant = self.variant
         }
 
-        if (tagView.iconImage == nil && self.content.showIcon) ||
-            (tagView.iconImage != nil && !self.content.showIcon) {
-            tagView.iconImage = self.content.showIcon ? self.iconImage : nil
+        if (tagView.iconImage == nil && self.content.shouldShowIcon) ||
+            (tagView.iconImage != nil && !self.content.shouldShowIcon) {
+            tagView.iconImage = self.content.shouldShowIcon ? self.iconImage : nil
         }
 
-        if (tagView.text == nil && self.content.showText) ||
-            (tagView.text != nil && !self.content.showText) {
-            tagView.text = self.content.showText ? self.viewModel.text : nil
+        if (tagView.text == nil && self.content.shouldShowText) ||
+            (tagView.text != nil && !self.content.shouldShowText) {
+            tagView.text = self.content.shouldShowText ? self.viewModel.text : nil
         }
 
         DispatchQueue.main.async {

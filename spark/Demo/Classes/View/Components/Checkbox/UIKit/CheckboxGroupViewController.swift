@@ -93,7 +93,7 @@ final class CheckboxGroupViewController: UIViewController {
     }
 
     private var selectedItemsText: String {
-        self.selectedItems.map { $0.title }.joined(separator: ", ")
+        self.selectedItems.map { $0.title ?? "" }.joined(separator: ", ")
     }
 
     private var items: [any CheckboxGroupItemProtocol] = [
@@ -221,11 +221,34 @@ final class CheckboxGroupViewController: UIViewController {
         self.selectionLabel.text = "Selection: " + self.selectedItemsText
     }
 
+    private func attributedCheckboxLabel(for value: String) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(
+            string: "Entry ",
+            attributes: [
+                .font: self.theme.typography.body1.uiFont,
+                .foregroundColor: UIColor.black
+            ]
+        )
+        let boldString = NSAttributedString(
+            string: value,
+            attributes: [
+                .font: self.theme.typography.body1Highlight.uiFont,
+                .foregroundColor: UIColor.red
+            ]
+        )
+        attributedString.append(boldString)
+        return attributedString
+    }
+
     // MARK: - Actions
 
     @objc private func actionAddItem(sender: UIButton) {
         let identifier = "\(self.items.count + 1)"
-        let newItem = CheckboxGroupItem(title: "Entry \(identifier)", id: identifier, selectionState: .unselected)
+        let newItem = CheckboxGroupItem(
+            attributedTitle: self.attributedCheckboxLabel(for: identifier),
+            id: identifier,
+            selectionState: .unselected
+        )
         self.items.append(newItem)
         self.checkboxGroup?.update()
     }

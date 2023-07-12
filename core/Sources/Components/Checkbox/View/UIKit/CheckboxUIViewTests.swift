@@ -111,4 +111,41 @@ final class CheckboxUIViewTests: UIKitComponentTestCase {
             assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
         }
     }
+
+    func test_checkbox_with_attributed_title() throws {
+        let attributedText = self.attributedCheckboxLabel
+        for state in self.states {
+            let checkbox = CheckboxUIView(
+                theme: self.theme,
+                attributedText: attributedText,
+                checkedImage: self.checkedImage,
+                state: state,
+                selectionState: .init(
+                    get: { return .selected },
+                    set: { _ in }
+                ),
+                checkboxPosition: .left
+            )
+
+            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
+        }
+    }
+
+    private var attributedCheckboxLabel: NSAttributedString {
+        let attributedString = NSMutableAttributedString(
+            string: "This text is ",
+            attributes: [
+                .font: self.theme.typography.body1.uiFont
+            ]
+        )
+        let boldString = NSAttributedString(
+            string: "bold",
+            attributes: [
+                .font: self.theme.typography.body1Highlight.uiFont,
+                .foregroundColor: self.theme.colors.feedback.success.uiColor
+            ]
+        )
+        attributedString.append(boldString)
+        return attributedString
+    }
 }

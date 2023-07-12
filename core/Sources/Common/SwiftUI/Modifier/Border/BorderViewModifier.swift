@@ -14,13 +14,13 @@ struct BorderViewModifier: ViewModifier {
 
     private let width: CGFloat
     private let radius: CGFloat
-    private let colorToken: ColorToken
+    private let colorToken: any ColorToken
 
     // MARK: - Initialization
 
     init(width: CGFloat,
          radius: CGFloat,
-         colorToken: ColorToken) {
+         colorToken: any ColorToken) {
         self.width = width
         self.radius = radius
         self.colorToken = colorToken

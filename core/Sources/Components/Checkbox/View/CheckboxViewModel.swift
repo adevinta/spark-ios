@@ -13,7 +13,8 @@ import UIKit
 final class CheckboxViewModel: ObservableObject {
     // MARK: - Internal properties
 
-    var text: String
+    var text: String?
+    var attributedText: NSAttributedString?
     var checkedImage: UIImage
 
     @Published var state: SelectButtonState {
@@ -41,13 +42,20 @@ final class CheckboxViewModel: ObservableObject {
     // MARK: - Init
 
     init(
-        text: String,
+        text: Either<NSAttributedString, String>,
         checkedImage: UIImage,
         theme: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled
     ) {
-        self.text = text
+        switch text {
+        case .left(let attributedString):
+            self.attributedText = attributedString
+            self.text = attributedString.string
+        case .right(let string):
+            self.attributedText = nil
+            self.text = string
+        }
         self.checkedImage = checkedImage
         self.theme = theme
         self.state = state
@@ -60,6 +68,17 @@ final class CheckboxViewModel: ObservableObject {
 
     private func updateColors() {
         self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
+    }
+
+    func update(content: Either<NSAttributedString, String>) {
+        switch content {
+        case .left(let attributedString):
+            self.attributedText = attributedString
+            self.text = attributedString.string
+        case .right(let string):
+            self.text = string
+            self.attributedText = nil
+        }
     }
 
     // MARK: - Computed properties

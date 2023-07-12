@@ -54,7 +54,7 @@ private extension SwitchGetPositionUseCaseTests {
 
         // WHEN
         let position = useCase.execute(
-            forAlignment: givenAlignment,
+            for: givenAlignment,
             spacing: self.spacingMock
         )
 

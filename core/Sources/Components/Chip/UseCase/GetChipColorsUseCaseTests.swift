@@ -178,25 +178,6 @@ final class GetChipColorsUseCaseTests: XCTestCase {
     }
 }
 
-// MARK: Private helpers
-extension ChipColors: Equatable {
-    public static func == (lhs: ChipColors, rhs: ChipColors) -> Bool {
-        lhs.default == rhs.default && lhs.pressed == rhs.pressed
-    }
-}
-
-extension ChipStateColors: Equatable {
-    public static func == (lhs: ChipStateColors, rhs: ChipStateColors) -> Bool {
-        return equal(lhs.border, rhs.border) &&
-        equal(lhs.background, rhs.background) &&
-        equal(lhs.foreground, rhs.foreground)
-    }
-
-    static func equal(_ lhs: ColorToken, _ rhs: ColorToken) -> Bool {
-        return lhs.color == rhs.color && lhs.uiColor == rhs.uiColor
-    }
-}
-
 private extension ChipIntentColors {
     init(principal: UIColor,
      subordinate: UIColor,

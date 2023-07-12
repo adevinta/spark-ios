@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 import UIKit
 
@@ -163,9 +164,15 @@ public final class CheckboxGroupUIView: UIView {
         var checkboxes: [CheckboxUIView] = []
 
         for item in self.items {
+            let content: Either<NSAttributedString, String>
+            if let attributedTitle = item.attributedTitle {
+                content = .left(attributedTitle)
+            } else {
+                content = .right(item.title ?? "")
+            }
             let checkbox = CheckboxUIView(
                 theme: theme,
-                text: item.title,
+                content: content,
                 checkedImage: self.checkedImage,
                 state: item.state,
                 selectionState: .init(

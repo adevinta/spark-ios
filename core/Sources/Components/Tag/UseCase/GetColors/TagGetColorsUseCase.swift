@@ -6,57 +6,55 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-// TODO: rename paremeters
-
 // sourcery: AutoMockable
 protocol TagGetColorsUseCaseable {
-    func execute(forTheme theme: Theme,
-                 intentColor: TagIntentColor,
-                 variant: TagVariant) -> TagColorables
+    func execute(for theme: Theme,
+                 intent: TagIntent,
+                 variant: TagVariant) -> TagColors
 }
 
 struct TagGetColorsUseCase: TagGetColorsUseCaseable {
 
     // MARK: - Properties
 
-    private let getIntentColorsUseCase: any TagGetIntentColorsUseCaseable
+    private let getContentColorsUseCase: any TagGetContentColorsUseCaseable
 
     // MARK: - Initialization
 
-    init(getIntentColorsUseCase: any TagGetIntentColorsUseCaseable = TagGetIntentColorsUseCase()) {
-        self.getIntentColorsUseCase = getIntentColorsUseCase
+    init(getContentColorsUseCase: any TagGetContentColorsUseCaseable = TagGetContentColorsUseCase()) {
+        self.getContentColorsUseCase = getContentColorsUseCase
     }
 
     // MARK: - Methods
 
-    func execute(forTheme theme: Theme,
-                 intentColor: TagIntentColor,
-                 variant: TagVariant) -> TagColorables {
-        let intentColors = self.getIntentColorsUseCase.execute(
-            forIntentColor: intentColor,
+    func execute(for theme: Theme,
+                 intent: TagIntent,
+                 variant: TagVariant) -> TagColors {
+        let contentColors = self.getContentColorsUseCase.execute(
+            for: intent,
             colors: theme.colors
         )
 
         switch variant {
         case .filled:
-            return TagColors(
-                backgroundColor: intentColors.color,
-                borderColor: intentColors.color,
-                foregroundColor: intentColors.onColor
+            return .init(
+                backgroundColor: contentColors.color,
+                borderColor: contentColors.color,
+                foregroundColor: contentColors.onColor
             )
 
         case .outlined:
-            return TagColors(
-                backgroundColor: intentColors.surfaceColor,
-                borderColor: intentColors.color,
-                foregroundColor: intentColors.color
+            return .init(
+                backgroundColor: contentColors.surfaceColor,
+                borderColor: contentColors.color,
+                foregroundColor: contentColors.color
             )
 
         case .tinted:
-            return TagColors(
-                backgroundColor: intentColors.containerColor,
-                borderColor: intentColors.containerColor,
-                foregroundColor: intentColors.onContainerColor
+            return .init(
+                backgroundColor: contentColors.containerColor,
+                borderColor: contentColors.containerColor,
+                foregroundColor: contentColors.onContainerColor
             )
         }
     }

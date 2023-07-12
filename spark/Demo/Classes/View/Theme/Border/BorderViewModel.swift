@@ -7,18 +7,14 @@
 //
 
 import Spark
+import SparkCore
 
 struct BorderViewModel {
 
-    // MARK: - Properties
-
-    let sectionViewModels: [BorderSectionViewModel]
-
-    // MARK: - Initialization
-
-    init() {
-        let border = SparkTheme.shared.border
-        self.sectionViewModels = [
+    // MARK: - Methods
+    func sectionViewModels(for theme: Theme) -> [BorderSectionViewModel] {
+        let border = theme.border
+        return [
             .init(name: "none width",
                   itemViewModels: [
                     .init(name: "none", width: border.width.none, radius: border.radius.none),
