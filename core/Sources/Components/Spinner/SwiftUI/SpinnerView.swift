@@ -40,9 +40,9 @@ public struct SpinnerView: View {
     public var body: some View {
         Circle()
             .trim(from: 0, to: 0.5)
-            .stroke(lineWidth: self.viewModel.strokeWidth)
+            .stroke(lineWidth: self.strokeWidth)
             .foregroundColor(self.viewModel.intentColor.color)
-            .frame(width: self.viewModel.size, height: self.viewModel.size)
+            .frame(width: self.size, height: self.size)
             .rotationEffect(.degrees(self.rotationDegrees))
             .animation(self.animation(), value: self.viewModel.isSpinning)
             .task {
