@@ -261,7 +261,7 @@ final class RadioButtonUIGroupViewController: UIViewController {
     }
 
     @objc private func reshuffleItems() {
-        let selections = [
+        let selections: [[String]] = [
             ["Cat", "Dog", "Horse", "Rabbit", "Goldfish", "Hamster"],
             ["Apple", "Grape", "Grapefruit", "Orange", "Lemon", "Banana", "Pear", "Cherry", "Plum", "Apricot"],
             ["Male", "Female", "Diverse"],
@@ -274,9 +274,7 @@ final class RadioButtonUIGroupViewController: UIViewController {
         }
         selectionGroups.append(self.radioButtonItems)
 
-        let newItems = selectionGroups[Int.random(in: 0..<selectionGroups.count)]
-
-        radioButtonGroupView.items = newItems
+        radioButtonGroupView.items = selectionGroups.randomElement() ?? self.radioButtonItems
     }
 
     @objc private func removeRandomItem() {
@@ -310,14 +308,6 @@ private class RadioButtonItemDelegate: RadioButtonUIGroupViewDelegate {
 
     func radioButtonGroup<ID>(_ radioButtonGroup: some Any, didChangeSelection item: ID) where ID: CustomStringConvertible, ID: Hashable {
         action(item.description)
-    }
-}
-
-// MARK: - Preview
-
-struct RadioButtonUIGroup_Previews: PreviewProvider {
-    static var previews: some View {
-        RadioButtonUIGroup()
     }
 }
 
@@ -356,5 +346,13 @@ private class NSAttributedStringBuilder {
 
     func build() -> NSAttributedString {
         return nsAttributedString
+    }
+}
+
+// MARK: - Preview
+//
+struct RadioButtonUIGroup_Previews: PreviewProvider {
+    static var previews: some View {
+        RadioButtonUIGroup()
     }
 }

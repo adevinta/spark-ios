@@ -103,6 +103,6 @@ final class RadioButtonToggleUIView: UIView {
 private extension UIBezierPath {
     static func circle(arcCenter: CGPoint,
                        radius: CGFloat) ->  UIBezierPath {
-        return UIBezierPath(arcCenter: arcCenter, radius: radius, startAngle: 0, endAngle: 360, clockwise: true)
+        return UIBezierPath(arcCenter: arcCenter, radius: radius, startAngle: 0, endAngle: CGFloat.pi * 2, clockwise: true)
     }
 }

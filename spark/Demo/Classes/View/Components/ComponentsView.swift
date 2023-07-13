@@ -32,6 +32,10 @@ struct ComponentsView: View {
                     RadioButtonOverview()
                 }
 
+                NavigationLink("Spinner") {
+                    SpinnerComponent()
+                }
+
                 NavigationLink("Switch") {
                     SwitchComponentView()
                 }
