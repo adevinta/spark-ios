@@ -9,13 +9,13 @@
 import Foundation
 
 /// Buttons can have different shapes.
-public enum ButtonShape {
-    /// Square button with no rounded corners.
-    case square
+public enum ButtonShape: CaseIterable {
+    /// Button with pill-like shape.
+    case pill
 
     /// Button with rounded corners.
     case rounded
 
-    /// Button with pill-like shape.
-    case pill
+    /// Square button with no rounded corners.
+    case square
 }
