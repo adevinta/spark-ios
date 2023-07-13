@@ -8,7 +8,7 @@
 
 // sourcery: AutoMockable
 protocol ButtonGetContentUseCaseable {
-    func execute(for alignment: ButtonAlignment,
+    func execute(alignment: ButtonAlignment,
                  iconImage: ImageEither?,
                  text: String?,
                  attributedText: AttributedStringEither?) -> ButtonContent
@@ -19,7 +19,7 @@ struct ButtonGetContentUseCase: ButtonGetContentUseCaseable {
     // MARK: - Methods
 
     func execute(
-        for alignment: ButtonAlignment,
+        alignment: ButtonAlignment,
         iconImage: ImageEither?,
         text: String?,
         attributedText: AttributedStringEither?

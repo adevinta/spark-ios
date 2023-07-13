@@ -83,7 +83,7 @@ final class  TagGetContentColorsUseCaseTests: XCTestCase {
 
             // WHEN
             let contentColors = useCase.execute(
-                for: item.givenIntent,
+                intent: item.givenIntent,
                 colors: colorsMock
             )
             

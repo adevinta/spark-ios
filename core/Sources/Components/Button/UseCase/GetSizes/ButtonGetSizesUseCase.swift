@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ButtonGetSizesUseCaseable {
-    func execute(for size: ButtonSize,
+    func execute(size: ButtonSize,
                  isOnlyIcon: Bool) -> ButtonSizes
 }
 
@@ -18,7 +18,7 @@ struct ButtonGetSizesUseCase: ButtonGetSizesUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for size: ButtonSize,
+    func execute(size: ButtonSize,
                  isOnlyIcon: Bool) -> ButtonSizes {
         let height: CGFloat
         switch size {

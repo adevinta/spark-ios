@@ -104,7 +104,7 @@ final class TagViewModel: ObservableObject {
         useCase: any TagGetColorsUseCaseable
     ) -> TagColors {
         return useCase.execute(
-            for: theme,
+            theme: theme,
             intent: intent,
             variant: variant
         )
