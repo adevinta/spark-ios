@@ -88,10 +88,12 @@ final class RadioButtonUIGroupViewController: UIViewController {
         return label
     }()
 
-    private lazy var radioButtonItemDelegate = RadioButtonItemDelegate{
+    // swiftlint: disable weak_delegate
+    private lazy var radioButtonItemDelegate = RadioButtonItemDelegate {
         self.backingSelectedID = $0
         self.selectedValueLabel.text = self.label
     }
+    // swiftlint: enable weak_delegate
 
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
@@ -125,9 +127,9 @@ final class RadioButtonUIGroupViewController: UIViewController {
 
         let items: [RadioButtonUIItem<Bool>] = [
             RadioButtonUIItem(id: false,
-                            label: leftLabel),
+                              label: leftLabel),
             RadioButtonUIItem(id: true,
-                            label: rightLabel)
+                              label: rightLabel)
         ]
 
         let selectedPosition = Binding<Bool>(
@@ -147,7 +149,8 @@ final class RadioButtonUIGroupViewController: UIViewController {
 
         groupView.publisher.sink { [weak self] item in
             self?.labelPosition = item ? .right : .left
-        }.store(in: &self.subscriptions)
+        }
+        .store(in: &self.subscriptions)
 
         return groupView
     }()
@@ -155,7 +158,7 @@ final class RadioButtonUIGroupViewController: UIViewController {
     private lazy var labelRadioButton: RadioButtonUIGroupView = {
         let items: [RadioButtonUIItem<Bool>] = [
             RadioButtonUIItem(id: true,
-                            label: "Label")
+                              label: "Label")
         ]
         let selectedPosition = Binding<Bool>(
             get: { return true },
@@ -171,20 +174,19 @@ final class RadioButtonUIGroupViewController: UIViewController {
         return groupView
     }()
 
-    
     private lazy var radioButtonItems: [RadioButtonUIItem<String>] = [
         RadioButtonUIItem(id: "1",
-                        label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
+                          label: "1 Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"),
         RadioButtonUIItem(id: "2",
-                        label: .init("2 Radio button")),
+                          label: .init("2 Radio button")),
         RadioButtonUIItem(id: "3",
-                        label: .init("3 Radio button")),
+                          label: .init("3 Radio button")),
         RadioButtonUIItem(id: "4",
-                        label: .init("4 Radio button")),
+                          label: .init("4 Radio button")),
         RadioButtonUIItem(id: "5",
-                        label: .init("5 Radio button")),
+                          label: .init("5 Radio button")),
         RadioButtonUIItem(id: "6",
-                        label: .init("6 Radio button"))
+                          label: .init("6 Radio button"))
     ]
 
     // MARK: Methods
@@ -306,7 +308,7 @@ private class RadioButtonItemDelegate: RadioButtonUIGroupViewDelegate {
         self.action = action
     }
 
-    func radioButtonGroup<ID>(_ radioButtonGroup: some Any, didChangeSelection item: ID) where ID : CustomStringConvertible, ID : Hashable {
+    func radioButtonGroup<ID>(_ radioButtonGroup: some Any, didChangeSelection item: ID) where ID: CustomStringConvertible, ID: Hashable {
         action(item.description)
     }
 }
@@ -339,7 +341,7 @@ private class NSAttributedStringBuilder {
     }
 
     func text(_ label: String, color: UIColor) -> Self {
-        let attributedStringColor = [NSAttributedString.Key.foregroundColor : color];
+        let attributedStringColor = [NSAttributedString.Key.foregroundColor: color];
         self.nsAttributedString.append(NSAttributedString(string: label, attributes: attributedStringColor))
         return self
     }

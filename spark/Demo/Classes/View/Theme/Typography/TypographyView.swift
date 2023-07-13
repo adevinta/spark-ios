@@ -23,7 +23,7 @@ struct TypographyView: View {
     }
 
     // MARK: - View
-    
+
     var body: some View {
         List(self.viewModel.itemViewModels(for: self.theme), id: \.self) { itemViewModels in
             Section {

@@ -22,7 +22,7 @@ struct ButtonComponentView: View {
     @State var version: ComponentVersion = .uiKit
 
     @State private var intentSheetIsPresented = false
-    @State var intent: ButtonIntent = .primary 
+    @State var intent: ButtonIntent = .primary
 
     @State private var variantSheetIsPresented = false
     @State var variant: ButtonVariant = .filled
@@ -260,7 +260,7 @@ private extension ButtonIntent {
 }
 
 private extension ButtonVariant {
-    
+
     var name: String {
         switch self {
         case .filled:

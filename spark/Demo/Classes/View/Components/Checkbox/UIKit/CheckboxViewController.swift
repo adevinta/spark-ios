@@ -11,6 +11,8 @@ import Spark
 import SparkCore
 import SwiftUI
 
+// swiftlint: disable no_debugging_method
+
 // MARK: - SwiftUI-wrapper
 
 struct CheckboxUIViewControllerBridge: UIViewControllerRepresentable {
@@ -70,7 +72,7 @@ final class CheckboxViewController: UIViewController {
         attributedString.append(boldString)
         return attributedString
     }
-    
+
     // MARK: - Methods
 
     override func viewDidLoad() {
@@ -209,7 +211,7 @@ final class CheckboxViewController: UIViewController {
         var previousCheckbox: CheckboxUIView?
         for checkbox in checkboxes {
             checkbox.delegate = self
-            
+
             checkbox.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
             checkbox.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
 
@@ -235,6 +237,6 @@ final class CheckboxViewController: UIViewController {
 
 extension CheckboxViewController: CheckboxUIViewDelegate {
     func checkbox(_ checkbox: SparkCore.CheckboxUIView, didChangeSelection state: SparkCore.CheckboxSelectionState) {
-        print("checkbox", checkbox.text, "did switch to", state)
+        print("checkbox", checkbox.text ?? "", "did switch to", state)
     }
 }

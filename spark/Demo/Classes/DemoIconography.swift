@@ -22,6 +22,6 @@ struct DemoIconography {
     // MARK: - Icons
 
     lazy var checkmark: UIImage = {
-        return UIImage(named: "checkbox-selected")!.withRenderingMode(.alwaysTemplate)
+        return UIImage(named: "checkbox-selected")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
     }()
 }

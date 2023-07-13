@@ -1,0 +1,104 @@
+included:
+    - SparkCore
+    - SparkCoreTests
+    - Spark
+    - SparkTests
+
+# Enabled rules for CI linting
+only_rules:
+ - colon
+ - comment_spacing
+ - custom_rules
+ - mark
+ - trailing_closure
+ - trailing_whitespace
+ - vertical_parameter_alignment_on_call
+ - weak_delegate
+ - comma
+ - private_subject
+ - unneeded_parentheses_in_closure_argument
+ - multiline_arguments
+ - lower_acl_than_parent
+ - syntactic_sugar
+ - unneeded_break_in_switch
+ - multiline_function_chains
+ - operator_usage_whitespace
+ - redundant_optional_initialization
+ - statement_position
+ - explicit_self
+ - empty_count
+ - force_cast
+ - force_try
+ - force_unwrapping
+ - empty_collection_literal
+
+# Rules triggering ERROR
+
+force_unwrapping:
+ severity: error
+
+comment_spacing:
+ severity: error
+
+trailing_whitespace:
+ severity: error
+
+mark:
+ severity: error
+
+trailing_closure:
+ only_single_muted_parameter: true
+ severity: error
+
+weak_delegate:
+ severity: error
+
+colon:
+ severity: error
+
+vertical_parameter_alignment_on_call:
+ severity: error
+
+private_subject:
+ severity: error
+
+unneeded_parentheses_in_closure_argument:
+ severity: error
+
+multiline_arguments:
+ severity: error
+
+lower_acl_than_parent:
+ severity: error
+
+syntactic_sugar:
+ severity: error
+
+comma:
+ severity: error
+
+unneeded_break_in_switch:
+ severity: error
+
+multiline_function_chains:
+ severity: error
+
+operator_usage_whitespace:
+ severity: error
+
+redundant_optional_initialization:
+ severity: error
+
+statement_position:
+ severity: error
+
+explicit_self:
+ severity: error
+
+custom_rules:
+ no_debugging_method:
+  included: ".*\\.swift"
+  name: "Debugging method"
+  regex: "(dump\\()|(print\\()|(debugPrint\\()|(NSLog\\()"
+  message: "Debugging method is not allowed."
+  severity: error

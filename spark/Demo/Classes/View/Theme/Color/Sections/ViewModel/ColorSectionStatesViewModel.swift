@@ -15,7 +15,7 @@ struct ColorSectionStatesViewModel: ColorSectionViewModelable {
     let itemViewModels: [[ColorItemViewModel]]
 
     // MARK: - Initialization
-    
+
     init(color: ColorsStates) {
         self.name = "states"
         self.itemViewModels = [

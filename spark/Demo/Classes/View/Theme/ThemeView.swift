@@ -31,7 +31,7 @@ struct ThemeView: View {
                 NavigationLink("Typography") {
                     TypographyView()
                 }
-                
+
                 NavigationLink("Dims") {
                     DimsView()
                 }

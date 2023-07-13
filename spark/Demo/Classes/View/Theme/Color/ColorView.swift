@@ -23,7 +23,7 @@ struct ColorView: View {
     }
 
     // MARK: - View
-    
+
     var body: some View {
         List(self.viewModel.sectionViewModels(for: self.theme), id: \.name) { sectionViewModel in
             NavigationLink(sectionViewModel.name) {
