@@ -21,14 +21,14 @@ final class ButtonGetStateUseCaseTests: XCTestCase {
     func test_execute_when_isEnabled_is_true() {
         self.testExecute(
             givenIsEnabled: true,
-            expectedIsInteractionState: .init(isInteractionEnabled: true, opacity: self.dimsMock.none)
+            expectedIsInteractionState: .init(isUserInteractionEnabled: true, opacity: self.dimsMock.none)
         )
     }
 
     func test_execute_when_isEnabled_is_false() {
         self.testExecute(
             givenIsEnabled: false,
-            expectedIsInteractionState: .init(isInteractionEnabled: false, opacity: self.dimsMock.dim3)
+            expectedIsInteractionState: .init(isUserInteractionEnabled: false, opacity: self.dimsMock.dim3)
         )
     }
 }
@@ -53,9 +53,9 @@ private extension ButtonGetStateUseCaseTests {
         )
 
         // THEN
-        XCTAssertEqual(interactionState.isInteractionEnabled,
-                       expectedIsInteractionState.isInteractionEnabled,
-                       "Wrong isInteractionEnabled" + errorSuffixMessage)
+        XCTAssertEqual(interactionState.isUserInteractionEnabled,
+                       expectedIsInteractionState.isUserInteractionEnabled,
+                       "Wrong isUserInteractionEnabled" + errorSuffixMessage)
         XCTAssertEqual(interactionState.opacity,
                        expectedIsInteractionState.opacity,
                        "Wrong opacity" + errorSuffixMessage)

@@ -12,7 +12,7 @@ struct ButtonVariantGetContrastUseCase: ButtonGetVariantUseCaseable {
 
     // MARK: - Methods
 
-    func colors(
+    func execute(
         for intent: ButtonIntent,
         colors: Colors,
         dims: Dims

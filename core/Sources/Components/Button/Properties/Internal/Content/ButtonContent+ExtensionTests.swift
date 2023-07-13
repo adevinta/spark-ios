@@ -14,13 +14,13 @@ extension ButtonContent {
 
     static func mocked(
         shouldShowIconImage: Bool = true ,
-        isIconImageOnRight: Bool = false,
+        isIconImageTrailing: Bool = false,
         iconImage: ImageEither? = .left(IconographyTests.shared.arrow),
         shouldShowText: Bool = true
     ) -> Self {
         return .init(
             shouldShowIconImage: shouldShowIconImage,
-            isIconImageOnRight: isIconImageOnRight,
+            isIconImageTrailing: isIconImageTrailing,
             iconImage: iconImage,
             shouldShowText: shouldShowText
         )

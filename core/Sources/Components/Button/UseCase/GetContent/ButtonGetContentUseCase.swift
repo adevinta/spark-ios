@@ -25,14 +25,14 @@ struct ButtonGetContentUseCase: ButtonGetContentUseCaseable {
         attributedText: AttributedStringEither?
     ) -> ButtonContent {
         let shouldShowIconImage = (iconImage != nil) ? true : false
-        let isIconImageOnRight = (shouldShowIconImage && alignment == .trailingIcon) ? true : false
+        let isIconImageTrailing = (shouldShowIconImage && alignment == .trailingIcon) ? true : false
         let iconImage = shouldShowIconImage ? iconImage : nil
 
         let shouldShowText = (text != nil) || (attributedText != nil)
 
         return .init(
             shouldShowIconImage: shouldShowIconImage,
-            isIconImageOnRight: isIconImageOnRight,
+            isIconImageTrailing: isIconImageTrailing,
             iconImage: iconImage,
             shouldShowText: shouldShowText
         )

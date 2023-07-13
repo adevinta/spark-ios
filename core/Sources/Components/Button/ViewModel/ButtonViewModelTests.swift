@@ -32,6 +32,13 @@ final class ButtonViewModelTests: XCTestCase {
     private let spacingsMock = ButtonSpacings.mocked()
     private let stateMock = ButtonState.mocked()
 
+    private let displayedTextViewModelMock: DisplayedTextViewModelGeneratedMock = {
+        let mock = DisplayedTextViewModelGeneratedMock()
+        mock.text = "Text"
+        mock.attributedText = .left(.init(string: "AText"))
+        return mock
+    }()
+
     private lazy var getBorderUseCaseMock: ButtonGetBorderUseCaseableGeneratedMock = {
         let mock = ButtonGetBorderUseCaseableGeneratedMock()
         mock.executeWithShapeAndBorderAndVariantReturnValue = self.borderMock
@@ -83,6 +90,7 @@ final class ButtonViewModelTests: XCTestCase {
         mock.underlyingGetSizesUseCase = self.getSizesUseCaseMock
         mock.underlyingGetSpacingsUseCase = self.getSpacingsUseCaseMock
         mock.underlyingGetStateUseCase = self.getStateUseCaseMock
+        mock.makeDisplayedTextViewModelWithTextAndAttributedTextReturnValue = self.displayedTextViewModelMock
         return mock
     }()
 
@@ -281,18 +289,14 @@ final class ButtonViewModelTests: XCTestCase {
         )
         self.testGetContentUseCaseMock(
             givenAlignment: alignmentMock,
-            givenIconImage: self.iconImageMock,
-            givenText: textMock,
-            givenAttributedText: attributedTextMock
+            givenIconImage: self.iconImageMock
         )
         self.testGetCurrentColorsUseCaseMock(
             givenColors: self.colorsMock,
             givenIsPressed: false
         )
         self.testGetIsIconOnlyUseCaseMock(
-            givenIconImage: self.iconImageMock,
-            givenText: textMock,
-            givenAttributedText: attributedTextMock
+            givenIconImage: self.iconImageMock
         )
         self.testGetSizesUseCaseMock(
             givenSize: sizeMock,
@@ -783,34 +787,32 @@ final class ButtonViewModelTests: XCTestCase {
         // **
     }
 
-    func test_set_text_with_new_value() {
+    func test_set_text_when_displayedTextViewModel_textChanged_return_true_and_new_value_is_NOT_nil() {
         self.testSetText(
-            givenValue: "Text",
-            givenNewValue: "New Text"
+            givenNewValueIsNil: false,
+            givenTextChanged: true
         )
     }
 
-    func test_set_text_with_new_empty_value() {
+    func test_set_text_when_displayedTextViewModel_textChanged_return_true_and_new_value_is_nil() {
         self.testSetText(
-            givenValue: "Text",
-            givenNewValue: nil
+            givenNewValueIsNil: true,
+            givenTextChanged: true
         )
     }
 
-    func test_set_text_without_new_value() {
-        let textMock = "Text"
+    func test_set_text_when_displayedTextViewModel_textChanged_return_false() {
         self.testSetText(
-            givenValue: textMock,
-            givenNewValue: textMock
+            givenTextChanged: false
         )
     }
 
     private func testSetText(
-        givenValue: String,
-        givenNewValue: String?
+        givenNewValueIsNil: Bool = true,
+        givenTextChanged: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
+        let givenNewValue: String? = givenNewValueIsNil ? nil : "My New Text"
 
         let sizeMock: ButtonSize = .medium
         let alignmentMock: ButtonAlignment = .trailingIcon
@@ -818,7 +820,7 @@ final class ButtonViewModelTests: XCTestCase {
         let viewModel = self.classToTest(
             size: sizeMock,
             alignment: alignmentMock,
-            text: givenValue
+            text: "Text"
         )
 
         self.subscribeAllPublishedValues(on: viewModel)
@@ -829,79 +831,80 @@ final class ButtonViewModelTests: XCTestCase {
         self.resetMockedData()
 
         // WHEN
+        self.displayedTextViewModelMock.textChangedWithTextReturnValue = givenTextChanged
         viewModel.set(text: givenNewValue)
-        viewModel.set(text: givenNewValue) // The second call should do nothing
 
         // THEN
         // **
         // Published count
         XCTAssertEqual(self.contentPublishedSinkCount,
-                       isNewValue ? 1 : 0,
+                       givenTextChanged ? 1 : 0,
                        "Wrong contentPublishedSinkCount value")
         XCTAssertEqual(self.sizesPublishedSinkCount,
-                       isNewValue ? 1 : 0,
+                       givenTextChanged ? 1 : 0,
                        "Wrong sizesPublishedSinkCount value")
         XCTAssertEqual(self.spacingsPublishedSinkCount,
-                       isNewValue ? 1 : 0,
+                       givenTextChanged ? 1 : 0,
                        "Wrong spacingsPublishedSinkCount value")
         XCTAssertEqual(self.currentColorsPublishedSinkCount,
-                       isNewValue && givenNewValue != nil ? 1 : 0,
+                       givenTextChanged && !givenNewValueIsNil ? 1 : 0,
                        "Wrong currentColorsPublishedSinkCount value")
         XCTAssertEqual(self.textFontTokenPublishedSinkCount,
-                       isNewValue && givenNewValue != nil ? 1 : 0,
+                       givenTextChanged && !givenNewValueIsNil ? 1 : 0,
                        "Wrong textFontTokenPublishedSinkCount value")
+        // **
+
+        // **
+        // DisplayedText ViewModel
+        XCTAssertEqual(self.displayedTextViewModelMock.textChangedWithTextCallsCount,
+                       1,
+                       "Wrong call number on textChanged on displayedTextViewModel")
+        XCTAssertEqual(self.displayedTextViewModelMock.textChangedWithTextReceivedText,
+                       givenNewValue,
+                       "Wrong textChanged parameter on displayedTextViewModel")
         // **
 
         // **
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: isNewValue ? 2 : 0,
-            givenIconImage: nil,
-            givenText: givenNewValue,
-            givenAttributedText: nil
+            numberOfCalls: givenTextChanged ? 2 : 0,
+            givenIconImage: nil
         )
         self.testGetContentUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: givenTextChanged ? 1 : 0,
             givenAlignment: alignmentMock,
-            givenIconImage: nil,
-            givenText: givenNewValue,
-            givenAttributedText: nil
+            givenIconImage: nil
         )
         self.testGetSizesUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: givenTextChanged ? 1 : 0,
             givenSize: sizeMock,
             givenIsOnlyIcon: self.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: givenTextChanged ? 1 : 0,
             givenTheme: self.themeMock,
             givenIsOnlyIcon: self.isIconOnlyMock
         )
         // **
     }
 
-    func test_set_attributedText_with_new_value() {
-        // GIVEN
+    func test_set_attributedText_when_displayedTextViewModel_attributedTextChanged_return_true() {
         self.testSetAttributedText(
-            givenValue: .init(string: "My AT Button"),
-            givenNewValue: .init(string: "My new AT Button")
+            givenAttributedTextChanged: true
         )
     }
 
-    func test_set_attributedText_without_new_value() {
-        let valueMock = NSAttributedString(string: "My AT Button")
+    func test_set_attributedText_when_displayedTextViewModel_attributedTextChanged_return_false() {
         self.testSetAttributedText(
-            givenValue: valueMock,
-            givenNewValue: valueMock
+            givenAttributedTextChanged: false
         )
     }
 
     private func testSetAttributedText(
-        givenValue: NSAttributedString,
-        givenNewValue: NSAttributedString
+        givenAttributedTextChanged: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
+        let givenNewValue = NSAttributedString(string: "My new AT Button")
 
         let sizeMock: ButtonSize = .medium
         let alignmentMock: ButtonAlignment = .trailingIcon
@@ -909,7 +912,7 @@ final class ButtonViewModelTests: XCTestCase {
         let viewModel = self.classToTest(
             size: sizeMock,
             alignment: alignmentMock,
-            attributedText: givenValue
+            attributedText: .init(string: "My AT Button")
         )
 
         self.subscribeAllPublishedValues(on: viewModel)
@@ -920,45 +923,51 @@ final class ButtonViewModelTests: XCTestCase {
         self.resetMockedData()
 
         // WHEN
+        self.displayedTextViewModelMock.attributedTextChangedWithAttributedTextReturnValue = givenAttributedTextChanged
         viewModel.set(attributedText: .left(givenNewValue))
-        viewModel.set(attributedText: .left(givenNewValue)) // The second call should do nothing
 
         // THEN
         // **
         // Published count
         XCTAssertEqual(self.contentPublishedSinkCount,
-                       isNewValue ? 1 : 0,
+                       givenAttributedTextChanged ? 1 : 0,
                        "Wrong contentPublishedSinkCount value")
         XCTAssertEqual(self.sizesPublishedSinkCount,
-                       isNewValue ? 1 : 0,
+                       givenAttributedTextChanged ? 1 : 0,
                        "Wrong sizesPublishedSinkCount value")
         XCTAssertEqual(self.spacingsPublishedSinkCount,
-                       isNewValue ? 1 : 0,
+                       givenAttributedTextChanged ? 1 : 0,
                        "Wrong spacingsPublishedSinkCount value")
+        // **
+
+        // **
+        // DisplayedText ViewModel
+        XCTAssertEqual(self.displayedTextViewModelMock.attributedTextChangedWithAttributedTextCallsCount,
+                       1,
+                       "Wrong call number on attributedText on displayedTextViewModel")
+        XCTAssertEqual(self.displayedTextViewModelMock.attributedTextChangedWithAttributedTextReceivedAttributedText?.leftValue,
+                       givenNewValue,
+                       "Wrong attributedText parameter on displayedTextViewModel")
         // **
 
         // **
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: isNewValue ? 2 : 0,
-            givenIconImage: nil,
-            givenText: nil,
-            givenAttributedText: givenNewValue
+            numberOfCalls: givenAttributedTextChanged ? 2 : 0,
+            givenIconImage: nil
         )
         self.testGetContentUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: givenAttributedTextChanged ? 1 : 0,
             givenAlignment: alignmentMock,
-            givenIconImage: nil,
-            givenText: nil,
-            givenAttributedText: givenNewValue
+            givenIconImage: nil
         )
         self.testGetSizesUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: givenAttributedTextChanged ? 1 : 0,
             givenSize: sizeMock,
             givenIsOnlyIcon: self.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            numberOfCalls: givenAttributedTextChanged ? 1 : 0,
             givenTheme: self.themeMock,
             givenIsOnlyIcon: self.isIconOnlyMock
         )
@@ -1028,16 +1037,12 @@ final class ButtonViewModelTests: XCTestCase {
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
             numberOfCalls: isNewValue ? 2 : 0,
-            givenIconImage: givenNewValue,
-            givenText: nil,
-            givenAttributedText: nil
+            givenIconImage: givenNewValue
         )
         self.testGetContentUseCaseMock(
             numberOfCalls: isNewValue ? 1 : 0,
             givenAlignment: alignmentMock,
-            givenIconImage: givenNewValue,
-            givenText: nil,
-            givenAttributedText: nil
+            givenIconImage: givenNewValue
         )
         self.testGetSizesUseCaseMock(
             numberOfCalls: isNewValue ? 1 : 0,
@@ -1286,9 +1291,7 @@ private extension ButtonViewModelTests {
     private func testGetContentUseCaseMock(
         numberOfCalls: Int = 1,
         givenAlignment: ButtonAlignment? = nil,
-        givenIconImage: UIImage? = nil,
-        givenText: String? = nil,
-        givenAttributedText: NSAttributedString? = nil
+        givenIconImage: UIImage? = nil
     ) {
         XCTAssertEqual(self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextCallsCount,
                        numberOfCalls,
@@ -1303,10 +1306,10 @@ private extension ButtonViewModelTests {
                            givenIconImage,
                            "Wrong iconImage parameter on execute on getContentUseCase")
             XCTAssertEqual(getContentUseCaseArgs?.text,
-                           givenText,
+                           self.displayedTextViewModelMock.text,
                            "Wrong text parameter on execute on getContentUseCase")
-            XCTAssertEqual(getContentUseCaseArgs?.attributedText?.leftValue,
-                           givenAttributedText,
+            XCTAssertEqual(getContentUseCaseArgs?.attributedText,
+                           self.displayedTextViewModelMock.attributedText,
                            "Wrong attributedText parameter on execute on getContentUseCase")
         }
     }
@@ -1333,9 +1336,7 @@ private extension ButtonViewModelTests {
 
     private func testGetIsIconOnlyUseCaseMock(
         numberOfCalls: Int = 2,
-        givenIconImage: UIImage? = nil,
-        givenText: String? = nil,
-        givenAttributedText: NSAttributedString? = nil
+        givenIconImage: UIImage? = nil
     ) {
         XCTAssertEqual(self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextCallsCount,
                        numberOfCalls,
@@ -1347,10 +1348,10 @@ private extension ButtonViewModelTests {
                            givenIconImage,
                            "Wrong iconImage parameter on execute on getIsIconOnlyUseCase")
             XCTAssertEqual(getIsIconOnlyUseCaseArgs?.text,
-                           givenText,
+                           self.displayedTextViewModelMock.text,
                            "Wrong text parameter on execute on getIsIconOnlyUseCase")
-            XCTAssertEqual(getIsIconOnlyUseCaseArgs?.attributedText?.leftValue,
-                           givenAttributedText,
+            XCTAssertEqual(getIsIconOnlyUseCaseArgs?.attributedText,
+                           self.displayedTextViewModelMock.attributedText,
                            "Wrong attributedText parameter on execute on getIsIconOnlyUseCase")
         }
     }

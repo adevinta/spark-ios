@@ -14,11 +14,11 @@ extension ButtonState {
     // MARK: - Properties
 
     static func mocked(
-        isInteractionEnabled: Bool = true,
+        isUserInteractionEnabled: Bool = true,
         opacity: CGFloat = 1.0
     ) -> Self {
         return .init(
-            isInteractionEnabled: isInteractionEnabled,
+            isUserInteractionEnabled: isUserInteractionEnabled,
             opacity: opacity
         )
     }

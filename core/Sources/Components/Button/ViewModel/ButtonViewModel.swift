@@ -23,16 +23,16 @@ final class ButtonViewModel: ObservableObject {
 
     // MARK: - Published Properties
 
-    @Published private (set) var state: ButtonState?
+    @Published private(set) var state: ButtonState?
 
-    @Published private (set) var currentColors: ButtonCurrentColors?
+    @Published private(set) var currentColors: ButtonCurrentColors?
 
-    @Published private (set) var sizes: ButtonSizes?
-    @Published private (set) var border: ButtonBorder?
-    @Published private (set) var spacings: ButtonSpacings?
+    @Published private(set) var sizes: ButtonSizes?
+    @Published private(set) var border: ButtonBorder?
+    @Published private(set) var spacings: ButtonSpacings?
 
-    @Published private (set) var content: ButtonContent?
-    @Published private (set) var textFontToken: TypographyFontToken?
+    @Published private(set) var content: ButtonContent?
+    @Published private(set) var textFontToken: TypographyFontToken?
 
     // MARK: - Private Properties
 
@@ -41,14 +41,12 @@ final class ButtonViewModel: ObservableObject {
     private var isIconOnly: Bool {
         return self.dependencies.getIsIconOnlyUseCase.execute(
             for: self.iconImage,
-            text: self.text,
-            attributedText: self.attributedText
+            text: self.displayedTextViewModel.text,
+            attributedText: self.displayedTextViewModel.attributedText
         )
     }
 
-    private var text: String?
-    private var attributedText: AttributedStringEither?
-    private var displayedTextType: ButtonDisplayedTextType
+    private let displayedTextViewModel: DisplayedTextViewModel
 
     private var isPressed: Bool = false
 
@@ -76,18 +74,11 @@ final class ButtonViewModel: ObservableObject {
         self.shape = shape
         self.alignment = alignment
         self.iconImage = iconImage
-        self.text = text
-        self.attributedText = attributedText
+        self.displayedTextViewModel = dependencies.makeDisplayedTextViewModel(
+            text: text,
+            attributedText: attributedText
+        )
         self.isEnabled = isEnabled
-
-        switch (text, attributedText) {
-        case (nil, nil):
-            self.displayedTextType = .none
-        case (nil, _):
-            self.displayedTextType = .attributedText
-        case (_, nil), (_, _):
-            self.displayedTextType = .text
-        }
 
         self.dependencies = dependencies
     }
@@ -169,11 +160,8 @@ final class ButtonViewModel: ObservableObject {
     }
 
     func set(text: String?) {
-        // Text changed or is not currently displayed ?
-        if self.text != text || self.displayedTextType != .text {
-            self.text = text
-            self.displayedTextType = text != nil ? .text : .none
-
+        // Displayed text changed ?
+        if self.displayedTextViewModel.textChanged(text) {
             self.contentDidUpdate()
             self.sizesDidUpdate()
             self.spacingsDidUpdate()
@@ -187,11 +175,8 @@ final class ButtonViewModel: ObservableObject {
     }
 
     func set(attributedText: AttributedStringEither?) {
-        // AttributedText changed or is not currently displayed ?
-        if self.attributedText != attributedText || self.displayedTextType != .attributedText {
-            self.attributedText = attributedText
-            self.displayedTextType = attributedText != nil ? .attributedText : .none
-
+        // Displayed text changed ?
+        if self.displayedTextViewModel.attributedTextChanged(attributedText) {
             self.contentDidUpdate()
             self.sizesDidUpdate()
             self.spacingsDidUpdate()
@@ -284,20 +269,12 @@ final class ButtonViewModel: ObservableObject {
         self.content = self.dependencies.getContentUseCase.execute(
             for: self.alignment,
             iconImage: self.iconImage,
-            text: self.text,
-            attributedText: self.attributedText
+            text: self.displayedTextViewModel.text,
+            attributedText: self.displayedTextViewModel.attributedText
         )
     }
 
     private func textFontDidUpdate() {
         self.textFontToken = self.theme.typography.callout
     }
-}
-
-// MARK: - Private Enum
-
-private enum ButtonDisplayedTextType {
-    case none
-    case text
-    case attributedText
 }

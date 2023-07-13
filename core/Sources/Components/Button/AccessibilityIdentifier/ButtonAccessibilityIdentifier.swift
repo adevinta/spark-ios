@@ -11,6 +11,8 @@ public enum ButtonAccessibilityIdentifier {
 
     // MARK: - Properties
 
+    /// The default view accessibility identifier. Can be changed by the consumer
+    public static let view = "spark-button"
     /// The icon view accessibility identifier.
     public static let icon = "spark-button-icon"
     /// The icon image accessibility identifier.

@@ -61,7 +61,7 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
             case .tinted:
                 mockedUseCase = getTintedUseCaseMock
             }
-            mockedUseCase.colorsWithIntentAndColorsAndDimsReturnValue = item.givenColors
+            mockedUseCase.executeWithIntentAndColorsAndDimsReturnValue = item.givenColors
 
             let getIntentsUseCaseMock = ButtonGetColorsUseCase(
                 getContrastUseCase: getContrastUseCaseMock,
@@ -103,8 +103,8 @@ private struct Tester {
         givenColors: ColorsGeneratedMock,
         givenDims: DimsGeneratedMock
     ) {
-        let arguments = givenColorsUseCase.colorsWithIntentAndColorsAndDimsReceivedArguments
-        XCTAssertEqual(givenColorsUseCase.colorsWithIntentAndColorsAndDimsCallsCount,
+        let arguments = givenColorsUseCase.executeWithIntentAndColorsAndDimsReceivedArguments
+        XCTAssertEqual(givenColorsUseCase.executeWithIntentAndColorsAndDimsCallsCount,
                        1,
                        "Wrong call number on execute")
         XCTAssertEqual(arguments?.intent,

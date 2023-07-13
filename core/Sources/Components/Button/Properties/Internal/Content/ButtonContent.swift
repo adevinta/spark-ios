@@ -11,7 +11,7 @@ struct ButtonContent: Equatable {
     // MARK: - Properties
 
     let shouldShowIconImage: Bool
-    let isIconImageOnRight: Bool
+    let isIconImageTrailing: Bool
     let iconImage: ImageEither?
 
     let shouldShowText: Bool

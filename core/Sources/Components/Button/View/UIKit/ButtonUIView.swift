@@ -469,6 +469,9 @@ public final class ButtonUIView: UIView {
         text: String?,
         attributedText: NSAttributedString?
     ) {
+        // Accessibility Identifier
+        self.accessibilityIdentifier = AccessibilityIdentifier.view
+
         // Label
         // Only one of the text/attributedText can be set in the init
         if let text {
@@ -597,7 +600,7 @@ public final class ButtonUIView: UIView {
             guard let self, let state else { return }
 
             // Update the user interaction enabled
-            self.clearButton.isUserInteractionEnabled = state.isInteractionEnabled
+            self.clearButton.isUserInteractionEnabled = state.isUserInteractionEnabled
 
             // Animate only if new alpha is different from current alpha
             let alpha = state.opacity
@@ -708,7 +711,7 @@ public final class ButtonUIView: UIView {
             }
 
             // Position
-            self.contentStackView.semanticContentAttribute = content.isIconImageOnRight ? .forceRightToLeft : .forceLeftToRight
+            self.contentStackView.semanticContentAttribute = content.isIconImageTrailing ? .forceRightToLeft : .forceLeftToRight
         }
         // **
 

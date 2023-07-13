@@ -28,7 +28,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenAttributedText: nil,
             expectedContent: .init(
                 shouldShowIconImage: true,
-                isIconImageOnRight: false,
+                isIconImageTrailing: false,
                 iconImage: .left(self.imageMock),
                 shouldShowText: false
             )
@@ -43,7 +43,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenAttributedText: nil,
             expectedContent: .init(
                 shouldShowIconImage: true,
-                isIconImageOnRight: true,
+                isIconImageTrailing: true,
                 iconImage: .left(self.imageMock),
                 shouldShowText: false
             )
@@ -58,7 +58,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenAttributedText: nil,
             expectedContent: .init(
                 shouldShowIconImage: true,
-                isIconImageOnRight: false,
+                isIconImageTrailing: false,
                 iconImage: .left(self.imageMock),
                 shouldShowText: true
             )
@@ -73,7 +73,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenAttributedText: self.attributedText,
             expectedContent: .init(
                 shouldShowIconImage: true,
-                isIconImageOnRight: false,
+                isIconImageTrailing: false,
                 iconImage: .left(self.imageMock),
                 shouldShowText: true
             )
@@ -88,7 +88,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenAttributedText: nil,
             expectedContent: .init(
                 shouldShowIconImage: false,
-                isIconImageOnRight: false,
+                isIconImageTrailing: false,
                 iconImage: nil,
                 shouldShowText: true
             )
@@ -103,7 +103,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
             givenAttributedText: self.attributedText,
             expectedContent: .init(
                 shouldShowIconImage: false,
-                isIconImageOnRight: false,
+                isIconImageTrailing: false,
                 iconImage: nil,
                 shouldShowText: true
             )
@@ -162,9 +162,9 @@ private extension ButtonGetContentUseCaseTests {
         XCTAssertEqual(content.shouldShowIconImage,
                        expectedContent.shouldShowIconImage,
                        "Wrong shouldShowIconImage" + errorSuffixMessage)
-        XCTAssertEqual(content.isIconImageOnRight,
-                       expectedContent.isIconImageOnRight,
-                       "Wrong isIconImageOnRight" + errorSuffixMessage)
+        XCTAssertEqual(content.isIconImageTrailing,
+                       expectedContent.isIconImageTrailing,
+                       "Wrong isIconImageTrailing" + errorSuffixMessage)
         XCTAssertEqual(content.iconImage?.leftValue,
                        expectedContent.iconImage?.leftValue,
                        "Wrong iconImage" + errorSuffixMessage)

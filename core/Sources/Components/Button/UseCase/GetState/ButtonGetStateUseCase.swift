@@ -25,7 +25,7 @@ struct ButtonGetStateUseCase: ButtonGetStateUseCaseable {
         let opacity = isEnabled ? dims.none : dims.dim3
 
         return .init(
-            isInteractionEnabled: isEnabled,
+            isUserInteractionEnabled: isEnabled,
             opacity: opacity
         )
     }
