@@ -14,7 +14,9 @@ import UIKit
 public final class CheckboxGroupUIView: UIView {
     // MARK: - Private properties.
 
-    @Binding private var items: [any CheckboxGroupItemProtocol]
+    private var subscriptions = Set<AnyCancellable>()
+    private var items: [any CheckboxGroupItemProtocol]
+    private var subject = PassthroughSubject<[any CheckboxGroupItemProtocol], Never>()
     @Published public var theme: Theme {
         didSet {
             self.spacingXLarge = self.theme.layout.spacing.xLarge
@@ -36,6 +38,12 @@ public final class CheckboxGroupUIView: UIView {
     @ScaledUIMetric private var spacingXLarge: CGFloat
 
     // MARK: - Public properties.
+
+    public weak var delegate: CheckboxGroupUIViewDelegate?
+
+    public var publisher: some Publisher<[any CheckboxGroupItemProtocol], Never> {
+        return self.subject
+    }
 
     /// The title of the checkbox group displayed on top of the group.
     public var title: String? {
@@ -80,7 +88,7 @@ public final class CheckboxGroupUIView: UIView {
     public init(
         title: String? = nil,
         checkedImage: UIImage,
-        items: Binding<[any CheckboxGroupItemProtocol]>,
+        items: [any CheckboxGroupItemProtocol],
         layout: CheckboxGroupLayout = .vertical,
         checkboxPosition: CheckboxPosition,
         theme: Theme,
@@ -88,7 +96,7 @@ public final class CheckboxGroupUIView: UIView {
     ) {
         self.title = title
         self.checkedImage = checkedImage
-        self._items = items
+        self.items = items
         self.layout = layout
         self.checkboxPosition = checkboxPosition
         self.theme = theme
@@ -164,31 +172,13 @@ public final class CheckboxGroupUIView: UIView {
         var checkboxes: [CheckboxUIView] = []
 
         for item in self.items {
-            let content: Either<NSAttributedString, String>
-            if let attributedTitle = item.attributedTitle {
-                content = .left(attributedTitle)
-            } else {
-                content = .right(item.title ?? "")
-            }
+            let content: Either<NSAttributedString, String> = .of(item.attributedTitle, or: item.title ?? "")
             let checkbox = CheckboxUIView(
                 theme: theme,
                 content: content,
                 checkedImage: self.checkedImage,
                 state: item.state,
-                selectionState: .init(
-                    get: {
-                        return item.selectionState
-                    },
-                    set: { [weak self] in
-                        guard
-                            let self,
-                            let index = self.items.firstIndex(where: { $0.id == item.id}) else { return }
-
-                        var item = self.items[index]
-                        item.selectionState = $0
-                        self.items[index] = item
-                    }
-                ),
+                selectionState: item.selectionState,
                 checkboxPosition: self.checkboxPosition
             )
             let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id)"
@@ -196,6 +186,20 @@ public final class CheckboxGroupUIView: UIView {
             checkbox.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(checkbox)
             checkboxes.append(checkbox)
+
+            checkbox.publisher.sink { [weak self] in
+                guard
+                    let self,
+                    let index = self.items.firstIndex(where: { $0.id == item.id}) else { return }
+
+                var item = self.items[index]
+                item.selectionState = $0
+                self.items[index] = item
+
+                self.delegate?.checkboxGroup(self, didChangeSelection: self.items)
+                self.subject.send(self.items)
+            }
+            .store(in: &self.subscriptions)
         }
 
         self.checkboxes = checkboxes

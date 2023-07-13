@@ -140,7 +140,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     public weak var delegate: (any RadioButtonUIGroupViewDelegate)?
 
     /// A change of the selected item will be published. This is an alternative method to the `delegate` of being notified of changes to the selected item.
-    public var publisher: any Publisher<ID, Never> {
+    public var publisher: some Publisher<ID, Never> {
         return self.valueSubject
     }
 

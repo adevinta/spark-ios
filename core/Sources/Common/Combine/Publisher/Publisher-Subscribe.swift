@@ -12,11 +12,10 @@ import Foundation
 extension Publisher where Failure == Never {
     func subscribe<S>(
         in subscriptions: inout Set<AnyCancellable>,
-        on scheduler: S = RunLoop.main,
+        on scheduler: S = DispatchQueue.main,
         action: @escaping (Self.Output) -> Void ) where S: Scheduler {
-
             self
-                .receive(on: RunLoop.main)
+                .receive(on: scheduler)
                 .sink { value in
                     action(value)
                 }

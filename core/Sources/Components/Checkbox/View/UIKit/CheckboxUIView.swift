@@ -85,7 +85,12 @@ public final class CheckboxUIView: UIView {
         return self.viewModel.colors
     }
 
+    private var subject: PassthroughSubject<CheckboxSelectionState, Never>
     // MARK: - Public properties.
+
+    public var publisher: some Publisher<CheckboxSelectionState, Never> {
+        return self.subject
+    }
 
     /// Set a delegate to receive selection state change callbacks. Alternatively, you can use bindings.
     public weak var delegate: CheckboxUIViewDelegate?
@@ -115,7 +120,7 @@ public final class CheckboxUIView: UIView {
     }
 
     /// The current selection state of the checkbox.
-    @Binding public var selectionState: CheckboxSelectionState {
+    public var selectionState: CheckboxSelectionState {
         didSet {
             self.controlView.selectionState = self.selectionState
             self.updateAccessibility()
@@ -186,7 +191,7 @@ public final class CheckboxUIView: UIView {
         text: String,
         checkedImage: UIImage,
         state: SelectButtonState = .enabled,
-        selectionState: Binding<CheckboxSelectionState>,
+        selectionState: CheckboxSelectionState,
         checkboxPosition: CheckboxPosition
     ) {
         self.init(
@@ -213,7 +218,7 @@ public final class CheckboxUIView: UIView {
         attributedText: NSAttributedString,
         checkedImage: UIImage,
         state: SelectButtonState = .enabled,
-        selectionState: Binding<CheckboxSelectionState>,
+        selectionState: CheckboxSelectionState,
         checkboxPosition: CheckboxPosition
     ) {
         self.init(
@@ -233,12 +238,13 @@ public final class CheckboxUIView: UIView {
         checkedImage: UIImage,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         state: SelectButtonState = .enabled,
-        selectionState: Binding<CheckboxSelectionState>,
+        selectionState: CheckboxSelectionState,
         checkboxPosition: CheckboxPosition
     ) {
-        self._selectionState = selectionState
+        self.selectionState = selectionState
         self.checkboxPosition = checkboxPosition
         self.viewModel = .init(text: content, checkedImage: checkedImage, theme: theme, colorsUseCase: colorsUseCase, state: state)
+        self.subject = PassthroughSubject()
 
         super.init(frame: .zero)
         self.commonInit()
@@ -320,29 +326,17 @@ public final class CheckboxUIView: UIView {
     }
 
     private func subscribe() {
-        self.viewModel.$colors
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] text in
-                self?.updateTheme()
-            }
-            .store(in: &cancellables)
+        self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] _ in
+            self?.updateTheme()
+        }
 
-        self.subscribeTo(self.viewModel.$theme) { [weak self] _ in
+        self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] _ in
             guard let self else { return }
 
             self.updateTheme()
             self.updateState()
             self.updateViewConstraints()
         }
-    }
-
-    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void) {
-        publisher
-            .receive(on: DispatchQueue.main)
-            .sink { value in
-                action(value)
-            }
-            .store(in: &self.cancellables)
     }
 
     // MARK: - Override
@@ -486,6 +480,7 @@ public final class CheckboxUIView: UIView {
             self.selectionState = .selected
         }
         self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
+        self.subject.send(self.selectionState)
     }
 
     @IBAction private func actionTouchDown(sender: UIButton) {

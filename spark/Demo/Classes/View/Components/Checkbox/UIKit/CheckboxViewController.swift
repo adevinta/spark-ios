@@ -137,13 +137,15 @@ final class CheckboxViewController: UIViewController {
             text: "Hello world!",
             checkedImage: image,
             state: .enabled,
-            selectionState: .init(
-                get: { return self.checkboxValue1 },
-                set: { self.checkboxValue1 = $0 }
-            ),
+            selectionState: self.checkboxValue1,
             checkboxPosition: .left
         )
+
         checkbox.translatesAutoresizingMaskIntoConstraints = false
+        checkbox.publisher.sink { [weak self] in
+            self?.checkboxValue1 = $0
+        }.store(in: &self.cancellables)
+
         view.addSubview(checkbox)
         checkboxes.append(checkbox)
 
@@ -152,13 +154,13 @@ final class CheckboxViewController: UIViewController {
             text: "Second checkbox! This is a very very long descriptive text.",
             checkedImage: image,
             state: .disabled,
-            selectionState: .init(
-                get: { return self.checkboxValue2 },
-                set: { self.checkboxValue2 = $0 }
-            ),
+            selectionState: self.checkboxValue2,
             checkboxPosition: .left
         )
         checkbox2.translatesAutoresizingMaskIntoConstraints = false
+        checkbox2.publisher.sink { [weak self] in
+            self?.checkboxValue2 = $0
+        }.store(in: &self.cancellables)
         view.addSubview(checkbox2)
         checkboxes.append(checkbox2)
 
@@ -168,13 +170,14 @@ final class CheckboxViewController: UIViewController {
             text: "Error checkbox",
             checkedImage: image,
             state: .error(message: "Error message"),
-            selectionState: .init(
-                get: { return self.checkboxValue3 },
-                set: { self.checkboxValue3 = $0 }
-            ),
+            selectionState: self.checkboxValue3,
             checkboxPosition: .left
         )
         errorCheckbox.translatesAutoresizingMaskIntoConstraints = false
+        errorCheckbox.publisher.sink { [weak self] in
+            self?.checkboxValue3 = $0
+        }.store(in: &self.cancellables)
+
         view.addSubview(errorCheckbox)
         checkboxes.append(errorCheckbox)
 
@@ -183,13 +186,14 @@ final class CheckboxViewController: UIViewController {
             text: "Right checkbox",
             checkedImage: image,
             state: .success(message: "Success message"),
-            selectionState: .init(
-                get: { return self.checkboxValue4 },
-                set: { self.checkboxValue4 = $0 }
-            ),
+            selectionState: self.checkboxValue4,
             checkboxPosition: .right
         )
         successCheckbox.translatesAutoresizingMaskIntoConstraints = false
+        successCheckbox.publisher.sink { [weak self] in
+            self?.checkboxValue4 = $0
+        }.store(in: &self.cancellables)
+
         view.addSubview(successCheckbox)
         checkboxes.append(successCheckbox)
 
@@ -198,13 +202,14 @@ final class CheckboxViewController: UIViewController {
             text: "Right checkbox",
             checkedImage: image,
             state: .success(message: "Success message"),
-            selectionState: .init(
-                get: { return self.checkboxValue4 },
-                set: { self.checkboxValue4 = $0 }
-            ),
+            selectionState: self.checkboxValue4,
             checkboxPosition: .right
         )
         attributedCheckbox.attributedText = self.attributedCheckboxLabel
+        attributedCheckbox.publisher.sink { [weak self] in
+            self?.checkboxValue4 = $0
+        }.store(in: &self.cancellables)
+
         view.addSubview(attributedCheckbox)
         checkboxes.append(attributedCheckbox)
 

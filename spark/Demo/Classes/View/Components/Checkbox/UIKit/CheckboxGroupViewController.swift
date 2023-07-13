@@ -192,14 +192,7 @@ final class CheckboxGroupViewController: UIViewController {
         let groupView = CheckboxGroupUIView(
             title: "Checkbox-group title (UIKit)",
             checkedImage: checkedImage,
-            items: .init(
-                get: { [weak self] in
-                    self?.items ?? []
-                },
-                set: { [weak self] in
-                    self?.items = $0
-                }
-            ),
+            items: self.items,
             layout: self.checkboxGroupLayout,
             checkboxPosition: .left,
             theme: theme,
@@ -207,6 +200,9 @@ final class CheckboxGroupViewController: UIViewController {
         )
         self.checkboxGroup = groupView
         groupView.translatesAutoresizingMaskIntoConstraints = false
+        groupView.publisher.sink { [weak self] in
+            self?.items = $0
+        }.store(in: &self.cancellables)
 
         view.addSubview(groupView)
 
