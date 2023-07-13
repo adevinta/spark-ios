@@ -18,51 +18,87 @@ struct SpinnerComponent: View {
         self.themePublisher.theme
     }
 
+    @State private var versionSheetIsPresented = false
+    @State var version: ComponentVersion = .swiftUI
+
     @State var intent: SpinnerIntent = .primary
+    @State var isIntentPresented = false
     @State var spinnerSize: SpinnerSize = .medium
     @State var isSizesPresented = false
-    @State var isIntentPresented = false
 
     var body: some View {
-        VStack {
-            HStack(spacing: 20) {
-                Button(self.spinnerSize.description) {
-                    self.isSizesPresented = true
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Configuration")
+                .font(.title2)
+                .bold()
+                .padding(.bottom, 6)
+            HStack() {
+                Text("Version: ")
+                Button(self.version.name) {
+                    self.versionSheetIsPresented = true
                 }
-                .confirmationDialog("Select a size", isPresented: self.$isSizesPresented) {
-                    ForEach(SpinnerSize.allCases, id: \.self) { size in
-                        Button(size.description) {
-                            self.spinnerSize = size
+                .confirmationDialog("Select a version",
+                                    isPresented: self.$versionSheetIsPresented) {
+                    ForEach(ComponentVersion.allCases, id: \.self) { version in
+                        Button(version.name) {
+                            self.version = version
                         }
                     }
                 }
-
-                Button(self.intent.description) {
+                Spacer()
+            }
+            HStack() {
+                Text("Intent: ")
+                Button(self.intent.name) {
                     self.isIntentPresented = true
                 }
                 .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
                     ForEach(SpinnerIntent.allCases, id: \.self) { intent in
-                        Button(intent.description) {
+                        Button(intent.name) {
                             self.intent = intent
                         }
                     }
                 }
-            }.padding(.bottom, 20)
+            }
+            HStack() {
+                Text("Spinner Size: ")
+                Button(self.spinnerSize.name) {
+                    self.isSizesPresented = true
+                }
+                .confirmationDialog("Select a size", isPresented: self.$isSizesPresented) {
+                    ForEach(SpinnerSize.allCases, id: \.self) { size in
+                        Button(size.name) {
+                            self.spinnerSize = size
+                        }
+                    }
+                }
+            }
 
-            Text("SwiftUI")
-            SpinnerView(theme: self.theme,
-                        intent: self.intent,
-                        spinnerSize: self.spinnerSize
-            )
             Divider()
-            Text("UIKit*")
-            UISpinnerView(theme: self.theme,
-                          intent: self.intent,
-                          spinnerSize: self.spinnerSize)
-            Text("*The UIKit spinner does not animate in a view representable, but works fine in a standard UIView view hierarchy.")
-                .font(.footnote)
+
+            Text("Integration")
+                .font(.title2)
+                .bold()
+
+            if version == .swiftUI {
+                SpinnerView(theme: self.theme,
+                            intent: self.intent,
+                            spinnerSize: self.spinnerSize
+                )
+            } else {
+                VStack(alignment: .leading) {
+                    UISpinnerView(theme: self.theme,
+                                  intent: self.intent,
+                                  spinnerSize: self.spinnerSize)
+                    Text("*").baselineOffset(0.5) +
+                    Text("The UIKit spinner does not animate in a view representable, but works fine in a standard UIView view hierarchy.")
+                        .font(.footnote)
+                }
+            }
             Spacer()
         }
+        .padding(.horizontal, 16)
+        .navigationBarTitle(Text("Spinner"))
     }
 }
 
@@ -73,7 +109,13 @@ struct SpinnerComponent_Previews: PreviewProvider {
 }
 
 private extension CaseIterable {
-    var description: String {
-        return "\(self)".capitalized
+    var name: String {
+        return "\(self)".capitalizingFirstLetter
+    }
+}
+
+extension String {
+    var capitalizingFirstLetter: String {
+      return prefix(1).uppercased() + self.lowercased().dropFirst()
     }
 }

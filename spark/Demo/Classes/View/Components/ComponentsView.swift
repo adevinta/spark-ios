@@ -32,16 +32,16 @@ struct ComponentsView: View {
                     RadioButtonOverview()
                 }
 
+                NavigationLink("Spinner") {
+                    SpinnerComponent()
+                }
+
                 NavigationLink("Switch") {
                     SwitchComponentView()
                 }
 
                 NavigationLink("Tag") {
                     TagComponentView()
-                }
-
-                NavigationLink("Spinner") {
-                    SpinnerComponent()
                 }
             }
             .navigationBarTitle(Text("Components"))

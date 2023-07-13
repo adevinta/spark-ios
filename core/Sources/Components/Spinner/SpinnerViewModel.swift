@@ -9,17 +9,18 @@
 import Combine
 import Foundation
 
-private enum Constants {
-    static let small = 20.0
-    static let medium = 28.0
-    static let stroke = 2.0
-    static let duration = 1.0
-}
-
 /// `SpinnerViewModel` is the view model for both the SwiftUI `SpinnerView` as well as the UIKit `SpinnerUIView`.
 /// The view model is responsible for returning the varying attributes to the views, i.e. colors and size. These are determined by the theme, intent and spinnerSize.
 /// When the theme or the intent change the new values are calculated and published.
 final class SpinnerViewModel: ObservableObject {
+    enum Constants {
+        enum Size {
+            static let small = 20.0
+            static let medium = 28.0
+        }
+        static let stroke = 2.0
+        static let duration = 1.0
+    }
 
     // MARK: - Private Properties
     private let useCase: any GetSpinnerIntentColorUseCasable
@@ -77,8 +78,8 @@ final class SpinnerViewModel: ObservableObject {
 private extension SpinnerSize {
     var numeric: CGFloat {
         switch self {
-        case .small: return Constants.small
-        case .medium: return Constants.medium
+        case .small: return SpinnerViewModel.Constants.Size.small
+        case .medium: return SpinnerViewModel.Constants.Size.medium
         }
     }
 }

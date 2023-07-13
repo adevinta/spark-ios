@@ -29,16 +29,25 @@ final class SpinnerViewModelTests: XCTestCase {
     // MARK: - Tests
     func test_variables_published_on_init() {
         let sut = sut(intent: .primary, spinnerSize: .small)
-        let expect = expectation(description: "All publisher should have published")
+        let expect = expectation(description: "All publishers should have published")
 
         Publishers.Zip(sut.$intentColor, sut.$size).subscribe(in: &self.subscriptions) { (colorToken, size) in
 
             XCTAssertEqual(colorToken.color, Color.red)
-            XCTAssertEqual(size, 20.0)
+            XCTAssertEqual(size, SpinnerViewModel.Constants.Size.small)
             expect.fulfill()
         }
 
         wait(for: [expect], timeout: 0.1)
+    }
+
+    func test_non_published_variables_on_init() {
+        let sut = sut(intent: .error, spinnerSize: .medium)
+
+        XCTAssertEqual(sut.size, SpinnerViewModel.Constants.Size.small)
+        XCTAssertEqual(sut.intentColor.color, Color.red)
+        XCTAssertEqual(sut.duration, SpinnerViewModel.Constants.duration)
+        XCTAssertEqual(sut.strokeWidth, SpinnerViewModel.Constants.stroke)
     }
 
     func test_colors_republished_on_theme_update() {

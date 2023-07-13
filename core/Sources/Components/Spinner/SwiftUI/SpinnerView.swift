@@ -12,6 +12,10 @@ import SwiftUI
 /// The spinner can have a size of `small` or `medium` and have different intents which determine the color of the spinner.
 /// The spinner spin animation is 1 second linear infinite.
 public struct SpinnerView: View {
+
+    // MARK: - Type Alias
+    private typealias AccessibilityIdentifier = SpinnerAccessibilityIdentifier
+
     // MARK: - Private Properties
     @ObservedObject private var viewModel: SpinnerViewModel
     @State private var rotationDegrees = 0.0
@@ -23,11 +27,11 @@ public struct SpinnerView: View {
     /// init
     /// Parameters:
     /// - theme: The current `Theme`
-    /// - intent: The `SpinnerIntent` intent used for coloring the spinner
-    /// - spinnerSize: The defined size of the spinner`SpinnerSize`
+    /// - intent: The `SpinnerIntent` intent used for coloring the spinner. The default is `primary`
+    /// - spinnerSize: The defined size of the spinner`SpinnerSize`. The default is `small`
     public init(theme: Theme,
-                intent: SpinnerIntent,
-                spinnerSize: SpinnerSize) {
+                intent: SpinnerIntent = .primary,
+                spinnerSize: SpinnerSize = .small) {
         self.init(viewModel: SpinnerViewModel(theme: theme, intent: intent, spinnerSize: spinnerSize))
     }
 
@@ -49,14 +53,10 @@ public struct SpinnerView: View {
                 self.rotationDegrees = 360.0
                 self.viewModel.isSpinning = true
             }
+            .accessibilityIdentifier(AccessibilityIdentifier.spinner)
     }
 
     // MARK: - Public modifiers
-    public func theme(_ theme: Theme) -> Self {
-        self.viewModel.theme = theme
-        return self
-    }
-
     public func spinnerSize(_ spinnerSize: SpinnerSize) -> Self {
         self.viewModel.spinnerSize = spinnerSize
         return self

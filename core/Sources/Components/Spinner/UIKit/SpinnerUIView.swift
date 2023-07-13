@@ -17,6 +17,9 @@ import SwiftUI
 /// The spinner spin animation is 1 second linear infinite.
 public final class SpinnerUIView: UIView {
 
+    // MARK: - Type Alias
+    private typealias AccessibilityIdentifier = SpinnerAccessibilityIdentifier
+
     // MARK: - Private attributes
     private let viewModel: SpinnerViewModel
     private var subscriptions = Set<AnyCancellable>()
@@ -44,9 +47,11 @@ public final class SpinnerUIView: UIView {
     /// init
     /// Parameters:
     /// - theme: The current `Theme`
-    /// - intent: The `SpinnerIntent` intent used for coloring the spinner
-    /// - spinnerSize: The defined size of the spinner`SpinnerSize`
-    public convenience init(theme: Theme, intent: SpinnerIntent, spinnerSize: SpinnerSize) {
+    /// - intent: The `SpinnerIntent` intent used for coloring the spinner. The default is `primary`
+    /// - spinnerSize: The defined size of the spinner`SpinnerSize`. The default is `small`
+    public convenience init(theme: Theme,
+                            intent: SpinnerIntent = .primary,
+                            spinnerSize: SpinnerSize = .small) {
         self.init(viewModel: SpinnerViewModel(theme: theme, intent: intent, spinnerSize: spinnerSize))
     }
 
@@ -68,6 +73,7 @@ public final class SpinnerUIView: UIView {
 
         self.animate()
         self.setupSubscriptions()
+        self.accessibilityIdentifier = AccessibilityIdentifier.spinner
     }
 
     required init?(coder: NSCoder) {
