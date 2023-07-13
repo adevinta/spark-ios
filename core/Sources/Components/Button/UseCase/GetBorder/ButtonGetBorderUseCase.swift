@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ButtonGetBorderUseCaseable {
-    func execute(for shape: ButtonShape,
+    func execute(shape: ButtonShape,
                  border: Border,
                  variant: ButtonVariant) -> ButtonBorder
 }
@@ -20,7 +20,7 @@ struct ButtonGetBorderUseCase: ButtonGetBorderUseCaseable {
     // MARK: - Methods
 
     func execute(
-        for shape: ButtonShape,
+        shape: ButtonShape,
         border: Border,
         variant: ButtonVariant
     ) -> ButtonBorder {

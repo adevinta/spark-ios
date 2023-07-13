@@ -40,7 +40,7 @@ final class ButtonViewModel: ObservableObject {
 
     private var isIconOnly: Bool {
         return self.dependencies.getIsIconOnlyUseCase.execute(
-            for: self.iconImage,
+            iconImage: self.iconImage,
             text: self.displayedTextViewModel.text,
             attributedText: self.displayedTextViewModel.attributedText
         )
@@ -217,7 +217,7 @@ final class ButtonViewModel: ObservableObject {
 
     private func stateDidUpdate() {
         self.state = self.dependencies.getStateUseCase.execute(
-            for: self.isEnabled,
+            isEnabled: self.isEnabled,
             dims: self.theme.dims
         )
     }
@@ -227,7 +227,7 @@ final class ButtonViewModel: ObservableObject {
     ) {
         if reloadColorsFromUseCase {
             self.colors = self.dependencies.getColorsUseCase.execute(
-                for: self.theme,
+                theme: self.theme,
                 intent: self.intent,
                 variant: self.variant
             )
@@ -238,21 +238,21 @@ final class ButtonViewModel: ObservableObject {
         }
 
         self.currentColors = self.dependencies.getCurrentColorsUseCase.execute(
-            for: colors,
+            colors: colors,
             isPressed: self.isPressed
         )
     }
 
     private func sizesDidUpdate() {
         self.sizes = self.dependencies.getSizesUseCase.execute(
-            for: self.size,
+            size: self.size,
             isOnlyIcon: self.isIconOnly
         )
     }
 
     private func borderDidUpdate() {
         self.border = self.dependencies.getBorderUseCase.execute(
-            for: self.shape,
+            shape: self.shape,
             border: self.theme.border,
             variant: self.variant
         )
@@ -260,14 +260,14 @@ final class ButtonViewModel: ObservableObject {
 
     private func spacingsDidUpdate() {
         self.spacings = self.dependencies.getSpacingsUseCase.execute(
-            for: self.theme.layout.spacing,
+            spacing: self.theme.layout.spacing,
             isOnlyIcon: self.isIconOnly
         )
     }
 
     private func contentDidUpdate() {
         self.content = self.dependencies.getContentUseCase.execute(
-            for: self.alignment,
+            alignment: self.alignment,
             iconImage: self.iconImage,
             text: self.displayedTextViewModel.text,
             attributedText: self.displayedTextViewModel.attributedText
