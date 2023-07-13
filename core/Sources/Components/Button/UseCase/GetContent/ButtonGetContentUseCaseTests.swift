@@ -152,7 +152,7 @@ private extension ButtonGetContentUseCaseTests {
 
         // GIVEN
         let content = useCase.execute(
-            for: givenAlignment,
+            alignment: givenAlignment,
             iconImage: iconImage,
             text: givenText,
             attributedText: attributedString

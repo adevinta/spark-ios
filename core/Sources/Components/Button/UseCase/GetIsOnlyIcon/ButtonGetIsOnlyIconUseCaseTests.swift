@@ -26,7 +26,7 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
         // WHEN
         let isIconOnly = useCase.execute(
-            for: .left(imageMock),
+            iconImage: .left(imageMock),
             text: nil,
             attributedText: nil
         )
@@ -41,7 +41,7 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
         // WHEN
         let isIconOnly = useCase.execute(
-            for: .left(imageMock),
+            iconImage: .left(imageMock),
             text: self.textMock,
             attributedText: nil
         )
@@ -56,7 +56,7 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
         // WHEN
         let isIconOnly = useCase.execute(
-            for: .left(imageMock),
+            iconImage: .left(imageMock),
             text: nil,
             attributedText: .left(self.attributedText)
         )
@@ -71,7 +71,7 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
         // WHEN
         let isIconOnly = useCase.execute(
-            for: .left(imageMock),
+            iconImage: .left(imageMock),
             text: self.textMock,
             attributedText: .left(self.attributedText)
         )
@@ -88,7 +88,7 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
         // WHEN
         let isIconOnly = useCase.execute(
-            for: nil,
+            iconImage: nil,
             text: self.textMock,
             attributedText: nil
         )
@@ -103,7 +103,7 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
         // WHEN
         let isIconOnly = useCase.execute(
-            for: nil,
+            iconImage: nil,
             text: nil,
             attributedText: .left(self.attributedText)
         )
@@ -118,7 +118,7 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
         // WHEN
         let isIconOnly = useCase.execute(
-            for: nil,
+            iconImage: nil,
             text: self.textMock,
             attributedText: .left(self.attributedText)
         )
@@ -133,7 +133,7 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
         // WHEN
         let isIconOnly = useCase.execute(
-            for: nil,
+            iconImage: nil,
             text: nil,
             attributedText: nil
         )

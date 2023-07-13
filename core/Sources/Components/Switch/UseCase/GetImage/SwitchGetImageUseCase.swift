@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol SwitchGetImageUseCaseable {
-    func execute(for isOn: Bool,
+    func execute(isOn: Bool,
                  images: SwitchImagesEither) -> SwitchImageEither
 }
 
@@ -18,7 +18,7 @@ struct SwitchGetImageUseCase: SwitchGetImageUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for isOn: Bool,
+    func execute(isOn: Bool,
                  images: SwitchImagesEither) -> SwitchImageEither {
         switch images {
         case .left(let images):

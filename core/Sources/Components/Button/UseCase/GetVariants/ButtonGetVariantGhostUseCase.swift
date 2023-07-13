@@ -13,7 +13,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
     // MARK: - Methods
 
     func execute(
-        for intent: ButtonIntent,
+        intent: ButtonIntent,
         colors: Colors,
         dims: Dims
     ) -> ButtonColors {

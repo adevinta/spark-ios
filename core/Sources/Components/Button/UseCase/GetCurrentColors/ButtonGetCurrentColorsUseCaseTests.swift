@@ -68,7 +68,7 @@ private extension ButtonGetCurrentColorsUseCaseTests {
 
         // GIVEN
         let currentColors = useCase.execute(
-            for: self.colorsMock,
+            colors: self.colorsMock,
             isPressed: givenIsPressed
         )
 

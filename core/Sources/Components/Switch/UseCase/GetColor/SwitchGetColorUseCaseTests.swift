@@ -81,7 +81,7 @@ private extension SwitchGetColorUseCaseTests {
         
         // WHEN
         let colorToken = useCase.execute(
-            for: givenIntent,
+            intent: givenIntent,
             colors: self.colorsMock
         )
         

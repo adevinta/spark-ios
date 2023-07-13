@@ -48,7 +48,7 @@ private extension ButtonGetStateUseCaseTests {
 
         // GIVEN
         let interactionState = useCase.execute(
-            for: givenIsEnabled,
+            isEnabled: givenIsEnabled,
             dims: self.dimsMock
         )
 

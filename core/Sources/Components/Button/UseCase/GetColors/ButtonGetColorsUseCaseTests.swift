@@ -73,7 +73,7 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
 
             // WHEN
             let colors = getIntentsUseCaseMock.execute(
-                for: themeMock,
+                theme: themeMock,
                 intent: item.givenIntent,
                 variant: item.givenVariant
             )

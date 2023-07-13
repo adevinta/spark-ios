@@ -144,7 +144,7 @@ final class SwitchViewModel: ObservableObject {
     private func colorsDidUpdate(reloadColorsFromUseCase: Bool = false) {
         if reloadColorsFromUseCase {
             self.colors = self.dependencies.getColorsUseCase.execute(
-                for: self.intent,
+                intent: self.intent,
                 colors: self.theme.colors,
                 dims: self.theme.dims
             )
@@ -155,12 +155,12 @@ final class SwitchViewModel: ObservableObject {
         }
 
         self.toggleBackgroundColorToken = self.dependencies.getToggleColorUseCase.execute(
-            for: self.isOn,
+            isOn: self.isOn,
             statusAndStateColor: colors.toggleBackgroundColors
         )
         self.toggleDotBackgroundColorToken = colors.toggleDotBackgroundColor
         self.toggleDotForegroundColorToken = self.dependencies.getToggleColorUseCase.execute(
-            for: self.isOn,
+            isOn: self.isOn,
             statusAndStateColor: colors.toggleDotForegroundColors
         )
         self.textForegroundColorTokenDidUpdate()
@@ -176,7 +176,7 @@ final class SwitchViewModel: ObservableObject {
 
     private func alignmentDidUpdate() {
         let position = self.dependencies.getPositionUseCase.execute(
-            for: self.alignment,
+            alignment: self.alignment,
             spacing: self.theme.layout.spacing
         )
 
@@ -186,7 +186,7 @@ final class SwitchViewModel: ObservableObject {
 
     private func toggleStateDidUpdate() {
         let interactionState = self.dependencies.getToggleStateUseCase.execute(
-            for: self.isEnabled,
+            isEnabled: self.isEnabled,
             dims: self.theme.dims
         )
 
@@ -197,7 +197,7 @@ final class SwitchViewModel: ObservableObject {
     private func toggleDotImageDidUpdate() {
         if let images = self.images {
             self.toggleDotImage = self.dependencies.getImageUseCase.execute(
-                for: self.isOn,
+                isOn: self.isOn,
                 images: images
             )
         } else {

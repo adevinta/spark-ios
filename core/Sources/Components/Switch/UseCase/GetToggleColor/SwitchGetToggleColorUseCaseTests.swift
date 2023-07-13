@@ -48,7 +48,7 @@ private extension SwitchGetToggleColorUseCaseTests {
 
         // WHEN
         let colorToken = useCase.execute(
-            for: givenIsOn,
+            isOn: givenIsOn,
             statusAndStateColor: statusAndStateColorMock
         )
 
