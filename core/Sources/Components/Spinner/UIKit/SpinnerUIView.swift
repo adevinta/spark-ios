@@ -71,7 +71,6 @@ public final class SpinnerUIView: UIView {
         self.setContentCompressionResistancePriority(.required, for: .vertical)
         self.backgroundColor = .clear
 
-        self.animate()
         self.setupSubscriptions()
         self.accessibilityIdentifier = AccessibilityIdentifier.spinner
     }
@@ -112,6 +111,8 @@ public final class SpinnerUIView: UIView {
         spinnerArc.lineWidth = self.strokeWidth
         ctx.setStrokeColor(self.viewModel.intentColor.uiColor.cgColor)
         spinnerArc.stroke()
+
+        self.animate()
     }
 
     // MARK: - Private functions
@@ -132,6 +133,8 @@ public final class SpinnerUIView: UIView {
     }
 
     private func animate() {
+        self.layer.removeAllAnimations()
+        
         let fullRotation = CABasicAnimation(keyPath:  "transform.rotation.z")
         fullRotation.fromValue = 0
         fullRotation.toValue = 2 * CGFloat.pi

@@ -44,10 +44,10 @@ final class SpinnerViewModelTests: XCTestCase {
     func test_non_published_variables_on_init() {
         let sut = sut(intent: .error, spinnerSize: .medium)
 
-        XCTAssertEqual(sut.size, SpinnerViewModel.Constants.Size.small)
-        XCTAssertEqual(sut.intentColor.color, Color.red)
-        XCTAssertEqual(sut.duration, SpinnerViewModel.Constants.duration)
-        XCTAssertEqual(sut.strokeWidth, SpinnerViewModel.Constants.stroke)
+        XCTAssertEqual(sut.size, SpinnerViewModel.Constants.Size.medium, "Expected size to be \(SpinnerViewModel.Constants.Size.medium)")
+        XCTAssertEqual(sut.intentColor.color, Color.red, "Expected intentColor.color to be red")
+        XCTAssertEqual(sut.duration, SpinnerViewModel.Constants.duration, "Expected duration to be \(SpinnerViewModel.Constants.duration)")
+        XCTAssertEqual(sut.strokeWidth, SpinnerViewModel.Constants.stroke, "Expected strokeWidth to be \(SpinnerViewModel.Constants.stroke)")
     }
 
     func test_colors_republished_on_theme_update() {

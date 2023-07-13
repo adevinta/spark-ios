@@ -33,7 +33,7 @@ struct SpinnerComponent: View {
                 .bold()
                 .padding(.bottom, 6)
             HStack() {
-                Text("Version: ")
+                Text("Version: ").bold()
                 Button(self.version.name) {
                     self.versionSheetIsPresented = true
                 }
@@ -48,7 +48,7 @@ struct SpinnerComponent: View {
                 Spacer()
             }
             HStack() {
-                Text("Intent: ")
+                Text("Intent: ").bold()
                 Button(self.intent.name) {
                     self.isIntentPresented = true
                 }
@@ -61,7 +61,7 @@ struct SpinnerComponent: View {
                 }
             }
             HStack() {
-                Text("Spinner Size: ")
+                Text("Spinner Size: ").bold()
                 Button(self.spinnerSize.name) {
                     self.isSizesPresented = true
                 }
@@ -86,14 +86,9 @@ struct SpinnerComponent: View {
                             spinnerSize: self.spinnerSize
                 )
             } else {
-                VStack(alignment: .leading) {
-                    UISpinnerView(theme: self.theme,
-                                  intent: self.intent,
-                                  spinnerSize: self.spinnerSize)
-                    Text("*").baselineOffset(0.5) +
-                    Text("The UIKit spinner does not animate in a view representable, but works fine in a standard UIView view hierarchy.")
-                        .font(.footnote)
-                }
+                UISpinnerView(theme: self.theme,
+                              intent: self.intent,
+                              spinnerSize: self.spinnerSize)
             }
             Spacer()
         }
