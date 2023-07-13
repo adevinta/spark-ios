@@ -23,7 +23,7 @@ struct BorderView: View {
     }
 
     // MARK: - View
-    
+
     var body: some View {
         List(self.viewModel.sectionViewModels(for: self.theme), id: \.self) { sectionViewModel in
             Section(header: Text(sectionViewModel.name)) {

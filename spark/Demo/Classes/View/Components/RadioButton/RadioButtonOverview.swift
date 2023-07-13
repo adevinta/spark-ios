@@ -17,7 +17,7 @@ struct RadioButtonOverview: View {
             NavigationLink("Radio Button SwiftUI") {
                 RadioButtonGroup()
             }
-            
+
             NavigationLink("Radio Button UIKit") {
                 RadioButtonUIGroup()
             }

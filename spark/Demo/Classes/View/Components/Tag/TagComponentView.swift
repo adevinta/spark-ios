@@ -127,7 +127,7 @@ struct TagComponentView: View {
                         .text(self.content.shouldShowText ? self.viewModel.text : nil)
                         .accessibility(identifier: "MyTag1",
                                        label: "It's my first tag")
-                    
+
                 } else {
                     GeometryReader { geometry in
                         TagComponentItemsUIView(

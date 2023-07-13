@@ -23,7 +23,7 @@ struct LayoutSpacingItemView: View {
                 .font(Font.caption2)
                 .italic()
                 .foregroundColor(.gray)
-            
+
             if self.viewModel.value > 0 {
                 Rectangle()
                     .fill(.gray)

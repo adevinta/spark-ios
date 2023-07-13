@@ -149,11 +149,13 @@ final class ChipComponentUIViewController: UIViewController {
     private func chipWithComponent() -> ChipUIView {
         let icon = UIImage(imageLiteralResourceName: "alert")
 
-        let chip = ChipUIView(theme: theme,
-                          intentColor: .primary,
-                          variant: .filled,
-                          label: "Not selected",
-                          iconImage: icon)
+        let chip = ChipUIView(
+            theme: theme,
+            intentColor: .primary,
+            variant: .filled,
+            label: "Not selected",
+            iconImage: icon
+        )
         let component = UIImageView(image: UIImage.strokedCheckmark)
 
         var selected = false

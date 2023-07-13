@@ -15,7 +15,7 @@ struct ColorSectionFeedbackViewModel: ColorSectionViewModelable {
     let itemViewModels: [[ColorItemViewModel]]
 
     // MARK: - Initialization
-    
+
     init(color: ColorsFeedback) {
         self.name = "feedback"
         self.itemViewModels = [

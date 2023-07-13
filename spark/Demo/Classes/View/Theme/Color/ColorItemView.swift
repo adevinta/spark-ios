@@ -10,9 +10,9 @@ import SwiftUI
 import SparkCore
 
 struct ColorItemView: View {
-    
+
     // MARK: - Properties
-    
+
     let viewModel: ColorItemViewModel
 
     // MARK: - View
