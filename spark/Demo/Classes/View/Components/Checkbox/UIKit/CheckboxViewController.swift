@@ -242,6 +242,5 @@ final class CheckboxViewController: UIViewController {
 
 extension CheckboxViewController: CheckboxUIViewDelegate {
     func checkbox(_ checkbox: SparkCore.CheckboxUIView, didChangeSelection state: SparkCore.CheckboxSelectionState) {
-        print("checkbox", checkbox.text ?? "", "did switch to", state)
     }
 }

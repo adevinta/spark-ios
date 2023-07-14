@@ -8,7 +8,8 @@
 
 import Foundation
 
-/// The checkbox delegate informs about a new checkbox selection state.
+/// The checkbox groupe delegate informs about a changes to any of the checkbox selection state.
+// sourcery: AutoMockable
 public protocol CheckboxGroupUIViewDelegate: AnyObject {
     /// The checkbox group selection was changed.
     /// - Parameters:

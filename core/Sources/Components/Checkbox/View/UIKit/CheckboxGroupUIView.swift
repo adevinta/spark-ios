@@ -17,6 +17,7 @@ public final class CheckboxGroupUIView: UIView {
     private var subscriptions = Set<AnyCancellable>()
     private var items: [any CheckboxGroupItemProtocol]
     private var subject = PassthroughSubject<[any CheckboxGroupItemProtocol], Never>()
+
     @Published public var theme: Theme {
         didSet {
             self.spacingXLarge = self.theme.layout.spacing.xLarge
@@ -28,7 +29,7 @@ public final class CheckboxGroupUIView: UIView {
         }
     }
     private var accessibilityIdentifierPrefix: String
-    private var checkboxes: [CheckboxUIView] = []
+    private (set) var checkboxes: [CheckboxUIView] = []
     private var titleLabel: UILabel?
 
     private var titleLabelBottomConstraint: NSLayoutConstraint?

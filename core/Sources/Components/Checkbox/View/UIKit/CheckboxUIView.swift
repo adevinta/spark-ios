@@ -41,6 +41,8 @@ public final class CheckboxUIView: UIView {
         label.numberOfLines = 0
         label.setContentCompressionResistancePriority(.required,
                                                       for: .vertical)
+        label.adjustsFontForContentSizeCategory = true
+
         return label
     }()
 
@@ -50,6 +52,7 @@ public final class CheckboxUIView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
 
@@ -436,16 +439,12 @@ public final class CheckboxUIView: UIView {
         self.controlView.theme = self.theme
         self.controlView.colors = self.colors
 
-        self.textLabel.adjustsFontForContentSizeCategory = true
         if self.attributedText == nil {
-            let font = self.theme.typography.body1.uiFont
-            self.textLabel.font = font
+            self.textLabel.font = self.theme.typography.body1.uiFont
             self.textLabel.textColor = self.colors.textColor.uiColor
         }
 
-        let captionFont = self.theme.typography.caption.uiFont
-        self.supplementaryTextLabel.font = captionFont
-        self.supplementaryTextLabel.adjustsFontForContentSizeCategory = true
+        self.supplementaryTextLabel.font = self.theme.typography.caption.uiFont
         self.supplementaryTextLabel.textColor = self.colors.checkboxTintColor.uiColor
     }
 
@@ -469,7 +468,7 @@ public final class CheckboxUIView: UIView {
         self.supplementaryTextLabel.alpha = opacity
     }
 
-    @IBAction private func actionTapped(sender: UIButton) {
+    @IBAction func actionTapped(sender: UIButton) {
         self.isPressed = false
 
         guard self.interactionEnabled else { return }
