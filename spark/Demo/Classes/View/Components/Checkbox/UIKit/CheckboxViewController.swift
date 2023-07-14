@@ -11,8 +11,6 @@ import Spark
 import SparkCore
 import SwiftUI
 
-// swiftlint: disable no_debugging_method
-
 // MARK: - SwiftUI-wrapper
 
 struct CheckboxUIViewControllerBridge: UIViewControllerRepresentable {
@@ -144,7 +142,8 @@ final class CheckboxViewController: UIViewController {
         checkbox.translatesAutoresizingMaskIntoConstraints = false
         checkbox.publisher.sink { [weak self] in
             self?.checkboxValue1 = $0
-        }.store(in: &self.cancellables)
+        }
+        .store(in: &self.cancellables)
 
         view.addSubview(checkbox)
         checkboxes.append(checkbox)
@@ -160,7 +159,8 @@ final class CheckboxViewController: UIViewController {
         checkbox2.translatesAutoresizingMaskIntoConstraints = false
         checkbox2.publisher.sink { [weak self] in
             self?.checkboxValue2 = $0
-        }.store(in: &self.cancellables)
+        }
+        .store(in: &self.cancellables)
         view.addSubview(checkbox2)
         checkboxes.append(checkbox2)
 
@@ -176,7 +176,8 @@ final class CheckboxViewController: UIViewController {
         errorCheckbox.translatesAutoresizingMaskIntoConstraints = false
         errorCheckbox.publisher.sink { [weak self] in
             self?.checkboxValue3 = $0
-        }.store(in: &self.cancellables)
+        }
+        .store(in: &self.cancellables)
 
         view.addSubview(errorCheckbox)
         checkboxes.append(errorCheckbox)
@@ -192,7 +193,8 @@ final class CheckboxViewController: UIViewController {
         successCheckbox.translatesAutoresizingMaskIntoConstraints = false
         successCheckbox.publisher.sink { [weak self] in
             self?.checkboxValue4 = $0
-        }.store(in: &self.cancellables)
+        }
+        .store(in: &self.cancellables)
 
         view.addSubview(successCheckbox)
         checkboxes.append(successCheckbox)
@@ -208,7 +210,8 @@ final class CheckboxViewController: UIViewController {
         attributedCheckbox.attributedText = self.attributedCheckboxLabel
         attributedCheckbox.publisher.sink { [weak self] in
             self?.checkboxValue4 = $0
-        }.store(in: &self.cancellables)
+        }
+        .store(in: &self.cancellables)
 
         view.addSubview(attributedCheckbox)
         checkboxes.append(attributedCheckbox)

@@ -202,7 +202,8 @@ final class CheckboxGroupViewController: UIViewController {
         groupView.translatesAutoresizingMaskIntoConstraints = false
         groupView.publisher.sink { [weak self] in
             self?.items = $0
-        }.store(in: &self.cancellables)
+        }
+        .store(in: &self.cancellables)
 
         view.addSubview(groupView)
 
