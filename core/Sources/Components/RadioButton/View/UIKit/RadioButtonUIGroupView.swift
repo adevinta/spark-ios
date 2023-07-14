@@ -55,12 +55,14 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }()
 
     // MARK: - Public Properties
+    /// All the items `RadioButtonUIItem` of the radio button group
     public var items: [RadioButtonUIItem<ID>] {
         didSet {
             self.didUpdateItems()
         }
     }
 
+    /// An optional title of the radio button group
     public var title: String? {
         didSet {
             if self.setTextOf(label: self.titleLabel,
@@ -72,6 +74,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
+    /// An optional supplementary text of the radio button group rendered at the bottom of the group. This is NOT well defined for the states `enabled` and disabled.
     public var supplementaryText: String? {
         didSet {
             if self.setTextOf(label: self.supplementaryLabel,
@@ -83,6 +86,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
+    /// The current state `RadioButtonGroupState` of the items within the group, e.g. `enabled`.
     public var state: RadioButtonGroupState {
         get {
             return self.viewModel.state
@@ -116,7 +120,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
-    /// The label position according to the toggle, either `left` or `right`. The default value is `.left`
+    /// The label position `RadioButtonLabelPosition` according to the toggle, either `left` or `right`. The default value is `.left`
     public var radioButtonLabelPosition: RadioButtonLabelPosition {
         didSet {
             guard radioButtonLabelPosition != oldValue else { return }
@@ -128,7 +132,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
-    /// The group layout of the radio buttons, either `horizontal` or `vertical`. The default is `vertical`.
+    /// The group layout `RadioButtonGroupLayout` of the radio buttons, either `horizontal` or `vertical`. The default is `vertical`.
     public var groupLayout: RadioButtonGroupLayout {
         didSet {
             guard groupLayout != oldValue else { return }
@@ -144,6 +148,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         return self.valueSubject
     }
 
+    /// Set the accessibilityIdentifier. This identifier will be used as the accessibility identifier prefix of each radio button item, the suffix of that accessibility identifier being the index of the item within it's array.
     public override var accessibilityIdentifier: String? {
         didSet {
             guard let identifier = accessibilityIdentifier else { return }
@@ -159,7 +164,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     /// - theme: The current theme.
     /// - title: The title of the radio button group. This is optional, if it's not given, no title will be shown.
     /// - selectedID: The current selected value of the radio button group.
-    /// - items: A list of `RadioButtonItem` which represent each item in the radio button group.
+    /// - items: A list of `RadioButtonUIItem` which represent each item in the radio button group.
     /// - radioButtonLabelPosition: The position of the label in each radio button item according to the toggle. The default value is, that the label is to the `right` of the toggle.
     /// - groupLayout: The layout of the items within the group. These can be `horizontal` or `vertical`. The defalt is `vertical`.
     /// - state: The state of the radiobutton group, see `RadioButtonGroupState`

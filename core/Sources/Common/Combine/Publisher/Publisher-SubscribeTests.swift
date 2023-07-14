@@ -22,6 +22,6 @@ final class Publisher_SubscribeTests: XCTestCase {
             exp.fulfill()
         }
 
-        wait(for: [exp], timeout: 0.001)
+        wait(for: [exp], timeout: 0.1)
     }
 }

@@ -89,8 +89,10 @@ public final class CheckboxUIView: UIView {
     }
 
     private var subject: PassthroughSubject<CheckboxSelectionState, Never>
+
     // MARK: - Public properties.
 
+    /// Changes to the checbox state are published to the publisher.
     public var publisher: some Publisher<CheckboxSelectionState, Never> {
         return self.subject
     }

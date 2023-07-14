@@ -40,8 +40,10 @@ public final class CheckboxGroupUIView: UIView {
 
     // MARK: - Public properties.
 
+    /// The delegate CheckboxGroupUIViewDelegate` which may be set to retrieve changes to the checkboxes.
     public weak var delegate: CheckboxGroupUIViewDelegate?
 
+    /// Changes to the checkboxgroup are published to the publisher.
     public var publisher: some Publisher<[any CheckboxGroupItemProtocol], Never> {
         return self.subject
     }

@@ -24,9 +24,10 @@ private enum Constants {
 /// When the radio button is selected, it will change the binding value.
 public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: UIView {
 
-    // MARK: Injected Properties
+    // MARK: - Injected Properties
     private let viewModel: RadioButtonViewModel<ID>
 
+    // MARK: - Public Properties
     /// The general theme
     public var theme: Theme {
         get {
@@ -57,6 +58,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
+    /// The label position, right of left of the toggle
     public var labelPosition: RadioButtonLabelPosition {
         get {
             return self.viewModel.labelPosition
@@ -66,7 +68,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
-    // MARK: Private Properties
+    // MARK: - Private Properties
     @ScaledUIMetric private var toggleSize = Constants.toggleViewHeight
     @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var textLabelTopSpacing = Constants.textLabelTopSpacing
@@ -100,7 +102,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     private var toggleViewTrailingConstraint: NSLayoutConstraint?
     private var labelPositionConstraints: [NSLayoutConstraint] = []
 
-    //  MARK: - Initialization
+    // MARK: - Initialization
 
     /// The radio button component takes a theme, an id, a label and a binding
     ///
@@ -143,7 +145,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Public Functions
+    // MARK: - Public Functions
     public func toggleNeedsRedisplay() {
         self.viewModel.updateColors()
         self.updateColors(self.viewModel.colors)
@@ -170,7 +172,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
 
-    // MARK: - Private functions
+    // MARK: - Private Functions
 
     private func setupSubscriptions() {
 
@@ -366,7 +368,7 @@ private extension UILabel {
     }
 }
 
-// MARK: - Label priorities
+// MARK: - Label Priorities
 public extension RadioButtonUIView {
     func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
                                                       for axis: NSLayoutConstraint.Axis) {
