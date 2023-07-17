@@ -11,16 +11,6 @@ import UIKit
 
 public final class ChipUIView: UIControl {
 
-    // MARK: - Constants
-
-    private enum Constants {
-        static let imageSize: CGFloat = 13.33
-        static let height: CGFloat = 32
-        static let borderWidth: CGFloat = 1
-        static let dashLength: CGFloat = 1.9
-        static let touchAreaTolerance: CGFloat = 100
-    }
-
     //MARK: - Public properties
     /// An optional icon on the Chip. The icon is always rendered to the left of the text
     public var icon: UIImage? {
@@ -137,10 +127,10 @@ public final class ChipUIView: UIControl {
 
     private var dashBorder: CAShapeLayer?
 
-    @ScaledUIMetric private var imageSize = Constants.imageSize
-    @ScaledUIMetric private var height = Constants.height
-    @ScaledUIMetric private var borderWidth = Constants.borderWidth
-    @ScaledUIMetric private var dashLength = Constants.dashLength
+    @ScaledUIMetric private var imageSize = ChipConstants.imageSize
+    @ScaledUIMetric private var height = ChipConstants.height
+    @ScaledUIMetric private var borderWidth = ChipConstants.borderWidth
+    @ScaledUIMetric private var dashLength = ChipConstants.dashLength
     @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var padding: CGFloat
     @ScaledUIMetric private var borderRadius: CGFloat
