@@ -129,10 +129,7 @@ final class CheckboxViewController: UIViewController {
             text: "Hello world!",
             checkedImage: checkedImage,
             state: .enabled,
-            selectionState: .init(
-                get: { return self.checkboxValue1 },
-                set: { self.checkboxValue1 = $0 }
-            ),
+            selectionState: self.checkboxValue1,
             checkboxPosition: .left
         )
         view.addSubview(checkbox)
@@ -143,10 +140,7 @@ final class CheckboxViewController: UIViewController {
             text: "Second checkbox! This is a very very long descriptive text.",
             checkedImage: checkedImage,
             state: .disabled,
-            selectionState: .init(
-                get: { return self.checkboxValue2},
-                set: { self.checkboxValue2 = $0 }
-            ),
+            selectionState: self.checkboxValue2,
             checkboxPosition: .left
         )
         view.addSubview(checkbox2)
@@ -158,10 +152,7 @@ final class CheckboxViewController: UIViewController {
             text: "Error checkbox",
             checkedImage: checkedImage,
             state: .error(message: "Error message"),
-            selectionState: .init(
-                get: { return self.checkboxValue3 },
-                set: { self.checkboxValue3 = $0 }
-            ),
+            selectionState: self.checkboxValue3,
             checkboxPosition: .left
         )
         view.addSubview(errorCheckbox)
@@ -172,10 +163,7 @@ final class CheckboxViewController: UIViewController {
             text: "Right checkbox",
             checkedImage: checkedImage,
             state: .success(message: "Success message"),
-            selectionState: .init(
-                get: { return self.checkboxValue4 },
-                set: { self.checkboxValue4 = $0 }
-            ),
+            selectionState: self.checkboxValue4,
             checkboxPosition: .right
         )
         view.addSubview(successCheckbox)
@@ -192,10 +180,7 @@ final class CheckboxViewController: UIViewController {
             ),
             checkedImage: checkedImage,
             state: .success(message: "Success message"),
-            selectionState: .init(
-                get: { return self.checkboxValue4 },
-                set: { self.checkboxValue4 = $0 }
-            ),
+            selectionState: self.checkboxValue4,
             checkboxPosition: .right
         )
         view.addSubview(attributedCheckbox)
@@ -230,6 +215,5 @@ final class CheckboxViewController: UIViewController {
 
 extension CheckboxViewController: CheckboxUIViewDelegate {
     func checkbox(_ checkbox: SparkCore.CheckboxUIView, didChangeSelection state: SparkCore.CheckboxSelectionState) {
-        print("checkbox", checkbox.text, "did switch to", state)
     }
 }

@@ -190,14 +190,7 @@ final class CheckboxGroupViewController: UIViewController {
 
         let groupView = CheckboxGroupUIView(
             checkedImage: checkedImage,
-            items: .init(
-                get: { [weak self] in
-                    self?.items ?? []
-                },
-                set: { [weak self] in
-                    self?.items = $0
-                }
-            ),
+            items: self.items,
             layout: self.checkboxGroupLayout,
             checkboxPosition: .left,
             theme: theme,

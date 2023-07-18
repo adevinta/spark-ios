@@ -28,14 +28,7 @@ final class CheckboxGroupUIViewTests: UIKitComponentTestCase {
 
         let groupView = CheckboxGroupUIView(
             checkedImage: checkedImage,
-            items: .init(
-                get: { [weak self] in
-                    self?.items ?? []
-                },
-                set: { [weak self] in
-                    self?.items = $0
-                }
-            ),
+            items: self.items,
             layout: .vertical,
             checkboxPosition: position,
             theme: theme,

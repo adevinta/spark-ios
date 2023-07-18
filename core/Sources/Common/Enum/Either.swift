@@ -35,3 +35,13 @@ extension Either {
         }
     }
 }
+
+extension Either {
+    static func of(_ left: Left?, or right: Right) -> Either {
+        if let left = left {
+            return .left(left)
+        } else {
+            return .right(right)
+        }
+    }
+}
