@@ -38,7 +38,7 @@ final class ChipViewModelTests: TestCase {
 
         self.sut = ChipViewModel(theme: theme,
                                  variant: .filled,
-                                 intentColor: .primary,
+                                 intent: .primary,
                                  useCase: useCase)
     }
 
@@ -92,7 +92,7 @@ final class ChipViewModelTests: TestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        self.sut.set(intentColor: .alert)
+        self.sut.set(intent: .alert)
 
         // Then
         wait(for: [updateExpectation], timeout: 0.1)

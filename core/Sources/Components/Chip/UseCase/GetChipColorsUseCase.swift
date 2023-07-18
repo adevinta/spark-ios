@@ -22,7 +22,7 @@ protocol GetChipColorsUseCasable {
     ///
     /// Returns:
     ///       ChipColors: all the colors used for the chip
-    func execute(theme: Theme, variant: ChipVariant, intent: ChipIntentColor) -> ChipColors
+    func execute(theme: Theme, variant: ChipVariant, intent: ChipIntent) -> ChipColors
 }
 
 /// GetChipColorsUseCase: A use case to calculate the colors of a chip depending on the theme, variand and intent
@@ -48,7 +48,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
     /// - theme: The current theme to be used
     /// - variant: The variant of the chip, whether it's filled, outlined, etc.
     /// - intent: The intent color of the chip, e.g. primary, secondary
-    func execute(theme: Theme, variant: ChipVariant, intent: ChipIntentColor) -> ChipColors {
+    func execute(theme: Theme, variant: ChipVariant, intent: ChipIntent) -> ChipColors {
         let intentColors = intentColorsUseCase.execute(colors: theme.colors, intentColor: intent)
 
         switch variant {

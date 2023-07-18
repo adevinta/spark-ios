@@ -76,7 +76,7 @@ private struct Tester {
                        "Wrong call number on execute on getIntentColorsUseCase")
         XCTAssertEqual(getIntentColorsUseCaseArgs?.intentColor,
                        givenState,
-                       "Wrong intentColor parameter on execute on getIntentColorsUseCase")
+                       "Wrong intent parameter on execute on getIntentColorsUseCase")
         XCTAssertIdentical(getIntentColorsUseCaseArgs?.colors as? ColorsGeneratedMock,
                            givenThemeColors,
                            "Wrong colors parameter on execute on getIntentColorsUseCase")

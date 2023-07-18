@@ -45,7 +45,7 @@ final class SpinnerViewModelTests: XCTestCase {
         let sut = sut(intent: .error, spinnerSize: .medium)
 
         XCTAssertEqual(sut.size, SpinnerViewModel.Constants.Size.medium, "Expected size to be \(SpinnerViewModel.Constants.Size.medium)")
-        XCTAssertEqual(sut.intentColor.color, Color.red, "Expected intentColor.color to be red")
+        XCTAssertEqual(sut.intentColor.color, Color.red, "Expected intent.color to be red")
         XCTAssertEqual(sut.duration, SpinnerViewModel.Constants.duration, "Expected duration to be \(SpinnerViewModel.Constants.duration)")
         XCTAssertEqual(sut.strokeWidth, SpinnerViewModel.Constants.stroke, "Expected strokeWidth to be \(SpinnerViewModel.Constants.stroke)")
     }
