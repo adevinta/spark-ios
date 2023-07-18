@@ -34,7 +34,7 @@ targetTemplates:
       gatherCoverageData: true
 
     postCompileScripts:
-      - script: swiftlint
+      - script: ./scripts/swiftlint.sh
         name: SwiftLint
 
   SparkCoreTestsTemplate:
