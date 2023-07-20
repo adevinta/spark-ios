@@ -17,7 +17,6 @@ struct IconComponentUIView: View {
         IconUIViewControllerReperesentation()
             .navigationBarTitle(Text("UIKit Icon"))
     }
-    
 }
 
 struct IconUIViewControllerReperesentation: UIViewControllerRepresentable {
@@ -31,7 +30,7 @@ struct IconUIViewControllerReperesentation: UIViewControllerRepresentable {
 }
 
 final class IconComponentUIViewController: UIViewController {
-    
+
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
