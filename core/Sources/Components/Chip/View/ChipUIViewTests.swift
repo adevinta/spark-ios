@@ -15,10 +15,10 @@ final class ChipUIViewTests: UIKitComponentTestCase {
 
     // MARK: Tests
     func test_variants_without_icon() {
-        for intent in ChipIntentColor.allCases {
+        for intent in ChipIntent.allCases {
             for variant in ChipVariant.allCases {
                 let chipView = ChipUIView(theme: SparkTheme.shared,
-                                          intentColor: intent,
+                                          intent: intent,
                                           variant: variant,
                                           label: "Label")
 
@@ -31,7 +31,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
         for variant in ChipVariant.allCases {
             let icon: UIImage = UIImage(systemName: "pencil.circle")!
             let chipView = ChipUIView(theme: SparkTheme.shared,
-                                      intentColor: .primary,
+                                      intent: .primary,
                                       variant: variant,
                                       iconImage: icon)
 
@@ -43,7 +43,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
         for variant in ChipVariant.allCases {
             let icon: UIImage = UIImage(systemName: "pencil.circle")!
             let chipView = ChipUIView(theme: SparkTheme.shared,
-                                      intentColor: .secondary,
+                                      intent: .secondary,
                                       variant: variant,
                                       label: "Label",
                                       iconImage: icon)
@@ -57,7 +57,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
             let icon = UIImage(systemName: "pencil.circle")!
 
             let chipView = ChipUIView(theme: SparkTheme.shared,
-                                      intentColor: .info,
+                                      intent: .info,
                                       variant: variant,
                                       label: "Label",
                                       iconImage: icon)

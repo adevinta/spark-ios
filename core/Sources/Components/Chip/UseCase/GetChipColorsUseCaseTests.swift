@@ -49,7 +49,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
                 foreground: .red))
 
         // When
-        for intentColor in [ChipIntentColor.primary, .secondary, .alert, .danger, .info, .neutral, .success] {
+        for intentColor in [ChipIntent.primary, .secondary, .alert, .danger, .info, .neutral, .success] {
             let given = sut.execute(theme: theme, variant: .filled, intent: intentColor)
 
             // Then
@@ -79,7 +79,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
 
         for variant in [ChipVariant.outlined, .dashed] {
             // When
-            for intentColor in [ChipIntentColor.primary, .secondary, .alert, .danger, .info, .neutral, .success] {
+            for intentColor in [ChipIntent.primary, .secondary, .alert, .danger, .info, .neutral, .success] {
 
                 let given = sut.execute(theme: theme, variant: variant, intent: intentColor)
 
@@ -110,7 +110,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
                 foreground: .purple))
 
         // When
-        for intentColor in [ChipIntentColor.primary, .secondary, .alert, .danger, .info, .neutral, .success] {
+        for intentColor in [ChipIntent.primary, .secondary, .alert, .danger, .info, .neutral, .success] {
 
             let given = sut.execute(theme: theme, variant: .tinted, intent: intentColor)
 

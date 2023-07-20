@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol GetChipIntentColorsUseCasable {
-    func execute(colors: Colors, intentColor: ChipIntentColor) -> ChipIntentColors
+    func execute(colors: Colors, intentColor: ChipIntent) -> ChipIntentColors
 }
 
 /// GetChipIntentColorsUseCase: A use case to calculate the colors that are needed by a chip
@@ -20,10 +20,10 @@ struct GetChipIntentColorsUseCase: GetChipIntentColorsUseCasable {
     ///
     /// Parameters:
     /// - colors: The available color palette
-    /// - intentColor: The intent of the chip
+    /// - intent: The intent of the chip
     ///
     /// Returns: ChipIntentColors
-    func execute(colors: Colors, intentColor: ChipIntentColor) -> ChipIntentColors {
+    func execute(colors: Colors, intentColor: ChipIntent) -> ChipIntentColors {
         switch intentColor {
         case .primary:
             return .init(principal: colors.primary.primary,

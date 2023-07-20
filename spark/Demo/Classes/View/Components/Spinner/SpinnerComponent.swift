@@ -102,15 +102,3 @@ struct SpinnerComponent_Previews: PreviewProvider {
         SpinnerComponent()
     }
 }
-
-private extension CaseIterable {
-    var name: String {
-        return "\(self)".capitalizingFirstLetter
-    }
-}
-
-extension String {
-    var capitalizingFirstLetter: String {
-      return prefix(1).uppercased() + self.lowercased().dropFirst()
-    }
-}

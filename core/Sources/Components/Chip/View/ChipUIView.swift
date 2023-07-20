@@ -25,6 +25,11 @@ public final class ChipUIView: UIView {
     public var icon: UIImage? {
         set {
             self.imageView.image = newValue
+            if (newValue != nil) {
+                self.stackView.insertArrangedSubview(self.imageView, at: 0)
+            } else {
+                self.stackView.removeArrangedSubview(self.imageView)
+            }
         }
         get {
             return self.imageView.image
@@ -35,6 +40,11 @@ public final class ChipUIView: UIView {
     public var text: String? {
         set {
             self.textLabel.text = newValue
+            if (newValue != nil) {
+                self.stackView.addArrangedSubview(self.textLabel)
+            } else {
+                self.stackView.removeArrangedSubview(self.textLabel)
+            }
         }
         get {
             return self.textLabel.text
@@ -49,12 +59,12 @@ public final class ChipUIView: UIView {
     }
 
     /// The intent of the chip.
-    public var intentColor: ChipIntentColor {
+    public var intent: ChipIntent {
         set {
-            self.viewModel.set(intentColor: newValue)
+            self.viewModel.set(intent: newValue)
         }
         get {
-            return self.viewModel.intentColor
+            return self.viewModel.intent
         }
     }
 
@@ -83,6 +93,9 @@ public final class ChipUIView: UIView {
     public var component: UIView? {
         willSet {
             self.component?.removeFromSuperview()
+            if let component = self.component {
+                self.stackView.removeArrangedSubview(component)
+            }
         }
         didSet {
             if let component = self.component {
@@ -107,6 +120,7 @@ public final class ChipUIView: UIView {
     private let textLabel: UILabel = {
         let label = UILabel()
         label.isAccessibilityElement = false
+        label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 1
@@ -155,61 +169,61 @@ public final class ChipUIView: UIView {
     ///
     /// Parameters:
     /// - theme: The theme.
-    /// - intentColor: The intent of the chip, e.g. primary, secondary
+    /// - intent: The intent of the chip, e.g. primary, secondary
     /// - variant: The chip variant, e.g. outlined, filled
     /// - iconImage: An icon
     public convenience init(theme: Theme,
-                            intentColor: ChipIntentColor,
+                            intent: ChipIntent,
                             variant: ChipVariant,
                             iconImage: UIImage) {
-        self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: nil, optionalIconImage: iconImage)
+        self.init(theme: theme, intent: intent, variant: variant, optionalLabel: nil, optionalIconImage: iconImage)
     }
 
     /// Initializer of a chip containing only a text.
     ///
     /// Parameters:
     /// - theme: The theme.
-    /// - intentColor: The intent of the chip, e.g. primary, secondary
+    /// - intent: The intent of the chip, e.g. primary, secondary
     /// - variant: The chip variant, e.g. outlined, filled
     /// - text: The text label
     public convenience init(theme: Theme,
-                            intentColor: ChipIntentColor,
+                            intent: ChipIntent,
                             variant: ChipVariant,
                             label: String) {
-        self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: label, optionalIconImage: nil)
+        self.init(theme: theme, intent: intent, variant: variant, optionalLabel: label, optionalIconImage: nil)
     }
 
     /// Initializer of a chip containing both a text and an icon.
     ///
     /// Parameters:
     /// - theme: The theme.
-    /// - intentColor: The intent of the chip, e.g. primary, secondary
+    /// - intent: The intent of the chip, e.g. primary, secondary
     /// - variant: The chip variant, e.g. outlined, filled
     /// - text: The text label
     /// - iconImage: An icon
     public convenience init(theme: Theme,
-                            intentColor: ChipIntentColor,
+                            intent: ChipIntent,
                             variant: ChipVariant,
                             label: String,
                             iconImage: UIImage) {
-        self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: label , optionalIconImage: iconImage)
+        self.init(theme: theme, intent: intent, variant: variant, optionalLabel: label , optionalIconImage: iconImage)
     }
 
     init(theme: Theme,
-         intentColor: ChipIntentColor,
+         intent: ChipIntent,
          variant: ChipVariant,
          optionalLabel: String?,
          optionalIconImage: UIImage?) {
 
-        self.viewModel = ChipViewModel(theme: theme, variant: variant, intentColor: intentColor)
+        self.viewModel = ChipViewModel(theme: theme, variant: variant, intent: intent)
         self.spacing = self.viewModel.spacing
         self.padding = self.viewModel.padding
         self.borderRadius = self.viewModel.borderRadius
 
         super.init(frame: CGRect.zero)
 
-        self.text = optionalLabel
         self.icon = optionalIconImage
+        self.text = optionalLabel
         self.textLabel.sizeToFit()
 
         self.setupView()
@@ -239,6 +253,8 @@ public final class ChipUIView: UIView {
 
     public override func layoutSubviews() {
         super.layoutSubviews()
+        self.removeDashedBorder()
+
         if self.viewModel.isBorderDashed {
             self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
         }
@@ -250,6 +266,8 @@ public final class ChipUIView: UIView {
         self.stackView.backgroundColor = chipColors.background.uiColor
         self.textLabel.textColor = chipColors.foreground.uiColor
         self.imageView.tintColor = chipColors.foreground.uiColor
+
+        self.removeDashedBorder()
 
         if self.viewModel.isBorderDashed {
             self.addDashedBorder(borderColor: chipColors.border)
@@ -284,9 +302,6 @@ public final class ChipUIView: UIView {
         self.updateSpacing()
         self.updateLayoutMargins()
 
-        self.stackView.addArrangedSubview(self.imageView)
-        self.stackView.addArrangedSubview(self.textLabel)
-
         self.setupConstraints()
         self.setChipColors(self.viewModel.colors.default)
         self.setupSubscriptions()
@@ -302,14 +317,19 @@ public final class ChipUIView: UIView {
 
     private func updateBorder() {
         self.stackView.layer.cornerRadius = self.borderRadius
+        self.removeDashedBorder()
+        self.stackView.layer.borderWidth = 0
 
         if self.viewModel.isBorderDashed {
             self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
         } else if self.viewModel.isBordered {
             self.stackView.layer.borderWidth = self.borderWidth
-        } else {
-            self.stackView.layer.borderWidth = 0
         }
+    }
+
+    private func removeDashedBorder() {
+        self.dashBorder?.removeFromSuperlayer()
+        self.dashBorder = nil
     }
 
     private func updateFont() {
@@ -352,49 +372,34 @@ public final class ChipUIView: UIView {
     }
 
     private func setupSubscriptions() {
-        self.subscribeTo(self.viewModel.$colors) { [weak self] colors in
+        self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
             self?.setChipColors(colors.default)
         }
 
-        self.subscribeTo(self.viewModel.$spacing) { [weak self] spacing in
+        self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
             guard let self else { return }
             self.spacing = spacing
             self.updateSpacing()
         }
 
-        self.subscribeTo(self.viewModel.$padding) { [weak self] padding in
+        self.viewModel.$padding.subscribe(in: &self.subscriptions) { [weak self] padding in
             guard let self else { return }
             self.padding = padding
             self.updateLayoutMargins()
         }
         
-        self.subscribeTo(self.viewModel.$borderRadius) { [weak self] borderRadius in
+        self.viewModel.$borderRadius.subscribe(in: &self.subscriptions) { [weak self] borderRadius in
             guard let self else { return }
             self.borderRadius = borderRadius
             self.updateBorder()
         }
 
-        self.subscribeTo(self.viewModel.$font) { [weak self] _ in
+        self.viewModel.$font.subscribe(in: &self.subscriptions) { [weak self] _ in
             self?.updateFont()
         }
     }
 
-    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void) {
-        publisher
-            .receive(on: RunLoop.main)
-            .sink { value in
-                action(value)
-            }.store(in: &self.subscriptions)
-    }
-
-    private func removeDashedBorder() {
-        self.dashBorder?.removeFromSuperlayer()
-        self.dashBorder = nil
-    }
-
     private func addDashedBorder(borderColor: any ColorToken) {
-        self.dashBorder?.removeFromSuperlayer()
-
         let dashBorder = CAShapeLayer()
         let bounds = self.stackView.bounds
         dashBorder.lineWidth = self.borderWidth

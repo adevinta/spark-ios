@@ -13,7 +13,7 @@ class ChipViewModel: ObservableObject {
     // MARK: - Properties Injected
     private (set) var theme: Theme
     private (set) var variant: ChipVariant
-    private (set) var intentColor: ChipIntentColor
+    private (set) var intent: ChipIntent
     private let useCase: GetChipColorsUseCasable
 
     // MARK: - Published Properties
@@ -32,16 +32,16 @@ class ChipViewModel: ObservableObject {
     }
 
     // MARK: - Initializers
-    convenience init(theme: Theme, variant: ChipVariant, intentColor: ChipIntentColor) {
-        self.init(theme: theme, variant: variant, intentColor: intentColor, useCase: GetChipColorsUseCase())
+    convenience init(theme: Theme, variant: ChipVariant, intent: ChipIntent) {
+        self.init(theme: theme, variant: variant, intent: intent, useCase: GetChipColorsUseCase())
     }
 
-    init(theme: Theme, variant: ChipVariant, intentColor: ChipIntentColor, useCase: GetChipColorsUseCasable) {
+    init(theme: Theme, variant: ChipVariant, intent: ChipIntent, useCase: GetChipColorsUseCasable) {
         self.theme = theme
         self.variant = variant
-        self.intentColor = intentColor
+        self.intent = intent
         self.useCase = useCase
-        self.colors = useCase.execute(theme: theme, variant: variant, intent: intentColor)
+        self.colors = useCase.execute(theme: theme, variant: variant, intent: intent)
         self.spacing = self.theme.layout.spacing.small
         self.padding = self.theme.layout.spacing.medium
         self.borderRadius = self.theme.border.radius.medium
@@ -60,16 +60,16 @@ class ChipViewModel: ObservableObject {
         }
     }
 
-    func set(intentColor: ChipIntentColor) {
-        if self.intentColor != intentColor {
-            self.intentColor = intentColor
+    func set(intent: ChipIntent) {
+        if self.intent != intent {
+            self.intent = intent
             self.intentColorsDidUpdate()
         }
     }
 
     // MARK: - Private functions
     private func updateColors() {
-        self.colors = self.useCase.execute(theme: self.theme, variant: self.variant, intent: self.intentColor)
+        self.colors = self.useCase.execute(theme: self.theme, variant: self.variant, intent: self.intent)
     }
 
     private func themeDidUpdate() {
