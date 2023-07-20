@@ -16,40 +16,40 @@ public final class IconUIView: UIView {
     /// UIImage of the icon.
     public var icon: UIImage? {
         get {
-            return imageView.image
+            return self.imageView.image
         }
         set {
-            imageView.image = newValue
+            self.imageView.image = newValue
         }
     }
 
     /// Used theme for the icon.
     public var theme: Theme {
         get {
-            return viewModel.theme
+            return self.viewModel.theme
         }
         set {
-            viewModel.set(theme: newValue)
+            self.viewModel.set(theme: newValue)
         }
     }
 
     /// Intent of icon.
     public var intent: IconIntent {
         get {
-            return viewModel.intent
+            return self.viewModel.intent
         }
         set {
-            viewModel.set(intent: newValue)
+            self.viewModel.set(intent: newValue)
         }
     }
 
     /// Size of icon.
     public var size: IconSize {
         get {
-            return viewModel.size
+            return self.viewModel.size
         }
         set {
-            viewModel.set(size: newValue)
+            self.viewModel.set(size: newValue)
         }
     }
 
@@ -80,13 +80,13 @@ public final class IconUIView: UIView {
         intent: IconIntent,
         size: IconSize
     ) {
-        viewModel = IconViewModel(theme: theme, intent: intent, size: size)
+        self.viewModel = IconViewModel(theme: theme, intent: intent, size: size)
 
         super.init(frame: .zero)
 
-        icon = iconImage
-        setupView()
-        setupSubscriptions()
+        self.icon = iconImage
+        self.setupView()
+        self.setupSubscriptions()
     }
 
     required init?(coder: NSCoder) {
@@ -96,58 +96,52 @@ public final class IconUIView: UIView {
     // MARK: - Private funcs
 
     private func setupView() {
-        translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .clear
-        accessibilityIdentifier = IconAccessibilityIdentifier.text
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.backgroundColor = .clear
+        self.accessibilityIdentifier = IconAccessibilityIdentifier.text
 
-        addSubview(imageView)
-        imageView.tintColor = viewModel.color.foreground.uiColor
-        imageView.layoutMargins = UIEdgeInsets(vertical: .zero, horizontal: .zero)
+        self.addSubview(imageView)
+        self.imageView.tintColor = viewModel.color.foreground.uiColor
+        self.imageView.layoutMargins = UIEdgeInsets(vertical: .zero, horizontal: .zero)
 
-        iconHeightAnchor = imageView.heightAnchor.constraint(equalToConstant: size.value)
-        iconWidthAnchor = imageView.widthAnchor.constraint(equalToConstant: size.value)
-        iconHeightAnchor?.isActive = true
-        iconWidthAnchor?.isActive = true
+        self.iconHeightAnchor = imageView.heightAnchor.constraint(equalToConstant: size.value)
+        self.iconWidthAnchor = imageView.widthAnchor.constraint(equalToConstant: size.value)
+        self.iconHeightAnchor?.isActive = true
+        self.iconWidthAnchor?.isActive = true
 
         let anchorConstraint = [
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.leftAnchor.constraint(equalTo: leftAnchor),
-            imageView.rightAnchor.constraint(equalTo: rightAnchor),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            self.imageView.topAnchor.constraint(equalTo: topAnchor),
+            self.imageView.leftAnchor.constraint(equalTo: leftAnchor),
+            self.imageView.rightAnchor.constraint(equalTo: rightAnchor),
+            self.imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
 
         NSLayoutConstraint.activate(anchorConstraint)
     }
 
     private func setupSubscriptions() {
-        viewModel.$color
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] color in
-                self?.setIconColor(color)
-            }
-            .store(in: &cancellables)
+        self.viewModel.$color.subscribe(in: &self.cancellables) { [weak self] color in
+            self?.setIconColor(color)
+        }
 
-        viewModel.$size
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] size in
-                self?.setIconSize(size)
-            }
-            .store(in: &cancellables)
+        self.viewModel.$size.subscribe(in: &self.cancellables) { [weak self] size in
+            self?.setIconSize(size)
+        }
     }
 
     private func setIconColor(_ iconColor: IconColor) {
-        imageView.tintColor = iconColor.foreground.uiColor
+        self.imageView.tintColor = iconColor.foreground.uiColor
     }
 
     private func setIconSize(_ iconSize: IconSize) {
-        iconHeightAnchor?.isActive = false
-        iconWidthAnchor?.isActive = false
+        self.iconHeightAnchor?.isActive = false
+        self.iconWidthAnchor?.isActive = false
 
-        iconHeightAnchor = imageView.heightAnchor.constraint(equalToConstant: iconSize.value)
-        iconWidthAnchor = imageView.widthAnchor.constraint(equalToConstant: iconSize.value)
+        self.iconHeightAnchor = imageView.heightAnchor.constraint(equalToConstant: iconSize.value)
+        self.iconWidthAnchor = imageView.widthAnchor.constraint(equalToConstant: iconSize.value)
 
-        iconHeightAnchor?.isActive = true
-        iconWidthAnchor?.isActive = true
+        self.iconHeightAnchor?.isActive = true
+        self.iconWidthAnchor?.isActive = true
     }
 
 }

@@ -63,17 +63,17 @@ final class IconComponentUIViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(scrollView)
-        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        self.view.addSubview(scrollView)
+        self.scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        self.scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        self.scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        self.scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        scrollView.addSubview(contentView)
-        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        self.scrollView.addSubview(contentView)
+        self.contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        self.contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        self.contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        self.contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
 
         setupSegmentedControl()
         setupView()
@@ -85,7 +85,7 @@ final class IconComponentUIViewController: UIViewController {
             items: ["sm", "md", "lg", "xl"]
         )
 
-        view.addSubview(segmentedControl)
+        self.view.addSubview(segmentedControl)
 
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.selectedSegmentIndex = 0
@@ -102,13 +102,13 @@ final class IconComponentUIViewController: UIViewController {
     func segmentedControlValueChanged(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            selectedSize = .small
+            self.selectedSize = .small
         case 1:
-            selectedSize = .medium
+            self.selectedSize = .medium
         case 2:
-            selectedSize = .large
+            self.selectedSize = .large
         case 3:
-            selectedSize = .extraLarge
+            self.selectedSize = .extraLarge
         default:
             break
         }
@@ -121,7 +121,7 @@ final class IconComponentUIViewController: UIViewController {
         vStack.alignment = .leading
         vStack.spacing = 10
 
-        contentView.addSubview(vStack)
+        self.contentView.addSubview(vStack)
         vStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 70).isActive = true
         vStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
         vStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
@@ -144,7 +144,7 @@ final class IconComponentUIViewController: UIViewController {
                 size: .small
             )
             icon.translatesAutoresizingMaskIntoConstraints = false
-            icons.append(icon)
+            self.icons.append(icon)
 
             hStack.addArrangedSubview(icon)
             hStack.addArrangedSubview(label)

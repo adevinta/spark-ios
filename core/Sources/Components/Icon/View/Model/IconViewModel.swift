@@ -55,6 +55,6 @@ final class IconViewModel: ObservableObject {
     // MARK: - Private funcs
 
     private func updateColor() {
-        color = useCase.execute(for: intent, colors: theme.colors)
+        self.color = useCase.execute(for: intent, colors: theme.colors)
     }
 }
