@@ -9,7 +9,7 @@
 import Foundation
 
 /// Buttons come in different heights.
-public enum ButtonSize {
+public enum ButtonSize: CaseIterable {
     /// A small button with a base height of 32 points.
     case small
 
@@ -18,25 +18,4 @@ public enum ButtonSize {
 
     /// A large button with a base height of 56 points.
     case large
-}
-
-// MARK: - Internal extension
-extension ButtonSize {
-    var height: CGFloat {
-        switch self {
-        case .small:
-            return Constants.heightSmall
-        case .medium:
-            return Constants.heightMedium
-        case .large:
-            return Constants.heightLarge
-        }
-    }
-}
-
-// MARK: - Constants
-private enum Constants {
-    static var heightSmall: CGFloat = 32
-    static var heightMedium: CGFloat = 44
-    static var heightLarge: CGFloat = 56
 }

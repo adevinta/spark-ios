@@ -13,6 +13,11 @@ enum Either<Left, Right> {
     case right(Right)
 }
 
+// MARK: - Equatable
+
+extension Either: Equatable where Left: Equatable, Right: Equatable {
+}
+
 // MARK: - Properties
 
 extension Either {
@@ -27,6 +32,16 @@ extension Either {
         switch self {
         case let .left(value): return value
         case .right: fatalError("No value for left part")
+        }
+    }
+}
+
+extension Either {
+    static func of(_ left: Left?, or right: Right) -> Either {
+        if let left = left {
+            return .left(left)
+        } else {
+            return .right(right)
         }
     }
 }

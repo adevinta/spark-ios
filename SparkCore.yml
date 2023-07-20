@@ -33,6 +33,10 @@ targetTemplates:
         - name: SparkCoreTests
       gatherCoverageData: true
 
+    postCompileScripts:
+      - script: ./scripts/swiftlint.sh
+        name: SwiftLint
+
   SparkCoreTestsTemplate:
     type: bundle.unit-test
     platform: iOS

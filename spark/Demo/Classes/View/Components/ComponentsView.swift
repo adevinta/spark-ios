@@ -17,7 +17,7 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Button") {
-                    ComponentsButtonListView()
+                    ButtonComponentView()
                 }
 
                 NavigationLink("Checkbox") {
@@ -36,6 +36,10 @@ struct ComponentsView: View {
                     RadioButtonOverview()
                 }
 
+                NavigationLink("Spinner") {
+                    SpinnerComponent()
+                }
+
                 NavigationLink("Switch") {
                     SwitchComponentView()
                 }
@@ -46,6 +50,7 @@ struct ComponentsView: View {
             }
             .navigationBarTitle(Text("Components"))
         }
+        .background(Color.gray)
     }
 }
 

@@ -23,7 +23,7 @@ struct LayoutView: View {
     }
 
     // MARK: - View
-    
+
     var body: some View {
         List(self.viewModel.spacingItemViewModels(for: self.theme), id: \.self) {
             LayoutSpacingItemView(viewModel: $0)

@@ -9,6 +9,7 @@
 import Foundation
 
 /// The checkbox delegate informs about a new checkbox selection state.
+// sourcery: AutoMockable
 public protocol CheckboxUIViewDelegate: AnyObject {
     /// The checkbox selection was changed.
     /// - Parameters:
