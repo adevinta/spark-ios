@@ -56,8 +56,11 @@ public final class IconUIView: UIView {
     // MARK: - Private properties
 
     private var cancellables = Set<AnyCancellable>()
-    private var iconHeightAnchor: NSLayoutConstraint?
-    private var iconWidthAnchor: NSLayoutConstraint?
+    private var heightConstraint: NSLayoutConstraint?
+    private var widthConstraint: NSLayoutConstraint?
+
+    @ScaledUIMetric private var height: CGFloat = .zero
+    @ScaledUIMetric private var width: CGFloat = .zero
 
     private let viewModel: IconViewModel
 
@@ -101,13 +104,13 @@ public final class IconUIView: UIView {
         self.accessibilityIdentifier = IconAccessibilityIdentifier.text
 
         self.addSubview(imageView)
-        self.imageView.tintColor = viewModel.color.foreground.uiColor
+        self.imageView.tintColor = self.viewModel.color.foreground.uiColor
         self.imageView.layoutMargins = UIEdgeInsets(vertical: .zero, horizontal: .zero)
 
-        self.iconHeightAnchor = imageView.heightAnchor.constraint(equalToConstant: size.value)
-        self.iconWidthAnchor = imageView.widthAnchor.constraint(equalToConstant: size.value)
-        self.iconHeightAnchor?.isActive = true
-        self.iconWidthAnchor?.isActive = true
+        self.heightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: self.height)
+        self.widthConstraint = self.imageView.widthAnchor.constraint(equalToConstant: self.width)
+        self.heightConstraint?.isActive = true
+        self.widthConstraint?.isActive = true
 
         let anchorConstraint = [
             self.imageView.topAnchor.constraint(equalTo: topAnchor),
@@ -121,27 +124,44 @@ public final class IconUIView: UIView {
 
     private func setupSubscriptions() {
         self.viewModel.$color.subscribe(in: &self.cancellables) { [weak self] color in
-            self?.setIconColor(color)
+            self?.updateIconColor(color)
         }
 
         self.viewModel.$size.subscribe(in: &self.cancellables) { [weak self] size in
-            self?.setIconSize(size)
+            self?.height = size.value
+            self?._height.update(traitCollection: self?.traitCollection)
+
+            self?.width = size.value
+            self?._width.update(traitCollection: self?.traitCollection)
+
+            self?.updateIconSize()
         }
     }
 
-    private func setIconColor(_ iconColor: IconColor) {
+    private func updateIconColor(_ iconColor: IconColor) {
         self.imageView.tintColor = iconColor.foreground.uiColor
     }
 
-    private func setIconSize(_ iconSize: IconSize) {
-        self.iconHeightAnchor?.isActive = false
-        self.iconWidthAnchor?.isActive = false
+    private func updateIconSize() {
+        if self.heightConstraint?.constant != self.height {
+            self.heightConstraint?.constant = self.height
+            self.layoutIfNeeded()
+        }
 
-        self.iconHeightAnchor = imageView.heightAnchor.constraint(equalToConstant: iconSize.value)
-        self.iconWidthAnchor = imageView.widthAnchor.constraint(equalToConstant: iconSize.value)
+        if self.widthConstraint?.constant != self.width {
+            self.widthConstraint?.constant = self.width
+            self.layoutIfNeeded()
+        }
+    }
 
-        self.iconHeightAnchor?.isActive = true
-        self.iconWidthAnchor?.isActive = true
+    // MARK: - Trait collection
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        self._height.update(traitCollection: traitCollection)
+        self._width.update(traitCollection: traitCollection)
+        self.updateIconSize()
     }
 
 }
