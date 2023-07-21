@@ -13,237 +13,81 @@ import SwiftUI
 
 struct ChipComponentUIView: View {
 
+    let theme: Theme
+    let intent: ChipIntent
+    let variant: ChipVariant
+    let label: String?
+    let icon: UIImage?
+    let component: UIView?
+    let action: (() -> Void)?
+
+//    init(theme: Theme, intent: ChipIntent, variant: ChipVariant, label: String?, icon: UIImage?, component: UIView?, action: (() -> Void)?) {
+//        self.theme = theme
+//        self.intent = intent
+//        self.variant = variant
+//        self.showComponent = showComponent
+//        self.label = label
+//        self.icon = icon
+//        self.action = action
+//    }
+
     var body: some View {
-        ZStack {
-            Color(UIColor.secondarySystemBackground)
-                .ignoresSafeArea()
-            ChipComponentUIViewRepresentation()
-                .navigationBarTitle(Text("Chip (UIKit)"))
-
-        }
-    }
-}
-
-struct ChipComponentUIViewRepresentation: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> ChipComponentUIViewController {
-        return ChipComponentUIViewController()
-    }
-
-    func updateUIViewController(_ uiViewController: ChipComponentUIViewController, context: Context) {
-
-    }
-}
-
-final class ChipComponentUIViewController: UIViewController {
-
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-
-    private var cancellables = Set<AnyCancellable>()
-
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
-
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.backgroundColor = .clear
-
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = 4
-        return stackView
-    }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.view.backgroundColor = .secondarySystemBackground
-
-        self.view.addSubview(scrollView)
-        self.scrollView.frame = self.view.bounds
-        self.scrollView.addSubview(self.stackView)
-
-        setupView()
-        setupConstraints()
-
-        self.subscribe()
-    }
-
-    private func subscribe() {
-        self.themePublisher.$theme
-            .sink { [weak self] theme in
-                guard let self else { return }
-
-                let chips = self.chips
-                for checkbox in chips {
-                    checkbox.theme = theme
-                }
-            }
-            .store(in: &self.cancellables)
-    }
-
-    private var chips: [ChipUIView] = []
-
-    private func setupView() {
-        for intent in ChipIntentColor.allCases {
-            self.stackView.addArrangedSubview(spacer(height: 4))
-            self.stackView.addArrangedSubview(bigLabel("\(intent)"))
-            self.stackView.addArrangedSubview(chipDesign(intent: intent))
-        }
-
-
-        self.stackView.addArrangedSubview(spacer(height: 4))
-        self.stackView.addArrangedSubview(bigLabel("Chip with action"))
-        let chip = chipWithComponent()
-        self.chips.append(chip)
-        self.stackView.addArrangedSubview(chip)
-    }
-
-    private func setupConstraints() {
-        let constraints = [
-            self.scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            self.scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-            self.scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            self.stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            self.stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
-            self.stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            self.stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
-        ]
-
-        NSLayoutConstraint.activate(constraints)
-    }
-
-    private func chipDesign(intent: ChipIntentColor) -> UIView {
-        let stackView = UIStackView()
-        stackView.backgroundColor = .lightText
-        stackView.layer.cornerRadius = 8
-        stackView.spacing = UIStackView.spacingUseSystem
-        stackView.axis = .vertical
-
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-
-        var spacer: UIView?
-        for variant in ChipVariant.allCases {
-
-            if let spacer = spacer {
-                stackView.addArrangedSubview(spacer)
-            }
-            stackView.addArrangedSubview(label( "Variant: .\(variant)"))
-            stackView.addArrangedSubview(chipStyles(intent: intent, variant: variant))
-
-            spacer = lineSpacer()
-        }
-
-        return stackView
-    }
-
-    private func chipWithComponent() -> ChipUIView {
-        let icon = UIImage(imageLiteralResourceName: "alert")
-
-        let chip = ChipUIView(
-            theme: theme,
-            intentColor: .primary,
-            variant: .filled,
-            label: "Not selected",
-            iconImage: icon
+        ChipComponentUIViewRepresentation(
+            theme: self.theme,
+            intent: self.intent,
+            variant: self.variant,
+            label: self.label,
+            icon: self.icon,
+            component: self.component,
+            action: self.action
         )
-        let component = UIImageView(image: UIImage.strokedCheckmark)
-
-        var selected = false
-        chip.action = {
-            selected.toggle()
-            if selected {
-                chip.text = "Selected"
-                chip.component = component
-                chip.variant = .tinted
-            } else {
-                chip.component = nil
-                chip.text = "Not selected"
-                chip.variant = .filled
-            }
-        }
-
-        return chip
     }
+}
 
-    private func lineSpacer() -> UIView {
-        let lineSpacer = UIView()
-        lineSpacer.translatesAutoresizingMaskIntoConstraints = false
-        lineSpacer.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        lineSpacer.backgroundColor = .secondarySystemBackground
-        return lineSpacer
-    }
+struct ChipComponentUIViewRepresentation: UIViewRepresentable {
 
-    private func spacer(height: CGFloat) -> UIView {
-        let spacer = UIView()
-        spacer.translatesAutoresizingMaskIntoConstraints = false
-        spacer.heightAnchor.constraint(equalToConstant: height).isActive = true
-        return spacer
-    }
-    private func label(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .italicSystemFont(ofSize: 14)
-        return label
-    }
+    let theme: Theme
+    let intent: ChipIntent
+    let variant: ChipVariant
+    let label: String?
+    let icon: UIImage?
+    let component: UIView?
+    let action: (()->Void)?
 
-    private func bigLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text.uppercased()
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.font = UIFont.preferredFont(forTextStyle: .headline)
-        label.textColor = .lightGray
-        return label
-    }
-
-    private func chipStyles(intent: ChipIntentColor,
-                            variant: ChipVariant) ->  UIView {
-        let icon = UIImage(imageLiteralResourceName: "alert")
-        let chips: [ChipUIView] = [
-            .init(
-                theme: theme,
-                intentColor: intent,
-                variant: variant,
-                label: "Only label"
-            ),
-            .init(
-                theme: theme,
-                intentColor: intent,
-                variant: variant,
-                label: "Leading icon",
-                iconImage: icon),
-            .init(
-                theme: theme,
-                intentColor: intent,
-                variant: variant,
+    func makeUIView(context: Context) -> ChipUIView {
+        let chipView: ChipUIView
+        if let label = self.label, let icon = self.icon {
+            chipView = ChipUIView(
+                theme: self.theme,
+                intent: self.intent,
+                variant: self.variant,
+                label: label,
                 iconImage: icon)
-        ]
-        chips.forEach{ $0.action = {} }
-        self.chips.append(contentsOf: chips)
-
-        let stackView = UIStackView(
-            arrangedSubviews: chips
-        )
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.axis = .horizontal
-        stackView.spacing = UIStackView.spacingUseSystem
-        return stackView
+        } else if let icon = icon {
+            chipView = ChipUIView(
+                theme: self.theme,
+                intent: self.intent,
+                variant: self.variant,
+                iconImage: icon)
+        } else {
+            chipView = ChipUIView(
+                theme: self.theme,
+                intent: self.intent,
+                variant: self.variant,
+                label: "")
+        }
+        chipView.action = self.action
+        chipView.component = self.component
+        return chipView
     }
-}
 
-struct ChipComponentUIView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChipComponentUIView()
+    func updateUIView(_ chipView: ChipUIView, context: Context) {
+        chipView.intent = self.intent
+        chipView.theme = self.theme
+        chipView.variant = self.variant
+        chipView.text = self.label
+        chipView.icon = self.icon
+        chipView.action = self.action
+        chipView.component = self.component
     }
 }

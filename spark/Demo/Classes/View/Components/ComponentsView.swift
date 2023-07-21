@@ -25,7 +25,7 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Chip") {
-                    ChipComponentUIView()
+                    ChipComponent()
                 }
 
                 NavigationLink("Icon") {
