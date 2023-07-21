@@ -27,7 +27,7 @@ struct GetSpinnerIntentColorUseCase: GetSpinnerIntentColorUseCasable {
     ///    - colors: Colors from the theme
     ///    - intent: `SpinnerIntent`.
     ///
-    /// - Returns: ``RadioButtonColors`` which contains the various colors of the radio button.
+    /// - Returns: ``ColorToken`` of the spinner.
     func execute(colors: any Colors, intent: SpinnerIntent) -> any ColorToken {
         switch intent {
         case .main: return colors.main.main
