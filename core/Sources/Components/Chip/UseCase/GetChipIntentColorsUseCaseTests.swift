@@ -194,12 +194,3 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
                        [UIColor.blue, .gray, .yellow, .red])
     }
 }
-
-// MARK: - Private helpers
-private extension ColorTokenGeneratedMock {
-    convenience init(uiColor: UIColor) {
-        self.init()
-        self.uiColor = uiColor
-    }
-}
-
