@@ -1,5 +1,5 @@
 //
-//  TabGetColorUseCase.swift
+//  TabGetIntentColorUseCase.swift
 //  SparkCore
 //
 //  Created by alican.aycil on 21.07.23.
@@ -9,7 +9,7 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol TabGetColorUseCasable {
+protocol TabGetIntentColorUseCaseble {
     func execute(colors: any Colors, intent: TabIntent) -> any ColorToken
 }
 
@@ -17,7 +17,7 @@ protocol TabGetColorUseCasable {
 /// Use case to determin the colors of the Tab by the intent
 /// Functions:
 /// - execute: returns a color token for given colors and an intent
-struct TabGetColorUseCase: TabGetColorUseCasable {
+struct TabGetIntentColorUseCase: TabGetIntentColorUseCaseble {
 
     // MARK: - Functions
     ///
