@@ -26,6 +26,8 @@ extension TagColors: Hashable, Equatable {
     }
 
     static func == (lhs: TagColors, rhs: TagColors) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.backgroundColor.equals(rhs.backgroundColor) &&
+        lhs.borderColor.equals(rhs.borderColor) &&
+        lhs.foregroundColor.equals(rhs.foregroundColor)
     }
 }

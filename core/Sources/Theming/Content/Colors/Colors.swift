@@ -35,8 +35,12 @@ public extension ColorToken {
         hasher.combine(self.uiColor)
     }
 
+    func equals(_ other: any ColorToken) -> Bool {
+        return self.color == other.color && self.uiColor == other.uiColor
+    }
+
     static func == (lhs: any ColorToken, rhs: any ColorToken) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.equals(rhs)
     }
 }
 
@@ -61,7 +65,8 @@ public extension ColorToken {
 
 fileprivate struct OpacityColorToken: ColorToken {
     static func == (lhs: OpacityColorToken, rhs: OpacityColorToken) -> Bool {
-        return lhs.hashValue == rhs.hashValue && lhs.opacity == rhs.opacity
+        return lhs.colorToken.equals(rhs.colorToken) &&
+        lhs.opacity == rhs.opacity
     }
 
     let colorToken: any ColorToken

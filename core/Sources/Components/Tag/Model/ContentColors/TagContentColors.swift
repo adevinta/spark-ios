@@ -30,6 +30,10 @@ extension TagContentColors: Hashable, Equatable {
     }
 
     static func == (lhs: TagContentColors, rhs: TagContentColors) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.color.equals(rhs.color) &&
+        lhs.onColor.equals(rhs.onColor) &&
+        lhs.containerColor.equals(rhs.containerColor) &&
+        lhs.onContainerColor.equals(rhs.onContainerColor) &&
+        lhs.surfaceColor.equals(rhs.surfaceColor)
     }
 }
