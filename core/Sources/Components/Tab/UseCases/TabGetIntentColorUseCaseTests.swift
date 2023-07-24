@@ -1,5 +1,5 @@
 //
-//  TabGetColorUseCaseTests.swift
+//  TabGetIntentColorUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by alican.aycil on 21.07.23.
@@ -9,16 +9,16 @@
 @testable import SparkCore
 import XCTest
 
-final class TabGetColorUseCaseTests: TestCase {
+final class TabGetIntentColorUseCaseTests: TestCase {
     
     // MARK: - Private properties
-    private var sut: TabGetColorUseCase!
+    private var sut: TabGetIntentColorUseCase!
     private var colors: ColorsGeneratedMock!
     
     // MARK: - Setup
     override func setUp() {
         super.setUp()
-        self.sut = TabGetColorUseCase()
+        self.sut = TabGetIntentColorUseCase()
         self.colors = ColorsGeneratedMock.mocked()
     }
     
