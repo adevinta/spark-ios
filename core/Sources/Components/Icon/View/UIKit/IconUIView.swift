@@ -104,7 +104,7 @@ public final class IconUIView: UIView {
         self.accessibilityIdentifier = IconAccessibilityIdentifier.text
 
         self.addSubview(imageView)
-        self.imageView.tintColor = self.viewModel.color.foreground.uiColor
+        self.imageView.tintColor = self.viewModel.color.uiColor
         self.imageView.layoutMargins = UIEdgeInsets(vertical: .zero, horizontal: .zero)
 
         self.heightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: self.height)
@@ -138,8 +138,8 @@ public final class IconUIView: UIView {
         }
     }
 
-    private func updateIconColor(_ iconColor: IconColor) {
-        self.imageView.tintColor = iconColor.foreground.uiColor
+    private func updateIconColor(_ color: any ColorToken) {
+        self.imageView.tintColor = color.uiColor
     }
 
     private func updateIconSize() {

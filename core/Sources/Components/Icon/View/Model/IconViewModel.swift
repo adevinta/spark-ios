@@ -18,7 +18,7 @@ final class IconViewModel: ObservableObject {
 
     // MARK: - Published properties
 
-    @Published var color: IconColor
+    @Published var color: any ColorToken
     @Published var size: IconSize
 
     // MARK: - Initializers

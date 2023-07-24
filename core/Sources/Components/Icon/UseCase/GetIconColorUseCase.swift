@@ -10,31 +10,27 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol GetIconColorUseCaseable {
-    func execute(for intent: IconIntent, colors: Colors) -> IconColor
+    func execute(for intent: IconIntent, colors: Colors) -> any ColorToken
 }
 
 struct GetIconColorUseCase: GetIconColorUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for intent: IconIntent, colors: Colors) -> IconColor {
-        var colorToken: any ColorToken
-
+    func execute(for intent: IconIntent, colors: Colors) -> any ColorToken {
         switch intent {
         case .alert :
-            colorToken = colors.feedback.alert
+            return colors.feedback.alert
         case .error:
-            colorToken = colors.feedback.error
+            return colors.feedback.error
         case .neutral:
-            colorToken = colors.feedback.neutral
+            return colors.feedback.neutral
         case .primary:
-            colorToken = colors.primary.primary
+            return colors.primary.primary
         case .secondary:
-            colorToken = colors.secondary.secondary
+            return colors.secondary.secondary
         case .success:
-            colorToken = colors.feedback.success
+            return colors.feedback.success
         }
-
-        return .init(foreground: colorToken)
     }
 }
