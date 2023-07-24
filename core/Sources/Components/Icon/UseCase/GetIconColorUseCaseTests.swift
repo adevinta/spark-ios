@@ -62,7 +62,7 @@ private extension GetIconColorUseCaseTests {
 
         // THEN
         XCTAssertIdentical(
-            colorToken.foreground as? ColorTokenGeneratedMock,
+            colorToken as? ColorTokenGeneratedMock,
             expectedColorToken as? ColorTokenGeneratedMock,
             "Wrong color for .\(givenIntent) case"
         )
