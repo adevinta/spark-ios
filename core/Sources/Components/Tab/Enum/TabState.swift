@@ -9,8 +9,18 @@
 import Foundation
 
 /// `TabState` determines the current state of the tab.
-enum TabState {
-    case selected
-    case pressed
-    case disabled
+struct TabState {
+    let isDisabled: Bool
+    let isPressed: Bool
+    let isSelected: Bool
+    
+    init(
+        isDisabled: Bool = false,
+        isPressed: Bool = false,
+        isSelected: Bool = false
+    ) {
+        self.isDisabled = isDisabled
+        self.isPressed = isPressed
+        self.isSelected = isSelected
+    }
 }
