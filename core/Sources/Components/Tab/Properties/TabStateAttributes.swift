@@ -1,5 +1,5 @@
 //
-//  TabStateColors.swift
+//  TabStateAttributes.swift
 //  SparkCore
 //
 //  Created by alican.aycil on 21.07.23.
@@ -8,19 +8,22 @@
 
 import Foundation
 
-/// Colors available for the states of the tab:
+/// Attributes available for the states of the tab:
 /// - Label: defines the color of the text and the tint color of the icon
 /// - Line: The color of the base line
 /// - Background: The background color of the tab item.
-struct TabStateColors: Equatable {
+/// - Opacity: The opacity of the tab item.
+/// - LineHeight: The lineHeight of the tab item.
+struct TabStateAttributes: Equatable {
     
     let label: any ColorToken
     let line: any ColorToken
     let background: any ColorToken
     let opacity: CGFloat?
+    let lineHeight: CGFloat
     
-    static func == (lhs: TabStateColors, rhs: TabStateColors) -> Bool {
-        return colorsEqual(lhs.label, rhs.label) && colorsEqual(lhs.line, rhs.line) && colorsEqual(lhs.background, rhs.background) && lhs.opacity == rhs.opacity
+    static func == (lhs: TabStateAttributes, rhs: TabStateAttributes) -> Bool {
+        return colorsEqual(lhs.label, rhs.label) && colorsEqual(lhs.line, rhs.line) && colorsEqual(lhs.background, rhs.background) && lhs.opacity == rhs.opacity && lhs.lineHeight == rhs.lineHeight
     }
     
     private static func colorsEqual(_ lhs: any ColorToken, _ rhs: any ColorToken) -> Bool {
