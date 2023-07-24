@@ -36,7 +36,7 @@ final class TabItemViewModel: ObservableObject {
             self.tabState.isDisabled
         }
         set {
-            self.tabState = TabState(isDisabled: newValue, isPressed: self.tabState.isPressed, isSelected: self.tabState.isSelected)
+            self.tabState = self.tabState.update(\.isDisabled, value: newValue)
         }
     }
     
@@ -45,7 +45,7 @@ final class TabItemViewModel: ObservableObject {
             self.tabState.isSelected
         }
         set {
-            self.tabState = TabState(isDisabled: self.tabState.isDisabled, isPressed: self.tabState.isPressed, isSelected: newValue)
+            self.tabState = self.tabState.update(\.isSelected, value: newValue)
         }
     }
     
@@ -54,7 +54,7 @@ final class TabItemViewModel: ObservableObject {
             self.tabState.isPressed
         }
         set {
-            self.tabState = TabState(isDisabled: self.tabState.isDisabled, isPressed: newValue, isSelected: self.tabState.isSelected)
+            self.tabState = self.tabState.update(\.isPressed, value: newValue)
         }
     }
     
@@ -86,3 +86,12 @@ final class TabItemViewModel: ObservableObject {
     }
 }
 
+private extension TabState {
+    func update(_ keyPath: KeyPath<Self, Bool>, value: Bool) -> Self {
+        guard let keyPath = keyPath as? WritableKeyPath else { return self }
+
+        var copy = self
+        copy[keyPath: keyPath] = value
+        return copy
+    }
+}
