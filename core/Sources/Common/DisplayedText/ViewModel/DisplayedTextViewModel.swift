@@ -10,6 +10,7 @@
 protocol DisplayedTextViewModel {
     var text: String? { get }
     var attributedText: AttributedStringEither? { get }
+    var displayedTextType: DisplayedTextType { get }
 
     func textChanged(_ text: String?) -> Bool
     func attributedTextChanged(_ attributedText: AttributedStringEither?) -> Bool
@@ -22,10 +23,9 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
 
     private(set) var text: String?
     private(set) var attributedText: AttributedStringEither?
+    private(set) var displayedTextType: DisplayedTextType
 
     // MARK: - Private Properties
-
-    private var displayedTextType: DisplayedTextType
 
     private let getDisplayedTextTypeUseCase: GetDisplayedTextTypeUseCaseable
     private let getDidDisplayedTextChangeUseCase: GetDidDisplayedTextChangeUseCaseable
