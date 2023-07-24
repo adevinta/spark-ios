@@ -45,21 +45,16 @@ struct UIBadgeView: UIViewRepresentable {
             containerView.addSubview(badgeView)
             containerView.backgroundColor = .blue
 
-            NSLayoutConstraint.activate([
-                label.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor),
-                label.topAnchor.constraint(equalTo: containerView.topAnchor),
-                label.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-            ])
+            label.addConstraint(from: .leading, to: .leading, ofView: containerView, relation: .greaterThanOrEqual)
+            label.addConstraint(from: .top, to: .top, ofView: containerView)
+            label.addConstraint(from: .bottom, to: .bottom, ofView: containerView)
+
             if index >= 3 && index <= 6 {
-                NSLayoutConstraint.activate([
-                    badgeView.centerXAnchor.constraint(equalTo: label.trailingAnchor, constant: 5),
-                    badgeView.centerYAnchor.constraint(equalTo: label.topAnchor, constant: -5)
-                ])
+                badgeView.addConstraint(from: .centerX, to: .trailing, ofView: label, constant: 5)
+                badgeView.addConstraint(from: .centerY, to: .top, ofView: label, constant: -5)
             } else {
-                NSLayoutConstraint.activate([
-                    badgeView.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 5),
-                    badgeView.centerYAnchor.constraint(equalTo: label.centerYAnchor, constant: 0)
-                ])
+                badgeView.addConstraint(from: .leading, to: .trailing, ofView: label, constant: 5)
+                badgeView.addConstraint(from: .centerY, to: .centerY, ofView: label)
             }
 
             badgesStackView.addArrangedSubview(containerView)

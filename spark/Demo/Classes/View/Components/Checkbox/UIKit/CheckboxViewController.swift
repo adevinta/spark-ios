@@ -76,17 +76,8 @@ final class CheckboxViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(self.scrollView)
-        self.scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        self.scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        self.scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        self.scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-        self.scrollView.addSubview(self.contentView)
-        self.contentView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
-        self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor).isActive = true
-        self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
-        self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+        view.addSubviewSizedEqually(self.scrollView)
+        self.scrollView.addSubviewSizedEqually(self.contentView)
 
         self.setUpView()
         self.subscribe()
