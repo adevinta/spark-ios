@@ -13,14 +13,15 @@ extension UIView {
     /// Adds a subview with the same size as the view.
     /// - Parameter subview: subview to be added
     public func addSubviewSizedEqually(_ subview: UIView) {
-        self.translatesAutoresizingMaskIntoConstraints = false
-        subview.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(subview)
 
         NSLayoutConstraint.activate([
             subview.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             subview.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             subview.topAnchor.constraint(equalTo: self.topAnchor),
-            subview.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            subview.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            subview.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            subview.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         ])
     }
 
