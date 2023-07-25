@@ -61,14 +61,14 @@ final class TabItemViewModel: ObservableObject {
     init(
         theme: Theme,
         intent: TabIntent = .primary,
-        isDisabled: Bool,
-        isSelected: Bool,
+        tabState: TabState = TabState(),
+        content: TabUIItemContent = TabUIItemContent(),
         tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable = TabGetStateAttributesUseCase()
     ) {
-        let tabState = TabState(isDisabled: isDisabled, isSelected: isSelected)
         self.tabState = tabState
         self.theme = theme
         self.intent = intent
+        self.content = content
         self.tabGetStateAttributesUseCase = tabGetStateAttributesUseCase
         self.tabStateAttributes = tabGetStateAttributesUseCase.execute(
             theme: theme,
