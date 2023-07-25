@@ -6,12 +6,14 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
 import Combine
+import UIKit
 
 final class TabItemViewModel: ObservableObject {
     
     @Published var tabStateAttributes: TabStateAttributes
+    @Published var content: TabUIItemContent
+
     private var tabState: TabState {
         didSet {
             guard tabState != oldValue else { return }
@@ -57,6 +59,42 @@ final class TabItemViewModel: ObservableObject {
             self.tabState = self.tabState.update(\.isPressed, value: newValue)
         }
     }
+
+    var icon: UIImage? {
+        get {
+            return self.content.icon
+        }
+        set {
+            self.content = self.content.update(\.icon, value: newValue)
+        }
+    }
+
+    var text: String? {
+        get {
+            return self.content.text
+        }
+        set {
+            self.content = self.content.update(\.text, value: newValue)
+        }
+    }
+
+    var attributeText: NSAttributedString? {
+        get {
+            return self.content.attributeText
+        }
+        set {
+            self.content = self.content.update(\.attributeText, value: newValue)
+        }
+    }
+
+    var badge: BadgeUIView? {
+        get {
+            return self.content.badge
+        }
+        set {
+            self.content = self.content.update(\.badge, value: newValue)
+        }
+    }
     
     init(
         theme: Theme,
@@ -83,15 +121,5 @@ final class TabItemViewModel: ObservableObject {
             intent: self.intent,
             state: self.tabState
         )
-    }
-}
-
-private extension TabState {
-    func update(_ keyPath: KeyPath<Self, Bool>, value: Bool) -> Self {
-        guard let keyPath = keyPath as? WritableKeyPath else { return self }
-
-        var copy = self
-        copy[keyPath: keyPath] = value
-        return copy
     }
 }
