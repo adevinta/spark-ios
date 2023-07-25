@@ -12,5 +12,5 @@ public enum IconAccessibilityIdentifier {
 
     // MARK: - Properties
 
-    public static let text = "spark-icon-image"
+    public static let view = "spark-icon-image"
 }

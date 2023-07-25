@@ -1,5 +1,5 @@
 //
-//  GetIconColorUseCaseTests.swift
+//  IconGetColorUseCaseTests.swift
 //  Spark
 //
 //  Created by Jacklyn Situmorang on 10.07.23.
@@ -11,7 +11,7 @@ import XCTest
 
 @testable import SparkCore
 
-final class GetIconColorUseCaseTests: XCTestCase {
+final class IconGetColorUseCaseTests: XCTestCase {
 
     // MARK: - Properties
 
@@ -46,13 +46,13 @@ final class GetIconColorUseCaseTests: XCTestCase {
 
 // MARK: - Extension
 
-private extension GetIconColorUseCaseTests {
+private extension IconGetColorUseCaseTests {
     func testExecute(
         givenIntent: IconIntent,
         expectedColorToken: any ColorToken
     ) {
         // GIVEN
-        let useCase = GetIconColorUseCase()
+        let useCase = IconGetColorUseCase()
 
         // WHEN
         let colorToken = useCase.execute(

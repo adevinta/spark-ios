@@ -101,7 +101,7 @@ public final class IconUIView: UIView {
     private func setupView() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear
-        self.accessibilityIdentifier = IconAccessibilityIdentifier.text
+        self.accessibilityIdentifier = IconAccessibilityIdentifier.view
 
         self.addSubview(imageView)
         self.imageView.tintColor = self.viewModel.color.uiColor

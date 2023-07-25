@@ -1,5 +1,5 @@
 //
-//  GetIconColorUseCase.swift
+//  IconGetColorUseCase.swift
 //  Spark
 //
 //  Created by Jacklyn Situmorang on 10.07.23.
@@ -9,11 +9,11 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol GetIconColorUseCaseable {
+protocol IconGetColorUseCaseable {
     func execute(for intent: IconIntent, colors: Colors) -> any ColorToken
 }
 
-struct GetIconColorUseCase: GetIconColorUseCaseable {
+struct IconGetColorUseCase: IconGetColorUseCaseable {
 
     // MARK: - Methods
 
