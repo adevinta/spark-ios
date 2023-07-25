@@ -15,8 +15,8 @@ struct ChipStateColors {
 
 extension ChipStateColors: Equatable {
     static func == (lhs: ChipStateColors, rhs: ChipStateColors) -> Bool {
-        return lhs.background.hashValue == rhs.background.hashValue &&
-        lhs.border.hashValue  == rhs.border.hashValue &&
-        lhs.foreground.hashValue  == rhs.foreground.hashValue
+        return lhs.background.equals(rhs.background) &&
+        lhs.border.equals(rhs.border) &&
+        lhs.foreground.equals(rhs.foreground)
     }
 }
