@@ -23,7 +23,7 @@ extension ButtonCurrentColors: Hashable, Equatable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.iconTintColor)
-        if let textColor {
+        if let textColor = self.textColor {
             hasher.combine(textColor)
         }
         hasher.combine(self.backgroundColor)
