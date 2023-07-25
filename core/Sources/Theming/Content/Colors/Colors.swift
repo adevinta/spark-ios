@@ -44,6 +44,13 @@ public extension ColorToken {
     }
 }
 
+public extension Optional where Wrapped == any ColorToken {
+
+    func equals(_ other: (any ColorToken)?) -> Bool {
+        return self?.color == other?.color && self?.uiColor == other?.uiColor
+    }
+}
+
 public extension ColorToken {
     static var clear: any ColorToken {
         return ColorTokenClear()

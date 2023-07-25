@@ -16,13 +16,16 @@ final class ButtonCurrentColorsTests: XCTestCase {
 
     func test_buttonCurrentColors_equal() {
         let colors = SparkTheme.shared.colors
+
         let given1 = ButtonCurrentColors(
-            foregroundColor: colors.base.onSurface,
+            iconTintColor: colors.base.onSurface,
+            textColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.primary.primary)
 
         let given2 = ButtonCurrentColors(
-            foregroundColor: colors.base.onSurface,
+            iconTintColor: colors.base.onSurface,
+            textColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.primary.primary)
 
@@ -33,16 +36,17 @@ final class ButtonCurrentColorsTests: XCTestCase {
         let colors = SparkTheme.shared.colors
 
         let given1 = ButtonCurrentColors(
-            foregroundColor: colors.base.onSurface,
+            iconTintColor: colors.base.surface,
+            textColor: colors.base.surfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.primary.primary)
 
         let given2 = ButtonCurrentColors(
-            foregroundColor: colors.base.onSurface,
+            iconTintColor: colors.base.onSurface,
+            textColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.primary.onPrimary)
 
         XCTAssertNotEqual(given1, given2)
     }
-
 }

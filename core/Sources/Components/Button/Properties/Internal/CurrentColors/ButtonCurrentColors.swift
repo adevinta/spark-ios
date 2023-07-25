@@ -31,7 +31,8 @@ extension ButtonCurrentColors: Hashable, Equatable {
     }
 
     static func == (lhs: ButtonCurrentColors, rhs: ButtonCurrentColors) -> Bool {
-        return lhs.foregroundColor.equals(rhs.foregroundColor) &&
+        return lhs.iconTintColor.equals(rhs.iconTintColor) &&
+        lhs.textColor.equals(rhs.textColor) == true &&
         lhs.backgroundColor.equals(rhs.backgroundColor) &&
         lhs.borderColor.equals(rhs.borderColor)
     }
