@@ -9,7 +9,7 @@
 import Foundation
 
 /// `TabState` determines the current state of the tab.
-struct TabState: Equatable {
+struct TabState: Equatable, Updateable {
     let isDisabled: Bool
     let isPressed: Bool
     let isSelected: Bool
