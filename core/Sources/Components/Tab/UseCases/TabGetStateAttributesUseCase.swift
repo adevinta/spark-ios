@@ -19,6 +19,13 @@ protocol TabGetStateAttributesUseCasable {
 /// - execute: returns attributes for given theme, intent and state
 struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
 
+    private let getIntentColorUseCase: any TabGetIntentColorUseCaseble
+
+    // MARK: - Initializer
+    init(getIntentColorUseCase: any TabGetIntentColorUseCaseble = TabGetIntentColorUseCase()) {
+        self.getIntentColorUseCase = getIntentColorUseCase
+    }
+
     // MARK: - Functions
     ///
     /// Calculate the attribute of the tab depending on the theme, intent and state
@@ -29,54 +36,47 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
     ///    - state: `TabState`.
     ///
     /// - Returns: ``TabStateAttributes`` return attributes of the tab.
-    func execute(theme: Theme, intent: TabIntent, state: TabState) -> TabStateAttributes {
-        return self.execute(theme: theme, intent: intent, state: state, tabGetColorUseCase: TabGetIntentColorUseCase())
-    }
-    
-    func execute(
-        theme: Theme,
-        intent: TabIntent,
-        state: TabState,
-        tabGetColorUseCase: any TabGetIntentColorUseCaseble
-    ) -> TabStateAttributes {
-        
+    func execute(theme: Theme,
+                 intent: TabIntent,
+                 state: TabState) -> TabStateAttributes {
+
         if state.isDisabled {
             return TabStateAttributes(
-                label: theme.colors.base.outline,
-                line: theme.colors.base.outline,
-                background: theme.colors.base.surface,
+                labelColor: theme.colors.base.outline,
+                lineColor: theme.colors.base.outline,
+                backgroundColor: theme.colors.base.surface,
                 opacity: theme.dims.dim3,
-                lineHeight: theme.border.width.small
+                separatorLineHeight: theme.border.width.small
             )
         }
         
         if state.isPressed {
             return TabStateAttributes(
-                label: theme.colors.base.outline,
-                line: theme.colors.base.outline,
-                background: theme.colors.base.surface,
+                labelColor: theme.colors.base.outline,
+                lineColor: theme.colors.base.outline,
+                backgroundColor: theme.colors.base.surface,
                 opacity: nil,
-                lineHeight: theme.border.width.small
+                separatorLineHeight: theme.border.width.small
             )
         }
         
         if state.isSelected {
-            var intentColor = tabGetColorUseCase.execute(colors: theme.colors, intent: intent)
+            var intentColor = self.getIntentColorUseCase.execute(colors: theme.colors, intent: intent)
             return TabStateAttributes(
-                label: intentColor,
-                line: intentColor,
-                background: theme.colors.base.surface,
+                labelColor: intentColor,
+                lineColor: intentColor,
+                backgroundColor: theme.colors.base.surface,
                 opacity: nil,
-                lineHeight: theme.border.width.medium
+                separatorLineHeight: theme.border.width.medium
             )
         }
        
         return TabStateAttributes(
-            label: theme.colors.base.outline,
-            line: theme.colors.base.outline,
-            background: theme.colors.base.surface,
+            labelColor: theme.colors.base.outline,
+            lineColor: theme.colors.base.outline,
+            backgroundColor: theme.colors.base.surface,
             opacity: nil,
-            lineHeight: theme.border.width.small
+            separatorLineHeight: theme.border.width.small
         )
     }
 }
