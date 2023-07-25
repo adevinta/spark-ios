@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct TabUIItemContent {
+struct TabUIItemContent: Updateable {
     let icon: UIImage?
     let text: String?
     let attributeText: NSAttributedString?
