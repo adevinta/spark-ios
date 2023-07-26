@@ -25,15 +25,15 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
     }
 
     // MARK: - Tests
-    func test_primary_color() {
+    func test_main_color() {
         // Given
-        let primary = ColorsPrimaryGeneratedMock()
-        primary.primary = ColorTokenGeneratedMock(uiColor: .blue)
-        primary.onPrimary = ColorTokenGeneratedMock(uiColor: .gray)
-        primary.primaryContainer = ColorTokenGeneratedMock(uiColor: .yellow)
-        primary.onPrimaryContainer = ColorTokenGeneratedMock(uiColor: .red)
+        let main = ColorsMainGeneratedMock()
+        main.main = ColorTokenGeneratedMock(uiColor: .blue)
+        main.onMain = ColorTokenGeneratedMock(uiColor: .gray)
+        main.mainContainer = ColorTokenGeneratedMock(uiColor: .yellow)
+        main.onMainContainer = ColorTokenGeneratedMock(uiColor: .red)
 
-        self.colors.primary = primary
+        self.colors.main = main
 
         // When
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .primary)
@@ -46,15 +46,15 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
                        [UIColor.blue, .gray, .yellow, .red])
     }
 
-    func test_secondary_color() {
+    func test_support_color() {
         // Given
-        let secondary = ColorsSecondaryGeneratedMock()
-        secondary.secondary = ColorTokenGeneratedMock(uiColor: .blue)
-        secondary.onSecondary = ColorTokenGeneratedMock(uiColor: .gray)
-        secondary.secondaryContainer = ColorTokenGeneratedMock(uiColor: .yellow)
-        secondary.onSecondaryContainer = ColorTokenGeneratedMock(uiColor: .red)
+        let support = ColorsSupportGeneratedMock()
+        support.support = ColorTokenGeneratedMock(uiColor: .blue)
+        support.onSupport = ColorTokenGeneratedMock(uiColor: .gray)
+        support.supportContainer = ColorTokenGeneratedMock(uiColor: .yellow)
+        support.onSupportContainer = ColorTokenGeneratedMock(uiColor: .red)
 
-        self.colors.secondary = secondary
+        self.colors.support = support
 
         // When
         let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .secondary)

@@ -18,12 +18,12 @@ final class TagColorsTests: XCTestCase {
 
         let colors1 = TagColors(
             backgroundColor: colors.base.background,
-            borderColor: colors.primary.primary,
+            borderColor: colors.main.main,
             foregroundColor: colors.feedback.info)
 
         let colors2 = TagColors(
             backgroundColor: colors.base.background,
-            borderColor: colors.primary.primary,
+            borderColor: colors.main.main,
             foregroundColor: colors.feedback.info)
 
         XCTAssertEqual(colors1, colors2)
@@ -34,12 +34,12 @@ final class TagColorsTests: XCTestCase {
 
         let colors1 = TagColors(
             backgroundColor: colors.base.background,
-            borderColor: colors.primary.primary,
+            borderColor: colors.main.main,
             foregroundColor: colors.feedback.info)
 
         let colors2 = TagColors(
             backgroundColor: colors.base.background,
-            borderColor: colors.primary.primary,
+            borderColor: colors.main.main,
             foregroundColor: colors.feedback.alert)
 
         XCTAssertNotEqual(colors1, colors2)

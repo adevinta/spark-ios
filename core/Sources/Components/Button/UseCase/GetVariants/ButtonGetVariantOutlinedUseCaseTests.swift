@@ -13,7 +13,7 @@ import SwiftUI
 final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
 
     // MARK: - Tests
-    func test_primary_colors() throws {
+    func test_main_colors() throws {
         // Given
         let sut = self.sut()
 
@@ -27,15 +27,15 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.primary.primary,
+            [self.theme.colors.main.main,
              self.theme.colors.base.surface,
-             self.theme.colors.primary.primary.opacity(self.theme.dims.dim5),
-             self.theme.colors.primary.primary,
-             self.theme.colors.primary.primary
+             self.theme.colors.main.main.opacity(self.theme.dims.dim5),
+             self.theme.colors.main.main,
+             self.theme.colors.main.main
             ].map(\.color))
     }
 
-    func test_secondary_colors() throws {
+    func test_support_colors() throws {
         // Given
         let sut = self.sut()
 
@@ -49,11 +49,11 @@ final class ButtonGetVariantOutlinedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.secondary.secondary,
+            [self.theme.colors.support.support,
              self.theme.colors.base.surface,
-             self.theme.colors.secondary.secondary.opacity(self.theme.dims.dim5),
-             self.theme.colors.secondary.secondary,
-             self.theme.colors.secondary.secondary
+             self.theme.colors.support.support.opacity(self.theme.dims.dim5),
+             self.theme.colors.support.support,
+             self.theme.colors.support.support
             ].map(\.color))
     }
 

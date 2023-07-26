@@ -18,49 +18,49 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_when_switchColor_is_alert_case() throws {
+    func test_execute_when_intent_is_alert_case() throws {
         try self.testExecute(
             givenIntent: .alert,
             expectedColorToken: self.colorsMock.feedback.alert
         )
     }
 
-    func test_execute_when_switchColor_is_error_case() throws {
+    func test_execute_when_intent_is_error_case() throws {
         try self.testExecute(
             givenIntent: .error,
             expectedColorToken: self.colorsMock.feedback.error
         )
     }
 
-    func test_execute_when_switchColor_is_info_case() throws {
+    func test_execute_when_intent_is_info_case() throws {
         try self.testExecute(
             givenIntent: .info,
             expectedColorToken: self.colorsMock.feedback.info
         )
     }
 
-    func test_execute_when_switchColor_is_neutral_case() throws {
+    func test_execute_when_intent_is_neutral_case() throws {
         try self.testExecute(
             givenIntent: .neutral,
             expectedColorToken: self.colorsMock.feedback.neutral
         )
     }
 
-    func test_execute_when_switchColor_is_primary_case() throws {
+    func test_execute_when_intent_is_primary_case() throws {
         try self.testExecute(
             givenIntent: .primary,
-            expectedColorToken: self.colorsMock.primary.primary
+            expectedColorToken: self.colorsMock.main.main
         )
     }
 
-    func test_execute_when_switchColor_is_secondary_case() throws {
+    func test_execute_when_intent_is_secondary_case() throws {
         try self.testExecute(
             givenIntent: .secondary,
-            expectedColorToken: self.colorsMock.secondary.secondary
+            expectedColorToken: self.colorsMock.support.support
         )
     }
 
-    func test_execute_when_switchColor_is_success_case() throws {
+    func test_execute_when_intent_is_success_case() throws {
         try self.testExecute(
             givenIntent: .success,
             expectedColorToken: self.colorsMock.feedback.success

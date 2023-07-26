@@ -24,11 +24,11 @@ final class GetSpinnerIntentColorUseCaseTests: TestCase {
 
     // MARK: - Tests
     func test_execute_primary() {
-        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .primary).color, self.colors.primary.primary.color)
+        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .primary).color, self.colors.main.main.color)
     }
 
     func test_execute_secondary() {
-        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .secondary).color, self.colors.secondary.secondary.color)
+        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .secondary).color, self.colors.support.support.color)
     }
 
     func test_execute_alert() {

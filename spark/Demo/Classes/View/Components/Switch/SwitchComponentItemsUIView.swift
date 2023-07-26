@@ -45,7 +45,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
         self.attributedText = .init(
             string: viewModel.text,
             attributes: [
-                .foregroundColor: SparkTheme.shared.colors.primary.primary.uiColor,
+                .foregroundColor: SparkTheme.shared.colors.main.main.uiColor,
                 .font: SparkTheme.shared.typography.body2Highlight.uiFont
             ]
         )

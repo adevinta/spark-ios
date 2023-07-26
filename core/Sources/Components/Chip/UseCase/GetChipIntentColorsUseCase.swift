@@ -26,15 +26,15 @@ struct GetChipIntentColorsUseCase: GetChipIntentColorsUseCasable {
     func execute(colors: Colors, intentColor: ChipIntent) -> ChipIntentColors {
         switch intentColor {
         case .primary:
-            return .init(principal: colors.primary.primary,
-                         subordinate: colors.primary.onPrimary,
-                         tintedPrincipal: colors.primary.primaryContainer,
-                         tintedSubordinate: colors.primary.onPrimaryContainer)
+            return .init(principal: colors.main.main,
+                         subordinate: colors.main.onMain,
+                         tintedPrincipal: colors.main.mainContainer,
+                         tintedSubordinate: colors.main.onMainContainer)
         case .secondary:
-            return .init(principal: colors.secondary.secondary,
-                         subordinate: colors.secondary.onSecondary,
-                         tintedPrincipal: colors.secondary.secondaryContainer,
-                         tintedSubordinate: colors.secondary.onSecondaryContainer)
+            return .init(principal: colors.support.support,
+                         subordinate: colors.support.onSupport,
+                         tintedPrincipal: colors.support.supportContainer,
+                         tintedSubordinate: colors.support.onSupportContainer)
         case .surface:
             return .init(principal: colors.base.surface,
                          subordinate: colors.base.onSurface,

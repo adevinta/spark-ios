@@ -20,12 +20,12 @@ struct ColorSectionStatesViewModel: ColorSectionViewModelable {
         self.name = "states"
         self.itemViewModels = [
             [
-                .init(name: "primaryPressed", colorToken: color.primaryPressed),
-                .init(name: "primaryVariantPressed", colorToken: color.primaryVariantPressed),
-                .init(name: "primaryContainerPressed", colorToken: color.primaryContainerPressed),
-                .init(name: "secondaryPressed", colorToken: color.secondaryPressed),
-                .init(name: "secondaryVariantPressed", colorToken: color.secondaryVariantPressed),
-                .init(name: "secondaryContainerPressed", colorToken: color.secondaryContainerPressed),
+                .init(name: "mainPressed", colorToken: color.mainPressed),
+                .init(name: "mainVariantPressed", colorToken: color.mainVariantPressed),
+                .init(name: "mainContainerPressed", colorToken: color.mainContainerPressed),
+                .init(name: "supportPressed", colorToken: color.supportPressed),
+                .init(name: "supportVariantPressed", colorToken: color.supportVariantPressed),
+                .init(name: "supportContainerPressed", colorToken: color.supportContainerPressed),
                 .init(name: "surfacePressed", colorToken: color.surfacePressed),
                 .init(name: "surfaceInversePressed", colorToken: color.surfaceInversePressed),
                 .init(name: "outlinePressed", colorToken: color.outlinePressed),

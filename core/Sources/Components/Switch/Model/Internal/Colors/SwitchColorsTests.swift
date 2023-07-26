@@ -20,20 +20,20 @@ final class SwitchColorsTests: XCTestCase {
                 onColorToken: colors.feedback.info,
                 offColorToken: colors.feedback.alert),
             toggleDotForegroundColors: SwitchStatusColors(
-                onColorToken: colors.primary.primary,
-                offColorToken: colors.secondary.secondary),
+                onColorToken: colors.main.main,
+                offColorToken: colors.support.support),
             toggleDotBackgroundColor: colors.base.background,
-            textForegroundColor: colors.primary.onPrimary)
+            textForegroundColor: colors.main.onMain)
 
         let colors2 = SwitchColors(
             toggleBackgroundColors: SwitchStatusColors(
                 onColorToken: colors.feedback.info,
                 offColorToken: colors.feedback.alert),
             toggleDotForegroundColors: SwitchStatusColors(
-                onColorToken: colors.primary.primary,
-                offColorToken: colors.secondary.secondary),
+                onColorToken: colors.main.main,
+                offColorToken: colors.support.support),
             toggleDotBackgroundColor: colors.base.background,
-            textForegroundColor: colors.primary.onPrimary)
+            textForegroundColor: colors.main.onMain)
 
         XCTAssertEqual(colors1, colors2)
     }
@@ -46,20 +46,20 @@ final class SwitchColorsTests: XCTestCase {
                 onColorToken: colors.feedback.info,
                 offColorToken: colors.feedback.alert),
             toggleDotForegroundColors: SwitchStatusColors(
-                onColorToken: colors.primary.primary,
-                offColorToken: colors.secondary.secondary),
+                onColorToken: colors.main.main,
+                offColorToken: colors.support.support),
             toggleDotBackgroundColor: colors.base.background,
-            textForegroundColor: colors.primary.onPrimary)
+            textForegroundColor: colors.main.onMain)
 
         let colors2 = SwitchColors(
             toggleBackgroundColors: SwitchStatusColors(
                 onColorToken: colors.feedback.error,
                 offColorToken: colors.feedback.alert),
             toggleDotForegroundColors: SwitchStatusColors(
-                onColorToken: colors.primary.primary,
-                offColorToken: colors.secondary.secondary),
+                onColorToken: colors.main.main,
+                offColorToken: colors.support.support),
             toggleDotBackgroundColor: colors.base.background,
-            textForegroundColor: colors.primary.onPrimary)
+            textForegroundColor: colors.main.onMain)
 
         XCTAssertNotEqual(colors1, colors2)
     }

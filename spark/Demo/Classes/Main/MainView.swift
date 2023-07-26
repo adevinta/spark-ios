@@ -61,7 +61,7 @@ struct MainView: View {
                     }
             }
         }
-        .accentColor(self.theme.colors.primary.primary.color)
+        .accentColor(self.theme.colors.main.main.color)
     }
 }
 

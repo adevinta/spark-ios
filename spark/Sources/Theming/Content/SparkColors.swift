@@ -14,21 +14,21 @@ struct SparkColors: Colors {
 
     private class ClassForBundle {}
 
-    let primary: ColorsPrimary = ColorsPrimaryDefault(
-        primary: ColorTokenDefault(named: "primary", in: Bundle(for: ClassForBundle.self)),
-        onPrimary: ColorTokenDefault(named: "on-primary", in: Bundle(for: ClassForBundle.self)),
-        primaryVariant: ColorTokenDefault(named: "primary-variant", in: Bundle(for: ClassForBundle.self)),
-        onPrimaryVariant: ColorTokenDefault(named: "on-primary-variant", in: Bundle(for: ClassForBundle.self)),
-        primaryContainer: ColorTokenDefault(named: "primary-container", in: Bundle(for: ClassForBundle.self)),
-        onPrimaryContainer: ColorTokenDefault(named: "on-primary-container", in: Bundle(for: ClassForBundle.self)))
+    let main: ColorsMain = ColorsMainDefault(
+        main: ColorTokenDefault(named: "main", in: Bundle(for: ClassForBundle.self)),
+        onMain: ColorTokenDefault(named: "on-main", in: Bundle(for: ClassForBundle.self)),
+        mainVariant: ColorTokenDefault(named: "main-variant", in: Bundle(for: ClassForBundle.self)),
+        onMainVariant: ColorTokenDefault(named: "on-main-variant", in: Bundle(for: ClassForBundle.self)),
+        mainContainer: ColorTokenDefault(named: "main-container", in: Bundle(for: ClassForBundle.self)),
+        onMainContainer: ColorTokenDefault(named: "on-main-container", in: Bundle(for: ClassForBundle.self)))
 
-    let secondary: ColorsSecondary = ColorsSecondaryDefault(
-        secondary: ColorTokenDefault(named: "secondary", in: Bundle(for: ClassForBundle.self)),
-        onSecondary: ColorTokenDefault(named: "on-secondary", in: Bundle(for: ClassForBundle.self)),
-        secondaryVariant: ColorTokenDefault(named: "secondary-variant", in: Bundle(for: ClassForBundle.self)),
-        onSecondaryVariant: ColorTokenDefault(named: "on-secondary-variant", in: Bundle(for: ClassForBundle.self)),
-        secondaryContainer: ColorTokenDefault(named: "secondary-container", in: Bundle(for: ClassForBundle.self)),
-        onSecondaryContainer: ColorTokenDefault(named: "on-secondary-container", in: Bundle(for: ClassForBundle.self)))
+    let support: ColorsSupport = ColorsSupportDefault(
+        support: ColorTokenDefault(named: "support", in: Bundle(for: ClassForBundle.self)),
+        onSupport: ColorTokenDefault(named: "on-support", in: Bundle(for: ClassForBundle.self)),
+        supportVariant: ColorTokenDefault(named: "support-variant", in: Bundle(for: ClassForBundle.self)),
+        onSupportVariant: ColorTokenDefault(named: "on-support-variant", in: Bundle(for: ClassForBundle.self)),
+        supportContainer: ColorTokenDefault(named: "support-container", in: Bundle(for: ClassForBundle.self)),
+        onSupportContainer: ColorTokenDefault(named: "on-support-container", in: Bundle(for: ClassForBundle.self)))
 
     let base: ColorsBase = ColorsBaseDefault(
         background: ColorTokenDefault(named: "background", in: Bundle(for: ClassForBundle.self)),
@@ -68,12 +68,12 @@ struct SparkColors: Colors {
     )
 
     let states: ColorsStates = ColorsStatesDefault(
-        primaryPressed: ColorTokenDefault(named: "primary-pressed", in: Bundle(for: ClassForBundle.self)),
-        primaryVariantPressed: ColorTokenDefault(named: "primary-variant-pressed", in: Bundle(for: ClassForBundle.self)),
-        primaryContainerPressed: ColorTokenDefault(named: "primary-container-pressed", in: Bundle(for: ClassForBundle.self)),
-        secondaryPressed: ColorTokenDefault(named: "secondary-pressed", in: Bundle(for: ClassForBundle.self)),
-        secondaryVariantPressed: ColorTokenDefault(named: "secondary-variant-pressed", in: Bundle(for: ClassForBundle.self)),
-        secondaryContainerPressed: ColorTokenDefault(named: "secondary-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        mainPressed: ColorTokenDefault(named: "main-pressed", in: Bundle(for: ClassForBundle.self)),
+        mainVariantPressed: ColorTokenDefault(named: "main-variant-pressed", in: Bundle(for: ClassForBundle.self)),
+        mainContainerPressed: ColorTokenDefault(named: "main-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        supportPressed: ColorTokenDefault(named: "support-pressed", in: Bundle(for: ClassForBundle.self)),
+        supportVariantPressed: ColorTokenDefault(named: "support-variant-pressed", in: Bundle(for: ClassForBundle.self)),
+        supportContainerPressed: ColorTokenDefault(named: "support-container-pressed", in: Bundle(for: ClassForBundle.self)),
         surfacePressed: ColorTokenDefault(named: "surface-pressed", in: Bundle(for: ClassForBundle.self)),
         surfaceInversePressed: ColorTokenDefault(named: "surface-inverse-pressed", in: Bundle(for: ClassForBundle.self)),
         outlinePressed: ColorTokenDefault(named: "outline-pressed", in: Bundle(for: ClassForBundle.self)),

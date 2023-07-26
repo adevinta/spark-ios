@@ -16,7 +16,7 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
     var sut: GetRadioButtonColorsUseCase!
     var feedback: ColorsFeedbackGeneratedMock!
-    var primary: ColorsPrimaryGeneratedMock!
+    var main: ColorsMainGeneratedMock!
     var base: ColorsBaseGeneratedMock!
     var theme: ThemeGeneratedMock!
 
@@ -30,18 +30,18 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         let colors = ColorsGeneratedMock()
 
         let base = ColorsBaseGeneratedMock()
-        let primary = ColorsPrimaryGeneratedMock()
+        let main = ColorsMainGeneratedMock()
         let feedback = ColorsFeedbackGeneratedMock()
 
         colors.base = base
         colors.feedback = feedback
-        colors.primary = primary
+        colors.main = main
 
         theme.colors = colors
 
         self.theme = theme
         self.base = base
-        self.primary = primary
+        self.main = main
         self.feedback = feedback
         self.sut = GetRadioButtonColorsUseCase()
     }
@@ -49,15 +49,15 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
     // MARK: - Tests
     func test_enabled_colors_when_button_is_not_selected() throws {
         // Given
-        let primaryContainer = ColorTokenGeneratedMock()
+        let mainContainer = ColorTokenGeneratedMock()
         let onSurface = ColorTokenGeneratedMock()
         let outline = ColorTokenGeneratedMock()
 
-        primaryContainer.color = .red
+        mainContainer.color = .red
         onSurface.color = .green
         outline.color = .blue
 
-        self.primary.primaryContainer = primaryContainer
+        self.main.mainContainer = mainContainer
         self.base.onSurface = onSurface
         self.base.outline = outline
 
@@ -80,15 +80,15 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
     func test_disabled_colors_when_button_is_not_selected() throws {
         // Given
-        let primaryContainer = ColorTokenGeneratedMock()
+        let mainContainer = ColorTokenGeneratedMock()
         let onSurface = ColorTokenGeneratedMock()
         let outline = ColorTokenGeneratedMock()
 
-        primaryContainer.color = .yellow
+        mainContainer.color = .yellow
         onSurface.color = .gray
         outline.color = .purple
 
-        self.primary.primaryContainer = primaryContainer
+        self.main.mainContainer = mainContainer
         self.base.onSurface = onSurface
         self.base.outline = outline
 
@@ -206,16 +206,16 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
     func test_enabled_colors_when_button_is_selected() throws {
         // Given
-        let primary = ColorTokenGeneratedMock()
-        let primaryContainer = ColorTokenGeneratedMock()
+        let main = ColorTokenGeneratedMock()
+        let mainContainer = ColorTokenGeneratedMock()
         let onSurface = ColorTokenGeneratedMock()
 
-        primary.color = .blue
+        main.color = .blue
         onSurface.color = .green
-        primaryContainer.color = .gray
+        mainContainer.color = .gray
 
-        self.primary.primary = primary
-        self.primary.primaryContainer = primaryContainer
+        self.main.main = main
+        self.main.mainContainer = mainContainer
         self.base.onSurface = onSurface
         
         // When
@@ -237,16 +237,16 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
     func test_disabled_colors_when_button_is_selected() throws {
         // Given
-        let primary = ColorTokenGeneratedMock()
-        let primaryContainer = ColorTokenGeneratedMock()
+        let main = ColorTokenGeneratedMock()
+        let mainContainer = ColorTokenGeneratedMock()
         let onSurface = ColorTokenGeneratedMock()
 
-        primary.color = .blue
-        primaryContainer.color = .black
+        main.color = .blue
+        mainContainer.color = .black
         onSurface.color = .white
 
-        self.primary.primary = primary
-        self.primary.primaryContainer = primaryContainer
+        self.main.main = main
+        self.main.mainContainer = mainContainer
         self.base.onSurface = onSurface
 
         // When

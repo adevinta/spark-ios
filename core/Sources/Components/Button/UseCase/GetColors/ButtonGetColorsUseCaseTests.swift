@@ -34,7 +34,7 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
 
         for item in items {
             let themeColorsMock = ColorsGeneratedMock()
-            themeColorsMock.primary = ColorsPrimaryGeneratedMock.mocked()
+            themeColorsMock.main = ColorsMainGeneratedMock.mocked()
             themeColorsMock.states = ColorsStatesGeneratedMock.mocked()
 
             let dimsMock = DimsGeneratedMock.mocked()

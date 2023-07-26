@@ -32,11 +32,11 @@ final class IconGetColorUseCaseTests: XCTestCase {
     }
 
     func test_execute_when_icon_is_primary_case() {
-        testExecute(givenIntent: .primary, expectedColorToken: self.colorsMock.primary.primary)
+        testExecute(givenIntent: .primary, expectedColorToken: self.colorsMock.main.main)
     }
 
     func test_execute_when_icon_is_secondary_case() {
-        testExecute(givenIntent: .secondary, expectedColorToken: self.colorsMock.secondary.secondary)
+        testExecute(givenIntent: .secondary, expectedColorToken: self.colorsMock.support.support)
     }
 
     func test_execute_when_icon_is_success_case() {

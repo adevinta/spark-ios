@@ -15,8 +15,8 @@ extension ColorsGeneratedMock {
     static func mocked() -> ColorsGeneratedMock {
         let mock = ColorsGeneratedMock()
 
-        mock.primary = ColorsPrimaryGeneratedMock.mocked()
-        mock.secondary = ColorsSecondaryGeneratedMock.mocked()
+        mock.main = ColorsMainGeneratedMock.mocked()
+        mock.support = ColorsSupportGeneratedMock.mocked()
         mock.base = ColorsBaseGeneratedMock.mocked()
         mock.feedback = ColorsFeedbackGeneratedMock.mocked()
         mock.states =  ColorsStatesGeneratedMock.mocked()

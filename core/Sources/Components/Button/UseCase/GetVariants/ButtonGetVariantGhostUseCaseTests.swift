@@ -13,7 +13,7 @@ import SwiftUI
 final class ButtonGetVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
 
     // MARK: - Tests
-    func test_primary_colors() throws {
+    func test_main_colors() throws {
         // Given
         let sut = self.sut()
 
@@ -27,15 +27,15 @@ final class ButtonGetVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.primary.primary,
+            [self.theme.colors.main.main,
              ColorTokenDefault.clear,
-             self.theme.colors.primary.primary.opacity(self.theme.dims.dim5),
+             self.theme.colors.main.main.opacity(self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
     }
 
-    func test_secondary_colors() throws {
+    func test_support_colors() throws {
         // Given
         let sut = self.sut()
 
@@ -49,9 +49,9 @@ final class ButtonGetVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.secondary.secondary,
+            [self.theme.colors.support.support,
              ColorTokenDefault.clear,
-             self.theme.colors.secondary.secondary.opacity(self.theme.dims.dim5),
+             self.theme.colors.support.support.opacity(self.theme.dims.dim5),
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))

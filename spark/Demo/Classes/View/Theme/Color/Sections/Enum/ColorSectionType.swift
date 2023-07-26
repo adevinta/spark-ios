@@ -21,9 +21,9 @@ enum ColorSectionType: CaseIterable {
         let colors = theme.colors
         switch self {
         case .primary:
-            return ColorSectionPrimaryViewModel(color: colors.primary)
+            return ColorSectionMainViewModel(color: colors.main)
         case .secondary:
-            return ColorSectionSecondaryViewModel(color: colors.secondary)
+            return ColorSectionSupportViewModel(color: colors.support)
         case .base:
             return ColorSectionBaseViewModel(color: colors.base)
         case .feedback:
