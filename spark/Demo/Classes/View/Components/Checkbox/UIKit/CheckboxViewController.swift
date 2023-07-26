@@ -77,7 +77,14 @@ final class CheckboxViewController: UIViewController {
         super.viewDidLoad()
 
         view.addSubviewSizedEqually(self.scrollView)
-        self.scrollView.addSubviewSizedEqually(self.contentView)
+
+        self.scrollView.addSubview(self.contentView)
+        NSLayoutConstraint.activate([
+            self.contentView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor),
+            self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
+            self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+            self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
+        ])
 
         self.setUpView()
         self.subscribe()

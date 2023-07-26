@@ -8,32 +8,32 @@
 
 import UIKit
 
-extension UIView {
+public extension UIView {
 
     /// Adds a subview with the same size as the view.
     /// - Parameter subview: subview to be added
-    public func addSubviewSizedEqually(_ subview: UIView) {
+    func addSubviewSizedEqually(_ subview: UIView) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        subview.translatesAutoresizingMaskIntoConstraints = false
         addSubview(subview)
 
         NSLayoutConstraint.activate([
             subview.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             subview.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             subview.topAnchor.constraint(equalTo: self.topAnchor),
-            subview.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            subview.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            subview.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            subview.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
 
-    /// Adding a constraint of this view in relation to another view.
+    /// Activate a constraint of this view in relation to another view.
     /// - Parameters:
-    ///   - attribute1: anchor of this view
+    ///   - attribute1: anchor of caller view
     ///   - attribute2: anchor of the other view
     ///   - ofView: view that relates to this view
     ///   - relation: relation of constraint, .equal by default
     ///   - constant: constant of constraint, 0.0 by default
     ///   - multiplier: multiplier of constraint, 1.0 by default
-    public func addConstraint(
+    func activateConstraint(
         from attribute1: NSLayoutConstraint.Attribute,
         to attribute2: NSLayoutConstraint.Attribute,
         ofView: UIView,
@@ -44,6 +44,35 @@ extension UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         ofView.translatesAutoresizingMaskIntoConstraints = false
 
+        NSLayoutConstraint.activate([
+            self.constraint(
+                from: attribute1,
+                to: attribute2,
+                ofView: ofView,
+                relation: relation,
+                constant: constant,
+                multiplier: multiplier
+            )
+        ])
+    }
+
+    /// Return an NSConstraint for the caller view.
+    /// - Parameters:
+    ///   - attribute1: anchor of caller view
+    ///   - attribute2: anchor of the other view
+    ///   - ofView: view that relates to this view
+    ///   - relation: relation of constraint, .equal by default
+    ///   - constant: constant of constraint, 0.0 by default
+    ///   - multiplier: multiplier of constraint, 10.0 by default
+    /// - Returns: NSLayoutConstraint
+    func constraint(
+        from attribute1: NSLayoutConstraint.Attribute,
+        to attribute2: NSLayoutConstraint.Attribute,
+        ofView: UIView,
+        relation: NSLayoutConstraint.Relation = .equal,
+        constant: CGFloat = 0.0,
+        multiplier: CGFloat = 1.0
+    ) -> NSLayoutConstraint {
         NSLayoutConstraint(
             item: self,
             attribute: attribute1,
@@ -52,6 +81,6 @@ extension UIView {
             attribute: attribute2,
             multiplier: multiplier,
             constant: constant
-        ).isActive = true
+        )
     }
 }

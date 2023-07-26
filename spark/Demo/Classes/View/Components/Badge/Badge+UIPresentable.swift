@@ -45,16 +45,16 @@ struct UIBadgeView: UIViewRepresentable {
             containerView.addSubview(badgeView)
             containerView.backgroundColor = .blue
 
-            label.addConstraint(from: .leading, to: .leading, ofView: containerView, relation: .greaterThanOrEqual)
-            label.addConstraint(from: .top, to: .top, ofView: containerView)
-            label.addConstraint(from: .bottom, to: .bottom, ofView: containerView)
+            label.activateConstraint(from: .leading, to: .leading, ofView: containerView, relation: .greaterThanOrEqual)
+            label.activateConstraint(from: .top, to: .top, ofView: containerView)
+            label.activateConstraint(from: .bottom, to: .bottom, ofView: containerView)
 
             if index >= 3 && index <= 6 {
-                badgeView.addConstraint(from: .centerX, to: .trailing, ofView: label, constant: 5)
-                badgeView.addConstraint(from: .centerY, to: .top, ofView: label, constant: -5)
+                badgeView.activateConstraint(from: .centerX, to: .trailing, ofView: label, constant: 5)
+                badgeView.activateConstraint(from: .centerY, to: .top, ofView: label, constant: -5)
             } else {
-                badgeView.addConstraint(from: .leading, to: .trailing, ofView: label, constant: 5)
-                badgeView.addConstraint(from: .centerY, to: .centerY, ofView: label)
+                badgeView.activateConstraint(from: .leading, to: .trailing, ofView: label, constant: 5)
+                badgeView.activateConstraint(from: .centerY, to: .centerY, ofView: label)
             }
 
             badgesStackView.addArrangedSubview(containerView)
