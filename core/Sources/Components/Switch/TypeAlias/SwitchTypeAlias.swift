@@ -10,4 +10,3 @@ import SwiftUI
 import UIKit
 
 typealias SwitchImagesEither = Either<SwitchUIImages, SwitchImages>
-typealias SwitchImageEither = Either<UIImage, Image>

@@ -162,7 +162,7 @@ public final class ButtonUIView: UIView {
             return self.viewModel.iconImage?.leftValue
         }
         set {
-            self.viewModel.set(iconImage: Self.getImageEither(from: newValue))
+            self.viewModel.set(iconImage: newValue.map { .left($0) })
         }
     }
 
@@ -184,7 +184,7 @@ public final class ButtonUIView: UIView {
         }
         set {
             self.textLabel.attributedText = newValue
-            self.viewModel.set(attributedText: Self.getAttributedTextEither(from: newValue))
+            self.viewModel.set(attributedText: newValue.map { .left($0) })
         }
     }
 
@@ -431,9 +431,9 @@ public final class ButtonUIView: UIView {
             size: size,
             shape: shape,
             alignment: alignment,
-            iconImage: Self.getImageEither(from: iconImage),
+            iconImage: iconImage.map { .left($0) },
             text: text,
-            attributedText: Self.getAttributedTextEither(from: attributedText),
+            attributedText: attributedText.map { .left($0) },
             isEnabled: isEnabled)
 
         super.init(frame: .zero)
@@ -782,23 +782,5 @@ public final class ButtonUIView: UIView {
         self._horizontalSpacing.update(traitCollection: self.traitCollection)
         self._horizontalPadding.update(traitCollection: self.traitCollection)
         self.updateSpacings()
-    }
-
-    // MARK: - Either Getter
-
-    private static func getImageEither(from value: UIImage?) -> ImageEither? {
-        guard let value else {
-            return nil
-        }
-
-        return .left(value)
-    }
-
-    private static func getAttributedTextEither(from value: NSAttributedString?) -> AttributedStringEither? {
-        guard let value else {
-            return nil
-        }
-
-        return .left(value)
     }
 }

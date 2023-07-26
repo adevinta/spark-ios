@@ -37,7 +37,7 @@ final class SwitchViewModel: ObservableObject {
 
     @Published private (set) var showToggleLeftSpace: Bool?
 
-    @Published private (set) var toggleDotImage: SwitchImageEither?
+    @Published private (set) var toggleDotImage: ImageEither?
 
     @Published private (set) var textFontToken: TypographyFontToken?
 
