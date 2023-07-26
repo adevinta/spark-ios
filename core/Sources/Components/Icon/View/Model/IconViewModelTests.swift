@@ -43,6 +43,22 @@ final class IconViewModelTests: TestCase {
 
     // MARK: - Tests
 
+    func test_execute() {
+        let _ = self.useCase.execute(
+            for: .alert,
+            colors: self.theme.colors
+        )
+
+        XCTAssertTrue(useCase.executeWithIntentAndColorsCalled, "Execute was not called")
+
+        // Execute is called once on sut setup and once actual execute call
+        XCTAssertEqual(
+            useCase.executeWithIntentAndColorsCallsCount,
+            2,
+            "Call to execute exceeds 2"
+        )
+    }
+
     func test_init() throws {
         for iconIntent in IconIntent.allCases {
             for iconSize in IconSize.allCases {

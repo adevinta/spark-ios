@@ -52,8 +52,7 @@ private extension IconGetColorUseCaseTests {
         expectedColorToken: any ColorToken
     ) {
         // GIVEN
-        let useCase = IconGetColorUseCaseableGeneratedMock()
-        useCase.executeWithIntentAndColorsReturnValue = expectedColorToken
+        let useCase = IconGetColorUseCase()
 
         // WHEN
         let colorToken = useCase.execute(
@@ -62,12 +61,6 @@ private extension IconGetColorUseCaseTests {
         )
 
         // THEN
-        XCTAssertEqual(
-            useCase.executeWithIntentAndColorsCallsCount,
-            1,
-            "Call to execute exceeds 1"
-        )
-
         XCTAssertIdentical(
             colorToken as? ColorTokenGeneratedMock,
             expectedColorToken as? ColorTokenGeneratedMock,
