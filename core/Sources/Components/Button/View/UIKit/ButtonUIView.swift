@@ -162,7 +162,7 @@ public final class ButtonUIView: UIView {
             return self.viewModel.iconImage?.leftValue
         }
         set {
-            self.viewModel.set(iconImage: newValue.either)
+            self.viewModel.set(iconImage: newValue.map { .left($0) })
         }
     }
 
@@ -184,7 +184,7 @@ public final class ButtonUIView: UIView {
         }
         set {
             self.textLabel.attributedText = newValue
-            self.viewModel.set(attributedText: newValue.either)
+            self.viewModel.set(attributedText: newValue.map { .left($0) })
         }
     }
 
@@ -431,9 +431,9 @@ public final class ButtonUIView: UIView {
             size: size,
             shape: shape,
             alignment: alignment,
-            iconImage: iconImage.either,
+            iconImage: iconImage.map { .left($0) },
             text: text,
-            attributedText: attributedText.either,
+            attributedText: attributedText.map { .left($0) },
             isEnabled: isEnabled)
 
         super.init(frame: .zero)

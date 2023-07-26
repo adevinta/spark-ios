@@ -176,7 +176,7 @@ public final class SwitchUIView: UIView {
             return self.viewModel.images?.leftValue
         }
         set {
-            self.viewModel.set(images: newValue.either)
+            self.viewModel.set(images: newValue.map { .left($0) })
         }
     }
 
@@ -360,7 +360,7 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intent: intent,
             isEnabled: isEnabled,
-            images: images.either
+            images: images.map { .left($0) }
         )
 
         super.init(frame: .zero)
