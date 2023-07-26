@@ -29,7 +29,7 @@ struct ComponentsView: View {
                 }
 
                 NavigationLink("Icon") {
-                    IconComponentUIView()
+                    IconComponentView()
                 }
 
                 NavigationLink("Radio Button") {

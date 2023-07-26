@@ -25,7 +25,7 @@ public enum IconSize: CaseIterable {
 
 // MARK: - Extension
 extension IconSize {
-    var value: CGFloat {
+    public var value: CGFloat {
         switch self {
         case .small:
             return Constants.valueSmall
