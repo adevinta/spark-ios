@@ -16,7 +16,7 @@ final class IconViewModelTests: TestCase {
     // MARK: - Properties
 
     var theme: ThemeGeneratedMock!
-    var useCase: IconGetColorUseCaseableGeneratedMock!
+    var getColorUseCase: IconGetColorUseCaseableGeneratedMock!
     var colorToken: ColorTokenGeneratedMock!
     var cancellables: Set<AnyCancellable>!
     var sut: IconViewModel!
@@ -27,52 +27,33 @@ final class IconViewModelTests: TestCase {
         try super.setUpWithError()
 
         self.theme = ThemeGeneratedMock.mocked()
-        self.useCase = IconGetColorUseCaseableGeneratedMock()
+        self.getColorUseCase = IconGetColorUseCaseableGeneratedMock()
         self.colorToken = ColorTokenGeneratedMock.random()
         self.cancellables = .init()
 
-        self.useCase.executeWithIntentAndColorsReturnValue = colorToken
+        self.getColorUseCase.executeWithIntentAndColorsReturnValue = self.colorToken
 
         self.sut = IconViewModel(
             theme: self.theme,
             intent: .alert,
             size: .small,
-            iconGetUseCase: self.useCase
+            getColorUseCase: self.getColorUseCase
         )
     }
 
     // MARK: - Tests
 
-    func test_execute() {
-        let _ = self.useCase.execute(
-            for: .alert,
-            colors: self.theme.colors
-        )
-
-        XCTAssertTrue(useCase.executeWithIntentAndColorsCalled, "Execute was not called")
-
-        // Execute is called once on sut setup and once actual execute call
-        XCTAssertEqual(
-            useCase.executeWithIntentAndColorsCallsCount,
-            2,
-            "Call to execute exceeds 2"
-        )
-    }
-
     func test_init() throws {
         for iconIntent in IconIntent.allCases {
             for iconSize in IconSize.allCases {
                 // GIVEN
+                self.getColorUseCase.executeWithIntentAndColorsCallsCount = 0
+
                 self.sut = IconViewModel(
                     theme: self.theme,
                     intent: iconIntent,
                     size: iconSize,
-                    iconGetUseCase: self.useCase
-                )
-
-                let expectedIconColor = self.useCase.execute(
-                    for: iconIntent,
-                    colors: self.theme.colors
+                    getColorUseCase: self.getColorUseCase
                 )
 
                 // THEN
@@ -84,13 +65,18 @@ final class IconViewModelTests: TestCase {
 
                 XCTAssertIdentical(
                     self.sut.color as? ColorTokenGeneratedMock,
-                    expectedIconColor as? ColorTokenGeneratedMock,
+                    self.colorToken,
                     "Icon color doesn't match the expected color"
                 )
 
                 XCTAssertTrue(
                     self.sut.size.value == iconSize.value,
                     "Icon size doesn't match the given size"
+                )
+
+                self.testGetColorUseCaseExecute(
+                    givenIntent: iconIntent,
+                    expectedCallsCount: 1
                 )
             }
         }
@@ -103,15 +89,26 @@ final class IconViewModelTests: TestCase {
                 theme: self.theme,
                 intent: iconIntent,
                 size: .medium,
-                iconGetUseCase: self.useCase
+                getColorUseCase: self.getColorUseCase
             )
 
+            self.getColorUseCase.executeWithIntentAndColorsCallsCount = 0
+
             // THEN
+            
             XCTAssertEqual(self.sut.intent, iconIntent, "Icon intent doesn't match the given intent")
+            self.testGetColorUseCaseExecute(
+                expectedCallsCount: 0
+            )
 
-            self.sut.set(intent: randomizeIntentAndRemoveCurrent(iconIntent))
+            let newIntent = self.randomizeIntentAndRemoveCurrent(iconIntent)
+            self.sut.set(intent: newIntent)
 
-            XCTAssertNotEqual(self.sut.intent, iconIntent, "Icon intent should not match the initial given intent")
+            XCTAssertEqual(self.sut.intent, newIntent, "Icon intent should not match the initial given intent")
+            self.testGetColorUseCaseExecute(
+                givenIntent: newIntent,
+                expectedCallsCount: 1
+            )
         }
     }
 
@@ -122,16 +119,15 @@ final class IconViewModelTests: TestCase {
                 theme: self.theme,
                 intent: .neutral,
                 size: iconSize,
-                iconGetUseCase: self.useCase
+                getColorUseCase: self.getColorUseCase
             )
 
             // THEN
             XCTAssertEqual(self.sut.size, iconSize, "Icon size doesn't match the given size")
 
-            self.sut.set(size: randomizeSizeAndRemoveCurrent(iconSize))
+            self.sut.set(size: self.randomizeSizeAndRemoveCurrent(iconSize))
 
             XCTAssertNotEqual(self.sut.size, iconSize, "Icon size should not match the initial given size")
-
         }
     }
 
@@ -143,7 +139,7 @@ final class IconViewModelTests: TestCase {
             theme: self.theme,
             intent: .alert,
             size: .medium,
-            iconGetUseCase: self.useCase
+            getColorUseCase: self.getColorUseCase
         )
 
         self.sut.$color.sink { _ in
@@ -165,7 +161,7 @@ final class IconViewModelTests: TestCase {
             theme: self.theme,
             intent: .alert,
             size: .medium,
-            iconGetUseCase: self.useCase
+            getColorUseCase: self.getColorUseCase
         )
 
         self.sut.$size.sink { _ in
@@ -177,6 +173,33 @@ final class IconViewModelTests: TestCase {
 
         // THEN
         wait(for: [expectation], timeout: 0.1)
+    }
+
+    private func testGetColorUseCaseExecute(
+        givenIntent: IconIntent? = nil,
+        expectedCallsCount: Int
+    ) {
+        XCTAssertEqual(
+            self.getColorUseCase.executeWithIntentAndColorsCallsCount,
+            expectedCallsCount,
+            "Wrong call number on execute on getColorUseCase"
+        )
+
+        if expectedCallsCount > 0 {
+            let args = self.getColorUseCase.executeWithIntentAndColorsReceivedArguments
+
+            XCTAssertEqual(
+                args?.intent,
+                givenIntent,
+                "Wrong intent parameter on execute on getColorUseCase"
+            )
+
+            XCTAssertIdentical(
+                args?.colors as? ColorsGeneratedMock,
+                self.theme.colors as? ColorsGeneratedMock,
+                "Wrong colors parameter on execute on getColorUseCase"
+            )
+        }
     }
 
     private func randomizeIntentAndRemoveCurrent(_ currentIntent: IconIntent) -> IconIntent {
