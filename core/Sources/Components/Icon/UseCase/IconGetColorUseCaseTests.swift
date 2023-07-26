@@ -20,27 +20,27 @@ final class IconGetColorUseCaseTests: XCTestCase {
     // MARK: - Tests
 
     func test_execute_when_icon_is_alert_case() {
-        testExecute(givenIntent: .alert, expectedColorToken: colorsMock.feedback.alert)
+        testExecute(givenIntent: .alert, expectedColorToken: self.colorsMock.feedback.alert)
     }
 
     func test_execute_when_icon_is_error_case() {
-        testExecute(givenIntent: .error, expectedColorToken: colorsMock.feedback.error)
+        testExecute(givenIntent: .error, expectedColorToken: self.colorsMock.feedback.error)
     }
 
     func test_execute_when_icon_is_neutral_case() {
-        testExecute(givenIntent: .neutral, expectedColorToken: colorsMock.feedback.neutral)
+        testExecute(givenIntent: .neutral, expectedColorToken: self.colorsMock.feedback.neutral)
     }
 
     func test_execute_when_icon_is_primary_case() {
-        testExecute(givenIntent: .primary, expectedColorToken: colorsMock.primary.primary)
+        testExecute(givenIntent: .primary, expectedColorToken: self.colorsMock.primary.primary)
     }
 
     func test_execute_when_icon_is_secondary_case() {
-        testExecute(givenIntent: .secondary, expectedColorToken: colorsMock.secondary.secondary)
+        testExecute(givenIntent: .secondary, expectedColorToken: self.colorsMock.secondary.secondary)
     }
 
     func test_execute_when_icon_is_success_case() {
-        testExecute(givenIntent: .success, expectedColorToken: colorsMock.feedback.success)
+        testExecute(givenIntent: .success, expectedColorToken: self.colorsMock.feedback.success)
     }
 }
 
@@ -52,7 +52,8 @@ private extension IconGetColorUseCaseTests {
         expectedColorToken: any ColorToken
     ) {
         // GIVEN
-        let useCase = IconGetColorUseCase()
+        let useCase = IconGetColorUseCaseableGeneratedMock()
+        useCase.executeWithIntentAndColorsReturnValue = expectedColorToken
 
         // WHEN
         let colorToken = useCase.execute(
@@ -61,6 +62,12 @@ private extension IconGetColorUseCaseTests {
         )
 
         // THEN
+        XCTAssertEqual(
+            useCase.executeWithIntentAndColorsCallsCount,
+            1,
+            "Call to execute exceeds 1"
+        )
+
         XCTAssertIdentical(
             colorToken as? ColorTokenGeneratedMock,
             expectedColorToken as? ColorTokenGeneratedMock,

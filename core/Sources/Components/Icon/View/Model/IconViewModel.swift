@@ -14,7 +14,7 @@ final class IconViewModel: ObservableObject {
 
     private(set) var theme: Theme
     private(set) var intent: IconIntent
-    private let iconGetUseCase: IconGetColorUseCase
+    private let iconGetUseCase: IconGetColorUseCaseable
 
     // MARK: - Published properties
 
@@ -27,7 +27,7 @@ final class IconViewModel: ObservableObject {
         theme: Theme,
         intent: IconIntent,
         size: IconSize,
-        iconGetUseCase: IconGetColorUseCase = IconGetColorUseCase()
+        iconGetUseCase: IconGetColorUseCaseable = IconGetColorUseCase()
     ) {
         self.theme = theme
         self.intent = intent
