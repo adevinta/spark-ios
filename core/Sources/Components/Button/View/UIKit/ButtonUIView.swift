@@ -632,8 +632,10 @@ public final class ButtonUIView: UIView {
             self.setBorderColor(from: colors.borderColor)
 
             // Foreground Color
-            self.iconImageView.tintColor = colors.foregroundColor.uiColor
-            self.textLabel.textColor = colors.foregroundColor.uiColor
+            self.iconImageView.tintColor = colors.iconTintColor.uiColor
+            if let textColor = colors.textColor {
+                self.textLabel.textColor = textColor.uiColor
+            }
         }
 
         // **

@@ -239,7 +239,8 @@ final class ButtonViewModel: ObservableObject {
 
         self.currentColors = self.dependencies.getCurrentColorsUseCase.execute(
             colors: colors,
-            isPressed: self.isPressed
+            isPressed: self.isPressed,
+            displayedTextType: self.displayedTextViewModel.displayedTextType
         )
     }
 
