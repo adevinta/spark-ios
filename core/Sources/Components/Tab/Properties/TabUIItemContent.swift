@@ -8,11 +8,11 @@
 
 import UIKit
 
-struct TabUIItemContent: Updateable {
-    let icon: UIImage?
-    let text: String?
-    let attributeText: NSAttributedString?
-    let badge: BadgeUIView?
+struct TabUIItemContent: Equatable, Updateable {
+    var icon: UIImage?
+    var text: String?
+    var attributeText: NSAttributedString?
+    var badge: BadgeUIView?
     
     init(
         icon: UIImage? = nil,
