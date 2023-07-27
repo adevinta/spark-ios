@@ -28,6 +28,10 @@ struct ComponentsView: View {
                     ChipComponent()
                 }
 
+                NavigationLink("Icon") {
+                    IconComponentView()
+                }
+
                 NavigationLink("Radio Button") {
                     RadioButtonOverview()
                 }
