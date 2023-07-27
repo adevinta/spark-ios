@@ -23,9 +23,9 @@ final class TabItemViewModelTests: XCTestCase {
         theme = ThemeGeneratedMock.mocked()
         tabGetStateAttributesUseCase = TabGetStateAttributesUseCasableGeneratedMock()
         tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateReturnValue = TabStateAttributes(
-            labelColor: theme.colors.primary.primary,
-            lineColor: theme.colors.primary.primary,
-            backgroundColor: theme.colors.primary.primary,
+            labelColor: theme.colors.main.main,
+            lineColor: theme.colors.main.main,
+            backgroundColor: theme.colors.main.main,
             opacity: nil,
             separatorLineHeight: theme.border.width.small
         )
@@ -56,9 +56,9 @@ final class TabItemViewModelTests: XCTestCase {
     func test_published_attributes_on_initialization() {
         let sut = self.sut()
         let expectedAttributes = TabStateAttributes(
-            labelColor: self.theme.colors.primary.primary,
-            lineColor: self.theme.colors.primary.primary,
-            backgroundColor: self.theme.colors.primary.primary,
+            labelColor: self.theme.colors.main.main,
+            lineColor: self.theme.colors.main.main,
+            backgroundColor: self.theme.colors.main.main,
             opacity: nil,
             separatorLineHeight: self.theme.border.width.small
         )
