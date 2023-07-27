@@ -82,6 +82,25 @@ final class IconViewModelTests: TestCase {
         }
     }
 
+    func test_set_theme() throws {
+        // GIVEN
+        self.getColorUseCase.executeWithIntentAndColorsCallsCount = 0
+        let newTheme = ThemeGeneratedMock.mocked()
+
+        // WHEN
+        self.sut.set(theme: newTheme)
+        self.theme = newTheme
+
+        // THEN
+        XCTAssertIdentical(
+            self.sut.theme as? ThemeGeneratedMock,
+            newTheme,
+            "Theme is not updated"
+        )
+
+        self.testGetColorUseCaseExecute(givenIntent: .alert, expectedCallsCount: 1)
+    }
+
     func test_set_intent() throws {
         for iconIntent in IconIntent.allCases {
             // GIVEN
