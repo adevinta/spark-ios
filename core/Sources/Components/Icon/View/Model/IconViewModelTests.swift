@@ -166,7 +166,7 @@ final class IconViewModelTests: TestCase {
         }.store(in: &self.cancellables)
 
         // WHEN
-        self.sut.set(intent: .secondary)
+        self.sut.set(intent: .support)
 
         // THEN
         wait(for: [expectation], timeout: 0.1)

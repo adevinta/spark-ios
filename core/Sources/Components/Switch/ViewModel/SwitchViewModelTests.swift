@@ -203,7 +203,7 @@ final class SwitchViewModelTests: XCTestCase {
         let expectedIsOn = true
 
         let alignmentMock: SwitchAlignment = .right
-        let intentMock: SwitchIntent = .secondary
+        let intentMock: SwitchIntent = .support
         let isEnabledMock = false
         let imagesMock: SwitchUIImages? = nil
 
@@ -264,7 +264,7 @@ final class SwitchViewModelTests: XCTestCase {
 
         let isOnMock = false
         let alignmentMock: SwitchAlignment = .right
-        let intentMock: SwitchIntent = .secondary
+        let intentMock: SwitchIntent = .support
         let isEnabledMock = false
         let imagesMock: SwitchUIImages? = nil
 
@@ -314,7 +314,7 @@ final class SwitchViewModelTests: XCTestCase {
 
         let isOnMock = false
         let alignmentMock: SwitchAlignment = .right
-        let intentMock: SwitchIntent = .secondary
+        let intentMock: SwitchIntent = .support
         let isEnabledMock = false
         let imagesMock: SwitchUIImages? = nil
 
@@ -402,7 +402,7 @@ final class SwitchViewModelTests: XCTestCase {
 
     func test_set_intent() {
         // GIVEN
-        let newIntent: SwitchIntent = .primary
+        let newIntent: SwitchIntent = .main
 
         let isOnMock = true
 

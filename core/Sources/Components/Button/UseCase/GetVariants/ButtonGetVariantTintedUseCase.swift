@@ -21,7 +21,7 @@ struct ButtonGetVariantTintedUseCase: ButtonGetVariantUseCaseable {
         let pressedBorderColor = ColorTokenDefault.clear
 
         switch intent {
-        case .primary:
+        case .main:
             return .init(
                 foregroundColor: colors.main.onMainContainer,
                 backgroundColor: colors.main.mainContainer,
@@ -29,7 +29,7 @@ struct ButtonGetVariantTintedUseCase: ButtonGetVariantUseCaseable {
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
-        case .secondary:
+        case .support:
             return .init(
                 foregroundColor: colors.support.onSupportContainer,
                 backgroundColor: colors.support.supportContainer,

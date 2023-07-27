@@ -13,7 +13,7 @@ public enum IconIntent: CaseIterable {
     case alert
     case error
     case neutral
-    case primary
-    case secondary
+    case main
+    case support
     case success
 }

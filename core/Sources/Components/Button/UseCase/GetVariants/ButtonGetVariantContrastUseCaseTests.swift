@@ -18,7 +18,7 @@ final class ButtonVariantGetContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(intent: .primary, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.execute(intent: .main, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -40,7 +40,7 @@ final class ButtonVariantGetContrastUseCaseTests: ButtonVariantUseCaseTests {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(intent: .secondary, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.execute(intent: .support, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(

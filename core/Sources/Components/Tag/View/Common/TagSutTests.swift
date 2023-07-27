@@ -28,8 +28,8 @@ struct TagSutTests {
         Self.allVariantCases(for: .danger) +
         Self.allVariantCases(for: .info) +
         Self.allVariantCases(for: .neutral) +
-        Self.allVariantCases(for: .primary) +
-        Self.allVariantCases(for: .secondary) +
+        Self.allVariantCases(for: .main) +
+        Self.allVariantCases(for: .support) +
         Self.allVariantCases(for: .success)
     }
 

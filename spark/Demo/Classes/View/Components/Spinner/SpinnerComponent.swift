@@ -21,7 +21,7 @@ struct SpinnerComponent: View {
     @State private var versionSheetIsPresented = false
     @State var version: ComponentVersion = .swiftUI
 
-    @State var intent: SpinnerIntent = .primary
+    @State var intent: SpinnerIntent = .main
     @State var isIntentPresented = false
     @State var spinnerSize: SpinnerSize = .medium
     @State var isSizesPresented = false

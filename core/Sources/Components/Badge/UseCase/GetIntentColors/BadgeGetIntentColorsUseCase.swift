@@ -47,13 +47,13 @@ final class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
                 borderColor: surfaceColor,
                 foregroundColor: colors.feedback.onNeutral
             )
-        case .primary:
+        case .main:
             return BadgeColors(
                 backgroundColor: colors.main.main,
                 borderColor: surfaceColor,
                 foregroundColor: colors.main.onMain
             )
-        case .secondary:
+        case .support:
             return BadgeColors(
                 backgroundColor: colors.support.support,
                 borderColor: surfaceColor,

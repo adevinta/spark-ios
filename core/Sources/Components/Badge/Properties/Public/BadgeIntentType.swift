@@ -15,7 +15,7 @@ public enum BadgeIntentType: CaseIterable {
     case danger
     case info
     case neutral
-    case primary
-    case secondary
+    case main
+    case support
     case success
 }

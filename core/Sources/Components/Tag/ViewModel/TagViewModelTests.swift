@@ -49,7 +49,7 @@ final class TagViewModelTests: XCTestCase {
         // THEN
         self.testProperties(
             on: viewModel,
-            expectedIntent: .primary,
+            expectedIntent: .main,
             expectedVariant: .filled,
             expectedIconImage: nil,
             expectedText: nil

@@ -18,7 +18,7 @@ protocol GetChipColorsUseCasable {
     /// Parameters:
     ///   - theme: The spark theme.
     ///   - variant: The variant of the chip, if it is outlined, filled, etc.
-    ///   - intent: The intent color, e.g. primary, secondary.
+    ///   - intent: The intent color, e.g. main, support.
     ///
     /// Returns:
     ///       ChipColors: all the colors used for the chip
@@ -47,7 +47,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
     /// Parameters:
     /// - theme: The current theme to be used
     /// - variant: The variant of the chip, whether it's filled, outlined, etc.
-    /// - intent: The intent color of the chip, e.g. primary, secondary
+    /// - intent: The intent color of the chip, e.g. main, support
     func execute(theme: Theme, variant: ChipVariant, intent: ChipIntent) -> ChipColors {
         let intentColors = intentColorsUseCase.execute(colors: theme.colors, intentColor: intent)
 

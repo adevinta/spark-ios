@@ -28,7 +28,7 @@ struct SwitchComponentView: View {
     @State var alignment: SwitchAlignment = .left
 
     @State private var intentSheetIsPresented = false
-    @State var intent: SwitchIntent = .primary
+    @State var intent: SwitchIntent = .main
 
     @State private var isEnabledSheetIsPresented = false
     @State var isEnabled: Bool = true
@@ -214,10 +214,10 @@ private extension SwitchIntent {
             return "Info"
         case .neutral:
             return "Neutral"
-        case .primary:
-            return "Primary"
-        case .secondary:
-            return "Secondary"
+        case .main:
+            return "Main"
+        case .support:
+            return "Support"
         case .success:
             return "Success"
         @unknown default:

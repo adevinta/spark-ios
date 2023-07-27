@@ -21,7 +21,7 @@ final class ButtonGetColorsUseCaseTests: XCTestCase {
             let intentsMock = ButtonColors.mocked()
 
             return GetColors(
-                givenIntent: .primary,
+                givenIntent: .main,
                 givenVariant: $0,
                 givenColors: intentsMock,
                 expectedforegroundColorToken: intentsMock.foregroundColor,

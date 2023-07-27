@@ -35,7 +35,7 @@ struct BadgeComponentView: View {
         ),
         BadgeUIView(
             theme: SparkThemePublisher.shared.theme,
-            intent: .primary,
+            intent: .main,
             size: .normal,
             value: 22,
             format: .overflowCounter(maxValue: 20)
@@ -55,7 +55,7 @@ struct BadgeComponentView: View {
         ),
         BadgeUIView(
             theme: SparkThemePublisher.shared.theme,
-            intent: .primary
+            intent: .main
         ),
         BadgeUIView(
             theme: SparkThemePublisher.shared.theme,
@@ -64,7 +64,7 @@ struct BadgeComponentView: View {
         ),
         BadgeUIView(
             theme: SparkThemePublisher.shared.theme,
-            intent: .secondary,
+            intent: .support,
             value: 23
         ),
         BadgeUIView(
@@ -115,7 +115,7 @@ struct BadgeComponentView: View {
                     smallCustomBadgeValue = 18
                     smallCustomBadgeSize = .normal
                     smallCustomBadgeIsOutlined.toggle()
-                    smallCustomBadgeType = .primary
+                    smallCustomBadgeType = .main
                 }
                 Button("Change Dange Badge") {
                     standartDangerBadgeType = .neutral
@@ -126,7 +126,7 @@ struct BadgeComponentView: View {
                             Text("Default Badge")
                             BadgeView(
                                 theme: theme,
-                                intent: .primary,
+                                intent: .main,
                                 value: standartBadgeValue
                             )
                             .format(badgeFormat)
@@ -182,14 +182,14 @@ struct BadgeComponentView: View {
                             Text("Text")
                             BadgeView(
                                 theme: self.theme,
-                                intent: .primary
+                                intent: .main
                             )
                         }
                         HStack {
                             Text("Text")
                             BadgeView(
                                 theme: self.theme,
-                                intent: .secondary
+                                intent: .support
                             )
                         }
                         HStack {

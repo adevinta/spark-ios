@@ -22,7 +22,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
         let backgroundColor = colors.base.surface
 
         switch intent {
-        case .primary:
+        case .main:
             return .init(
                 foregroundColor: colors.main.main,
                 backgroundColor: backgroundColor,
@@ -30,7 +30,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
                 borderColor: colors.main.main,
                 pressedBorderColor: colors.main.main
             )
-        case .secondary:
+        case .support:
             return .init(
                 foregroundColor: colors.support.support,
                 backgroundColor: backgroundColor,

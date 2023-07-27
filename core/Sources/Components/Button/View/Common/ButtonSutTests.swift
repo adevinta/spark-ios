@@ -81,7 +81,7 @@ struct ButtonSutTests {
         return sizePossibilities.flatMap { size in
             shapePossibilities.map { shape in
                     .init(
-                        intent: .primary,
+                        intent: .main,
                         variant: .filled,
                         size: size,
                         shape: shape,
@@ -112,7 +112,7 @@ struct ButtonSutTests {
 
         return items.map { item in
             .init(
-                intent: .primary,
+                intent: .main,
                 variant: .filled,
                 size: .medium,
                 shape: .rounded,

@@ -46,16 +46,16 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
         )
     }
 
-    func test_execute_when_intent_is_primary_case() throws {
+    func test_execute_when_intent_is_main_case() throws {
         try self.testExecute(
-            givenIntent: .primary,
+            givenIntent: .main,
             expectedColorToken: self.colorsMock.main.main
         )
     }
 
-    func test_execute_when_intent_is_secondary_case() throws {
+    func test_execute_when_intent_is_support_case() throws {
         try self.testExecute(
-            givenIntent: .secondary,
+            givenIntent: .support,
             expectedColorToken: self.colorsMock.support.support
         )
     }
