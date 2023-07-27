@@ -13,7 +13,7 @@ import SwiftUI
 final class ButtonVariantGetContrastUseCaseTests: ButtonVariantUseCaseTests {
 
     // MARK: - Tests
-    func test_primary_colors() throws {
+    func test_main_colors() throws {
         // Given
         let sut = self.sut()
 
@@ -27,15 +27,15 @@ final class ButtonVariantGetContrastUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.primary.primary,
+            [self.theme.colors.main.main,
              self.theme.colors.base.surface,
-             self.theme.colors.states.primaryContainerPressed,
+             self.theme.colors.states.mainContainerPressed,
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
     }
 
-    func test_secondary_colors() throws {
+    func test_support_colors() throws {
         // Given
         let sut = self.sut()
 
@@ -49,9 +49,9 @@ final class ButtonVariantGetContrastUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.secondary.secondary,
+            [self.theme.colors.support.support,
              self.theme.colors.base.surface,
-             self.theme.colors.states.secondaryContainerPressed,
+             self.theme.colors.states.supportContainerPressed,
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))

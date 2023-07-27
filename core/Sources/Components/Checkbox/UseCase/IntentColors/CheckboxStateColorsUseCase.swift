@@ -18,10 +18,10 @@ struct CheckboxStateColorsUseCase: CheckboxStateColorsUseCaseable {
 
     func execute(for intentColor: SelectButtonState,
                  on colors: Colors) -> CheckboxStateColorables {
-        let surfaceColor = colors.primary.primary
+        let surfaceColor = colors.main.main
         let textColor = colors.base.onSurface
-        let iconColor = colors.primary.onPrimary
-        let pressedBorderColor = colors.primary.primaryContainer
+        let iconColor = colors.main.onMain
+        let pressedBorderColor = colors.main.mainContainer
 
         switch intentColor {
         case .enabled:

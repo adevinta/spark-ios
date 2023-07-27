@@ -36,10 +36,10 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
              colors.checkboxIconColor,
              colors.textColor,
              colors.checkboxColor].map(\.color),
-            [self.theme.colors.primary.primaryContainer,
-             self.theme.colors.primary.onPrimary,
+            [self.theme.colors.main.mainContainer,
+             self.theme.colors.main.onMain,
              self.theme.colors.base.onSurface,
-             self.theme.colors.primary.primary
+             self.theme.colors.main.main
             ].map(\.color))
     }
 
@@ -56,10 +56,10 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
              colors.checkboxIconColor,
              colors.textColor,
              colors.checkboxColor].map(\.color),
-            [self.theme.colors.primary.primaryContainer,
-             self.theme.colors.primary.onPrimary,
+            [self.theme.colors.main.mainContainer,
+             self.theme.colors.main.onMain,
              self.theme.colors.base.onSurface,
-             self.theme.colors.primary.primary
+             self.theme.colors.main.main
             ].map(\.color))
     }
 
@@ -77,7 +77,7 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
              colors.textColor,
              colors.checkboxColor].map(\.color),
             [self.theme.colors.feedback.successContainer,
-             self.theme.colors.primary.onPrimary,
+             self.theme.colors.main.onMain,
              self.theme.colors.base.onSurface,
              self.theme.colors.feedback.success
             ].map(\.color))
@@ -97,7 +97,7 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
              colors.textColor,
              colors.checkboxColor].map(\.color),
             [self.theme.colors.feedback.alertContainer,
-             self.theme.colors.primary.onPrimary,
+             self.theme.colors.main.onMain,
              self.theme.colors.base.onSurface,
              self.theme.colors.feedback.alert
             ].map(\.color))
@@ -117,7 +117,7 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
              colors.textColor,
              colors.checkboxColor].map(\.color),
             [self.theme.colors.feedback.errorContainer,
-             self.theme.colors.primary.onPrimary,
+             self.theme.colors.main.onMain,
              self.theme.colors.base.onSurface,
              self.theme.colors.feedback.error
             ].map(\.color))
@@ -142,7 +142,7 @@ private extension Colors where Self == ColorsGeneratedMock {
     static var mock: Self {
         let colors = ColorsGeneratedMock()
         colors.base = ColorsBaseGeneratedMock.mocked()
-        colors.primary = ColorsPrimaryGeneratedMock.mocked()
+        colors.main = ColorsMainGeneratedMock.mocked()
         colors.feedback = ColorsFeedbackGeneratedMock.mocked()
 
         return colors

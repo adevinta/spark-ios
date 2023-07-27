@@ -34,8 +34,8 @@ final class SwitchStatusColorsTests: XCTestCase {
                 offColorToken: colors.feedback.alert)
 
         let colors2 = SwitchStatusColors(
-                onColorToken: colors.primary.primary,
-                offColorToken: colors.secondary.secondary)
+                onColorToken: colors.main.main,
+                offColorToken: colors.support.support)
 
         XCTAssertNotEqual(colors1, colors2)
     }

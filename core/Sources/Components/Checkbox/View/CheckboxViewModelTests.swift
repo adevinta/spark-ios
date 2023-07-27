@@ -98,7 +98,7 @@ private extension Theme where Self == ThemeGeneratedMock {
         let colors = ColorsGeneratedMock()
 
         colors.base = ColorsBaseGeneratedMock.mocked()
-        colors.primary = ColorsPrimaryGeneratedMock.mocked()
+        colors.main = ColorsMainGeneratedMock.mocked()
         colors.feedback = ColorsFeedbackGeneratedMock.mocked()
         theme.colors = colors
         theme.dims = DimsGeneratedMock.mocked()

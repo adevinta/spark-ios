@@ -37,8 +37,8 @@ private extension Colors where Self == ColorsGeneratedMock {
     static var mock: Self {
         let colors = ColorsGeneratedMock()
         colors.base = ColorsBaseGeneratedMock.mocked()
-        colors.primary = ColorsPrimaryGeneratedMock.mocked()
-        colors.secondary = ColorsSecondaryGeneratedMock.mocked()
+        colors.main = ColorsMainGeneratedMock.mocked()
+        colors.support = ColorsSupportGeneratedMock.mocked()
         colors.feedback = ColorsFeedbackGeneratedMock.mocked()
         colors.states = ColorsStatesGeneratedMock.mocked()
 

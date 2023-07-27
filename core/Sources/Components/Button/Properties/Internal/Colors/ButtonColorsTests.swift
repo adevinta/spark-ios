@@ -17,17 +17,17 @@ final class ButtonColorsTests: XCTestCase {
     func test_buttonColors_equal() {
         let colors = SparkTheme.shared.colors
         let given1 = ButtonColors(
-            foregroundColor: colors.primary.primary,
+            foregroundColor: colors.main.main,
             backgroundColor: colors.base.background,
             pressedBackgroundColor: colors.base.backgroundVariant,
             borderColor: colors.base.background,
-            pressedBorderColor: colors.states.primaryPressed)
+            pressedBorderColor: colors.states.mainPressed)
         let given2 = ButtonColors(
-            foregroundColor: colors.primary.primary,
+            foregroundColor: colors.main.main,
             backgroundColor: colors.base.background,
             pressedBackgroundColor: colors.base.backgroundVariant,
             borderColor: colors.base.background,
-            pressedBorderColor: colors.states.primaryPressed)
+            pressedBorderColor: colors.states.mainPressed)
 
         XCTAssertEqual(given1, given2)
     }
@@ -35,13 +35,13 @@ final class ButtonColorsTests: XCTestCase {
     func test_buttonColors_not_equal() {
         let colors = SparkTheme.shared.colors
         let given1 = ButtonColors(
-            foregroundColor: colors.primary.primary,
+            foregroundColor: colors.main.main,
             backgroundColor: colors.base.background,
             pressedBackgroundColor: colors.base.backgroundVariant,
             borderColor: colors.base.background,
-            pressedBorderColor: colors.states.primaryPressed)
+            pressedBorderColor: colors.states.mainPressed)
         let given2 = ButtonColors(
-            foregroundColor: colors.primary.primary,
+            foregroundColor: colors.main.main,
             backgroundColor: colors.base.background,
             pressedBackgroundColor: colors.base.backgroundVariant,
             borderColor: colors.base.background,

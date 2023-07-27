@@ -19,15 +19,15 @@ final class TagContentColorsTests: XCTestCase {
         let colors = SparkTheme.shared.colors
 
         let colors1 = TagContentColors(
-            color: colors.primary.primary,
-            onColor: colors.primary.onPrimary,
+            color: colors.main.main,
+            onColor: colors.main.onMain,
             containerColor: colors.base.background,
             onContainerColor: colors.base.onBackground,
             surfaceColor: colors.base.surface)
 
         let colors2 = TagContentColors(
-            color: colors.primary.primary,
-            onColor: colors.primary.onPrimary,
+            color: colors.main.main,
+            onColor: colors.main.onMain,
             containerColor: colors.base.background,
             onContainerColor: colors.base.onBackground,
             surfaceColor: colors.base.surface)
@@ -39,15 +39,15 @@ final class TagContentColorsTests: XCTestCase {
         let colors = SparkTheme.shared.colors
 
         let colors1 = TagContentColors(
-            color: colors.primary.primary,
-            onColor: colors.primary.onPrimary,
+            color: colors.main.main,
+            onColor: colors.main.onMain,
             containerColor: colors.base.background,
             onContainerColor: colors.base.onBackground,
             surfaceColor: colors.base.surface)
 
         let colors2 = TagContentColors(
-            color: colors.secondary.secondary,
-            onColor: colors.secondary.onSecondary,
+            color: colors.support.support,
+            onColor: colors.support.onSupport,
             containerColor: colors.base.background,
             onContainerColor: colors.base.onBackground,
             surfaceColor: colors.base.surface)

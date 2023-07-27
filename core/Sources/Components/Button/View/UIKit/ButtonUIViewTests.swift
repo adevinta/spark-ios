@@ -20,17 +20,17 @@ final class ButtonUIViewTests: UIKitComponentTestCase {
 
     // MARK: - Tests
 
-    func test_uikit_switch_colors() {
+    func test_uikit_button_colors() {
         let suts = ButtonSutTests.allColorsCases()
         self.test(suts: suts)
     }
 
-    func test_uikit_switch_styles() {
+    func test_uikit_button_styles() {
         let suts = ButtonSutTests.allStylesCases()
         self.test(suts: suts)
     }
 
-    func test_uikit_switch_contents() {
+    func test_uikit_button_contents() {
         let suts = ButtonSutTests.allContentCases(isSwiftUIComponent: false)
         self.test(suts: suts)
     }

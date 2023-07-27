@@ -10,12 +10,12 @@ public struct ColorsStatesDefault: ColorsStates {
 
     // MARK: - Properties
 
-    public let primaryPressed: any ColorToken
-    public let primaryVariantPressed: any ColorToken
-    public let primaryContainerPressed: any ColorToken
-    public let secondaryPressed: any ColorToken
-    public let secondaryVariantPressed: any ColorToken
-    public let secondaryContainerPressed: any ColorToken
+    public let mainPressed: any ColorToken
+    public let mainVariantPressed: any ColorToken
+    public let mainContainerPressed: any ColorToken
+    public let supportPressed: any ColorToken
+    public let supportVariantPressed: any ColorToken
+    public let supportContainerPressed: any ColorToken
     public let surfacePressed: any ColorToken
     public let surfaceInversePressed: any ColorToken
     public let outlinePressed: any ColorToken
@@ -32,12 +32,12 @@ public struct ColorsStatesDefault: ColorsStates {
 
     // MARK: - Init
 
-    public init(primaryPressed: any ColorToken,
-                primaryVariantPressed: any ColorToken,
-                primaryContainerPressed: any ColorToken,
-                secondaryPressed: any ColorToken,
-                secondaryVariantPressed: any ColorToken,
-                secondaryContainerPressed: any ColorToken,
+    public init(mainPressed: any ColorToken,
+                mainVariantPressed: any ColorToken,
+                mainContainerPressed: any ColorToken,
+                supportPressed: any ColorToken,
+                supportVariantPressed: any ColorToken,
+                supportContainerPressed: any ColorToken,
                 surfacePressed: any ColorToken,
                 surfaceInversePressed: any ColorToken,
                 outlinePressed: any ColorToken,
@@ -51,12 +51,12 @@ public struct ColorsStatesDefault: ColorsStates {
                 infoContainerPressed: any ColorToken,
                 neutralPressed: any ColorToken,
                 neutralContainerPressed: any ColorToken) {
-        self.primaryPressed = primaryPressed
-        self.primaryVariantPressed = primaryVariantPressed
-        self.primaryContainerPressed = primaryContainerPressed
-        self.secondaryPressed = secondaryPressed
-        self.secondaryVariantPressed = secondaryVariantPressed
-        self.secondaryContainerPressed = secondaryContainerPressed
+        self.mainPressed = mainPressed
+        self.mainVariantPressed = mainVariantPressed
+        self.mainContainerPressed = mainContainerPressed
+        self.supportPressed = supportPressed
+        self.supportVariantPressed = supportVariantPressed
+        self.supportContainerPressed = supportContainerPressed
         self.surfacePressed = surfacePressed
         self.surfaceInversePressed = surfaceInversePressed
         self.outlinePressed = outlinePressed

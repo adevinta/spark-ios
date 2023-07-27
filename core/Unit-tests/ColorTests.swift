@@ -26,13 +26,13 @@ final class ColorTests: TestCase {
         self.testAllColors(colors: self.getColors(for: mirror))
     }
 
-    func test_primary_colors() throws {
-        let mirror = Mirror(reflecting: self.colors.primary)
+    func test_main_colors() throws {
+        let mirror = Mirror(reflecting: self.colors.main)
         self.testAllColors(colors: self.getColors(for: mirror))
     }
 
-    func test_secondary_colors() throws {
-        let mirror = Mirror(reflecting: self.colors.secondary)
+    func test_support_colors() throws {
+        let mirror = Mirror(reflecting: self.colors.support)
         self.testAllColors(colors: self.getColors(for: mirror))
     }
 
@@ -47,10 +47,20 @@ final class ColorTests: TestCase {
             let vc = UIHostingController(rootView: view)
             vc.view.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
             vc.overrideUserInterfaceStyle = .light
-            sparktAssertSnapshot(matching: vc.view, as: .image, named: value.key, testName: testName)
+            sparktAssertSnapshot(
+                matching: vc.view,
+                as: .image,
+                named: value.key,
+                testName: testName
+            )
 
             vc.overrideUserInterfaceStyle = .dark
-            sparktAssertSnapshot(matching: vc.view, as: .image, named: value.key + "-dark", testName: testName)
+            sparktAssertSnapshot(
+                matching: vc.view,
+                as: .image,
+                named: value.key + "-dark",
+                testName: testName
+            )
         }
     }
 

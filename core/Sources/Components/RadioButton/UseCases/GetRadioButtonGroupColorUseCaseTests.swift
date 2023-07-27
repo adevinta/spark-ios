@@ -59,27 +59,27 @@ final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
         // Given
         let sut = GetRadioButtonGroupColorUseCase()
         let colors = ColorsGeneratedMock()
-        colors.primary = ColorsPrimaryGeneratedMock.mocked()
+        colors.main = ColorsMainGeneratedMock.mocked()
 
         // When
         let colorToken = sut.execute(colors: colors, state: .enabled)
 
         // Then
-        XCTAssertEqual(colorToken.uiColor, colors.primary.primaryContainer.uiColor)
-        XCTAssertEqual(colorToken.color, colors.primary.primaryContainer.color)
+        XCTAssertEqual(colorToken.uiColor, colors.main.mainContainer.uiColor)
+        XCTAssertEqual(colorToken.color, colors.main.mainContainer.color)
     }
 
     func test_disabled() {
         // Given
         let sut = GetRadioButtonGroupColorUseCase()
         let colors = ColorsGeneratedMock()
-        colors.primary = ColorsPrimaryGeneratedMock.mocked()
+        colors.main = ColorsMainGeneratedMock.mocked()
 
         // When
         let colorToken = sut.execute(colors: colors, state: .disabled)
 
         // Then
-        XCTAssertEqual(colorToken.uiColor, colors.primary.primaryContainer.uiColor)
-        XCTAssertEqual(colorToken.color, colors.primary.primaryContainer.color)
+        XCTAssertEqual(colorToken.uiColor, colors.main.mainContainer.uiColor)
+        XCTAssertEqual(colorToken.color, colors.main.mainContainer.color)
     }
 }

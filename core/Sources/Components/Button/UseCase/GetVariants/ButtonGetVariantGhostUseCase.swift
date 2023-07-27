@@ -25,17 +25,17 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
         switch intent {
         case .primary:
             return .init(
-                foregroundColor: colors.primary.primary,
+                foregroundColor: colors.main.main,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.primary.primary.opacity(dim5),
+                pressedBackgroundColor: colors.main.main.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
         case .secondary:
             return .init(
-                foregroundColor: colors.secondary.secondary,
+                foregroundColor: colors.support.support,
                 backgroundColor: ColorTokenDefault.clear,
-                pressedBackgroundColor: colors.secondary.secondary.opacity(dim5),
+                pressedBackgroundColor: colors.support.support.opacity(dim5),
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )

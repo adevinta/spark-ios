@@ -13,21 +13,21 @@ public struct ColorsDefault: Colors {
 
     // MARK: - Properties
 
-    public let primary: ColorsPrimary
-    public let secondary: ColorsSecondary
+    public let main: ColorsMain
+    public let support: ColorsSupport
     public let base: ColorsBase
     public let feedback: ColorsFeedback
     public let states: ColorsStates
 
     // MARK: - Initialization
 
-    public init(primary: ColorsPrimary,
-                secondary: ColorsSecondary,
+    public init(main: ColorsMain,
+                support: ColorsSupport,
                 base: ColorsBase,
                 feedback: ColorsFeedback,
                 states: ColorsStates) {
-        self.primary = primary
-        self.secondary = secondary
+        self.main = main
+        self.support = support
         self.base = base
         self.feedback = feedback
         self.states = states

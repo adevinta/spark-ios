@@ -24,17 +24,17 @@ struct ButtonVariantGetContrastUseCase: ButtonGetVariantUseCaseable {
         switch intent {
         case .primary:
             return .init(
-                foregroundColor: colors.primary.primary,
+                foregroundColor: colors.main.main,
                 backgroundColor: backgroundColor,
-                pressedBackgroundColor: colors.states.primaryContainerPressed,
+                pressedBackgroundColor: colors.states.mainContainerPressed,
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
         case .secondary:
             return .init(
-                foregroundColor: colors.secondary.secondary,
+                foregroundColor: colors.support.support,
                 backgroundColor: backgroundColor,
-                pressedBackgroundColor: colors.states.secondaryContainerPressed,
+                pressedBackgroundColor: colors.states.supportContainerPressed,
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )

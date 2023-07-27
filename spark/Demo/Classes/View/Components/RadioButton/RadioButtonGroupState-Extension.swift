@@ -35,7 +35,7 @@ extension RadioButtonGroupState {
         case .warning: return theme.colors.feedback.alert.color
         case .error: return theme.colors.feedback.error.color
         case .success: return theme.colors.feedback.success.color
-        case .enabled: return theme.colors.primary.primary.color
+        case .enabled: return theme.colors.main.main.color
         case .disabled: return theme.colors.base.outline.color
         }
     }

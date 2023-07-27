@@ -15,13 +15,13 @@ extension ColorsStatesGeneratedMock {
     static func mocked() -> ColorsStatesGeneratedMock {
         let mock = ColorsStatesGeneratedMock()
 
-        mock.underlyingPrimaryPressed = ColorTokenGeneratedMock.random()
-        mock.underlyingPrimaryVariantPressed = ColorTokenGeneratedMock.random()
-        mock.underlyingPrimaryContainerPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingMainPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingMainVariantPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingMainContainerPressed = ColorTokenGeneratedMock.random()
 
-        mock.underlyingSecondaryPressed = ColorTokenGeneratedMock.random()
-        mock.underlyingSecondaryVariantPressed = ColorTokenGeneratedMock.random()
-        mock.underlyingSecondaryContainerPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingSupportPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingSupportVariantPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingSupportContainerPressed = ColorTokenGeneratedMock.random()
 
         mock.underlyingSurfacePressed = ColorTokenGeneratedMock.random()
         mock.underlyingSurfaceInversePressed = ColorTokenGeneratedMock.random()

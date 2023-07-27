@@ -13,8 +13,8 @@ import SwiftUI
 
 // sourcery: AutoMockable
 public protocol Colors {
-    var primary: ColorsPrimary { get }
-    var secondary: ColorsSecondary { get }
+    var main: ColorsMain { get }
+    var support: ColorsSupport { get }
     var base: ColorsBase { get }
     var feedback: ColorsFeedback { get }
     var states: ColorsStates { get }
