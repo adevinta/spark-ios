@@ -9,17 +9,23 @@
 import Combine
 import UIKit
 
+
+/// `TabItemViewModel` is the view model for both the SwiftUI `TabItemView` as well as the UIKit `TabItemUIView`.
+/// The view model is responsible for returning the varying attributes to the views, i.e. colors and attributes. These are determined by the theme, intent, tabState, content and tabGetStateAttributesUseCase.
+/// When the theme, intent, states or contents change the new values are calculated and published.
 final class TabItemViewModel: ObservableObject {
     
-    @Published var tabStateAttributes: TabStateAttributes
-    @Published var content: TabUIItemContent
-
+    // MARK: - Private Properties
     private var tabState: TabState {
         didSet {
             guard tabState != oldValue else { return }
             self.updateStateAttributes()
         }
     }
+    
+    private let tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable
+    
+    // MARK: Properties
     var theme: Theme {
         didSet {
             self.updateStateAttributes()
@@ -31,7 +37,6 @@ final class TabItemViewModel: ObservableObject {
             self.updateStateAttributes()
         }
     }
-    private let tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable
     
     var isDisabled: Bool {
         get {
@@ -96,6 +101,18 @@ final class TabItemViewModel: ObservableObject {
         }
     }
     
+    // MARK: Published Properties
+    @Published var tabStateAttributes: TabStateAttributes
+    @Published var content: TabUIItemContent
+    
+    // MARK: Init
+    /// Init
+    /// Parameters:
+    /// - theme: the current `Theme`
+    /// - intent: the `TabIntent`, which will determine the color of the tab item's tint color
+    /// - tabState: the `TabState` determines the current state of the tab.
+    /// - content: the `TabUIItemContent` contents of the tab item:
+    /// - tabGetStateAttributesUseCase: `TabGetStateAttributesUseCasable` has a default value `TabGetStateAttributesUseCase`
     init(
         theme: Theme,
         intent: TabIntent = .primary,
