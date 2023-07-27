@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension UIView {
+extension UIView {
 
     /// Adds a subview with the same size as the view.
     /// - Parameter subview: subview to be added
