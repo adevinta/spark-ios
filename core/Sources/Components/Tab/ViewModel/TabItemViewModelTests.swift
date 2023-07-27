@@ -12,10 +12,12 @@ import XCTest
 
 final class TabItemViewModelTests: XCTestCase {
     
-    var theme: ThemeGeneratedMock!
-    var tabGetStateAttributesUseCase: TabGetStateAttributesUseCasableGeneratedMock!
-    var cancellables = Set<AnyCancellable>()
+    // MARK: - Private properties
+    private var theme: ThemeGeneratedMock!
+    private var tabGetStateAttributesUseCase: TabGetStateAttributesUseCasableGeneratedMock!
+    private var cancellables = Set<AnyCancellable>()
     
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
         theme = ThemeGeneratedMock.mocked()
@@ -29,25 +31,7 @@ final class TabItemViewModelTests: XCTestCase {
         )
     }
     
-    private func sut(
-        intent: TabIntent = .primary,
-        icon: UIImage? = nil,
-        text: String? = nil,
-        attributeText: NSAttributedString? = nil
-    ) -> TabItemViewModel {
-        return TabItemViewModel(
-            theme: self.theme,
-            intent: intent,
-            tabState: TabState(),
-            content: TabUIItemContent(
-                icon: icon,
-                text: text,
-                attributeText: attributeText
-            ),
-            tabGetStateAttributesUseCase: self.tabGetStateAttributesUseCase
-        )
-    }
-    
+    // MARK: - Tests
     func test_initialization() {
         let text = "Text"
         let icon = UIImage(systemName: "pencil.circle")
@@ -208,5 +192,28 @@ final class TabItemViewModelTests: XCTestCase {
         .store(in: &self.cancellables)
         sut.attributeText = expectedAttributeText
         wait(for: [expectation], timeout: 0.1)
+    }
+}
+
+// MARK: - Helper
+private extension TabItemViewModelTests {
+    
+    func sut(
+        intent: TabIntent = .primary,
+        icon: UIImage? = nil,
+        text: String? = nil,
+        attributeText: NSAttributedString? = nil
+    ) -> TabItemViewModel {
+        return TabItemViewModel(
+            theme: self.theme,
+            intent: intent,
+            tabState: TabState(),
+            content: TabUIItemContent(
+                icon: icon,
+                text: text,
+                attributeText: attributeText
+            ),
+            tabGetStateAttributesUseCase: self.tabGetStateAttributesUseCase
+        )
     }
 }
