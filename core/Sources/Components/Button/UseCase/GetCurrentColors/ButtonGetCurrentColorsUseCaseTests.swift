@@ -30,12 +30,12 @@ final class ButtonGetCurrentColorsUseCaseTests: XCTestCase {
         )
     }()
 
-    // MARK: - Tests
+    // MARK: - IsPressed Tests
 
     func test_execute_when_isPressed_is_true() throws {
         try self.testExecute(
             givenIsPressed: true,
-            expectedForegroundColor: self.foregroundColorMock,
+            expectedIconTintColor: self.foregroundColorMock,
             expectedBackgroundColor: self.pressedBackgroundColorMock,
             expectedBorderColor: self.pressedBorderColorMock
         )
@@ -44,9 +44,32 @@ final class ButtonGetCurrentColorsUseCaseTests: XCTestCase {
     func test_execute_when_isPressed_is_false() throws {
         try self.testExecute(
             givenIsPressed: false,
-            expectedForegroundColor: self.foregroundColorMock,
+            expectedIconTintColor: self.foregroundColorMock,
             expectedBackgroundColor: self.backgroundColorMock,
             expectedBorderColor: self.borderColorMock
+        )
+    }
+
+    // MARK: - DisplayedTextType Tests
+
+    func test_execute_when_displayedTextType_is_none() throws {
+        try self.testExecute(
+            givenDisplayedTextType: .none,
+            expectedTextColor: nil
+        )
+    }
+
+    func test_execute_when_displayedTextType_is_text() throws {
+        try self.testExecute(
+            givenDisplayedTextType: .text,
+            expectedTextColor: self.foregroundColorMock
+        )
+    }
+
+    func test_execute_when_displayedTextType_is_attributedText() throws {
+        try self.testExecute(
+            givenDisplayedTextType: .attributedText,
+            expectedTextColor: nil
         )
     }
 }
@@ -57,7 +80,7 @@ private extension ButtonGetCurrentColorsUseCaseTests {
 
     func testExecute(
         givenIsPressed: Bool,
-        expectedForegroundColor: ColorTokenGeneratedMock,
+        expectedIconTintColor: ColorTokenGeneratedMock,
         expectedBackgroundColor: ColorTokenGeneratedMock,
         expectedBorderColor: ColorTokenGeneratedMock
     ) throws {
@@ -69,18 +92,43 @@ private extension ButtonGetCurrentColorsUseCaseTests {
         // GIVEN
         let currentColors = useCase.execute(
             colors: self.colorsMock,
-            isPressed: givenIsPressed
+            isPressed: givenIsPressed,
+            displayedTextType: .none
         )
 
         // THEN
-        XCTAssertIdentical(currentColors.foregroundColor as? ColorTokenGeneratedMock,
-                           expectedForegroundColor,
-                           "Wrong foregroundColor" + errorSuffixMessage)
+        XCTAssertIdentical(currentColors.iconTintColor as? ColorTokenGeneratedMock,
+                           expectedIconTintColor,
+                           "Wrong iconTintColor" + errorSuffixMessage)
+        XCTAssertNil(currentColors.textColor,
+                     "Wrong textColor" + errorSuffixMessage)
         XCTAssertIdentical(currentColors.backgroundColor as? ColorTokenGeneratedMock,
                            expectedBackgroundColor,
                            "Wrong foregroundColor" + errorSuffixMessage)
         XCTAssertIdentical(currentColors.borderColor as? ColorTokenGeneratedMock,
                            expectedBorderColor,
                            "Wrong foregroundColor" + errorSuffixMessage)
+    }
+
+    func testExecute(
+        givenDisplayedTextType: DisplayedTextType,
+        expectedTextColor: ColorTokenGeneratedMock?
+    ) throws {
+        // GIVEN
+        let errorSuffixMessage = " for \(givenDisplayedTextType) givenDisplayedTextType"
+
+        let useCase = ButtonGetCurrentColorsUseCase()
+
+        // GIVEN
+        let currentColors = useCase.execute(
+            colors: self.colorsMock,
+            isPressed: true,
+            displayedTextType: givenDisplayedTextType
+        )
+
+        // THEN
+        XCTAssertIdentical(currentColors.textColor as? ColorTokenGeneratedMock,
+                           expectedTextColor,
+                           "Wrong textColor" + errorSuffixMessage)
     }
 }

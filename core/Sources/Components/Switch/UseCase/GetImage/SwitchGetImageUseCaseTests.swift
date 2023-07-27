@@ -89,7 +89,7 @@ private extension SwitchGetImageUseCaseTests {
         givenIsOn: Bool,
         givenImages: SwitchImagesEither,
         givenIsSwiftUIVersion: Bool,
-        expectedImage: SwitchImageEither
+        expectedImage: ImageEither
     ) throws {
         // GIVEN
         let errorPrefixMessage = " for \(givenIsOn) isOn"
