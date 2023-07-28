@@ -15,6 +15,8 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
     private var sut: TabGetStateAttributesUseCase!
     private var theme: ThemeGeneratedMock!
     private var getIntentColorUseCase: TabGetIntentColorUseCasebleGeneratedMock!
+    private var spacings: TabItemSpacings!
+    private var colors: TabItemColors!
     
     // MARK: - Setup
     override func setUp() {
@@ -22,6 +24,16 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         self.theme = ThemeGeneratedMock.mocked()
         self.getIntentColorUseCase = TabGetIntentColorUseCasebleGeneratedMock()
         self.sut = TabGetStateAttributesUseCase(getIntentColorUseCase: getIntentColorUseCase)
+        self.spacings = TabItemSpacings(
+            verticalSpacing: self.theme.layout.spacing.medium,
+            horizontalSpacing: self.theme.layout.spacing.large,
+            horizontalPadding: self.theme.layout.spacing.medium
+        )
+        self.colors = TabItemColors(
+            labelColor: self.theme.colors.base.outline,
+            lineColor: self.theme.colors.base.outline,
+            backgroundColor: self.theme.colors.base.surface
+        )
     }
     
     // MARK: - Tests
@@ -33,13 +45,17 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             intent: .primary,
             state: .selected
         )
-        
-        let expectedAttribute = TabStateAttributes(
+        let selectedColors = TabItemColors(
             labelColor: mockedColor,
             lineColor: mockedColor,
-            backgroundColor: theme.colors.base.surface,
+            backgroundColor: self.theme.colors.base.surface
+        )
+        let expectedAttribute = TabStateAttributes(
+            spacings: self.spacings,
+            colors: selectedColors,
             opacity: nil,
-            separatorLineHeight: theme.border.width.medium)
+            separatorLineHeight: self.theme.border.width.medium
+        )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
     
@@ -49,13 +65,11 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             intent: .primary,
             state: .enabled
         )
-        
         let expectedAttribute = TabStateAttributes(
-            labelColor: theme.colors.base.outline,
-            lineColor: theme.colors.base.outline,
-            backgroundColor: theme.colors.base.surface,
+            spacings: self.spacings,
+            colors: self.colors,
             opacity: nil,
-            separatorLineHeight: theme.border.width.small
+            separatorLineHeight: self.theme.border.width.small
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -66,13 +80,12 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             intent: .primary,
             state: .pressed
         )
-        
+
         let expectedAttribute = TabStateAttributes(
-            labelColor: theme.colors.base.outline,
-            lineColor: theme.colors.base.outline,
-            backgroundColor: theme.colors.base.surface,
+            spacings: self.spacings,
+            colors: self.colors,
             opacity: nil,
-            separatorLineHeight: theme.border.width.small
+            separatorLineHeight: self.theme.border.width.small
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -83,13 +96,11 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             intent: .primary,
             state: .disabled
         )
-        
         let expectedAttribute = TabStateAttributes(
-            labelColor: theme.colors.base.outline,
-            lineColor: theme.colors.base.outline,
-            backgroundColor: theme.colors.base.surface,
+            spacings: self.spacings,
+            colors: self.colors,
             opacity: theme.dims.dim3,
-            separatorLineHeight: theme.border.width.small
+            separatorLineHeight: self.theme.border.width.small
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
