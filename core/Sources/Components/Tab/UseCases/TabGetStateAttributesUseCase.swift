@@ -39,12 +39,24 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
     func execute(theme: Theme,
                  intent: TabIntent,
                  state: TabState) -> TabStateAttributes {
+        
+        let spacings = TabItemSpacings(
+            verticalSpacing: theme.layout.spacing.medium,
+            horizontalSpacing: theme.layout.spacing.large,
+            horizontalPadding: theme.layout.spacing.medium
+        )
+        
+        let colors = TabItemColors(
+            labelColor: theme.colors.base.outline,
+            lineColor: theme.colors.base.outline,
+            backgroundColor: theme.colors.base.surface
+        )
 
+        
         if state.isDisabled {
             return TabStateAttributes(
-                labelColor: theme.colors.base.outline,
-                lineColor: theme.colors.base.outline,
-                backgroundColor: theme.colors.base.surface,
+                spacings: spacings,
+                colors: colors,
                 opacity: theme.dims.dim3,
                 separatorLineHeight: theme.border.width.small
             )
@@ -52,29 +64,31 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
         
         if state.isPressed {
             return TabStateAttributes(
-                labelColor: theme.colors.base.outline,
-                lineColor: theme.colors.base.outline,
-                backgroundColor: theme.colors.base.surface,
+                spacings: spacings,
+                colors: colors,
                 opacity: nil,
                 separatorLineHeight: theme.border.width.small
             )
         }
         
         if state.isSelected {
-            var intentColor = self.getIntentColorUseCase.execute(colors: theme.colors, intent: intent)
-            return TabStateAttributes(
+            let intentColor = self.getIntentColorUseCase.execute(colors: theme.colors, intent: intent)
+            let selectedcolors = TabItemColors(
                 labelColor: intentColor,
                 lineColor: intentColor,
-                backgroundColor: theme.colors.base.surface,
+                backgroundColor: theme.colors.base.surface
+            )
+            return TabStateAttributes(
+                spacings: spacings,
+                colors: selectedcolors,
                 opacity: nil,
                 separatorLineHeight: theme.border.width.medium
             )
         }
-       
+        
         return TabStateAttributes(
-            labelColor: theme.colors.base.outline,
-            lineColor: theme.colors.base.outline,
-            backgroundColor: theme.colors.base.surface,
+            spacings: spacings,
+            colors: colors,
             opacity: nil,
             separatorLineHeight: theme.border.width.small
         )
