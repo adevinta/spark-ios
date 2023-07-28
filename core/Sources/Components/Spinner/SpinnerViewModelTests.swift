@@ -28,7 +28,7 @@ final class SpinnerViewModelTests: XCTestCase {
 
     // MARK: - Tests
     func test_variables_published_on_init() {
-        let sut = sut(intent: .primary, spinnerSize: .small)
+        let sut = sut(intent: .main, spinnerSize: .small)
         let expect = expectation(description: "All publishers should have published")
 
         Publishers.Zip(sut.$intentColor, sut.$size).subscribe(in: &self.subscriptions) { (colorToken, size) in
@@ -51,7 +51,7 @@ final class SpinnerViewModelTests: XCTestCase {
     }
 
     func test_colors_republished_on_theme_update() {
-        let sut = sut(intent: .primary, spinnerSize: .small)
+        let sut = sut(intent: .main, spinnerSize: .small)
         let expect = expectation(description: "All publisher should have published")
         expect.expectedFulfillmentCount = 2
 
@@ -66,7 +66,7 @@ final class SpinnerViewModelTests: XCTestCase {
     }
 
     func test_size_republished_on_size_update() {
-        let sut = sut(intent: .primary, spinnerSize: .small)
+        let sut = sut(intent: .main, spinnerSize: .small)
         let expect = expectation(description: "All publisher should have published")
         expect.expectedFulfillmentCount = 2
 

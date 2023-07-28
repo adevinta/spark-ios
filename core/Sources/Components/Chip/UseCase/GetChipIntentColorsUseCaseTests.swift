@@ -36,7 +36,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.main = main
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .primary)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .main)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
@@ -57,7 +57,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.support = support
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .secondary)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .support)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,

@@ -23,7 +23,7 @@ struct IconComponentView: View {
     @State var size: IconSize = .medium
 
     @State private var intentSheetIsPresented = false
-    @State var intent: IconIntent = .primary
+    @State var intent: IconIntent = .main
 
     // MARK: - View
 

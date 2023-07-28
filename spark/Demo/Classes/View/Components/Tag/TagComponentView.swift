@@ -22,7 +22,7 @@ struct TagComponentView: View {
     @State var version: ComponentVersion = .swiftUI
 
     @State private var intentSheetIsPresented = false
-    @State var intent: TagIntent = .primary
+    @State var intent: TagIntent = .main
 
     @State private var variantSheetIsPresented = false
     @State var variant: TagVariant = .filled
@@ -169,10 +169,10 @@ private extension TagIntent {
             return "Info"
         case .neutral:
             return "Neutral"
-        case .primary:
-            return "Primary"
-        case .secondary:
-            return "Secondary"
+        case .main:
+            return "Main"
+        case .support:
+            return "Support"
         case .success:
             return "Success"
         @unknown default:

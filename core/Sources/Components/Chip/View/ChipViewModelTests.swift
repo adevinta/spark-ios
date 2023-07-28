@@ -38,7 +38,7 @@ final class ChipViewModelTests: TestCase {
 
         self.sut = ChipViewModel(theme: theme,
                                  variant: .filled,
-                                 intent: .primary,
+                                 intent: .main,
                                  useCase: useCase)
     }
 

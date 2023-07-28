@@ -57,7 +57,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 surfaceColor: surfaceColor
             )
 
-        case .primary:
+        case .main:
             return .init(
                 color: colors.main.main,
                 onColor: colors.main.onMain,
@@ -66,7 +66,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 surfaceColor: surfaceColor
             )
 
-        case .secondary:
+        case .support:
             return .init(
                 color: colors.support.support,
                 onColor: colors.support.onSupport,

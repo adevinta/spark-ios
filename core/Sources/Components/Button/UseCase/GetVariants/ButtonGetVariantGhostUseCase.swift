@@ -23,7 +23,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
         let dim5 = dims.dim5
 
         switch intent {
-        case .primary:
+        case .main:
             return .init(
                 foregroundColor: colors.main.main,
                 backgroundColor: ColorTokenDefault.clear,
@@ -31,7 +31,7 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
-        case .secondary:
+        case .support:
             return .init(
                 foregroundColor: colors.support.support,
                 backgroundColor: ColorTokenDefault.clear,

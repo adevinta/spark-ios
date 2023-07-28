@@ -52,7 +52,7 @@ final class  TagGetContentColorsUseCaseTests: XCTestCase {
                 expectedSurfaceColor: colorsMock.base.surface
             ),
             .init(
-                givenIntent: .primary,
+                givenIntent: .main,
                 expectedColor: colorsMock.main.main,
                 expectedOnColor: colorsMock.main.onMain,
                 expectedContainerColor: colorsMock.main.mainContainer,
@@ -60,7 +60,7 @@ final class  TagGetContentColorsUseCaseTests: XCTestCase {
                 expectedSurfaceColor: colorsMock.base.surface
             ),
             .init(
-                givenIntent: .secondary,
+                givenIntent: .support,
                 expectedColor: colorsMock.support.support,
                 expectedOnColor: colorsMock.support.onSupport,
                 expectedContainerColor: colorsMock.support.supportContainer,

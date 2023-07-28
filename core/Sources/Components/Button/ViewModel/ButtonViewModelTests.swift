@@ -216,7 +216,7 @@ final class ButtonViewModelTests: XCTestCase {
 
     func test_published_properties_on_load() throws {
         // GIVEN
-        let intentMock: ButtonIntent = .secondary
+        let intentMock: ButtonIntent = .support
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
@@ -403,7 +403,7 @@ final class ButtonViewModelTests: XCTestCase {
         // GIVEN
         let newThemeMock = themeMock
 
-        let intentMock: ButtonIntent = .secondary
+        let intentMock: ButtonIntent = .support
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
@@ -491,12 +491,12 @@ final class ButtonViewModelTests: XCTestCase {
     func test_set_intent_with_new_value() {
         self.testSetIntent(
             givenValue: .danger,
-            givenNewValue: .primary
+            givenNewValue: .main
         )
     }
     
     func test_set_intent_without_new_value() {
-        let valueMock: ButtonIntent = .primary
+        let valueMock: ButtonIntent = .main
         self.testSetIntent(
             givenValue: valueMock,
             givenNewValue: valueMock
@@ -1120,7 +1120,7 @@ final class ButtonViewModelTests: XCTestCase {
 private extension ButtonViewModelTests {
 
     private func classToTest(
-        intent: ButtonIntent = .primary,
+        intent: ButtonIntent = .main,
         variant: ButtonVariant = .tinted,
         size: ButtonSize = .medium,
         shape: ButtonShape = .rounded,

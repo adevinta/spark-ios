@@ -40,7 +40,7 @@ final class TagViewModel: ObservableObject {
 
     init(
         theme: Theme,
-        intent: TagIntent = .primary,
+        intent: TagIntent = .main,
         variant: TagVariant = .filled,
         iconImage: Image? = nil,
         text: String? = nil,

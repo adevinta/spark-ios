@@ -50,7 +50,7 @@ struct BadgeView_Previews: PreviewProvider {
                         smallCustomBadgeValue = 18
                         smallCustomBadgeSize = .normal
                         smallCustomBadgeIsOutlined.toggle()
-                        smallCustomBadgeType = .primary
+                        smallCustomBadgeType = .main
                     }
                     Button("Change Dange Badge") {
                         standartDangerBadgeType = .neutral
@@ -61,7 +61,7 @@ struct BadgeView_Previews: PreviewProvider {
                                 Text("Default Badge")
                                 BadgeView(
                                     theme: theme,
-                                    intent: .primary,
+                                    intent: .main,
                                     value: 3
                                 )
                                 .format(badgeFormat)
@@ -118,14 +118,14 @@ struct BadgeView_Previews: PreviewProvider {
                                 Text("Text")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    intent: .primary
+                                    intent: .main
                                 )
                             }
                             HStack {
                                 Text("Text")
                                 BadgeView(
                                     theme: SparkTheme.shared,
-                                    intent: .secondary
+                                    intent: .support
                                 )
                             }
                             HStack {
