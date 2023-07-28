@@ -16,16 +16,28 @@ final class TabItemViewModelTests: XCTestCase {
     private var theme: ThemeGeneratedMock!
     private var tabGetStateAttributesUseCase: TabGetStateAttributesUseCasableGeneratedMock!
     private var cancellables = Set<AnyCancellable>()
+    private var spacings: TabItemSpacings!
+    private var colors: TabItemColors!
     
     // MARK: - Setup
     override func setUp() {
         super.setUp()
-        theme = ThemeGeneratedMock.mocked()
+        self.theme = ThemeGeneratedMock.mocked()
         tabGetStateAttributesUseCase = TabGetStateAttributesUseCasableGeneratedMock()
+        
+        self.spacings = TabItemSpacings(
+            verticalSpacing: self.theme.layout.spacing.medium,
+            horizontalSpacing: self.theme.layout.spacing.large,
+            horizontalPadding: self.theme.layout.spacing.medium
+        )
+        self.colors = TabItemColors(
+            labelColor: self.theme.colors.base.outline,
+            lineColor: self.theme.colors.base.outline,
+            backgroundColor: self.theme.colors.base.surface
+        )
         tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateReturnValue = TabStateAttributes(
-            labelColor: theme.colors.main.main,
-            lineColor: theme.colors.main.main,
-            backgroundColor: theme.colors.main.main,
+            spacings: self.spacings,
+            colors: self.colors,
             opacity: nil,
             separatorLineHeight: theme.border.width.small
         )
@@ -56,9 +68,8 @@ final class TabItemViewModelTests: XCTestCase {
     func test_published_attributes_on_initialization() {
         let sut = self.sut()
         let expectedAttributes = TabStateAttributes(
-            labelColor: self.theme.colors.main.main,
-            lineColor: self.theme.colors.main.main,
-            backgroundColor: self.theme.colors.main.main,
+            spacings: self.spacings,
+            colors: self.colors,
             opacity: nil,
             separatorLineHeight: self.theme.border.width.small
         )
