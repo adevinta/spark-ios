@@ -219,7 +219,6 @@ public final class ButtonUIView: UIView {
 
     private var contentStackViewLeadingConstraint: NSLayoutConstraint?
     private var contentStackViewTopConstraint: NSLayoutConstraint?
-    private var contentStackViewTrailingConstraint: NSLayoutConstraint?
     private var contentStackViewBottomConstraint: NSLayoutConstraint?
 
     private var iconImageViewHeightConstraint: NSLayoutConstraint?
@@ -511,15 +510,17 @@ public final class ButtonUIView: UIView {
     private func setupContentStackViewConstraints() {
         self.contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        self.contentStackViewLeadingConstraint = self.contentStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        self.contentStackViewLeadingConstraint = self.contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor)
         self.contentStackViewTopConstraint = self.contentStackView.topAnchor.constraint(equalTo: self.topAnchor)
-        self.contentStackViewTrailingConstraint = self.contentStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        let contentStackViewCenterXAnchor = self.contentStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         self.contentStackViewBottomConstraint = self.contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
 
-        self.contentStackViewLeadingConstraint?.isActive = true
-        self.contentStackViewTopConstraint?.isActive = true
-        self.contentStackViewTrailingConstraint?.isActive = true
-        self.contentStackViewBottomConstraint?.isActive = true
+        NSLayoutConstraint.activate([
+            self.contentStackViewLeadingConstraint,
+            self.contentStackViewTopConstraint,
+            contentStackViewCenterXAnchor,
+            self.contentStackViewBottomConstraint,
+        ].compactMap({ $0 }))
     }
 
     private func setupIconViewConstraints() {
@@ -574,7 +575,6 @@ public final class ButtonUIView: UIView {
 
                 self.contentStackViewLeadingConstraint?.constant = horizontalSpacing
                 self.contentStackViewTopConstraint?.constant = verticalSpacing
-                self.contentStackViewTrailingConstraint?.constant = -horizontalSpacing
                 self.contentStackViewBottomConstraint?.constant = -verticalSpacing
                 self.contentStackView.layoutIfNeeded()
 
