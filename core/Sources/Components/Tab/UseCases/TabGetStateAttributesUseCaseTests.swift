@@ -25,14 +25,14 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         self.getIntentColorUseCase = TabGetIntentColorUseCasebleGeneratedMock()
         self.sut = TabGetStateAttributesUseCase(getIntentColorUseCase: getIntentColorUseCase)
         self.spacings = TabItemSpacings(
-            verticalSpacing: self.theme.layout.spacing.medium,
-            horizontalSpacing: self.theme.layout.spacing.large,
-            horizontalPadding: self.theme.layout.spacing.medium
+            verticalEdge: self.theme.layout.spacing.medium,
+            horizontalEdge: self.theme.layout.spacing.large,
+            content: self.theme.layout.spacing.medium
         )
         self.colors = TabItemColors(
-            labelColor: self.theme.colors.base.outline,
-            lineColor: self.theme.colors.base.outline,
-            backgroundColor: self.theme.colors.base.surface
+            label: self.theme.colors.base.outline,
+            line: self.theme.colors.base.outline,
+            background: self.theme.colors.base.surface
         )
     }
     
@@ -42,13 +42,13 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         self.getIntentColorUseCase.executeWithColorsAndIntentReturnValue = mockedColor
         let stateAttribute = sut.execute(
             theme: self.theme,
-            intent: .primary,
+            intent: .main,
             state: .selected
         )
         let selectedColors = TabItemColors(
-            labelColor: mockedColor,
-            lineColor: mockedColor,
-            backgroundColor: self.theme.colors.base.surface
+            label: mockedColor,
+            line: mockedColor,
+            background: self.theme.colors.base.surface
         )
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
@@ -62,7 +62,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
     func test_enabled() {
         let stateAttribute = sut.execute(
             theme: self.theme,
-            intent: .primary,
+            intent: .main,
             state: .enabled
         )
         let expectedAttribute = TabStateAttributes(
@@ -77,7 +77,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
     func test_pressed() {
         let stateAttribute = sut.execute(
             theme: self.theme,
-            intent: .primary,
+            intent: .main,
             state: .pressed
         )
 
@@ -93,7 +93,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
     func test_disabled() {
         let stateAttribute = sut.execute(
             theme: self.theme,
-            intent: .primary,
+            intent: .main,
             state: .disabled
         )
         let expectedAttribute = TabStateAttributes(
