@@ -23,11 +23,11 @@ final class TabGetIntentColorUseCaseTests: TestCase {
     }
     
     // MARK: - Tests
-    func test_execute_primary() {
-        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .primary).color, self.colors.main.main.color)
+    func test_execute_main() {
+        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .main).color, self.colors.main.main.color)
     }
     
-    func test_execute_secondary() {
-        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .secondary).color, self.colors.support.support.color)
+    func test_execute_support() {
+        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .support).color, self.colors.support.support.color)
     }
 }
