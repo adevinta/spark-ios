@@ -21,16 +21,6 @@ struct ChipComponentUIView: View {
     let component: UIView?
     let action: (() -> Void)?
 
-//    init(theme: Theme, intent: ChipIntent, variant: ChipVariant, label: String?, icon: UIImage?, component: UIView?, action: (() -> Void)?) {
-//        self.theme = theme
-//        self.intent = intent
-//        self.variant = variant
-//        self.showComponent = showComponent
-//        self.label = label
-//        self.icon = icon
-//        self.action = action
-//    }
-
     var body: some View {
         ChipComponentUIViewRepresentation(
             theme: self.theme,
