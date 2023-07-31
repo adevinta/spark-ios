@@ -30,8 +30,8 @@ struct TabGetIntentColorUseCase: TabGetIntentColorUseCaseble {
     /// - Returns: ``ColorToken`` return color of the tab.
     func execute(colors: any Colors, intent: TabIntent) -> any ColorToken {
         switch intent {
-        case .primary: return colors.main.main
-        case .secondary: return colors.support.support
+        case .main: return colors.main.main
+        case .support: return colors.support.support
         }
     }
 }

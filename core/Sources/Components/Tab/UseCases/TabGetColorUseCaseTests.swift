@@ -23,11 +23,11 @@ final class TabGetColorUseCaseTests: TestCase {
     }
     
     // MARK: - Tests
-    func test_execute_primary() {
-        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .primary).color, self.colors.primary.primary.color)
+    func test_execute_main() {
+        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .main).color, self.colors.main.main.color)
     }
     
-    func test_execute_secondary() {
-        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .secondary).color, self.colors.secondary.secondary.color)
+    func test_execute_support() {
+        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .support).color, self.colors.support.support.color)
     }
 }
