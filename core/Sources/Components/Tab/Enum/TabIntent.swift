@@ -10,6 +10,6 @@ import Foundation
 
 /// `TabIntent` determines the color of the tab tint color.
 public enum TabIntent: CaseIterable {
-    case primary
-    case secondary
+    case main
+    case support
 }
