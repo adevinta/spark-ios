@@ -41,15 +41,15 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
                  state: TabState) -> TabStateAttributes {
         
         let spacings = TabItemSpacings(
-            verticalSpacing: theme.layout.spacing.medium,
-            horizontalSpacing: theme.layout.spacing.large,
-            horizontalPadding: theme.layout.spacing.medium
+            verticalEdge: theme.layout.spacing.medium,
+            horizontalEdge: theme.layout.spacing.large,
+            content: theme.layout.spacing.medium
         )
         
         let colors = TabItemColors(
-            labelColor: theme.colors.base.outline,
-            lineColor: theme.colors.base.outline,
-            backgroundColor: theme.colors.base.surface
+            label: theme.colors.base.outline,
+            line: theme.colors.base.outline,
+            background: theme.colors.base.surface
         )
 
         
@@ -74,9 +74,9 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
         if state.isSelected {
             let intentColor = self.getIntentColorUseCase.execute(colors: theme.colors, intent: intent)
             let selectedcolors = TabItemColors(
-                labelColor: intentColor,
-                lineColor: intentColor,
-                backgroundColor: theme.colors.base.surface
+                label: intentColor,
+                line: intentColor,
+                background: theme.colors.base.surface
             )
             return TabStateAttributes(
                 spacings: spacings,

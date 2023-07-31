@@ -9,18 +9,18 @@
 import Foundation
 
 /// Spacings of the tab item:
-/// - verticalSpacing: The vertical spacing determines top and bottom spacing of the tab item.
-/// - horizontalSpacing: The horizantal spacing determines leading and trailing spacing of the tab item.
-/// - horizontalPadding: The horizontal padding determines the padding of between the text and the icon.
+/// - verticalEdge: The vertical edge determines top and bottom spacing of the tab item.
+/// - horizontalEdge: The horizontal edge determines leading and trailing spacing of the tab item.
+/// - content: The content determines the space  between the icon, text and badge.
 struct TabItemSpacings: Equatable {
     
-    let verticalSpacing: CGFloat
-    let horizontalSpacing: CGFloat
-    let horizontalPadding: CGFloat
+    let verticalEdge: CGFloat
+    let horizontalEdge: CGFloat
+    let content: CGFloat
     
     static func == (lhs: TabItemSpacings, rhs: TabItemSpacings) -> Bool {
-        return lhs.verticalSpacing == rhs.verticalSpacing &&
-        lhs.horizontalSpacing == lhs.horizontalSpacing &&
-        lhs.horizontalPadding == rhs.horizontalPadding
+        return lhs.verticalEdge == rhs.verticalEdge &&
+        lhs.horizontalEdge == lhs.horizontalEdge &&
+        lhs.content == rhs.content
     }
 }

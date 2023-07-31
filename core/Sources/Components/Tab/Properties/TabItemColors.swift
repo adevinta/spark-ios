@@ -9,17 +9,17 @@
 import Foundation
 
 /// Colors of the tab item:
-/// - labelColor: defines the color of the text and the tint color of the icon
-/// - lineColor: The color of the base line
-/// - backgroundColor: The background color of the tab item.
+/// - label: defines the color of the text and the tint color of the icon
+/// - line: The color of the base line
+/// - background: The background color of the tab item.
 struct TabItemColors: Equatable {
     
-    let labelColor: any ColorToken
-    let lineColor: any ColorToken
-    let backgroundColor: any ColorToken
+    let label: any ColorToken
+    let line: any ColorToken
+    let background: any ColorToken
     
     static func == (lhs: TabItemColors, rhs: TabItemColors) -> Bool {
-        return colorsEqual(lhs.labelColor, rhs.labelColor) && colorsEqual(lhs.lineColor, rhs.lineColor) && colorsEqual(lhs.backgroundColor, rhs.backgroundColor)
+        return colorsEqual(lhs.label, rhs.label) && colorsEqual(lhs.line, rhs.line) && colorsEqual(lhs.background, rhs.background)
     }
     
     private static func colorsEqual(_ lhs: any ColorToken, _ rhs: any ColorToken) -> Bool {
