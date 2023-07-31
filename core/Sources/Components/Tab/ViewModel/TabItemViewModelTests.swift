@@ -26,14 +26,14 @@ final class TabItemViewModelTests: XCTestCase {
         tabGetStateAttributesUseCase = TabGetStateAttributesUseCasableGeneratedMock()
         
         self.spacings = TabItemSpacings(
-            verticalSpacing: self.theme.layout.spacing.medium,
-            horizontalSpacing: self.theme.layout.spacing.large,
-            horizontalPadding: self.theme.layout.spacing.medium
+            verticalEdge: self.theme.layout.spacing.medium,
+            horizontalEdge: self.theme.layout.spacing.large,
+            content: self.theme.layout.spacing.medium
         )
         self.colors = TabItemColors(
-            labelColor: self.theme.colors.base.outline,
-            lineColor: self.theme.colors.base.outline,
-            backgroundColor: self.theme.colors.base.surface
+            label: self.theme.colors.base.outline,
+            line: self.theme.colors.base.outline,
+            background: self.theme.colors.base.surface
         )
         tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateReturnValue = TabStateAttributes(
             spacings: self.spacings,
@@ -49,7 +49,7 @@ final class TabItemViewModelTests: XCTestCase {
         let icon = UIImage(systemName: "pencil.circle")
         let sut = self.sut(icon: icon, text: text)
         XCTAssertIdentical(sut.theme as AnyObject, self.theme, "sut theme should be the same as self.theme")
-        XCTAssertEqual(sut.intent, .primary, "sut intent should be primary")
+        XCTAssertEqual(sut.intent, .main, "sut intent should be main")
         XCTAssertEqual(sut.isSelected, false, "sut's isSelected parameter should be false")
         XCTAssertEqual(sut.isPressed, false, "sut's isPressed parameter should be false")
         XCTAssertEqual(sut.isDisabled, false, "sut's isDisabled parameter should be false")
@@ -58,10 +58,10 @@ final class TabItemViewModelTests: XCTestCase {
     }
     
     func test_usecase_is_executed_on_initialization() {
-        _ = self.sut(intent: .secondary)
+        _ = self.sut(intent: .support)
         let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateReceivedArguments
         XCTAssertIdentical(arguments?.theme as AnyObject, self.theme, "sut theme should be the same as self.theme")
-        XCTAssertEqual(arguments?.intent, .secondary, "sut intent should be secondary")
+        XCTAssertEqual(arguments?.intent, .support, "sut intent should be support")
         XCTAssertEqual(arguments?.state, TabState(), "sut state should be TabState that has default parameters")
     }
     
@@ -210,7 +210,7 @@ final class TabItemViewModelTests: XCTestCase {
 private extension TabItemViewModelTests {
     
     func sut(
-        intent: TabIntent = .primary,
+        intent: TabIntent = .main,
         icon: UIImage? = nil,
         text: String? = nil,
         attributeText: NSAttributedString? = nil
