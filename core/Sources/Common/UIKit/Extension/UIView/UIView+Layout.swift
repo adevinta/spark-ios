@@ -17,12 +17,7 @@ extension UIView {
         subview.translatesAutoresizingMaskIntoConstraints = false
         addSubview(subview)
 
-        NSLayoutConstraint.activate([
-            subview.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            subview.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            subview.topAnchor.constraint(equalTo: self.topAnchor),
-            subview.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
+        NSLayoutConstraint.stickEdges(from: subview, to: self)
     }
 
     /// Activate a constraint of this view in relation to another view.
