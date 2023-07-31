@@ -30,7 +30,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             content: self.theme.layout.spacing.medium
         )
         self.colors = TabItemColors(
-            label: self.theme.colors.base.outline,
+            label: self.theme.colors.base.onSurface,
             line: self.theme.colors.base.outline,
             background: self.theme.colors.base.surface
         )
