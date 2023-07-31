@@ -57,21 +57,21 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 surfaceColor: surfaceColor
             )
 
-        case .primary:
+        case .main:
             return .init(
-                color: colors.primary.primary,
-                onColor: colors.primary.onPrimary,
-                containerColor: colors.primary.primaryContainer,
-                onContainerColor: colors.primary.onPrimaryContainer,
+                color: colors.main.main,
+                onColor: colors.main.onMain,
+                containerColor: colors.main.mainContainer,
+                onContainerColor: colors.main.onMainContainer,
                 surfaceColor: surfaceColor
             )
 
-        case .secondary:
+        case .support:
             return .init(
-                color: colors.secondary.secondary,
-                onColor: colors.secondary.onSecondary,
-                containerColor: colors.secondary.secondaryContainer,
-                onContainerColor: colors.secondary.onSecondaryContainer,
+                color: colors.support.support,
+                onColor: colors.support.onSupport,
+                containerColor: colors.support.supportContainer,
+                onContainerColor: colors.support.onSupportContainer,
                 surfaceColor: surfaceColor
             )
 

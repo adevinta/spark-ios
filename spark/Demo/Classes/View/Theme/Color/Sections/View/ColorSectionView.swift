@@ -36,6 +36,6 @@ struct ColorSectionView: View {
 
 struct ColorSectionView_Previews: PreviewProvider {
     static var previews: some View {
-        ColorSectionView(viewModel: ColorSectionType.primary.viewModel(for: SparkTheme()))
+        ColorSectionView(viewModel: ColorSectionType.main.viewModel(for: SparkTheme()))
     }
 }

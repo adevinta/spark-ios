@@ -24,6 +24,7 @@ extension SwitchStatusColors: Hashable, Equatable {
     }
 
     static func == (lhs: SwitchStatusColors, rhs: SwitchStatusColors) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.onColorToken.equals(rhs.onColorToken) &&
+        lhs.offColorToken.equals(rhs.offColorToken)
     }
 }

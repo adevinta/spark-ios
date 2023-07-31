@@ -14,21 +14,21 @@ struct PurpleColors: Colors {
 
     private class ClassForBundle {}
 
-    var primary: ColorsPrimary = ColorsPrimaryDefault(
-        primary: ColorTokenDefault(named: "purple-primary", in: Bundle(for: ClassForBundle.self)),
-        onPrimary: ColorTokenDefault(named: "purple-onPrimary", in: Bundle(for: ClassForBundle.self)),
-        primaryVariant: ColorTokenDefault(named: "purple-primaryVariant", in: Bundle(for: ClassForBundle.self)),
-        onPrimaryVariant: ColorTokenDefault(named: "purple-onPrimaryVariant", in: Bundle(for: ClassForBundle.self)),
-        primaryContainer: ColorTokenDefault(named: "purple-primaryContainer", in: Bundle(for: ClassForBundle.self)),
-        onPrimaryContainer: ColorTokenDefault(named: "purple-onPrimaryContainer", in: Bundle(for: ClassForBundle.self)))
+    var main: ColorsMain = ColorsMainDefault(
+        main: ColorTokenDefault(named: "purple-main", in: Bundle(for: ClassForBundle.self)),
+        onMain: ColorTokenDefault(named: "purple-onMain", in: Bundle(for: ClassForBundle.self)),
+        mainVariant: ColorTokenDefault(named: "purple-mainVariant", in: Bundle(for: ClassForBundle.self)),
+        onMainVariant: ColorTokenDefault(named: "purple-onMainVariant", in: Bundle(for: ClassForBundle.self)),
+        mainContainer: ColorTokenDefault(named: "purple-mainContainer", in: Bundle(for: ClassForBundle.self)),
+        onMainContainer: ColorTokenDefault(named: "purple-onMainContainer", in: Bundle(for: ClassForBundle.self)))
 
-    let secondary: ColorsSecondary = ColorsSecondaryDefault(
-        secondary: ColorTokenDefault(named: "purple-secondary", in: Bundle(for: ClassForBundle.self)),
-        onSecondary: ColorTokenDefault(named: "purple-onSecondary", in: Bundle(for: ClassForBundle.self)),
-        secondaryVariant: ColorTokenDefault(named: "purple-secondaryVariant", in: Bundle(for: ClassForBundle.self)),
-        onSecondaryVariant: ColorTokenDefault(named: "purple-onSecondaryVariant", in: Bundle(for: ClassForBundle.self)),
-        secondaryContainer: ColorTokenDefault(named: "purple-secondaryContainer", in: Bundle(for: ClassForBundle.self)),
-        onSecondaryContainer: ColorTokenDefault(named: "purple-onSecondaryContainer", in: Bundle(for: ClassForBundle.self)))
+    let support: ColorsSupport = ColorsSupportDefault(
+        support: ColorTokenDefault(named: "purple-support", in: Bundle(for: ClassForBundle.self)),
+        onSupport: ColorTokenDefault(named: "purple-onSupport", in: Bundle(for: ClassForBundle.self)),
+        supportVariant: ColorTokenDefault(named: "purple-supportVariant", in: Bundle(for: ClassForBundle.self)),
+        onSupportVariant: ColorTokenDefault(named: "purple-onSupportVariant", in: Bundle(for: ClassForBundle.self)),
+        supportContainer: ColorTokenDefault(named: "purple-supportContainer", in: Bundle(for: ClassForBundle.self)),
+        onSupportContainer: ColorTokenDefault(named: "purple-onSupportContainer", in: Bundle(for: ClassForBundle.self)))
 
     let base: ColorsBase = ColorsBaseDefault(
         background: ColorTokenDefault(named: "purple-background", in: Bundle(for: ClassForBundle.self)),
@@ -68,12 +68,12 @@ struct PurpleColors: Colors {
     )
 
     let states: ColorsStates = ColorsStatesDefault(
-        primaryPressed: ColorTokenDefault(named: "purple-primaryPressed", in: Bundle(for: ClassForBundle.self)),
-        primaryVariantPressed: ColorTokenDefault(named: "purple-primaryVariantPressed", in: Bundle(for: ClassForBundle.self)),
-        primaryContainerPressed: ColorTokenDefault(named: "purple-primaryContainerPressed", in: Bundle(for: ClassForBundle.self)),
-        secondaryPressed: ColorTokenDefault(named: "purple-secondaryPressed", in: Bundle(for: ClassForBundle.self)),
-        secondaryVariantPressed: ColorTokenDefault(named: "purple-secondaryVariantPressed", in: Bundle(for: ClassForBundle.self)),
-        secondaryContainerPressed: ColorTokenDefault(named: "purple-secondaryContainerPressed", in: Bundle(for: ClassForBundle.self)),
+        mainPressed: ColorTokenDefault(named: "purple-mainPressed", in: Bundle(for: ClassForBundle.self)),
+        mainVariantPressed: ColorTokenDefault(named: "purple-mainVariantPressed", in: Bundle(for: ClassForBundle.self)),
+        mainContainerPressed: ColorTokenDefault(named: "purple-mainContainerPressed", in: Bundle(for: ClassForBundle.self)),
+        supportPressed: ColorTokenDefault(named: "purple-supportPressed", in: Bundle(for: ClassForBundle.self)),
+        supportVariantPressed: ColorTokenDefault(named: "purple-supportVariantPressed", in: Bundle(for: ClassForBundle.self)),
+        supportContainerPressed: ColorTokenDefault(named: "purple-supportContainerPressed", in: Bundle(for: ClassForBundle.self)),
         surfacePressed: ColorTokenDefault(named: "purple-surfacePressed", in: Bundle(for: ClassForBundle.self)),
         surfaceInversePressed: ColorTokenDefault(named: "purple-surfaceInversePressed", in: Bundle(for: ClassForBundle.self)),
         outlinePressed: ColorTokenDefault(named: "purple-outlinePressed", in: Bundle(for: ClassForBundle.self)),

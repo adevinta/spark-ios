@@ -9,17 +9,17 @@
 // sourcery: AutoMockable
 public protocol ColorsStates {
 
-    // MARK: - Primary
+    // MARK: - Main
 
-    var primaryPressed: any ColorToken { get }
-    var primaryVariantPressed: any ColorToken { get }
-    var primaryContainerPressed: any ColorToken { get }
+    var mainPressed: any ColorToken { get }
+    var mainVariantPressed: any ColorToken { get }
+    var mainContainerPressed: any ColorToken { get }
 
-    // MARK: - Secondary
+    // MARK: - Support
 
-    var secondaryPressed: any ColorToken { get }
-    var secondaryVariantPressed: any ColorToken { get }
-    var secondaryContainerPressed: any ColorToken { get }
+    var supportPressed: any ColorToken { get }
+    var supportVariantPressed: any ColorToken { get }
+    var supportContainerPressed: any ColorToken { get }
 
     // MARK: - Base
 

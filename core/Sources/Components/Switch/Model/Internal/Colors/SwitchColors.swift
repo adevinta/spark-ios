@@ -13,7 +13,6 @@ struct SwitchColors {
     let toggleBackgroundColors: SwitchStatusColors
     let toggleDotForegroundColors: SwitchStatusColors
     let toggleDotBackgroundColor: any ColorToken
-
     let textForegroundColor: any ColorToken
 }
 
@@ -29,6 +28,9 @@ extension SwitchColors: Hashable, Equatable {
     }
 
     static func == (lhs: SwitchColors, rhs: SwitchColors) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.toggleBackgroundColors == rhs.toggleBackgroundColors &&
+        lhs.toggleDotForegroundColors == rhs.toggleDotForegroundColors &&
+        lhs.toggleDotBackgroundColor.equals(rhs.toggleDotBackgroundColor) &&
+        lhs.textForegroundColor.equals(rhs.textForegroundColor)
     }
 }

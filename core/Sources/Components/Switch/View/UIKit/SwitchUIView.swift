@@ -176,7 +176,7 @@ public final class SwitchUIView: UIView {
             return self.viewModel.images?.leftValue
         }
         set {
-            self.viewModel.set(images: Self.getImagesEither(from: newValue))
+            self.viewModel.set(images: newValue.map { .left($0) })
         }
     }
 
@@ -360,7 +360,7 @@ public final class SwitchUIView: UIView {
             alignment: alignment,
             intent: intent,
             isEnabled: isEnabled,
-            images: Self.getImagesEither(from: images)
+            images: images.map { .left($0) }
         )
 
         super.init(frame: .zero)
@@ -777,15 +777,5 @@ public final class SwitchUIView: UIView {
                                         for axis: NSLayoutConstraint.Axis) {
         self.textLabel.setContentHuggingPriority(priority,
                                                  for: axis)
-    }
-
-    // MARK: - Either Getter
-
-    private static func getImagesEither(from value: SwitchUIImages?) -> SwitchImagesEither? {
-        guard let value else {
-            return nil
-        }
-
-        return .left(value)
     }
 }

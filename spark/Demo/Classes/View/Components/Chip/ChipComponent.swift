@@ -20,7 +20,7 @@ struct ChipComponent: View {
     @State private var versionSheetIsPresented = false
     @State var version: ComponentVersion = .uiKit
 
-    @State var intent: ChipIntent = .primary
+    @State var intent: ChipIntent = .main
     @State var isIntentPresented = false
     @State var variant: ChipVariant = .filled
     @State var isVariantPresented = false

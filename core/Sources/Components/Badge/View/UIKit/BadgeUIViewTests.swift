@@ -124,9 +124,9 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
 
     private func createAttachTestView(badge: BadgeUIView, position: BadgePosition) -> UIView {
         let containerView = UIView(frame: .init(x: 0, y: 0, width: 200, height: 200))
-        containerView.backgroundColor = self.theme.colors.primary.primaryContainer.uiColor
+        containerView.backgroundColor = self.theme.colors.main.mainContainer.uiColor
         let view = UIView(frame: .init(x: 50, y: 50, width: 100, height: 100))
-        view.backgroundColor = self.theme.colors.primary.primary.uiColor
+        view.backgroundColor = self.theme.colors.main.main.uiColor
         view.layer.cornerRadius = self.theme.border.radius.small
         containerView.addSubview(view)
         containerView.addSubview(badge)

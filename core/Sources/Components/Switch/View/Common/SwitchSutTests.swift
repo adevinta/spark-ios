@@ -84,7 +84,7 @@ struct SwitchSutTests {
 
         return items.map { item -> SwitchSutTests in
                 .init(
-                    intent: .primary,
+                    intent: .main,
                     isOn: true,
                     alignment: .left,
                     isEnabled: true,
@@ -103,7 +103,7 @@ struct SwitchSutTests {
         return alignmentPossibilities.flatMap { alignment in
             isMultilineTextPossibilities.map { isMultilineText -> SwitchSutTests in
                     .init(
-                        intent: .primary,
+                        intent: .main,
                         isOn: true,
                         alignment: alignment,
                         isEnabled: true,

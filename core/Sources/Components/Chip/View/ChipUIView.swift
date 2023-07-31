@@ -169,7 +169,7 @@ public final class ChipUIView: UIView {
     ///
     /// Parameters:
     /// - theme: The theme.
-    /// - intent: The intent of the chip, e.g. primary, secondary
+    /// - intent: The intent of the chip, e.g. main, support
     /// - variant: The chip variant, e.g. outlined, filled
     /// - iconImage: An icon
     public convenience init(theme: Theme,
@@ -183,7 +183,7 @@ public final class ChipUIView: UIView {
     ///
     /// Parameters:
     /// - theme: The theme.
-    /// - intent: The intent of the chip, e.g. primary, secondary
+    /// - intent: The intent of the chip, e.g. main, support
     /// - variant: The chip variant, e.g. outlined, filled
     /// - text: The text label
     public convenience init(theme: Theme,
@@ -197,7 +197,7 @@ public final class ChipUIView: UIView {
     ///
     /// Parameters:
     /// - theme: The theme.
-    /// - intent: The intent of the chip, e.g. primary, secondary
+    /// - intent: The intent of the chip, e.g. main, support
     /// - variant: The chip variant, e.g. outlined, filled
     /// - text: The text label
     /// - iconImage: An icon

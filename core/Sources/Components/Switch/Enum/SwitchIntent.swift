@@ -12,7 +12,7 @@ public enum SwitchIntent: CaseIterable {
     case error
     case info
     case neutral
-    case primary
-    case secondary
+    case main
+    case support
     case success
 }

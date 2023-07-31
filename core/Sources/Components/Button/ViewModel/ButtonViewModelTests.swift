@@ -36,6 +36,7 @@ final class ButtonViewModelTests: XCTestCase {
         let mock = DisplayedTextViewModelGeneratedMock()
         mock.text = "Text"
         mock.attributedText = .left(.init(string: "AText"))
+        mock.underlyingDisplayedTextType = .text
         return mock
     }()
 
@@ -56,7 +57,7 @@ final class ButtonViewModelTests: XCTestCase {
     }()
     private lazy var getCurrentColorsUseCaseMock: ButtonGetCurrentColorsUseCaseableGeneratedMock = {
         let mock = ButtonGetCurrentColorsUseCaseableGeneratedMock()
-        mock.executeWithColorsAndIsPressedReturnValue = self.currentColorsMock
+        mock.executeWithColorsAndIsPressedAndDisplayedTextTypeReturnValue = self.currentColorsMock
         return mock
     }()
     private lazy var getIsIconOnlyUseCaseMock: ButtonGetIsOnlyIconUseCaseableGeneratedMock = {
@@ -215,7 +216,7 @@ final class ButtonViewModelTests: XCTestCase {
 
     func test_published_properties_on_load() throws {
         // GIVEN
-        let intentMock: ButtonIntent = .secondary
+        let intentMock: ButtonIntent = .support
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
@@ -402,7 +403,7 @@ final class ButtonViewModelTests: XCTestCase {
         // GIVEN
         let newThemeMock = themeMock
 
-        let intentMock: ButtonIntent = .secondary
+        let intentMock: ButtonIntent = .support
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
@@ -490,12 +491,12 @@ final class ButtonViewModelTests: XCTestCase {
     func test_set_intent_with_new_value() {
         self.testSetIntent(
             givenValue: .danger,
-            givenNewValue: .primary
+            givenNewValue: .main
         )
     }
     
     func test_set_intent_without_new_value() {
-        let valueMock: ButtonIntent = .primary
+        let valueMock: ButtonIntent = .main
         self.testSetIntent(
             givenValue: valueMock,
             givenNewValue: valueMock
@@ -1119,7 +1120,7 @@ final class ButtonViewModelTests: XCTestCase {
 private extension ButtonViewModelTests {
 
     private func classToTest(
-        intent: ButtonIntent = .primary,
+        intent: ButtonIntent = .main,
         variant: ButtonVariant = .tinted,
         size: ButtonSize = .medium,
         shape: ButtonShape = .rounded,
@@ -1319,12 +1320,12 @@ private extension ButtonViewModelTests {
         givenColors: ButtonColors? = nil,
         givenIsPressed: Bool? = nil
     ) {
-        XCTAssertEqual(self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedCallsCount,
+        XCTAssertEqual(self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getCurrentColorsUseCase")
 
         if numberOfCalls > 0, let givenColors, let givenIsPressed {
-            let getCurrentColorsUseCaseArgs = self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedReceivedArguments
+            let getCurrentColorsUseCaseArgs = self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReceivedArguments
             XCTAssertEqual(try XCTUnwrap(getCurrentColorsUseCaseArgs?.colors),
                                givenColors,
                                "Wrong colors parameter on execute on getCurrentColorsUseCase")
@@ -1430,9 +1431,9 @@ private extension ButtonViewModelTests {
         self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReceivedArguments = nil
         self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReceivedInvocations = []
 
-        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedCallsCount = 0
-        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedReceivedArguments = nil
-        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedReceivedInvocations = []
+        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeCallsCount = 0
+        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReceivedArguments = nil
+        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReceivedInvocations = []
 
         self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextCallsCount = 0
         self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextReceivedArguments = nil

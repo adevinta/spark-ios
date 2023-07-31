@@ -46,16 +46,16 @@ final class BadgeGetColorsUseCaseTests: XCTestCase {
                 expectedTextToken: mockedExpectedColors.feedback.onNeutral
             ),
             .init(
-                givenIntent: .primary,
-                expectedBackgroundToken: mockedExpectedColors.primary.primary,
+                givenIntent: .main,
+                expectedBackgroundToken: mockedExpectedColors.main.main,
                 expectedBorderToken: mockedExpectedSurfaceColor,
-                expectedTextToken: mockedExpectedColors.primary.onPrimary
+                expectedTextToken: mockedExpectedColors.main.onMain
             ),
             .init(
-                givenIntent: .secondary,
-                expectedBackgroundToken: mockedExpectedColors.secondary.secondary,
+                givenIntent: .support,
+                expectedBackgroundToken: mockedExpectedColors.support.support,
                 expectedBorderToken: mockedExpectedSurfaceColor,
-                expectedTextToken: mockedExpectedColors.secondary.onSecondary
+                expectedTextToken: mockedExpectedColors.support.onSupport
             ),
             .init(
                 givenIntent: .success,

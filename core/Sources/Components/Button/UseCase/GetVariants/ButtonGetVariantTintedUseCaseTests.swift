@@ -13,12 +13,12 @@ import SwiftUI
 final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
 
     // MARK: - Tests
-    func test_primary_colors() throws {
+    func test_main_colors() throws {
         // Given
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(intent: .primary, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.execute(intent: .main, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -27,20 +27,20 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.primary.onPrimaryContainer,
-             self.theme.colors.primary.primaryContainer,
-             self.theme.colors.states.primaryContainerPressed,
+            [self.theme.colors.main.onMainContainer,
+             self.theme.colors.main.mainContainer,
+             self.theme.colors.states.mainContainerPressed,
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))
     }
 
-    func test_secondary_colors() throws {
+    func test_support_colors() throws {
         // Given
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(intent: .secondary, colors: self.theme.colors, dims: self.theme.dims)
+        let colors = sut.execute(intent: .support, colors: self.theme.colors, dims: self.theme.dims)
 
         // Then
         XCTAssertEqual(
@@ -49,9 +49,9 @@ final class ButtonGetVariantTintedUseCaseTests: ButtonVariantUseCaseTests {
              colors.pressedBackgroundColor,
              colors.borderColor,
              colors.pressedBorderColor].map(\.color),
-            [self.theme.colors.secondary.onSecondaryContainer,
-             self.theme.colors.secondary.secondaryContainer,
-             self.theme.colors.states.secondaryContainerPressed,
+            [self.theme.colors.support.onSupportContainer,
+             self.theme.colors.support.supportContainer,
+             self.theme.colors.states.supportContainerPressed,
              ColorTokenDefault.clear,
              ColorTokenDefault.clear
             ].map(\.color))

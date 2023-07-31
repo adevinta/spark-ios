@@ -31,11 +31,11 @@ struct SwitchGetColorUseCase: SwitchGetColorUseCaseable {
         case .neutral:
             return colors.feedback.neutral
 
-        case .primary:
-            return colors.primary.primary
+        case .main:
+            return colors.main.main
 
-        case .secondary:
-            return colors.secondary.secondary
+        case .support:
+            return colors.support.support
 
         case .success:
             return colors.feedback.success

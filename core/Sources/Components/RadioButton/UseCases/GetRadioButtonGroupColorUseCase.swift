@@ -26,8 +26,8 @@ struct GetRadioButtonGroupColorUseCase: GetRadioButtonGroupColorUseCaseable {
         case .warning: return colors.feedback.onAlertContainer
         case .error: return colors.feedback.error
         case .success: return colors.feedback.success
-        case .enabled: return colors.primary.primaryContainer
-        case .disabled: return colors.primary.primaryContainer
+        case .enabled: return colors.main.mainContainer
+        case .disabled: return colors.main.mainContainer
         }
     }
 }

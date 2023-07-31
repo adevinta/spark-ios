@@ -28,7 +28,7 @@ public struct TagView: View {
     /// - Parameters:
     ///   - theme: The spark theme.
     /// - Default values are:
-    ///   - intent is .primary case.
+    ///   - intent is .main case.
     ///   - variant is .filled case.
     ///   - iconImage is nil.
     ///   - text is nil.
