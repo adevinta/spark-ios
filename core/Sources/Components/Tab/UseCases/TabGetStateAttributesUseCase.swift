@@ -39,20 +39,19 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
     func execute(theme: Theme,
                  intent: TabIntent,
                  state: TabState) -> TabStateAttributes {
-        
+
         let spacings = TabItemSpacings(
             verticalEdge: theme.layout.spacing.medium,
             horizontalEdge: theme.layout.spacing.large,
             content: theme.layout.spacing.medium
         )
-        
+
         let colors = TabItemColors(
-            label: theme.colors.base.outline,
+            label: theme.colors.base.onSurface,
             line: theme.colors.base.outline,
             background: theme.colors.base.surface
         )
 
-        
         if state.isDisabled {
             return TabStateAttributes(
                 spacings: spacings,
@@ -61,7 +60,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
                 separatorLineHeight: theme.border.width.small
             )
         }
-        
+
         if state.isPressed {
             return TabStateAttributes(
                 spacings: spacings,
@@ -70,22 +69,22 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
                 separatorLineHeight: theme.border.width.small
             )
         }
-        
+
         if state.isSelected {
             let intentColor = self.getIntentColorUseCase.execute(colors: theme.colors, intent: intent)
-            let selectedcolors = TabItemColors(
+            let selectedColors = TabItemColors(
                 label: intentColor,
                 line: intentColor,
                 background: theme.colors.base.surface
             )
             return TabStateAttributes(
                 spacings: spacings,
-                colors: selectedcolors,
+                colors: selectedColors,
                 opacity: nil,
                 separatorLineHeight: theme.border.width.medium
             )
         }
-        
+
         return TabStateAttributes(
             spacings: spacings,
             colors: colors,
