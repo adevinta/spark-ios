@@ -69,6 +69,7 @@ public class BadgeUIView: UIView {
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Public variables
+    /// The current theme of the view
     public var theme: Theme {
         get {
             return self.viewModel.theme
@@ -78,6 +79,7 @@ public class BadgeUIView: UIView {
         }
     }
 
+    /// The current intent
     public var intent: BadgeIntentType {
         get {
             return self.viewModel.intent
@@ -87,6 +89,7 @@ public class BadgeUIView: UIView {
         }
     }
 
+    /// The badge size
     public var size: BadgeSize {
         get {
             return self.viewModel.size
@@ -96,6 +99,7 @@ public class BadgeUIView: UIView {
         }
     }
 
+    /// The current value of the badge
     public var value: Int? {
         get {
             return self.viewModel.value
@@ -105,6 +109,7 @@ public class BadgeUIView: UIView {
         }
     }
 
+    /// The formatter of the badge
     public var format: BadgeFormat {
         get {
             return self.viewModel.format
@@ -114,6 +119,7 @@ public class BadgeUIView: UIView {
         }
     }
 
+    /// Shows/hides the border around the badge
     public var isBorderVisible: Bool {
         get {
             return self.viewModel.isBorderVisible
