@@ -8,8 +8,8 @@
 
 import Combine
 import SwiftUI
-import SparkCore
-import Spark
+@testable import SparkCore
+@testable import Spark
 
 private struct BadgePreviewFormatter: BadgeFormatting {
     func formatText(for value: Int?) -> String {
@@ -22,52 +22,44 @@ private struct BadgePreviewFormatter: BadgeFormatting {
 
 struct UIBadgeView: UIViewRepresentable {
 
-    var views: [BadgeUIView]
+//    var views: [BadgeUIView]
 
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+//    @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
-    var theme: Theme {
-        self.themePublisher.theme
+    let theme: Theme
+    let intent: BadgeIntentType
+    let size: BadgeSize
+    let value: Int?
+    let format: BadgeFormat
+    let isBorderVisible: Bool
+
+    init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = true) {
+        self.theme = theme
+        self.intent = intent
+        self.size = size
+        self.value = value
+        self.format = format
+        self.isBorderVisible = isBorderVisible
     }
 
-    func makeUIView(context: Context) -> some UIView {
-        let badgesStackView = UIStackView()
-        for view in self.views {
-            view.setTheme(self.theme)
-        }
-        views.enumerated().forEach { index, badgeView in
-            let containerView = UIView()
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.text = "badge_\(index)"
-            containerView.addSubview(label)
-            containerView.addSubview(badgeView)
-            containerView.backgroundColor = .blue
-
-            label.activateConstraint(from: .leading, to: .leading, ofView: containerView, relation: .greaterThanOrEqual)
-            label.activateConstraint(from: .top, to: .top, ofView: containerView)
-            label.activateConstraint(from: .bottom, to: .bottom, ofView: containerView)
-
-            if index >= 3 && index <= 6 {
-                badgeView.activateConstraint(from: .centerX, to: .trailing, ofView: label, constant: 5)
-                badgeView.activateConstraint(from: .centerY, to: .top, ofView: label, constant: -5)
-            } else {
-                badgeView.activateConstraint(from: .leading, to: .trailing, ofView: label, constant: 5)
-                badgeView.activateConstraint(from: .centerY, to: .centerY, ofView: label)
-            }
-
-            badgesStackView.addArrangedSubview(containerView)
-        }
-        badgesStackView.axis = .vertical
-        badgesStackView.alignment = .leading
-        badgesStackView.spacing = 30
-        badgesStackView.distribution = .fill
-
-        return badgesStackView
+    func makeUIView(context: Context) -> BadgeUIView {
+        return BadgeUIView(
+            theme: theme,
+            intent: intent,
+            size: size,
+            value: value,
+            format: format,
+            isBorderVisible: isBorderVisible
+        )
     }
 
-    func updateUIView(_ uiView: UIViewType, context: Context) {
+    func updateUIView(_ badge: BadgeUIView, context: Context) {
+        badge.theme = theme
+        badge.intent = intent
+        badge.size = size
+        badge.format = format
+        badge.value = value
+        badge.isBorderVisible = isBorderVisible
     }
 }
 

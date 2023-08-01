@@ -8,7 +8,7 @@
 
 import Combine
 import Spark
-import SparkCore
+@testable import SparkCore
 import SwiftUI
 
 // MARK: - SwiftUI-wrapper
