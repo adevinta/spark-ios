@@ -6,8 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SparkCore
 import Spark
+import SparkCore
 import SwiftUI
 
 private struct BadgePreviewFormatter: BadgeFormatting {
@@ -27,189 +27,157 @@ struct BadgeComponentView: View {
         self.themePublisher.theme
     }
 
-    private var views = [
-        BadgeUIView(
-            theme: SparkThemePublisher.shared.theme,
-            intent: .alert,
-            value: 6
-        ),
-        BadgeUIView(
-            theme: SparkThemePublisher.shared.theme,
-            intent: .main,
-            size: .normal,
-            value: 22,
-            format: .overflowCounter(maxValue: 20)
-        ),
-        BadgeUIView(
-            theme: SparkThemePublisher.shared.theme,
-            intent: .danger,
-            value: 10,
-            format: .custom(
-                formatter: BadgePreviewFormatter()
-            )
-        ),
-        BadgeUIView(
-            theme: SparkThemePublisher.shared.theme,
-            intent: .info,
-            value: 20
-        ),
-        BadgeUIView(
-            theme: SparkThemePublisher.shared.theme,
-            intent: .main
-        ),
-        BadgeUIView(
-            theme: SparkThemePublisher.shared.theme,
-            intent: .neutral,
-            isBorderVisible: false
-        ),
-        BadgeUIView(
-            theme: SparkThemePublisher.shared.theme,
-            intent: .support,
-            value: 23
-        ),
-        BadgeUIView(
-            theme: SparkThemePublisher.shared.theme,
-            intent: .success
-        )
-    ]
+    @State var version: ComponentVersion = .uiKit
+    @State var isVersionPresented = false
 
-    @State var standartBadgeValue: Int? = 3
-    @State var standartBadgeIsOutlined: Bool = true
+    @State var intent: BadgeIntentType = .danger
+    @State var isIntentPresented = false
 
-    @State var smallCustomBadgeValue: Int? = 14
-    @State var smallCustomBadgeSize: BadgeSize = .small
-    @State var smallCustomBadgeIsOutlined: Bool = true
-    @State var smallCustomBadgeType: BadgeIntentType = .alert
-    @State var badgeFormat: BadgeFormat = .default
+    @State var size: BadgeSize = .normal
+    @State var isSizePresented = false
 
-    @State var standartDangerBadgeType: BadgeIntentType = .danger
+    @State var value: Int? = 99
+
+    @State var format: BadgeFormat = .default
+    @State var isFormatPresented = false
+
+    @State var isBorderVisible: CheckboxSelectionState = .unselected
 
     var body: some View {
-        List {
-            Section(header: Text("UIKit Badge")) {
-                Button("Change UIKit Badge 0 Type") {
-                    views[0].setIntent(BadgeIntentType.allCases.randomElement() ?? .alert)
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Configuration")
+                .font(.title2)
+                .bold()
+                .padding(.bottom, 6)
+
+            VStack(alignment: .leading, spacing: 8) {
+                HStack() {
+                    Text("Version: ").bold()
+                    Button(self.version.name) {
+                        self.isVersionPresented = true
+                    }
+                    .confirmationDialog("Select a version",
+                                        isPresented: self.$isVersionPresented) {
+                        ForEach(ComponentVersion.allCases, id: \.self) { version in
+                            Button(version.name) {
+                                self.version = version
+                            }
+                        }
+                    }
+                    Spacer()
                 }
-                Button("Change UIKit Badge 1 Value") {
-                    views[1].setValue(2)
+                HStack() {
+                    Text("Intent: ").bold()
+                    Button(self.intent.name) {
+                        self.isIntentPresented = true
+                    }
+                    .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
+                        ForEach(BadgeIntentType.allCases, id: \.self) { intent in
+                            Button(intent.name) {
+                                self.intent = intent
+                            }
+                        }
+                    }
                 }
-                Button("Change UIKit Badge 2 Outline") {
-                    views[2].setBorderVisible(false)
+                HStack() {
+                    Text("Badge Size: ").bold()
+                    Button(self.size.name) {
+                        self.isSizePresented = true
+                    }
+                    .confirmationDialog("Select a size", isPresented: self.$isSizePresented) {
+                        ForEach(BadgeSize.allCases, id: \.self) { size in
+                            Button(size.name) {
+                                self.size = size
+                            }
+                        }
+                    }
                 }
-                Button("Change UIKit Badge 3 Size") {
-                    views[3].setSize(.small)
+                HStack() {
+                    Text("Format ").bold()
+                    Button(self.format.name) {
+                        self.isFormatPresented = true
+                    }
+                    .confirmationDialog("Select a format", isPresented: self.$isFormatPresented) {
+                        ForEach(BadgeFormat.allNames, id: \.self) { name in
+                            Button(name) {
+                                self.format = BadgeFormat.from(name: name)
+                            }
+                        }
+                    }
                 }
-                UIBadgeView(views: views)
-                    .frame(height: 400)
-                    .listRowBackground(Color.gray.opacity(0.3))
+                HStack() {
+                    Text("Value ").bold()
+                    TextField("Value", value: self.$value, formatter: NumberFormatter())
+                }
+
+                CheckboxView(
+                    text: "With Border",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$isBorderVisible
+                )
             }
-            .listRowBackground(Color.gray.opacity(0.3))
 
-            Section(header: Text("SwiftUI Badge")) {
-                Button("Change Default Badge Value") {
-                    standartBadgeValue = 23
-                    standartBadgeIsOutlined.toggle()
-                    badgeFormat = .overflowCounter(maxValue: 20)
-                }
-                Button("Change Small Custom Badge") {
-                    smallCustomBadgeValue = 18
-                    smallCustomBadgeSize = .normal
-                    smallCustomBadgeIsOutlined.toggle()
-                    smallCustomBadgeType = .main
-                }
-                Button("Change Dange Badge") {
-                    standartDangerBadgeType = .neutral
-                }
-                VStack(spacing: 100) {
-                    HStack(spacing: 50) {
-                        ZStack(alignment: .leading) {
-                            Text("Default Badge")
-                            BadgeView(
-                                theme: theme,
-                                intent: .main,
-                                value: standartBadgeValue
-                            )
-                            .format(badgeFormat)
-                            .borderVisible(standartBadgeIsOutlined)
-                            .offset(x: 100, y: -15)
-                        }
-                        ZStack(alignment: .leading) {
-                            Text("Small Custom")
-                            BadgeView(
-                                theme: SparkTheme.shared,
-                                intent: smallCustomBadgeType,
-                                value: 22
-                            )
-                            .borderVisible(smallCustomBadgeIsOutlined)
-                            .size(smallCustomBadgeSize)
-                            .offset(x: 100, y: -15)
-                        }
-                    }
+            Divider()
 
-                    HStack(spacing: 55) {
-                        ZStack(alignment: .leading) {
-                            Text("Danger Badge")
-                            BadgeView(
-                                theme: self.theme,
-                                intent: standartDangerBadgeType,
-                                value: 10
-                            )
-                            .format(.custom(
-                                formatter: BadgePreviewFormatter()
-                            ))
-                                .offset(x: 100, y: -15)
-                        }
-                        ZStack(alignment: .leading) {
-                            Text("Text")
-                            BadgeView(
-                                theme: self.theme,
-                                intent: .info
-                            )
-                                .offset(x: 25, y: -15)
-                        }
-                        ZStack(alignment: .leading) {
-                            Text("Text")
-                            BadgeView(
-                                theme: self.theme,
-                                intent: .neutral
-                            )
-                                .offset(x: 25, y: -15)
-                        }
-                    }
+            Text("Integration")
+                .font(.title2)
+                .bold()
 
-                    HStack(spacing: 50) {
-                        HStack {
-                            Text("Text")
-                            BadgeView(
-                                theme: self.theme,
-                                intent: .main
-                            )
-                        }
-                        HStack {
-                            Text("Text")
-                            BadgeView(
-                                theme: self.theme,
-                                intent: .support
-                            )
-                        }
-                        HStack {
-                            Text("Text")
-                            BadgeView(
-                                theme: self.theme,
-                                intent: .success
-                            )
-                        }
-                    }
-                }
-                .padding(.vertical, 15)
-                .listRowBackground(Color.gray.opacity(0.3))
+
+            if version == .swiftUI {
+                BadgeView(theme: self.theme, intent: self.intent, value: self.value)
+                    .size(self.size)
+                    .format(self.format)
+                    .borderVisible(self.isBorderVisible == .selected)
+            } else {
+                UIBadgeView(theme: self.theme,
+                            intent: self.intent,
+                            size: self.size,
+                            value: self.value,
+                            format: self.format,
+                            isBorderVisible: self.isBorderVisible == .selected)
+                .fixedSize()
             }
+
+            Spacer()
         }
+        .padding(.horizontal, 16)
+        .navigationBarTitle(Text("Badge"))
     }
 }
 
 struct BadgeComponentView_Previews: PreviewProvider {
     static var previews: some View {
         BadgeComponentView()
+    }
+}
+
+private extension BadgeFormat {
+    enum Names {
+        static let `default` = "Default"
+        static let custom = "Custom"
+        static let overflowCounter = "Overflow Counter"
+    }
+
+    static var allNames: [String] = [Names.default, Names.custom, Names.overflowCounter]
+
+    var name: String {
+        switch self {
+        case .default: return Names.default
+        case .custom: return Names.custom
+        case .overflowCounter: return Names.overflowCounter
+        @unknown default:
+            fatalError("Unknown Badge Format")
+        }
+    }
+
+    static func from(name: String) -> BadgeFormat {
+        switch name {
+        case Names.custom: return .custom(formatter: BadgePreviewFormatter())
+        case Names.overflowCounter: return .overflowCounter(maxValue: 99)
+        default: return .default
+        }
     }
 }
