@@ -7,9 +7,9 @@
 //
 
 import Combine
+import Spark
+import SparkCore
 import SwiftUI
-@testable import SparkCore
-@testable import Spark
 
 private struct BadgePreviewFormatter: BadgeFormatting {
     func formatText(for value: Int?) -> String {
@@ -21,10 +21,6 @@ private struct BadgePreviewFormatter: BadgeFormatting {
 }
 
 struct UIBadgeView: UIViewRepresentable {
-
-//    var views: [BadgeUIView]
-
-//    @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     let theme: Theme
     let intent: BadgeIntentType
