@@ -14,7 +14,11 @@ import UIKit
 /// The view model is responsible for returning the varying attributes to the views, i.e. colors and attributes. These are determined by the theme, intent, tabState, content and tabGetStateAttributesUseCase.
 /// When the theme, intent, states or contents change the new values are calculated and published.
 final class TabItemViewModel: ObservableObject {
-    
+
+    private enum Constants {
+        static let height: CGFloat = 40.0
+    }
+
     // MARK: - Private Properties
     private var tabState: TabState {
         didSet {
@@ -31,6 +35,7 @@ final class TabItemViewModel: ObservableObject {
             self.updateStateAttributes()
         }
     }
+
     var intent: TabIntent {
         didSet {
             guard intent != oldValue else { return }
@@ -45,15 +50,16 @@ final class TabItemViewModel: ObservableObject {
         }
     }
 
-    var isDisabled: Bool {
+
+    var isEnabled: Bool {
         get {
-            self.tabState.isDisabled
+            self.tabState.isEnabled
         }
         set {
-            self.tabState = self.tabState.update(\.isDisabled, value: newValue)
+            self.tabState = self.tabState.update(\.isEnabled, value: newValue)
         }
     }
-    
+
     var isSelected: Bool {
         get {
             self.tabState.isSelected
@@ -62,7 +68,7 @@ final class TabItemViewModel: ObservableObject {
             self.tabState = self.tabState.update(\.isSelected, value: newValue)
         }
     }
-    
+
     var isPressed: Bool {
         get {
             self.tabState.isPressed
@@ -110,6 +116,10 @@ final class TabItemViewModel: ObservableObject {
         }
     }
 
+    var height: CGFloat {
+        return Constants.height
+    }
+    
     // MARK: Published Properties
     @Published var tabStateAttributes: TabStateAttributes
     @Published var content: TabUIItemContent
@@ -126,7 +136,7 @@ final class TabItemViewModel: ObservableObject {
         theme: Theme,
         intent: TabIntent = .main,
         tabSize: TabSize = .md,
-        tabState: TabState = TabState(),
+        tabState: TabState = .init(),
         content: TabUIItemContent = TabUIItemContent(),
         tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable = TabGetStateAttributesUseCase()
     ) {
