@@ -16,11 +16,11 @@ public class BadgeUIView: UIView {
 
     // Dynamicaly sized properties for badge
     // emptyBadgeSize represents size of the circle in empty state of Badge
-    // horizontalSpacing and verticalSpacing are properties
-    // that are used for space between badge background and text
+    // horizontalSpacing is the padding to the left and right of the text
+    // borderWidth is the width of the border when it's shown
+    // badgeHeight is the height of the badge
     @ScaledUIMetric private var emptyBadgeSize: CGFloat = 0
     @ScaledUIMetric private var horizontalSpacing: CGFloat = 0
-    @ScaledUIMetric private var verticalSpacing: CGFloat = 0
     @ScaledUIMetric private var borderWidth: CGFloat = 0
     @ScaledUIMetric private var badgeHeight: CGFloat = 0
 
@@ -157,7 +157,6 @@ public class BadgeUIView: UIView {
         self.emptyBadgeSize = BadgeConstants.emptySize.width
         self.badgeHeight = BadgeConstants.height
         self.horizontalSpacing = self.viewModel.horizontalOffset
-        self.verticalSpacing = self.viewModel.verticalOffset
         self.borderWidth = self.viewModel.isBorderVisible ? self.viewModel.border.width : .zero
     }
 
@@ -353,7 +352,6 @@ extension BadgeUIView {
             self._emptyBadgeSize.update(traitCollection: self.traitCollection)
         } else {
             self._horizontalSpacing.update(traitCollection: self.traitCollection)
-            self._verticalSpacing.update(traitCollection: self.traitCollection)
         }
         self._badgeHeight.update(traitCollection: traitCollection)
     }
