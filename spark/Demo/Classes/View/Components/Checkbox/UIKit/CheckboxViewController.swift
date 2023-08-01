@@ -8,7 +8,7 @@
 
 import Combine
 import Spark
-@testable import SparkCore
+import SparkCore
 import SwiftUI
 
 // MARK: - SwiftUI-wrapper
@@ -76,10 +76,15 @@ final class CheckboxViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubviewSizedEqually(self.scrollView)
-
+        self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentView)
+
         NSLayoutConstraint.activate([
+            self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+
             self.contentView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor),
             self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
