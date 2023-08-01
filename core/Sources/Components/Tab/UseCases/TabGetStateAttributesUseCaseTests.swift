@@ -64,7 +64,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             colors: selectedColors,
             opacity: nil,
             separatorLineHeight: self.theme.border.width.medium,
-            font: self.theme.typography.body2
+            font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -81,7 +81,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             colors: self.colors,
             opacity: nil,
             separatorLineHeight: self.theme.border.width.small,
-            font: self.theme.typography.body2
+            font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -99,7 +99,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             colors: self.colors,
             opacity: nil,
             separatorLineHeight: self.theme.border.width.small,
-            font: self.theme.typography.body2
+            font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -116,7 +116,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             colors: self.colors,
             opacity: theme.dims.dim3,
             separatorLineHeight: self.theme.border.width.small,
-            font: self.theme.typography.body2
+            font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }

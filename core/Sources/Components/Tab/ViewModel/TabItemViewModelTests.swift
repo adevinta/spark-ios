@@ -39,8 +39,8 @@ final class TabItemViewModelTests: XCTestCase {
             spacings: self.spacings,
             colors: self.colors,
             opacity: nil,
-            separatorLineHeight: self.theme.border.width.small,
-            font: self.theme.typography.body2
+            separatorLineHeight: theme.border.width.small,
+            font: theme.typography.body1
         )
     }
     
@@ -53,7 +53,7 @@ final class TabItemViewModelTests: XCTestCase {
         XCTAssertEqual(sut.intent, .main, "sut intent should be main")
         XCTAssertEqual(sut.isSelected, false, "sut's isSelected parameter should be false")
         XCTAssertEqual(sut.isPressed, false, "sut's isPressed parameter should be false")
-        XCTAssertEqual(sut.isDisabled, false, "sut's isDisabled parameter should be false")
+        XCTAssertEqual(sut.isEnabled, true, "sut's isDisabled parameter should be false")
         XCTAssertEqual(sut.icon, icon, "sut's icon should be icon")
         XCTAssertEqual(sut.text, text, "sut's text should be text")
     }
@@ -73,7 +73,7 @@ final class TabItemViewModelTests: XCTestCase {
             colors: self.colors,
             opacity: nil,
             separatorLineHeight: self.theme.border.width.small,
-            font: self.theme.typography.body2
+            font: self.theme.typography.body1
         )
         
         let expectation = expectation(description: "wait for attributes")
@@ -144,12 +144,12 @@ final class TabItemViewModelTests: XCTestCase {
         var counter = 0
         sut.$tabStateAttributes.sink { _ in
             counter += 1
-            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments
-            XCTAssertEqual(arguments?.state.isDisabled, counter == 2)
+            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateReceivedArguments
+            XCTAssertEqual(arguments?.state.isEnabled, counter == 2)
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
-        sut.isDisabled = true
+        sut.isEnabled = false
         wait(for: [expectation], timeout: 0.1)
     }
     
