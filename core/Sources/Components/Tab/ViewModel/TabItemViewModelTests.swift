@@ -189,7 +189,7 @@ final class TabItemViewModelTests: TestCase {
         var counter = 0
         sut.$tabStateAttributes.sink { _ in
             counter += 1
-            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments
+            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments
             XCTAssertEqual(arguments?.state.isEnabled, counter == 1)
             expectation.fulfill()
         }
@@ -229,22 +229,18 @@ final class TabItemViewModelTests: TestCase {
         // Given
         let title = "Text"
         let expectedText = "Expected Text"
-        let sut = self.sut(title: title)
+        let sut = self.sut(text: text)
         
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
         var counter = 0
         sut.$content.sink { content in
             counter += 1
-            XCTAssertEqual(content.title == expectedText, counter == 2)
+            XCTAssertEqual(content.text == expectedText, counter == 2)
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
-
-        // When
-        sut.title = expectedText
-
-        // Then
+        sut.text = expectedText
         wait(for: [expectation], timeout: 0.1)
     }
 
