@@ -76,10 +76,15 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
         }
 
         if state.isPressed {
+            let pressedColors = TabItemColors(
+                label: colors.label,
+                line: colors.line,
+                background: theme.colors.states.surfacePressed)
+
             return TabStateAttributes(
                 spacings: spacings,
-                colors: colors,
-                opacity: nil,
+                colors: pressedColors,
+                opacity: 1,
                 separatorLineHeight: theme.border.width.small,
                 font: font
             )
@@ -95,7 +100,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             return TabStateAttributes(
                 spacings: spacings,
                 colors: selectedColors,
-                opacity: nil,
+                opacity: 1,
                 separatorLineHeight: theme.border.width.medium,
                 font: font
             )
@@ -104,7 +109,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
         return TabStateAttributes(
             spacings: spacings,
             colors: colors,
-            opacity: nil,
+            opacity: 1,
             separatorLineHeight: theme.border.width.small,
             font: font
         )

@@ -11,8 +11,10 @@ import SparkCore
 import SwiftUI
 
 struct TabItemUIComponentView: View {
+    // MARK: - Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
+    // MARK: - View
     var body: some View {
         let badge = BadgeUIView(
             theme: themePublisher.theme,
@@ -28,7 +30,6 @@ struct TabItemUIComponentView: View {
             isSelected: true,
             isEnabled: true
         )
-
     }
 }
 
@@ -86,9 +87,6 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
 
 struct TabItemUIComponentView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            TabItemUIComponentView()
-            Text("Hello World")
-        }
+        TabItemUIComponentView()
     }
 }
