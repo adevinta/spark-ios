@@ -35,110 +35,112 @@ struct ChipComponent: View {
     private let icon = UIImage(imageLiteralResourceName: "alert")
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Configuration")
-                .font(.title2)
-                .bold()
-                .padding(.bottom, 6)
-            VStack(alignment: .leading, spacing: 8) {
-                HStack() {
-                    Text("Version: ").bold()
-                    Button(self.version.name) {
-                        self.versionSheetIsPresented = true
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Configuration")
+                    .font(.title2)
+                    .bold()
+                    .padding(.bottom, 6)
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack() {
+                        Text("Version: ").bold()
+                        Button(self.version.name) {
+                            self.versionSheetIsPresented = true
+                        }
+                        .confirmationDialog("Select a version",
+                                            isPresented: self.$versionSheetIsPresented) {
+                            ForEach(ComponentVersion.allCases, id: \.self) { version in
+                                Button(version.name) {
+                                    self.version = version
+                                }
+                            }
+                        }
+                        Spacer()
                     }
-                    .confirmationDialog("Select a version",
-                                        isPresented: self.$versionSheetIsPresented) {
-                        ForEach(ComponentVersion.allCases, id: \.self) { version in
-                            Button(version.name) {
-                                self.version = version
+                    HStack() {
+                        Text("Intent: ").bold()
+                        Button(self.intent.name) {
+                            self.isIntentPresented = true
+                        }
+                        .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
+                            ForEach(ChipIntent.allCases, id: \.self) { intent in
+                                Button(intent.name) {
+                                    self.intent = intent
+                                }
                             }
                         }
                     }
-                    Spacer()
-                }
-                HStack() {
-                    Text("Intent: ").bold()
-                    Button(self.intent.name) {
-                        self.isIntentPresented = true
-                    }
-                    .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
-                        ForEach(ChipIntent.allCases, id: \.self) { intent in
-                            Button(intent.name) {
-                                self.intent = intent
+                    HStack() {
+                        Text("Chip Variant: ").bold()
+                        Button(self.variant.name) {
+                            self.isVariantPresented = true
+                        }
+                        .confirmationDialog("Select a variant", isPresented: self.$isVariantPresented) {
+                            ForEach(ChipVariant.allCases, id: \.self) { variant in
+                                Button(variant.name) {
+                                    self.variant = variant
+                                }
                             }
                         }
                     }
+
+                    CheckboxView(
+                        text: "With Label",
+                        checkedImage: DemoIconography.shared.checkmark,
+                        theme: theme,
+                        state: .enabled,
+                        selectionState: self.$showLabel
+                    )
+
+                    CheckboxView(
+                        text: "With Icon",
+                        checkedImage: DemoIconography.shared.checkmark,
+                        theme: theme,
+                        state: .enabled,
+                        selectionState: self.$showIcon
+                    )
+
+                    CheckboxView(
+                        text: "With Action",
+                        checkedImage: DemoIconography.shared.checkmark,
+                        theme: theme,
+                        state: .enabled,
+                        selectionState: self.$withAction
+                    )
+
+                    CheckboxView(
+                        text: "With Extra Component",
+                        checkedImage: DemoIconography.shared.checkmark,
+                        theme: theme,
+                        state: .enabled,
+                        selectionState: self.$withComponent
+                    )
                 }
-                HStack() {
-                    Text("Chip Variant: ").bold()
-                    Button(self.variant.name) {
-                        self.isVariantPresented = true
-                    }
-                    .confirmationDialog("Select a variant", isPresented: self.$isVariantPresented) {
-                        ForEach(ChipVariant.allCases, id: \.self) { variant in
-                            Button(variant.name) {
-                                self.variant = variant
-                            }
-                        }
+
+                Divider()
+
+                Text("Integration")
+                    .font(.title2)
+                    .bold()
+
+                if (version == .swiftUI) {
+                    Text("Not available yet!!")
+                } else {
+                    ChipComponentUIView(
+                        theme: self.theme,
+                        intent: self.intent,
+                        variant: self.variant,
+                        label: self.showLabel == .selected ? self.label : nil,
+                        icon: self.showIcon == .selected ? self.icon : nil,
+                        component: self.withComponent == .selected ? self.component : nil,
+                        action: self.withAction == .selected ? { self.showingAlert = true} : nil)
+                    .alert("Chip Pressed", isPresented: self.$showingAlert) {
+                        Button("OK", role: .cancel) { }
                     }
                 }
 
-                CheckboxView(
-                    text: "With Label",
-                    checkedImage: DemoIconography.shared.checkmark,
-                    theme: theme,
-                    state: .enabled,
-                    selectionState: self.$showLabel
-                )
-
-                CheckboxView(
-                    text: "With Icon",
-                    checkedImage: DemoIconography.shared.checkmark,
-                    theme: theme,
-                    state: .enabled,
-                    selectionState: self.$showIcon
-                )
-
-                CheckboxView(
-                    text: "With Action",
-                    checkedImage: DemoIconography.shared.checkmark,
-                    theme: theme,
-                    state: .enabled,
-                    selectionState: self.$withAction
-                )
-
-                CheckboxView(
-                    text: "With Extra Component",
-                    checkedImage: DemoIconography.shared.checkmark,
-                    theme: theme,
-                    state: .enabled,
-                    selectionState: self.$withComponent
-                )
+                Spacer()
             }
-
-            Divider()
-
-            Text("Integration")
-                .font(.title2)
-                .bold()
-
-            if (version == .swiftUI) {
-                Text("Not available yet!!")
-            } else {
-                ChipComponentUIView(
-                    theme: self.theme,
-                    intent: self.intent,
-                    variant: self.variant,
-                    label: self.showLabel == .selected ? self.label : nil,
-                    icon: self.showIcon == .selected ? self.icon : nil,
-                    component: self.withComponent == .selected ? self.component : nil,
-                    action: self.withAction == .selected ? { self.showingAlert = true} : nil)
-                .alert("Chip Pressed", isPresented: self.$showingAlert) {
-                    Button("OK", role: .cancel) { }
-                }
-            }
-
-            Spacer()
         }
         .padding(.horizontal, 16)
         .navigationBarTitle(Text("Chip"))
