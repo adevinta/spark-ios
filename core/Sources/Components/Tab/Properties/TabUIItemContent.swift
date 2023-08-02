@@ -17,13 +17,13 @@ struct TabUIItemContent: Equatable, Updateable {
     var icon: UIImage?
     var text: String?
     var attributeText: NSAttributedString?
-    var badge: BadgeUIView?
+    var badge: UIView?
     
     init(
         icon: UIImage? = nil,
         text: String? = nil,
         attributeText: NSAttributedString? = nil,
-        badge: BadgeUIView? = nil
+        badge: UIView? = nil
     ) {
         self.icon = icon
         self.text = text

@@ -11,6 +11,8 @@ import SparkCore
 import SwiftUI
 
 struct TabItemComponent: View {
+
+    // MARK: Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     var theme: Theme {
@@ -28,6 +30,7 @@ struct TabItemComponent: View {
     @State var isSelected = CheckboxSelectionState.unselected
     @State var isEnabled = CheckboxSelectionState.selected
 
+    // MARK: - View
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Configuration")
