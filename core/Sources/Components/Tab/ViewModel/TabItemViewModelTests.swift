@@ -38,7 +38,7 @@ final class TabItemViewModelTests: XCTestCase {
         tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReturnValue = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: nil,
+            opacity: 1,
             separatorLineHeight: theme.border.width.small,
             font: theme.typography.body1
         )
@@ -71,7 +71,7 @@ final class TabItemViewModelTests: XCTestCase {
         let expectedAttributes = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: nil,
+            opacity: 1,
             separatorLineHeight: self.theme.border.width.small,
             font: self.theme.typography.body1
         )
@@ -266,8 +266,7 @@ private extension TabItemViewModelTests {
         intent: TabIntent = .main,
         size: TabSize = .md,
         icon: UIImage? = nil,
-        text: String? = nil,
-        attributeText: NSAttributedString? = nil
+        text: String? = nil
     ) -> TabItemViewModel {
         return TabItemViewModel(
             theme: self.theme,
@@ -276,8 +275,7 @@ private extension TabItemViewModelTests {
             tabState: TabState(),
             content: TabUIItemContent(
                 icon: icon,
-                text: text,
-                attributeText: attributeText
+                text: text
             ),
             tabGetStateAttributesUseCase: self.tabGetStateAttributesUseCase
         )

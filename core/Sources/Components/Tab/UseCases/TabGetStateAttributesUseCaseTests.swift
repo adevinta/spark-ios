@@ -62,7 +62,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: selectedColors,
-            opacity: nil,
+            opacity: 1,
             separatorLineHeight: self.theme.border.width.medium,
             font: self.theme.typography.body1
         )
@@ -79,7 +79,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: nil,
+            opacity: 1,
             separatorLineHeight: self.theme.border.width.small,
             font: self.theme.typography.body1
         )
@@ -97,7 +97,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: nil,
+            opacity: 1,
             separatorLineHeight: self.theme.border.width.small,
             font: self.theme.typography.body1
         )
@@ -136,6 +136,6 @@ private extension TabState {
     }
     
     static var disabled: TabState {
-        return .init(isDisabled: true)
+        return .init(isEnabled: false)
     }
 }
