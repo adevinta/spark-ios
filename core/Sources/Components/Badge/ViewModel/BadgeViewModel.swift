@@ -26,30 +26,30 @@ import SwiftUI
 /// - format -- see ``BadgeFormat`` as a formater of **Badge Text**
 ///
 /// - theme  -- represents ``Theme`` used in the app
-public final class BadgeViewModel: ObservableObject {
+final class BadgeViewModel: ObservableObject {
 
     // MARK: - Badge Configuration Public Properties
-    public var value: Int? = nil {
+    var value: Int? = nil {
         didSet {
             updateText()
         }
     }
-    public var intent: BadgeIntentType {
+    var intent: BadgeIntentType {
         didSet {
             updateColors()
         }
     }
-    public var size: BadgeSize {
+    var size: BadgeSize {
         didSet {
             updateFont()
         }
     }
-    public var format: BadgeFormat {
+    var format: BadgeFormat {
         didSet {
             updateText()
         }
     }
-    public var theme: Theme {
+    var theme: Theme {
         didSet {
             updateColors()
             updateScalings()
@@ -61,10 +61,8 @@ public final class BadgeViewModel: ObservableObject {
     @Published var textFont: TypographyFontToken
     @Published var textColor: any ColorToken
     @Published var isBadgeEmpty: Bool
-
     @Published var backgroundColor: any ColorToken
     @Published var border: BadgeBorder
-
     @Published var isBorderVisible: Bool
 
     // MARK: - Internal Appearance Properties
