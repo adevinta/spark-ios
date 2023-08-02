@@ -15,6 +15,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
     private var sut: TabGetStateAttributesUseCase!
     private var theme: ThemeGeneratedMock!
     private var getIntentColorUseCase: TabGetIntentColorUseCasebleGeneratedMock!
+    private var getFontUseCase: TabGetFontUseCaseableGeneratedMock!
     private var spacings: TabItemSpacings!
     private var colors: TabItemColors!
     
@@ -23,7 +24,12 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         super.setUp()
         self.theme = ThemeGeneratedMock.mocked()
         self.getIntentColorUseCase = TabGetIntentColorUseCasebleGeneratedMock()
-        self.sut = TabGetStateAttributesUseCase(getIntentColorUseCase: getIntentColorUseCase)
+        self.getFontUseCase = TabGetFontUseCaseableGeneratedMock()
+
+        self.sut = TabGetStateAttributesUseCase(
+            getIntentColorUseCase: getIntentColorUseCase,
+            getTabFontUseCase: getFontUseCase
+        )
         self.spacings = TabItemSpacings(
             verticalEdge: self.theme.layout.spacing.medium,
             horizontalEdge: self.theme.layout.spacing.large,
@@ -34,6 +40,8 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             line: self.theme.colors.base.outline,
             background: self.theme.colors.base.surface
         )
+
+        self.getFontUseCase.executeWithTypographyAndSizeReturnValue = self.theme.typography.body2
     }
     
     // MARK: - Tests
@@ -43,7 +51,8 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let stateAttribute = sut.execute(
             theme: self.theme,
             intent: .main,
-            state: .selected
+            state: .selected,
+            size: .md
         )
         let selectedColors = TabItemColors(
             label: mockedColor,
@@ -54,7 +63,8 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             spacings: self.spacings,
             colors: selectedColors,
             opacity: nil,
-            separatorLineHeight: self.theme.border.width.medium
+            separatorLineHeight: self.theme.border.width.medium,
+            font: self.theme.typography.body2
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -63,13 +73,15 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let stateAttribute = sut.execute(
             theme: self.theme,
             intent: .main,
-            state: .enabled
+            state: .enabled,
+            size: .md
         )
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
             opacity: nil,
-            separatorLineHeight: self.theme.border.width.small
+            separatorLineHeight: self.theme.border.width.small,
+            font: self.theme.typography.body2
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -78,14 +90,16 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let stateAttribute = sut.execute(
             theme: self.theme,
             intent: .main,
-            state: .pressed
+            state: .pressed,
+            size: .sm
         )
 
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
             opacity: nil,
-            separatorLineHeight: self.theme.border.width.small
+            separatorLineHeight: self.theme.border.width.small,
+            font: self.theme.typography.body2
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -94,13 +108,15 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let stateAttribute = sut.execute(
             theme: self.theme,
             intent: .main,
-            state: .disabled
+            state: .disabled,
+            size: .xs
         )
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
             opacity: theme.dims.dim3,
-            separatorLineHeight: self.theme.border.width.small
+            separatorLineHeight: self.theme.border.width.small,
+            font: self.theme.typography.body2
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
