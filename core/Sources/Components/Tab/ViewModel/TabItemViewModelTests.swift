@@ -145,7 +145,7 @@ final class TabItemViewModelTests: XCTestCase {
         sut.$tabStateAttributes.sink { _ in
             counter += 1
             let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateReceivedArguments
-            XCTAssertEqual(arguments?.state.isEnabled, counter == 2)
+            XCTAssertEqual(arguments?.state.isEnabled, counter == 1)
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
