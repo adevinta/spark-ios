@@ -98,24 +98,6 @@ final class TabItemViewModel: ObservableObject {
         }
     }
 
-    var attributeText: NSAttributedString? {
-        get {
-            return self.content.attributeText
-        }
-        set {
-            self.content = self.content.update(\.attributeText, value: newValue)
-        }
-    }
-
-    var badge: UIView? {
-        get {
-            return self.content.badge
-        }
-        set {
-            self.content = self.content.update(\.badge, value: newValue)
-        }
-    }
-
     var height: CGFloat {
         return Constants.height
     }
