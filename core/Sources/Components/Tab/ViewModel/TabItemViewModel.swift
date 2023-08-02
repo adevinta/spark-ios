@@ -37,7 +37,14 @@ final class TabItemViewModel: ObservableObject {
             self.updateStateAttributes()
         }
     }
-    
+
+    var tabSize: TabSize {
+        didSet {
+            guard self.tabSize != oldValue else { return }
+            self.updateStateAttributes()
+        }
+    }
+
     var isDisabled: Bool {
         get {
             self.tabState.isDisabled
@@ -79,7 +86,9 @@ final class TabItemViewModel: ObservableObject {
             return self.content.text
         }
         set {
+            guard self.content.text != newValue else { return }
             self.content = self.content.update(\.text, value: newValue)
+            self.updateStateAttributes()
         }
     }
 
@@ -100,7 +109,7 @@ final class TabItemViewModel: ObservableObject {
             self.content = self.content.update(\.badge, value: newValue)
         }
     }
-    
+
     // MARK: Published Properties
     @Published var tabStateAttributes: TabStateAttributes
     @Published var content: TabUIItemContent
@@ -116,6 +125,7 @@ final class TabItemViewModel: ObservableObject {
     init(
         theme: Theme,
         intent: TabIntent = .main,
+        tabSize: TabSize = .md,
         tabState: TabState = TabState(),
         content: TabUIItemContent = TabUIItemContent(),
         tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable = TabGetStateAttributesUseCase()
@@ -124,11 +134,14 @@ final class TabItemViewModel: ObservableObject {
         self.theme = theme
         self.intent = intent
         self.content = content
+        self.tabSize = tabSize
         self.tabGetStateAttributesUseCase = tabGetStateAttributesUseCase
+
         self.tabStateAttributes = tabGetStateAttributesUseCase.execute(
             theme: theme,
             intent: intent,
-            state: tabState
+            state: tabState,
+            size: content.defaultTabSize(tabSize)
         )
     }
     
@@ -136,7 +149,14 @@ final class TabItemViewModel: ObservableObject {
         self.tabStateAttributes = self.tabGetStateAttributesUseCase.execute(
             theme: self.theme,
             intent: self.intent,
-            state: self.tabState
+            state: self.tabState,
+            size: content.defaultTabSize(self.tabSize)
         )
+    }
+}
+
+private extension TabUIItemContent {
+    func defaultTabSize(_ tabSize: TabSize) -> TabSize {
+        return text == nil ? .sm : tabSize
     }
 }
