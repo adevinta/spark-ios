@@ -107,7 +107,7 @@ final class TabItemViewModel: ObservableObject {
         }
     }
 
-    var badge: BadgeUIView? {
+    var badge: UIView? {
         get {
             return self.content.badge
         }
