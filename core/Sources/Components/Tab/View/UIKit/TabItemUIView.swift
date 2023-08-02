@@ -16,12 +16,9 @@ import UIKit
 /// The label and icon are publicly accessible, so the standard label maye be replaced with an attributed string.
 /// The layout of the tab item is orgianized with a stack view. This stack view is also publicly accessible, and further views may be added to it. Again here, the developer needs to pay caution, not to break constraints.
 public final class TabItemUIView: UIControl {
+
     // MARK: - Private variables
     private var subscriptions = Set<AnyCancellable>()
-    private var labelInStackView: UILabel?
-    private var imageInStackView: UIImageView?
-    private var badgeInStackView: UIView?
-
     private var bottomLineHeightConstraint: NSLayoutConstraint?
     private var heightConstraint: NSLayoutConstraint?
 
@@ -60,19 +57,15 @@ public final class TabItemUIView: UIControl {
     ///
     /// The attributes may be changed as required, e.g. using an attributed string instead of a standard string.
     public var label: UILabel? {
-        get {
-            return self.labelInStackView
-        }
-        set {
-            if let labelInStackView = self.labelInStackView {
+        didSet {
+            if let labelInStackView = oldValue {
                 labelInStackView.removeFromSuperview()
                 self.stackView.removeArrangedSubview(labelInStackView)
             }
-            if let newLabel = newValue {
-                let index = self.imageInStackView == nil ? 0 : 1
+            if let newLabel = self.label {
+                let index = self.imageView == nil ? 0 : 1
                 self.stackView.insertArrangedSubview(newLabel, at: index)
             }
-            self.labelInStackView = newValue
         }
     }
 
@@ -80,17 +73,33 @@ public final class TabItemUIView: UIControl {
     ///
     /// To attributes of the icon can be changed directly or replaced by changing the imageView.
     public var imageView: UIImageView? {
-        get {
-            return self.imageInStackView
-        }
-        set {
-            if let imageInStackView = self.imageInStackView {
+        didSet {
+            if let imageInStackView = oldValue {
                 imageInStackView.removeFromSuperview()
                 self.stackView.removeArrangedSubview(imageInStackView)
             }
-            self.imageInStackView = newValue
-            if let newImage = newValue {
+            if let newImage = self.imageView {
                 self.stackView.insertArrangedSubview(newImage, at: 0)
+            }
+        }
+    }
+
+    /// The badge which is rendered to the right of the label.
+    ///
+    /// The badge will typically be used for rendering a BadgeUIView, but it is not restricted to this type. Any type of view may be added as a badge. It is to be noted, that the view added should have a maximum height of 24px, othewise the constraints of the tab item will be broken.
+    /// It is also possible to add further views to the tab, by directly accessing the stackView.
+    public var badge: UIView? {
+        didSet {
+            guard badge != oldValue else { return }
+
+            if let currentBadge = oldValue {
+                currentBadge.removeFromSuperview()
+                self.stackView.removeArrangedSubview(currentBadge)
+            }
+
+            if let newBadge = self.badge {
+                let index = [self.imageView, self.label].compacted().count
+                self.stackView.insertArrangedSubview(newBadge, at: index)
             }
         }
     }
@@ -142,19 +151,6 @@ public final class TabItemUIView: UIControl {
         }
         set {
             self.viewModel.text = newValue
-        }
-    }
-
-    /// The badge which is rendered to the right of the label.
-    ///
-    /// The badge will typically be used for rendering a BadgeUIView, but it is not restricted to this type. Any type of view may be added as a badge. It is to be noted, that the view added should have a maximum height of 24px, othewise the constraints of the tab item will be broken.
-    /// It is also possible to add further views to the tab, by directly accessing the stackView.
-    public var badge: UIView? {
-        get {
-            return self.viewModel.badge
-        }
-        set {
-            self.viewModel.badge = newValue
         }
     }
 
@@ -254,7 +250,6 @@ public final class TabItemUIView: UIControl {
             guard let self else { return }
             self.addOrRemoveIcon(itemContent.icon)
             self.addOrRemoveLabel(itemContent.text)
-            self.addOrRemoveBadge(itemContent.badge)
         }
 
         self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
@@ -280,9 +275,10 @@ public final class TabItemUIView: UIControl {
     }
 
     private func setupColors(attributes: TabStateAttributes) {
-        self.labelInStackView?.font = attributes.font.uiFont
-        self.labelInStackView?.textColor = attributes.colors.label.uiColor
-        self.imageInStackView?.tintColor = attributes.colors.label.uiColor
+        self.label?.font = attributes.font.uiFont
+        self.label?.textColor = attributes.colors.label.uiColor
+
+        self.imageView?.tintColor = attributes.colors.label.uiColor
         self.bottomLine.backgroundColor = attributes.colors.line.uiColor
         self.bottomLine.layer.opacity = Float(attributes.opacity)
         self.stackView.backgroundColor = attributes.colors.background.uiColor
@@ -329,57 +325,34 @@ public final class TabItemUIView: UIControl {
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
         if let icon = icon {
-            if let image = self.imageInStackView {
+            if let image = self.imageView {
                 image.image = icon
                 image.tintColor = self.viewModel.tabStateAttributes.colors.label.uiColor
             } else {
                 let image = UIImageView.standard
                 image.image = icon
                 image.tintColor = self.viewModel.tabStateAttributes.colors.label.uiColor
-                self.stackView.insertArrangedSubview(image, at: 0)
-                self.imageInStackView = image
+                self.imageView = image
             }
-        } else if let image = self.imageInStackView {
-            image.removeFromSuperview()
-            self.stackView.removeArrangedSubview(image)
-            self.imageInStackView = nil
+        } else {
+            self.imageView = nil
         }
     }
 
     private func addOrRemoveLabel(_ text: String?) {
         if let text = text {
-            if let label = self.labelInStackView {
+            if let label = self.label {
                 label.text = text
-                label.textColor = self.viewModel.tabStateAttributes.colors.label.uiColor
             } else {
                 let label = UILabel.standard
                 label.text = text
                 label.textColor = self.viewModel.tabStateAttributes.colors.label.uiColor
-                let labelIndex = self.imageInStackView == nil ? 0 : 1
-                self.stackView.insertArrangedSubview(label, at: labelIndex)
-                self.labelInStackView = label
+                label.font = self.viewModel.tabStateAttributes.font.uiFont
+                self.label = label
             }
-        } else if let label = self.labelInStackView {
-            label.removeFromSuperview()
-            self.stackView.removeArrangedSubview(label)
-            self.labelInStackView = nil
+        } else {
+            self.label = nil
         }
-    }
-
-    private func addOrRemoveBadge(_ badge: UIView?) {
-        guard badge != self.badgeInStackView else { return }
-
-        if let currentBadge = self.badgeInStackView {
-            currentBadge.removeFromSuperview()
-            self.stackView.removeArrangedSubview(currentBadge)
-        }
-
-        if let newBadge = badge {
-            let index = [self.imageInStackView, self.labelInStackView].compacted().count
-            self.stackView.insertArrangedSubview(newBadge, at: index)
-        }
-
-        self.badgeInStackView = badge
     }
 
     @IBAction func actionTapped(sender: UIButton)  {
