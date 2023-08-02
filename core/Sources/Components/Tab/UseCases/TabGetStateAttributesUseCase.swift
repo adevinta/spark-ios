@@ -10,7 +10,10 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol TabGetStateAttributesUseCasable {
-    func execute(theme: Theme, intent: TabIntent, state: TabState) -> TabStateAttributes
+    func execute(theme: Theme,
+                 intent: TabIntent,
+                 state: TabState,
+                 size: TabSize) -> TabStateAttributes
 }
 
 /// TabGetStateAttributesUseCase
@@ -20,10 +23,14 @@ protocol TabGetStateAttributesUseCasable {
 struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
 
     private let getIntentColorUseCase: any TabGetIntentColorUseCaseble
+    private let getFontUseCase: any TabGetFontUseCaseable
 
     // MARK: - Initializer
-    init(getIntentColorUseCase: any TabGetIntentColorUseCaseble = TabGetIntentColorUseCase()) {
+    init(getIntentColorUseCase: any TabGetIntentColorUseCaseble = TabGetIntentColorUseCase(),
+         getTabFontUseCase: any TabGetFontUseCaseable = TabGetFontUseCase()
+    ) {
         self.getIntentColorUseCase = getIntentColorUseCase
+        self.getFontUseCase = getTabFontUseCase
     }
 
     // MARK: - Functions
@@ -34,11 +41,15 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
     ///    - theme: current theme
     ///    - intent: `TabIntent`.
     ///    - state: `TabState`.
+    ///    - size: `TabSize`
     ///
     /// - Returns: ``TabStateAttributes`` return attributes of the tab.
     func execute(theme: Theme,
                  intent: TabIntent,
-                 state: TabState) -> TabStateAttributes {
+                 state: TabState,
+                 size: TabSize) -> TabStateAttributes {
+
+        let font = self.getFontUseCase.execute(typography: theme.typography, size: size)
 
         let spacings = TabItemSpacings(
             verticalEdge: theme.layout.spacing.medium,
@@ -57,7 +68,8 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
                 spacings: spacings,
                 colors: colors,
                 opacity: theme.dims.dim3,
-                separatorLineHeight: theme.border.width.small
+                separatorLineHeight: theme.border.width.small,
+                font: font
             )
         }
 
@@ -66,7 +78,8 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
                 spacings: spacings,
                 colors: colors,
                 opacity: nil,
-                separatorLineHeight: theme.border.width.small
+                separatorLineHeight: theme.border.width.small,
+                font: font
             )
         }
 
@@ -81,7 +94,8 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
                 spacings: spacings,
                 colors: selectedColors,
                 opacity: nil,
-                separatorLineHeight: theme.border.width.medium
+                separatorLineHeight: theme.border.width.medium,
+                font: font
             )
         }
 
@@ -89,7 +103,9 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             spacings: spacings,
             colors: colors,
             opacity: nil,
-            separatorLineHeight: theme.border.width.small
+            separatorLineHeight: theme.border.width.small,
+            font: font
         )
     }
 }
+
