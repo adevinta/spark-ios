@@ -94,6 +94,12 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             size: .sm
         )
 
+        self.colors = TabItemColors(
+            label: self.theme.colors.base.onSurface,
+            line: self.theme.colors.base.outline,
+            background: self.theme.colors.states.surfacePressed
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
