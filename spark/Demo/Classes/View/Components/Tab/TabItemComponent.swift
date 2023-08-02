@@ -32,109 +32,111 @@ struct TabItemComponent: View {
 
     // MARK: - View
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Configuration")
-                .font(.title2)
-                .bold()
-                .padding(.bottom, 6)
-            HStack() {
-                Text("Version: ").bold()
-                Button(self.version.name) {
-                    self.versionSheetIsPresented = true
-                }
-                .confirmationDialog("Select a version",
-                                    isPresented: self.$versionSheetIsPresented) {
-                    ForEach(ComponentVersion.allCases, id: \.self) { version in
-                        Button(version.name) {
-                            self.version = version
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Configuration")
+                    .font(.title2)
+                    .bold()
+                    .padding(.bottom, 6)
+                HStack() {
+                    Text("Version: ").bold()
+                    Button(self.version.name) {
+                        self.versionSheetIsPresented = true
+                    }
+                    .confirmationDialog("Select a version",
+                                        isPresented: self.$versionSheetIsPresented) {
+                        ForEach(ComponentVersion.allCases, id: \.self) { version in
+                            Button(version.name) {
+                                self.version = version
+                            }
                         }
                     }
+                    Spacer()
+                }
+                HStack() {
+                    Text("Intent: ").bold()
+                    Button(self.intent.name) {
+                        self.isIntentPresented = true
+                    }
+                    .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
+                        ForEach(TabIntent.allCases, id: \.self) { intent in
+                            Button(intent.name) {
+                                self.intent = intent
+                            }
+                        }
+                    }
+                }
+
+                CheckboxView(
+                    text: "With Label",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$showText
+                )
+
+                CheckboxView(
+                    text: "With Icon",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$showIcon
+                )
+
+                CheckboxView(
+                    text: "Show Badge",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$showBadge
+                )
+
+                CheckboxView(
+                    text: "Is Selected",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$isSelected
+                )
+
+                CheckboxView(
+                    text: "Is Enabled",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$isEnabled
+                )
+            }
+            .padding(.horizontal, 16)
+
+            VStack(alignment: .leading, spacing: 16) {
+
+                Divider()
+
+                Text("Integration")
+                    .font(.title2)
+                    .bold()
+
+                if version == .swiftUI {
+                    Text("Not available yet!")
+                } else {
+                    let badge = BadgeUIView(
+                        theme: themePublisher.theme,
+                        intent: .danger,
+                        value: 5,
+                        isBorderVisible: false)
+                    TabItemUIComponentRepresentableView(
+                        theme: self.theme,
+                        intent: self.intent,
+                        label: self.showText.isSelected ? "Label" : nil,
+                        icon: self.showIcon.isSelected ? UIImage(systemName: "fleuron.fill") : nil,
+                        badge: self.showBadge.isSelected ? badge : nil,
+                        isSelected: self.isSelected.isSelected,
+                        isEnabled: self.isEnabled.isSelected
+                    )
                 }
                 Spacer()
             }
-            HStack() {
-                Text("Intent: ").bold()
-                Button(self.intent.name) {
-                    self.isIntentPresented = true
-                }
-                .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
-                    ForEach(TabIntent.allCases, id: \.self) { intent in
-                        Button(intent.name) {
-                            self.intent = intent
-                        }
-                    }
-                }
-            }
-
-            CheckboxView(
-                text: "With Label",
-                checkedImage: DemoIconography.shared.checkmark,
-                theme: theme,
-                state: .enabled,
-                selectionState: self.$showText
-            )
-
-            CheckboxView(
-                text: "With Icon",
-                checkedImage: DemoIconography.shared.checkmark,
-                theme: theme,
-                state: .enabled,
-                selectionState: self.$showIcon
-            )
-
-            CheckboxView(
-                text: "Show Badge",
-                checkedImage: DemoIconography.shared.checkmark,
-                theme: theme,
-                state: .enabled,
-                selectionState: self.$showBadge
-            )
-
-            CheckboxView(
-                text: "Is Selected",
-                checkedImage: DemoIconography.shared.checkmark,
-                theme: theme,
-                state: .enabled,
-                selectionState: self.$isSelected
-            )
-
-            CheckboxView(
-                text: "Is Enabled",
-                checkedImage: DemoIconography.shared.checkmark,
-                theme: theme,
-                state: .enabled,
-                selectionState: self.$isEnabled
-            )
-        }
-        .padding(.horizontal, 16)
-
-        VStack(alignment: .leading, spacing: 16) {
-
-            Divider()
-
-            Text("Integration")
-                .font(.title2)
-                .bold()
-
-            if version == .swiftUI {
-                Text("Not available yet!")
-            } else {
-                let badge = BadgeUIView(
-                    theme: themePublisher.theme,
-                    intent: .danger,
-                    value: 5,
-                    isBorderVisible: false)
-                TabItemUIComponentRepresentableView(
-                    theme: self.theme,
-                    intent: self.intent,
-                    label: self.showText.isSelected ? "Label" : nil,
-                    icon: self.showIcon.isSelected ? UIImage(systemName: "fleuron.fill") : nil,
-                    badge: self.showBadge.isSelected ? badge : nil,
-                    isSelected: self.isSelected.isSelected,
-                    isEnabled: self.isEnabled.isSelected
-                )
-            }
-            Spacer()
         }
         .padding(.horizontal, 16)
         .navigationBarTitle(Text("Tab Item"))

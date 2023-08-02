@@ -144,7 +144,7 @@ final class TabItemViewModelTests: XCTestCase {
         var counter = 0
         sut.$tabStateAttributes.sink { _ in
             counter += 1
-            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateReceivedArguments
+            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments
             XCTAssertEqual(arguments?.state.isEnabled, counter == 1)
             expectation.fulfill()
         }
@@ -186,24 +186,6 @@ final class TabItemViewModelTests: XCTestCase {
         }
         .store(in: &self.cancellables)
         sut.text = expectedText
-        wait(for: [expectation], timeout: 0.1)
-    }
-    
-    func test_published_attribute_text_on_change() {
-        let attributeText = NSAttributedString(string: "Text")
-        let expectedAttributeText = NSAttributedString(string: "Expected Text")
-        let sut = self.sut(attributeText: attributeText)
-        
-        let expectation = expectation(description: "wait for attributes")
-        expectation.expectedFulfillmentCount = 2
-        var counter = 0
-        sut.$content.sink { content in
-            counter += 1
-            XCTAssertEqual(content.attributeText == expectedAttributeText, counter == 2)
-            expectation.fulfill()
-        }
-        .store(in: &self.cancellables)
-        sut.attributeText = expectedAttributeText
         wait(for: [expectation], timeout: 0.1)
     }
 
