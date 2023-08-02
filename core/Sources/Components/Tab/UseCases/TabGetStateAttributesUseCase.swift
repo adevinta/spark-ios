@@ -63,8 +63,6 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             background: theme.colors.base.surface
         )
 
-        let font = theme.typography.body1
-        
         if !state.isEnabled {
             return TabStateAttributes(
                 spacings: spacings,
