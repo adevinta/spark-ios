@@ -17,7 +17,7 @@ struct TabStateAttributes: Equatable {
     
     let spacings: TabItemSpacings
     let colors: TabItemColors
-    let opacity: CGFloat?
+    let opacity: CGFloat
     let separatorLineHeight: CGFloat
     let font: TypographyFontToken
 
