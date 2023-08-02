@@ -30,6 +30,20 @@ struct PurpleColors: Colors {
         supportContainer: ColorTokenDefault(named: "purple-supportContainer", in: Bundle(for: ClassForBundle.self)),
         onSupportContainer: ColorTokenDefault(named: "purple-onSupportContainer", in: Bundle(for: ClassForBundle.self)))
 
+    let accent: ColorsAccent = ColorsAccentDefault(
+        accent: ColorTokenDefault(named: "purple-accent", in: Bundle(for: ClassForBundle.self)),
+        onAccent: ColorTokenDefault(named: "purple-on-accent", in: Bundle(for: ClassForBundle.self)),
+        accentVariant: ColorTokenDefault(named: "purple-accent-variant", in: Bundle(for: ClassForBundle.self)),
+        onAccentVariant: ColorTokenDefault(named: "purple-on-accent-variant", in: Bundle(for: ClassForBundle.self)),
+        accentContainer: ColorTokenDefault(named: "purple-accent-container", in: Bundle(for: ClassForBundle.self)),
+        onAccentContainer: ColorTokenDefault(named: "purple-on-accent-container", in: Bundle(for: ClassForBundle.self)))
+
+    let basic: ColorsBasic = ColorsBasicDefault(
+        basic: ColorTokenDefault(named: "purple-basic", in: Bundle(for: ClassForBundle.self)),
+        onBasic: ColorTokenDefault(named: "purple-on-basic", in: Bundle(for: ClassForBundle.self)),
+        basicContainer: ColorTokenDefault(named: "purple-basic-container", in: Bundle(for: ClassForBundle.self)),
+        onBasicContainer: ColorTokenDefault(named: "purple-on-basic-container", in: Bundle(for: ClassForBundle.self)))
+
     let base: ColorsBase = ColorsBaseDefault(
         background: ColorTokenDefault(named: "purple-background", in: Bundle(for: ClassForBundle.self)),
         onBackground: ColorTokenDefault(named: "purple-onBackground", in: Bundle(for: ClassForBundle.self)),

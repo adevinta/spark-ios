@@ -15,6 +15,8 @@ import SwiftUI
 public protocol Colors {
     var main: ColorsMain { get }
     var support: ColorsSupport { get }
+    var accent: ColorsAccent { get }
+    var basic: ColorsBasic { get }
     var base: ColorsBase { get }
     var feedback: ColorsFeedback { get }
     var states: ColorsStates { get }

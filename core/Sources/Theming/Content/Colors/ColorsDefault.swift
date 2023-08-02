@@ -15,6 +15,8 @@ public struct ColorsDefault: Colors {
 
     public let main: ColorsMain
     public let support: ColorsSupport
+    public let accent: ColorsAccent
+    public let basic: ColorsBasic
     public let base: ColorsBase
     public let feedback: ColorsFeedback
     public let states: ColorsStates
@@ -23,11 +25,15 @@ public struct ColorsDefault: Colors {
 
     public init(main: ColorsMain,
                 support: ColorsSupport,
+                accent: ColorsAccent,
+                basic: ColorsBasic,
                 base: ColorsBase,
                 feedback: ColorsFeedback,
                 states: ColorsStates) {
         self.main = main
         self.support = support
+        self.accent = accent
+        self.basic = basic
         self.base = base
         self.feedback = feedback
         self.states = states
