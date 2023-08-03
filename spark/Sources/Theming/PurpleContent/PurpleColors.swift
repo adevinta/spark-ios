@@ -30,6 +30,20 @@ struct PurpleColors: Colors {
         supportContainer: ColorTokenDefault(named: "purple-supportContainer", in: Bundle(for: ClassForBundle.self)),
         onSupportContainer: ColorTokenDefault(named: "purple-onSupportContainer", in: Bundle(for: ClassForBundle.self)))
 
+    let accent: ColorsAccent = ColorsAccentDefault(
+        accent: ColorTokenDefault(named: "purple-accent", in: Bundle(for: ClassForBundle.self)),
+        onAccent: ColorTokenDefault(named: "purple-on-accent", in: Bundle(for: ClassForBundle.self)),
+        accentVariant: ColorTokenDefault(named: "purple-accent-variant", in: Bundle(for: ClassForBundle.self)),
+        onAccentVariant: ColorTokenDefault(named: "purple-on-accent-variant", in: Bundle(for: ClassForBundle.self)),
+        accentContainer: ColorTokenDefault(named: "purple-accent-container", in: Bundle(for: ClassForBundle.self)),
+        onAccentContainer: ColorTokenDefault(named: "purple-on-accent-container", in: Bundle(for: ClassForBundle.self)))
+
+    let basic: ColorsBasic = ColorsBasicDefault(
+        basic: ColorTokenDefault(named: "purple-basic", in: Bundle(for: ClassForBundle.self)),
+        onBasic: ColorTokenDefault(named: "purple-on-basic", in: Bundle(for: ClassForBundle.self)),
+        basicContainer: ColorTokenDefault(named: "purple-basic-container", in: Bundle(for: ClassForBundle.self)),
+        onBasicContainer: ColorTokenDefault(named: "purple-on-basic-container", in: Bundle(for: ClassForBundle.self)))
+
     let base: ColorsBase = ColorsBaseDefault(
         background: ColorTokenDefault(named: "purple-background", in: Bundle(for: ClassForBundle.self)),
         onBackground: ColorTokenDefault(named: "purple-onBackground", in: Bundle(for: ClassForBundle.self)),
@@ -74,6 +88,11 @@ struct PurpleColors: Colors {
         supportPressed: ColorTokenDefault(named: "purple-supportPressed", in: Bundle(for: ClassForBundle.self)),
         supportVariantPressed: ColorTokenDefault(named: "purple-supportVariantPressed", in: Bundle(for: ClassForBundle.self)),
         supportContainerPressed: ColorTokenDefault(named: "purple-supportContainerPressed", in: Bundle(for: ClassForBundle.self)),
+        accentPressed: ColorTokenDefault(named: "purple-accent-pressed", in: Bundle(for: ClassForBundle.self)),
+        accentVariantPressed: ColorTokenDefault(named: "purple-accent-variant-pressed", in: Bundle(for: ClassForBundle.self)),
+        accentContainerPressed: ColorTokenDefault(named: "purple-accent-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        basicPressed: ColorTokenDefault(named: "purple-basic-pressed", in: Bundle(for: ClassForBundle.self)),
+        basicContainerPressed: ColorTokenDefault(named: "purple-basic-container-pressed", in: Bundle(for: ClassForBundle.self)),
         surfacePressed: ColorTokenDefault(named: "purple-surfacePressed", in: Bundle(for: ClassForBundle.self)),
         surfaceInversePressed: ColorTokenDefault(named: "purple-surfaceInversePressed", in: Bundle(for: ClassForBundle.self)),
         outlinePressed: ColorTokenDefault(named: "purple-outlinePressed", in: Bundle(for: ClassForBundle.self)),

@@ -10,4 +10,5 @@ import Foundation
 
 enum BadgeConstants {
     static let emptySize = CGSize(width: 12, height: 12)
+    static let height: CGFloat = 24
 }

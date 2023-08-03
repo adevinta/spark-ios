@@ -11,6 +11,8 @@ import SparkCore
 enum ColorSectionType: CaseIterable {
     case main
     case support
+    case accent
+    case basic
     case base
     case feedback
     case states
@@ -24,6 +26,10 @@ enum ColorSectionType: CaseIterable {
             return ColorSectionMainViewModel(color: colors.main)
         case .support:
             return ColorSectionSupportViewModel(color: colors.support)
+        case .accent:
+            return ColorSectionAccentViewModel(color: colors.accent)
+        case .basic:
+            return ColorSectionBasicViewModel(color: colors.basic)
         case .base:
             return ColorSectionBaseViewModel(color: colors.base)
         case .feedback:

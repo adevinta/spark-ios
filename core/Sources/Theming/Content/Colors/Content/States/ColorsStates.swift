@@ -21,6 +21,15 @@ public protocol ColorsStates {
     var supportVariantPressed: any ColorToken { get }
     var supportContainerPressed: any ColorToken { get }
 
+    // MARK: - Accent
+    var accentPressed: any ColorToken { get }
+    var accentVariantPressed: any ColorToken { get }
+    var accentContainerPressed: any ColorToken { get }
+
+    // MARK: - Basic
+    var basicPressed: any ColorToken { get }
+    var basicContainerPressed: any ColorToken { get }
+
     // MARK: - Base
 
     var surfacePressed: any ColorToken { get }

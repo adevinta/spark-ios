@@ -23,6 +23,13 @@ extension ColorsStatesGeneratedMock {
         mock.underlyingSupportVariantPressed = ColorTokenGeneratedMock.random()
         mock.underlyingSupportContainerPressed = ColorTokenGeneratedMock.random()
 
+        mock.underlyingAccentPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingAccentVariantPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingAccentContainerPressed = ColorTokenGeneratedMock.random()
+
+        mock.underlyingBasicPressed = ColorTokenGeneratedMock.random()
+        mock.underlyingBasicContainerPressed = ColorTokenGeneratedMock.random()
+
         mock.underlyingSurfacePressed = ColorTokenGeneratedMock.random()
         mock.underlyingSurfaceInversePressed = ColorTokenGeneratedMock.random()
         mock.underlyingOutlinePressed = ColorTokenGeneratedMock.random()

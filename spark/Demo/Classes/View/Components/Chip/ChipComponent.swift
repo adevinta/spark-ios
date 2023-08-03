@@ -141,7 +141,8 @@ struct ChipComponent: View {
             Spacer()
         }
         .padding(.horizontal, 16)
-        .navigationBarTitle(Text("Chip"))    }
+        .navigationBarTitle(Text("Chip"))
+    }
 }
 
 struct ChipComponent_Previews: PreviewProvider {

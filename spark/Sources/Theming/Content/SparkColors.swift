@@ -30,6 +30,20 @@ struct SparkColors: Colors {
         supportContainer: ColorTokenDefault(named: "support-container", in: Bundle(for: ClassForBundle.self)),
         onSupportContainer: ColorTokenDefault(named: "on-support-container", in: Bundle(for: ClassForBundle.self)))
 
+    let accent: ColorsAccent = ColorsAccentDefault(
+        accent: ColorTokenDefault(named: "accent", in: Bundle(for: ClassForBundle.self)),
+        onAccent: ColorTokenDefault(named: "on-accent", in: Bundle(for: ClassForBundle.self)),
+        accentVariant: ColorTokenDefault(named: "accent-variant", in: Bundle(for: ClassForBundle.self)),
+        onAccentVariant: ColorTokenDefault(named: "on-accent-variant", in: Bundle(for: ClassForBundle.self)),
+        accentContainer: ColorTokenDefault(named: "accent-container", in: Bundle(for: ClassForBundle.self)),
+        onAccentContainer: ColorTokenDefault(named: "on-accent-container", in: Bundle(for: ClassForBundle.self)))
+
+    let basic: ColorsBasic = ColorsBasicDefault(
+        basic: ColorTokenDefault(named: "basic", in: Bundle(for: ClassForBundle.self)),
+        onBasic: ColorTokenDefault(named: "on-basic", in: Bundle(for: ClassForBundle.self)),
+        basicContainer: ColorTokenDefault(named: "basic-container", in: Bundle(for: ClassForBundle.self)),
+        onBasicContainer: ColorTokenDefault(named: "on-basic-container", in: Bundle(for: ClassForBundle.self)))
+
     let base: ColorsBase = ColorsBaseDefault(
         background: ColorTokenDefault(named: "background", in: Bundle(for: ClassForBundle.self)),
         onBackground: ColorTokenDefault(named: "on-background", in: Bundle(for: ClassForBundle.self)),
@@ -74,6 +88,11 @@ struct SparkColors: Colors {
         supportPressed: ColorTokenDefault(named: "support-pressed", in: Bundle(for: ClassForBundle.self)),
         supportVariantPressed: ColorTokenDefault(named: "support-variant-pressed", in: Bundle(for: ClassForBundle.self)),
         supportContainerPressed: ColorTokenDefault(named: "support-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        accentPressed: ColorTokenDefault(named: "accent-pressed", in: Bundle(for: ClassForBundle.self)),
+        accentVariantPressed: ColorTokenDefault(named: "accent-variant-pressed", in: Bundle(for: ClassForBundle.self)),
+        accentContainerPressed: ColorTokenDefault(named: "accent-container-pressed", in: Bundle(for: ClassForBundle.self)),
+        basicPressed: ColorTokenDefault(named: "basic-pressed", in: Bundle(for: ClassForBundle.self)),
+        basicContainerPressed: ColorTokenDefault(named: "basic-container-pressed", in: Bundle(for: ClassForBundle.self)),
         surfacePressed: ColorTokenDefault(named: "surface-pressed", in: Bundle(for: ClassForBundle.self)),
         surfaceInversePressed: ColorTokenDefault(named: "surface-inverse-pressed", in: Bundle(for: ClassForBundle.self)),
         outlinePressed: ColorTokenDefault(named: "outline-pressed", in: Bundle(for: ClassForBundle.self)),
