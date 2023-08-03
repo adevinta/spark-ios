@@ -29,9 +29,6 @@ public class BadgeUIView: UIView {
     // vertical and horizontal offsets
     private var widthConstraint: NSLayoutConstraint?
     private var heightConstraint: NSLayoutConstraint?
-    private var sizeConstraints: [NSLayoutConstraint?] {
-        [widthConstraint, heightConstraint]
-    }
 
     // Constraints for attach / detach
     private var attachLeadingAnchorConstraint: NSLayoutConstraint?
@@ -46,22 +43,12 @@ public class BadgeUIView: UIView {
 
     // Constraints for badge text label.
     // All of these are applied to the badge text label
-    private var labelTopConstraint: NSLayoutConstraint?
     private var labelLeadingConstraint: NSLayoutConstraint?
     private var labelTrailingConstraint: NSLayoutConstraint?
-    private var labelBottomConstraint: NSLayoutConstraint?
-
-    // Array of badge text label constraints for
-    // easier activation
-    private var labelConstraints: [NSLayoutConstraint?] {
-        [labelTopConstraint, labelLeadingConstraint, labelTrailingConstraint, labelBottomConstraint]
-    }
 
     // Bool property that determines wether we should
     // install and activate text label constraints or not
     private var shouldSetupLabelConstrains: Bool {
-        self.labelTopConstraint == nil ||
-        self.labelBottomConstraint == nil ||
         self.labelLeadingConstraint == nil ||
         self.labelTrailingConstraint == nil
     }
@@ -128,8 +115,8 @@ public class BadgeUIView: UIView {
             self.viewModel.isBorderVisible = newValue
         }
     }
-    // MARK: - Init
 
+    // MARK: - Init
     public init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = true) {
         self.viewModel = BadgeViewModel(theme: theme, intent: intent, size: size, value: value, format: format, isBorderVisible: isBorderVisible)
 
@@ -155,8 +142,8 @@ public class BadgeUIView: UIView {
 
     private func setupScalables() {
         self.emptyBadgeSize = BadgeConstants.emptySize.width
-        self.badgeHeight = BadgeConstants.height
-        self.horizontalSpacing = self.viewModel.horizontalOffset
+        self.badgeHeight = self.viewModel.badgeHeight
+        self.horizontalSpacing = self.viewModel.offset.leading
         self.borderWidth = self.viewModel.isBorderVisible ? self.viewModel.border.width : .zero
     }
 
@@ -186,38 +173,48 @@ public class BadgeUIView: UIView {
     // MARK: - Layouts setup
 
     private func setupLayouts() {
-        let textSize = textLabel.intrinsicContentSize
-
-        self.setupSizeConstraint(for: textSize)
-        self.setupBadgeConstraintsIfNeeded(for: textSize)
+        self.setupSizeConstraint()
+        self.updateLeadingConstraintsIfNeeded()
+        self.setupBadgeConstraintsIfNeeded()
     }
 
-    private func setupSizeConstraint(for textSize: CGSize) {
-        let widht = self.viewModel.isBadgeEmpty ? self.emptyBadgeSize : textSize.width + (self.horizontalSpacing * 2)
-        let height = self.viewModel.isBadgeEmpty ? self.emptyBadgeSize : self.badgeHeight
+    private func setupSizeConstraint() {
+        let badgeSize = self.viewModel.isBadgeEmpty ? self.emptyBadgeSize : self.badgeHeight
 
-        if let widthConstraint, let heightConstraint {
-            widthConstraint.constant = widht
-            heightConstraint.constant = height
+        if let heightConstraint = self.heightConstraint, let widthConstraint = self.widthConstraint {
+            widthConstraint.constant = badgeSize
+            heightConstraint.constant = badgeSize
         } else {
-            self.widthConstraint = self.widthAnchor.constraint(equalToConstant: widht)
-            self.widthConstraint?.priority = .required
-            self.heightConstraint = self.heightAnchor.constraint(equalToConstant: height)
-            self.heightConstraint?.priority = .required
-            NSLayoutConstraint.activate(self.sizeConstraints.compactMap({ $0 }))
+            let widthConstraint = self.widthAnchor.constraint(greaterThanOrEqualToConstant: badgeSize)
+            widthConstraint.priority = .required
+            let heightConstraint = self.heightAnchor.constraint(equalToConstant: badgeSize)
+            heightConstraint.priority = .required
+            NSLayoutConstraint.activate([widthConstraint, heightConstraint])
+            self.widthConstraint = widthConstraint
+            self.heightConstraint = heightConstraint
         }
     }
 
-    private func setupBadgeConstraintsIfNeeded(for textSize: CGSize) {
+    private func updateLeadingConstraintsIfNeeded() {
+        guard let leadingConstraint = self.labelLeadingConstraint,
+              let trailingConstraint = self.labelTrailingConstraint else { return }
+
+        let spacing: CGFloat = self.viewModel.isBadgeEmpty ? 0 : self.horizontalSpacing
+        leadingConstraint.constant = spacing
+        trailingConstraint.constant = -spacing
+    }
+
+    private func setupBadgeConstraintsIfNeeded() {
         guard self.shouldSetupLabelConstrains else {
             return
         }
 
-        self.labelLeadingConstraint = self.textLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
-        self.labelTopConstraint = self.textLabel.topAnchor.constraint(equalTo: topAnchor)
-        self.labelTrailingConstraint = self.textLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
-        self.labelBottomConstraint = self.textLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-        NSLayoutConstraint.activate(self.labelConstraints.compactMap({ $0 }))
+        let labelLeadingConstraint = self.textLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing)
+        let labelTrailingConstraint = self.textLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing)
+        let centerYConstraint = self.textLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        NSLayoutConstraint.activate([labelLeadingConstraint, labelTrailingConstraint, centerYConstraint])
+        self.labelLeadingConstraint = labelLeadingConstraint
+        self.labelTrailingConstraint = labelTrailingConstraint
     }
 
     public override func layoutSubviews() {
@@ -245,12 +242,16 @@ public class BadgeUIView: UIView {
 
         switch position {
         case .topTrailingCorner:
-            self.attachCenterXAnchorConstraint = self.centerXAnchor.constraint(equalTo: view.trailingAnchor)
-            self.attachCenterYAnchorConstraint = self.centerYAnchor.constraint(equalTo: view.topAnchor)
+            self.attachCenterXAnchorConstraint = self.centerXAnchor.constraint(
+                equalTo: view.trailingAnchor)
+            self.attachCenterYAnchorConstraint = self.centerYAnchor.constraint(
+                equalTo: view.topAnchor)
         case .trailing:
-            self.attachLeadingAnchorConstraint = self.leadingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                                               constant: self.viewModel.theme.layout.spacing.small)
-            self.attachCenterYAnchorConstraint = self.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            self.attachLeadingAnchorConstraint = self.leadingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: self.viewModel.theme.layout.spacing.small)
+            self.attachCenterYAnchorConstraint = self.centerYAnchor.constraint(
+                equalTo: view.centerYAnchor)
         }
 
         NSLayoutConstraint.activate(self.attachConstraints.compactMap({ $0 }))
@@ -263,66 +264,61 @@ extension BadgeUIView {
         self.subscribeToTextChanges()
         self.subscribeToBorderChanges()
         self.subscribeToColorChanges()
+        self.subscribeToSizeChanges()
     }
 
     private func subscribeToTextChanges() {
         self.viewModel.$text
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] text in
+            .subscribe(in: &self.cancellables) { [weak self] text in
                 self?.textLabel.text = text
                 self?.reloadUISize()
                 self?.setupLayouts()
-            }
-            .store(in: &cancellables)
+        }
         self.viewModel.$textFont
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] textFont in
+            .subscribe(in: &self.cancellables) { [weak self] textFont in
                 self?.textLabel.font = textFont.uiFont
                 self?.reloadUISize()
                 self?.setupLayouts()
             }
-            .store(in: &cancellables)
         self.viewModel.$isBadgeEmpty
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isBadgeOutlined in
+            .subscribe(in: &self.cancellables) { [weak self] isBadgeOutlined in
                 self?.textLabel.text = self?.viewModel.text
                 self?.reloadUISize()
                 self?.setupLayouts()
             }
-            .store(in: &cancellables)
     }
 
     private func subscribeToBorderChanges() {
         self.viewModel.$isBorderVisible
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isBadgeOutlined in
+            .subscribe(in: &self.cancellables) { [weak self] isBadgeOutlined in
                 guard let self else {
                     return
                 }
                 self.updateBorder(self.viewModel.border)
             }
-            .store(in: &cancellables)
         self.viewModel.$border
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] badgeBorder in
+            .subscribe(in: &self.cancellables) { [weak self] badgeBorder in
                 self?.updateBorder(badgeBorder)
             }
-            .store(in: &cancellables)
     }
 
     private func subscribeToColorChanges() {
         self.viewModel.$textColor
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] textColor in
+            .subscribe(in: &self.cancellables) { [weak self] textColor in
                 self?.textLabel.textColor = textColor.uiColor
             }
-            .store(in: &cancellables)
         self.viewModel.$backgroundColor
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] backgroundColor in
+            .subscribe(in: &self.cancellables) { [weak self] backgroundColor in
                 self?.backgroundColor = backgroundColor.uiColor
             }
-            .store(in: &cancellables)
+    }
+
+    private func subscribeToSizeChanges() {
+        self.viewModel.$badgeHeight
+            .subscribe(in: &self.cancellables) { [weak self] badgeHeight in
+                self?.badgeHeight = badgeHeight
+                self?.setupLayouts()
+            }
     }
 }
 
@@ -348,11 +344,8 @@ extension BadgeUIView {
     }
 
     private func reloadUISize() {
-        if self.viewModel.isBadgeEmpty {
-            self._emptyBadgeSize.update(traitCollection: self.traitCollection)
-        } else {
-            self._horizontalSpacing.update(traitCollection: self.traitCollection)
-        }
+        self._emptyBadgeSize.update(traitCollection: self.traitCollection)
+        self._horizontalSpacing.update(traitCollection: self.traitCollection)
         self._badgeHeight.update(traitCollection: traitCollection)
     }
 

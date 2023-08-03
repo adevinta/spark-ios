@@ -14,6 +14,7 @@ import XCTest
 final class BadgeViewModelTests: XCTestCase {
 
     var theme: ThemeGeneratedMock = ThemeGeneratedMock.mocked()
+    var subscriptions = Set<AnyCancellable>()
 
     // MARK: - Tests
     func test_init() throws {
@@ -92,6 +93,104 @@ final class BadgeViewModelTests: XCTestCase {
         }
     }
 
+    func test_theme_change_publishes_values() {
+        // Given
+        let sut = BadgeViewModel(theme: self.theme, intent: .danger)
+        let updateExpectation = expectation(description: "Attributes updated")
+        updateExpectation.expectedFulfillmentCount = 2
+
+        let publishers = Publishers.Zip4(sut.$offset,
+                                         sut.$textColor,
+                                         sut.$backgroundColor,
+                                         sut.$border)
+
+        publishers.sink { _ in
+            updateExpectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        // When
+        sut.theme = ThemeGeneratedMock.mocked()
+
+        // Then
+        wait(for: [updateExpectation], timeout: 0.1)
+    }
+
+    func test_size_change_publishes_values() {
+        // Given
+        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .normal)
+        let updateExpectation = expectation(description: "Attributes updated")
+        updateExpectation.expectedFulfillmentCount = 2
+
+        let publishers = Publishers.Zip3(sut.$textFont,
+                                         sut.$badgeHeight,
+                                         sut.$offset)
+
+        publishers.sink { _ in
+            updateExpectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        // When
+        sut.size = .small
+
+        // Then
+        wait(for: [updateExpectation], timeout: 0.1)
+    }
+
+    func test_intent_change_publishes_values() {
+        // Given
+        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .normal)
+        let updateExpectation = expectation(description: "Attributes updated")
+        updateExpectation.expectedFulfillmentCount = 2
+
+        let publishers = Publishers.Zip(sut.$textColor,
+                                         sut.$backgroundColor)
+
+        publishers.sink { _ in
+            updateExpectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        // When
+        sut.intent = .alert
+
+        // Then
+        wait(for: [updateExpectation], timeout: 0.1)
+    }
+
+    func test_value_change_publishes_values() {
+        // Given
+        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .normal, value: 9)
+        let updateExpectation = expectation(description: "Attributes updated")
+        updateExpectation.expectedFulfillmentCount = 2
+
+        sut.$text.sink { _ in
+            updateExpectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        // When
+        sut.value = 99
+
+        // Then
+        wait(for: [updateExpectation], timeout: 0.1)
+    }
+
+    func test_formater_change_publishes_values() {
+        // Given
+        let sut = BadgeViewModel(theme: self.theme, intent: .danger, value: 9999, format: .default)
+        let updateExpectation = expectation(description: "Attributes updated")
+        updateExpectation.expectedFulfillmentCount = 2
+
+        sut.$text.sink { _ in
+            updateExpectation.fulfill()
+        }.store(in: &self.subscriptions)
+
+        // When
+        sut.format = .overflowCounter(maxValue: 99)
+
+        // Then
+        wait(for: [updateExpectation], timeout: 0.1)
+    }
+
+    // MARK: - Private functions
     private func randomizeIntentAndExceptingCurrent(_ currentIntentType: BadgeIntentType) -> BadgeIntentType {
         let filteredIntentTypes = BadgeIntentType.allCases.filter({ $0 != currentIntentType })
         let randomIndex = Int.random(in: 0...filteredIntentTypes.count - 1)
@@ -100,6 +199,7 @@ final class BadgeViewModelTests: XCTestCase {
     }
 }
 
+// MARK: - Private extensions
 private extension BadgeBorder {
     func isEqual(to theme: Theme, isOutlined: Bool) -> Bool {
         return (isOutlined ? width == theme.border.width.medium : width == theme.border.width.none) &&
