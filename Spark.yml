@@ -70,6 +70,7 @@ targetTemplates:
           UISceneConfigurations: {}
     sources:
       - path: spark/Demo
+      - path: core/Sources/Common/UIKit/GlobalExtension
     dependencies:
       - target: Spark
 
