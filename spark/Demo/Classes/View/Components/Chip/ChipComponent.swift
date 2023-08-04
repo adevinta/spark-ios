@@ -138,6 +138,7 @@ struct ChipComponent: View {
                         icon: self.showIcon == .selected ? self.icon : nil,
                         component: self.withComponent == .selected ? self.component : nil,
                         action: self.withAction == .selected ? { self.showingAlert = true} : nil)
+                    .frame(width: 100, height: 40)
                     .alert("Chip Pressed", isPresented: self.$showingAlert) {
                         Button("OK", role: .cancel) { }
                     }

@@ -15,10 +15,6 @@ import UIKit
 /// When the theme, intent, states or contents change the new values are calculated and published.
 final class TabItemViewModel: ObservableObject {
 
-    private enum Constants {
-        static let height: CGFloat = 40.0
-    }
-
     // MARK: - Private Properties
     private var tabState: TabState {
         didSet {
@@ -96,10 +92,6 @@ final class TabItemViewModel: ObservableObject {
             self.content = self.content.update(\.text, value: newValue)
             self.updateStateAttributes()
         }
-    }
-
-    var height: CGFloat {
-        return Constants.height
     }
     
     // MARK: Published Properties
