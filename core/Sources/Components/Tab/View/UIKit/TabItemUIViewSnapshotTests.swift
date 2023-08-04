@@ -6,12 +6,12 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+@testable import Spark
 @testable import SparkCore
 import XCTest
 
 final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
-    let theme = ThemeGeneratedMock.mocked()
-
+    let theme = SparkTheme.shared
 
     func test_selected_tab() throws {
         let sut = TabItemUIView(
