@@ -75,8 +75,8 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
 
         if state.isPressed {
             let pressedColors = TabItemColors(
-                label: colors.label,
-                line: colors.line,
+                label: theme.colors.base.onSurface.opacity(theme.dims.dim1),
+                line: theme.colors.base.outline,
                 background: theme.colors.states.surfacePressed)
 
             return TabStateAttributes(

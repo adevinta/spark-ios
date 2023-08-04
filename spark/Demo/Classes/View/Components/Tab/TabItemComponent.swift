@@ -29,6 +29,8 @@ struct TabItemComponent: View {
     @State var showBadge = CheckboxSelectionState.unselected
     @State var isSelected = CheckboxSelectionState.unselected
     @State var isEnabled = CheckboxSelectionState.selected
+    @State var tabSize: TabSize = .md
+    @State var isSizePresented = false
 
     // MARK: - View
     var body: some View {
@@ -62,6 +64,19 @@ struct TabItemComponent: View {
                         ForEach(TabIntent.allCases, id: \.self) { intent in
                             Button(intent.name) {
                                 self.intent = intent
+                            }
+                        }
+                    }
+                }
+                HStack() {
+                    Text("Size: ").bold()
+                    Button(self.tabSize.name) {
+                        self.isSizePresented = true
+                    }
+                    .confirmationDialog("Select a size", isPresented: self.$isSizePresented) {
+                        ForEach(TabSize.allCases, id: \.self) { size in
+                            Button(size.name) {
+                                self.tabSize = size
                             }
                         }
                     }
@@ -128,12 +143,14 @@ struct TabItemComponent: View {
                     TabItemUIComponentRepresentableView(
                         theme: self.theme,
                         intent: self.intent,
+                        tabSize: self.tabSize,
                         label: self.showText.isSelected ? "Label" : nil,
                         icon: self.showIcon.isSelected ? UIImage(systemName: "fleuron.fill") : nil,
                         badge: self.showBadge.isSelected ? badge : nil,
                         isSelected: self.isSelected.isSelected,
                         isEnabled: self.isEnabled.isSelected
                     )
+                    .frame(width: 100, height: 40)
                 }
                 Spacer()
             }
@@ -152,5 +169,17 @@ struct TabItemComponent_Previews: PreviewProvider {
 private extension CheckboxSelectionState {
     var isSelected: Bool {
         return self == .selected
+    }
+}
+
+private extension TabSize {
+    var name: String {
+        switch self {
+        case .md: return "Medium"
+        case .sm: return "Small"
+        case .xs: return "Xtra Small"
+        @unknown default:
+            fatalError()
+        }
     }
 }
