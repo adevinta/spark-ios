@@ -21,6 +21,22 @@ struct ChipComponentUIView: View {
     let component: UIView?
     let action: (() -> Void)?
 
+    init(theme: Theme = SparkTheme.shared,
+         intent: ChipIntent = .alert,
+         variant: ChipVariant = .outlined,
+         label: String? = "Test",
+         icon: UIImage? = nil,
+         component: UIView? = nil,
+         action: (() -> Void)? = {}) {
+        self.theme = theme
+        self.intent = intent
+        self.variant = variant
+        self.label = label
+        self.icon = icon
+        self.component = component
+        self.action = action
+    }
+
     var body: some View {
         ChipComponentUIViewRepresentation(
             theme: self.theme,
@@ -79,5 +95,12 @@ struct ChipComponentUIViewRepresentation: UIViewRepresentable {
         chipView.icon = self.icon
         chipView.action = self.action
         chipView.component = self.component
+    }
+}
+
+
+struct ChipComponentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ChipComponentUIView()
     }
 }

@@ -9,7 +9,7 @@
 import Foundation
 
 /// The size of the content of the tabs
-public enum TabSize {
+public enum TabSize: CaseIterable {
     case xs
     case sm
     case md
