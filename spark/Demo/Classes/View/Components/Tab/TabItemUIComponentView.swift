@@ -24,6 +24,7 @@ struct TabItemUIComponentView: View {
         TabItemUIComponentRepresentableView(
             theme: themePublisher.theme,
             intent: .main,
+            tabSize: .md,
             label: "Tab 1",
             icon: UIImage(systemName: "fleuron.fill"),
             badge: badge,
@@ -35,15 +36,17 @@ struct TabItemUIComponentView: View {
 
 struct TabItemUIComponentRepresentableView: UIViewRepresentable {
     let theme: Theme
+    let intent: TabIntent
+    let tabSize: TabSize
     let label: String?
     let icon: UIImage?
     let badge: BadgeUIView?
-    let intent: TabIntent
     let isSelected: Bool
     let isEnabled: Bool
 
     init(theme: Theme,
          intent: TabIntent,
+         tabSize: TabSize,
          label: String?,
          icon: UIImage?,
          badge: BadgeUIView?,
@@ -52,6 +55,7 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
     ) {
         self.theme = theme
         self.intent = intent
+        self.tabSize = tabSize
         self.label = label
         self.icon = icon
         self.badge = badge
@@ -63,6 +67,7 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
         let view = TabItemUIView(
             theme: self.theme,
             intent: self.intent,
+            tabSize: self.tabSize,
             label: self.label,
             icon: self.icon)
 
@@ -77,6 +82,7 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
     func updateUIView(_ uiView: SparkCore.TabItemUIView, context: Context) {
         uiView.theme = self.theme
         uiView.intent = self.intent
+        uiView.tabSize = self.tabSize
         uiView.badge = self.badge
         uiView.icon = self.icon
         uiView.text = self.label
