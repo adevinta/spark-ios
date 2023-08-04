@@ -395,6 +395,12 @@ public final class SwitchUIView: UIView {
 
         // Load view model
         self.viewModel.load()
+
+        // Updates
+        self.updateToggleContentViewSpacings()
+        self.updateToggleViewSize()
+        self.updateToggleDotImageViewSpacings()
+        self.updateContentStackViewSpacing()
     }
 
     private func setupProperties(
@@ -536,14 +542,12 @@ public final class SwitchUIView: UIView {
 
     private func updateToggleContentViewSpacings() {
         // Reload spacing only if value changed
-        let spacing = self._toggleSpacing.wrappedValue
+        if self.toggleSpacing != self.toggleContentLeadingConstraint?.constant {
 
-        if spacing != self.toggleContentLeadingConstraint?.constant {
-
-            self.toggleContentLeadingConstraint?.constant = spacing
-            self.toggleContentTopConstraint?.constant = spacing
-            self.toggleContentTrailingConstraint?.constant = -spacing
-            self.toggleContentBottomConstraint?.constant = -spacing
+            self.toggleContentLeadingConstraint?.constant = self.toggleSpacing
+            self.toggleContentTopConstraint?.constant = self.toggleSpacing
+            self.toggleContentTrailingConstraint?.constant = -self.toggleSpacing
+            self.toggleContentBottomConstraint?.constant = -self.toggleSpacing
 
             self.toggleContentStackView.layoutIfNeeded()
         }
@@ -553,20 +557,17 @@ public final class SwitchUIView: UIView {
         // Reload size only if value changed
         var valueChanged = false
 
-        let width = self._toggleWidth.wrappedValue
-        if width > 0 && width != self.toggleWidthConstraint?.constant {
-            self.toggleWidthConstraint?.constant = width
+        if self.toggleWidth > 0 && self.toggleWidth != self.toggleWidthConstraint?.constant {
+            self.toggleWidthConstraint?.constant = self.toggleWidth
             self.toggleWidthConstraint?.isActive = true
             valueChanged = true
         }
 
-        let height = self._toggleHeight.wrappedValue
-        if height > 0 && height != self.toggleHeightConstraint?.constant {
-            self.toggleHeightConstraint?.constant = height
+        if self.toggleHeight > 0 && self.toggleHeight != self.toggleHeightConstraint?.constant {
+            self.toggleHeightConstraint?.constant = self.toggleHeight
             self.toggleHeightConstraint?.isActive = true
             valueChanged = true
         }
-
         if valueChanged {
             self.toggleView.layoutIfNeeded()
         }
@@ -574,14 +575,11 @@ public final class SwitchUIView: UIView {
 
     private func updateToggleDotImageViewSpacings() {
         // Reload spacing only if value changed
-        let spacing = self._toggleDotSpacing.wrappedValue
-
-        if spacing != self.toggleDotLeadingConstraint?.constant {
-
-            self.toggleDotLeadingConstraint?.constant = spacing
-            self.toggleDotTopConstraint?.constant = spacing
-            self.toggleDotTrailingConstraint?.constant = -spacing
-            self.toggleDotBottomConstraint?.constant = -spacing
+        if self.toggleDotSpacing != self.toggleDotLeadingConstraint?.constant {
+            self.toggleDotLeadingConstraint?.constant = self.toggleDotSpacing
+            self.toggleDotTopConstraint?.constant = self.toggleDotSpacing
+            self.toggleDotTrailingConstraint?.constant = -self.toggleDotSpacing
+            self.toggleDotBottomConstraint?.constant = -self.toggleDotSpacing
 
             self.toggleDotImageView.layoutIfNeeded()
         }
@@ -589,10 +587,8 @@ public final class SwitchUIView: UIView {
 
     private func updateContentStackViewSpacing() {
         // Reload spacing only if value changed and constraint is active
-        let spacing = self._contentStackViewSpacing.wrappedValue
-
-        if spacing != self.contentStackView.spacing {
-            self.contentStackView.spacing = spacing
+        if self.contentStackViewSpacing != self.contentStackView.spacing {
+            self.contentStackView.spacing = contentStackViewSpacing
         }
     }
 
