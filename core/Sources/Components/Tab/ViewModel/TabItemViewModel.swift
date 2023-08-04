@@ -80,17 +80,16 @@ final class TabItemViewModel: ObservableObject {
         }
         set {
             self.content = self.content.update(\.icon, value: newValue)
-            self.updateStateAttributes()
         }
     }
 
-    var title: String? {
+    var text: String? {
         get {
-            return self.content.title
+            return self.content.text
         }
         set {
-            guard self.content.title != newValue else { return }
-            self.content = self.content.update(\.title, value: newValue)
+            guard self.content.text != newValue else { return }
+            self.content = self.content.update(\.text, value: newValue)
             self.updateStateAttributes()
         }
     }
@@ -126,19 +125,22 @@ final class TabItemViewModel: ObservableObject {
             theme: theme,
             intent: intent,
             state: tabState,
-            tabSize: tabSize,
-            hasTitle: false
+            size: content.defaultTabSize(tabSize)
         )
     }
-
-    // MARK: - Private functions
+    
     private func updateStateAttributes() {
         self.tabStateAttributes = self.tabGetStateAttributesUseCase.execute(
             theme: self.theme,
             intent: self.intent,
             state: self.tabState,
-            tabSize: self.tabSize,
-            hasTitle: self.title != nil
+            size: content.defaultTabSize(self.tabSize)
         )
+    }
+}
+
+private extension TabUIItemContent {
+    func defaultTabSize(_ tabSize: TabSize) -> TabSize {
+        return text == nil ? .sm : tabSize
     }
 }
