@@ -25,8 +25,8 @@ import SwiftUI
 /// ```
 public struct BadgeView: View {
     @ObservedObject private var viewModel: BadgeViewModel
-    @ScaledMetric private var smallOffset: CGFloat
-    @ScaledMetric private var mediumOffset: CGFloat
+    @ScaledMetric private var horizontalOffset: CGFloat
+    @ScaledMetric private var verticalOffset: CGFloat
     @ScaledMetric private var emptySize: CGFloat
     @ScaledMetric private var borderWidth: CGFloat
 
@@ -45,7 +45,7 @@ public struct BadgeView: View {
             Text(self.viewModel.text)
                 .font(self.viewModel.textFont.font)
                 .foregroundColor(self.viewModel.textColor.color)
-                .padding(.init(vertical: self.smallOffset, horizontal: self.mediumOffset))
+                .padding(.init(vertical: self.verticalOffset, horizontal: self.horizontalOffset))
                 .background(self.viewModel.backgroundColor.color)
                 .border(
                     width: self.viewModel.isBorderVisible ? borderWidth : 0,
@@ -64,13 +64,13 @@ public struct BadgeView: View {
         let viewModel = BadgeViewModel(theme: theme, intent: intent, value: value)
         self.viewModel = viewModel
 
-        self._smallOffset =
+        self._horizontalOffset =
             .init(wrappedValue:
-                    viewModel.verticalOffset
+                    viewModel.offset.leading
             )
-        self._mediumOffset =
+        self._verticalOffset =
             .init(wrappedValue:
-                    viewModel.horizontalOffset
+                    viewModel.offset.top
             )
         self._emptySize = .init(wrappedValue: BadgeConstants.emptySize.width)
         self._borderWidth = .init(wrappedValue: viewModel.border.width)

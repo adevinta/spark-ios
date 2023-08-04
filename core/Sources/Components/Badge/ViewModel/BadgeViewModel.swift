@@ -31,28 +31,29 @@ final class BadgeViewModel: ObservableObject {
     // MARK: - Badge Configuration Public Properties
     var value: Int? = nil {
         didSet {
-            updateText()
+            self.updateText()
         }
     }
     var intent: BadgeIntentType {
         didSet {
-            updateColors()
+            self.updateColors()
         }
     }
     var size: BadgeSize {
         didSet {
-            updateFont()
+            self.updateFont()
+            self.updateScalings()
         }
     }
     var format: BadgeFormat {
         didSet {
-            updateText()
+            self.updateText()
         }
     }
     var theme: Theme {
         didSet {
-            updateColors()
-            updateScalings()
+            self.updateColors()
+            self.updateScalings()
         }
     }
 
@@ -64,37 +65,33 @@ final class BadgeViewModel: ObservableObject {
     @Published var backgroundColor: any ColorToken
     @Published var border: BadgeBorder
     @Published var isBorderVisible: Bool
+    @Published var badgeHeight: CGFloat
+    @Published var offset: EdgeInsets
 
     // MARK: - Internal Appearance Properties
     var colorsUseCase: BadgeGetIntentColorsUseCaseable
-    var verticalOffset: CGFloat
-    var horizontalOffset: CGFloat
-
+    var sizeAttributesUseCase: BadgeGetSizeAttributesUseCaseable
 
     // MARK: - Initializer
 
-    init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = true, colorsUseCase: BadgeGetIntentColorsUseCaseable = BadgeGetIntentColorsUseCase()) {
+    init(theme: Theme,
+         intent: BadgeIntentType,
+         size: BadgeSize = .normal,
+         value: Int? = nil,
+         format: BadgeFormat = .default,
+         isBorderVisible: Bool = true,
+         colorsUseCase: BadgeGetIntentColorsUseCaseable = BadgeGetIntentColorsUseCase(),
+         sizeAttributesUseCase: BadgeGetSizeAttributesUseCaseable = BadgeGetSizeAttributesUseCase()
+    ) {
         let colors = colorsUseCase.execute(intentType: intent, on: theme.colors)
 
         self.value = value
 
         self.text = format.text(value)
         self.isBadgeEmpty = format.text(value).isEmpty
-        switch size {
-        case .normal:
-            self.textFont = theme.typography.captionHighlight
-        case .small:
-            self.textFont = theme.typography.smallHighlight
-        }
         self.textColor = colors.foregroundColor
 
         self.backgroundColor = colors.backgroundColor
-
-        let verticalOffset = theme.layout.spacing.small
-        let horizontalOffset = theme.layout.spacing.medium
-
-        self.verticalOffset = verticalOffset
-        self.horizontalOffset = horizontalOffset
 
         self.border = BadgeBorder(
             width: theme.border.width.medium,
@@ -109,15 +106,19 @@ final class BadgeViewModel: ObservableObject {
         self.intent = intent
         self.isBorderVisible = isBorderVisible
         self.colorsUseCase = colorsUseCase
+        self.sizeAttributesUseCase = sizeAttributesUseCase
+
+        let sizeAttributes = sizeAttributesUseCase.execute(theme: theme, size: size)
+        self.textFont = sizeAttributes.font
+        self.badgeHeight = sizeAttributes.height
+        self.offset = sizeAttributes.offset
     }
 
     private func updateColors() {
         let colors = self.colorsUseCase.execute(intentType: self.intent, on: self.theme.colors)
 
         self.textColor = colors.foregroundColor
-
         self.backgroundColor = colors.backgroundColor
-
         self.border.setColor(colors.borderColor)
     }
 
@@ -127,21 +128,14 @@ final class BadgeViewModel: ObservableObject {
     }
 
     private func updateFont() {
-        switch size {
-        case .normal:
-            self.textFont = self.theme.typography.captionHighlight
-        case .small:
-            self.textFont = self.theme.typography.smallHighlight
-        }
+        let sizeAttributes = self.sizeAttributesUseCase.execute(theme: self.theme, size: self.size)
+        self.textFont = sizeAttributes.font
     }
 
     private func updateScalings() {
-        let verticalOffset = self.theme.layout.spacing.small
-        let horizontalOffset = self.theme.layout.spacing.medium
-
-        self.verticalOffset = verticalOffset
-        self.horizontalOffset = horizontalOffset
-
+        let sizeAttributes = self.sizeAttributesUseCase.execute(theme: self.theme, size: self.size)
+        self.offset = sizeAttributes.offset
         self.border.setWidth(self.theme.border.width.medium)
+        self.badgeHeight = sizeAttributes.height
     }
 }
