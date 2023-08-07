@@ -95,7 +95,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         )
 
         self.colors = TabItemColors(
-            label: self.theme.colors.base.onSurface,
+            label: self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1),
             line: self.theme.colors.base.outline,
             background: self.theme.colors.states.surfacePressed
         )
@@ -103,7 +103,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: 1,
+            opacity: 1.0,
             separatorLineHeight: self.theme.border.width.small,
             font: self.theme.typography.body1
         )
