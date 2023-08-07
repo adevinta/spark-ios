@@ -13,12 +13,92 @@ import XCTest
 final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
     let theme = SparkTheme.shared
 
-    func test_selected_tab() throws {
+    // MARK: - Tests
+    func test_tab_with_image() throws {
         let sut = TabItemUIView(
-            theme: theme,
+            theme: self.theme,
             intent: .main,
-            icon: UIImage(systemName: "fleuron.fill"))
+            label: "Label",
+            icon: UIImage(systemName: "square.and.pencil.circle"))
 
-        assertSnapshotInDarkAndLight(matching: sut)
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+    }
+
+    func test_selected_tab_with_intent_support() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .support,
+            label: "Label",
+            icon: UIImage(systemName: "square.and.pencil.circle"))
+        sut.isSelected = true
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.large])
+    }
+
+    func test_selected_tab_with_intent_main() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            label: "Label",
+            icon: UIImage(systemName: "square.and.pencil.circle"))
+        sut.isSelected = true
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.large])
+    }
+
+    func test_with_image_only() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            icon: UIImage(systemName: "square.and.pencil.circle"))
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+    }
+
+    func test_with_label_only() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            label: "Label")
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+    }
+
+    func test_with_label_and_badge() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            label: "Label")
+
+        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
+        sut.badge = badge
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+    }
+
+    func test_with_icon_and_badge() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            icon: UIImage(systemName: "square.and.pencil.circle"))
+
+        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
+        sut.badge = badge
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+    }
+
+    func test_with_icon_label_and_badge() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            label: "Label",
+            icon: UIImage(systemName: "square.and.pencil.circle")
+        )
+
+        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
+        sut.badge = badge
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
     }
 }
