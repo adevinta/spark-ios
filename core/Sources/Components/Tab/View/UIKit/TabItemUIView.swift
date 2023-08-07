@@ -12,16 +12,15 @@ import UIKit
 
 /// A single component of the tabs view.
 /// The standard tab item consists of an icon, label and a badge.
-/// The badge is not restricted in type and any UIView may be accepted. It is to be noted, that the exptected view is not to be higher than 24px, otherwise constraints will be broken.
-/// The label and icon are publicly accessible, so the standard label maye be replaced with an attributed string.
-/// The layout of the tab item is orgianized with a stack view. This stack view is also publicly accessible, and further views may be added to it. Again here, the developer needs to pay caution, not to break constraints.
+/// The badge is not restricted in type and any UIView may be accepted. .
+/// The label and icon are publicly accessible, so the standard label may be replaced with an attributed string.
+/// The layout of the tab item is orgianized with a stack view. This stack view is publicly accessible, and further views may be added to it. The developer needs to pay caution, not to break constraints.
 public final class TabItemUIView: UIControl {
 
     // MARK: - Private variables
     private var subscriptions = Set<AnyCancellable>()
     private var bottomLineHeightConstraint: NSLayoutConstraint?
-    private var heightConstraint: NSLayoutConstraint?
-    private var imageViewHeightConstraint: NSLayoutConstraint?
+    private var imageViewSizeConstraint = [NSLayoutConstraint]()
 
     private var edgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: self.paddingVertical,
@@ -49,7 +48,6 @@ public final class TabItemUIView: UIControl {
     @ScaledUIMetric private var paddingVertical: CGFloat
     @ScaledUIMetric private var paddingHorizontal: CGFloat
     @ScaledUIMetric private var borderLineHeight: CGFloat
-    @ScaledUIMetric private var iconHeight: CGFloat
 
     @ObservedObject private var viewModel: TabItemViewModel
 
@@ -57,41 +55,35 @@ public final class TabItemUIView: UIControl {
     /// The label shown in the tab item.
     ///
     /// The attributes may be changed as required, e.g. using an attributed string instead of a standard string.
-    public private(set) var label: UILabel? {
-        didSet {
-            if let labelInStackView = oldValue {
-                labelInStackView.removeFromSuperview()
-                self.stackView.removeArrangedSubview(labelInStackView)
-            }
-            if let newLabel = self.label {
-                let index = self.imageView == nil ? 0 : 1
-                self.stackView.insertArrangedSubview(newLabel, at: index)
-            }
-        }
-    }
+    public private(set) var label: UILabel = {
+        let label = UILabel()
+        label.isAccessibilityElement = false
+        label.contentMode = .scaleAspectFit
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 1
+        label.setContentCompressionResistancePriority(.defaultHigh,
+                                                      for: .horizontal)
+        label.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
+        return label
+    }()
 
     /// The image view containing the icon.
     ///
     /// To attributes of the icon can be changed directly or replaced by changing the imageView.
-    public private(set) var imageView: UIImageView? {
-        didSet {
-            if let imageInStackView = oldValue {
-                imageInStackView.removeFromSuperview()
-                self.stackView.removeArrangedSubview(imageInStackView)
-            }
-            if let newImage = self.imageView {
-                self.stackView.insertArrangedSubview(newImage, at: 0)
-                self.enableImageSizeConstraints()
-            } else {
-                self.disableImageViewSizeConstraints()
-            }
-        }
-    }
+    public private(set) var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
+        return imageView
+    }()
 
     /// The badge which is rendered to the right of the label.
     ///
-    /// The badge will typically be used for rendering a BadgeUIView, but it is not restricted to this type. Any type of view may be added as a badge. It is to be noted, that the view added should have a maximum height of 24px, othewise the constraints of the tab item will be broken.
-    /// It is also possible to add further views to the tab, by directly accessing the stackView.
+    /// The badge will typically be used for rendering a BadgeUIView, but it is not restricted to this type. Any type of view may be added as a badge.
+    /// It is possible to add further views to the tab, by directly accessing the stackView.
     public var badge: UIView? {
         didSet {
             guard badge != oldValue else { return }
@@ -107,6 +99,18 @@ public final class TabItemUIView: UIControl {
             }
         }
     }
+
+    /// The stack view containing the single items of the tab.
+    ///
+    /// The stack view is publicly accessible, so that the contents of the tab may be changed to special needs.
+    public var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
 
     /// The current theme of the view.
     ///
@@ -158,6 +162,7 @@ public final class TabItemUIView: UIControl {
         }
     }
 
+    /// The current tab size
     public var tabSize: TabSize {
         get {
             return self.viewModel.tabSize
@@ -193,16 +198,6 @@ public final class TabItemUIView: UIControl {
         }
     }
 
-    /// The stack view containing the single items of the tab.
-    ///
-    /// The stack view is publicly accessible, so that the contents of the tab may be changed to special needs. It must be noted though, that the components added may not exceed the height of 24px, otherwise the constraints of the tab item will be broken.
-    public var stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.isLayoutMarginsRelativeArrangement = true
-        return stackView
-    }()
-
     // MARK: - Initializers
     /// Create a tab item view.
     ///
@@ -224,11 +219,11 @@ public final class TabItemUIView: UIControl {
 
     init(viewModel: TabItemViewModel) {
         self.viewModel = viewModel
+
         self._spacing = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
         self._paddingVertical = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.verticalEdge)
         self._paddingHorizontal = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
         self._borderLineHeight = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.separatorLineHeight)
-        self._iconHeight = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.font.uiFont.lineHeight)
 
         super.init(frame: .zero)
 
@@ -246,14 +241,20 @@ public final class TabItemUIView: UIControl {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        self._spacing.update(traitCollection: traitCollection)
-        self._paddingVertical.update(traitCollection: traitCollection)
-        self._paddingHorizontal.update(traitCollection: traitCollection)
-        self._borderLineHeight.update(traitCollection: traitCollection)
-        self._iconHeight.update(traitCollection: traitCollection)
+        guard self.traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else {
+            return
+        }
+        self._spacing.update(traitCollection: self.traitCollection)
+        self._paddingVertical.update(traitCollection: self.traitCollection)
+        self._paddingHorizontal.update(traitCollection: self.traitCollection)
+        self._borderLineHeight.update(traitCollection: self.traitCollection)
 
+        let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
+        self.imageViewSizeConstraint.forEach{ $0.constant = iconHeight }
         self.bottomLineHeightConstraint?.constant = self.borderLineHeight
+        self.stackView.spacing = self.spacing
         self.stackView.layoutMargins = self.edgeInsets
+        self.updateIconConstraints()
     }
 
     // MARK: - Private functions
@@ -268,7 +269,7 @@ public final class TabItemUIView: UIControl {
             guard let self else { return }
             self.setupColors(attributes: attributes)
             self.button.isUserInteractionEnabled = self.viewModel.isEnabled
-            self.updateIconConstraints(size: attributes.font.uiFont.lineHeight)
+            self.updateIconConstraints()
         }
     }
 
@@ -286,48 +287,46 @@ public final class TabItemUIView: UIControl {
         self.addSubviewSizedEqually(self.button)
 
         self.setupColors(attributes: self.viewModel.tabStateAttributes)
+
+        self.stackView.addArrangedSubview(self.imageView)
+        self.stackView.addArrangedSubview(self.label)
     }
 
     private func setupColors(attributes: TabStateAttributes) {
-        self.label?.font = attributes.font.uiFont
-        self.label?.textColor = attributes.colors.label.uiColor
+        self.label.font = attributes.font.uiFont
+        self.label.textColor = attributes.colors.label.uiColor
 
-        self.imageView?.tintColor = attributes.colors.label.uiColor
+        self.imageView.tintColor = attributes.colors.label.uiColor
+
         self.bottomLine.backgroundColor = attributes.colors.line.uiColor
-        self.bottomLine.layer.opacity = Float(attributes.opacity)
         self.stackView.backgroundColor = attributes.colors.background.uiColor
-        self.stackView.layer.opacity = Float(attributes.opacity)
+
+        let opacity = Float(attributes.opacity)
+        self.bottomLine.layer.opacity = opacity
+        self.stackView.layer.opacity = opacity
     }
 
-    private func updateIconConstraints(size: CGFloat) {
-        self.iconHeight = size
-        self.imageViewHeightConstraint?.constant = self.iconHeight
+    private func updateIconConstraints() {
+        let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
+        self.imageViewSizeConstraint.forEach{ $0.constant = iconHeight }
     }
 
     private func setupConstraints() {
+        let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         let lineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.borderLineHeight)
+        let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: iconHeight)
+        let imageWidthConstraint = self.imageView.widthAnchor.constraint(equalToConstant: iconHeight)
 
         NSLayoutConstraint.activate([
             lineHeightConstraint,
+            imageWidthConstraint,
+            imageHeightConstraint,
             self.bottomLine.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor),
             self.bottomLine.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor),
             self.bottomLine.bottomAnchor.constraint(equalTo: self.stackView.bottomAnchor)
         ])
         self.bottomLineHeightConstraint = lineHeightConstraint
-    }
-
-    private func enableImageSizeConstraints() {
-        guard let imageView = self.imageView  else { return }
-        if self.imageViewHeightConstraint == nil {
-            self.imageViewHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: self.viewModel.tabStateAttributes.font.uiFont.lineHeight)
-
-        }
-        self.imageViewHeightConstraint?.isActive = true
-    }
-
-    private func disableImageViewSizeConstraints() {
-        self.imageViewHeightConstraint?.isActive = false
-        self.imageViewHeightConstraint = nil
+        self.imageViewSizeConstraint = [imageHeightConstraint, imageWidthConstraint]
     }
 
     private func setupButtonActions() {
@@ -345,33 +344,20 @@ public final class TabItemUIView: UIControl {
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
         if let icon = icon {
-            if let image = self.imageView {
-                image.image = icon
-                image.tintColor = self.viewModel.tabStateAttributes.colors.label.uiColor
-            } else {
-                let image = UIImageView.standard
-                image.image = icon
-                image.tintColor = self.viewModel.tabStateAttributes.colors.label.uiColor
-                self.imageView = image
-            }
+            self.imageView.image = icon
+            self.imageView.tintColor = self.viewModel.tabStateAttributes.colors.label.uiColor
+            self.imageView.isHidden = false
         } else {
-            self.imageView = nil
+            self.imageView.isHidden = true
         }
     }
 
     private func addOrRemoveLabel(_ text: String?) {
         if let text = text {
-            if let label = self.label {
-                label.text = text
-            } else {
-                let label = UILabel.standard
-                label.text = text
-                label.textColor = self.viewModel.tabStateAttributes.colors.label.uiColor
-                label.font = self.viewModel.tabStateAttributes.font.uiFont
-                self.label = label
-            }
+            self.label.text = text
+            self.label.isHidden = false
         } else {
-            self.label = nil
+            self.label.isHidden = true
         }
     }
 
@@ -385,29 +371,5 @@ public final class TabItemUIView: UIControl {
 
     @IBAction func actionTouchUp(sender: UIButton)  {
         self.viewModel.isPressed = false
-    }
-
-}
-
-private extension UIView {
-    func withStandardAttributes() -> Self {
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.contentMode = .scaleAspectFit
-        self.isAccessibilityElement = false
-        self.setContentCompressionResistancePriority(.required, for: .horizontal)
-        self.setContentCompressionResistancePriority(.required, for: .vertical)
-        return self
-    }
-}
-
-private extension UIImageView {
-    static var standard: UIImageView {
-        return UIImageView().withStandardAttributes()
-    }
-}
-
-private extension UILabel {
-    static var standard: UILabel {
-        return UILabel().withStandardAttributes()
     }
 }
