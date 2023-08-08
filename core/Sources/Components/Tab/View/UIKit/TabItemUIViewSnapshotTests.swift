@@ -12,6 +12,13 @@ import XCTest
 
 final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
     let theme = SparkTheme.shared
+    var image: UIImage!
+
+    override func setUp() {
+        super.setUp()
+
+        self.image = UIImage(systemName: "folder")!
+    }
 
     // MARK: - Tests
     func test_tab_with_image() throws {
@@ -19,7 +26,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .main,
             label: "Label",
-            icon: UIImage(systemName: "square.and.pencil.circle"))
+            icon: self.image)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
     }
@@ -29,7 +36,8 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .support,
             label: "Label",
-            icon: UIImage(systemName: "square.and.pencil.circle"))
+            icon: self.image)
+
         sut.isSelected = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.large])
@@ -40,7 +48,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .main,
             label: "Label",
-            icon: UIImage(systemName: "square.and.pencil.circle"))
+            icon: self.image)
         sut.isSelected = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.large])
@@ -50,7 +58,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            icon: UIImage(systemName: "square.and.pencil.circle"))
+            icon: self.image)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
     }
@@ -80,7 +88,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            icon: UIImage(systemName: "square.and.pencil.circle"))
+            icon: self.image)
 
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
         sut.badge = badge
@@ -93,8 +101,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .main,
             label: "Label",
-            icon: UIImage(systemName: "square.and.pencil.circle")
-        )
+            icon: self.image)
 
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
         sut.badge = badge
