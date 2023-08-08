@@ -35,11 +35,14 @@ final class TabItemViewModelTests: XCTestCase {
             line: self.theme.colors.base.outline,
             background: self.theme.colors.base.surface
         )
+
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 40)
         tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReturnValue = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: 1,
-            separatorLineHeight: theme.border.width.small,
+            heights: expectedHeights,
             font: theme.typography.body1
         )
     }
@@ -68,11 +71,14 @@ final class TabItemViewModelTests: XCTestCase {
     
     func test_published_attributes_on_initialization() {
         let sut = self.sut()
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 40)
+
         let expectedAttributes = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: 1,
-            separatorLineHeight: self.theme.border.width.small,
+            heights: expectedHeights,
             font: self.theme.typography.body1
         )
         

@@ -21,6 +21,7 @@ public final class TabItemUIView: UIControl {
     private var subscriptions = Set<AnyCancellable>()
     private var bottomLineHeightConstraint: NSLayoutConstraint?
     private var imageViewSizeConstraint: NSLayoutConstraint?
+    private var heightConstraint: NSLayoutConstraint?
 
     private var edgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: self.paddingVertical,
@@ -41,6 +42,7 @@ public final class TabItemUIView: UIControl {
     @ScaledUIMetric private var paddingVertical: CGFloat
     @ScaledUIMetric private var paddingHorizontal: CGFloat
     @ScaledUIMetric private var borderLineHeight: CGFloat
+    @ScaledUIMetric private var height: CGFloat
 
     @ObservedObject private var viewModel: TabItemViewModel
 
@@ -218,7 +220,8 @@ public final class TabItemUIView: UIControl {
         self._spacing = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
         self._paddingVertical = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.verticalEdge)
         self._paddingHorizontal = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
-        self._borderLineHeight = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.separatorLineHeight)
+        self._borderLineHeight = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.heights.separatorLineHeight)
+        self._height = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.heights.itemHeight)
 
         super.init(frame: .zero)
 
@@ -242,13 +245,9 @@ public final class TabItemUIView: UIControl {
         self._paddingVertical.update(traitCollection: self.traitCollection)
         self._paddingHorizontal.update(traitCollection: self.traitCollection)
         self._borderLineHeight.update(traitCollection: self.traitCollection)
+        self._height.update(traitCollection: self.traitCollection)
 
-        let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
-        self.imageViewSizeConstraint?.constant = iconHeight
-        self.bottomLineHeightConstraint?.constant = self.borderLineHeight
-        self.stackView.spacing = self.spacing
-        self.stackView.layoutMargins = self.edgeInsets
-        self.updateIconConstraints()
+        self.updateLayoutConstraints()
     }
 
     // MARK: - Private functions
@@ -262,7 +261,8 @@ public final class TabItemUIView: UIControl {
         self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
             guard let self else { return }
             self.setupColors(attributes: attributes)
-            self.updateIconConstraints()
+            self.updateSizes(attributes: attributes)
+            self.updateLayoutConstraints()
         }
     }
 
@@ -291,24 +291,41 @@ public final class TabItemUIView: UIControl {
         self.bottomLine.backgroundColor = attributes.colors.line.uiColor
         self.stackView.backgroundColor = attributes.colors.background.uiColor
 
-        let opacity = Float(attributes.opacity)
+        let opacity = Float(attributes.colors.opacity)
         self.bottomLine.layer.opacity = opacity
         self.stackView.layer.opacity = opacity
     }
 
-    private func updateIconConstraints() {
+    private func updateSizes(attributes: TabStateAttributes) {
+        self._spacing = ScaledUIMetric(wrappedValue: attributes.spacings.content)
+        self._paddingVertical = ScaledUIMetric(wrappedValue: attributes.spacings.verticalEdge)
+        self._paddingHorizontal = ScaledUIMetric(wrappedValue: attributes.spacings.horizontalEdge)
+        self._borderLineHeight = ScaledUIMetric(wrappedValue: attributes.heights.separatorLineHeight)
+        self._height = ScaledUIMetric(wrappedValue: attributes.heights.itemHeight)
+    }
+
+    private func updateLayoutConstraints() {
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         self.imageViewSizeConstraint?.constant = iconHeight
+
+        self.imageViewSizeConstraint?.constant = iconHeight
+        self.bottomLineHeightConstraint?.constant = self.borderLineHeight
+        self.heightConstraint?.constant = self.height
+
+        self.stackView.spacing = self.spacing
+        self.stackView.layoutMargins = self.edgeInsets
     }
 
     private func setupConstraints() {
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         let lineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.borderLineHeight)
         let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: iconHeight)
+        let heigtConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
 
         NSLayoutConstraint.activate([
             lineHeightConstraint,
             imageHeightConstraint,
+            heigtConstraint,
             self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
             self.bottomLine.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor),
             self.bottomLine.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor),
@@ -316,6 +333,7 @@ public final class TabItemUIView: UIControl {
         ])
         self.bottomLineHeightConstraint = lineHeightConstraint
         self.imageViewSizeConstraint = imageHeightConstraint
+        self.heightConstraint = heigtConstraint
     }
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
