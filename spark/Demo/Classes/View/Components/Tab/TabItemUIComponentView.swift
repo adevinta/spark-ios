@@ -25,7 +25,7 @@ struct TabItemUIComponentView: View {
             theme: themePublisher.theme,
             intent: .main,
             tabSize: .md,
-            label: "Tab 1",
+            text: "Tab 1",
             icon: UIImage(systemName: "fleuron.fill"),
             badge: badge,
             isSelected: true,
@@ -38,7 +38,7 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
     let theme: Theme
     let intent: TabIntent
     let tabSize: TabSize
-    let label: String?
+    let text: String?
     let icon: UIImage?
     let badge: BadgeUIView?
     let isSelected: Bool
@@ -47,7 +47,7 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
     init(theme: Theme,
          intent: TabIntent,
          tabSize: TabSize,
-         label: String?,
+         text: String?,
          icon: UIImage?,
          badge: BadgeUIView?,
          isSelected: Bool,
@@ -56,7 +56,7 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
         self.theme = theme
         self.intent = intent
         self.tabSize = tabSize
-        self.label = label
+        self.text = text
         self.icon = icon
         self.badge = badge
         self.isSelected = isSelected
@@ -68,7 +68,7 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
             theme: self.theme,
             intent: self.intent,
             tabSize: self.tabSize,
-            label: self.label,
+            text: self.text,
             icon: self.icon)
 
         view.icon = self.icon
@@ -85,7 +85,7 @@ struct TabItemUIComponentRepresentableView: UIViewRepresentable {
         uiView.tabSize = self.tabSize
         uiView.badge = self.badge
         uiView.icon = self.icon
-        uiView.text = self.label
+        uiView.text = self.text
         uiView.isEnabled = self.isEnabled
         uiView.isSelected = self.isSelected
     }
