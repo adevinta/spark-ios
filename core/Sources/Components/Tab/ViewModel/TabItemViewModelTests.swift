@@ -51,9 +51,9 @@ final class TabItemViewModelTests: XCTestCase {
         let sut = self.sut(icon: icon, text: text)
         XCTAssertIdentical(sut.theme as AnyObject, self.theme, "sut theme should be the same as self.theme")
         XCTAssertEqual(sut.intent, .main, "sut intent should be main")
-        XCTAssertEqual(sut.isSelected, false, "sut's isSelected parameter should be false")
-        XCTAssertEqual(sut.isPressed, false, "sut's isPressed parameter should be false")
-        XCTAssertEqual(sut.isEnabled, true, "sut's isDisabled parameter should be false")
+        XCTAssertTrue(sut.isSelected, "sut's isSelected parameter should be false")
+        XCTAssertFalse(sut.isPressed, "sut's isPressed parameter should be false")
+        XCTAssertTrue(sut.isEnabled, "sut's isDisabled parameter should be false")
         XCTAssertEqual(sut.icon, icon, "sut's icon should be icon")
         XCTAssertEqual(sut.text, text, "sut's text should be text")
     }
