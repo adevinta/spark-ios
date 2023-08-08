@@ -36,13 +36,6 @@ public final class TabItemUIView: UIControl {
         return border
     }()
 
-    private let button: UIButton = {
-        let button = UIButton(type: .custom)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.isAccessibilityElement = false
-        return button
-    }()
-
     // MARK: - Scaled metrics
     @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var paddingVertical: CGFloat
@@ -206,15 +199,15 @@ public final class TabItemUIView: UIControl {
     /// - Parameters:
     /// theme: the current theme, which will determine the colors and spacings
     /// intent: the intent of the tab item
-    /// label: optional string, the label if the tab item if set
+    /// text: optional string, the label if the tab item if set
     /// icon: optional image of the tab item
     public convenience init(theme: Theme,
                             intent: TabIntent = .main,
                             tabSize: TabSize = .md,
-                            label: String? = nil,
+                            text: String? = nil,
                             icon: UIImage? = nil) {
         let viewModel = TabItemViewModel(theme: theme, intent: intent, tabSize: tabSize)
-        viewModel.text = label
+        viewModel.text = text
         viewModel.icon = icon
         self.init(viewModel: viewModel)
     }
@@ -232,7 +225,6 @@ public final class TabItemUIView: UIControl {
         self.setupView()
         self.setupConstraints()
         self.setupSubscriptions()
-        self.setupButtonActions()
     }
 
     required init?(coder: NSCoder) {
@@ -264,13 +256,12 @@ public final class TabItemUIView: UIControl {
         self.viewModel.$content.subscribe(in: &self.subscriptions) { [weak self] itemContent in
             guard let self else { return }
             self.addOrRemoveIcon(itemContent.icon)
-            self.addOrRemoveLabel(itemContent.text)
+            self.addOrRemoveText(itemContent.text)
         }
 
         self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
             guard let self else { return }
             self.setupColors(attributes: attributes)
-            self.button.isUserInteractionEnabled = self.viewModel.isEnabled
             self.updateIconConstraints()
         }
     }
@@ -281,8 +272,6 @@ public final class TabItemUIView: UIControl {
         self.stackView.layoutMargins = self.edgeInsets
 
         self.addSubviewSizedEqually(self.stackView)
-
-        self.addSubviewSizedEqually(self.button)
 
         self.setupColors(attributes: self.viewModel.tabStateAttributes)
 
@@ -316,7 +305,6 @@ public final class TabItemUIView: UIControl {
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         let lineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.borderLineHeight)
         let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: iconHeight)
-//        let imageWidthConstraint = self.imageView.widthAnchor.constraint(equalToConstant: iconHeight)
 
         NSLayoutConstraint.activate([
             lineHeightConstraint,
@@ -330,19 +318,6 @@ public final class TabItemUIView: UIControl {
         self.imageViewSizeConstraint = imageHeightConstraint
     }
 
-    private func setupButtonActions() {
-        let actions: [(selector: Selector, event: UIControl.Event)] = [
-            (#selector(actionTapped(sender:)), .touchUpInside),
-            (#selector(actionTouchDown(sender:)), .touchDown),
-            (#selector(actionTouchUp(sender:)), .touchUpOutside),
-            (#selector(actionTouchUp(sender:)), .touchCancel)
-        ]
-
-        for action in actions {
-            self.button.addTarget(self, action: action.selector, for: action.event)
-        }
-    }
-
     private func addOrRemoveIcon(_ icon: UIImage?) {
         if let icon = icon {
             self.imageView.image = icon
@@ -353,24 +328,12 @@ public final class TabItemUIView: UIControl {
         }
     }
 
-    private func addOrRemoveLabel(_ text: String?) {
+    private func addOrRemoveText(_ text: String?) {
         if let text = text {
             self.label.text = text
             self.label.isHidden = false
         } else {
             self.label.isHidden = true
         }
-    }
-
-    @IBAction func actionTapped(sender: UIButton)  {
-        self.viewModel.isPressed = false
-    }
-
-    @IBAction func actionTouchDown(sender: UIButton)  {
-        self.viewModel.isPressed = true
-    }
-
-    @IBAction func actionTouchUp(sender: UIButton)  {
-        self.viewModel.isPressed = false
     }
 }
