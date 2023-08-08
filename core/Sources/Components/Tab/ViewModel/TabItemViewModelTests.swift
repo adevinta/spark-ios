@@ -224,8 +224,8 @@ final class TabItemViewModelTests: XCTestCase {
         XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .xs)
     }
 
-    func test_when_no_text_font_size_always_sm() {
-        let sut = self.sut(size: .md, text: nil)
+    func test_when_no_text_font_size_always_md() {
+        let sut = self.sut(size: .sm, text: nil)
 
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 1
@@ -237,7 +237,7 @@ final class TabItemViewModelTests: XCTestCase {
 
         wait(for: [expectation], timeout: 0.1)
 
-        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .sm)
+        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .md)
     }
 }
 
