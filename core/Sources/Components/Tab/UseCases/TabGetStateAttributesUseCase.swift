@@ -63,12 +63,15 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             background: theme.colors.base.surface
         )
 
+        let heights = TabItemHeights(separatorLineHeight: theme.border.width.small,
+                                     itemHeight: size.itemHeight)
+
         if !state.isEnabled {
+
             return TabStateAttributes(
                 spacings: spacings,
-                colors: colors,
-                opacity: theme.dims.dim3,
-                separatorLineHeight: theme.border.width.small,
+                colors: colors.update(\.opacity, value: theme.dims.dim3),
+                heights: heights,
                 font: font
             )
         }
@@ -82,8 +85,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             return TabStateAttributes(
                 spacings: spacings,
                 colors: pressedColors,
-                opacity: 1,
-                separatorLineHeight: theme.border.width.small,
+                heights: heights,
                 font: font
             )
         }
@@ -98,8 +100,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             return TabStateAttributes(
                 spacings: spacings,
                 colors: selectedColors,
-                opacity: 1,
-                separatorLineHeight: theme.border.width.medium,
+                heights: heights.update(\.separatorLineHeight, value: theme.border.width.medium),
                 font: font
             )
         }
@@ -107,10 +108,24 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
         return TabStateAttributes(
             spacings: spacings,
             colors: colors,
-            opacity: 1,
-            separatorLineHeight: theme.border.width.small,
+            heights: heights,
             font: font
         )
     }
 }
 
+private extension CGFloat {
+    static let medium: CGFloat = 40
+    static let small: CGFloat = 36
+    static let xtraSmall: CGFloat = 32
+}
+
+private extension TabSize {
+    var itemHeight: CGFloat {
+        switch self {
+        case .md: return .medium
+        case .sm: return .small
+        case .xs: return .xtraSmall
+        }
+    }
+}
