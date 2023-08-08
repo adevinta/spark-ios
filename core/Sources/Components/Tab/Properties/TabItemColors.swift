@@ -13,7 +13,9 @@ import Foundation
 /// - line: The color of the base line
 /// - background: The background color of the tab item.
 struct TabItemColors: Equatable {
-    
+    var icon: any ColorToken {
+        return self.label
+    }
     let label: any ColorToken
     let line: any ColorToken
     let background: any ColorToken
