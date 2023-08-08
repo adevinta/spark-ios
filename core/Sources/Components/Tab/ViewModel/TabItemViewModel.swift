@@ -141,6 +141,6 @@ final class TabItemViewModel: ObservableObject {
 
 private extension TabUIItemContent {
     func defaultTabSize(_ tabSize: TabSize) -> TabSize {
-        return text == nil ? .sm : tabSize
+        return text == nil ? .md : tabSize
     }
 }
