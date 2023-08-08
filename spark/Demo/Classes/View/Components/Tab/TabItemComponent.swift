@@ -144,7 +144,7 @@ struct TabItemComponent: View {
                         theme: self.theme,
                         intent: self.intent,
                         tabSize: self.tabSize,
-                        label: self.showText.isSelected ? "Label" : nil,
+                        text: self.showText.isSelected ? "Label" : nil,
                         icon: self.showIcon.isSelected ? UIImage(systemName: "fleuron.fill") : nil,
                         badge: self.showBadge.isSelected ? badge : nil,
                         isSelected: self.isSelected.isSelected,
