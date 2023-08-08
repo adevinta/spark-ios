@@ -59,11 +59,15 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             line: mockedColor,
             background: self.theme.colors.base.surface
         )
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.medium,
+            itemHeight: 40
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: selectedColors,
-            opacity: 1,
-            separatorLineHeight: self.theme.border.width.medium,
+            heights: expectedHeights,
             font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
@@ -76,11 +80,16 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             state: .enabled,
             size: .md
         )
+
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 40
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: 1,
-            separatorLineHeight: self.theme.border.width.small,
+            heights: expectedHeights,
             font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
@@ -100,11 +109,15 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             background: self.theme.colors.states.surfacePressed
         )
 
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 36
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: 1.0,
-            separatorLineHeight: self.theme.border.width.small,
+            heights: expectedHeights,
             font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
@@ -117,11 +130,17 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             state: .disabled,
             size: .xs
         )
+
+
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 32
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
-            colors: self.colors,
-            opacity: theme.dims.dim3,
-            separatorLineHeight: self.theme.border.width.small,
+            colors: self.colors.update(\.opacity, value: theme.dims.dim3),
+            heights: expectedHeights,
             font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
