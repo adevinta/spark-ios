@@ -55,13 +55,13 @@ jobs:
       - name: Run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
       - name: Tar files
-        run: tar -cvf xcresult.tar out/SparkCore.xcresult
+        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
         continue-on-error: true
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
         with:
-          name: xcresult
-          path: xcresult.tar
+          name: xcresult-SparkCore
+          path: xcresult-SparkCore.tar
           retention-days: 15
 
   build:
@@ -92,11 +92,11 @@ jobs:
       - name: Run fastlane lane unit_tests TARGET_NAME:Spark
         run: fastlane unit_tests TARGET_NAME:Spark
       - name: Tar files
-        run: tar -cvf xcresult.tar out/Spark.xcresult
+        run: tar -cvf xcresult-Spark.tar out/Spark.xcresult
         continue-on-error: true
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
         with:
-          name: xcresult
-          path: xcresult.tar
+          name: xcresult-Spark
+          path: xcresult-Spark.tar
           retention-days: 15
