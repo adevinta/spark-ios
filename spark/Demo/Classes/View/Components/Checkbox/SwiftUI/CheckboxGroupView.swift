@@ -95,7 +95,7 @@ struct CheckboxGroupListView: View {
     }
 
     func shuffleAction() {
-        let states = [SelectButtonState.enabled, .disabled, .success(message: "Success"), .warning(message: "Warning"), .error(message: "Error")]
+        let states = [SelectButtonState.enabled, .disabled, .accent, .basic, .success(message: "Success"), .warning(message: "Warning"), .error(message: "Error")]
         let selectionStates = [CheckboxSelectionState.selected, .unselected, .indeterminate]
 
         withAnimation {

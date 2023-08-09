@@ -38,6 +38,20 @@ struct CheckboxStateColorsUseCase: CheckboxStateColorsUseCaseable {
                 checkboxIconColor: iconColor,
                 pressedBorderColor: colors.feedback.successContainer
             )
+        case .accent:
+            return CheckboxStateColors(
+                textColor: textColor,
+                checkboxColor: colors.accent.accent,
+                checkboxIconColor: iconColor,
+                pressedBorderColor: colors.accent.accentContainer
+            )
+        case .basic:
+            return CheckboxStateColors(
+                textColor: textColor,
+                checkboxColor: colors.basic.basic,
+                checkboxIconColor: iconColor,
+                pressedBorderColor: colors.basic.basicContainer
+            )
         case .warning:
             return CheckboxStateColors(
                 textColor: textColor,
