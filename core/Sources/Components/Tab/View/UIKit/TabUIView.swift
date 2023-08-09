@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import Foundation
 import UIKit
 
@@ -50,6 +51,17 @@ public final class TabUIView: UIControl {
             }
         }
     }
+
+    public var publisher: some Publisher<Int, Never> {
+        return self.selectedIndexSubject
+    }
+
+    public override var isEnabled: Bool {
+        didSet {
+            self.segments.forEach{ $0.isEnabled = self.isEnabled }
+        }
+    }
+    private let selectedIndexSubject = PassthroughSubject<Int, Never>()
 
     public convenience init(theme: Theme,
                 intent: TabIntent = .main,
@@ -99,8 +111,16 @@ public final class TabUIView: UIControl {
             return TabItemUIView(theme: theme, intent: intent, tabSize: tabSize, text: item.text, icon: item.icon)
         }
 
+        for (index, tabItem) in tabItemViews.enumerated() {
+            let action = UIAction { [weak self] _ in
+                self?.pressed(index)
+            }
+            tabItem.addAction(action, for: .touchUpInside)
+        }
+
         self.stackView.addArrangedSubviews(tabItemViews)
         self.addSubviewSizedEqually(stackView)
+        self.selectedSegmentIndex = 0
     }
 
     required init?(coder: NSCoder) {
@@ -159,30 +179,52 @@ public final class TabUIView: UIControl {
     }
 
     /// Insert a segment with the action you specify at the given index.
-    public func insertSegment(action: UIAction, at index: Int, animated: Bool) {
+    public func insertSegment(action: UIAction,
+                              at index: Int,
+                              animated: Bool = false) {
         let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize)
         tab.action = action
         self.insertTab(tab, at: index, animated: animated)
-
     }
 
     /// Inserts a segment at the position you specify and gives it an image as content.
-    public func insertSegment(with icon: UIImage?, at index: Int, animated: Bool) {
+    public func insertSegment(with icon: UIImage?,
+                              at index: Int,
+                              animated: Bool = false) {
         let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, icon: icon)
         self.insertTab(tab, at: index, animated: animated)
     }
 
     ///Inserts a segment at the position you specify and gives it a title as content.
-    public func insertSegment(withTitle text: String?, at index: Int, animated: Bool) {
+    public func insertSegment(withTitle text: String?,
+                              at index: Int,
+                              animated: Bool = false) {
         let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, text: text)
         self.insertTab(tab, at: index, animated: animated)
     }
 
     ///Inserts a segment at the position you specify and gives it a title as content.
-    public func insertSegment(withImage icon: UIImage?, andTitle text: String?, at index: Int, animated: Bool) {
+    public func insertSegment(withImage icon: UIImage?,
+                              andTitle text: String?,
+                              at index: Int, animated: Bool = false) {
         let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, text: text, icon: icon)
         self.insertTab(tab, at: index, animated: animated)
     }
+
+    ///Enables the segment you specify.
+    public func setEnabled(_ isEnabled: Bool,
+                           at index: Int,
+                           animated: Bool = false) {
+        doWithAnimation(animated) {
+            self.segments[safe: index]?.isEnabled = isEnabled
+        }
+    }
+
+    ///Returns whether the indicated segment is enabled.
+    func isEnabledForSegment(at index: Int) -> Bool {
+        self.segments[safe: index]?.isEnabled ?? false
+    }
+
 
     ///Removes all segments of the segmented control.
     public func removeAllSegments() {
@@ -190,33 +232,58 @@ public final class TabUIView: UIControl {
     }
 
     /// Removes the segment you specify from the segmented control, optionally animating the transition.
-    func removeSegment(at index: Int, animated: Bool) {
+    public func removeSegment(at index: Int, animated: Bool) {
         guard let tab = self.stackView.arrangedSubviews[safe: index] else { return }
         self.removeTab(tab, animated: animated)
     }
 
     ///  The index number that identifies the selected segment that the user last touched.
     public var selectedSegmentIndex: Int {
-        return self.segments.firstIndex(where: {$0.isSelected == true}) ?? NSNotFound
+        get {
+            return self.segments.firstIndex(where: {$0.isSelected == true}) ?? NSNotFound
+        }
+        set {
+            guard newValue != self.selectedSegmentIndex else { return }
+            guard newValue < self.numberOfSegments, newValue >= 0 else { return }
+            self.setSelectedSegment(newValue, animated: false)
+        }
+    }
+
+    // MARK: - Private Functions
+    private func pressed(_ index: Int) {
+        self.setSelectedSegment(index, animated: true)
+        self.selectedIndexSubject.send(index)
+        self.sendActions(for: .valueChanged)
+    }
+
+    private func setSelectedSegment(_ index: Int, animated: Bool) {
+        self.doWithAnimation(animated) { [weak self] in
+            guard let self else { return }
+            self.segments[safe: self.selectedSegmentIndex]?.isSelected = false
+            self.segments[safe: index]?.isSelected = true
+        }
     }
 
     private func removeTab(_ tab: UIView, animated: Bool) {
-        if animated {
-            UIView.animate(withDuration: 0.3){
-                self.stackView.detachArrangedSubview(tab)
-            }
-        } else {
-            self.stackView.detachArrangedSubview(tab)
+        self.doWithAnimation(animated) { [weak self] in
+            self?.stackView.detachArrangedSubview(tab)
         }
     }
 
     private func insertTab(_ tab: UIView, at index: Int, animated: Bool) {
+        self.doWithAnimation(animated) { [weak self] in
+            self?.stackView.insertArrangedSubview(tab, at: index)
+        }
+    }
+
+    private func doWithAnimation(_ animated: Bool, block: @escaping () -> Void) {
         if animated {
-            UIView.animate(withDuration: 0.3){
-                self.stackView.insertArrangedSubview(tab, at: index)
-            }
+            UIView.animate(withDuration: 1,
+                           delay: 0.1,
+                           options: .curveEaseInOut,
+                           animations: block)
         } else {
-            self.stackView.insertArrangedSubview(tab, at: index)
+            block()
         }
     }
 }

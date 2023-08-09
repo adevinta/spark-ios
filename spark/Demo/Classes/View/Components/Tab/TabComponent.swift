@@ -27,11 +27,11 @@ struct TabComponent: View {
     @State var showText = CheckboxSelectionState.selected
     @State var showIcon = CheckboxSelectionState.selected
     @State var showBadge = CheckboxSelectionState.unselected
-    @State var isSelected = CheckboxSelectionState.unselected
     @State var isEnabled = CheckboxSelectionState.selected
     @State var tabSize: TabSize = .md
     @State var isSizePresented = false
     @State var numberOfTabs = 3
+    @State var selectedTab = 0
 
     // MARK: - View
     var body: some View {
@@ -113,14 +113,6 @@ struct TabComponent: View {
                 )
 
                 CheckboxView(
-                    text: "Is Selected",
-                    checkedImage: DemoIconography.shared.checkmark,
-                    theme: theme,
-                    state: .enabled,
-                    selectionState: self.$isSelected
-                )
-
-                CheckboxView(
                     text: "Is Enabled",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
@@ -135,30 +127,27 @@ struct TabComponent: View {
 
                 Divider()
 
-                Text("Integration")
+                Text("Integration \(self.selectedTab)")
                     .font(.title2)
                     .bold()
 
                 if version == .swiftUI {
                     Text("Not available yet!")
                 } else {
-                    let badge = BadgeUIView(
-                        theme: themePublisher.theme,
-                        intent: .danger,
-                        value: 5,
-                        isBorderVisible: false)
-                    TabUIComponentRepresentableView(
-                        theme: self.theme,
-                        intent: self.intent,
-                        tabSize: self.tabSize,
-                        showText: self.showText.isSelected,
-                        showIcon: self.showIcon.isSelected,
-                        badge: self.showBadge.isSelected ? badge : nil,
-                        isSelected: self.isSelected.isSelected,
-                        isEnabled: self.isEnabled.isSelected,
-                        numberOfTabs: self.numberOfTabs
-                    )
-                    .frame(width: 100, height: 40)
+                    GeometryReader { geometry in
+                        TabUIComponentRepresentableView(
+                            theme: self.theme,
+                            intent: self.intent,
+                            tabSize: self.tabSize,
+                            showText: self.showText.isSelected,
+                            showIcon: self.showIcon.isSelected,
+                            showBadge: self.showBadge.isSelected,
+                            isEnabled: self.isEnabled.isSelected,
+                            numberOfTabs: self.numberOfTabs,
+                            selectedTab: self.$selectedTab
+                        )
+                        .frame(width: geometry.size.width, height: 40)
+                    }
                 }
                 Spacer()
             }
