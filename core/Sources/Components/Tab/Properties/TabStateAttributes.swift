@@ -17,11 +17,13 @@ struct TabStateAttributes: Equatable {
     
     let spacings: TabItemSpacings
     let colors: TabItemColors
-    let opacity: CGFloat?
-    let separatorLineHeight: CGFloat
+    let heights: TabItemHeights
     let font: TypographyFontToken
 
     static func == (lhs: TabStateAttributes, rhs: TabStateAttributes) -> Bool {
-        return lhs.spacings == rhs.spacings && lhs.colors == rhs.colors && lhs.opacity == rhs.opacity && lhs.separatorLineHeight == rhs.separatorLineHeight && lhs.font.font == rhs.font.font
+        return lhs.spacings == rhs.spacings &&
+        lhs.colors == rhs.colors &&
+        lhs.heights == rhs.heights &&
+        lhs.font.font == rhs.font.font
     }
 }

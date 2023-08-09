@@ -63,22 +63,29 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             background: theme.colors.base.surface
         )
 
-        if state.isDisabled {
+        let heights = TabItemHeights(separatorLineHeight: theme.border.width.small,
+                                     itemHeight: size.itemHeight)
+
+        if !state.isEnabled {
+
             return TabStateAttributes(
                 spacings: spacings,
-                colors: colors,
-                opacity: theme.dims.dim3,
-                separatorLineHeight: theme.border.width.small,
+                colors: colors.update(\.opacity, value: theme.dims.dim3),
+                heights: heights,
                 font: font
             )
         }
 
         if state.isPressed {
+            let pressedColors = TabItemColors(
+                label: theme.colors.base.onSurface.opacity(theme.dims.dim1),
+                line: theme.colors.base.outline,
+                background: theme.colors.states.surfacePressed)
+
             return TabStateAttributes(
                 spacings: spacings,
-                colors: colors,
-                opacity: nil,
-                separatorLineHeight: theme.border.width.small,
+                colors: pressedColors,
+                heights: heights,
                 font: font
             )
         }
@@ -93,8 +100,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             return TabStateAttributes(
                 spacings: spacings,
                 colors: selectedColors,
-                opacity: nil,
-                separatorLineHeight: theme.border.width.medium,
+                heights: heights.update(\.separatorLineHeight, value: theme.border.width.medium),
                 font: font
             )
         }
@@ -102,10 +108,24 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
         return TabStateAttributes(
             spacings: spacings,
             colors: colors,
-            opacity: nil,
-            separatorLineHeight: theme.border.width.small,
+            heights: heights,
             font: font
         )
     }
 }
 
+private extension CGFloat {
+    static let medium: CGFloat = 40
+    static let small: CGFloat = 36
+    static let xtraSmall: CGFloat = 32
+}
+
+private extension TabSize {
+    var itemHeight: CGFloat {
+        switch self {
+        case .md: return .medium
+        case .sm: return .small
+        case .xs: return .xtraSmall
+        }
+    }
+}

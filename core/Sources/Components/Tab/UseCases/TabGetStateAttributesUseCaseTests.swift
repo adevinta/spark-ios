@@ -59,12 +59,16 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             line: mockedColor,
             background: self.theme.colors.base.surface
         )
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.medium,
+            itemHeight: 40
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: selectedColors,
-            opacity: nil,
-            separatorLineHeight: self.theme.border.width.medium,
-            font: self.theme.typography.body2
+            heights: expectedHeights,
+            font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -76,12 +80,17 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             state: .enabled,
             size: .md
         )
+
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 40
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: nil,
-            separatorLineHeight: self.theme.border.width.small,
-            font: self.theme.typography.body2
+            heights: expectedHeights,
+            font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -94,12 +103,22 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             size: .sm
         )
 
+        self.colors = TabItemColors(
+            label: self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1),
+            line: self.theme.colors.base.outline,
+            background: self.theme.colors.states.surfacePressed
+        )
+
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 36
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
-            opacity: nil,
-            separatorLineHeight: self.theme.border.width.small,
-            font: self.theme.typography.body2
+            heights: expectedHeights,
+            font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -111,12 +130,18 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             state: .disabled,
             size: .xs
         )
+
+
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 32
+        )
+
         let expectedAttribute = TabStateAttributes(
             spacings: self.spacings,
-            colors: self.colors,
-            opacity: theme.dims.dim3,
-            separatorLineHeight: self.theme.border.width.small,
-            font: self.theme.typography.body2
+            colors: self.colors.update(\.opacity, value: theme.dims.dim3),
+            heights: expectedHeights,
+            font: self.theme.typography.body1
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
@@ -136,6 +161,6 @@ private extension TabState {
     }
     
     static var disabled: TabState {
-        return .init(isDisabled: true)
+        return .init(isEnabled: false)
     }
 }
