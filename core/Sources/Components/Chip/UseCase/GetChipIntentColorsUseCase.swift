@@ -65,6 +65,16 @@ struct GetChipIntentColorsUseCase: GetChipIntentColorsUseCasable {
                          subordinate: colors.feedback.onError,
                          tintedPrincipal: colors.feedback.errorContainer,
                          tintedSubordinate: colors.feedback.onErrorContainer)
+        case .accent:
+            return .init(principal: colors.accent.accent,
+                         subordinate: colors.accent.onAccent,
+                         tintedPrincipal: colors.accent.accentContainer,
+                         tintedSubordinate: colors.accent.onAccentContainer)
+        case .basic:
+            return .init(principal: colors.basic.basic,
+                         subordinate: colors.basic.onBasic,
+                         tintedPrincipal: colors.basic.basicContainer,
+                         tintedSubordinate: colors.basic.onBasicContainer)
         }
     }
 }
