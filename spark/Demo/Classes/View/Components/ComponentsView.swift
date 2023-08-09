@@ -44,8 +44,12 @@ struct ComponentsView: View {
                     SwitchComponentView()
                 }
 
-                NavigationLink("Tab") {
-                    TabItemComponent()
+//                NavigationLink("Tab") {
+//                    TabItemComponent()
+//                }
+
+                NavigationLink("Tabs") {
+                    TabComponent()
                 }
 
                 NavigationLink("Tag") {
