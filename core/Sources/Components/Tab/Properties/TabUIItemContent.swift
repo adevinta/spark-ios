@@ -16,6 +16,20 @@ struct TabUIItemContent: Equatable, Updateable {
     var text: String?
 
     init(
+        text: String
+    ) {
+        self.icon = nil
+        self.text = text
+    }
+
+    init(
+        icon: UIImage
+    ) {
+        self.icon = icon
+        self.text = nil
+    }
+
+    init(
         icon: UIImage? = nil,
         text: String? = nil
     ) {
