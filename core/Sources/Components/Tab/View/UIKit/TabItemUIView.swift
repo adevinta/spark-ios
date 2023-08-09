@@ -22,6 +22,7 @@ public final class TabItemUIView: UIControl {
     private var bottomLineHeightConstraint: NSLayoutConstraint?
     private var imageViewSizeConstraint: NSLayoutConstraint?
     private var heightConstraint: NSLayoutConstraint?
+    public var action: UIAction?
 
     private var edgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: self.paddingVertical,
@@ -87,8 +88,7 @@ public final class TabItemUIView: UIControl {
             guard badge != oldValue else { return }
 
             if let currentBadge = oldValue {
-                currentBadge.removeFromSuperview()
-                self.stackView.removeArrangedSubview(currentBadge)
+                self.stackView.detachArrangedSubview(currentBadge)
             }
 
             if let newBadge = self.badge {
