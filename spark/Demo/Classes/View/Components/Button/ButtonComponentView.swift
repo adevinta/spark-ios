@@ -241,6 +241,10 @@ private extension ButtonIntent {
 
     var name: String {
         switch self {
+        case .accent:
+            return "Accent"
+        case .basic:
+            return "Basic"
         case .alert:
             return "Alert"
         case .danger:

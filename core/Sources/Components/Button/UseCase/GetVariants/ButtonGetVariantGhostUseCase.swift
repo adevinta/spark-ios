@@ -23,6 +23,22 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
         let dim5 = dims.dim5
 
         switch intent {
+        case .accent:
+            return .init(
+                foregroundColor: colors.accent.accent,
+                backgroundColor: ColorTokenDefault.clear,
+                pressedBackgroundColor: colors.accent.accent.opacity(dim5),
+                borderColor: borderColor,
+                pressedBorderColor: pressedBorderColor
+            )
+        case .basic:
+            return .init(
+                foregroundColor: colors.basic.basic,
+                backgroundColor: ColorTokenDefault.clear,
+                pressedBackgroundColor: colors.basic.basic.opacity(dim5),
+                borderColor: borderColor,
+                pressedBorderColor: pressedBorderColor
+            )
         case .main:
             return .init(
                 foregroundColor: colors.main.main,
