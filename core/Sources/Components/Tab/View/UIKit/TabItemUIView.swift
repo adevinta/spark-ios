@@ -320,12 +320,12 @@ public final class TabItemUIView: UIControl {
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         let lineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.borderLineHeight)
         let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: iconHeight)
-        let heigtConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
+        let heightConstraint = self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.height)
 
         NSLayoutConstraint.activate([
             lineHeightConstraint,
             imageHeightConstraint,
-            heigtConstraint,
+            heightConstraint,
             self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
             self.bottomLine.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor),
             self.bottomLine.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor),
@@ -333,7 +333,7 @@ public final class TabItemUIView: UIControl {
         ])
         self.bottomLineHeightConstraint = lineHeightConstraint
         self.imageViewSizeConstraint = imageHeightConstraint
-        self.heightConstraint = heigtConstraint
+        self.heightConstraint = heightConstraint
     }
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
