@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import Foundation
 import Spark
 import SparkCore
@@ -15,24 +16,20 @@ import UIKit
 struct TabUIComponentView: View {
     // MARK: - Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
+    @State var selectedTab = 1
 
     // MARK: - View
     var body: some View {
-        let badge = BadgeUIView(
-            theme: themePublisher.theme,
-            intent: .danger,
-            value: 5,
-            isBorderVisible: false)
         TabUIComponentRepresentableView(
             theme: themePublisher.theme,
             intent: .main,
             tabSize: .md,
             showText: true,
             showIcon: true,
-            badge: badge,
-            isSelected: true,
+            showBadge: true,
             isEnabled: true,
-            numberOfTabs: 1
+            numberOfTabs: 1,
+            selectedTab: self.$selectedTab
         )
     }
 }
@@ -43,30 +40,40 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
     let tabSize: TabSize
     let showText: Bool
     let showIcon: Bool
-    let badge: BadgeUIView?
-    let isSelected: Bool
+    let showBadge: Bool
     let isEnabled: Bool
     let numbeOfTabs: Int
+    let badge: BadgeUIView
+    let selectedTab: Binding<Int>
+
+    private let publishedBinding: PublishedBinding<Int>
 
     init(theme: Theme,
          intent: TabIntent,
          tabSize: TabSize,
          showText: Bool,
          showIcon: Bool,
-         badge: BadgeUIView?,
-         isSelected: Bool,
+         showBadge: Bool,
          isEnabled: Bool,
-         numberOfTabs: Int
+         numberOfTabs: Int,
+         selectedTab: Binding<Int>
     ) {
         self.theme = theme
         self.intent = intent
         self.tabSize = tabSize
         self.showText = showText
         self.showIcon = showIcon
-        self.badge = badge
-        self.isSelected = isSelected
+        self.showBadge = showBadge
         self.isEnabled = isEnabled
         self.numbeOfTabs = numberOfTabs
+        self.selectedTab = selectedTab
+        self.publishedBinding = PublishedBinding(binding: selectedTab)
+
+        self.badge = BadgeUIView(
+            theme: theme,
+            intent: .danger,
+            value: 5,
+            isBorderVisible: false)
     }
 
     func makeUIView(context: Context) -> SparkCore.TabUIView {
@@ -82,11 +89,12 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
             tabSize: self.tabSize,
             content: content
         )
-        view.segments.last?.badge = self.badge
-        view.segments.first?.isSelected = self.isSelected
 
-        view.isSelected = self.isSelected
-        view.isEnabled = self.isEnabled
+        publishedBinding.publisher = view.publisher.eraseToAnyPublisher()
+        view.selectedSegmentIndex = self.selectedTab.wrappedValue
+        if self.showBadge {
+            view.segments.randomElement()?.badge = self.badge
+        }
 
         return view
     }
@@ -96,6 +104,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         uiView.intent = self.intent
         uiView.tabSize = self.tabSize
         uiView.isEnabled = self.isEnabled
+
         uiView.segments.forEach{ tab in
             tab.imageView.isHidden = !self.showIcon
             tab.label.isHidden = !self.showText
@@ -112,8 +121,13 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
                     animated: false)
             }
         }
-        uiView.segments.first?.isSelected = self.isSelected
-        uiView.segments.last?.badge = self.badge
+
+        let badgeIndex = uiView.segments.firstIndex(where: {$0.badge != nil})
+        if let badgeIndex = badgeIndex, !self.showBadge {
+            uiView.segments[badgeIndex].badge = nil
+        } else if badgeIndex == nil && self.showBadge {
+            uiView.segments.randomElement()?.badge = self.badge
+        }
     }
 }
 
@@ -151,5 +165,23 @@ private extension UIImage {
             fatalError("NO IMAGE FOUND FOR \(sfName)")
         }
         return image
+    }
+}
+
+private class PublishedBinding<T> {
+    var publisher: AnyPublisher<T, Never>? {
+        didSet {
+            guard let publisher = publisher else { return }
+            publisher.sink { value in
+                self.binding.wrappedValue = value
+            }
+            .store(in: &self.cancellables)
+        }
+    }
+    let binding: Binding<T>
+    var cancellables = Set<AnyCancellable>()
+
+    init( binding: Binding<T>) {
+        self.binding = binding
     }
 }

@@ -56,6 +56,7 @@ public final class TabItemUIView: UIControl {
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
+        label.isUserInteractionEnabled = false
         label.numberOfLines = 1
         label.setContentCompressionResistancePriority(.defaultHigh,
                                                       for: .horizontal)
@@ -72,6 +73,8 @@ public final class TabItemUIView: UIControl {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.isAccessibilityElement = false
+        imageView.isUserInteractionEnabled = false
+
         imageView.setContentCompressionResistancePriority(.required,
                                                       for: .horizontal)
         imageView.setContentCompressionResistancePriority(.required,
@@ -92,6 +95,8 @@ public final class TabItemUIView: UIControl {
             }
 
             if let newBadge = self.badge {
+                newBadge.isUserInteractionEnabled = false
+
                 self.stackView.addArrangedSubview(newBadge)
             }
         }
@@ -250,7 +255,60 @@ public final class TabItemUIView: UIControl {
         self.updateLayoutConstraints()
     }
 
+    // MARK: - Control functions
+    public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+
+    public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        let tracking = super.beginTracking(touch, with: event)
+
+        return tracking
+    }
+
+    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+        super.endTracking(touch, with: event)
+    }
+
+    public override func endEditing(_ force: Bool) -> Bool {
+        let tracking = super.endEditing(force)
+        return tracking
+    }
+
+    public override func cancelTracking(with event: UIEvent?) {
+        super.cancelTracking(with: event)
+    }
+
+    public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        super.continueTracking(touch, with: event)
+    }
+
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.viewModel.isPressed = true
+        self.sendActions(for: .touchDown)
+    }
+
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        self.pressFinised()
+    }
+
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        self.viewModel.isPressed = false
+        self.sendActions(for: .touchCancel)
+    }
+
     // MARK: - Private functions
+    private func pressFinised() {
+        self.viewModel.isPressed = false
+        self.sendActions(for: .touchUpInside)
+        if let action = self.action {
+            self.sendAction(action)
+        }
+    }
+
     private func setupSubscriptions() {
         self.viewModel.$content.subscribe(in: &self.subscriptions) { [weak self] itemContent in
             guard let self else { return }
