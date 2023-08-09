@@ -10,4 +10,5 @@ import Foundation
 
 public enum TabItemAccessibilityIdentifier {
     public static let tabItem = "spark-tab-item"
+    public static let tab = "spark-tab"
 }
