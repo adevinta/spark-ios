@@ -5,7 +5,6 @@
 //  Created by robin.lemaire on 14/04/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
-// swiftlint:disable all
 
 import SwiftUI
 import Spark
