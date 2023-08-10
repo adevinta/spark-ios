@@ -161,9 +161,6 @@ private extension UIImage {
         let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
         let sfName: String? = allSfs.randomElement()
         let image = sfName.flatMap(UIImage.init(systemName:))
-        if image == nil {
-            fatalError("NO IMAGE FOUND FOR \(sfName)")
-        }
         return image
     }
 }

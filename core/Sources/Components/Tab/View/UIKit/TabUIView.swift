@@ -63,6 +63,8 @@ public final class TabUIView: UIControl {
     }
     private let selectedIndexSubject = PassthroughSubject<Int, Never>()
 
+    public weak var delegate: TabUIViewDelegate?
+
     public convenience init(theme: Theme,
                 intent: TabIntent = .main,
                 tabSize: TabSize = .md,
@@ -112,10 +114,19 @@ public final class TabUIView: UIControl {
         }
 
         for (index, tabItem) in tabItemViews.enumerated() {
-            let action = UIAction { [weak self] _ in
+            let pressedAction = UIAction { [weak self] _ in
                 self?.pressed(index)
             }
-            tabItem.addAction(action, for: .touchUpInside)
+            let unselectAction = UIAction { [weak self] _ in
+                self?.unselectSegment(index)
+            }
+            let contentChangedAction = UIAction { [weak self] _ in
+                self?.segementContentChanged(index)
+            }
+            tabItem.addAction(pressedAction, for: .touchUpInside)
+            tabItem.addAction(unselectAction, for: .otherSegmentSelected)
+            tabItem.addAction(contentChangedAction, for: .contentChanged)
+            tabItem.accessibilityIdentifier = "\(TabAccessibilityIdentifier.tabItem)-\(index)"
         }
 
         self.stackView.addArrangedSubviews(tabItemViews)
@@ -254,13 +265,23 @@ public final class TabUIView: UIControl {
         self.setSelectedSegment(index, animated: true)
         self.selectedIndexSubject.send(index)
         self.sendActions(for: .valueChanged)
+        self.delegate?.segmentSelected(index: index, sender: self)
+    }
+
+    private func unselectSegment(_ index: Int) {
+        self.segments[safe: index]?.backingIsSelected = false
+    }
+
+    private func segementContentChanged(_ index: Int) {
+        guard let segment = self.segments[safe: index] else { return }
+        segment.isHidden = segment.isEmpty
     }
 
     private func setSelectedSegment(_ index: Int, animated: Bool) {
         self.doWithAnimation(animated) { [weak self] in
             guard let self else { return }
-            self.segments[safe: self.selectedSegmentIndex]?.isSelected = false
-            self.segments[safe: index]?.isSelected = true
+            self.segments[safe: self.selectedSegmentIndex]?.backingIsSelected = false
+            self.segments[safe: index]?.backingIsSelected = true
         }
     }
 
