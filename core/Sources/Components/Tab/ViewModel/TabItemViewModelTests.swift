@@ -10,7 +10,7 @@ import Combine
 @testable import SparkCore
 import XCTest
 
-final class TabItemViewModelTests: XCTestCase {
+final class TabItemViewModelTests: TestCase {
     
     // MARK: - Private properties
     private var theme: ThemeGeneratedMock!
@@ -49,9 +49,12 @@ final class TabItemViewModelTests: XCTestCase {
     
     // MARK: - Tests
     func test_initialization() {
+        // Given
         let text = "Text"
         let icon = UIImage(systemName: "pencil.circle")
         let sut = self.sut(icon: icon, text: text)
+
+        // Then
         XCTAssertIdentical(sut.theme as AnyObject, self.theme, "sut theme should be the same as self.theme")
         XCTAssertEqual(sut.intent, .main, "sut intent should be main")
         XCTAssertFalse(sut.isSelected, "sut's isSelected parameter should be false")
@@ -62,14 +65,18 @@ final class TabItemViewModelTests: XCTestCase {
     }
     
     func test_usecase_is_executed_on_initialization() {
+        // Given
         _ = self.sut(intent: .support)
         let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments
+
+        // Then
         XCTAssertIdentical(arguments?.theme as AnyObject, self.theme, "sut theme should be the same as self.theme")
         XCTAssertEqual(arguments?.intent, .support, "sut intent should be support")
         XCTAssertEqual(arguments?.state, TabState(), "sut state should be TabState that has default parameters")
     }
     
     func test_published_attributes_on_initialization() {
+        // Given
         let sut = self.sut()
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
@@ -83,32 +90,45 @@ final class TabItemViewModelTests: XCTestCase {
         )
         
         let expectation = expectation(description: "wait for attributes")
+        var givenAttributes: TabStateAttributes?
+
+        // When
         sut.$tabStateAttributes.sink { attributes in
-            XCTAssertEqual(attributes, expectedAttributes)
+            givenAttributes = attributes
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
-        
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
+        XCTAssertEqual(givenAttributes, expectedAttributes)
     }
     
     func test_published_content_on_initialization() {
+        // Given
         let text = "Text"
         let icon = UIImage(systemName: "pencil.circle")
         let expectedContent = TabUIItemContent(icon: icon, text: text)
         let sut = self.sut(icon: icon, text: text)
         
         let expectation = expectation(description: "wait for attributes")
+        var givenContent: TabUIItemContent?
+
+        // When
         sut.$content.sink { content in
-            XCTAssertEqual(content, expectedContent)
+            givenContent = content
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
-        
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
+        XCTAssertEqual(givenContent, expectedContent)
+
     }
     
     func test_published_attributes_on_change() {
+        // Given
         let sut = self.sut()
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
@@ -116,22 +136,32 @@ final class TabItemViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
+
+        // When
         sut.isSelected = true
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
     }
     
     func test_attributes_not_published() {
+        // Given
         let sut = self.sut()
         let expectation = expectation(description: "wait for attributes")
         sut.$tabStateAttributes.sink { _ in
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
+
+        // When
         sut.isSelected = false
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
     }
     
     func test_published_is_pressed_on_change() {
+        // Given
         let sut = self.sut()
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
@@ -139,11 +169,16 @@ final class TabItemViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
+
+        // When
         sut.isPressed = true
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
     }
     
     func test_published_is_disable_on_change() {
+        // Given
         let sut = self.sut()
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
@@ -155,11 +190,16 @@ final class TabItemViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
+
+        // When
         sut.isEnabled = false
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
     }
     
     func test_published_icon_on_change() {
+        // Given
         let icon = UIImage(systemName: "pencil.circle")
         let expectedIcon = UIImage(systemName: "pencil.circle.fill")
         let sut = self.sut(icon: icon)
@@ -173,11 +213,16 @@ final class TabItemViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
+
+        // When
         sut.icon = UIImage(systemName: "pencil.circle.fill")
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
     }
     
     func test_published_text_on_change() {
+        // Given
         let text = "Text"
         let expectedText = "Expected Text"
         let sut = self.sut(text: text)
@@ -191,11 +236,16 @@ final class TabItemViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
+
+        // When
         sut.text = expectedText
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
     }
 
     func test_published_attribute_on_size_change() {
+        // Given
         let sut = self.sut(size: .md, text: "Hello")
 
         let expectation = expectation(description: "wait for attributes")
@@ -206,14 +256,16 @@ final class TabItemViewModelTests: XCTestCase {
         }
         .store(in: &self.cancellables)
 
+        // When
         sut.tabSize = .xs
+
+        // Then
         wait(for: [expectation], timeout: 0.1)
-
-
         XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .xs)
     }
 
     func test_not_published_attribute_when_no_size_change() {
+        // Given
         let sut = self.sut(size: .xs, text: "Hello")
 
         let expectation = expectation(description: "wait for attributes")
@@ -224,13 +276,16 @@ final class TabItemViewModelTests: XCTestCase {
         }
         .store(in: &self.cancellables)
 
+        // When
         sut.tabSize = .xs
-        wait(for: [expectation], timeout: 0.1)
 
+        // Then
+        wait(for: [expectation], timeout: 0.1)
         XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .xs)
     }
 
     func test_when_no_text_font_size_always_md() {
+        // Given
         let sut = self.sut(size: .sm, text: nil)
 
         let expectation = expectation(description: "wait for attributes")
@@ -241,9 +296,68 @@ final class TabItemViewModelTests: XCTestCase {
         }
         .store(in: &self.cancellables)
 
+        // Then
         wait(for: [expectation], timeout: 0.1)
 
         XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .md)
+    }
+
+    func test_when_theme_changes_then_attributes_published() {
+        // Given
+        let sut = self.sut(size: .sm, text: "Label")
+
+        let expectation = expectation(description: "wait for attributes")
+        expectation.expectedFulfillmentCount = 2
+
+        sut.$tabStateAttributes.sink { attributes in
+            expectation.fulfill()
+        }
+        .store(in: &self.cancellables)
+
+        // When
+        sut.theme = ThemeGeneratedMock.mocked()
+
+        // Then
+        wait(for: [expectation], timeout: 0.1)
+    }
+
+
+    func test_when_intent_changes_then_attributes_published() {
+        // Given
+        let sut = self.sut(intent: .main, text: "Label")
+
+        let expectation = expectation(description: "wait for attributes")
+        expectation.expectedFulfillmentCount = 2
+
+        sut.$tabStateAttributes.sink { attributes in
+            expectation.fulfill()
+        }
+        .store(in: &self.cancellables)
+
+        // When
+        sut.intent = .support
+
+        // Then
+        wait(for: [expectation], timeout: 0.1)
+    }
+
+    func test_when_intent_does_not_change_then_nothing_published() {
+        // Given
+        let sut = self.sut(intent: .main, text: "Label")
+
+        let expectation = expectation(description: "wait for attributes")
+        expectation.expectedFulfillmentCount = 1
+
+        sut.$tabStateAttributes.sink { attributes in
+            expectation.fulfill()
+        }
+        .store(in: &self.cancellables)
+
+        // When
+        sut.intent = .main
+
+        // Then
+        wait(for: [expectation], timeout: 0.1)
     }
 }
 
