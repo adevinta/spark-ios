@@ -83,6 +83,24 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 onContainerColor: colors.feedback.onSuccessContainer,
                 surfaceColor: surfaceColor
             )
+
+        case .accent:
+            return .init(
+                color: colors.accent.accent,
+                onColor: colors.accent.onAccent,
+                containerColor: colors.accent.accentContainer,
+                onContainerColor: colors.accent.onAccentContainer,
+                surfaceColor: surfaceColor
+            )
+
+        case .basic:
+            return .init(
+                color: colors.basic.basic,
+                onColor: colors.basic.onBasic,
+                containerColor: colors.basic.basicContainer,
+                onContainerColor: colors.basic.onBasicContainer,
+                surfaceColor: surfaceColor
+            )
         }
     }
 }

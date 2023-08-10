@@ -175,6 +175,10 @@ private extension TagIntent {
             return "Support"
         case .success:
             return "Success"
+        case .accent:
+            return "Accent"
+        case .basic:
+            return "Basic"
         @unknown default:
             return "Please, add this unknow intent value"
         }

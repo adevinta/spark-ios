@@ -74,6 +74,22 @@ final class  TagGetContentColorsUseCaseTests: XCTestCase {
                 expectedContainerColor: colorsMock.feedback.successContainer,
                 expectedOnContainerColor: colorsMock.feedback.onSuccessContainer,
                 expectedSurfaceColor: colorsMock.base.surface
+            ),
+            .init(
+                givenIntent: .accent,
+                expectedColor: colorsMock.accent.accent,
+                expectedOnColor: colorsMock.accent.onAccent,
+                expectedContainerColor: colorsMock.accent.accentContainer,
+                expectedOnContainerColor: colorsMock.accent.onAccentContainer,
+                expectedSurfaceColor: colorsMock.base.surface
+            ),
+            .init(
+                givenIntent: .basic,
+                expectedColor: colorsMock.basic.basic,
+                expectedOnColor: colorsMock.basic.onBasic,
+                expectedContainerColor: colorsMock.basic.basicContainer,
+                expectedOnContainerColor: colorsMock.basic.onBasicContainer,
+                expectedSurfaceColor: colorsMock.base.surface
             )
         ]
 
