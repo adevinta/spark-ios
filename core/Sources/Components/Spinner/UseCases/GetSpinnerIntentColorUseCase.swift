@@ -37,6 +37,8 @@ struct GetSpinnerIntentColorUseCase: GetSpinnerIntentColorUseCasable {
         case .info: return colors.feedback.info
         case .neutral: return colors.feedback.neutral
         case .success: return colors.feedback.success
+        case .accent: return colors.accent.accent
+        case .basic: return colors.basic.basic
         }
     }
 }
