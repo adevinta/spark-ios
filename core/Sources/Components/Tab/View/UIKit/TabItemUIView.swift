@@ -45,7 +45,7 @@ public final class TabItemUIView: UIControl {
     @ScaledUIMetric private var borderLineHeight: CGFloat
     @ScaledUIMetric private var height: CGFloat
 
-    @ObservedObject private var viewModel: TabItemViewModel
+    @ObservedObject var viewModel: TabItemViewModel
 
     // MARK: - Public variables
     /// The label shown in the tab item.
@@ -74,6 +74,7 @@ public final class TabItemUIView: UIControl {
         imageView.contentMode = .scaleAspectFit
         imageView.isAccessibilityElement = false
         imageView.isUserInteractionEnabled = false
+        imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
 
         imageView.setContentCompressionResistancePriority(.required,
                                                       for: .horizontal)
@@ -149,6 +150,7 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.icon
         }
         set {
+            guard self.viewModel.icon != newValue else { return }
             self.viewModel.icon = newValue
             self.sendActions(for: .contentChanged)
         }
@@ -163,6 +165,7 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.text
         }
         set {
+            guard self.viewModel.text != newValue else { return }
             self.viewModel.text = newValue
             self.sendActions(for: .contentChanged)
         }
@@ -214,6 +217,7 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.isEnabled
         }
         set {
+            guard newValue != self.viewModel.isEnabled else { return }
             self.viewModel.isEnabled = newValue
         }
     }
@@ -279,33 +283,6 @@ public final class TabItemUIView: UIControl {
     }
 
     // MARK: - Control functions
-    public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-
-    public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        let tracking = super.beginTracking(touch, with: event)
-
-        return tracking
-    }
-
-    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        super.endTracking(touch, with: event)
-    }
-
-    public override func endEditing(_ force: Bool) -> Bool {
-        let tracking = super.endEditing(force)
-        return tracking
-    }
-
-    public override func cancelTracking(with event: UIEvent?) {
-        super.cancelTracking(with: event)
-    }
-
-    public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        super.continueTracking(touch, with: event)
-    }
-
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         self.viewModel.isPressed = true
@@ -348,7 +325,7 @@ public final class TabItemUIView: UIControl {
     }
 
     private func setupView() {
-        self.accessibilityIdentifier = TabItemAccessibilityIdentifier.tabItem
+        self.accessibilityIdentifier = TabAccessibilityIdentifier.tabItem
         self.stackView.spacing = self.spacing
         self.stackView.layoutMargins = self.edgeInsets
 
@@ -386,6 +363,7 @@ public final class TabItemUIView: UIControl {
     }
 
     private func updateLayoutConstraints() {
+
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         self.imageViewSizeConstraint?.constant = iconHeight
 
