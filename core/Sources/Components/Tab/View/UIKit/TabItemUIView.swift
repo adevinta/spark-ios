@@ -99,6 +99,8 @@ public final class TabItemUIView: UIControl {
 
                 self.stackView.addArrangedSubview(newBadge)
             }
+
+            self.sendActions(for: .contentChanged)
         }
     }
 
@@ -148,6 +150,7 @@ public final class TabItemUIView: UIControl {
         }
         set {
             self.viewModel.icon = newValue
+            self.sendActions(for: .contentChanged)
         }
     }
 
@@ -161,6 +164,7 @@ public final class TabItemUIView: UIControl {
         }
         set {
             self.viewModel.text = newValue
+            self.sendActions(for: .contentChanged)
         }
     }
 
@@ -180,6 +184,20 @@ public final class TabItemUIView: UIControl {
     /// The default value of this property is false for a newly created control.
     public override var isSelected: Bool {
         get {
+            return self.backingIsSelected
+        }
+        set {
+            guard newValue != self.backingIsSelected else { return }
+            if newValue {
+                self.sendActions(for: .otherSegmentSelected)
+            }
+            self.backingIsSelected = newValue
+        }
+    }
+
+    // An internal property used for setting the isSelected tab without triggering an action
+    internal var backingIsSelected: Bool {
+        get {
             return self.viewModel.isSelected
         }
         set {
@@ -198,6 +216,11 @@ public final class TabItemUIView: UIControl {
         set {
             self.viewModel.isEnabled = newValue
         }
+    }
+
+    /// A Boolean value indicating that the tab has no content.
+    public var isEmpty: Bool {
+        return !self.stackView.arrangedSubviews.contains(where: {$0.isHidden == false})
     }
 
     // MARK: - Initializers
@@ -412,4 +435,9 @@ public final class TabItemUIView: UIControl {
             self.label.isHidden = true
         }
     }
+}
+
+public extension UIControl.Event {
+    static let otherSegmentSelected = UIControl.Event(rawValue: 0b0010 << 24)
+    static let contentChanged = UIControl.Event(rawValue: 0b0100 << 24)
 }
