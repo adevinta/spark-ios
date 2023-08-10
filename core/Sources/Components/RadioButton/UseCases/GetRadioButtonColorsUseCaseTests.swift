@@ -18,6 +18,8 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
     var feedback: ColorsFeedbackGeneratedMock!
     var main: ColorsMainGeneratedMock!
     var base: ColorsBaseGeneratedMock!
+    var accent: ColorsAccentGeneratedMock!
+    var basic: ColorsBasicGeneratedMock!
     var theme: ThemeGeneratedMock!
 
     // MARK: - Setup
@@ -32,10 +34,14 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         let base = ColorsBaseGeneratedMock()
         let main = ColorsMainGeneratedMock()
         let feedback = ColorsFeedbackGeneratedMock()
+        let accent = ColorsAccentGeneratedMock()
+        let basic = ColorsBasicGeneratedMock()
 
         colors.base = base
         colors.feedback = feedback
         colors.main = main
+        colors.accent = accent
+        colors.basic = basic
 
         theme.colors = colors
 
@@ -43,6 +49,8 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
         self.base = base
         self.main = main
         self.feedback = feedback
+        self.accent = accent
+        self.basic = basic
         self.sut = GetRadioButtonColorsUseCase()
     }
 
@@ -204,6 +212,66 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
              .clear])
     }
 
+    func test_accent_colors_when_button_is_not_selected() throws {
+        // Given
+        let outline = ColorTokenGeneratedMock()
+        let onSurface = ColorTokenGeneratedMock()
+        let accentContainer = ColorTokenGeneratedMock()
+
+        outline.color = .gray
+        onSurface.color = .pink
+        accentContainer.color = .green
+
+        self.base.outline = outline
+        self.base.onSurface = onSurface
+        self.accent.accentContainer = accentContainer
+
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .accent,
+                                      isSelected: false)
+
+        // Then
+        XCTAssertEqual(
+            [colors.halo,
+             colors.label,
+             colors.button,
+             colors.fill].map(\.color),
+            [Color.green,
+             .pink,
+             .gray,
+             .clear])
+    }
+
+    func test_basic_colors_when_button_is_not_selected() throws {
+        // Given
+        let outline = ColorTokenGeneratedMock()
+        let onSurface = ColorTokenGeneratedMock()
+        let basicContainer = ColorTokenGeneratedMock()
+
+        outline.color = .gray
+        onSurface.color = .red
+        basicContainer.color = .blue
+
+        self.base.outline = outline
+        self.base.onSurface = onSurface
+        self.basic.basicContainer = basicContainer
+
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .basic,
+                                      isSelected: false)
+
+        // Then
+        XCTAssertEqual(
+            [colors.halo,
+             colors.label,
+             colors.button,
+             colors.fill].map(\.color),
+            [Color.blue,
+             .red,
+             .gray,
+             .clear])
+    }
+
     func test_enabled_colors_when_button_is_selected() throws {
         // Given
         let main = ColorTokenGeneratedMock()
@@ -360,5 +428,65 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
              .gray,
              .green,
              .green])
+    }
+
+    func test_accent_colors_when_button_is_selected() throws {
+        // Given
+        let onSurface = ColorTokenGeneratedMock()
+        let accent = ColorTokenGeneratedMock()
+        let accentContainer = ColorTokenGeneratedMock()
+
+        onSurface.color = .yellow
+        accent.color = .red
+        accentContainer.color = .green
+
+        self.base.onSurface = onSurface
+        self.accent.accent = accent
+        self.accent.accentContainer = accentContainer
+
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .accent,
+                                      isSelected: true)
+
+        // Then
+        XCTAssertEqual(
+            [colors.halo,
+             colors.label,
+             colors.button,
+             colors.fill].map(\.color),
+            [Color.green,
+             .yellow,
+             .red,
+             .red])
+    }
+
+    func test_basic_colors_when_button_is_selected() throws {
+        // Given
+        let onSurface = ColorTokenGeneratedMock()
+        let basic = ColorTokenGeneratedMock()
+        let basicContainer = ColorTokenGeneratedMock()
+
+        onSurface.color = .red
+        basic.color = .purple
+        basicContainer.color = .blue
+
+        self.base.onSurface = onSurface
+        self.basic.basic = basic
+        self.basic.basicContainer = basicContainer
+
+        let colors = self.sut.execute(theme: self.theme,
+                                      state: .basic,
+                                      isSelected: true)
+
+        // Then
+        XCTAssertEqual(
+            [colors.halo,
+             colors.label,
+             colors.button,
+             colors.fill].map(\.color),
+            [Color.blue,
+             .red,
+             .purple,
+             .purple])
     }
 }
