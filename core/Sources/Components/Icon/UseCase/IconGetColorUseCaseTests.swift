@@ -42,6 +42,14 @@ final class IconGetColorUseCaseTests: XCTestCase {
     func test_execute_when_icon_is_success_case() {
         testExecute(givenIntent: .success, expectedColorToken: self.colorsMock.feedback.success)
     }
+
+    func test_execute_when_icon_is_accent_case() {
+        testExecute(givenIntent: .accent, expectedColorToken: self.colorsMock.accent.accent)
+    }
+
+    func test_execute_when_icon_is_basic_case() {
+        testExecute(givenIntent: .basic, expectedColorToken: self.colorsMock.basic.basic)
+    }
 }
 
 // MARK: - Extension
