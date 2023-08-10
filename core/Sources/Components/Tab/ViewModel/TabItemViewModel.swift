@@ -128,7 +128,8 @@ final class TabItemViewModel: ObservableObject {
             size: content.defaultTabSize(tabSize)
         )
     }
-    
+
+    // MARK: - Private functions
     private func updateStateAttributes() {
         self.tabStateAttributes = self.tabGetStateAttributesUseCase.execute(
             theme: self.theme,
@@ -139,6 +140,7 @@ final class TabItemViewModel: ObservableObject {
     }
 }
 
+// MARK: - Private extensions
 private extension TabUIItemContent {
     func defaultTabSize(_ tabSize: TabSize) -> TabSize {
         return text == nil ? .md : tabSize
