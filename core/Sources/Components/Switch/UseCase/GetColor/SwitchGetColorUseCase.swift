@@ -39,6 +39,12 @@ struct SwitchGetColorUseCase: SwitchGetColorUseCaseable {
 
         case .success:
             return colors.feedback.success
+
+        case .accent:
+            return colors.accent.accent
+
+        case .basic:
+            return colors.basic.basic
         }
     }
 }

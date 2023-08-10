@@ -15,4 +15,6 @@ public enum SwitchIntent: CaseIterable {
     case main
     case support
     case success
+    case accent
+    case basic
 }
