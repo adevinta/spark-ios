@@ -61,6 +61,7 @@ public final class TabUIView: UIControl {
             self.segments.forEach{ $0.isEnabled = self.isEnabled }
         }
     }
+
     private let selectedIndexSubject = PassthroughSubject<Int, Never>()
 
     public weak var delegate: TabUIViewDelegate?
@@ -76,7 +77,7 @@ public final class TabUIView: UIControl {
                   items: texts.map(TabUIItemContent.init(text:)))
     }
 
-    convenience public init(theme: Theme,
+    public convenience init(theme: Theme,
                 intent: TabIntent = .main,
                 tabSize: TabSize = .md,
                 icons: [UIImage]
@@ -87,7 +88,7 @@ public final class TabUIView: UIControl {
                   items: icons.map(TabUIItemContent.init(icon:)))
     }
 
-    convenience public init(theme: Theme,
+    public convenience init(theme: Theme,
                 intent: TabIntent = .main,
                 tabSize: TabSize = .md,
                 content: [(UIImage?, String?)]
@@ -109,30 +110,9 @@ public final class TabUIView: UIControl {
 
         super.init(frame: .zero)
 
-        let tabItemViews = items.map{ item in
-            return TabItemUIView(theme: theme, intent: intent, tabSize: tabSize, text: item.text, icon: item.icon)
-        }
-
-        for (index, tabItem) in tabItemViews.enumerated() {
-            let pressedAction = UIAction { [weak self] _ in
-                self?.pressed(index)
-            }
-            let unselectAction = UIAction { [weak self] _ in
-                self?.unselectSegment(index)
-            }
-            let contentChangedAction = UIAction { [weak self] _ in
-                self?.segementContentChanged(index)
-            }
-            tabItem.addAction(pressedAction, for: .touchUpInside)
-            tabItem.addAction(unselectAction, for: .otherSegmentSelected)
-            tabItem.addAction(contentChangedAction, for: .contentChanged)
-            tabItem.accessibilityIdentifier = "\(TabAccessibilityIdentifier.tabItem)-\(index)"
-        }
-
-        self.stackView.addArrangedSubviews(tabItemViews)
-        self.addSubviewSizedEqually(stackView)
-        self.selectedSegmentIndex = 0
+        self.setupViews(items: items)
     }
+
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -236,7 +216,6 @@ public final class TabUIView: UIControl {
         self.segments[safe: index]?.isEnabled ?? false
     }
 
-
     ///Removes all segments of the segmented control.
     public func removeAllSegments() {
         self.stackView.removeArrangedSubviews()
@@ -261,6 +240,32 @@ public final class TabUIView: UIControl {
     }
 
     // MARK: - Private Functions
+    private func setupViews(items: [TabUIItemContent]) {
+        let tabItemViews = items.map{ item in
+            return TabItemUIView(theme: theme, intent: intent, tabSize: tabSize, text: item.text, icon: item.icon)
+        }
+
+        for (index, tabItem) in tabItemViews.enumerated() {
+            let pressedAction = UIAction { [weak self] _ in
+                self?.pressed(index)
+            }
+            let unselectAction = UIAction { [weak self] _ in
+                self?.unselectSegment(index)
+            }
+            let contentChangedAction = UIAction { [weak self] _ in
+                self?.segementContentChanged(index)
+            }
+            tabItem.addAction(pressedAction, for: .touchUpInside)
+            tabItem.addAction(unselectAction, for: .otherSegmentSelected)
+            tabItem.addAction(contentChangedAction, for: .contentChanged)
+            tabItem.accessibilityIdentifier = "\(TabAccessibilityIdentifier.tabItem)-\(index)"
+        }
+
+        self.stackView.addArrangedSubviews(tabItemViews)
+        self.addSubviewSizedEqually(stackView)
+        self.selectedSegmentIndex = 0
+    }
+
     private func pressed(_ index: Int) {
         self.setSelectedSegment(index, animated: true)
         self.selectedIndexSubject.send(index)
