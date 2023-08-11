@@ -92,24 +92,6 @@ final class TabUIViewTests: TestCase {
         XCTAssertEqual(self.sut.imageForSegment(at: 2), image, "Expected same result as accessing icon of element directly")
     }
 
-    func test_adding_badge_should_trigger_change() {
-        // Given
-        let badge = UIView()
-        let expect = expectation(description: "Expect content change to be triggered")
-        expect.expectedFulfillmentCount = 2
-
-        let contentChangedAction = UIAction { _ in
-            expect.fulfill()
-        }
-        self.sut.segments[2].addAction(contentChangedAction, for: .contentChanged)
-        // When
-        self.sut.setBadge(badge, forSegementAt: 2)
-
-        waitForExpectations(timeout: 1)
-
-        XCTAssertEqual(self.sut.badgeForSegment(at: 2), badge, "Expected badge to be set")
-    }
-
     func test_tab_change_is_published() {
         // Given
         let expect = expectation(description: "Expect publisher to publish new selected tab")

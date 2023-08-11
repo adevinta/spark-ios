@@ -288,6 +288,7 @@ public final class TabUIView: UIControl {
         self.stackView.addArrangedSubviews(tabItemViews)
         self.addSubviewSizedEqually(stackView)
         self.selectedSegmentIndex = 0
+        self.updateAccessibilityIdentifiers()
     }
 
     private func setupTabActions(for tabItem: TabItemUIView, index: Int) {
@@ -297,13 +298,8 @@ public final class TabUIView: UIControl {
         let unselectAction = UIAction { [weak self] _ in
             self?.unselectSegment(index)
         }
-        let contentChangedAction = UIAction { [weak self] _ in
-            self?.segementContentChanged(index)
-        }
         tabItem.addAction(pressedAction, for: .touchUpInside)
         tabItem.addAction(unselectAction, for: .otherSegmentSelected)
-        tabItem.addAction(contentChangedAction, for: .contentChanged)
-        tabItem.accessibilityIdentifier = "\(TabAccessibilityIdentifier.tabItem)-\(index)"
     }
 
     private func pressed(_ index: Int) {
@@ -311,11 +307,6 @@ public final class TabUIView: UIControl {
         self.selectedIndexSubject.send(index)
         self.sendActions(for: .valueChanged)
         self.delegate?.segmentSelected(index: index, sender: self)
-    }
-
-    private func segementContentChanged(_ index: Int) {
-//        guard let segment = self.segments[safe: index] else { return }
-//        segment.isHidden = segment.isEmpty
     }
 
     private func unselectSegment(_ newSelected: Int) {
@@ -337,12 +328,20 @@ public final class TabUIView: UIControl {
         self.doWithAnimation(animated) { [weak self] in
             self?.stackView.detachArrangedSubview(tab)
         }
+        self.updateAccessibilityIdentifiers()
     }
 
     private func insertTab(_ tab: TabItemUIView, at index: Int, animated: Bool) {
         self.setupTabActions(for: tab, index: index)
         self.doWithAnimation(animated) { [weak self] in
             self?.stackView.insertArrangedSubview(tab, at: index)
+        }
+        self.updateAccessibilityIdentifiers()
+    }
+
+    private func updateAccessibilityIdentifiers() {
+        for (index, tabItem) in segments.enumerated() {
+            tabItem.accessibilityIdentifier = "\(TabAccessibilityIdentifier.tabItem)-\(index)"
         }
     }
 
