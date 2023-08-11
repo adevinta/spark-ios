@@ -23,7 +23,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         super.setUp()
 
         self.images = names.map{ UIImage.init(systemName: $0)! }
-        self.badge = BadgeUIView(theme: theme, intent: .danger, value: 99)
+        self.badge = BadgeUIView(theme: theme, intent: .danger, value: 99, isBorderVisible: false)
     }
 
     // MARK: - Tests
