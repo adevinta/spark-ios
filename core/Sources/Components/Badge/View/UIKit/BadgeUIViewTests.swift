@@ -120,6 +120,22 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
         }
     }
 
+    func test_intrinsic_content_size_with_long_label() {
+
+        let view = BadgeUIView(
+            theme: theme,
+            intent: .alert,
+            format: .custom(
+                formatter: TestBadgeFormatting()
+            ),
+            isBorderVisible: true
+        )
+
+        print(view.intrinsicContentSize)
+        XCTAssertEqual(view.intrinsicContentSize.rounded(), CGSize(width: 93, height: 32))
+
+    }
+
     // MARK: - Attach(to:, position:)
 
     private func createAttachTestView(badge: BadgeUIView, position: BadgePosition) -> UIView {
@@ -182,5 +198,11 @@ final class BadgeUIViewTests: UIKitComponentTestCase {
                 }
             }
         }
+    }
+}
+
+private extension CGSize {
+    func rounded() -> CGSize {
+        return CGSize(width: self.width.rounded(), height: self.height.rounded())
     }
 }
