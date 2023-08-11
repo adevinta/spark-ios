@@ -50,9 +50,9 @@ final class TabItemViewModelTests: TestCase {
     // MARK: - Tests
     func test_initialization() {
         // Given
-        let text = "Text"
+        let title = "Text"
         let icon = UIImage(systemName: "pencil.circle")
-        let sut = self.sut(icon: icon, text: text)
+        let sut = self.sut(icon: icon, title: title)
 
         // Then
         XCTAssertIdentical(sut.theme as AnyObject, self.theme, "sut theme should be the same as self.theme")
@@ -61,7 +61,7 @@ final class TabItemViewModelTests: TestCase {
         XCTAssertFalse(sut.isPressed, "sut's isPressed parameter should be false")
         XCTAssertTrue(sut.isEnabled, "sut's isDisabled parameter should be false")
         XCTAssertEqual(sut.icon, icon, "sut's icon should be icon")
-        XCTAssertEqual(sut.text, text, "sut's text should be text")
+        XCTAssertEqual(sut.title, title, "sut's text should be text")
     }
     
     func test_usecase_is_executed_on_initialization() {
@@ -106,10 +106,10 @@ final class TabItemViewModelTests: TestCase {
     
     func test_published_content_on_initialization() {
         // Given
-        let text = "Text"
+        let title = "Text"
         let icon = UIImage(systemName: "pencil.circle")
-        let expectedContent = TabUIItemContent(icon: icon, text: text)
-        let sut = self.sut(icon: icon, text: text)
+        let expectedContent = TabUIItemContent(icon: icon, title: title)
+        let sut = self.sut(icon: icon, title: title)
         
         let expectation = expectation(description: "wait for attributes")
         var givenContent: TabUIItemContent?
@@ -223,22 +223,22 @@ final class TabItemViewModelTests: TestCase {
     
     func test_published_text_on_change() {
         // Given
-        let text = "Text"
+        let title = "Text"
         let expectedText = "Expected Text"
-        let sut = self.sut(text: text)
+        let sut = self.sut(title: title)
         
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
         var counter = 0
         sut.$content.sink { content in
             counter += 1
-            XCTAssertEqual(content.text == expectedText, counter == 2)
+            XCTAssertEqual(content.title == expectedText, counter == 2)
             expectation.fulfill()
         }
         .store(in: &self.cancellables)
 
         // When
-        sut.text = expectedText
+        sut.title = expectedText
 
         // Then
         wait(for: [expectation], timeout: 0.1)
@@ -246,7 +246,7 @@ final class TabItemViewModelTests: TestCase {
 
     func test_published_attribute_on_size_change() {
         // Given
-        let sut = self.sut(size: .md, text: "Hello")
+        let sut = self.sut(size: .md, title: "Hello")
 
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
@@ -266,7 +266,7 @@ final class TabItemViewModelTests: TestCase {
 
     func test_not_published_attribute_when_no_size_change() {
         // Given
-        let sut = self.sut(size: .xs, text: "Hello")
+        let sut = self.sut(size: .xs, title: "Hello")
 
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 1
@@ -286,7 +286,7 @@ final class TabItemViewModelTests: TestCase {
 
     func test_when_no_text_font_size_always_md() {
         // Given
-        let sut = self.sut(size: .sm, text: nil)
+        let sut = self.sut(size: .sm, title: nil)
 
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 1
@@ -304,7 +304,7 @@ final class TabItemViewModelTests: TestCase {
 
     func test_when_theme_changes_then_attributes_published() {
         // Given
-        let sut = self.sut(size: .sm, text: "Label")
+        let sut = self.sut(size: .sm, title: "Label")
 
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
@@ -324,7 +324,7 @@ final class TabItemViewModelTests: TestCase {
 
     func test_when_intent_changes_then_attributes_published() {
         // Given
-        let sut = self.sut(intent: .main, text: "Label")
+        let sut = self.sut(intent: .main, title: "Label")
 
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
@@ -343,7 +343,7 @@ final class TabItemViewModelTests: TestCase {
 
     func test_when_intent_does_not_change_then_nothing_published() {
         // Given
-        let sut = self.sut(intent: .main, text: "Label")
+        let sut = self.sut(intent: .main, title: "Label")
 
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 1
@@ -368,7 +368,7 @@ private extension TabItemViewModelTests {
         intent: TabIntent = .main,
         size: TabSize = .md,
         icon: UIImage? = nil,
-        text: String? = nil
+        title: String? = nil
     ) -> TabItemViewModel {
         return TabItemViewModel(
             theme: self.theme,
@@ -377,7 +377,7 @@ private extension TabItemViewModelTests {
             tabState: TabState(),
             content: TabUIItemContent(
                 icon: icon,
-                text: text
+                title: title
             ),
             tabGetStateAttributesUseCase: self.tabGetStateAttributesUseCase
         )
