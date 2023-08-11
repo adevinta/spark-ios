@@ -152,22 +152,20 @@ public final class TabItemUIView: UIControl {
         set {
             guard self.viewModel.icon != newValue else { return }
             self.viewModel.icon = newValue
-            self.sendActions(for: .contentChanged)
         }
     }
 
-    /// The standard text of the tab item.
+    /// The standard title of the tab item.
     ///
-    /// The text is shown to the right of the icon.
-    /// If the text is nil, no label will be added to the tab item. To change the attributes of the text, you can directly access the label of this component.
-    public var text: String? {
+    /// The title is shown to the right of the icon.
+    /// If the title is nil, no label will be added to the tab item. To change the attributes of the text, you can directly access the label of this component.
+    public var title: String? {
         get {
-            return self.viewModel.text
+            return self.viewModel.title
         }
         set {
-            guard self.viewModel.text != newValue else { return }
-            self.viewModel.text = newValue
-            self.sendActions(for: .contentChanged)
+            guard self.viewModel.title != newValue else { return }
+            self.viewModel.title = newValue
         }
     }
 
@@ -204,6 +202,7 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.isSelected
         }
         set {
+            guard newValue != self.viewModel.isSelected else { return }
             self.viewModel.isSelected = newValue
         }
     }
@@ -238,10 +237,10 @@ public final class TabItemUIView: UIControl {
     public convenience init(theme: Theme,
                             intent: TabIntent = .main,
                             tabSize: TabSize = .md,
-                            text: String? = nil,
+                            title: String? = nil,
                             icon: UIImage? = nil) {
         let viewModel = TabItemViewModel(theme: theme, intent: intent, tabSize: tabSize)
-        viewModel.text = text
+        viewModel.title = title
         viewModel.icon = icon
         self.init(viewModel: viewModel)
     }
@@ -313,7 +312,7 @@ public final class TabItemUIView: UIControl {
         self.viewModel.$content.subscribe(in: &self.subscriptions) { [weak self] itemContent in
             guard let self else { return }
             self.addOrRemoveIcon(itemContent.icon)
-            self.addOrRemoveText(itemContent.text)
+            self.addOrRemoveTitle(itemContent.title)
         }
 
         self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
@@ -338,6 +337,13 @@ public final class TabItemUIView: UIControl {
 
         self.addSubview(self.bottomLine)
         self.bringSubviewToFront(self.bottomLine)
+
+        if self.viewModel.title == nil {
+            self.label.isHidden = true
+        }
+        if self.viewModel.icon == nil {
+            self.imageView.isHidden = true
+        }
     }
 
     private func setupColors(attributes: TabStateAttributes) {
@@ -396,6 +402,7 @@ public final class TabItemUIView: UIControl {
     }
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
+        guard icon != self.imageView.image else { return }
         if let icon = icon {
             self.imageView.image = icon
             self.imageView.tintColor = self.viewModel.tabStateAttributes.colors.icon.uiColor
@@ -403,15 +410,18 @@ public final class TabItemUIView: UIControl {
         } else {
             self.imageView.isHidden = true
         }
+        self.sendActions(for: .contentChanged)
     }
 
-    private func addOrRemoveText(_ text: String?) {
+    private func addOrRemoveTitle(_ text: String?) {
+        guard text != self.label.text else { return }
         if let text = text {
             self.label.text = text
             self.label.isHidden = false
         } else {
             self.label.isHidden = true
         }
+        self.sendActions(for: .contentChanged)
     }
 }
 

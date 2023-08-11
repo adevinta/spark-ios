@@ -110,16 +110,26 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
             tab.label.isHidden = !self.showText
         }
 
+        let oldSelectedIndex = uiView.selectedSegmentIndex
+
         if self.numbeOfTabs != uiView.numberOfSegments {
             uiView.removeAllSegments()
 
             for tabNo in 0..<self.numbeOfTabs {
                 uiView.insertSegment(
-                    withImage: self.showIcon ? .random : nil,
-                    andTitle: self.showText ? "Label \(tabNo)" : nil,
+                    withImage: .random,
+                    andTitle: "Label \(tabNo)",
                     at: tabNo,
                     animated: false)
+                if !showIcon {
+                    uiView.setImage(nil, forSegmentAt: tabNo)
+                }
+                if !showText {
+                    uiView.setTitle(nil, forSegmentAt: tabNo)
+                }
             }
+
+            uiView.selectedSegmentIndex = min(oldSelectedIndex, self.numbeOfTabs - 1)
         }
 
         let badgeIndex = uiView.segments.firstIndex(where: {$0.badge != nil})
@@ -157,10 +167,11 @@ private extension UIImage {
         "magazine"
     ]
 
-    static var random: UIImage? {
+    // swiftlint: disable force_unwrapping
+    static var random: UIImage {
         let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
         let sfName: String? = allSfs.randomElement()
-        let image = sfName.flatMap(UIImage.init(systemName:))
+        let image = sfName.flatMap(UIImage.init(systemName:))!
         return image
     }
 }
