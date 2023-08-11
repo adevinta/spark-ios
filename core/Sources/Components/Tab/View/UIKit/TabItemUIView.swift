@@ -100,8 +100,6 @@ public final class TabItemUIView: UIControl {
 
                 self.stackView.addArrangedSubview(newBadge)
             }
-
-            self.sendActions(for: .contentChanged)
         }
     }
 
@@ -410,7 +408,6 @@ public final class TabItemUIView: UIControl {
         } else {
             self.imageView.isHidden = true
         }
-        self.sendActions(for: .contentChanged)
     }
 
     private func addOrRemoveTitle(_ text: String?) {
@@ -421,11 +418,9 @@ public final class TabItemUIView: UIControl {
         } else {
             self.label.isHidden = true
         }
-        self.sendActions(for: .contentChanged)
     }
 }
 
 public extension UIControl.Event {
     static let otherSegmentSelected = UIControl.Event(rawValue: 0b0010 << 24)
-    static let contentChanged = UIControl.Event(rawValue: 0b0100 << 24)
 }
