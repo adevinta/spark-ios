@@ -83,13 +83,13 @@ final class TabItemViewModel: ObservableObject {
         }
     }
 
-    var text: String? {
+    var title: String? {
         get {
-            return self.content.text
+            return self.content.title
         }
         set {
-            guard self.content.text != newValue else { return }
-            self.content = self.content.update(\.text, value: newValue)
+            guard self.content.title != newValue else { return }
+            self.content = self.content.update(\.title, value: newValue)
             self.updateStateAttributes()
         }
     }
@@ -143,6 +143,6 @@ final class TabItemViewModel: ObservableObject {
 // MARK: - Private extensions
 private extension TabUIItemContent {
     func defaultTabSize(_ tabSize: TabSize) -> TabSize {
-        return text == nil ? .md : tabSize
+        return title == nil ? .md : tabSize
     }
 }

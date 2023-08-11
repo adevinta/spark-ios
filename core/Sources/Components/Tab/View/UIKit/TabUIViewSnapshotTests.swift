@@ -37,7 +37,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
     func test_tabs_with_text_only() throws {
         let sut = TabUIView(
             theme: self.theme,
-            texts: Array(self.names[0..<3].map(\.capitalized))
+            titles: Array(self.names[0..<3].map(\.capitalized))
         )
         sut.setBadge(self.badge, forSegementAt: 1)
 
