@@ -73,7 +73,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             intent: .main,
             icon: self.image)
 
-        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
+        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99, isBorderVisible: false)
         sut.badge = badge
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
