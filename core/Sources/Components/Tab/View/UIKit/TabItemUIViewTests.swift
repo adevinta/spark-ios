@@ -21,7 +21,7 @@ final class TabItemUIViewTests: TestCase {
         super.setUp()
         self.sut = TabItemUIView(theme: theme,
                                  intent: .main,
-                                 text: "Label",
+                                 title: "Label",
                                  icon: .init(systemName: "trash"))
     }
 
@@ -91,7 +91,7 @@ final class TabItemUIViewTests: TestCase {
         self.sut.addAction(action, for: .contentChanged)
 
         // When
-        self.sut.text = "New Label"
+        self.sut.title = "New Label"
 
         // Then
         waitForExpectations(timeout: 1)
@@ -211,7 +211,7 @@ final class TabItemUIViewTests: TestCase {
         }
 
         // When
-        self.sut.text = nil
+        self.sut.title = nil
         self.sut.icon = nil
 
         // Then

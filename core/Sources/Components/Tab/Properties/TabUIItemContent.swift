@@ -13,27 +13,27 @@ import UIKit
 /// - text: The text of the tab item.
 struct TabUIItemContent: Equatable, Updateable {
     var icon: UIImage?
-    var text: String?
+    var title: String?
 
     init(
-        text: String
+        title: String
     ) {
         self.icon = nil
-        self.text = text
+        self.title = title
     }
 
     init(
         icon: UIImage
     ) {
         self.icon = icon
-        self.text = nil
+        self.title = nil
     }
 
     init(
         icon: UIImage? = nil,
-        text: String? = nil
+        title: String? = nil
     ) {
         self.icon = icon
-        self.text = text
+        self.title = title
     }
 }
