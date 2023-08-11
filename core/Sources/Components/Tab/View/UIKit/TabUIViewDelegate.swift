@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 /// The delegate to receive segment selected events.
 public protocol TabUIViewDelegate: AnyObject {
     /// This method to receive segment event.

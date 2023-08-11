@@ -29,7 +29,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            text: "Label",
+            title: "Label",
             icon: self.image)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
@@ -39,7 +39,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .support,
-            text: "Label",
+            title: "Label",
             icon: self.image)
 
         sut.isSelected = true
@@ -51,7 +51,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            text: "Label",
+            title: "Label",
             icon: self.image)
         sut.isSelected = true
 
@@ -83,7 +83,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            text: "Label",
+            title: "Label",
             icon: self.image)
 
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
@@ -96,7 +96,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            text: "Label")
+            title: "Label")
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
     }
@@ -105,7 +105,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            text: "Label")
+            title: "Label")
 
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
         sut.badge = badge
