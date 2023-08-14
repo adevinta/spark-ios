@@ -330,6 +330,7 @@ extension BadgeUIView {
             .subscribe(in: &self.cancellables) { [weak self] badgeHeight in
                 self?.badgeHeight = badgeHeight
                 self?.setupLayouts()
+                self?.invalidateIntrinsicContentSize()
             }
     }
 }
