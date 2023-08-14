@@ -15,22 +15,25 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
     // MARK: - Properties
     let theme = SparkTheme.shared
     var image: UIImage!
-
+    var badge: BadgeUIView!
 
     // MARK: - Setup
     override func setUp() {
         super.setUp()
 
+        self.badge = BadgeUIView(theme: theme, intent: .danger, isBorderVisible: false)
         self.image = UIImage(systemName: "trash")!
     }
 
     // MARK: - Tests
-    func test_tab_with_image() throws {
-        let sut = TabItemUIView(
+    func test_tab_with_badge() throws {
+       let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            title: "Label",
-            icon: self.image)
+            title: "Label")
+
+        self.badge.value = 99
+        sut.badge = self.badge
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -39,9 +42,9 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .support,
-            title: "Label",
-            icon: self.image)
+            title: "Label")
 
+        sut.badge = badge
         sut.isSelected = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
@@ -51,43 +54,23 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            title: "Label",
-            icon: self.image)
+            title: "Label")
+
         sut.isSelected = true
+        self.badge.value = 99
+        sut.badge = self.badge
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
-    func test_with_image_only() throws {
+    func test_with_badge_only() throws {
+
         let sut = TabItemUIView(
             theme: self.theme,
-            intent: .main,
-            icon: self.image)
+            intent: .main)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
-    }
-
-    func test_with_icon_and_badge() throws {
-        let sut = TabItemUIView(
-            theme: self.theme,
-            intent: .main,
-            icon: self.image)
-
-        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99, isBorderVisible: false)
-        sut.badge = badge
-
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
-    }
-
-    func test_with_icon_label_and_badge() throws {
-        let sut = TabItemUIView(
-            theme: self.theme,
-            intent: .main,
-            title: "Label",
-            icon: self.image)
-
-        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
-        sut.badge = badge
+        self.badge.value = 99
+        sut.badge = self.badge
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
