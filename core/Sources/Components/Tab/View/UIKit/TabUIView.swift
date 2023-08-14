@@ -22,6 +22,13 @@ public final class TabUIView: UIControl {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
+
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.isScrollEnabled = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
     private let selectedIndexSubject = PassthroughSubject<Int, Never>()
 
     // MARK: - Managing design of the segments
@@ -285,10 +292,31 @@ public final class TabUIView: UIControl {
             self.setupTabActions(for: tabItem, index: index)
         }
 
-        self.stackView.addArrangedSubviews(tabItemViews)
-        self.addSubviewSizedEqually(stackView)
+//        self.addSubview(self.scrollView)
+
+//        self.stackView.addArrangedSubviews(tabItemViews)
+
+        self.scrollView.addSubviewSizedEqually(stackView)
+
+        self.scrollView.addSubview(self.stackView)
+
+        self.addSubviewSizedEqually(scrollView)
         self.selectedSegmentIndex = 0
         self.updateAccessibilityIdentifiers()
+
+        let scrollContentGuide = self.scrollView.contentLayoutGuide
+        let scrollFrameGuid = self.scrollView.frameLayoutGuide
+
+        NSLayoutConstraint.activate([
+            self.stackView.leadingAnchor.constraint(equalTo: scrollContentGuide.leadingAnchor),
+            self.stackView.trailingAnchor.constraint(equalTo: scrollContentGuide.trailingAnchor),
+            self.stackView.topAnchor.constraint(equalTo: scrollContentGuide.topAnchor),
+            self.stackView.bottomAnchor.constraint(equalTo: scrollContentGuide.bottomAnchor),
+
+            self.stackView.topAnchor.constraint(equalTo: scrollFrameGuid.topAnchor),
+            self.stackView.bottomAnchor.constraint(equalTo: scrollFrameGuid.bottomAnchor),
+            self.stackView.widthAnchor.constraint(equalTo: scrollFrameGuid.widthAnchor)
+        ])
     }
 
     private func setupTabActions(for tabItem: TabItemUIView, index: Int) {
