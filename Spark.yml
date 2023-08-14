@@ -67,7 +67,10 @@ targetTemplates:
 
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
-          UISceneConfigurations: {}
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
     sources:
       - path: spark/Demo
       - path: core/Sources/Common/UIKit/GlobalExtension

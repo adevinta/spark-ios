@@ -19,7 +19,6 @@ struct ThemeSwitchView: View {
     }
 
     // MARK: - Properties
-    @State private var showView = false
 
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
@@ -32,18 +31,20 @@ struct ThemeSwitchView: View {
         .init(title: "Purple", theme: PurpleTheme())
     ]
 
+    var dismiss: () -> Void
+
+    init(dismissAction: @escaping () -> Void) {
+        self.dismiss = dismissAction
+    }
+
     // MARK: - Content
     var body: some View {
-        if showView {
-            self.contentView
-        } else {
-            EmptyView()
-                .onShake {
-                    withAnimation {
-                        self.showView = true
-                    }
-                }
+        ZStack {
+            backgroundView
+            listView
         }
+        .ignoresSafeArea()
+        .zIndex(.infinity)
     }
 
     var backgroundView: some View {
@@ -59,15 +60,6 @@ struct ThemeSwitchView: View {
         }
     }
 
-    var contentView: some View {
-        ZStack {
-            backgroundView
-            listView
-        }
-        .ignoresSafeArea()
-        .zIndex(.infinity)
-    }
-
     var listView: some View {
         VStack {
             List {
@@ -81,13 +73,14 @@ struct ThemeSwitchView: View {
 
                 Section(header: Text("Colors")) {
                     Button("Dark Mode") {
-                        ColorSchemeManager.shared.colorScheme = .dark
+                        self.changeApperance(.dark)
+
                     }
                     Button("Light Mode") {
-                        ColorSchemeManager.shared.colorScheme = .light
+                        self.changeApperance(.light)
                     }
                     Button("System") {
-                        ColorSchemeManager.shared.colorScheme = nil
+                        self.changeApperance(.unspecified)
                     }
                 }
 
@@ -110,11 +103,17 @@ struct ThemeSwitchView: View {
     private func hide(completion: (() -> Void)? = nil) {
         let duration: CGFloat = 0.3
         withAnimation(.easeInOut(duration: duration)) {
-            self.showView = false
+            self.dismiss()
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
             completion?()
+        }
+    }
+
+    private func changeApperance(_ mode: UIUserInterfaceStyle) {
+        UIApplication.shared.windows.forEach { window in
+            window.overrideUserInterfaceStyle = mode
         }
     }
 
