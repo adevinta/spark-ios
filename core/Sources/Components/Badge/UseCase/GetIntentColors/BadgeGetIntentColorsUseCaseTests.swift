@@ -24,13 +24,13 @@ final class BadgeGetColorsUseCaseTests: XCTestCase {
             .init(
                 givenIntent: .accent,
                 expectedBackgroundToken: mockedExpectedColors.accent.accent,
-                expectedBorderToken: mockedExpectedColors.accent.onAccent,
+                expectedBorderToken: mockedExpectedSurfaceColor,
                 expectedTextToken: mockedExpectedColors.accent.onAccent
             ),
             .init(
                 givenIntent: .basic,
                 expectedBackgroundToken: mockedExpectedColors.basic.basic,
-                expectedBorderToken: mockedExpectedColors.basic.onBasic,
+                expectedBorderToken: mockedExpectedSurfaceColor,
                 expectedTextToken: mockedExpectedColors.basic.onBasic
             ),
             .init(

@@ -26,13 +26,13 @@ final class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
         case .accent:
             return BadgeColors(
                 backgroundColor: colors.accent.accent,
-                borderColor: colors.accent.onAccent,
+                borderColor: surfaceColor,
                 foregroundColor: colors.accent.onAccent
             )
         case .basic:
             return BadgeColors(
                 backgroundColor: colors.basic.basic,
-                borderColor: colors.basic.onBasic,
+                borderColor: surfaceColor,
                 foregroundColor: colors.basic.onBasic
             )
         case .alert:
