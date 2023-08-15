@@ -19,7 +19,6 @@ struct ThemeSwitchView: View {
     }
 
     // MARK: - Properties
-
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     var theme: Theme {
@@ -74,7 +73,6 @@ struct ThemeSwitchView: View {
                 Section(header: Text("Colors")) {
                     Button("Dark Mode") {
                         self.changeApperance(.dark)
-
                     }
                     Button("Light Mode") {
                         self.changeApperance(.light)
