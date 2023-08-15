@@ -22,6 +22,22 @@ struct ButtonVariantGetContrastUseCase: ButtonGetVariantUseCaseable {
         let backgroundColor = colors.base.surface
 
         switch intent {
+        case .accent:
+            return .init(
+                foregroundColor: colors.accent.accent,
+                backgroundColor: backgroundColor,
+                pressedBackgroundColor: colors.states.accentContainerPressed,
+                borderColor: borderColor,
+                pressedBorderColor: pressedBorderColor
+            )
+        case .basic:
+            return .init(
+                foregroundColor: colors.basic.basic,
+                backgroundColor: backgroundColor,
+                pressedBackgroundColor: colors.states.basicContainerPressed,
+                borderColor: borderColor,
+                pressedBorderColor: pressedBorderColor
+            )
         case .main:
             return .init(
                 foregroundColor: colors.main.main,

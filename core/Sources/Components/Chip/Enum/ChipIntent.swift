@@ -18,4 +18,6 @@ public enum ChipIntent: CaseIterable {
     case alert
     case neutral
     case info
+    case accent
+    case basic
 }

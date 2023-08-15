@@ -21,6 +21,22 @@ struct ButtonGetVariantFilledUseCase: ButtonGetVariantUseCaseable {
         let pressedBorderColor = ColorTokenDefault.clear
 
         switch intent {
+        case .accent:
+            return .init(
+                foregroundColor: colors.accent.onAccent,
+                backgroundColor: colors.accent.accent,
+                pressedBackgroundColor: colors.states.accentPressed,
+                borderColor: borderColor,
+                pressedBorderColor: pressedBorderColor
+            )
+        case .basic:
+            return .init(
+                foregroundColor: colors.basic.onBasic,
+                backgroundColor: colors.basic.basic,
+                pressedBackgroundColor: colors.states.basicPressed,
+                borderColor: borderColor,
+                pressedBorderColor: pressedBorderColor
+            )
         case .main:
             return .init(
                 foregroundColor: colors.main.onMain,

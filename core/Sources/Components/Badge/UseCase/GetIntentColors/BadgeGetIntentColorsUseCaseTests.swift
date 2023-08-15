@@ -22,6 +22,18 @@ final class BadgeGetColorsUseCaseTests: XCTestCase {
 
         let items: [BadgeGetColors] = [
             .init(
+                givenIntent: .accent,
+                expectedBackgroundToken: mockedExpectedColors.accent.accent,
+                expectedBorderToken: mockedExpectedSurfaceColor,
+                expectedTextToken: mockedExpectedColors.accent.onAccent
+            ),
+            .init(
+                givenIntent: .basic,
+                expectedBackgroundToken: mockedExpectedColors.basic.basic,
+                expectedBorderToken: mockedExpectedSurfaceColor,
+                expectedTextToken: mockedExpectedColors.basic.onBasic
+            ),
+            .init(
                 givenIntent: .alert,
                 expectedBackgroundToken: mockedExpectedColors.feedback.alert,
                 expectedBorderToken: mockedExpectedSurfaceColor,

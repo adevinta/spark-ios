@@ -33,7 +33,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let opacities = sutValues(for: \.opacity)
 
         // Then
-        XCTAssertEqual(opacities, [1.0, 0.40, 1.0, 1.0, 1.0])
+        XCTAssertEqual(opacities, [1.0, 0.40, 1.0, 1.0, 1.0, 1.0, 1.0])
     }
 
     func test_is_disabled() {
@@ -41,7 +41,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let disabledStates = sutValues(for: \.isDisabled)
 
         // Then
-        XCTAssertEqual(disabledStates, [false, true, false, false, false])
+        XCTAssertEqual(disabledStates, [false, true, false, false, false, false, false])
     }
 
     func test_spacings() {
@@ -49,7 +49,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let spacings = sutValues(for: \.spacing)
 
         // Then
-        XCTAssertEqual(spacings, Array(repeating: 5.0, count: 5))
+        XCTAssertEqual(spacings, Array(repeating: 5.0, count: 7))
     }
 
     func test_fonts() {
@@ -57,7 +57,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let fonts = sutValues(for: \.font.font)
 
         // Then
-        XCTAssertEqual(fonts, Array(repeating: Font.body, count: 5))
+        XCTAssertEqual(fonts, Array(repeating: Font.body, count: 7))
     }
 
     func test_surfaceColors() {
@@ -69,7 +69,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let surfaceColors = sutValues(for: \.surfaceColor.color)
 
         // Then
-        XCTAssertEqual(surfaceColors, Array(repeating: Color.red, count: 5))
+        XCTAssertEqual(surfaceColors, Array(repeating: Color.red, count: 7))
     }
 
     func test_colors_reset_when_selected_value_set() {

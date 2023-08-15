@@ -156,6 +156,10 @@ extension SelectButtonState {
             return "error"
         case .success:
             return "success"
+        case .accent:
+            return "accent"
+        case .basic:
+            return "basic"
         }
     }
 }

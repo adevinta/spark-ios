@@ -10,6 +10,8 @@ import Foundation
 
 /// Intents of the icon.
 public enum IconIntent: CaseIterable {
+    case accent
+    case basic
     case alert
     case error
     case neutral

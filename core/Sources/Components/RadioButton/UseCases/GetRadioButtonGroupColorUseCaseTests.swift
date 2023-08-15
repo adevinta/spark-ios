@@ -82,4 +82,32 @@ final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
         XCTAssertEqual(colorToken.uiColor, colors.main.mainContainer.uiColor)
         XCTAssertEqual(colorToken.color, colors.main.mainContainer.color)
     }
+
+    func test_accent() {
+        // Given
+        let sut = GetRadioButtonGroupColorUseCase()
+        let colors = ColorsGeneratedMock()
+        colors.accent = ColorsAccentGeneratedMock.mocked()
+
+        // When
+        let colorToken = sut.execute(colors: colors, state: .accent)
+
+        // Then
+        XCTAssertEqual(colorToken.uiColor, colors.accent.accent.uiColor)
+        XCTAssertEqual(colorToken.color, colors.accent.accent.color)
+    }
+
+    func test_basic() {
+        // Given
+        let sut = GetRadioButtonGroupColorUseCase()
+        let colors = ColorsGeneratedMock()
+        colors.basic = ColorsBasicGeneratedMock.mocked()
+
+        // When
+        let colorToken = sut.execute(colors: colors, state: .basic)
+
+        // Then
+        XCTAssertEqual(colorToken.uiColor, colors.basic.basic.uiColor)
+        XCTAssertEqual(colorToken.color, colors.basic.basic.color)
+    }
 }

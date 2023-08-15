@@ -23,6 +23,18 @@ final class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
         let surfaceColor = colors.base.surface
 
         switch intentType {
+        case .accent:
+            return BadgeColors(
+                backgroundColor: colors.accent.accent,
+                borderColor: surfaceColor,
+                foregroundColor: colors.accent.onAccent
+            )
+        case .basic:
+            return BadgeColors(
+                backgroundColor: colors.basic.basic,
+                borderColor: surfaceColor,
+                foregroundColor: colors.basic.onBasic
+            )
         case .alert:
             return BadgeColors(
                 backgroundColor: colors.feedback.alert,

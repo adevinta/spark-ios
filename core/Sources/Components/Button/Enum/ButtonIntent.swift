@@ -11,6 +11,8 @@ import Foundation
 /// A button intent is used to apply a color scheme to a button.
 @frozen
 public enum ButtonIntent: CaseIterable {
+    case accent
+    case basic
     case alert
     case danger
     case main

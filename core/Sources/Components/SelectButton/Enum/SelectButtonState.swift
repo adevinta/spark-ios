@@ -12,6 +12,8 @@ import Foundation
 public enum SelectButtonState: Equatable, Hashable {
     case enabled
     case disabled
+    case accent
+    case basic
 
     case success(message: String)
     case warning(message: String)
