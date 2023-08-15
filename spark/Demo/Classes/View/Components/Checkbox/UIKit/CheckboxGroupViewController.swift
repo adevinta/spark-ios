@@ -262,7 +262,7 @@ final class CheckboxGroupViewController: UIViewController {
 
     @objc private func actionShuffle(sender: UIButton) {
         let selectionStates = [CheckboxSelectionState.indeterminate, .selected, .unselected]
-        let states = [SelectButtonState.enabled, .disabled, .success(message: "Success message"), .warning(message: "Warning message"), .error(message: "Error message")]
+        let states = [SelectButtonState.enabled, .disabled, .accent, .basic, .success(message: "Success message"), .warning(message: "Warning message"), .error(message: "Error message")]
         for index in 0..<items.count {
             var item = items[index]
             if let randomState = states.randomElement() {

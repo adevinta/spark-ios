@@ -28,6 +28,8 @@ struct GetRadioButtonGroupColorUseCase: GetRadioButtonGroupColorUseCaseable {
         case .success: return colors.feedback.success
         case .enabled: return colors.main.mainContainer
         case .disabled: return colors.main.mainContainer
+        case .accent: return colors.accent.accent
+        case .basic: return colors.basic.basic
         }
     }
 }

@@ -19,6 +19,10 @@ struct IconGetColorUseCase: IconGetColorUseCaseable {
 
     func execute(for intent: IconIntent, colors: Colors) -> any ColorToken {
         switch intent {
+        case .accent:
+            return colors.accent.accent
+        case .basic:
+            return colors.basic.basic
         case .alert :
             return colors.feedback.alert
         case .error:

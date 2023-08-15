@@ -73,6 +73,10 @@ struct CheckboxListView: View {
             return "Enabled"
         case .disabled:
             return "Disabled"
+        case .accent:
+            return "Accent"
+        case .basic:
+            return "Basic"
         case .success:
             return "Success"
         case .warning:

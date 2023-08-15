@@ -50,4 +50,12 @@ final class GetSpinnerIntentColorUseCaseTests: TestCase {
     func test_execute_success() {
         XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .success).color, self.colors.feedback.success.color)
     }
+
+    func test_execute_accent() {
+        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .accent).color, self.colors.accent.accent.color)
+    }
+
+    func test_execute_basic() {
+        XCTAssertEqual(self.sut.execute(colors: self.colors, intent: .basic).color, self.colors.basic.basic.color)
+    }
 }

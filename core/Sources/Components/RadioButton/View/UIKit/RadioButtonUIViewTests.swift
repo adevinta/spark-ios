@@ -176,6 +176,8 @@ private extension RadioButtonGroupState {
         case .error: return .init(string: "Error / \(selected)")
         case .success: return .init(string: "Success / \(selected)")
         case .warning: return .init(string: "Warning / \(selected)")
+        case .accent: return .init(string: "Accent / \(selected)")
+        case .basic: return .init(string: "Basic / \(selected)")
         }
     }
 }

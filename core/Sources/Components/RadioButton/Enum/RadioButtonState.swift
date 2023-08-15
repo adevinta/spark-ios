@@ -12,6 +12,8 @@ import Foundation
 public enum RadioButtonGroupState: Equatable, Hashable, CaseIterable {
     case enabled
     case disabled
+    case accent
+    case basic
 
     case success
     case warning

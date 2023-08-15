@@ -66,6 +66,20 @@ final class SwitchGetColorUseCaseTests: XCTestCase {
             expectedColorToken: self.colorsMock.feedback.success
         )
     }
+
+    func test_execute_when_intent_is_accent_case() throws {
+        try self.testExecute(
+            givenIntent: .accent,
+            expectedColorToken: self.colorsMock.accent.accent
+        )
+    }
+
+    func test_execute_when_intent_is_basic_case() throws {
+        try self.testExecute(
+            givenIntent: .basic,
+            expectedColorToken: self.colorsMock.basic.basic
+        )
+    }
 }
 
 // MARK: - Execute Testing

@@ -17,6 +17,8 @@ extension ColorsGeneratedMock {
 
         mock.main = ColorsMainGeneratedMock.mocked()
         mock.support = ColorsSupportGeneratedMock.mocked()
+        mock.accent = ColorsAccentGeneratedMock.mocked()
+        mock.basic = ColorsBasicGeneratedMock.mocked()
         mock.base = ColorsBaseGeneratedMock.mocked()
         mock.feedback = ColorsFeedbackGeneratedMock.mocked()
         mock.states =  ColorsStatesGeneratedMock.mocked()

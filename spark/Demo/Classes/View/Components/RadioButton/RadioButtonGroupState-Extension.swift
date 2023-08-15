@@ -17,6 +17,8 @@ extension RadioButtonGroupState {
         case .error: return "Error"
         case .success: return "Success"
         case .warning: return "Warning"
+        case .accent: return "Accent"
+        case .basic: return "Basic"
         }
     }
 
@@ -27,6 +29,8 @@ extension RadioButtonGroupState {
         case .error: return "Error"
         case .success: return "Success"
         case .warning: return "Warning"
+        case .accent: return nil
+        case .basic: return nil
         }
     }
 
@@ -37,6 +41,8 @@ extension RadioButtonGroupState {
         case .success: return theme.colors.feedback.success.color
         case .enabled: return theme.colors.main.main.color
         case .disabled: return theme.colors.base.outline.color
+        case .accent: return theme.colors.accent.accent.color
+        case .basic: return theme.colors.basic.basic.color
         }
     }
 }

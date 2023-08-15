@@ -52,6 +52,8 @@ private extension Theme {
         case .error: return self.colors.feedback.error
         case .success: return self.colors.feedback.success
         case .enabled, .disabled: return isSelected ? self.colors.main.main : self.colors.base.outline
+        case .accent: return isSelected ? self.colors.accent.accent : self.colors.base.outline
+        case .basic: return isSelected ? self.colors.basic.basic : self.colors.base.outline
         }
     }
 
@@ -62,6 +64,8 @@ private extension Theme {
         case .success: return self.colors.feedback.successContainer
         case .disabled: return self.colors.main.mainContainer
         case .enabled: return self.colors.main.mainContainer
+        case .accent: return self.colors.accent.accentContainer
+        case .basic: return self.colors.basic.basicContainer
         }
     }
 }

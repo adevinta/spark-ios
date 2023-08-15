@@ -133,7 +133,7 @@ private extension Theme {
     func opacity(state: RadioButtonGroupState) -> CGFloat {
         switch state {
         case .disabled: return self.dims.dim3
-        case .warning, .error, .success, .enabled: return 1
+        case .warning, .error, .success, .enabled, .accent, .basic: return 1
         }
     }
 

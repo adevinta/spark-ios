@@ -109,6 +109,8 @@ private extension RadioButtonGroupState {
         case .error: return "Error / " + selected
         case .success: return "Success / " + selected
         case .warning: return "Warning / " + selected
+        case .accent: return "Accent / " + selected
+        case .basic: return "Basic / " + selected
         }
     }
 }

@@ -11,6 +11,8 @@ import Foundation
 // sourcery: AutoMockable
 /// **BadgeIntentType** defines color of ``BadgeView``
 public enum BadgeIntentType: CaseIterable {
+    case accent
+    case basic
     case alert
     case danger
     case info

@@ -30,7 +30,9 @@ struct TagSutTests {
         Self.allVariantCases(for: .neutral) +
         Self.allVariantCases(for: .main) +
         Self.allVariantCases(for: .support) +
-        Self.allVariantCases(for: .success)
+        Self.allVariantCases(for: .success) +
+        Self.allVariantCases(for: .accent) +
+        Self.allVariantCases(for: .basic)
     }
 
     private static func allVariantCases(for intent: TagIntent) -> [Self] {
