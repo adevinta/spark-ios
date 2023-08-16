@@ -38,16 +38,13 @@ public final class TabItemUIView: UIControl {
         return border
     }()
 
-    private var iconHeight: CGFloat {
-        return self.viewModel.tabStateAttributes.font.uiFont.pointSize
-    }
-
     // MARK: - Scaled metrics
     @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var paddingVertical: CGFloat
     @ScaledUIMetric private var paddingHorizontal: CGFloat
     @ScaledUIMetric private var borderLineHeight: CGFloat
     @ScaledUIMetric var height: CGFloat
+    @ScaledUIMetric private var iconHeight: CGFloat
 
     @ObservedObject var viewModel: TabItemViewModel
 
@@ -280,6 +277,7 @@ public final class TabItemUIView: UIControl {
         self._paddingHorizontal = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
         self._borderLineHeight = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.heights.separatorLineHeight)
         self._height = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.heights.itemHeight)
+        self._iconHeight = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.heights.iconHeight)
 
         super.init(frame: .zero)
 
@@ -304,6 +302,8 @@ public final class TabItemUIView: UIControl {
         self._paddingHorizontal.update(traitCollection: self.traitCollection)
         self._borderLineHeight.update(traitCollection: self.traitCollection)
         self._height.update(traitCollection: self.traitCollection)
+        self._iconHeight.update(traitCollection: self.traitCollection)
+
 
         self.invalidateIntrinsicContentSize()
 
@@ -397,12 +397,11 @@ public final class TabItemUIView: UIControl {
         self._paddingHorizontal = ScaledUIMetric(wrappedValue: attributes.spacings.horizontalEdge)
         self._borderLineHeight = ScaledUIMetric(wrappedValue: attributes.heights.separatorLineHeight)
         self._height = ScaledUIMetric(wrappedValue: attributes.heights.itemHeight)
+        self._iconHeight = ScaledUIMetric(wrappedValue: attributes.heights.iconHeight)
     }
 
     private func updateLayoutConstraints() {
-
-        let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
-        self.imageViewHeightConstraint?.constant = iconHeight
+        self.imageViewHeightConstraint?.constant = self.iconHeight
 
         self.bottomLineHeightConstraint?.constant = self.borderLineHeight
         self.heightConstraint?.constant = self.height
@@ -412,9 +411,8 @@ public final class TabItemUIView: UIControl {
     }
 
     private func setupConstraints() {
-        let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         let lineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.borderLineHeight)
-        let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: iconHeight)
+        let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
         let heightConstraint = self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.height)
 
         NSLayoutConstraint.activate([
@@ -433,23 +431,16 @@ public final class TabItemUIView: UIControl {
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
         guard icon != self.imageView.image else { return }
-        if let icon = icon {
-            self.imageView.image = icon
-            self.imageView.tintColor = self.viewModel.tabStateAttributes.colors.icon.uiColor
-            self.imageView.isHidden = false
-        } else {
-            self.imageView.isHidden = true
-        }
+        self.imageView.image = icon
+        self.imageView.tintColor = self.viewModel.tabStateAttributes.colors.icon.uiColor
+
+        self.imageView.isHidden = icon == nil
     }
 
     private func addOrRemoveTitle(_ text: String?) {
         guard text != self.label.text else { return }
-        if let text = text {
-            self.label.text = text
-            self.label.isHidden = false
-        } else {
-            self.label.isHidden = true
-        }
+        self.label.text = text
+        self.label.isHidden = text == nil
     }
 }
 

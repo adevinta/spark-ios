@@ -13,7 +13,8 @@ protocol TabGetStateAttributesUseCasable {
     func execute(theme: Theme,
                  intent: TabIntent,
                  state: TabState,
-                 size: TabSize) -> TabStateAttributes
+                 tabSize: TabSize,
+                 hasTitle: Bool) -> TabStateAttributes
 }
 
 /// TabGetStateAttributesUseCase
@@ -47,8 +48,12 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
     func execute(theme: Theme,
                  intent: TabIntent,
                  state: TabState,
-                 size: TabSize) -> TabStateAttributes {
+                 tabSize: TabSize,
+                 hasTitle: Bool
+    ) -> TabStateAttributes {
 
+        let size = hasTitle ? tabSize : TabSize.md
+        
         let font = self.getFontUseCase.execute(typography: theme.typography, size: size)
 
         let spacings = TabItemSpacings(
@@ -63,8 +68,11 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             background: theme.colors.base.surface
         )
 
-        let heights = TabItemHeights(separatorLineHeight: theme.border.width.small,
-                                     itemHeight: size.itemHeight)
+        let heights = TabItemHeights(
+            separatorLineHeight: theme.border.width.small,
+            itemHeight: size.itemHeight,
+            iconHeight: size.iconHeight
+        )
 
         if !state.isEnabled {
 
@@ -118,6 +126,10 @@ private extension CGFloat {
     static let medium: CGFloat = 40
     static let small: CGFloat = 36
     static let xtraSmall: CGFloat = 32
+
+    static let fontMd: CGFloat = 16
+    static let fontSm: CGFloat = 14
+    static let fontXs: CGFloat = 12
 }
 
 private extension TabSize {
@@ -127,5 +139,13 @@ private extension TabSize {
         case .sm: return .small
         case .xs: return .xtraSmall
         }
+    }
+
+    var iconHeight: CGFloat {
+        switch self {
+        case .md: return .fontMd
+        case .sm: return .fontSm
+        case .xs: return .fontXs
+       }
     }
 }

@@ -91,7 +91,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
     func makeUIView(context: Context) -> SparkCore.TabUIView {
 
         let content: [(UIImage?, String?)] = (1...numbeOfTabs).map { tabNo in
-            (self.showIcon ? UIImage.random : nil,
+            (self.showIcon ? .image(at: tabNo) : nil,
              self.showText ? "Label \(tabNo)" : nil )
         }
 
@@ -119,9 +119,9 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         uiView.isEnabled = self.isEnabled
         uiView.maxWidth = self.maxWidth
 
-        uiView.segments.forEach{ tab in
-            tab.imageView.isHidden = !self.showIcon
-            tab.label.isHidden = !self.showText
+        uiView.segments.enumerated().forEach{ index, tab in
+            tab.icon = self.showIcon ? .image(at: index) : nil
+            tab.title = self.showText ? "Label \(index)" : nil
         }
 
         let oldSelectedIndex = uiView.selectedSegmentIndex
@@ -131,7 +131,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
 
             for tabNo in 0..<self.numbeOfTabs {
                 uiView.insertSegment(
-                    withImage: .random,
+                    withImage: .image(at: tabNo),
                     andTitle: "Label \(tabNo)",
                     at: tabNo,
                     animated: false)
@@ -187,11 +187,16 @@ private extension UIImage {
     ]
 
     // swiftlint: disable force_unwrapping
-    static var random: UIImage {
+//    static var random: UIImage {
+//        let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
+//        let sfName: String? = allSfs.randomElement()
+//        let image = sfName.flatMap(UIImage.init(systemName:))!
+//        return image
+//    }
+    static func image(at index: Int) -> UIImage {
         let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
-        let sfName: String? = allSfs.randomElement()
-        let image = sfName.flatMap(UIImage.init(systemName:))!
-        return image
+        let imageName = allSfs[index % names.count]
+        return UIImage(systemName: imageName)!
     }
 }
 
