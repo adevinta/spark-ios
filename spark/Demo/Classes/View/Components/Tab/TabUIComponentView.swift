@@ -214,13 +214,14 @@ private class PublishedBinding<T> {
 }
 
 private extension TabSize {
-    var name: String {
+    var badgeSize: BadgeSize {
         switch self {
-        case .md: return "Medium"
-        case .sm: return "Small"
-        case .xs: return "Xtra Small"
+        case .md: return .normal
+        case .sm: return .small
+        case .xs: return .small
         @unknown default:
             fatalError()
         }
     }
 }
+
