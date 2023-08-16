@@ -143,24 +143,20 @@ struct TabComponent: View {
                     Text("Not available yet!")
                 } else {
                     GeometryReader { geometry in
-                        VStack{
-                            TabUIComponentRepresentableView(
-                                theme: self.theme,
-                                intent: self.intent,
-                                tabSize: self.tabSize,
-                                showText: self.showText.isSelected,
-                                showIcon: self.showIcon.isSelected,
-                                showBadge: self.showBadge.isSelected,
-                                isEnabled: self.isEnabled.isSelected,
-                                numberOfTabs: self.numberOfTabs,
-                                selectedTab: self.$selectedTab,
-                                height: self.$height,
-                                maxWidth: geometry.size.width
-                            )
-//                            .fixedSize(horizontal: false, vertical: true)
-                            .frame(width: geometry.size.width, height: self.height)
-                            Text("Width \(geometry.size.width)")
-                        }
+                        TabUIComponentRepresentableView(
+                            theme: self.theme,
+                            intent: self.intent,
+                            tabSize: self.tabSize,
+                            showText: self.showText.isSelected,
+                            showIcon: self.showIcon.isSelected,
+                            showBadge: self.showBadge.isSelected,
+                            isEnabled: self.isEnabled.isSelected,
+                            numberOfTabs: self.numberOfTabs,
+                            selectedTab: self.$selectedTab,
+                            height: self.$height,
+                            maxWidth: geometry.size.width
+                        )
+                        .frame(width: geometry.size.width, height: self.height)
                     }
                 }
                 Spacer()
