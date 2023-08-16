@@ -26,7 +26,6 @@ public final class TabUIView: UIControl {
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.isScrollEnabled = true
-        scrollView.isDirectionalLockEnabled = false
         scrollView.alwaysBounceHorizontal = false
         scrollView.alwaysBounceVertical = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
