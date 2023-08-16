@@ -27,7 +27,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
     }
 
     // MARK: - Tests
-    func xtest_tabs_with_icons_only() throws {
+    func test_tabs_with_icons_only() throws {
         let sut = TabUIView(theme: self.theme, icons: Array(self.images[0..<3]))
         sut.setBadge(self.badge, forSegementAt: 2)
 
@@ -44,7 +44,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut)
     }
 
-    func xtest_tabs_with_icon_and_text() throws {
+    func test_tabs_with_icon_and_text() throws {
         let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
 
         let sut = TabUIView(
@@ -56,7 +56,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
-    func xtest_many_tabs_with_icon_and_text() throws {
+    func test_many_tabs_with_icon_and_text() throws {
         let content = Array(zip(images, names.map(\.capitalized)))
 
         let sut = TabUIView(
