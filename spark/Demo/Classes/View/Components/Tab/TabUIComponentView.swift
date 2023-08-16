@@ -127,20 +127,17 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         let oldSelectedIndex = uiView.selectedSegmentIndex
 
         if self.numbeOfTabs != uiView.numberOfSegments {
-            uiView.removeAllSegments()
+            let content: [(icon: UIImage, title: String)] = (0..<self.numbeOfTabs).map{ (icon: .image(at: $0), title: "Label \($0)") }
 
-            for tabNo in 0..<self.numbeOfTabs {
-                uiView.insertSegment(
-                    withImage: .image(at: tabNo),
-                    andTitle: "Label \(tabNo)",
-                    at: tabNo,
-                    animated: false)
-                if !showIcon {
-                    uiView.setImage(nil, forSegmentAt: tabNo)
-                }
-                if !showText {
-                    uiView.setTitle(nil, forSegmentAt: tabNo)
-                }
+            if self.showIcon && self.showText {
+                uiView.setSegments(withContent: content)
+            } else if self.showIcon {
+                uiView.setSegments(withImages: content.map(\.icon))
+            } else if self.showText {
+                uiView.setSegments(withTitles: content.map(\.title))
+            } else {
+                uiView.setSegments(withImages: content.map(\.icon))
+                uiView.segments.forEach{ $0.icon = nil }
             }
 
             uiView.selectedSegmentIndex = min(oldSelectedIndex, self.numbeOfTabs - 1)
@@ -155,7 +152,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         }
 
         DispatchQueue.main.async {
-            self.height = uiView.frame.height
+            self.height = uiView.intrinsicContentSize.height
         }
     }
 }
@@ -187,12 +184,6 @@ private extension UIImage {
     ]
 
     // swiftlint: disable force_unwrapping
-//    static var random: UIImage {
-//        let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
-//        let sfName: String? = allSfs.randomElement()
-//        let image = sfName.flatMap(UIImage.init(systemName:))!
-//        return image
-//    }
     static func image(at index: Int) -> UIImage {
         let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
         let imageName = allSfs[index % names.count]
