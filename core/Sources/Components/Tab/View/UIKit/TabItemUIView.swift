@@ -43,7 +43,7 @@ public final class TabItemUIView: UIControl {
     @ScaledUIMetric private var paddingVertical: CGFloat
     @ScaledUIMetric private var paddingHorizontal: CGFloat
     @ScaledUIMetric private var borderLineHeight: CGFloat
-    @ScaledUIMetric private var height: CGFloat
+    @ScaledUIMetric var height: CGFloat
 
     @ObservedObject var viewModel: TabItemViewModel
 
@@ -100,6 +100,8 @@ public final class TabItemUIView: UIControl {
 
                 self.stackView.addArrangedSubview(newBadge)
             }
+            
+            self.invalidateIntrinsicContentSize()
         }
     }
 
@@ -224,6 +226,26 @@ public final class TabItemUIView: UIControl {
         return !self.stackView.arrangedSubviews.contains(where: {$0.isHidden == false})
     }
 
+    public override var intrinsicContentSize: CGSize {
+        var itemsWidth: CGFloat = 0
+        if !self.label.isHidden {
+            itemsWidth += self.label.intrinsicContentSize.width
+        }
+        if !self.imageView.isHidden {
+            itemsWidth += self.imageView.intrinsicContentSize.width
+        }
+        if let badge = self.badge, !badge.isHidden {
+            itemsWidth += (badge.intrinsicContentSize.width == -1) ? self.height : badge.intrinsicContentSize.width
+        }
+
+        let numberOfSpacings = max(self.stackView.arrangedSubviews.filter{!$0.isHidden}.count - 1, 0)
+        let spacingsWidth = CGFloat(numberOfSpacings) * self.spacing
+
+        let totalWidth = self.paddingHorizontal + (itemsWidth + spacingsWidth) + self.paddingHorizontal
+
+        return CGSize(width: totalWidth, height: self.height)
+    }
+
     // MARK: - Initializers
     /// Create a tab item view.
     ///
@@ -276,6 +298,8 @@ public final class TabItemUIView: UIControl {
         self._borderLineHeight.update(traitCollection: self.traitCollection)
         self._height.update(traitCollection: self.traitCollection)
 
+        self.invalidateIntrinsicContentSize()
+
         self.updateLayoutConstraints()
     }
 
@@ -311,6 +335,7 @@ public final class TabItemUIView: UIControl {
             guard let self else { return }
             self.addOrRemoveIcon(itemContent.icon)
             self.addOrRemoveTitle(itemContent.title)
+            self.invalidateIntrinsicContentSize()
         }
 
         self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
@@ -318,6 +343,7 @@ public final class TabItemUIView: UIControl {
             self.setupColors(attributes: attributes)
             self.updateSizes(attributes: attributes)
             self.updateLayoutConstraints()
+            self.invalidateIntrinsicContentSize()
         }
     }
 
