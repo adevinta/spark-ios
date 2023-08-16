@@ -20,7 +20,8 @@ public final class TabItemUIView: UIControl {
     // MARK: - Private variables
     private var subscriptions = Set<AnyCancellable>()
     private var bottomLineHeightConstraint: NSLayoutConstraint?
-    private var imageViewSizeConstraint: NSLayoutConstraint?
+    private var imageViewHeightConstraint: NSLayoutConstraint?
+    private var imageViewWidthConstraint: NSLayoutConstraint?
     private var heightConstraint: NSLayoutConstraint?
     public var action: UIAction?
 
@@ -37,6 +38,10 @@ public final class TabItemUIView: UIControl {
         border.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return border
     }()
+
+    private var iconHeight: CGFloat {
+        return self.viewModel.tabStateAttributes.font.uiFont.pointSize
+    }
 
     // MARK: - Scaled metrics
     @ScaledUIMetric private var spacing: CGFloat
@@ -228,17 +233,20 @@ public final class TabItemUIView: UIControl {
 
     public override var intrinsicContentSize: CGSize {
         var itemsWidth: CGFloat = 0
-        if !self.label.isHidden {
+
+        if self.label.isNotHidden {
             itemsWidth += self.label.intrinsicContentSize.width
         }
-        if !self.imageView.isHidden {
-            itemsWidth += self.imageView.intrinsicContentSize.width
-        }
-        if let badge = self.badge, !badge.isHidden {
-            itemsWidth += (badge.intrinsicContentSize.width == -1) ? self.height : badge.intrinsicContentSize.width
+
+        if self.imageView.isNotHidden {
+            itemsWidth += self.iconHeight
         }
 
-        let numberOfSpacings = max(self.stackView.arrangedSubviews.filter{!$0.isHidden}.count - 1, 0)
+        if let badge = self.badge, self.isNotHidden {
+            itemsWidth += badge.intrinsicContentSize.width == UIView.noIntrinsicMetric ? self.height : badge.intrinsicContentSize.width
+        }
+
+        let numberOfSpacings = max(self.stackView.arrangedSubviews.filter(\.isNotHidden).count - 1, 0)
         let spacingsWidth = CGFloat(numberOfSpacings) * self.spacing
 
         let totalWidth = self.paddingHorizontal + (itemsWidth + spacingsWidth) + self.paddingHorizontal
@@ -395,9 +403,9 @@ public final class TabItemUIView: UIControl {
     private func updateLayoutConstraints() {
 
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
-        self.imageViewSizeConstraint?.constant = iconHeight
+        self.imageViewWidthConstraint?.constant = iconHeight
+        self.imageViewHeightConstraint?.constant = iconHeight
 
-        self.imageViewSizeConstraint?.constant = iconHeight
         self.bottomLineHeightConstraint?.constant = self.borderLineHeight
         self.heightConstraint?.constant = self.height
 
@@ -409,19 +417,21 @@ public final class TabItemUIView: UIControl {
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         let lineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.borderLineHeight)
         let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: iconHeight)
+        let imageWidthConstraint = self.imageView.widthAnchor.constraint(equalToConstant: iconHeight)
         let heightConstraint = self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.height)
 
         NSLayoutConstraint.activate([
             lineHeightConstraint,
             imageHeightConstraint,
+            imageWidthConstraint,
             heightConstraint,
-            self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
             self.bottomLine.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor),
             self.bottomLine.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor),
             self.bottomLine.bottomAnchor.constraint(equalTo: self.stackView.bottomAnchor)
         ])
         self.bottomLineHeightConstraint = lineHeightConstraint
-        self.imageViewSizeConstraint = imageHeightConstraint
+        self.imageViewHeightConstraint = imageHeightConstraint
+        self.imageViewWidthConstraint = imageWidthConstraint
         self.heightConstraint = heightConstraint
     }
 
