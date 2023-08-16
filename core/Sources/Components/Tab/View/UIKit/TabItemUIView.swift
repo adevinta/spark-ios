@@ -21,7 +21,6 @@ public final class TabItemUIView: UIControl {
     private var subscriptions = Set<AnyCancellable>()
     private var bottomLineHeightConstraint: NSLayoutConstraint?
     private var imageViewHeightConstraint: NSLayoutConstraint?
-    private var imageViewWidthConstraint: NSLayoutConstraint?
     private var heightConstraint: NSLayoutConstraint?
     public var action: UIAction?
 
@@ -403,7 +402,6 @@ public final class TabItemUIView: UIControl {
     private func updateLayoutConstraints() {
 
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
-        self.imageViewWidthConstraint?.constant = iconHeight
         self.imageViewHeightConstraint?.constant = iconHeight
 
         self.bottomLineHeightConstraint?.constant = self.borderLineHeight
@@ -423,7 +421,7 @@ public final class TabItemUIView: UIControl {
         NSLayoutConstraint.activate([
             lineHeightConstraint,
             imageHeightConstraint,
-            imageWidthConstraint,
+            self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
             heightConstraint,
             self.bottomLine.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor),
             self.bottomLine.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor),
@@ -431,7 +429,6 @@ public final class TabItemUIView: UIControl {
         ])
         self.bottomLineHeightConstraint = lineHeightConstraint
         self.imageViewHeightConstraint = imageHeightConstraint
-        self.imageViewWidthConstraint = imageWidthConstraint
         self.heightConstraint = heightConstraint
     }
 
