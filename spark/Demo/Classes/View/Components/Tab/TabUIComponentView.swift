@@ -17,6 +17,7 @@ struct TabUIComponentView: View {
     // MARK: - Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
     @State var selectedTab = 1
+    @State var height: CGFloat = CGFloat(50)
 
     // MARK: - View
     var body: some View {
@@ -29,12 +30,15 @@ struct TabUIComponentView: View {
             showBadge: true,
             isEnabled: true,
             numberOfTabs: 1,
-            selectedTab: self.$selectedTab
+            selectedTab: self.$selectedTab,
+            height: self.$height,
+            maxWidth: 300
         )
     }
 }
 
 struct TabUIComponentRepresentableView: UIViewRepresentable {
+
     let theme: Theme
     let intent: TabIntent
     let tabSize: TabSize
@@ -44,7 +48,9 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
     let isEnabled: Bool
     let numbeOfTabs: Int
     let badge: BadgeUIView
-    let selectedTab: Binding<Int>
+    @Binding var selectedTab: Int
+    @Binding var height: CGFloat
+    let maxWidth: CGFloat
 
     private let publishedBinding: PublishedBinding<Int>
 
@@ -56,7 +62,9 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
          showBadge: Bool,
          isEnabled: Bool,
          numberOfTabs: Int,
-         selectedTab: Binding<Int>
+         selectedTab: Binding<Int>,
+         height: Binding<CGFloat>,
+         maxWidth: CGFloat
     ) {
         self.theme = theme
         self.intent = intent
@@ -66,8 +74,10 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         self.showBadge = showBadge
         self.isEnabled = isEnabled
         self.numbeOfTabs = numberOfTabs
-        self.selectedTab = selectedTab
+        self._selectedTab = selectedTab
+        self._height = height
         self.publishedBinding = PublishedBinding(binding: selectedTab)
+        self.maxWidth = maxWidth
 
         self.badge = BadgeUIView(
             theme: theme,
@@ -89,9 +99,10 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
             tabSize: self.tabSize,
             content: content
         )
+        view.maxWidth = self.maxWidth
 
         publishedBinding.publisher = view.publisher.eraseToAnyPublisher()
-        view.selectedSegmentIndex = self.selectedTab.wrappedValue
+        view.selectedSegmentIndex = self.selectedTab
         if self.showBadge {
             view.segments.randomElement()?.badge = self.badge
         }
@@ -104,6 +115,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         uiView.intent = self.intent
         uiView.tabSize = self.tabSize
         uiView.isEnabled = self.isEnabled
+        uiView.maxWidth = self.maxWidth
 
         uiView.segments.forEach{ tab in
             tab.imageView.isHidden = !self.showIcon
@@ -137,6 +149,10 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
             uiView.segments[badgeIndex].badge = nil
         } else if badgeIndex == nil && self.showBadge {
             uiView.segments.randomElement()?.badge = self.badge
+        }
+
+        DispatchQueue.main.async {
+            self.height = uiView.frame.height
         }
     }
 }
