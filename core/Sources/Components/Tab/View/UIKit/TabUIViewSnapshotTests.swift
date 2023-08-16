@@ -56,6 +56,29 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
+    func test_tabs_with_icon_and_text_size_small() throws {
+        let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
+
+        let sut = TabUIView(
+            theme: self.theme,
+            tabSize: .sm,
+            content: content
+        )
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
+    }
+
+    func test_tabs_with_icon_and_text_size_xtra_small() throws {
+        let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
+
+        let sut = TabUIView(
+            theme: self.theme,
+            tabSize: .xs,
+            content: content
+        )
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
+    }
     func test_many_tabs_with_icon_and_text() throws {
         let content = Array(zip(images, names.map(\.capitalized)))
 
