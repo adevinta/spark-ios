@@ -90,7 +90,7 @@ public final class TabUIView: UIControl {
     public override var intrinsicContentSize: CGSize {
         let height = self.stackView
             .arrangedSubviews
-            .filter{!$0.isHidden}
+            .filter(\.isNotHidden)
             .map(\.intrinsicContentSize.height)
             .reduce(0, max)
 
@@ -423,19 +423,5 @@ public final class TabUIView: UIControl {
         } else {
             block()
         }
-    }
-}
-
-private extension UIStackView {
-    func addArrangedSubviews(_ subviews: [UIView]) {
-        for view in subviews {
-            self.addArrangedSubview(view)
-        }
-    }
-}
-
-private extension UIView {
-    var isNotHidden: Bool {
-        return !self.isHidden
     }
 }
