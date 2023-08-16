@@ -11,4 +11,5 @@ import Foundation
 struct TabItemHeights: Equatable, Updateable {
     var separatorLineHeight: CGFloat
     var itemHeight: CGFloat
+    var iconHeight: CGFloat
 }
