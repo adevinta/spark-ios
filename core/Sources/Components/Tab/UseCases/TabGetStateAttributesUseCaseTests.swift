@@ -141,7 +141,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
 
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
-            itemHeight: 32,
+            itemHeight: 34,
             iconHeight: 12
         )
 

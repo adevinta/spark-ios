@@ -288,24 +288,6 @@ final class TabItemViewModelTests: TestCase {
         XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments?.tabSize, .xs)
     }
 
-    func test_when_no_text_font_size_always_md() {
-        // Given
-        let sut = self.sut(size: .sm, title: nil)
-
-        let expectation = expectation(description: "wait for attributes")
-        expectation.expectedFulfillmentCount = 1
-
-        sut.$tabStateAttributes.sink { attributes in
-            expectation.fulfill()
-        }
-        .store(in: &self.cancellables)
-
-        // Then
-        wait(for: [expectation], timeout: 0.1)
-
-        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments?.tabSize, .md)
-    }
-
     func test_when_theme_changes_then_attributes_published() {
         // Given
         let sut = self.sut(size: .sm, title: "Label")

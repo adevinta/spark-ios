@@ -35,6 +35,7 @@ public final class TabItemUIView: UIControl {
         let border = UIView()
         border.translatesAutoresizingMaskIntoConstraints = false
         border.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        border.isUserInteractionEnabled = false
         return border
     }()
 
@@ -103,6 +104,7 @@ public final class TabItemUIView: UIControl {
             }
             
             self.invalidateIntrinsicContentSize()
+            self.setNeedsLayout()
         }
     }
 
@@ -115,6 +117,7 @@ public final class TabItemUIView: UIControl {
         stackView.alignment = .center
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isUserInteractionEnabled = false
         return stackView
     }()
 
@@ -239,7 +242,7 @@ public final class TabItemUIView: UIControl {
         }
 
         if let badge = self.badge, self.isNotHidden {
-            itemsWidth += badge.intrinsicContentSize.width == UIView.noIntrinsicMetric ? self.height : badge.intrinsicContentSize.width
+            itemsWidth += badge.intrinsicContentSize.width == UIView.noIntrinsicMetric ? self.height: badge.intrinsicContentSize.width
         }
 
         let numberOfSpacings = max(self.stackView.arrangedSubviews.filter(\.isNotHidden).count - 1, 0)
@@ -247,7 +250,8 @@ public final class TabItemUIView: UIControl {
 
         let totalWidth = self.paddingHorizontal + (itemsWidth + spacingsWidth) + self.paddingHorizontal
 
-        return CGSize(width: totalWidth, height: self.height)
+        let size = CGSize(width: totalWidth, height: self.height)
+        return size
     }
 
     // MARK: - Initializers
@@ -304,10 +308,9 @@ public final class TabItemUIView: UIControl {
         self._height.update(traitCollection: self.traitCollection)
         self._iconHeight.update(traitCollection: self.traitCollection)
 
-
         self.invalidateIntrinsicContentSize()
-
         self.updateLayoutConstraints()
+        self.setNeedsLayout()
     }
 
     // MARK: - Control functions
@@ -343,6 +346,7 @@ public final class TabItemUIView: UIControl {
             self.addOrRemoveIcon(itemContent.icon)
             self.addOrRemoveTitle(itemContent.title)
             self.invalidateIntrinsicContentSize()
+            self.setNeedsLayout()
         }
 
         self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
@@ -351,6 +355,7 @@ public final class TabItemUIView: UIControl {
             self.updateSizes(attributes: attributes)
             self.updateLayoutConstraints()
             self.invalidateIntrinsicContentSize()
+            self.setNeedsLayout()
         }
     }
 
