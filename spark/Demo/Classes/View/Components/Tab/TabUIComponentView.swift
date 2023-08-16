@@ -82,8 +82,10 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         self.badge = BadgeUIView(
             theme: theme,
             intent: .danger,
+            size: tabSize.badgeSize,
             value: 5,
-            isBorderVisible: false)
+            isBorderVisible: false
+        )
     }
 
     func makeUIView(context: Context) -> SparkCore.TabUIView {
@@ -144,6 +146,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
             uiView.selectedSegmentIndex = min(oldSelectedIndex, self.numbeOfTabs - 1)
         }
 
+        self.badge.size = self.tabSize.badgeSize
         let badgeIndex = uiView.segments.firstIndex(where: {$0.badge != nil})
         if let badgeIndex = badgeIndex, !self.showBadge {
             uiView.segments[badgeIndex].badge = nil
@@ -209,3 +212,26 @@ private class PublishedBinding<T> {
         self.binding = binding
     }
 }
+
+private extension TabSize {
+    var name: String {
+        switch self {
+        case .md: return "Medium"
+        case .sm: return "Small"
+        case .xs: return "Xtra Small"
+        @unknown default:
+            fatalError()
+        }
+    }
+
+    var badgeSize: BadgeSize {
+        switch self {
+        case .md: return .normal
+        case .sm: return .small
+        case .xs: return .small
+        @unknown default:
+            fatalError()
+        }
+    }
+}
+
