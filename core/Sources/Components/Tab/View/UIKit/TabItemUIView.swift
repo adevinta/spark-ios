@@ -415,14 +415,13 @@ public final class TabItemUIView: UIControl {
         let iconHeight = self.viewModel.tabStateAttributes.font.uiFont.pointSize
         let lineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.borderLineHeight)
         let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: iconHeight)
-        let imageWidthConstraint = self.imageView.widthAnchor.constraint(equalToConstant: iconHeight)
         let heightConstraint = self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.height)
 
         NSLayoutConstraint.activate([
             lineHeightConstraint,
             imageHeightConstraint,
-            self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
             heightConstraint,
+            self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
             self.bottomLine.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor),
             self.bottomLine.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor),
             self.bottomLine.bottomAnchor.constraint(equalTo: self.stackView.bottomAnchor)
