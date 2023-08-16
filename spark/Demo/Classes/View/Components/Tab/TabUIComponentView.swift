@@ -223,15 +223,4 @@ private extension TabSize {
             fatalError()
         }
     }
-
-    var badgeSize: BadgeSize {
-        switch self {
-        case .md: return .normal
-        case .sm: return .small
-        case .xs: return .small
-        @unknown default:
-            fatalError()
-        }
-    }
 }
-
