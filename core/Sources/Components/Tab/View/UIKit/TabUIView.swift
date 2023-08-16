@@ -343,19 +343,13 @@ public final class TabUIView: UIControl {
 
         let scrollContentGuide = self.scrollView.contentLayoutGuide
 
-//        self.height = tabItemViews.map(\.height).reduce(0, max)
-//        let heightConstraint = self.stackView.heightAnchor.constraint(greaterThanOrEqualToConstant: self.height)
-
         NSLayoutConstraint.activate([
-//            heightConstraint,
             self.stackView.leadingAnchor.constraint(equalTo: scrollContentGuide.leadingAnchor),
             self.stackView.trailingAnchor.constraint(equalTo: scrollContentGuide.trailingAnchor),
             self.stackView.topAnchor.constraint(equalTo: scrollContentGuide.topAnchor),
             self.stackView.bottomAnchor.constraint(equalTo: scrollContentGuide.bottomAnchor),
             self.stackView.widthAnchor.constraint(equalTo: scrollContentGuide.widthAnchor),
         ])
-
-//        self.heightConstraint = heightConstraint
     }
 
     private func setupTabActions(for tabItem: TabItemUIView, index: Int) {
