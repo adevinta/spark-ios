@@ -32,6 +32,7 @@ struct TabComponent: View {
     @State var isSizePresented = false
     @State var numberOfTabs = 3
     @State var selectedTab = 0
+    @State var height = CGFloat(50)
 
     // MARK: - View
     var body: some View {
@@ -85,7 +86,14 @@ struct TabComponent: View {
 
                 HStack() {
                     Text("No. of Tabs ").bold()
-                    TextField("Number of Tabs", value: self.$numberOfTabs, formatter: NumberFormatter())
+                    Button("-") {
+                        guard self.numberOfTabs > 1 else { return }
+                        self.numberOfTabs -= 1
+                    }
+                    Text("\(self.numberOfTabs)")
+                    Button("+") {
+                        self.numberOfTabs += 1
+                    }
                 }
 
                 CheckboxView(
@@ -144,9 +152,11 @@ struct TabComponent: View {
                             showBadge: self.showBadge.isSelected,
                             isEnabled: self.isEnabled.isSelected,
                             numberOfTabs: self.numberOfTabs,
-                            selectedTab: self.$selectedTab
+                            selectedTab: self.$selectedTab,
+                            height: self.$height,
+                            maxWidth: geometry.size.width
                         )
-                        .frame(width: geometry.size.width, height: 40)
+                        .frame(width: geometry.size.width, height: self.height)
                     }
                 }
                 Spacer()

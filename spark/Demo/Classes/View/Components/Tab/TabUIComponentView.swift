@@ -17,6 +17,7 @@ struct TabUIComponentView: View {
     // MARK: - Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
     @State var selectedTab = 1
+    @State var height: CGFloat = CGFloat(50)
 
     // MARK: - View
     var body: some View {
@@ -29,12 +30,15 @@ struct TabUIComponentView: View {
             showBadge: true,
             isEnabled: true,
             numberOfTabs: 1,
-            selectedTab: self.$selectedTab
+            selectedTab: self.$selectedTab,
+            height: self.$height,
+            maxWidth: 300
         )
     }
 }
 
 struct TabUIComponentRepresentableView: UIViewRepresentable {
+
     let theme: Theme
     let intent: TabIntent
     let tabSize: TabSize
@@ -44,7 +48,9 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
     let isEnabled: Bool
     let numbeOfTabs: Int
     let badge: BadgeUIView
-    let selectedTab: Binding<Int>
+    @Binding var selectedTab: Int
+    @Binding var height: CGFloat
+    let maxWidth: CGFloat
 
     private let publishedBinding: PublishedBinding<Int>
 
@@ -56,7 +62,9 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
          showBadge: Bool,
          isEnabled: Bool,
          numberOfTabs: Int,
-         selectedTab: Binding<Int>
+         selectedTab: Binding<Int>,
+         height: Binding<CGFloat>,
+         maxWidth: CGFloat
     ) {
         self.theme = theme
         self.intent = intent
@@ -66,20 +74,24 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         self.showBadge = showBadge
         self.isEnabled = isEnabled
         self.numbeOfTabs = numberOfTabs
-        self.selectedTab = selectedTab
+        self._selectedTab = selectedTab
+        self._height = height
         self.publishedBinding = PublishedBinding(binding: selectedTab)
+        self.maxWidth = maxWidth
 
         self.badge = BadgeUIView(
             theme: theme,
             intent: .danger,
+            size: tabSize.badgeSize,
             value: 5,
-            isBorderVisible: false)
+            isBorderVisible: false
+        )
     }
 
     func makeUIView(context: Context) -> SparkCore.TabUIView {
 
         let content: [(UIImage?, String?)] = (1...numbeOfTabs).map { tabNo in
-            (self.showIcon ? UIImage.random : nil,
+            (self.showIcon ? .image(at: tabNo) : nil,
              self.showText ? "Label \(tabNo)" : nil )
         }
 
@@ -89,9 +101,10 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
             tabSize: self.tabSize,
             content: content
         )
+        view.maxWidth = self.maxWidth
 
         publishedBinding.publisher = view.publisher.eraseToAnyPublisher()
-        view.selectedSegmentIndex = self.selectedTab.wrappedValue
+        view.selectedSegmentIndex = self.selectedTab
         if self.showBadge {
             view.segments.randomElement()?.badge = self.badge
         }
@@ -104,39 +117,42 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         uiView.intent = self.intent
         uiView.tabSize = self.tabSize
         uiView.isEnabled = self.isEnabled
+        uiView.maxWidth = self.maxWidth
 
-        uiView.segments.forEach{ tab in
-            tab.imageView.isHidden = !self.showIcon
-            tab.label.isHidden = !self.showText
+        uiView.segments.enumerated().forEach{ index, tab in
+            tab.icon = self.showIcon ? .image(at: index) : nil
+            tab.title = self.showText ? "Label \(index)" : nil
         }
 
         let oldSelectedIndex = uiView.selectedSegmentIndex
 
         if self.numbeOfTabs != uiView.numberOfSegments {
-            uiView.removeAllSegments()
+            let content: [(icon: UIImage, title: String)] = (0..<self.numbeOfTabs).map{ (icon: .image(at: $0), title: "Label \($0)") }
 
-            for tabNo in 0..<self.numbeOfTabs {
-                uiView.insertSegment(
-                    withImage: .random,
-                    andTitle: "Label \(tabNo)",
-                    at: tabNo,
-                    animated: false)
-                if !showIcon {
-                    uiView.setImage(nil, forSegmentAt: tabNo)
-                }
-                if !showText {
-                    uiView.setTitle(nil, forSegmentAt: tabNo)
-                }
+            if self.showIcon && self.showText {
+                uiView.setSegments(withContent: content)
+            } else if self.showIcon {
+                uiView.setSegments(withImages: content.map(\.icon))
+            } else if self.showText {
+                uiView.setSegments(withTitles: content.map(\.title))
+            } else {
+                uiView.setSegments(withImages: content.map(\.icon))
+                uiView.segments.forEach{ $0.icon = nil }
             }
 
             uiView.selectedSegmentIndex = min(oldSelectedIndex, self.numbeOfTabs - 1)
         }
 
+        self.badge.size = self.tabSize.badgeSize
         let badgeIndex = uiView.segments.firstIndex(where: {$0.badge != nil})
         if let badgeIndex = badgeIndex, !self.showBadge {
             uiView.segments[badgeIndex].badge = nil
         } else if badgeIndex == nil && self.showBadge {
             uiView.segments.randomElement()?.badge = self.badge
+        }
+
+        DispatchQueue.main.async {
+            self.height = uiView.intrinsicContentSize.height
         }
     }
 }
@@ -168,11 +184,10 @@ private extension UIImage {
     ]
 
     // swiftlint: disable force_unwrapping
-    static var random: UIImage {
+    static func image(at index: Int) -> UIImage {
         let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
-        let sfName: String? = allSfs.randomElement()
-        let image = sfName.flatMap(UIImage.init(systemName:))!
-        return image
+        let imageName = allSfs[index % names.count]
+        return UIImage(systemName: imageName)!
     }
 }
 
@@ -193,3 +208,16 @@ private class PublishedBinding<T> {
         self.binding = binding
     }
 }
+
+private extension TabSize {
+    var badgeSize: BadgeSize {
+        switch self {
+        case .md: return .normal
+        case .sm: return .small
+        case .xs: return .small
+        @unknown default:
+            fatalError()
+        }
+    }
+}
+

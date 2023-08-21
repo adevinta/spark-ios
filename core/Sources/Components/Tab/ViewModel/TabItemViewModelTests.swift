@@ -38,8 +38,10 @@ final class TabItemViewModelTests: TestCase {
 
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
-            itemHeight: 40)
-        tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReturnValue = TabStateAttributes(
+            itemHeight: 40,
+            iconHeight: 16
+        )
+        tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReturnValue = TabStateAttributes(
             spacings: self.spacings,
             colors: self.colors,
             heights: expectedHeights,
@@ -67,7 +69,7 @@ final class TabItemViewModelTests: TestCase {
     func test_usecase_is_executed_on_initialization() {
         // Given
         _ = self.sut(intent: .support)
-        let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments
+        let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments
 
         // Then
         XCTAssertIdentical(arguments?.theme as AnyObject, self.theme, "sut theme should be the same as self.theme")
@@ -80,7 +82,9 @@ final class TabItemViewModelTests: TestCase {
         let sut = self.sut()
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
-            itemHeight: 40)
+            itemHeight: 40,
+            iconHeight: 16
+        )
 
         let expectedAttributes = TabStateAttributes(
             spacings: self.spacings,
@@ -185,7 +189,7 @@ final class TabItemViewModelTests: TestCase {
         var counter = 0
         sut.$tabStateAttributes.sink { _ in
             counter += 1
-            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments
+            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments
             XCTAssertEqual(arguments?.state.isEnabled, counter == 1)
             expectation.fulfill()
         }
@@ -261,7 +265,7 @@ final class TabItemViewModelTests: TestCase {
 
         // Then
         wait(for: [expectation], timeout: 0.1)
-        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .xs)
+        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments?.tabSize, .xs)
     }
 
     func test_not_published_attribute_when_no_size_change() {
@@ -281,25 +285,7 @@ final class TabItemViewModelTests: TestCase {
 
         // Then
         wait(for: [expectation], timeout: 0.1)
-        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .xs)
-    }
-
-    func test_when_no_text_font_size_always_md() {
-        // Given
-        let sut = self.sut(size: .sm, title: nil)
-
-        let expectation = expectation(description: "wait for attributes")
-        expectation.expectedFulfillmentCount = 1
-
-        sut.$tabStateAttributes.sink { attributes in
-            expectation.fulfill()
-        }
-        .store(in: &self.cancellables)
-
-        // Then
-        wait(for: [expectation], timeout: 0.1)
-
-        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments?.size, .md)
+        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments?.tabSize, .xs)
     }
 
     func test_when_theme_changes_then_attributes_published() {

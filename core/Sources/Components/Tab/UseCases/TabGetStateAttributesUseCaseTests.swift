@@ -52,7 +52,8 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             theme: self.theme,
             intent: .main,
             state: .selected,
-            size: .md
+            tabSize: .md,
+            hasTitle: true
         )
         let selectedColors = TabItemColors(
             label: mockedColor,
@@ -61,7 +62,8 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         )
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.medium,
-            itemHeight: 40
+            itemHeight: 40,
+            iconHeight: 16
         )
 
         let expectedAttribute = TabStateAttributes(
@@ -78,12 +80,14 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             theme: self.theme,
             intent: .main,
             state: .enabled,
-            size: .md
+            tabSize: .md,
+            hasTitle: true
         )
 
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
-            itemHeight: 40
+            itemHeight: 40,
+            iconHeight: 16
         )
 
         let expectedAttribute = TabStateAttributes(
@@ -100,7 +104,8 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             theme: self.theme,
             intent: .main,
             state: .pressed,
-            size: .sm
+            tabSize: .sm,
+            hasTitle: true
         )
 
         self.colors = TabItemColors(
@@ -111,7 +116,8 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
 
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
-            itemHeight: 36
+            itemHeight: 36,
+            iconHeight: 14
         )
 
         let expectedAttribute = TabStateAttributes(
@@ -128,13 +134,40 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
             theme: self.theme,
             intent: .main,
             state: .disabled,
-            size: .xs
+            tabSize: .xs,
+            hasTitle: true
         )
 
 
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
-            itemHeight: 32
+            itemHeight: 34,
+            iconHeight: 12
+        )
+
+        let expectedAttribute = TabStateAttributes(
+            spacings: self.spacings,
+            colors: self.colors.update(\.opacity, value: theme.dims.dim3),
+            heights: expectedHeights,
+            font: self.theme.typography.body1
+        )
+        XCTAssertEqual(stateAttribute, expectedAttribute)
+    }
+
+    func test_no_title() {
+        let stateAttribute = sut.execute(
+            theme: self.theme,
+            intent: .main,
+            state: .disabled,
+            tabSize: .xs,
+            hasTitle: false
+        )
+
+
+        let expectedHeights = TabItemHeights(
+            separatorLineHeight: self.theme.border.width.small,
+            itemHeight: 40,
+            iconHeight: 16
         )
 
         let expectedAttribute = TabStateAttributes(

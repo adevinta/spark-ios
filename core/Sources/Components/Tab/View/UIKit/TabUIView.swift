@@ -22,6 +22,19 @@ public final class TabUIView: UIControl {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
+
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.isScrollEnabled = true
+        scrollView.alwaysBounceHorizontal = false
+        scrollView.alwaysBounceVertical = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.isDirectionalLockEnabled = true
+        return scrollView
+    }()
+
     private let selectedIndexSubject = PassthroughSubject<Int, Never>()
 
     // MARK: - Managing design of the segments
@@ -65,6 +78,23 @@ public final class TabUIView: UIControl {
         didSet {
             self.segments.forEach{ $0.isEnabled = self.isEnabled }
         }
+    }
+
+    public var maxWidth: CGFloat = UIScreen.main.bounds.width {
+        didSet {
+            self.invalidateIntrinsicContentSize()
+        }
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        let height = self.stackView
+            .arrangedSubviews
+            .filter(\.isNotHidden)
+            .map(\.intrinsicContentSize.height)
+            .reduce(0, max)
+
+        let size = CGSize(width: self.maxWidth, height: height)
+        return size
     }
 
     // MARK: - Managing interaction with the tab.
@@ -152,11 +182,23 @@ public final class TabUIView: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        self.invalidateIntrinsicContentSize()
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        self.scrollView.alwaysBounceVertical = self.scrollView.bounds.width > self.bounds.width
+    }
+
     // MARK: - Managing segment content
 
     /// Sets the content of a segment to a given image.
     public func setImage(_ image: UIImage?, forSegmentAt index: Int) {
         self.segments[safe: index]?.icon = image
+        self.invalidateIntrinsicContentSize()
     }
 
     /// Returns the image for a specific segment.
@@ -167,6 +209,7 @@ public final class TabUIView: UIControl {
     /// Sets the title of a segment.
     public func setTitle(_ title: String?, forSegmentAt index: Int) {
         self.segments[safe: index]?.title = title
+        self.invalidateIntrinsicContentSize()
     }
 
     /// Returns the title of the specified segment.
@@ -177,6 +220,7 @@ public final class TabUIView: UIControl {
     /// Set a badge (or any UIView) on the tab at the given index.
     public func setBadge(_ badge: UIView?, forSegementAt index: Int) {
         self.segments[safe: index]?.badge = badge
+        self.invalidateIntrinsicContentSize()
     }
 
     /// Return the badge (any UIView) for the specific segment
@@ -238,6 +282,23 @@ public final class TabUIView: UIControl {
         self.insertTab(tab, at: index, animated: animated)
     }
 
+    ///Replace all current segments with segments with just icons
+    public func setSegments(withImages icons: [UIImage]) {
+        let content: [(icon: UIImage?, title: String?)] = icons.map{ (icon: $0, title: nil) }
+        self.setTabItems(content: content)
+    }
+
+    ///Replace all current segments with segments with just titles
+    public func setSegments(withTitles titles: [String]) {
+        let content: [(icon: UIImage?, title: String?)] = titles.map{ (icon: nil, title: $0) }
+        self.setTabItems(content: content)
+    }
+
+    ///Replace all current segments with segments with icons & titles
+    public func setSegments(withContent content: [(icon: UIImage, title: String)]) {
+        self.setTabItems(content: content)
+    }
+
     ///Enables the segment you specify.
     public func setEnabled(_ isEnabled: Bool,
                            at index: Int,
@@ -275,6 +336,12 @@ public final class TabUIView: UIControl {
         }
     }
 
+    /// Scroll to the selected segment
+    public func scrollToSelectedSegement(animated: Bool) {
+        let point = self.segments[self.selectedSegmentIndex].frame.origin
+        self.scrollView.setContentOffset(point, animated: animated)
+    }
+
     // MARK: - Private Functions
     private func setupViews(items: [TabUIItemContent]) {
         let tabItemViews = items.map{ item in
@@ -284,11 +351,37 @@ public final class TabUIView: UIControl {
         for (index, tabItem) in tabItemViews.enumerated() {
             self.setupTabActions(for: tabItem, index: index)
         }
-
         self.stackView.addArrangedSubviews(tabItemViews)
-        self.addSubviewSizedEqually(stackView)
+
+        self.addSubviewSizedEqually(scrollView)
+        self.scrollView.addSubview(self.stackView)
+
         self.selectedSegmentIndex = 0
         self.updateAccessibilityIdentifiers()
+
+        let scrollContentGuide = self.scrollView.contentLayoutGuide
+
+        NSLayoutConstraint.activate([
+            self.stackView.leadingAnchor.constraint(equalTo: scrollContentGuide.leadingAnchor),
+            self.stackView.trailingAnchor.constraint(equalTo: scrollContentGuide.trailingAnchor),
+            self.stackView.topAnchor.constraint(equalTo: scrollContentGuide.topAnchor),
+            self.stackView.bottomAnchor.constraint(equalTo: scrollContentGuide.bottomAnchor),
+            self.stackView.widthAnchor.constraint(equalTo: scrollContentGuide.widthAnchor),
+        ])
+    }
+
+    private func setTabItems(content: [(icon: UIImage?, title: String?)]) {
+        let items = content.map{ TabItemUIView(theme: self.theme,
+                                   intent: self.intent,
+                                   tabSize: self.tabSize,
+                                   title: $0.title,
+                                   icon: $0.icon) }
+        self.stackView.removeArrangedSubviews()
+        self.stackView.addArrangedSubviews(items)
+
+        self.updateAccessibilityIdentifiers()
+        self.invalidateIntrinsicContentSize()
+
     }
 
     private func setupTabActions(for tabItem: TabItemUIView, index: Int) {
@@ -329,6 +422,7 @@ public final class TabUIView: UIControl {
             self?.stackView.detachArrangedSubview(tab)
         }
         self.updateAccessibilityIdentifiers()
+        self.invalidateIntrinsicContentSize()
     }
 
     private func insertTab(_ tab: TabItemUIView, at index: Int, animated: Bool) {
@@ -337,6 +431,7 @@ public final class TabUIView: UIControl {
             self?.stackView.insertArrangedSubview(tab, at: index)
         }
         self.updateAccessibilityIdentifiers()
+        self.invalidateIntrinsicContentSize()
     }
 
     private func updateAccessibilityIdentifiers() {
@@ -354,19 +449,5 @@ public final class TabUIView: UIControl {
         } else {
             block()
         }
-    }
-}
-
-private extension UIStackView {
-    func addArrangedSubviews(_ subviews: [UIView]) {
-        for view in subviews {
-            self.addArrangedSubview(view)
-        }
-    }
-}
-
-private extension UIView {
-    var isNotHidden: Bool {
-        return !self.isHidden
     }
 }

@@ -27,7 +27,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
 
     // MARK: - Tests
     func test_tab_with_badge() throws {
-       let sut = TabItemUIView(
+        let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
             title: "Label")
@@ -84,6 +84,15 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
     }
 
+    func test_with_icon_only() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            icon: UIImage(systemName: "paperplane"))
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
+    }
+
     func test_with_label_and_badge() throws {
         let sut = TabItemUIView(
             theme: self.theme,
@@ -94,5 +103,40 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         sut.badge = badge
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+    }
+
+    func test_with_icon_and_label() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            title: "Label",
+            icon: UIImage(systemName: "paperplane")
+        )
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.large])
+    }
+
+    func test_with_icon_and_badge() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            icon: UIImage(systemName: "paperplane")
+        )
+        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
+        sut.badge = badge
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.extraSmall])
+    }
+
+    func test_with_icon_and_label_and_badge() throws {
+        let sut = TabItemUIView(
+            theme: self.theme,
+            intent: .main,
+            title: "Label",
+            icon: UIImage(systemName: "paperplane")
+        )
+        let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
+        sut.badge = badge
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small])
     }
 }

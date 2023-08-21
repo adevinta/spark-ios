@@ -80,6 +80,7 @@ final class TabItemViewModel: ObservableObject {
         }
         set {
             self.content = self.content.update(\.icon, value: newValue)
+            self.updateStateAttributes()
         }
     }
 
@@ -125,7 +126,8 @@ final class TabItemViewModel: ObservableObject {
             theme: theme,
             intent: intent,
             state: tabState,
-            size: content.defaultTabSize(tabSize)
+            tabSize: tabSize,
+            hasTitle: false
         )
     }
 
@@ -135,14 +137,8 @@ final class TabItemViewModel: ObservableObject {
             theme: self.theme,
             intent: self.intent,
             state: self.tabState,
-            size: content.defaultTabSize(self.tabSize)
+            tabSize: self.tabSize,
+            hasTitle: self.title != nil
         )
-    }
-}
-
-// MARK: - Private extensions
-private extension TabUIItemContent {
-    func defaultTabSize(_ tabSize: TabSize) -> TabSize {
-        return title == nil ? .md : tabSize
     }
 }
