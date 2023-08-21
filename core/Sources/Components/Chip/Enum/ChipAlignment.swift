@@ -9,12 +9,12 @@
 import Foundation
 
 public enum ChipAlignment: CaseIterable {
-    /// Icon on the leading edge of the button.
-    /// Text on the trailing edge of the button.
+    /// Icon on the leading edge of the chip.
+    /// Text on the trailing edge of the chip.
     /// Not interpreted if chip contains just an icon or just text.
     case leadingIcon
-    /// Icon on the trailing edge of the button.
-    /// Text on the leading edge of the button
+    /// Icon on the trailing edge of the chip.
+    /// Text on the leading edge of the chip
     /// Not interpreted if the chip contains just an icon or just text.
     case trailingIcon
 }

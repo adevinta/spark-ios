@@ -9,7 +9,7 @@
 import Combine
 import UIKit
 
-public final class ChipUIView: UIView {
+public final class ChipUIView: UIControl {
 
     // MARK: - Constants
 
@@ -26,6 +26,7 @@ public final class ChipUIView: UIView {
         set {
             self.imageView.image = newValue
             self.imageView.isHidden = newValue == nil
+            self.invalidateIntrinsicContentSize()
         }
         get {
             return self.imageView.image
@@ -37,13 +38,14 @@ public final class ChipUIView: UIView {
         set {
             self.textLabel.text = newValue
             self.textLabel.isHidden = newValue == nil
+            self.invalidateIntrinsicContentSize()
         }
         get {
             return self.textLabel.text
         }
     }
 
-    public var isEnabled: Bool {
+    override public var isEnabled: Bool {
         set {
             self.viewModel.isEnabled = newValue
         }
@@ -55,7 +57,7 @@ public final class ChipUIView: UIView {
     /// An optional action. If the action is given, the Chip will act like a button and have a pressed state.
     public var action: (() -> ())? {
         didSet {
-            setupButtonActions()
+//            setupButtonActions()
         }
     }
 
@@ -110,7 +112,27 @@ public final class ChipUIView: UIView {
             if let component = self.component {
                 self.stackView.addArrangedSubview(component)
             }
+            self.invalidateIntrinsicContentSize()
         }
+    }
+
+    public override var intrinsicContentSize: CGSize {
+
+        let width: CGFloat = {
+            if let component = self.component, component.intrinsicContentSize.width == UIView.noIntrinsicMetric {
+                return UIView.noIntrinsicMetric
+            }
+
+            var width: CGFloat = (self.imageView.isHidden ? 0 : self.imageSize)
+            + (self.textLabel.isHidden ? 0 : self.textLabel.intrinsicContentSize.width)
+            + (self.component?.intrinsicContentSize.width ?? 0.0)
+
+            let spacings = max(0, self.stackView.arrangedSubviews.filter(\.isNotHidden).count - 1)
+
+            return width + (CGFloat(spacings) * self.spacing) + (self.padding * 2.0)
+        }()
+
+        return CGSize(width: width, height: self.height)
     }
 
     //MARK: - Private properties
@@ -159,13 +181,6 @@ public final class ChipUIView: UIView {
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
-    }()
-
-    private let button: UIButton = {
-        let button = UIButton(type: .custom)
-        button.translatesAutoresizingMaskIntoConstraints = true
-        button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        return button
     }()
 
     private var sizeConstraints: [NSLayoutConstraint] = []
@@ -333,9 +348,6 @@ public final class ChipUIView: UIView {
             self.stackView.addArrangedSubviews([self.textLabel, self.imageView])
         }
 
-        self.addSubview(self.button)
-        self.button.frame = self.bounds
-
         self.updateFont()
         self.updateSpacing()
         self.updateLayoutMargins()
@@ -347,10 +359,12 @@ public final class ChipUIView: UIView {
 
     private func updateLayoutMargins() {
         self.stackView.layoutMargins = UIEdgeInsets(top: 0, left: self.padding, bottom: 0, right: self.padding)
+        self.invalidateIntrinsicContentSize()
     }
 
     private func updateSpacing() {
         self.stackView.spacing = self.spacing
+        self.invalidateIntrinsicContentSize()
     }
 
     private func updateBorder() {
@@ -372,6 +386,7 @@ public final class ChipUIView: UIView {
 
     private func updateFont() {
         self.textLabel.font = self.viewModel.font.uiFont
+        self.invalidateIntrinsicContentSize()
     }
 
     private func setupConstraints() {
@@ -459,22 +474,6 @@ public final class ChipUIView: UIView {
         self.dashBorder = dashBorder
     }
 
-    //MARK: Button actions
-    private func setupButtonActions() {
-        let actions: [(selector: Selector, event: UIControl.Event)] = [
-            (#selector(actionTapped(sender:)), .touchUpInside),
-            (#selector(actionTouchDown(sender:)), .touchDown),
-            (#selector(actionTouchUp(sender:)), .touchUpOutside),
-            (#selector(actionTouchUp(sender:)), .touchCancel)
-        ]
-
-        if self.action == nil {
-            actions.forEach { self.button.removeTarget(self, action: $0.selector, for: $0.event)}
-        } else {
-            actions.forEach { self.button.addTarget(self, action: $0.selector, for: $0.event)}
-        }
-    }
-
     private func updateImagePosition(isIconLeading: Bool) {
         let newImageIndex = isIconLeading ? 0 : 1
 
@@ -484,22 +483,39 @@ public final class ChipUIView: UIView {
         self.stackView.insertArrangedSubview(imageView, at: newImageIndex)
     }
 
-    @IBAction func actionTapped(sender: UIButton)  {
-        guard self.viewModel.isEnabled else { return }
-        self.viewModel.isPressed = false
-        self.action?()
-    }
+    // MARK: - Control functions
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard self.action != nil else { return }
 
-    @IBAction func actionTouchDown(sender: UIButton)  {
-        guard self.viewModel.isEnabled else { return }
+        super.touchesBegan(touches, with: event)
         self.viewModel.isPressed = true
+        self.sendActions(for: .touchDown)
     }
 
-    @IBAction func actionTouchUp(sender: UIButton)  {
-        guard self.viewModel.isEnabled else { return }
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard self.action != nil else { return }
+
+        super.touchesEnded(touches, with: event)
         self.viewModel.isPressed = false
+        self.pressFinised()
     }
 
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard self.action != nil else { return }
+
+        super.touchesCancelled(touches, with: event)
+        self.viewModel.isPressed = false
+        self.sendActions(for: .touchCancel)
+    }
+
+    // MARK: - Private functions
+    private func pressFinised() {
+        self.viewModel.isPressed = false
+        self.sendActions(for: .touchUpInside)
+        if let action = self.action {
+            action()
+        }
+    }
 }
 
 // MARK: - Label priorities
@@ -517,11 +533,16 @@ public extension ChipUIView {
     }
 }
 
-
 private extension UIStackView {
     func addArrangedSubviews(_ views: [UIView]) {
         for view in views {
             self.addArrangedSubview(view)
         }
+    }
+}
+
+private extension UIView {
+    var isNotHidden: Bool {
+        return !self.isHidden
     }
 }

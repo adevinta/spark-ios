@@ -164,7 +164,6 @@ struct ChipComponent: View {
                     Button("OK", role: .cancel) { }
                 }
             }
-
             Spacer()
         }
         .padding(.horizontal, 16)
