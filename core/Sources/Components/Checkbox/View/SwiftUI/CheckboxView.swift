@@ -133,6 +133,7 @@ public struct CheckboxView: View {
             }
         )
         .buttonStyle(CheckboxButtonStyle(isPressed: self.$isPressed))
+        .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
     }
 
     @ViewBuilder private var checkboxView: some View {

@@ -116,8 +116,20 @@ public class BadgeUIView: UIView {
         }
     }
 
+    public override var intrinsicContentSize: CGSize {
+        if self.viewModel.isBadgeEmpty {
+            return CGSize(width: self.emptyBadgeSize, height: self.emptyBadgeSize)
+        } else {
+            let height = self.badgeHeight
+            let contentWidth = self.textLabel.intrinsicContentSize.width + (self.horizontalSpacing * 2)
+
+            let width = max(contentWidth, height)
+            return CGSize(width: width, height: height)
+        }
+    }
+
     // MARK: - Init
-    public init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = true) {
+    public init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .medium, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = false) {
         self.viewModel = BadgeViewModel(theme: theme, intent: intent, size: size, value: value, format: format, isBorderVisible: isBorderVisible)
 
         super.init(frame: .zero)
@@ -318,6 +330,7 @@ extension BadgeUIView {
             .subscribe(in: &self.cancellables) { [weak self] badgeHeight in
                 self?.badgeHeight = badgeHeight
                 self?.setupLayouts()
+                self?.invalidateIntrinsicContentSize()
             }
     }
 }
@@ -361,6 +374,7 @@ extension BadgeUIView {
             self.reloadColors()
         }
 
+        self.invalidateIntrinsicContentSize()
         self.reloadBadgeFontIfNeeded()
         self.reloadUISize()
         self.reloadBorderWidth()

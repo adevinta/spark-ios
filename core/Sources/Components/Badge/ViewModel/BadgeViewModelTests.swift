@@ -67,7 +67,7 @@ final class BadgeViewModelTests: XCTestCase {
 
             // Then
 
-            XCTAssertEqual(viewModel.size, .normal, "Badge should be .normal sized by default")
+            XCTAssertEqual(viewModel.size, .medium, "Badge should be .normal sized by default")
 
             XCTAssertEqual(viewModel.textFont.font, theme.typography.captionHighlight.font, "Font is wrong")
 
@@ -117,7 +117,7 @@ final class BadgeViewModelTests: XCTestCase {
 
     func test_size_change_publishes_values() {
         // Given
-        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .normal)
+        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .medium)
         let updateExpectation = expectation(description: "Attributes updated")
         updateExpectation.expectedFulfillmentCount = 2
 
@@ -138,7 +138,7 @@ final class BadgeViewModelTests: XCTestCase {
 
     func test_intent_change_publishes_values() {
         // Given
-        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .normal)
+        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .medium)
         let updateExpectation = expectation(description: "Attributes updated")
         updateExpectation.expectedFulfillmentCount = 2
 
@@ -158,7 +158,7 @@ final class BadgeViewModelTests: XCTestCase {
 
     func test_value_change_publishes_values() {
         // Given
-        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .normal, value: 9)
+        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .medium, value: 9)
         let updateExpectation = expectation(description: "Attributes updated")
         updateExpectation.expectedFulfillmentCount = 2
 

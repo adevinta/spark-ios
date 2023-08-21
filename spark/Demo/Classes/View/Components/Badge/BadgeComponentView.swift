@@ -33,7 +33,7 @@ struct BadgeComponentView: View {
     @State var intent: BadgeIntentType = .danger
     @State var isIntentPresented = false
 
-    @State var size: BadgeSize = .normal
+    @State var size: BadgeSize = .medium
     @State var isSizePresented = false
 
     @State var value: Int? = 99

@@ -35,7 +35,7 @@ final class BadgeGetSizeAttributesUseCaseTests: TestCase {
     }
 
     func test_size_normal() throws {
-        let attributes = sut.execute(theme: self.theme, size: .normal)
+        let attributes = sut.execute(theme: self.theme, size: .medium)
 
         let expectedAttributes = BadgeSizeDependentAttributes(
             offset: .init(vertical: 3, horizontal: 5),

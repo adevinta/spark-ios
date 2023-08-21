@@ -87,7 +87,7 @@ public struct BadgeView: View {
         return self
     }
 
-    /// Controlls text size of the Badge. By ``BadgeSize`` is *.normal*.
+    /// Controlls text size of the Badge. By ``BadgeSize`` is *.medium*.
     ///
     /// Text font size is based on ``BadgeSize`` value and current ``Theme``.
     /// Use @State variable to control ``BadgeSize`` based on this variable.
