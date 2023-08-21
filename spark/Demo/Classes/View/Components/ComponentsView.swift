@@ -5,10 +5,20 @@
 //  Created by robin.lemaire on 14/04/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
+// swiftlint:disable all
 
 import SwiftUI
+import Spark
+import SparkCore
 
 struct ComponentsView: View {
+
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+    
     var body: some View {
         NavigationView {
             List {
@@ -51,6 +61,7 @@ struct ComponentsView: View {
             .navigationBarTitle(Text("Components"))
         }
         .background(Color.gray)
+        .accentColor(theme.colors.main.main.color)
     }
 }
 
