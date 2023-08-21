@@ -16,7 +16,7 @@ final class BadgeComponentUIViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var theme: Theme
     @Published var intent: BadgeIntentType = .main
-    @Published var size: BadgeSize = .normal
+    @Published var size: BadgeSize = .medium
     @Published var value: Int = 99
     @Published var format: BadgeFormat = .default
     @Published var isBorderVisible: Bool = true

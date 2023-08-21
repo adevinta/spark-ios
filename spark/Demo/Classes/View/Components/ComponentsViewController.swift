@@ -69,6 +69,8 @@ extension ComponentsViewController {
         switch section {
         case .badge:
             viewController = BadgeComponentViewController.build()
+        case .button:
+            viewController = ButtonComponentViewController.build()
         default:
             break
         }
