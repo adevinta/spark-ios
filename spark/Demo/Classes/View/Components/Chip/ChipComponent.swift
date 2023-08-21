@@ -24,10 +24,15 @@ struct ChipComponent: View {
     @State var isIntentPresented = false
     @State var variant: ChipVariant = .filled
     @State var isVariantPresented = false
+    @State var alignment: ChipAlignment = .leadingIcon
+    @State var isAlignmentPressed = false
+
     @State var showLabel = CheckboxSelectionState.selected
     @State var showIcon = CheckboxSelectionState.selected
     @State var withAction = CheckboxSelectionState.unselected
     @State var withComponent = CheckboxSelectionState.unselected
+    @State var isEnabled = CheckboxSelectionState.selected
+
     @State var showingAlert = false
 
     private var component = UIImageView(image: UIImage.strokedCheckmark).withTint(.red)
@@ -82,7 +87,19 @@ struct ChipComponent: View {
                         }
                     }
                 }
-
+                HStack() {
+                    Text("Alignment: ").bold()
+                    Button(self.alignment.name) {
+                        self.isAlignmentPressed = true
+                    }
+                    .confirmationDialog("Select an alignment", isPresented: self.$isAlignmentPressed) {
+                        ForEach(ChipAlignment.allCases, id: \.self) { alignment in
+                            Button(alignment.name) {
+                                self.alignment = alignment
+                            }
+                        }
+                    }
+                }
                 CheckboxView(
                     text: "With Label",
                     checkedImage: DemoIconography.shared.checkmark,
@@ -114,6 +131,14 @@ struct ChipComponent: View {
                     state: .enabled,
                     selectionState: self.$withComponent
                 )
+
+                CheckboxView(
+                    text: "Is Enabled",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$isEnabled
+                )
             }
 
             Divider()
@@ -129,9 +154,11 @@ struct ChipComponent: View {
                     theme: self.theme,
                     intent: self.intent,
                     variant: self.variant,
+                    alignment: self.alignment,
                     label: self.showLabel == .selected ? self.label : nil,
                     icon: self.showIcon == .selected ? self.icon : nil,
                     component: self.withComponent == .selected ? self.component : nil,
+                    isEnabled: self.isEnabled == .selected,
                     action: self.withAction == .selected ? { self.showingAlert = true} : nil)
                 .alert("Chip Pressed", isPresented: self.$showingAlert) {
                     Button("OK", role: .cancel) { }
@@ -155,5 +182,16 @@ private extension UIView {
     func withTint(_ color: UIColor) -> Self {
         self.tintColor = color
         return self
+    }
+}
+
+private extension ChipAlignment {
+    var name: String {
+        switch self {
+        case .leadingIcon: return "Leading Icon"
+        case .trailingIcon: return "Trailing Icon"
+        @unknown default:
+            return "Unknown"
+        }
     }
 }

@@ -25,11 +25,7 @@ public final class ChipUIView: UIView {
     public var icon: UIImage? {
         set {
             self.imageView.image = newValue
-            if (newValue != nil) {
-                self.stackView.insertArrangedSubview(self.imageView, at: 0)
-            } else {
-                self.stackView.removeArrangedSubview(self.imageView)
-            }
+            self.imageView.isHidden = newValue == nil
         }
         get {
             return self.imageView.image
@@ -40,17 +36,22 @@ public final class ChipUIView: UIView {
     public var text: String? {
         set {
             self.textLabel.text = newValue
-            if (newValue != nil) {
-                self.stackView.addArrangedSubview(self.textLabel)
-            } else {
-                self.stackView.removeArrangedSubview(self.textLabel)
-            }
+            self.textLabel.isHidden = newValue == nil
         }
         get {
             return self.textLabel.text
         }
     }
 
+    public var isEnabled: Bool {
+        set {
+            self.viewModel.isEnabled = newValue
+        }
+        get {
+            return self.viewModel.isEnabled
+        }
+    }
+    
     /// An optional action. If the action is given, the Chip will act like a button and have a pressed state.
     public var action: (() -> ())? {
         didSet {
@@ -78,6 +79,14 @@ public final class ChipUIView: UIView {
         }
     }
 
+    public var alignment: ChipAlignment {
+        set {
+            self.viewModel.set(alignment: newValue)
+        }
+        get {
+            return self.viewModel.alignment
+        }
+    }
     /// The theme.
     public var theme: Theme {
         set {
@@ -117,7 +126,7 @@ public final class ChipUIView: UIView {
     @ScaledUIMetric private var padding: CGFloat
     @ScaledUIMetric private var borderRadius: CGFloat
 
-    private let textLabel: UILabel = {
+    public let textLabel: UILabel = {
         let label = UILabel()
         label.isAccessibilityElement = false
         label.contentMode = .scaleAspectFit
@@ -131,7 +140,7 @@ public final class ChipUIView: UIView {
         return label
     }()
 
-    private let imageView: UIImageView = {
+    public let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
@@ -175,8 +184,14 @@ public final class ChipUIView: UIView {
     public convenience init(theme: Theme,
                             intent: ChipIntent,
                             variant: ChipVariant,
+                            alignment: ChipAlignment = .leadingIcon,
                             iconImage: UIImage) {
-        self.init(theme: theme, intent: intent, variant: variant, optionalLabel: nil, optionalIconImage: iconImage)
+        self.init(theme: theme,
+                  intent: intent,
+                  variant: variant,
+                  alignment: alignment,
+                  optionalLabel: nil,
+                  optionalIconImage: iconImage)
     }
 
     /// Initializer of a chip containing only a text.
@@ -189,8 +204,14 @@ public final class ChipUIView: UIView {
     public convenience init(theme: Theme,
                             intent: ChipIntent,
                             variant: ChipVariant,
+                            alignment: ChipAlignment = .leadingIcon,
                             label: String) {
-        self.init(theme: theme, intent: intent, variant: variant, optionalLabel: label, optionalIconImage: nil)
+        self.init(theme: theme,
+                  intent: intent,
+                  variant: variant,
+                  alignment: alignment,
+                  optionalLabel: label,
+                  optionalIconImage: nil)
     }
 
     /// Initializer of a chip containing both a text and an icon.
@@ -204,18 +225,28 @@ public final class ChipUIView: UIView {
     public convenience init(theme: Theme,
                             intent: ChipIntent,
                             variant: ChipVariant,
+                            alignment: ChipAlignment = .leadingIcon,
                             label: String,
                             iconImage: UIImage) {
-        self.init(theme: theme, intent: intent, variant: variant, optionalLabel: label , optionalIconImage: iconImage)
+        self.init(theme: theme,
+                  intent: intent,
+                  variant: variant,
+                  alignment: alignment,
+                  optionalLabel: label ,
+                  optionalIconImage: iconImage)
     }
 
     init(theme: Theme,
          intent: ChipIntent,
          variant: ChipVariant,
+         alignment: ChipAlignment = .leadingIcon,
          optionalLabel: String?,
          optionalIconImage: UIImage?) {
 
-        self.viewModel = ChipViewModel(theme: theme, variant: variant, intent: intent)
+        self.viewModel = ChipViewModel(theme: theme,
+                                       variant: variant,
+                                       intent: intent,
+                                       alignment: alignment)
         self.spacing = self.viewModel.spacing
         self.padding = self.viewModel.padding
         self.borderRadius = self.viewModel.borderRadius
@@ -256,7 +287,7 @@ public final class ChipUIView: UIView {
         self.removeDashedBorder()
 
         if self.viewModel.isBorderDashed {
-            self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
+            self.addDashedBorder(borderColor: self.viewModel.colors.border)
         }
     }
 
@@ -266,6 +297,7 @@ public final class ChipUIView: UIView {
         self.stackView.backgroundColor = chipColors.background.uiColor
         self.textLabel.textColor = chipColors.foreground.uiColor
         self.imageView.tintColor = chipColors.foreground.uiColor
+        self.layer.opacity = Float(chipColors.opacity)
 
         self.removeDashedBorder()
 
@@ -295,6 +327,12 @@ public final class ChipUIView: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.addSubview(self.stackView)
+        if self.viewModel.isIconLeading {
+            self.stackView.addArrangedSubviews([self.imageView, self.textLabel])
+        } else  {
+            self.stackView.addArrangedSubviews([self.textLabel, self.imageView])
+        }
+
         self.addSubview(self.button)
         self.button.frame = self.bounds
 
@@ -303,7 +341,7 @@ public final class ChipUIView: UIView {
         self.updateLayoutMargins()
 
         self.setupConstraints()
-        self.setChipColors(self.viewModel.colors.default)
+        self.setChipColors(self.viewModel.colors)
         self.setupSubscriptions()
     }
 
@@ -321,7 +359,7 @@ public final class ChipUIView: UIView {
         self.stackView.layer.borderWidth = 0
 
         if self.viewModel.isBorderDashed {
-            self.addDashedBorder(borderColor: self.viewModel.colors.default.border)
+            self.addDashedBorder(borderColor: self.viewModel.colors.border)
         } else if self.viewModel.isBordered {
             self.stackView.layer.borderWidth = self.borderWidth
         }
@@ -373,7 +411,7 @@ public final class ChipUIView: UIView {
 
     private func setupSubscriptions() {
         self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
-            self?.setChipColors(colors.default)
+            self?.setChipColors(colors)
         }
 
         self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
@@ -396,6 +434,10 @@ public final class ChipUIView: UIView {
 
         self.viewModel.$font.subscribe(in: &self.subscriptions) { [weak self] _ in
             self?.updateFont()
+        }
+
+        self.viewModel.$isIconLeading.subscribe(in: &self.subscriptions) { [weak self] isLeading in
+            self?.updateImagePosition(isIconLeading: isLeading)
         }
     }
 
@@ -433,17 +475,29 @@ public final class ChipUIView: UIView {
         }
     }
 
+    private func updateImagePosition(isIconLeading: Bool) {
+        let newImageIndex = isIconLeading ? 0 : 1
+
+        guard self.stackView.arrangedSubviews.firstIndex(of: self.imageView) != newImageIndex else { return }
+
+        self.stackView.removeArrangedSubview(imageView)
+        self.stackView.insertArrangedSubview(imageView, at: newImageIndex)
+    }
+
     @IBAction func actionTapped(sender: UIButton)  {
-        self.setChipColors(self.viewModel.colors.default)
+        guard self.viewModel.isEnabled else { return }
+        self.viewModel.isPressed = false
         self.action?()
     }
 
     @IBAction func actionTouchDown(sender: UIButton)  {
-        self.setChipColors(self.viewModel.colors.pressed)
+        guard self.viewModel.isEnabled else { return }
+        self.viewModel.isPressed = true
     }
 
     @IBAction func actionTouchUp(sender: UIButton)  {
-        self.setChipColors(self.viewModel.colors.default)
+        guard self.viewModel.isEnabled else { return }
+        self.viewModel.isPressed = false
     }
 
 }
@@ -460,5 +514,14 @@ public extension ChipUIView {
                                         for axis: NSLayoutConstraint.Axis) {
         self.textLabel.setContentHuggingPriority(priority,
                                                  for: axis)
+    }
+}
+
+
+private extension UIStackView {
+    func addArrangedSubviews(_ views: [UIView]) {
+        for view in views {
+            self.addArrangedSubview(view)
+        }
     }
 }
