@@ -76,7 +76,7 @@ final class BadgeViewModel: ObservableObject {
 
     init(theme: Theme,
          intent: BadgeIntentType,
-         size: BadgeSize = .normal,
+         size: BadgeSize = .medium,
          value: Int? = nil,
          format: BadgeFormat = .default,
          isBorderVisible: Bool = true,

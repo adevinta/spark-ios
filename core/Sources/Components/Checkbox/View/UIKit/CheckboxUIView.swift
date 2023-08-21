@@ -258,6 +258,7 @@ public final class CheckboxUIView: UIView {
     private func commonInit() {
         self.isAccessibilityElement = true
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkbox
         self.controlView.selectionState = self.selectionState
 
         if let attributedText = self.attributedText {

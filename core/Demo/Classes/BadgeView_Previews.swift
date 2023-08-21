@@ -48,7 +48,7 @@ struct BadgeView_Previews: PreviewProvider {
                     }
                     Button("Change Small Custom Badge") {
                         smallCustomBadgeValue = 18
-                        smallCustomBadgeSize = .normal
+                        smallCustomBadgeSize = .medium
                         smallCustomBadgeIsOutlined.toggle()
                         smallCustomBadgeType = .main
                     }

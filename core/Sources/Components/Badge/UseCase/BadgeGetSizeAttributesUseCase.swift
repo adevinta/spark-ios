@@ -29,7 +29,7 @@ struct BadgeGetSizeAttributesUseCase: BadgeGetSizeAttributesUseCaseable {
 private extension BadgeSize {
     func offset(spacing: LayoutSpacing) -> EdgeInsets {
         switch self {
-        case .normal: return  .init(vertical: spacing.small,
+        case .medium: return  .init(vertical: spacing.small,
                                     horizontal: spacing.medium)
         case .small: return .init(vertical: 0,
                                   horizontal: spacing.small)
@@ -38,8 +38,8 @@ private extension BadgeSize {
 
     func badgeHeight() -> CGFloat {
         switch self {
-        case .normal:
-            return BadgeConstants.height.normal
+        case .medium:
+            return BadgeConstants.height.medium
         case .small:
             return BadgeConstants.height.small
         }
@@ -47,7 +47,7 @@ private extension BadgeSize {
 
     func font(typography: Typography) -> TypographyFontToken {
         switch self {
-        case .normal:
+        case .medium:
             return typography.captionHighlight
         case .small:
             return typography.smallHighlight

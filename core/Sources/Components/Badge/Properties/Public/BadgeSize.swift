@@ -11,9 +11,9 @@ import Foundation
 /// Enum that sets ``BadgeView`` size
 ///
 /// There are two possible sizes:
-/// - normal
+/// - medium
 /// - small
 public enum BadgeSize: CaseIterable {
-    case normal
+    case medium
     case small
 }
