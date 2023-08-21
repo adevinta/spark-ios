@@ -258,6 +258,28 @@ public final class TabUIView: UIControl {
         return self.segments.firstIndex(where: { $0.action?.identifier  == identifier }) ?? NSNotFound
     }
 
+    /// Inserts a segment at the last position you specify and gives it an image as content.
+    public func addSegment(with icon: UIImage,
+                           animated: Bool = false) {
+        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, icon: icon)
+        self.insertTab(tab, at: self.numberOfSegments, animated: animated)
+    }
+
+    ///Inserts a segment at the last position you specify and gives it a title as content.
+    public func addSegment(with title: String,
+                           animated: Bool = false) {
+        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, title: title)
+        self.insertTab(tab, at: self.numberOfSegments, animated: animated)
+    }
+
+    ///Inserts a segment at the last position you specify and gives it a title as content.
+    public func addSegment(withImage icon: UIImage,
+                           andTitle title: String,
+                           animated: Bool = false) {
+        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, title: title, icon: icon)
+        self.insertTab(tab, at: self.numberOfSegments, animated: animated)
+    }
+
     /// Inserts a segment at the position you specify and gives it an image as content.
     public func insertSegment(with icon: UIImage,
                               at index: Int,
@@ -267,7 +289,7 @@ public final class TabUIView: UIControl {
     }
 
     ///Inserts a segment at the position you specify and gives it a title as content.
-    public func insertSegment(withTitle title: String,
+    public func insertSegment(with title: String,
                               at index: Int,
                               animated: Bool = false) {
         let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, title: title)
@@ -338,7 +360,18 @@ public final class TabUIView: UIControl {
 
     /// Scroll to the selected segment
     public func scrollToSelectedSegement(animated: Bool) {
-        let point = self.segments[self.selectedSegmentIndex].frame.origin
+        let frame = self.segments[self.selectedSegmentIndex].frame
+
+        if scrollView.bounds.contains(frame) {
+            return
+        }
+
+        var point = CGPoint.zero
+        if frame.minX < self.scrollView.contentOffset.x {
+            point.x = frame.minX
+        } else if frame.maxX > self.scrollView.frame.maxX {
+            point.x = frame.maxX - self.scrollView.frame.maxX
+        }
         self.scrollView.setContentOffset(point, animated: animated)
     }
 
@@ -382,6 +415,9 @@ public final class TabUIView: UIControl {
         self.updateAccessibilityIdentifiers()
         self.invalidateIntrinsicContentSize()
 
+        for (index, item) in items.enumerated() {
+            self.setupTabActions(for: item, index: index)
+        }
     }
 
     private func setupTabActions(for tabItem: TabItemUIView, index: Int) {

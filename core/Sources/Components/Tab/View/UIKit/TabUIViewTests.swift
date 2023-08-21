@@ -216,7 +216,7 @@ final class TabUIViewTests: TestCase {
 
     func test_insert_with_text() {
         // When
-        self.sut.insertSegment(withTitle: "New Tab", at: 0)
+        self.sut.insertSegment(with: "New Tab", at: 0)
 
         XCTAssertEqual(self.sut.titleForSegment(at: 0), "New Tab", "Should contain new segment")
     }
