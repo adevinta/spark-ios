@@ -18,6 +18,7 @@ public final class ChipUIView: UIControl {
         static let height: CGFloat = 32
         static let borderWidth: CGFloat = 1
         static let dashLength: CGFloat = 1.9
+        static let touchAreaTolerance: CGFloat = 100
     }
 
     //MARK: - Public properties
@@ -55,11 +56,7 @@ public final class ChipUIView: UIControl {
     }
     
     /// An optional action. If the action is given, the Chip will act like a button and have a pressed state.
-    public var action: (() -> ())? {
-        didSet {
-//            setupButtonActions()
-        }
-    }
+    public var action: (() -> ())?
 
     /// The intent of the chip.
     public var intent: ChipIntent {
@@ -426,7 +423,7 @@ public final class ChipUIView: UIControl {
 
     private func setupSubscriptions() {
         self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
-            self?.setChipColors(colors)
+            UIView.animate(withDuration: 0.1, animations: { self?.setChipColors(colors) }) 
         }
 
         self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
@@ -485,36 +482,40 @@ public final class ChipUIView: UIControl {
 
     // MARK: - Control functions
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard self.action != nil else { return }
-
         super.touchesBegan(touches, with: event)
-        self.viewModel.isPressed = true
+        if self.action != nil {
+            self.viewModel.isPressed = true
+        }
         self.sendActions(for: .touchDown)
     }
 
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard self.action != nil else { return }
-
         super.touchesEnded(touches, with: event)
-        self.viewModel.isPressed = false
-        self.pressFinised()
+
+        guard let touchPoint = touches.first?.location(in: self) else { return }
+        guard self.bounds.padded(offset: Constants.touchAreaTolerance).contains(touchPoint) else { return }
+
+        if let action = self.action {
+            self.viewModel.isPressed = false
+            action()
+        }
+        self.sendActions(for: .touchUpInside)
+    }
+
+    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+
+        guard let touchPoint = touches.first?.location(in: self) else { return }
+
+        self.viewModel.isPressed = self.bounds.padded(offset: Constants.touchAreaTolerance).contains(touchPoint)
     }
 
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard self.action != nil else { return }
-
         super.touchesCancelled(touches, with: event)
-        self.viewModel.isPressed = false
-        self.sendActions(for: .touchCancel)
-    }
-
-    // MARK: - Private functions
-    private func pressFinised() {
-        self.viewModel.isPressed = false
-        self.sendActions(for: .touchUpInside)
-        if let action = self.action {
-            action()
+        if action != nil {
+            self.viewModel.isPressed = false
         }
+        self.sendActions(for: .touchCancel)
     }
 }
 
@@ -544,5 +545,15 @@ private extension UIStackView {
 private extension UIView {
     var isNotHidden: Bool {
         return !self.isHidden
+    }
+}
+
+private extension CGRect {
+    func padded(offset: CGFloat) -> CGRect {
+
+        return CGRect(x: self.minX - offset,
+                      y: self.minY - offset,
+                      width: self.width + (offset * 2),
+                      height: self.height + (offset * 2))
     }
 }

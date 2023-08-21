@@ -29,13 +29,12 @@ struct ChipComponent: View {
 
     @State var showLabel = CheckboxSelectionState.selected
     @State var showIcon = CheckboxSelectionState.selected
-    @State var withAction = CheckboxSelectionState.unselected
+    @State var withAction = CheckboxSelectionState.selected
     @State var withComponent = CheckboxSelectionState.unselected
     @State var isEnabled = CheckboxSelectionState.selected
 
     @State var showingAlert = false
 
-    private var component = UIImageView(image: UIImage.strokedCheckmark).withTint(.red)
     private let label = "Label"
     private let icon = UIImage(imageLiteralResourceName: "alert")
 
@@ -157,17 +156,26 @@ struct ChipComponent: View {
                     alignment: self.alignment,
                     label: self.showLabel == .selected ? self.label : nil,
                     icon: self.showIcon == .selected ? self.icon : nil,
-                    component: self.withComponent == .selected ? self.component : nil,
+                    component: self.withComponent == .selected ? badge() : nil,
                     isEnabled: self.isEnabled == .selected,
                     action: self.withAction == .selected ? { self.showingAlert = true} : nil)
                 .alert("Chip Pressed", isPresented: self.$showingAlert) {
                     Button("OK", role: .cancel) { }
                 }
+                .fixedSize()
             }
             Spacer()
         }
         .padding(.horizontal, 16)
         .navigationBarTitle(Text("Chip"))
+    }
+
+    func badge() -> UIView {
+        return BadgeUIView(theme: self.theme,
+                           intent: .danger,
+                           size: .small,
+                           value: 99
+        )
     }
 }
 
