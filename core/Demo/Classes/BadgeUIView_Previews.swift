@@ -77,7 +77,7 @@ struct BadgeUIView_Previews: PreviewProvider {
             BadgeUIView(
                 theme: SparkTheme.shared,
                 intent: .main,
-                size: .normal,
+                size: .medium,
                 value: 22,
                 format: .overflowCounter(maxValue: 20)
             ),

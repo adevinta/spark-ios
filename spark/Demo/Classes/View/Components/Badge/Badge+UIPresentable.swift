@@ -29,7 +29,7 @@ struct UIBadgeView: UIViewRepresentable {
     let format: BadgeFormat
     let isBorderVisible: Bool
 
-    init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .normal, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = true) {
+    init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .medium, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = true) {
         self.theme = theme
         self.intent = intent
         self.size = size
