@@ -65,12 +65,15 @@ extension ComponentsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let section = Row.allCases[indexPath.row]
+        var viewController: UIViewController!
         switch section {
         case .badge:
-            break
+            viewController = BadgeComponentViewController.build()
         default:
             break
         }
+        guard viewController != nil else { return }
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

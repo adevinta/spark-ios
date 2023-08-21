@@ -12,7 +12,7 @@ import Spark
 import SparkCore
 import Combine
 
-final class SparkDemoTabbarController: UITabBarController {
+final class SparkTabbarController: UITabBarController {
 
     // MARK: - Published Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
@@ -30,7 +30,7 @@ final class SparkDemoTabbarController: UITabBarController {
     /// Second Tab
     private lazy var componentsViewController: UIViewController = {
         let viewController = UIHostingController(rootView: ComponentsView())
-        viewController.tabBarItem = UITabBarItem(title: "Components", image: UIImage(systemName: "list.bullet.rectangle"), tag: 0)
+        viewController.tabBarItem = UITabBarItem(title: "SwiftUI", image: UIImage(systemName: "list.bullet.rectangle"), tag: 0)
         return viewController
     }()
 
@@ -38,7 +38,7 @@ final class SparkDemoTabbarController: UITabBarController {
     private lazy var uiComponentsViewController: UIViewController = {
         var layout = ComponentsViewController.makeLayout()
         let viewController = UINavigationController(rootViewController: ComponentsViewController(collectionViewLayout: layout))
-        viewController.tabBarItem = UITabBarItem(title: "UIComponents", image: UIImage(systemName: "list.bullet.rectangle"), tag: 0)
+        viewController.tabBarItem = UITabBarItem(title: "UIKit", image: UIImage(systemName: "list.bullet.rectangle"), tag: 0)
         return viewController
     }()
 
@@ -82,7 +82,7 @@ final class SparkDemoTabbarController: UITabBarController {
 }
 
 // MARK: - Navigation
-extension SparkDemoTabbarController {
+extension SparkTabbarController {
 
     private func presentThemeSwitchViewController() {
         let themeSwitchViewController = UIHostingController(
