@@ -46,7 +46,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
     let showIcon: Bool
     let showBadge: Bool
     let isEnabled: Bool
-    let numbeOfTabs: Int
+    let numberOfTabs: Int
     let badge: BadgeUIView
     @Binding var selectedTab: Int
     @Binding var height: CGFloat
@@ -73,7 +73,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         self.showIcon = showIcon
         self.showBadge = showBadge
         self.isEnabled = isEnabled
-        self.numbeOfTabs = numberOfTabs
+        self.numberOfTabs = numberOfTabs
         self._selectedTab = selectedTab
         self._height = height
         self.publishedBinding = PublishedBinding(binding: selectedTab)
@@ -90,7 +90,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> SparkCore.TabUIView {
 
-        let content: [(UIImage?, String?)] = (1...numbeOfTabs).map { tabNo in
+        let content: [(UIImage?, String?)] = (1...numberOfTabs).map { tabNo in
             (self.showIcon ? .image(at: tabNo) : nil,
              self.showText ? "Label \(tabNo)" : nil )
         }
@@ -126,21 +126,19 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
 
         let oldSelectedIndex = uiView.selectedSegmentIndex
 
-        if self.numbeOfTabs != uiView.numberOfSegments {
-            let content: [(icon: UIImage, title: String)] = (0..<self.numbeOfTabs).map{ (icon: .image(at: $0), title: "Label \($0)") }
+        if self.numberOfTabs > uiView.numberOfSegments {
+            guard let content: (icon: UIImage, title: String) = (0..<self.numberOfTabs).map({ (icon: .image(at: $0), title: "Label \($0)") }).last else { return }
 
             if self.showIcon && self.showText {
-                uiView.setSegments(withContent: content)
+                uiView.addSegment(withImage: content.icon, andTitle: content.title, animated: true)
             } else if self.showIcon {
-                uiView.setSegments(withImages: content.map(\.icon))
+                uiView.addSegment(with: content.icon, animated: true)
             } else if self.showText {
-                uiView.setSegments(withTitles: content.map(\.title))
+                uiView.addSegment(with: content.title, animated: true)
             } else {
-                uiView.setSegments(withImages: content.map(\.icon))
-                uiView.segments.forEach{ $0.icon = nil }
+                uiView.addSegment(with: "")
+                uiView.segments[self.numberOfTabs].label.text = nil
             }
-
-            uiView.selectedSegmentIndex = min(oldSelectedIndex, self.numbeOfTabs - 1)
         }
 
         self.badge.size = self.tabSize.badgeSize
@@ -153,6 +151,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
 
         DispatchQueue.main.async {
             self.height = uiView.intrinsicContentSize.height
+            uiView.scrollToSelectedSegement(animated: true)
         }
     }
 }
