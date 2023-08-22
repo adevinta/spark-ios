@@ -139,6 +139,7 @@ public final class IconUIView: UIView {
             self?._width.update(traitCollection: self?.traitCollection)
 
             self?.updateIconSize()
+            self?.invalidateIntrinsicContentSize()
         }
     }
 
@@ -163,6 +164,7 @@ public final class IconUIView: UIView {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
+        self.invalidateIntrinsicContentSize()
         self._height.update(traitCollection: traitCollection)
         self._width.update(traitCollection: traitCollection)
         self.updateIconSize()
