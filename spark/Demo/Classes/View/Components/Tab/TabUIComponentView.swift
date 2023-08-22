@@ -124,8 +124,6 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
             tab.title = self.showText ? "Label \(index)" : nil
         }
 
-        let oldSelectedIndex = uiView.selectedSegmentIndex
-
         if self.numberOfTabs > uiView.numberOfSegments {
             guard let content: (icon: UIImage, title: String) = (0..<self.numberOfTabs).map({ (icon: .image(at: $0), title: "Label \($0)") }).last else { return }
 
@@ -139,6 +137,9 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
                 uiView.addSegment(with: "")
                 uiView.segments[self.numberOfTabs].label.text = nil
             }
+        } else if self.numberOfTabs < uiView.numberOfSegments {
+            uiView.removeSegment(at: uiView.numberOfSegments - 1, animated: true)
+            uiView.selectedSegmentIndex = min(uiView.selectedSegmentIndex, uiView.numberOfSegments - 1)
         }
 
         self.badge.size = self.tabSize.badgeSize
