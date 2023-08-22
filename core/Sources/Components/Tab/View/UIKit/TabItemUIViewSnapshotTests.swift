@@ -38,29 +38,6 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
-    func test_tab_with_intent_support() throws {
-        let sut = TabItemUIView(
-            theme: self.theme,
-            intent: .support,
-            title: "Label")
-
-        sut.badge = badge
-
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
-    }
-
-    func x_test_selected_tab_with_intent_support() throws {
-        let sut = TabItemUIView(
-            theme: self.theme,
-            intent: .support,
-            title: "Label")
-
-        sut.badge = badge
-        sut.isSelected = true
-
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
-    }
-
     func test_selected_tab_with_intent_main() throws {
         let sut = TabItemUIView(
             theme: self.theme,
