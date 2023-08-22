@@ -53,6 +53,10 @@ public final class IconUIView: UIView {
         }
     }
 
+    public override var intrinsicContentSize: CGSize {
+        CGSize(width: size.value, height: size.value)
+    }
+
     // MARK: - Private properties
 
     private var cancellables = Set<AnyCancellable>()
