@@ -1,14 +1,15 @@
 //
-//  ComponentsViewController.swift
+//  ComponentVersionViewController.swift
 //  SparkDemo
 //
-//  Created by alican.aycil on 14.08.23.
+//  Created by alican.aycil on 22.08.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import UIKit
+import SwiftUI
 
-final class ComponentsViewController: UICollectionViewController {
+final class ComponentVersionViewController: UICollectionViewController {
 
     // MARK: - Typealias
     typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
@@ -38,7 +39,7 @@ final class ComponentsViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.title = "UIComponents"
+        navigationItem.title = "Component Version"
         setupData()
     }
 
@@ -52,7 +53,7 @@ final class ComponentsViewController: UICollectionViewController {
 }
 
 // MARK: - CollectionViewLayout
-extension ComponentsViewController {
+extension ComponentVersionViewController {
 
     static func makeLayout() -> UICollectionViewCompositionalLayout {
         let listConfiguration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
@@ -61,18 +62,17 @@ extension ComponentsViewController {
 }
 
 // MARK: - CollectionViewDelegates
-extension ComponentsViewController {
+extension ComponentVersionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let section = Row.allCases[indexPath.row]
         var viewController: UIViewController!
         switch section {
-        case .badge:
-            viewController = BadgeComponentViewController.build()
-        case .button:
-            viewController = ButtonComponentViewController.build()
-        default:
-            break
+        case .uikit:
+            let layout = ComponentsViewController.makeLayout()
+            viewController = ComponentsViewController(collectionViewLayout: layout)
+        case .swiftui:
+            viewController = UIHostingController(rootView: ComponentsView())
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -80,21 +80,14 @@ extension ComponentsViewController {
 }
 
 // MARK: - Enums
-extension ComponentsViewController {
+extension ComponentVersionViewController {
 
     enum Section {
         case all
     }
 
     enum Row: CaseIterable {
-        case badge
-        case button
-        case checkbox
-        case chip
-        case icon
-        case radioButton
-        case spinner
-        case switchButton
-        case tag
+        case uikit
+        case swiftui
     }
 }

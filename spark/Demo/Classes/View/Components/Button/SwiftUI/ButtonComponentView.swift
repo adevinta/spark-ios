@@ -16,10 +16,19 @@ struct ButtonComponentView: View {
 
     let viewModel = ButtonComponentViewModel()
 
-    @State private var uiKitViewHeight: CGFloat = .zero
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
-    @State private var versionSheetIsPresented = false
-    @State var version: ComponentVersion = .uiKit
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+    @State var isThemePresented = false
+
+    var themes: [ThemeCellModel] = [
+        .init(title: "Spark", theme: SparkTheme()),
+        .init(title: "Purple", theme: PurpleTheme())
+    ]
+
+    @State private var uiKitViewHeight: CGFloat = .zero
 
     @State private var intentSheetIsPresented = false
     @State var intent: ButtonIntent = .main
@@ -57,21 +66,23 @@ struct ButtonComponentView: View {
                     // **
                     // Version
                     HStack() {
-                        Text("Version: ")
-                            .bold()
-                        Button("\(self.version.name)") {
-                            self.versionSheetIsPresented = true
+                        Text("Theme: ").bold()
+                        let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
+                        Button(selectedTheme?.title ?? "") {
+                            self.isThemePresented = true
                         }
-                        .confirmationDialog("Select an version", isPresented: self.$versionSheetIsPresented) {
-                            ForEach(ComponentVersion.allCases, id: \.self) { version in
-                                Button("\(version.name)") {
-                                    self.version = version
+                        .confirmationDialog("Select a theme",
+                                            isPresented: self.$isThemePresented) {
+                            ForEach(themes, id: \.self) { theme in
+                                Button(theme.title) {
+                                    themePublisher.theme = theme.theme
                                 }
                             }
                         }
                         .onChange(of: self.intent) { newValue in
                             self.shouldShowReverseBackgroundColor = (newValue == .surface)
                         }
+                        Spacer()
                     }
                     // **
 
@@ -198,29 +209,24 @@ struct ButtonComponentView: View {
                     .font(.title2)
                     .bold()
 
-                if self.version == .swiftUI {
-                    Text("Not dev yet !")
-                } else {
-                    GeometryReader { geometry in
-                        ButtonComponentItemsUIView(
-                            viewModel: self.viewModel,
-                            width: geometry.size.width,
-                            height: self.$uiKitViewHeight,
-                            intent: self.$intent.wrappedValue,
-                            variant: self.$variant.wrappedValue,
-                            size: self.$size.wrappedValue,
-                            shape: self.$shape.wrappedValue,
-                            alignment: self.$alignment.wrappedValue,
-                            content: self.$content.wrappedValue,
-                            isEnabled: self.$isEnabled.wrappedValue
-                        )
-                        .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .center)
-                        .padding(.horizontal, self.shouldShowReverseBackgroundColor ? 4 : 0)
-                        .padding(.vertical, self.shouldShowReverseBackgroundColor ? 4 : 0)
-                        .background(self.shouldShowReverseBackgroundColor ? Color.gray : Color.clear)
-                    }
+                GeometryReader { geometry in
+                    ButtonComponentItemsUIView(
+                        viewModel: self.viewModel,
+                        width: geometry.size.width,
+                        height: self.$uiKitViewHeight,
+                        intent: self.$intent.wrappedValue,
+                        variant: self.$variant.wrappedValue,
+                        size: self.$size.wrappedValue,
+                        shape: self.$shape.wrappedValue,
+                        alignment: self.$alignment.wrappedValue,
+                        content: self.$content.wrappedValue,
+                        isEnabled: self.$isEnabled.wrappedValue
+                    )
+                    .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .center)
+                    .padding(.horizontal, self.shouldShowReverseBackgroundColor ? 4 : 0)
+                    .padding(.vertical, self.shouldShowReverseBackgroundColor ? 4 : 0)
+                    .background(self.shouldShowReverseBackgroundColor ? Color.gray : Color.clear)
                 }
-
                 Spacer()
             }
             .padding(.horizontal, 16)
