@@ -53,6 +53,10 @@ public final class IconUIView: UIView {
         }
     }
 
+    public override var intrinsicContentSize: CGSize {
+        CGSize(width: size.value, height: size.value)
+    }
+
     // MARK: - Private properties
 
     private var cancellables = Set<AnyCancellable>()
@@ -135,6 +139,7 @@ public final class IconUIView: UIView {
             self?._width.update(traitCollection: self?.traitCollection)
 
             self?.updateIconSize()
+            self?.invalidateIntrinsicContentSize()
         }
     }
 
@@ -159,6 +164,7 @@ public final class IconUIView: UIView {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
+        self.invalidateIntrinsicContentSize()
         self._height.update(traitCollection: traitCollection)
         self._width.update(traitCollection: traitCollection)
         self.updateIconSize()
