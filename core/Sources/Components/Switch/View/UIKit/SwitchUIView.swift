@@ -209,10 +209,21 @@ public final class SwitchUIView: UIView {
 
         // Calculate width
         let toggleWidth = self.toggleWidth
-        let labelWidth = self.textLabel.intrinsicContentSize.width
         let contentStackViewSpacing = self.contentStackViewSpacing
-        let width = toggleWidth + labelWidth + contentStackViewSpacing
+        var width = toggleWidth + contentStackViewSpacing
 
+        if let attributedText {
+            let computedSize = attributedText.boundingRect(
+                with: CGSize(
+                    width: CGFloat.greatestFiniteMagnitude,
+                    height: CGFloat.greatestFiniteMagnitude
+                ),
+                options: .usesLineFragmentOrigin,
+                context: nil)
+            width += computedSize.width
+        } else if text != nil {
+            width += textLabel.intrinsicContentSize.width
+        }
         return CGSize(width: width, height: height)
     }
 
