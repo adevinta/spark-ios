@@ -32,7 +32,11 @@ struct ComponentsView: View {
             }
 
             Button("Checkbox") {
-                self.navigateToView(ComponentsCheckboxListView())
+                self.navigateToView(
+                    ComponentsCheckboxListView(
+                        isSwiftUI: true
+                    ).environment(\.navigationController, self.navigationController)
+                )
             }
 
             Button("Chip") {

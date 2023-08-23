@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class ComponentsViewController: UICollectionViewController {
 
@@ -71,6 +72,12 @@ extension ComponentsViewController {
             viewController = BadgeComponentViewController.build()
         case .button:
             viewController = ButtonComponentViewController.build()
+        case .checkbox:
+            viewController = UIHostingController(
+                rootView: ComponentsCheckboxListView(
+                    isSwiftUI: false
+                ).environment(\.navigationController, self.navigationController)
+            )
         default:
             break
         }
