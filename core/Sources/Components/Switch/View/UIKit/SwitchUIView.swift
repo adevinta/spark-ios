@@ -202,7 +202,18 @@ public final class SwitchUIView: UIView {
     }
 
     public override var intrinsicContentSize: CGSize {
-        CGSize(width: contentStackView.intrinsicContentSize.width, height: contentStackView.intrinsicContentSize.height)
+        // Calculate height
+        let toggleHeight = self.toggleHeight
+        let labelHeight = self.textLabel.intrinsicContentSize.height
+        let height = max(toggleHeight, labelHeight)
+
+        // Calculate width
+        let toggleWidth = self.toggleWidth
+        let labelWidth = self.textLabel.intrinsicContentSize.width
+        let contentStackViewSpacing = self.contentStackViewSpacing
+        let width = toggleWidth + labelWidth + contentStackViewSpacing
+
+        return CGSize(width: width, height: height)
     }
 
     // MARK: - Private Properties
