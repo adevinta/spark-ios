@@ -11,8 +11,8 @@ import UIKit
 final class ComponentsViewController: UICollectionViewController {
 
     // MARK: - Typealias
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
-    typealias SnapShot = NSDiffableDataSourceSnapshot<Section, String>
+    fileprivate typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
+    fileprivate typealias SnapShot = NSDiffableDataSourceSnapshot<Section, String>
 
     // MARK: - Properties
     private let reuseIdentifier = "defaultCell"
@@ -80,7 +80,7 @@ extension ComponentsViewController {
 }
 
 // MARK: - Enums
-extension ComponentsViewController {
+private extension ComponentsViewController {
 
     enum Section {
         case all
