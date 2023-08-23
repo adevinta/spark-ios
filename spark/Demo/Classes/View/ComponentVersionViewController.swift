@@ -39,7 +39,7 @@ final class ComponentVersionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.title = "Component Version"
+        navigationItem.title = "Versions"
         setupData()
     }
 
@@ -72,7 +72,7 @@ extension ComponentVersionViewController {
             let layout = ComponentsViewController.makeLayout()
             viewController = ComponentsViewController(collectionViewLayout: layout)
         case .swiftui:
-            viewController = UIHostingController(rootView: ComponentsView())
+            viewController = UIHostingController(rootView: ComponentsView().environment(\.navigationController, self.navigationController))
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)

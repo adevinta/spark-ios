@@ -74,6 +74,7 @@ targetTemplates:
     sources:
       - path: spark/Demo
       - path: core/Sources/Common/UIKit/GlobalExtension
+      - path: core/Sources/Common/Combine/Global
     dependencies:
       - target: Spark
 
