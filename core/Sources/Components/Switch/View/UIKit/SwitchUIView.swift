@@ -222,7 +222,7 @@ public final class SwitchUIView: UIView {
                 context: nil)
             width += computedSize.width
         } else if text != nil {
-            width += textLabel.intrinsicContentSize.width
+            width += self.textLabel.intrinsicContentSize.width
         }
         return CGSize(width: width, height: height)
     }
