@@ -28,16 +28,19 @@ public final class SpinnerUIView: UIView {
     @ScaledUIMetric private var strokeWidth: CGFloat
 
     // MARK: - Public modifiable attributes
+    /// The current theme
     public var theme: Theme {
         get { return self.viewModel.theme }
         set { self.viewModel.theme = newValue }
     }
 
+    /// The spinner size (`medium` or `small`)
     public var spinnerSize: SpinnerSize {
         get { return self.viewModel.spinnerSize }
         set { self.viewModel.spinnerSize = newValue }
     }
 
+    /// The spinner intent
     public var intent: SpinnerIntent {
         get { return self.viewModel.intent }
         set { self.viewModel.intent = newValue}
