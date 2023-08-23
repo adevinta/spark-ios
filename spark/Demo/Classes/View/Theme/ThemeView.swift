@@ -7,8 +7,17 @@
 //
 
 import SwiftUI
+import SparkCore
+import Spark
 
 struct ThemeView: View {
+
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+
     var body: some View {
         NavigationView {
             List {
@@ -38,6 +47,7 @@ struct ThemeView: View {
             }
             .navigationBarTitle(Text("Theme"))
         }
+        .accentColor(theme.colors.main.main.color)
     }
 }
 
