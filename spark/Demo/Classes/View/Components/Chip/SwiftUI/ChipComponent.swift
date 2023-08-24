@@ -16,9 +16,12 @@ struct ChipComponent: View {
     var theme: Theme {
         self.themePublisher.theme
     }
+    @State private var isThemePresented = false
 
-    @State private var versionSheetIsPresented = false
-    @State var version: ComponentVersion = .uiKit
+    var themes: [ThemeCellModel] = [
+        .init(title: "Spark", theme: SparkTheme()),
+        .init(title: "Purple", theme: PurpleTheme())
+    ]
 
     @State var intent: ChipIntent = .main
     @State var isIntentPresented = false
@@ -42,15 +45,16 @@ struct ChipComponent: View {
                 .padding(.bottom, 6)
             VStack(alignment: .leading, spacing: 8) {
                 HStack() {
-                    Text("Version: ").bold()
-                    Button(self.version.name) {
-                        self.versionSheetIsPresented = true
+                    Text("Theme: ").bold()
+                    let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
+                    Button(selectedTheme?.title ?? "") {
+                        self.isThemePresented = true
                     }
-                    .confirmationDialog("Select a version",
-                                        isPresented: self.$versionSheetIsPresented) {
-                        ForEach(ComponentVersion.allCases, id: \.self) { version in
-                            Button(version.name) {
-                                self.version = version
+                    .confirmationDialog("Select a theme",
+                                        isPresented: self.$isThemePresented) {
+                        ForEach(themes, id: \.self) { theme in
+                            Button(theme.title) {
+                                themePublisher.theme = theme.theme
                             }
                         }
                     }
@@ -122,20 +126,16 @@ struct ChipComponent: View {
                 .font(.title2)
                 .bold()
 
-            if (version == .swiftUI) {
-                Text("Not available yet!!")
-            } else {
-                ChipComponentUIView(
-                    theme: self.theme,
-                    intent: self.intent,
-                    variant: self.variant,
-                    label: self.showLabel == .selected ? self.label : nil,
-                    icon: self.showIcon == .selected ? self.icon : nil,
-                    component: self.withComponent == .selected ? self.component : nil,
-                    action: self.withAction == .selected ? { self.showingAlert = true} : nil)
-                .alert("Chip Pressed", isPresented: self.$showingAlert) {
-                    Button("OK", role: .cancel) { }
-                }
+            ChipComponentView(
+                theme: self.theme,
+                intent: self.intent,
+                variant: self.variant,
+                label: self.showLabel == .selected ? self.label : nil,
+                icon: self.showIcon == .selected ? self.icon : nil,
+                component: self.withComponent == .selected ? self.component : nil,
+                action: self.withAction == .selected ? { self.showingAlert = true} : nil)
+            .alert("Chip Pressed", isPresented: self.$showingAlert) {
+                Button("OK", role: .cancel) { }
             }
 
             Spacer()
@@ -151,7 +151,7 @@ struct ChipComponent_Previews: PreviewProvider {
     }
 }
 
-private extension UIView {
+extension UIView {
     func withTint(_ color: UIColor) -> Self {
         self.tintColor = color
         return self

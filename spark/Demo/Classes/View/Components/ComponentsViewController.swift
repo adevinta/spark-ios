@@ -78,6 +78,8 @@ extension ComponentsViewController {
                     isSwiftUI: false
                 ).environment(\.navigationController, self.navigationController)
             )
+        case .chip:
+            viewController = ChipComponentViewController.build()
         default:
             break
         }
