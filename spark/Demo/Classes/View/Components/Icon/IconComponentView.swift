@@ -97,7 +97,12 @@ struct IconComponentView: View {
                     .bold()
 
                 if self.version == .swiftUI {
-                    Text("Component still under development")
+                    IconView(
+                        theme: SparkTheme.shared,
+                        intent: self.intent,
+                        size: self.size,
+                        iconImage: Image(systemName: "lock.circle")
+                    )
                 } else {
                     IconComponentUIView(
                         intent: self.$intent,
