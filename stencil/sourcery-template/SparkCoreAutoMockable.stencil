@@ -183,6 +183,25 @@ final class {{ type.name }}GeneratedMock: {{ import }}.{{ type.name }} {
     {% call mockMethod method %}
 {% endfor %}
 }
+
+extension  {{ type.name }}GeneratedMock: ResetGeneratedMock {
+
+    func reset() {
+    {% for method in type.allMethods|!definedInExtension %}
+
+        {% call swiftifyMethodNameV2 method %}CallsCount = 0
+        {% if method.parameters.count == 1 %}
+            {% call swiftifyMethodNameV2 method %}Received{% for param in method.parameters %}{{ param.name|upperFirstLetter }} = nil {% endfor %}
+        {% elif not method.parameters.count == 0 %}
+            {% call swiftifyMethodNameV2 method %}ReceivedArguments = nil
+        {% endif %}
+        {% call swiftifyMethodNameV2 method %}ReceivedInvocations = []
+    {% endfor %}
+    }
+}
 {% endif %}{% endfor %}
 
 {% endfor %}
+protocol ResetGeneratedMock {
+    func reset()
+}
