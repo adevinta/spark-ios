@@ -13,10 +13,14 @@ public enum ButtonAccessibilityIdentifier {
 
     /// The default view accessibility identifier. Can be changed by the consumer
     public static let view = "spark-button"
+    /// The default content stackView accessibility identifier.
+    static let contentStackView = "spark-button-content-stackView"
     /// The icon view accessibility identifier.
     public static let icon = "spark-button-icon"
     /// The icon image accessibility identifier.
     public static let iconImage = "spark-button-icon-image"
     /// The text accessibility identifier.
     public static let text = "spark-button-text"
+    /// The default clear button accessibility identifier.
+    static let clearButton = "spark-button-clear-button"
 }
