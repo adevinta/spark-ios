@@ -9,8 +9,15 @@
 import Foundation
 
 extension CaseIterable {
+
     var name: String {
-        return "\(self)".capitalizingFirstLetter
+        return "\(self)"
+            .map {
+                $0.isUppercase ? " \($0)" : "\($0)"
+            }
+            .joined(separator: "")
+            .replacingOccurrences(of: "And", with: "&")
+            .capitalized
     }
 }
 

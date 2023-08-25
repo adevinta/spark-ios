@@ -11,9 +11,10 @@ import Spark
 import SparkCore
 import UIKit
 
-final class ButtonComponentUIViewModel: ObservableObject {
+final class ButtonComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Published Properties
+
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         showThemeSheetSubject
             .eraseToAnyPublisher()
@@ -62,11 +63,95 @@ final class ButtonComponentUIViewModel: ObservableObject {
     @Published var alignment: ButtonAlignment
     @Published var content: ButtonContentDefault
     @Published var isEnabled: Bool
+
+    // MARK: - Items Properties
+
+    lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Theme",
+            type: .button,
+            target: (source: self, action: #selector(self.presentThemeSheet))
+        )
+    }()
+
+    lazy var intentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Intent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentIntentSheet))
+        )
+    }()
+
+    lazy var variantConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Variant",
+            type: .button,
+            target: (source: self, action: #selector(self.presentVariantSheet))
+        )
+    }()
+
+    lazy var sizeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Size",
+            type: .button,
+            target: (source: self, action: #selector(self.presentSizeSheet))
+        )
+    }()
+
+    lazy var shapeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Shape",
+            type: .button,
+            target: (source: self, action: #selector(self.presentShapeSheet))
+        )
+    }()
+
+    lazy var alignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Alignment",
+            type: .button,
+            target: (source: self, action: #selector(self.presentAlignmentSheet))
+        )
+    }()
+
+    lazy var contentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Content",
+            type: .button,
+            target: (source: self, action: #selector(self.presentContentSheet))
+        )
+    }()
+
+    lazy var isEnabledConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is Enabled",
+            type: .toggle(isOn: self.isEnabled),
+            target: (source: self, action: #selector(self.isEnabledChanged))
+        )
+    }()
+
+    // MARK: - Properties
+
+    var identifier: String
     let text: String
     let iconImage: UIImage
     let attributedText: NSAttributedString
 
+    lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
+        return .init(itemsViewModel: [
+            self.themeConfigurationItemViewModel,
+            self.intentConfigurationItemViewModel,
+            self.variantConfigurationItemViewModel,
+            self.sizeConfigurationItemViewModel,
+            self.shapeConfigurationItemViewModel,
+            self.alignmentConfigurationItemViewModel,
+            self.contentConfigurationItemViewModel,
+            self.isEnabledConfigurationItemViewModel
+        ])
+    }()
+
     // MARK: - Private Properties
+
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[ButtonIntent], Never> = .init()
     private var showVariantSheetSubject: PassthroughSubject<[ButtonVariant], Never> = .init()
@@ -76,9 +161,11 @@ final class ButtonComponentUIViewModel: ObservableObject {
     private var showContentSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
 
     // MARK: - Initialization
+
     init(
+        identifier: String = "Button",
         text: String = "Button",
-        iconImageNamed: String = "Arrow",
+        iconImageNamed: String = "arrow",
         theme: Theme,
         intent: ButtonIntent = .main,
         variant: ButtonVariant = .filled,
@@ -88,6 +175,7 @@ final class ButtonComponentUIViewModel: ObservableObject {
         content: ButtonContentDefault = .text,
         isEnabled: Bool = true
     ) {
+        self.identifier = identifier
         self.text = text
         self.iconImage = .init(named: iconImageNamed) ?? UIImage()
         self.attributedText = .init(
@@ -109,6 +197,7 @@ final class ButtonComponentUIViewModel: ObservableObject {
 }
 
 // MARK: - Navigation
+
 extension ButtonComponentUIViewModel {
 
     @objc func presentThemeSheet() {
@@ -138,5 +227,8 @@ extension ButtonComponentUIViewModel {
     @objc func presentContentSheet() {
         self.showContentSheetSubject.send(ButtonContentDefault.allCases)
     }
-}
 
+    @objc func isEnabledChanged() {
+        self.isEnabled.toggle()
+    }
+}
