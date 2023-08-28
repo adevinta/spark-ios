@@ -105,6 +105,8 @@ public final class IconUIView: UIView {
     private func setupView() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear
+        self.setContentHuggingPriority(.required, for: .horizontal)
+        self.setContentHuggingPriority(.required, for: .vertical)
         self.accessibilityIdentifier = IconAccessibilityIdentifier.view
 
         self.addSubview(imageView)
