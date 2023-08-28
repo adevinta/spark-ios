@@ -84,6 +84,8 @@ extension ComponentsViewController {
             viewController = IconComponentUIViewController.build()
         case .radioButton:
             viewController = RadioButtonUIGroupViewController()
+        case .spinner:
+            viewController = SpinnerComponentUIViewController.build()
         default:
             break
         }
