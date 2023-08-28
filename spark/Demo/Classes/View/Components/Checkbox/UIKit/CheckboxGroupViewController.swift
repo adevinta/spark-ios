@@ -11,21 +11,6 @@ import Spark
 import SparkCore
 import SwiftUI
 
-// MARK: - SwiftUI-wrapper
-
-struct CheckboxGroupUIViewControllerBridge: UIViewControllerRepresentable {
-    typealias UIViewControllerType = CheckboxGroupViewController
-
-    func makeUIViewController(context: Context) -> CheckboxGroupViewController {
-        let vc = CheckboxGroupViewController()
-        return vc
-    }
-
-    func updateUIViewController(_ uiViewController: CheckboxGroupViewController, context: Context) {
-        // Updates the state of the specified view controller with new information from SwiftUI.
-    }
-}
-
 // MARK: - Demo View Controller
 
 final class CheckboxGroupViewController: UIViewController {
@@ -123,6 +108,7 @@ final class CheckboxGroupViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .white
 
         let views = [self.selectionLabel, self.shuffleButton, self.changeLayoutButton, self.changePositionButton, self.addItemButton]
         var previousView: UIView?
