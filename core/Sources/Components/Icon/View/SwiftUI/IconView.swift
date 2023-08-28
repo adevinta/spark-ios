@@ -43,5 +43,6 @@ public struct IconView: View {
             .resizable()
             .frame(width: sizeValue, height: sizeValue)
             .foregroundColor(self.viewModel.color.color)
+            .accessibilityIdentifier(IconAccessibilityIdentifier.view)
     }
 }
