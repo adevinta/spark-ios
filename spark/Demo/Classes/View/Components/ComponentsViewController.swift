@@ -80,6 +80,8 @@ extension ComponentsViewController {
             )
         case .chip:
             viewController = ChipComponentViewController.build()
+        case .icon:
+            viewController = IconComponentUIViewController.build()
         default:
             break
         }
