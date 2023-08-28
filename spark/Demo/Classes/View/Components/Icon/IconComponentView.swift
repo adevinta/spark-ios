@@ -101,7 +101,7 @@ struct IconComponentView: View {
                         theme: SparkTheme.shared,
                         intent: self.intent,
                         size: self.size,
-                        iconImage: Image(systemName: "lock.circle")
+                        iconImage: Image("alert")
                     )
                 } else {
                     IconComponentUIView(
