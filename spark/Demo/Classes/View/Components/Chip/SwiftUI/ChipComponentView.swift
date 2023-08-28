@@ -1,5 +1,5 @@
 //
-//  ChipComponentUIView.swift
+//  ChipComponentView.swift
 //  SparkDemo
 //
 //  Created by michael.zimmermann on 21.04.23.
@@ -11,7 +11,7 @@ import Spark
 import SparkCore
 import SwiftUI
 
-struct ChipComponentUIView: View {
+struct ChipComponentView: View {
 
     let theme: Theme
     let intent: ChipIntent
