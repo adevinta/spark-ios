@@ -95,6 +95,7 @@ private extension ComponentsViewController {
         case radioButton
         case spinner
         case switchButton
+        case tab
         case tag
     }
 }

@@ -534,20 +534,6 @@ public extension ChipUIView {
     }
 }
 
-private extension UIStackView {
-    func addArrangedSubviews(_ views: [UIView]) {
-        for view in views {
-            self.addArrangedSubview(view)
-        }
-    }
-}
-
-private extension UIView {
-    var isNotHidden: Bool {
-        return !self.isHidden
-    }
-}
-
 private extension CGRect {
     func padded(offset: CGFloat) -> CGRect {
 

@@ -54,6 +54,10 @@ struct ComponentsView: View {
                 self.navigateToView(SwitchComponentView())
             }
 
+            Button("Tab") {
+                self.navigateToView(TabComponent())
+            }
+
             Button("Tag") {
                 self.navigateToView(TagComponentView())
             }
