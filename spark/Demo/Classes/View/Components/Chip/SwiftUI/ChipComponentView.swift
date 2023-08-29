@@ -74,6 +74,7 @@ struct ChipComponentView: View {
                             }
                         }
                     }
+
                     HStack() {
                         Text("Chip Variant: ").bold()
                         Button(self.variant.name) {
@@ -87,6 +88,21 @@ struct ChipComponentView: View {
                             }
                         }
                     }
+
+                    HStack() {
+                        Text("Chip Alignment: ").bold()
+                        Button(self.alignment.name) {
+                            self.isAlignmentPressed = true
+                        }
+                        .confirmationDialog("Select an Alignment", isPresented: self.$isAlignmentPressed) {
+                            ForEach(ChipAlignment.allCases, id: \.self) { alignment in
+                                Button(alignment.name) {
+                                    self.alignment = alignment
+                                }
+                            }
+                        }
+                    }
+
 
                     CheckboxView(
                         text: "With Label",
@@ -119,6 +135,14 @@ struct ChipComponentView: View {
                         state: .enabled,
                         selectionState: self.$withComponent
                     )
+
+                    CheckboxView(
+                        text: "Is Enabled",
+                        checkedImage: DemoIconography.shared.checkmark,
+                        theme: theme,
+                        state: .enabled,
+                        selectionState: self.$isEnabled
+                    )
                 }
 
                 Divider()
@@ -134,9 +158,11 @@ struct ChipComponentView: View {
                         theme: self.theme,
                         intent: self.intent,
                         variant: self.variant,
+                        alignment: self.alignment,
                         label: self.showLabel == .selected ? self.label : nil,
                         icon: self.showIcon == .selected ? self.icon : nil,
-                        component: self.withComponent == .selected ? self.component : nil,
+                        component: self.withComponent == .selected ? self.badge() : nil,
+                        isEnabled: self.isEnabled == .selected,
                         action: self.withAction == .selected ? { self.showingAlert = true} : nil)
                     .frame(width: 100, height: 40)
                     .alert("Chip Pressed", isPresented: self.$showingAlert) {

@@ -26,17 +26,22 @@ struct ChipComponentViewRepresentable: View {
     init(theme: Theme = SparkTheme.shared,
          intent: ChipIntent = .alert,
          variant: ChipVariant = .outlined,
+         alignment: ChipAlignment = .leadingIcon,
          label: String? = "Test",
          icon: UIImage? = nil,
          component: UIView? = nil,
-         action: (() -> Void)? = {}) {
+         isEnabled: Bool = true,
+         action: (() -> Void)? = {}
+    ) {
         self.theme = theme
         self.intent = intent
         self.variant = variant
+        self.alignment = alignment
         self.label = label
         self.icon = icon
         self.component = component
         self.action = action
+        self.isEnabled = isEnabled
     }
 
     var body: some View {
