@@ -82,6 +82,8 @@ extension ComponentsViewController {
             viewController = ChipComponentViewController.build()
         case .icon:
             viewController = IconComponentUIViewController.build()
+        case .radioButton:
+            viewController = RadioButtonUIGroupViewController()
         default:
             break
         }

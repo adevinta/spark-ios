@@ -11,15 +11,6 @@ import Spark
 import SparkCore
 import SwiftUI
 
-// MARK: SwiftUI Representable
-struct RadioButtonUIGroup: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> RadioButtonUIGroupViewController {
-        return RadioButtonUIGroupViewController()
-    }
-
-    func updateUIViewController(_ uiViewController: RadioButtonUIGroupViewController, context: Context) { }
-}
-
 final class RadioButtonUIGroupViewController: UIViewController {
 
     // MARK: - Constant definitions
@@ -192,6 +183,8 @@ final class RadioButtonUIGroupViewController: UIViewController {
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .white
+        self.navigationItem.title = "Radio Button"
 
         self.setupView()
         self.setupConstraints()
@@ -346,13 +339,5 @@ private class NSAttributedStringBuilder {
 
     func build() -> NSAttributedString {
         return nsAttributedString
-    }
-}
-
-// MARK: - Preview
-//
-struct RadioButtonUIGroup_Previews: PreviewProvider {
-    static var previews: some View {
-        RadioButtonUIGroup()
     }
 }
