@@ -38,19 +38,38 @@ final class GetChipColorsUseCaseTests: XCTestCase {
             tintedPrincipal: .purple,
             tintedSubordinate: .blue)
 
-        let expected = ChipColors(
-            default: ChipStateColors(
+        let expected = ChipStateColors(
                 background: .red,
                 border: .red,
-                foreground: .green),
-            pressed: ChipStateColors(
-                background: .purple,
-                border: .purple,
-                foreground: .red))
+                foreground: .green)
 
         // When
         for intentColor in [ChipIntent.main, .support, .alert, .danger, .info, .neutral, .success, .accent, .basic] {
-            let given = sut.execute(theme: theme, variant: .filled, intent: intentColor)
+            let given = sut.execute(theme: theme, variant: .filled, intent: intentColor, state: .default)
+
+            // Then
+            XCTAssertEqual(given, expected)
+        }
+    }
+
+    func test_all_standard_filled_pressed_colors() {
+        // Given
+        self.theme.border = BorderGeneratedMock()
+        self.theme.colors = ColorsGeneratedMock()
+        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
+
+        let expected = ChipStateColors(
+                background: .purple,
+                border: .purple,
+                foreground: .red)
+
+        // When
+        for intentColor in [ChipIntent.main, .support, .alert, .danger, .info, .neutral, .success, .accent, .basic] {
+            let given = sut.execute(theme: theme, variant: .filled, intent: intentColor, state: .pressed)
 
             // Then
             XCTAssertEqual(given, expected)
@@ -67,21 +86,43 @@ final class GetChipColorsUseCaseTests: XCTestCase {
             tintedPrincipal: .purple,
             tintedSubordinate: .blue)
 
-        let expected = ChipColors(
-            default: ChipStateColors(
+        let expected = ChipStateColors(
                 background: .clear,
                 border: .red,
-                foreground: .red),
-            pressed: ChipStateColors(
-                background: .purple,
-                border: .purple,
-                foreground: .red))
+                foreground: .red)
 
         for variant in [ChipVariant.outlined, .dashed] {
             // When
             for intentColor in [ChipIntent.main, .support, .alert, .danger, .info, .neutral, .success, .accent, .basic] {
 
-                let given = sut.execute(theme: theme, variant: variant, intent: intentColor)
+                let given = sut.execute(theme: theme, variant: variant, intent: intentColor, state: .default)
+
+                // Then
+                XCTAssertEqual(given, expected)
+            }
+        }
+    }
+
+    func test_all_standard_bordered_pressed_colors() {
+        // Given
+        self.theme.border = BorderGeneratedMock()
+        self.theme.colors = ColorsGeneratedMock()
+        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
+
+        let expected = ChipStateColors(
+                background: .purple,
+                border: .purple,
+                foreground: .red)
+
+        for variant in [ChipVariant.outlined, .dashed] {
+            // When
+            for intentColor in [ChipIntent.main, .support, .alert, .danger, .info, .neutral, .success, .accent, .basic] {
+
+                let given = sut.execute(theme: theme, variant: variant, intent: intentColor, state: .pressed)
 
                 // Then
                 XCTAssertEqual(given, expected)
@@ -99,20 +140,40 @@ final class GetChipColorsUseCaseTests: XCTestCase {
             tintedPrincipal: .purple,
             tintedSubordinate: .blue)
 
-        let expected = ChipColors(
-            default: ChipStateColors(
+        let expected = ChipStateColors(
                 background: .purple,
                 border: .purple,
-                foreground: .blue),
-            pressed: ChipStateColors(
-                background: .blue,
-                border: .blue,
-                foreground: .purple))
+                foreground: .blue)
 
         // When
         for intentColor in [ChipIntent.main, .support, .alert, .danger, .info, .neutral, .success, .accent, .basic] {
 
-            let given = sut.execute(theme: theme, variant: .tinted, intent: intentColor)
+            let given = sut.execute(theme: theme, variant: .tinted, intent: intentColor, state: .default)
+
+            // Then
+            XCTAssertEqual(given, expected)
+        }
+    }
+
+    func test_all_standard_tinted_pressed_colors() {
+        // Given
+        self.theme.border = BorderGeneratedMock()
+        self.theme.colors = ColorsGeneratedMock()
+        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
+
+        let expected = ChipStateColors(
+                background: .blue,
+                border: .blue,
+                foreground: .purple)
+
+        // When
+        for intentColor in [ChipIntent.main, .support, .alert, .danger, .info, .neutral, .success, .accent, .basic] {
+
+            let given = sut.execute(theme: theme, variant: .tinted, intent: intentColor, state: .pressed)
 
             // Then
             XCTAssertEqual(given, expected)
@@ -129,20 +190,39 @@ final class GetChipColorsUseCaseTests: XCTestCase {
             tintedPrincipal: .purple,
             tintedSubordinate: .blue)
 
-        let expected = ChipColors(
-            default: ChipStateColors(
+        let expected = ChipStateColors(
                 background: .clear,
                 border: .green,
-                foreground: .green),
-            pressed: ChipStateColors(
+                foreground: .green)
+        // When
+        for variant in [ChipVariant.outlined, .dashed] {
+
+            let given = sut.execute(theme: theme, variant: variant, intent: .surface, state: .default)
+
+            // Then
+            XCTAssertEqual(given, expected)
+        }
+    }
+
+    func test_surface_bordered_pressed_colors() {
+        // Given
+        self.theme.border = BorderGeneratedMock()
+        self.theme.colors = ColorsGeneratedMock()
+        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
+
+        let expected = ChipStateColors(
                 background: .blue,
                 border: .blue,
-                foreground: .red))
+                foreground: .red)
 
         // When
         for variant in [ChipVariant.outlined, .dashed] {
 
-            let given = sut.execute(theme: theme, variant: variant, intent: .surface)
+            let given = sut.execute(theme: theme, variant: variant, intent: .surface, state: .pressed)
 
             // Then
             XCTAssertEqual(given, expected)
@@ -159,19 +239,35 @@ final class GetChipColorsUseCaseTests: XCTestCase {
             tintedPrincipal: .purple,
             tintedSubordinate: .blue)
 
-        let expected = ChipColors(
-            default: ChipStateColors(
+        let expected = ChipStateColors(
                 background: .red,
                 border: .red,
-                foreground: .green),
-            pressed: ChipStateColors(
+                foreground: .green)
+
+        // When
+        let given = sut.execute(theme: theme, variant: .filled, intent: .surface, state: .default)
+
+        // Then
+        XCTAssertEqual(given, expected)
+    }
+
+    func test_surface_filled_pressed_colors() {
+        // Given
+        self.theme.border = BorderGeneratedMock()
+        self.theme.colors = ColorsGeneratedMock()
+        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+            principal: .red,
+            subordinate: .green,
+            tintedPrincipal: .purple,
+            tintedSubordinate: .blue)
+
+        let expected = ChipStateColors(
                 background: .blue,
                 border: .blue,
                 foreground: .red)
-        )
 
         // When
-        let given = sut.execute(theme: theme, variant: .filled, intent: .surface)
+        let given = sut.execute(theme: theme, variant: .filled, intent: .surface, state: .pressed)
 
         // Then
         XCTAssertEqual(given, expected)
@@ -205,4 +301,9 @@ private extension ChipStateColors {
                   border: ColorTokenGeneratedMock(uiColor:border),
                   foreground: ColorTokenGeneratedMock(uiColor:foreground))
     }
+}
+
+private extension ChipState {
+    static let pressed = ChipState(isEnabled: true, isPressed: true)
+    static let disabled = ChipState(isEnabled: false, isPressed: false)
 }

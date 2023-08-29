@@ -32,13 +32,12 @@ final class ChipViewModelTests: TestCase {
 
         let colorToken = ColorTokenGeneratedMock()
 
-        self.useCase.executeWithThemeAndVariantAndIntentReturnValue = ChipColors(
-            default: ChipStateColors(background: colorToken, border: colorToken, foreground: colorToken),
-            pressed: ChipStateColors(background: colorToken, border: colorToken, foreground: colorToken))
+        self.useCase.executeWithThemeAndVariantAndIntentAndStateReturnValue = ChipStateColors(background: colorToken, border: colorToken, foreground: colorToken)
 
         self.sut = ChipViewModel(theme: theme,
                                  variant: .filled,
                                  intent: .main,
+                                 alignment: .leadingIcon,
                                  useCase: useCase)
     }
 
