@@ -212,7 +212,7 @@ private class PublishedBinding<T> {
 private extension TabSize {
     var badgeSize: BadgeSize {
         switch self {
-        case .md: return .normal
+        case .md: return .medium
         case .sm: return .small
         case .xs: return .small
         @unknown default:
