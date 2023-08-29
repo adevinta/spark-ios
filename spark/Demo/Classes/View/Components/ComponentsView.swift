@@ -40,7 +40,7 @@ struct ComponentsView: View {
             }
 
             Button("Chip") {
-                self.navigateToView(ChipComponent())
+                self.navigateToView(ChipComponentView())
             }
 
             Button("Icon") {

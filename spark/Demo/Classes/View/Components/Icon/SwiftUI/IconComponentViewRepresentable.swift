@@ -1,5 +1,5 @@
 //
-//  IconComponentUIView.swift
+//  IconComponentViewRepresentable.swift
 //  SparkDemo
 //
 //  Created by Jacklyn Situmorang on 19.07.23.
@@ -12,7 +12,7 @@ import SparkCore
 import SwiftUI
 
 
-struct IconComponentUIView: UIViewRepresentable {
+struct IconComponentViewRepresentable: UIViewRepresentable {
 
     @Binding private var intent: IconIntent
     @Binding private var size: IconSize
