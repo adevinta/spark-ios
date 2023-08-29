@@ -49,10 +49,7 @@ final class ButtonComponentUIViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
 
-    var themes: [ThemeCellModel] = [
-        .init(title: "Spark", theme: SparkTheme()),
-        .init(title: "Purple", theme: PurpleTheme())
-    ]
+    let themes = ThemeCellModel.themes
 
     @Published var theme: Theme
     @Published var intent: ButtonIntent

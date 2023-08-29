@@ -23,10 +23,7 @@ struct ButtonComponentView: View {
     }
     @State var isThemePresented = false
 
-    var themes: [ThemeCellModel] = [
-        .init(title: "Spark", theme: SparkTheme()),
-        .init(title: "Purple", theme: PurpleTheme())
-    ]
+    let themes = ThemeCellModel.themes
 
     @State private var uiKitViewHeight: CGFloat = .zero
 

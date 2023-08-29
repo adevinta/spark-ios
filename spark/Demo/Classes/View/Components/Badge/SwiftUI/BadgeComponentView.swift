@@ -28,10 +28,7 @@ struct BadgeComponentView: View {
     }
     @State var isThemePresented = false
 
-    var themes: [ThemeCellModel] = [
-        .init(title: "Spark", theme: SparkTheme()),
-        .init(title: "Purple", theme: PurpleTheme())
-    ]
+    let themes = ThemeCellModel.themes
 
     @State var intent: BadgeIntentType = .danger
     @State var isIntentPresented = false
