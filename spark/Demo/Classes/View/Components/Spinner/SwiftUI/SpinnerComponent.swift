@@ -17,9 +17,12 @@ struct SpinnerComponent: View {
     var theme: Theme {
         self.themePublisher.theme
     }
+    @State private var isThemePresented = false
 
-    @State private var versionSheetIsPresented = false
-    @State var version: ComponentVersion = .swiftUI
+    var themes: [ThemeCellModel] = [
+        .init(title: "Spark", theme: SparkTheme()),
+        .init(title: "Purple", theme: PurpleTheme())
+    ]
 
     @State var intent: SpinnerIntent = .main
     @State var isIntentPresented = false
@@ -33,15 +36,16 @@ struct SpinnerComponent: View {
                 .bold()
                 .padding(.bottom, 6)
             HStack() {
-                Text("Version: ").bold()
-                Button(self.version.name) {
-                    self.versionSheetIsPresented = true
+                Text("Theme: ").bold()
+                let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
+                Button(selectedTheme?.title ?? "") {
+                    self.isThemePresented = true
                 }
-                .confirmationDialog("Select a version",
-                                    isPresented: self.$versionSheetIsPresented) {
-                    ForEach(ComponentVersion.allCases, id: \.self) { version in
-                        Button(version.name) {
-                            self.version = version
+                .confirmationDialog("Select a theme",
+                                    isPresented: self.$isThemePresented) {
+                    ForEach(themes, id: \.self) { theme in
+                        Button(theme.title) {
+                            themePublisher.theme = theme.theme
                         }
                     }
                 }
@@ -80,16 +84,11 @@ struct SpinnerComponent: View {
                 .font(.title2)
                 .bold()
 
-            if version == .swiftUI {
-                SpinnerView(theme: self.theme,
-                            intent: self.intent,
-                            spinnerSize: self.spinnerSize
-                )
-            } else {
-                UISpinnerView(theme: self.theme,
-                              intent: self.intent,
-                              spinnerSize: self.spinnerSize)
-            }
+            SpinnerView(theme: self.theme,
+                        intent: self.intent,
+                        spinnerSize: self.spinnerSize
+            )
+
             Spacer()
         }
         .padding(.horizontal, 16)
