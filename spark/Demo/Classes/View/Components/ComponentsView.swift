@@ -19,7 +19,7 @@ struct ComponentsView: View {
     var theme: Theme {
         self.themePublisher.theme
     }
-    
+
     var body: some View {
         List {
             Button("Badge") {
