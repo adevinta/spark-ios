@@ -23,7 +23,13 @@ public final class TabItemUIView: UIControl {
     private var imageViewHeightConstraint: NSLayoutConstraint?
     private var heightConstraint: NSLayoutConstraint?
     private var spaceConstraint: NSLayoutConstraint?
-    public var action: UIAction?
+
+    var apportionsSegmentWidthsByContent: Bool = false {
+        didSet {
+            self.spaceConstraint?.isActive = self.apportionsSegmentWidthsByContent
+            self.updateConstraintsIfNeeded()
+        }
+    }
 
     private var edgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: self.paddingVertical,
@@ -253,9 +259,14 @@ public final class TabItemUIView: UIControl {
 
         let totalWidth = self.paddingHorizontal + (itemsWidth + spacingsWidth) + self.paddingHorizontal
 
-        let size = CGSize(width: totalWidth, height: self.height)
+        let size = CGSize(width: totalWidth - 16, height: self.height)
+
+        print("LeadingSpacer constraint: \(spaceConstraint?.constant)")
+        print("LeadingSpacer frame \(leadingSpace.frame.width)")
         return size
     }
+
+    public var action: UIAction?
 
     // MARK: - Initializers
     /// Create a tab item view.
@@ -385,6 +396,7 @@ public final class TabItemUIView: UIControl {
         if self.viewModel.icon == nil {
             self.imageView.isHidden = true
         }
+
     }
 
     private func setupColors(attributes: TabStateAttributes) {
@@ -415,7 +427,7 @@ public final class TabItemUIView: UIControl {
 
         self.bottomLineHeightConstraint?.constant = self.borderLineHeight
         self.heightConstraint?.constant = self.height
-        self.spaceConstraint?.constant = self.paddingHorizontal
+//        self.spaceConstraint?.constant = self.paddingHorizontal - self.spacing
 
         self.stackView.spacing = self.spacing
         self.stackView.layoutMargins = self.edgeInsets
@@ -426,7 +438,9 @@ public final class TabItemUIView: UIControl {
         let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
         let heightConstraint = self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.height)
 
-        let spaceConstraint = self.leadingSpace.widthAnchor.constraint(greaterThanOrEqualToConstant: self.paddingHorizontal)
+        let spaceConstraint = self.leadingSpace.widthAnchor.constraint(equalToConstant: self.paddingHorizontal - self.spacing)
+
+        print("PADDING: \(spaceConstraint.constant)")
 
         NSLayoutConstraint.activate([
             lineHeightConstraint,
@@ -466,8 +480,10 @@ public extension UIControl.Event {
 
 private extension UIView {
     static var spacer: UIView {
-        let spacer = UIView()
+        let spacer = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: 20))
         spacer.translatesAutoresizingMaskIntoConstraints = false
+        spacer.backgroundColor = .red
+        spacer.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return spacer
     }
 }

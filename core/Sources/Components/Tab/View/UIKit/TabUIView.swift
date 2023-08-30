@@ -17,7 +17,7 @@ public final class TabUIView: UIControl {
         let stackView = UIStackView()
         stackView.spacing = 0
         stackView.axis = .horizontal
-        stackView.alignment = .fill //.lastBaseline
+        stackView.alignment = .lastBaseline // .fill //.lastBaseline
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -98,7 +98,11 @@ public final class TabUIView: UIControl {
 
     public var apportionsSegmentWidthsByContent: Bool {
         get { return viewModel.apportionsSegmentWidthsByContent }
-        set { self.viewModel.apportionsSegmentWidthsByContent = newValue }
+        set { self.viewModel.apportionsSegmentWidthsByContent = newValue
+            self.segments.forEach{
+            $0.apportionsSegmentWidthsByContent = newValue
+            }
+        }
     }
 
     public override var intrinsicContentSize: CGSize {
@@ -416,7 +420,7 @@ public final class TabUIView: UIControl {
     }
 
     private func setupConstraints() {
-        var scrollContentGuide = self.scrollView.contentLayoutGuide
+        let scrollContentGuide = self.scrollView.contentLayoutGuide
 //        scrollContentGuide = self.safeAreaLayoutGuide
 
         NSLayoutConstraint.activate([
@@ -484,7 +488,7 @@ public final class TabUIView: UIControl {
             guard let self else { return }
 
             self.widthConstraint?.isActive = !useContentWidth
-            stackView.distribution = useContentWidth ? .fill : .fillEqually
+            stackView.distribution = useContentWidth ? .fill : .fillProportionally
             self.setNeedsUpdateConstraints()
 
         }
