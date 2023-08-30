@@ -12,33 +12,4 @@ enum ButtonContentDefault: CaseIterable {
     case attributedText
     case iconAndText
     case iconAndAttributedText
-
-    // MARK: - Properties
-
-    var shouldShowIcon: Bool {
-        switch self {
-        case .icon, .iconAndText, .iconAndAttributedText:
-            return true
-        default:
-            return false
-        }
-    }
-
-    var shouldShowText: Bool {
-        switch self {
-        case .text, .iconAndText:
-            return true
-        default:
-            return false
-        }
-    }
-
-    var shouldShowAttributeText: Bool {
-        switch self {
-        case .attributedText, .iconAndAttributedText:
-            return true
-        default:
-            return false
-        }
-    }
 }

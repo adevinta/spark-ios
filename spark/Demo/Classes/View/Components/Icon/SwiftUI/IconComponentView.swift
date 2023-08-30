@@ -102,9 +102,12 @@ struct IconComponentView: View {
                     .font(.title2)
                     .bold()
 
-                IconComponentViewRepresentable(
-                    intent: self.$intent,
-                    size: self.$size
+
+                IconView(
+                    theme: SparkTheme.shared,
+                    intent: self.intent,
+                    size: self.size,
+                    iconImage: Image("alert")
                 )
 
                 Spacer()

@@ -24,7 +24,7 @@ struct IconComponentViewRepresentable: UIViewRepresentable {
 
     func makeUIView(context: Context) -> IconUIView {
         return IconUIView(
-            iconImage: UIImage(systemName: "lock.circle"),
+            iconImage: UIImage(imageLiteralResourceName: "alert"),
             theme: SparkTheme.shared,
             intent: self.intent,
             size: self.size
