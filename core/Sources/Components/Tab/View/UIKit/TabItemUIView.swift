@@ -22,14 +22,17 @@ public final class TabItemUIView: UIControl {
     private var bottomLineHeightConstraint: NSLayoutConstraint?
     private var imageViewHeightConstraint: NSLayoutConstraint?
     private var heightConstraint: NSLayoutConstraint?
+    private var spaceConstraint: NSLayoutConstraint?
     public var action: UIAction?
 
     private var edgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: self.paddingVertical,
-                            left: self.paddingHorizontal,
+                            left: 0,
                             bottom: self.paddingVertical,
-                            right: self.paddingHorizontal)
+                            right: 0)
     }
+    private let leadingSpace = UIView.spacer
+    private let trailingSpace = UIView.spacer
 
     private var bottomLine: UIView = {
         let border = UIView()
@@ -100,7 +103,7 @@ public final class TabItemUIView: UIControl {
             if let newBadge = self.badge {
                 newBadge.isUserInteractionEnabled = false
 
-                self.stackView.addArrangedSubview(newBadge)
+                self.stackView.insertArrangedSubview(newBadge, at: 3)
             }
             
             self.invalidateIntrinsicContentSize()
@@ -368,8 +371,10 @@ public final class TabItemUIView: UIControl {
 
         self.setupColors(attributes: self.viewModel.tabStateAttributes)
 
+        self.stackView.addArrangedSubview(self.leadingSpace)
         self.stackView.addArrangedSubview(self.imageView)
         self.stackView.addArrangedSubview(self.label)
+        self.stackView.addArrangedSubview(self.trailingSpace)
 
         self.addSubview(self.bottomLine)
         self.bringSubviewToFront(self.bottomLine)
@@ -410,6 +415,7 @@ public final class TabItemUIView: UIControl {
 
         self.bottomLineHeightConstraint?.constant = self.borderLineHeight
         self.heightConstraint?.constant = self.height
+        self.spaceConstraint?.constant = self.paddingHorizontal
 
         self.stackView.spacing = self.spacing
         self.stackView.layoutMargins = self.edgeInsets
@@ -420,10 +426,14 @@ public final class TabItemUIView: UIControl {
         let imageHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
         let heightConstraint = self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.height)
 
+        let spaceConstraint = self.leadingSpace.widthAnchor.constraint(greaterThanOrEqualToConstant: self.paddingHorizontal)
+
         NSLayoutConstraint.activate([
             lineHeightConstraint,
             imageHeightConstraint,
             heightConstraint,
+            spaceConstraint,
+            self.leadingSpace.widthAnchor.constraint(equalTo: trailingSpace.widthAnchor),
             self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
             self.bottomLine.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor),
             self.bottomLine.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor),
@@ -432,6 +442,7 @@ public final class TabItemUIView: UIControl {
         self.bottomLineHeightConstraint = lineHeightConstraint
         self.imageViewHeightConstraint = imageHeightConstraint
         self.heightConstraint = heightConstraint
+        self.spaceConstraint = spaceConstraint
     }
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
@@ -451,4 +462,12 @@ public final class TabItemUIView: UIControl {
 
 public extension UIControl.Event {
     static let otherSegmentSelected = UIControl.Event(rawValue: 0b0010 << 24)
+}
+
+private extension UIView {
+    static var spacer: UIView {
+        let spacer = UIView()
+        spacer.translatesAutoresizingMaskIntoConstraints = false
+        return spacer
+    }
 }
