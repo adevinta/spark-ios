@@ -32,6 +32,8 @@ struct TabUIComponentView: View {
             numberOfTabs: 1,
             selectedTab: self.$selectedTab,
             height: self.$height,
+            equalSize: false,
+            longLabel: false,
             maxWidth: 300
         )
     }
@@ -50,7 +52,9 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
     let badge: BadgeUIView
     @Binding var selectedTab: Int
     @Binding var height: CGFloat
+    let equalSize: Bool
     let maxWidth: CGFloat
+    let longLabel: Bool
 
     private let publishedBinding: PublishedBinding<Int>
 
@@ -64,6 +68,8 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
          numberOfTabs: Int,
          selectedTab: Binding<Int>,
          height: Binding<CGFloat>,
+         equalSize: Bool,
+         longLabel: Bool,
          maxWidth: CGFloat
     ) {
         self.theme = theme
@@ -76,8 +82,10 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         self.numberOfTabs = numberOfTabs
         self._selectedTab = selectedTab
         self._height = height
+        self.equalSize = equalSize
         self.publishedBinding = PublishedBinding(binding: selectedTab)
         self.maxWidth = maxWidth
+        self.longLabel = longLabel
 
         self.badge = BadgeUIView(
             theme: theme,
@@ -92,7 +100,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
 
         let content: [(UIImage?, String?)] = (1...numberOfTabs).map { tabNo in
             (self.showIcon ? .image(at: tabNo) : nil,
-             self.showText ? "Label \(tabNo)" : nil )
+             self.showText ? self.label(for: tabNo) : nil )
         }
 
         let view = TabUIView(
@@ -108,6 +116,7 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         if self.showBadge {
             view.segments.randomElement()?.badge = self.badge
         }
+        view.apportionsSegmentWidthsByContent = !self.equalSize
 
         return view
     }
@@ -118,14 +127,15 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
         uiView.tabSize = self.tabSize
         uiView.isEnabled = self.isEnabled
         uiView.maxWidth = self.maxWidth
+        uiView.apportionsSegmentWidthsByContent = !self.equalSize
 
         uiView.segments.enumerated().forEach{ index, tab in
             tab.icon = self.showIcon ? .image(at: index) : nil
-            tab.title = self.showText ? "Label \(index)" : nil
+            tab.title = self.showText ? self.label(for: index) : nil
         }
 
         if self.numberOfTabs > uiView.numberOfSegments {
-            guard let content: (icon: UIImage, title: String) = (0..<self.numberOfTabs).map({ (icon: .image(at: $0), title: "Label \($0)") }).last else { return }
+            guard let content: (icon: UIImage, title: String) = (0..<self.numberOfTabs).map({ (icon: .image(at: $0), title: self.label(for: $0)) }).last else { return }
 
             if self.showIcon && self.showText {
                 uiView.addSegment(withImage: content.icon, andTitle: content.title, animated: true)
@@ -154,6 +164,13 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
             self.height = uiView.intrinsicContentSize.height
             uiView.scrollToSelectedSegement(animated: true)
         }
+    }
+
+    private func label(for index: Int) -> String {
+        if index == 1 && self.longLabel {
+            return "A Long label \(index)"
+        }
+        return "Label \(index)"
     }
 }
 

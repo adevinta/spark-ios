@@ -17,7 +17,7 @@ public final class TabUIView: UIControl {
         let stackView = UIStackView()
         stackView.spacing = 0
         stackView.axis = .horizontal
-        stackView.alignment = .lastBaseline
+        stackView.alignment = .fill //.lastBaseline
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -35,7 +35,17 @@ public final class TabUIView: UIControl {
         return scrollView
     }()
 
+    private let bottomLine: UIView = {
+        let bottomLine = UIView()
+        bottomLine.translatesAutoresizingMaskIntoConstraints = false
+        return bottomLine
+    }()
+
     private let selectedIndexSubject = PassthroughSubject<Int, Never>()
+    private let viewModel: TabViewModel
+    private var widthConstraint: NSLayoutConstraint?
+    private var bottomLineHeightConstraint: NSLayoutConstraint?
+    private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - Managing design of the segments
     /// All segements of the the tab
@@ -84,6 +94,11 @@ public final class TabUIView: UIControl {
         didSet {
             self.invalidateIntrinsicContentSize()
         }
+    }
+
+    public var apportionsSegmentWidthsByContent: Bool {
+        get { return viewModel.apportionsSegmentWidthsByContent }
+        set { self.viewModel.apportionsSegmentWidthsByContent = newValue }
     }
 
     public override var intrinsicContentSize: CGSize {
@@ -171,10 +186,13 @@ public final class TabUIView: UIControl {
         self.theme = theme
         self.intent = intent
         self.tabSize = tabSize
+        self.viewModel = TabViewModel(theme: theme, apportionsSegmentWidthsByContent: false)
 
         super.init(frame: .zero)
 
         self.setupViews(items: items)
+        self.setupConstraints()
+        self.setupSubscriptions()
     }
 
 
@@ -392,15 +410,37 @@ public final class TabUIView: UIControl {
         self.selectedSegmentIndex = 0
         self.updateAccessibilityIdentifiers()
 
-        let scrollContentGuide = self.scrollView.contentLayoutGuide
+        self.scrollView.addSubview(self.bottomLine)
+        self.bottomLine.layer.zPosition = -1
+        self.bottomLine.backgroundColor = self.viewModel.tabsAttributes.lineColor.uiColor
+    }
+
+    private func setupConstraints() {
+        var scrollContentGuide = self.scrollView.contentLayoutGuide
+//        scrollContentGuide = self.safeAreaLayoutGuide
 
         NSLayoutConstraint.activate([
             self.stackView.leadingAnchor.constraint(equalTo: scrollContentGuide.leadingAnchor),
-            self.stackView.trailingAnchor.constraint(equalTo: scrollContentGuide.trailingAnchor),
+            self.stackView.trailingAnchor.constraint(lessThanOrEqualTo: scrollContentGuide.trailingAnchor),
+//            self.stackView.trailingAnchor.constraint(greaterThanOrEqualTo: self.safeAreaLayoutGuide.trailingAnchor),
             self.stackView.topAnchor.constraint(equalTo: scrollContentGuide.topAnchor),
             self.stackView.bottomAnchor.constraint(equalTo: scrollContentGuide.bottomAnchor),
-            self.stackView.widthAnchor.constraint(equalTo: scrollContentGuide.widthAnchor),
+            self.bottomLine.leadingAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.leadingAnchor),
+            self.bottomLine.trailingAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.trailingAnchor),
+            self.bottomLine.bottomAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.bottomAnchor)
+//            self.stackView.widthAnchor.constraint(equalTo: scrollContentGuide.widthAnchor),
         ])
+
+        self.bottomLineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.viewModel.tabsAttributes.lineHeight)
+        self.bottomLineHeightConstraint?.isActive = true
+
+        self.widthConstraint = self.stackView.widthAnchor.constraint(greaterThanOrEqualTo: self.widthAnchor)
+        if !self.apportionsSegmentWidthsByContent {
+            self.widthConstraint?.isActive = true
+        }
+
+        stackView.distribution = self.apportionsSegmentWidthsByContent ? .fill : .fillEqually
+
     }
 
     private func setTabItems(content: [(icon: UIImage?, title: String?)]) {
@@ -429,6 +469,25 @@ public final class TabUIView: UIControl {
         }
         tabItem.addAction(pressedAction, for: .touchUpInside)
         tabItem.addAction(unselectAction, for: .otherSegmentSelected)
+    }
+
+    private func setupSubscriptions() {
+        self.viewModel.$tabsAttributes.subscribe(in: &self.subscriptions) { [weak self] tabAttributes in
+            guard let self else { return }
+
+            self.bottomLineHeightConstraint?.constant = tabAttributes.lineHeight
+            self.bottomLine.backgroundColor = tabAttributes.lineColor.uiColor
+
+        }
+
+        self.viewModel.$apportionsSegmentWidthsByContent.subscribe(in: &self.subscriptions) { [weak self] useContentWidth in
+            guard let self else { return }
+
+            self.widthConstraint?.isActive = !useContentWidth
+            stackView.distribution = useContentWidth ? .fill : .fillEqually
+            self.setNeedsUpdateConstraints()
+
+        }
     }
 
     private func pressed(_ index: Int) {
