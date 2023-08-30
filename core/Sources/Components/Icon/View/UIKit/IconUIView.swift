@@ -71,7 +71,7 @@ public final class IconUIView: UIView {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleToFill
         imageView.isAccessibilityElement = false
         imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
         imageView.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -105,6 +105,8 @@ public final class IconUIView: UIView {
     private func setupView() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear
+        self.setContentHuggingPriority(.required, for: .horizontal)
+        self.setContentHuggingPriority(.required, for: .vertical)
         self.accessibilityIdentifier = IconAccessibilityIdentifier.view
 
         self.addSubview(imageView)
