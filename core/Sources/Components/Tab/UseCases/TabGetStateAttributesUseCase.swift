@@ -75,7 +75,6 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
         )
 
         if !state.isEnabled {
-
             return TabStateAttributes(
                 spacings: spacings,
                 colors: colors.update(\.opacity, value: theme.dims.dim3),
