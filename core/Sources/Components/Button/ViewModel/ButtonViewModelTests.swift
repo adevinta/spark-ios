@@ -198,10 +198,13 @@ final class ButtonViewModelTests: XCTestCase {
             numberOfCalls: 0
         )
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: 0
+            numberOfCalls: 1,
+            givenIconImage: self.iconImageMock
         )
         self.testGetSizesUseCaseMock(
-            numberOfCalls: 0
+            numberOfCalls: 1,
+            givenSize: sizeMock,
+            givenIsOnlyIcon: self.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
             numberOfCalls: 0
@@ -300,6 +303,7 @@ final class ButtonViewModelTests: XCTestCase {
             givenIconImage: self.iconImageMock
         )
         self.testGetSizesUseCaseMock(
+            numberOfCalls: 2,
             givenSize: sizeMock,
             givenIsOnlyIcon: self.isIconOnlyMock
         )
@@ -1336,7 +1340,7 @@ private extension ButtonViewModelTests {
     }
 
     private func testGetIsIconOnlyUseCaseMock(
-        numberOfCalls: Int = 2,
+        numberOfCalls: Int = 3,
         givenIconImage: UIImage? = nil
     ) {
         XCTAssertEqual(self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextCallsCount,

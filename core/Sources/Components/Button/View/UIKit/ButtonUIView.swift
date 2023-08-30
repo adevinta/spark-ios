@@ -456,6 +456,9 @@ public final class ButtonUIView: UIView {
         self.addSubview(self.contentStackView)
         self.addSubview(self.clearButton)
 
+        // Needed values from viewModel (important for superview)
+        self.height = self.viewModel.sizes?.height ?? 0
+
         // Setup constraints
         self.setupConstraints()
 
