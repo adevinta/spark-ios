@@ -9,9 +9,9 @@
 import Foundation
 
 enum BadgeConstants {
-    static let emptySize = CGSize(width: 12, height: 12)
+    static let emptySize = CGSize(width: 8, height: 8)
     enum height {
-        static let normal: CGFloat = 24
+        static let medium: CGFloat = 24
         static let small: CGFloat = 16
     }
 }

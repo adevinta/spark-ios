@@ -28,6 +28,7 @@ public final class ButtonUIView: UIView {
                 ]
         )
         stackView.axis = .horizontal
+        stackView.accessibilityIdentifier = AccessibilityIdentifier.contentStackView
         return stackView
     }()
 
@@ -67,6 +68,7 @@ public final class ButtonUIView: UIView {
         button.addTarget(self, action: #selector(self.touchDownAction), for: .touchDown)
         button.addTarget(self, action: #selector(self.touchUpOutsideAction), for: .touchUpOutside)
         button.addTarget(self, action: #selector(self.touchCancelAction), for: .touchCancel)
+        button.accessibilityIdentifier = AccessibilityIdentifier.clearButton
         return button
     }()
 
@@ -454,6 +456,9 @@ public final class ButtonUIView: UIView {
         self.addSubview(self.contentStackView)
         self.addSubview(self.clearButton)
 
+        // Needed values from viewModel (important for superview)
+        self.height = self.viewModel.sizes?.height ?? 0
+
         // Setup constraints
         self.setupConstraints()
 
@@ -554,7 +559,7 @@ public final class ButtonUIView: UIView {
         // Reload height only if value changed
         if self.heightConstraint?.constant != self.height {
             self.heightConstraint?.constant = self.height
-            self.layoutIfNeeded()
+            self.updateConstraintsIfNeeded()
         }
     }
 
@@ -576,7 +581,7 @@ public final class ButtonUIView: UIView {
                 self.contentStackViewLeadingConstraint?.constant = horizontalSpacing
                 self.contentStackViewTopConstraint?.constant = verticalSpacing
                 self.contentStackViewBottomConstraint?.constant = -verticalSpacing
-                self.contentStackView.layoutIfNeeded()
+                self.contentStackView.updateConstraintsIfNeeded()
 
                 self.contentStackView.spacing = horizontalPadding
             }
@@ -587,7 +592,7 @@ public final class ButtonUIView: UIView {
         // Reload height only if value changed
         if self.iconImageViewHeightConstraint?.constant != self.iconHeight {
             self.iconImageViewHeightConstraint?.constant = self.iconHeight
-            self.iconImageView.layoutIfNeeded()
+            self.iconImageView.updateConstraintsIfNeeded()
         }
     }
 
@@ -709,7 +714,7 @@ public final class ButtonUIView: UIView {
                 if self.textLabel.isHidden == content.shouldShowText {
                     self.textLabel.isHidden = !content.shouldShowText
                 }
-                self.contentStackView.layoutIfNeeded()
+                self.contentStackView.updateConstraintsIfNeeded()
             }
 
             // Position

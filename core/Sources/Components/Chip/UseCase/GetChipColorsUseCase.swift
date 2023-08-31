@@ -22,7 +22,11 @@ protocol GetChipColorsUseCasable {
     ///
     /// Returns:
     ///       ChipColors: all the colors used for the chip
-    func execute(theme: Theme, variant: ChipVariant, intent: ChipIntent) -> ChipColors
+    func execute(theme: Theme,
+                 variant: ChipVariant,
+                 intent: ChipIntent,
+                 state: ChipState
+    ) -> ChipStateColors
 }
 
 /// GetChipColorsUseCase: A use case to calculate the colors of a chip depending on the theme, variand and intent
@@ -48,13 +52,17 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
     /// - theme: The current theme to be used
     /// - variant: The variant of the chip, whether it's filled, outlined, etc.
     /// - intent: The intent color of the chip, e.g. main, support
-    func execute(theme: Theme, variant: ChipVariant, intent: ChipIntent) -> ChipColors {
+    func execute(theme: Theme,
+                 variant: ChipVariant,
+                 intent: ChipIntent,
+                 state: ChipState) -> ChipStateColors {
         let intentColors = intentColorsUseCase.execute(colors: theme.colors, intentColor: intent)
 
+        let chipColors: ChipColors
         switch variant {
         case .dashed, .outlined:
             if intent == .surface {
-                return ChipColors(
+                chipColors = ChipColors(
                     default: .init(background: ColorTokenDefault.clear,
                                    border: intentColors.subordinate,
                                    foreground: intentColors.subordinate),
@@ -63,7 +71,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                                    foreground: intentColors.principal)
                 )
             } else {
-                return ChipColors(
+                chipColors = ChipColors(
                     default: .init(background: ColorTokenDefault.clear,
                                    border: intentColors.principal,
                                    foreground: intentColors.principal),
@@ -74,7 +82,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
             }
         case .filled:
             if intent == .surface {
-                return ChipColors(
+                chipColors = ChipColors(
                     default: .init(background: intentColors.principal,
                                    border: intentColors.principal,
                                    foreground: intentColors.subordinate),
@@ -83,7 +91,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                                    foreground: intentColors.principal)
                 )
             } else {
-                return ChipColors(
+                chipColors = ChipColors(
                     default: .init(background: intentColors.principal,
                                    border: intentColors.principal,
                                    foreground: intentColors.subordinate),
@@ -93,7 +101,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                 )
             }
         case .tinted:
-            return ChipColors(
+            chipColors = ChipColors(
                 default: .init(background: intentColors.tintedPrincipal,
                                border: intentColors.tintedPrincipal,
                                foreground: intentColors.tintedSubordinate),
@@ -102,5 +110,19 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                                foreground: intentColors.tintedPrincipal)
             )
         }
+
+        if state.isPressed {
+            return chipColors.pressed
+        } else if state.isDisabled {
+            return chipColors.default.withOpacity(theme.dims.dim3)
+        } else {
+            return chipColors.default
+        }
+    }
+}
+
+private extension ChipStateColors {
+    func withOpacity(_ opacity: CGFloat) -> ChipStateColors {
+        return .init(background: self.background, border: self.border, foreground: self.foreground, opacity: opacity)
     }
 }

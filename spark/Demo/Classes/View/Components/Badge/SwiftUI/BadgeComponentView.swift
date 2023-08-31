@@ -26,14 +26,17 @@ struct BadgeComponentView: View {
     var theme: Theme {
         self.themePublisher.theme
     }
+    @State var isThemePresented = false
 
-    @State var version: ComponentVersion = .uiKit
-    @State var isVersionPresented = false
+    var themes: [ThemeCellModel] = [
+        .init(title: "Spark", theme: SparkTheme()),
+        .init(title: "Purple", theme: PurpleTheme())
+    ]
 
     @State var intent: BadgeIntentType = .danger
     @State var isIntentPresented = false
 
-    @State var size: BadgeSize = .normal
+    @State var size: BadgeSize = .medium
     @State var isSizePresented = false
 
     @State var value: Int? = 99
@@ -52,15 +55,16 @@ struct BadgeComponentView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack() {
-                    Text("Version: ").bold()
-                    Button(self.version.name) {
-                        self.isVersionPresented = true
+                    Text("Theme: ").bold()
+                    let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
+                    Button(selectedTheme?.title ?? "") {
+                        self.isThemePresented = true
                     }
-                    .confirmationDialog("Select a version",
-                                        isPresented: self.$isVersionPresented) {
-                        ForEach(ComponentVersion.allCases, id: \.self) { version in
-                            Button(version.name) {
-                                self.version = version
+                    .confirmationDialog("Select a theme",
+                                        isPresented: self.$isThemePresented) {
+                        ForEach(themes, id: \.self) { theme in
+                            Button(theme.title) {
+                                themePublisher.theme = theme.theme
                             }
                         }
                     }
@@ -125,21 +129,10 @@ struct BadgeComponentView: View {
                 .font(.title2)
                 .bold()
 
-
-            if version == .swiftUI {
-                BadgeView(theme: self.theme, intent: self.intent, value: self.value)
-                    .size(self.size)
-                    .format(self.format)
-                    .borderVisible(self.isBorderVisible == .selected)
-            } else {
-                UIBadgeView(theme: self.theme,
-                            intent: self.intent,
-                            size: self.size,
-                            value: self.value,
-                            format: self.format,
-                            isBorderVisible: self.isBorderVisible == .selected)
-                .fixedSize()
-            }
+            BadgeView(theme: self.theme, intent: self.intent, value: self.value)
+                .size(self.size)
+                .format(self.format)
+                .borderVisible(self.isBorderVisible == .selected)
 
             Spacer()
         }
@@ -154,7 +147,7 @@ struct BadgeComponentView_Previews: PreviewProvider {
     }
 }
 
-private extension BadgeFormat {
+extension BadgeFormat {
     enum Names {
         static let `default` = "Default"
         static let custom = "Custom"

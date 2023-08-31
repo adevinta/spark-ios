@@ -81,10 +81,18 @@ final class ButtonViewModel: ObservableObject {
         self.isEnabled = isEnabled
 
         self.dependencies = dependencies
+
+        self.loadRequired()
     }
 
     // MARK: - Load
 
+    /// Load required published properties when the view is init
+    private func loadRequired() {
+        self.sizesDidUpdate()
+    }
+
+    /// Load all published values. Should be called when all published values are subscribed by the view
     func load() {
         // Update all values when view is ready to receive published values
         self.updateAll()

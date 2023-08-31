@@ -198,10 +198,13 @@ final class ButtonViewModelTests: XCTestCase {
             numberOfCalls: 0
         )
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: 0
+            numberOfCalls: 1,
+            givenIconImage: self.iconImageMock
         )
         self.testGetSizesUseCaseMock(
-            numberOfCalls: 0
+            numberOfCalls: 1,
+            givenSize: sizeMock,
+            givenIsOnlyIcon: self.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
             numberOfCalls: 0
@@ -300,6 +303,7 @@ final class ButtonViewModelTests: XCTestCase {
             givenIconImage: self.iconImageMock
         )
         self.testGetSizesUseCaseMock(
+            numberOfCalls: 2,
             givenSize: sizeMock,
             givenIsOnlyIcon: self.isIconOnlyMock
         )
@@ -1336,7 +1340,7 @@ private extension ButtonViewModelTests {
     }
 
     private func testGetIsIconOnlyUseCaseMock(
-        numberOfCalls: Int = 2,
+        numberOfCalls: Int = 3,
         givenIconImage: UIImage? = nil
     ) {
         XCTAssertEqual(self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextCallsCount,
@@ -1419,37 +1423,17 @@ private extension ButtonViewModelTests {
 
     private func resetMockedData() {
         // Clear UseCases Mock
-        self.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantCallsCount = 0
-        self.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantReceivedArguments = nil
-        self.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantReceivedInvocations = []
-
-        self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount = 0
-        self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments = nil
-        self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedInvocations = []
-
-        self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextCallsCount = 0
-        self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReceivedArguments = nil
-        self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReceivedInvocations = []
-
-        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeCallsCount = 0
-        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReceivedArguments = nil
-        self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReceivedInvocations = []
-
-        self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextCallsCount = 0
-        self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextReceivedArguments = nil
-        self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextReceivedInvocations = []
-
-        self.getSizesUseCaseMock.executeWithSizeAndIsOnlyIconCallsCount = 0
-        self.getSizesUseCaseMock.executeWithSizeAndIsOnlyIconReceivedArguments = nil
-        self.getSizesUseCaseMock.executeWithSizeAndIsOnlyIconReceivedInvocations = []
-
-        self.getSpacingsUseCaseMock.executeWithSpacingAndIsOnlyIconCallsCount = 0
-        self.getSpacingsUseCaseMock.executeWithSpacingAndIsOnlyIconReceivedArguments = nil
-        self.getSpacingsUseCaseMock.executeWithSpacingAndIsOnlyIconReceivedInvocations = []
-
-        self.getStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount = 0
-        self.getStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments = nil
-        self.getStateUseCaseMock.executeWithIsEnabledAndDimsReceivedInvocations = []
+        let useCases: [ResetGeneratedMock] = [
+            self.getBorderUseCaseMock,
+            self.getColorsUseCaseMock,
+            self.getContentUseCaseMock,
+            self.getCurrentColorsUseCaseMock,
+            self.getIsIconOnlyUseCaseMock,
+            self.getSizesUseCaseMock,
+            self.getSpacingsUseCaseMock,
+            self.getStateUseCaseMock
+        ]
+        useCases.forEach { $0.reset() }
 
         // Reset published sink counter
         self.statePublishedSinkCount = 0

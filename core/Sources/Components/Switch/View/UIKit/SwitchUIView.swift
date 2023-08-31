@@ -201,6 +201,32 @@ public final class SwitchUIView: UIView {
         }
     }
 
+    public override var intrinsicContentSize: CGSize {
+        // Calculate height
+        let toggleHeight = self.toggleHeight
+        let labelHeight = self.textLabel.intrinsicContentSize.height
+        let height = max(toggleHeight, labelHeight)
+
+        // Calculate width
+        let toggleWidth = self.toggleWidth
+        let contentStackViewSpacing = self.contentStackViewSpacing
+        var width = toggleWidth + contentStackViewSpacing
+
+        if let attributedText {
+            let computedSize = attributedText.boundingRect(
+                with: CGSize(
+                    width: CGFloat.greatestFiniteMagnitude,
+                    height: CGFloat.greatestFiniteMagnitude
+                ),
+                options: .usesLineFragmentOrigin,
+                context: nil)
+            width += computedSize.width
+        } else if text != nil {
+            width += self.textLabel.intrinsicContentSize.width
+        }
+        return CGSize(width: width, height: height)
+    }
+
     // MARK: - Private Properties
 
     private let viewModel: SwitchViewModel
@@ -550,6 +576,7 @@ public final class SwitchUIView: UIView {
             self.toggleContentBottomConstraint?.constant = -self.toggleSpacing
 
             self.toggleContentStackView.layoutIfNeeded()
+            self.invalidateIntrinsicContentSize()
         }
     }
 
@@ -570,6 +597,7 @@ public final class SwitchUIView: UIView {
         }
         if valueChanged {
             self.toggleView.layoutIfNeeded()
+            self.invalidateIntrinsicContentSize()
         }
     }
 
@@ -582,6 +610,7 @@ public final class SwitchUIView: UIView {
             self.toggleDotBottomConstraint?.constant = -self.toggleDotSpacing
 
             self.toggleDotImageView.layoutIfNeeded()
+            self.invalidateIntrinsicContentSize()
         }
     }
 
@@ -589,6 +618,7 @@ public final class SwitchUIView: UIView {
         // Reload spacing only if value changed and constraint is active
         if self.contentStackViewSpacing != self.contentStackView.spacing {
             self.contentStackView.spacing = contentStackViewSpacing
+            self.invalidateIntrinsicContentSize()
         }
     }
 
@@ -747,6 +777,7 @@ public final class SwitchUIView: UIView {
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        self.invalidateIntrinsicContentSize()
 
         // Update size content
         self._contentStackViewSpacing.update(traitCollection: self.traitCollection)
