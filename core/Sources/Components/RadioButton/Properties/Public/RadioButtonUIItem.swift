@@ -9,7 +9,7 @@
 import Foundation
 
 /// A simple struct for defining radio buttons using the ``RadioButtonGroupView``.
-public struct RadioButtonUIItem<ID: Equatable & Hashable> {
+public struct RadioButtonUIItem<ID: Equatable & Hashable>: Equatable & Hashable {
 
     //MARK: - Properties
 
