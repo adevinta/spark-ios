@@ -91,7 +91,7 @@ class CheckboxControlUIView: UIView {
         case .unselected:
             return .zero
         case .selected:
-            iconSize = CGSize(width: 14, height: 10)
+            iconSize = CGSize(width: 14, height: 14)
         case .indeterminate:
             iconSize = CGSize(width: 12, height: 2)
         }
