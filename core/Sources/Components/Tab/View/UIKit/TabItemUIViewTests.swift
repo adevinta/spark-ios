@@ -129,27 +129,6 @@ final class TabItemUIViewTests: TestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func test_is_empty() {
-        // Given
-        let expect = expectation(description: "Content to be changed")
-        expect.expectedFulfillmentCount = 3
-
-        self.sut.viewModel.$content.subscribe(in: &self.subscriptions) { _ in
-            expect.fulfill()
-        }
-
-        // When
-        self.sut.title = nil
-        self.sut.icon = nil
-
-        // Then
-        waitForExpectations(timeout: 1)
-        for view in sut.stackView.arrangedSubviews {
-            print(view.isHidden)
-        }
-        XCTAssertTrue(self.sut.isEmpty)
-    }
-
     func test_when_pressed_attributes_change() {
         // Given
         let expect = expectation(description: "Attributes should be changed")
