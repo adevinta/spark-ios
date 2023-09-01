@@ -10,23 +10,29 @@ import Combine
 
 final class TabViewModel: ObservableObject {
 
-    private var useCase: TabsGetAttributesUseCase
+    private var useCase: any TabsGetAttributesUseCaseable
     var theme: Theme {
         didSet {
-            self.tabsAttributes = self.useCase.execute(theme: theme)
+            self.tabsAttributes = self.useCase.execute(theme: theme, isEnabled: self.isEnabled)
+        }
+    }
+
+    var isEnabled: Bool = true {
+        didSet {
+            self.tabsAttributes = self.useCase.execute(theme: theme, isEnabled: self.isEnabled)
         }
     }
 
     @Published var apportionsSegmentWidthsByContent: Bool = false
     @Published var tabsAttributes: TabsAttributes
 
-    init(theme: Theme,
+    init(theme: some Theme,
          apportionsSegmentWidthsByContent: Bool = false,
-         useCase: TabsGetAttributesUseCase = .init()
+         useCase: some TabsGetAttributesUseCaseable = TabsGetAttributesUseCase()
     ) {
         self.theme = theme
         self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
         self.useCase = useCase
-        self.tabsAttributes = useCase.execute(theme: theme)
+        self.tabsAttributes = useCase.execute(theme: theme, isEnabled: true)
     }
 }

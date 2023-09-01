@@ -29,6 +29,15 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
     // MARK: - Tests
     func test_tabs_with_icons_only() throws {
         let sut = TabUIView(theme: self.theme, icons: Array(self.images[0..<3]))
+        sut.apportionsSegmentWidthsByContent = true
+        sut.setBadge(self.badge, forSegementAt: 2)
+
+        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
+    }
+
+    func test_tabs_with_icons_only_equal_width() throws {
+        let sut = TabUIView(theme: self.theme, icons: Array(self.images[0..<3]))
+        sut.apportionsSegmentWidthsByContent = false
         sut.setBadge(self.badge, forSegementAt: 2)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
@@ -39,6 +48,18 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             titles: Array(self.names[0..<3].map(\.capitalized))
         )
+        sut.apportionsSegmentWidthsByContent = true
+        sut.setBadge(self.badge, forSegementAt: 1)
+
+        assertSnapshotInDarkAndLight(matching: sut)
+    }
+
+    func test_tabs_with_text_only_equal_width() throws {
+        let sut = TabUIView(
+            theme: self.theme,
+            titles: Array(self.names[0..<2].map(\.capitalized))
+        )
+        sut.apportionsSegmentWidthsByContent = false
         sut.setBadge(self.badge, forSegementAt: 1)
 
         assertSnapshotInDarkAndLight(matching: sut)
@@ -51,6 +72,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             content: content
         )
+        sut.apportionsSegmentWidthsByContent = true
         sut.setBadge(self.badge, forSegementAt: 0)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
@@ -64,6 +86,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             tabSize: .sm,
             content: content
         )
+        sut.apportionsSegmentWidthsByContent = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -76,6 +99,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             tabSize: .xs,
             content: content
         )
+        sut.apportionsSegmentWidthsByContent = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -86,6 +110,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             content: content
         )
+        sut.apportionsSegmentWidthsByContent = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
