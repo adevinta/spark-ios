@@ -86,7 +86,9 @@ extension ComponentsViewController {
             viewController = RadioButtonUIGroupViewController()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
-        default:
+        case .switchButton:
+            viewController = SwitchComponentUIViewController.build()
+        case .tag:
             break
         }
         guard viewController != nil else { return }

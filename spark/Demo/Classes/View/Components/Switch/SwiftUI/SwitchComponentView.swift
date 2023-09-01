@@ -16,10 +16,15 @@ struct SwitchComponentView: View {
 
     let viewModel = SwitchComponentViewModel()
 
-    @State private var uiKitViewHeight: CGFloat = .zero
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+    @State private var isThemePresented = false
 
-    @State private var versionSheetIsPresented = false
-    @State var version: ComponentVersion = .uiKit
+    let themes = ThemeCellModel.themes
+
+    @State private var uiKitViewHeight: CGFloat = .zero
 
     @State private var isOnSheetIsPresented = false
     @State var isOn: Bool = true
@@ -53,20 +58,22 @@ struct SwitchComponentView: View {
 
                 VStack(alignment: .leading, spacing: 16) {
                     // **
-                    // Version
+                    // Theme
                     HStack() {
-                        Text("Version: ")
-                            .bold()
-                        Button("\(self.version.name)") {
-                            self.versionSheetIsPresented = true
+                        Text("Theme: ").bold()
+                        let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
+                        Button(selectedTheme?.title ?? "") {
+                            self.isThemePresented = true
                         }
-                        .confirmationDialog("Select an version", isPresented: self.$versionSheetIsPresented) {
-                            ForEach(ComponentVersion.allCases, id: \.self) { version in
-                                Button("\(version.name)") {
-                                    self.version = version
+                        .confirmationDialog("Select a theme",
+                                            isPresented: self.$isThemePresented) {
+                            ForEach(themes, id: \.self) { theme in
+                                Button(theme.title) {
+                                    themePublisher.theme = theme.theme
                                 }
                             }
                         }
+                        Spacer()
                     }
                     // **
 
@@ -153,23 +160,19 @@ struct SwitchComponentView: View {
                     .font(.title2)
                     .bold()
 
-                if self.version == .swiftUI {
-                    Text("Not dev yet !")
-                } else {
-                    GeometryReader { geometry in
-                        SwitchComponentItemsUIView(
-                            viewModel: self.viewModel,
-                            width: geometry.size.width,
-                            height: self.$uiKitViewHeight,
-                            isOn: self.$isOn,
-                            alignment: self.$alignment.wrappedValue,
-                            intent: self.$intent.wrappedValue,
-                            isEnabled: self.$isEnabled.wrappedValue,
-                            hasImages: self.$hasImages.wrappedValue,
-                            textContent: self.$textContent.wrappedValue
-                        )
-                        .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .leading)
-                    }
+                GeometryReader { geometry in
+                    SwitchComponentViewRepresentable(
+                        viewModel: self.viewModel,
+                        width: geometry.size.width,
+                        height: self.$uiKitViewHeight,
+                        isOn: self.$isOn,
+                        alignment: self.$alignment.wrappedValue,
+                        intent: self.$intent.wrappedValue,
+                        isEnabled: self.$isEnabled.wrappedValue,
+                        hasImages: self.$hasImages.wrappedValue,
+                        textContent: self.$textContent.wrappedValue
+                    )
+                    .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .leading)
                 }
 
                 Spacer()

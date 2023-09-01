@@ -18,10 +18,7 @@ struct ChipComponentView: View {
     }
     @State private var isThemePresented = false
 
-    var themes: [ThemeCellModel] = [
-        .init(title: "Spark", theme: SparkTheme()),
-        .init(title: "Purple", theme: PurpleTheme())
-    ]
+    let themes = ThemeCellModel.themes
 
     @State var intent: ChipIntent = .main
     @State var isIntentPresented = false
@@ -150,7 +147,7 @@ struct ChipComponentView: View {
                 .font(.title2)
                 .bold()
 
-            ChipComponentUIView(
+            ChipComponentViewRepresentable(
                 theme: self.theme,
                 intent: self.intent,
                 variant: self.variant,

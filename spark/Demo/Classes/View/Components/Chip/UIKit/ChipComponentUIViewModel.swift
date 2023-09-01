@@ -29,10 +29,7 @@ final class ChipComponentUIViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
 
-    var themes: [ThemeCellModel] = [
-        .init(title: "Spark", theme: SparkTheme()),
-        .init(title: "Purple", theme: PurpleTheme())
-    ]
+    let themes = ThemeCellModel.themes
 
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()

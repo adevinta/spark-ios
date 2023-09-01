@@ -19,10 +19,7 @@ struct SpinnerComponent: View {
     }
     @State private var isThemePresented = false
 
-    var themes: [ThemeCellModel] = [
-        .init(title: "Spark", theme: SparkTheme()),
-        .init(title: "Purple", theme: PurpleTheme())
-    ]
+    let themes = ThemeCellModel.themes
 
     @State var intent: SpinnerIntent = .main
     @State var isIntentPresented = false
