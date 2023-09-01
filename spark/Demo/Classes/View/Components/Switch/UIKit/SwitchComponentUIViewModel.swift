@@ -117,7 +117,7 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
         ])
     }()
 
-    // MARK: - Inherited Properties
+    // MARK: - Default Value Properties
     let themes = ThemeCellModel.themes
     let images: SwitchUIImages = {
         let onImage = UIImage(named: "check") ?? UIImage()
@@ -128,8 +128,6 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
             off: offImage
         )
     }()
-
-    // MARK: - Default Value Properties
     let text: String = "Text"
     let multilineText: String = "This is an example of a multi-line text which is very long and in which the user should read all the information."
     let attributedText: NSAttributedString

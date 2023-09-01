@@ -89,7 +89,7 @@ extension ComponentsViewController {
         case .switchButton:
             viewController = SwitchComponentUIViewController.build()
         case .tag:
-            break
+            viewController = TagComponentUIViewController.build()
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
