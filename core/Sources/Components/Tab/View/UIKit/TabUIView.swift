@@ -17,7 +17,7 @@ public final class TabUIView: UIControl {
         let stackView = UIStackView()
         stackView.spacing = 0
         stackView.axis = .horizontal
-        stackView.alignment = .lastBaseline // .fill //.lastBaseline
+        stackView.alignment = .fill //.lastBaseline // .fill //.lastBaseline
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -86,6 +86,7 @@ public final class TabUIView: UIControl {
     /// Disable each segement of the tab
     public override var isEnabled: Bool {
         didSet {
+            self.viewModel.isEnabled = self.isEnabled
             self.segments.forEach{ $0.isEnabled = self.isEnabled }
         }
     }
@@ -98,9 +99,10 @@ public final class TabUIView: UIControl {
 
     public var apportionsSegmentWidthsByContent: Bool {
         get { return viewModel.apportionsSegmentWidthsByContent }
-        set { self.viewModel.apportionsSegmentWidthsByContent = newValue
+        set {
+            self.viewModel.apportionsSegmentWidthsByContent = newValue
             self.segments.forEach{
-            $0.apportionsSegmentWidthsByContent = newValue
+                $0.apportionsSegmentWidthsByContent = newValue
             }
         }
     }
@@ -137,7 +139,7 @@ public final class TabUIView: UIControl {
     /// - tabSize: The tab size, see `TabSize`. The default value is medium `md`.
     /// - titles: An array of labels.
     public convenience init(theme: Theme,
-                intent: TabIntent = .main,
+                intent: TabIntent = .basic,
                 tabSize: TabSize = .md,
                 titles: [String]
     ) {
@@ -183,8 +185,8 @@ public final class TabUIView: UIControl {
 
     // Internal initializer
     init(theme: Theme,
-                intent: TabIntent = .main,
-                tabSize: TabSize = .md,
+         intent: TabIntent = .main,
+         tabSize: TabSize = .md,
          items: [TabUIItemContent]) {
 
         self.theme = theme
@@ -198,7 +200,6 @@ public final class TabUIView: UIControl {
         self.setupConstraints()
         self.setupSubscriptions()
     }
-
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -417,22 +418,20 @@ public final class TabUIView: UIControl {
         self.scrollView.addSubview(self.bottomLine)
         self.bottomLine.layer.zPosition = -1
         self.bottomLine.backgroundColor = self.viewModel.tabsAttributes.lineColor.uiColor
+        self.scrollView.backgroundColor = self.viewModel.tabsAttributes.backgroundColor.uiColor
     }
 
     private func setupConstraints() {
         let scrollContentGuide = self.scrollView.contentLayoutGuide
-//        scrollContentGuide = self.safeAreaLayoutGuide
 
         NSLayoutConstraint.activate([
             self.stackView.leadingAnchor.constraint(equalTo: scrollContentGuide.leadingAnchor),
             self.stackView.trailingAnchor.constraint(lessThanOrEqualTo: scrollContentGuide.trailingAnchor),
-//            self.stackView.trailingAnchor.constraint(greaterThanOrEqualTo: self.safeAreaLayoutGuide.trailingAnchor),
             self.stackView.topAnchor.constraint(equalTo: scrollContentGuide.topAnchor),
             self.stackView.bottomAnchor.constraint(equalTo: scrollContentGuide.bottomAnchor),
             self.bottomLine.leadingAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.leadingAnchor),
             self.bottomLine.trailingAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.trailingAnchor),
             self.bottomLine.bottomAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.bottomAnchor)
-//            self.stackView.widthAnchor.constraint(equalTo: scrollContentGuide.widthAnchor),
         ])
 
         self.bottomLineHeightConstraint = self.bottomLine.heightAnchor.constraint(equalToConstant: self.viewModel.tabsAttributes.lineHeight)
@@ -481,14 +480,14 @@ public final class TabUIView: UIControl {
 
             self.bottomLineHeightConstraint?.constant = tabAttributes.lineHeight
             self.bottomLine.backgroundColor = tabAttributes.lineColor.uiColor
-
+            self.scrollView.backgroundColor = tabAttributes.backgroundColor.uiColor
         }
 
         self.viewModel.$apportionsSegmentWidthsByContent.subscribe(in: &self.subscriptions) { [weak self] useContentWidth in
             guard let self else { return }
 
             self.widthConstraint?.isActive = !useContentWidth
-            stackView.distribution = useContentWidth ? .fill : .fillProportionally
+            self.stackView.distribution = useContentWidth ? .fill : .fillEqually
             self.setNeedsUpdateConstraints()
 
         }

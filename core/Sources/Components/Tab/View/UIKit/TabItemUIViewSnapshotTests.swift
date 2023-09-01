@@ -31,6 +31,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .main,
             title: "Label")
+        sut.apportionsSegmentWidthsByContent = false
 
         self.badge.value = 99
         sut.badge = self.badge
@@ -43,6 +44,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .main,
             title: "Label")
+        sut.apportionsSegmentWidthsByContent = true
 
         sut.isSelected = true
         self.badge.value = 99
@@ -56,6 +58,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main)
+        sut.apportionsSegmentWidthsByContent = true
 
         self.badge.value = 99
         sut.badge = self.badge
@@ -68,6 +71,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .main,
             title: "Label")
+        sut.apportionsSegmentWidthsByContent = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
     }
@@ -77,6 +81,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .main,
             icon: UIImage(systemName: "paperplane"))
+        sut.apportionsSegmentWidthsByContent = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -86,6 +91,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             theme: self.theme,
             intent: .main,
             title: "Label")
+        sut.apportionsSegmentWidthsByContent = true
 
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
         sut.badge = badge
@@ -100,6 +106,8 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             title: "Label",
             icon: UIImage(systemName: "paperplane")
         )
+        sut.apportionsSegmentWidthsByContent = true
+
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.large])
     }
 
@@ -110,6 +118,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             icon: UIImage(systemName: "paperplane")
         )
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
+        sut.apportionsSegmentWidthsByContent = true
         sut.badge = badge
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.extraSmall])
@@ -123,6 +132,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
             icon: UIImage(systemName: "paperplane")
         )
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
+        sut.apportionsSegmentWidthsByContent = true
         sut.badge = badge
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.small])

@@ -22,7 +22,7 @@ struct TabComponent: View {
     @State private var versionSheetIsPresented = false
     @State var version: ComponentVersion = .uiKit
 
-    @State var intent: TabIntent = .main
+    @State var intent: TabIntent = .basic
     @State var isIntentPresented = false
     @State var showText = CheckboxSelectionState.selected
     @State var showIcon = CheckboxSelectionState.selected
