@@ -24,6 +24,7 @@ final class ComponentsConfigurationItemUIViewModel {
 
     @Published var color: UIColor = .blue
     @Published var buttonTitle: String?
+    @Published var isOn: Bool?
 
     // MARK: - Initialization
 

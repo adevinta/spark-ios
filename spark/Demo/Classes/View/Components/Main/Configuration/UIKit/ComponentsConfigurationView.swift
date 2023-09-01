@@ -34,6 +34,7 @@ final class ComponentsConfigurationUIView: UIView {
     private lazy var itemsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: self.itemsView)
         stackView.axis = .vertical
+        stackView.spacing = 5
         return stackView
     }()
 

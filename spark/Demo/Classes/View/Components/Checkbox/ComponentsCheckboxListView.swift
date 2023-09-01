@@ -9,34 +9,50 @@
 import SwiftUI
 
 struct ComponentsCheckboxListView: View {
+
+    @Environment(\.navigationController) var navigationController
+
+    let isSwiftUI: Bool
+
+    init(isSwiftUI: Bool) {
+        self.isSwiftUI = isSwiftUI
+    }
+
     var body: some View {
         List {
-            Section(header: Text("SwiftUI")) {
-                NavigationLink("Checkbox") {
-                    CheckboxListView()
+
+            if isSwiftUI {
+                Button("Checkbox") {
+                    self.navigateToView(CheckboxListView())
                 }
 
-                NavigationLink("Checkbox Group") {
-                    CheckboxGroupListView()
+                Button("Checkbox Group") {
+                    self.navigateToView(CheckboxGroupListView())
                 }
-            }
-
-            Section(header: Text("UIKit")) {
-                NavigationLink("Checkbox") {
-                    CheckboxUIViewControllerBridge()
+            } else {
+                Button("Checkbox") {
+                    self.navigationController?.pushViewController(CheckboxViewController(), animated: true)
                 }
 
-                NavigationLink("Checkbox Group") {
-                    CheckboxGroupUIViewControllerBridge()
+                Button("Checkbox Group") {
+                    self.navigationController?.pushViewController(CheckboxGroupViewController(), animated: true)
                 }
             }
         }
-        .navigationBarTitle(Text("Checkbox"))
+        .navigationBarTitle("Checkbox")
+        .foregroundColor(.black)
+        .navigationBarHidden(false)
+        .navigationTitle("Components")
+    }
+
+    private func navigateToView(_ rootView: some View) {
+        let controller = UIHostingController(rootView: rootView)
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 }
 
 struct ComponentsCheckboxListView_Previews: PreviewProvider {
     static var previews: some View {
-        ComponentsCheckboxListView()
+        ComponentsCheckboxListView(isSwiftUI: false)
     }
 }

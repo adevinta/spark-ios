@@ -98,6 +98,7 @@ struct RadioButtonGroup: View {
             Spacer()
 
         }
+        .navigationTitle("Radio Button")
         .padding(8)
     }
 }

@@ -127,5 +127,14 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
                 self?.button?.setTitle(buttonTitle, for: .normal)
             }
             .store(in: &self.subscriptions)
+
+        // Toggle isOn
+        self.viewModel.$isOn
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isOn in
+                guard let isOn = isOn else { return }
+                self?.toggle?.isOn = isOn
+            }
+            .store(in: &self.subscriptions)
     }
 }

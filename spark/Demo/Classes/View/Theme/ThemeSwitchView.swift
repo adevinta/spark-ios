@@ -131,6 +131,12 @@ struct ThemeCellModel: Equatable, Hashable {
     let title: String
     let theme: Theme
 
+    // MARK: - Public Properties
+    static var themes: [ThemeCellModel] = [
+        .init(title: "Spark", theme: SparkTheme()),
+        .init(title: "Purple", theme: PurpleTheme())
+    ]
+
     // MARK: - Initialize
     init(title: String, theme: Theme) {
         self.title = title
