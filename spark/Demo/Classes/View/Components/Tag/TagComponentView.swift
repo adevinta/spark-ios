@@ -16,10 +16,15 @@ struct TagComponentView: View {
 
     let viewModel = TagComponentViewModel()
 
-    @State private var uiKitViewHeight: CGFloat = .zero
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+    @State private var isThemePresented = false
 
-    @State private var versionSheetIsPresented = false
-    @State var version: ComponentVersion = .swiftUI
+    let themes = ThemeCellModel.themes
+
+    @State private var uiKitViewHeight: CGFloat = .zero
 
     @State private var intentSheetIsPresented = false
     @State var intent: TagIntent = .main
@@ -41,22 +46,23 @@ struct TagComponentView: View {
 
                 VStack(alignment: .leading, spacing: 16) {
                     // **
-                    // Version
+                    // Theme
                     HStack() {
-                        Text("Version: ")
-                            .bold()
-                        Button("\(self.version.name)") {
-                            self.versionSheetIsPresented = true
+                        Text("Theme: ").bold()
+                        let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
+                        Button(selectedTheme?.title ?? "") {
+                            self.isThemePresented = true
                         }
-                        .confirmationDialog("Select an version", isPresented: self.$versionSheetIsPresented) {
-                            ForEach(ComponentVersion.allCases, id: \.self) { version in
-                                Button("\(version.name)") {
-                                    self.version = version
+                        .confirmationDialog("Select a theme",
+                                            isPresented: self.$isThemePresented) {
+                            ForEach(themes, id: \.self) { theme in
+                                Button(theme.title) {
+                                    themePublisher.theme = theme.theme
                                 }
                             }
                         }
-                    }
-                    // **
+                        Spacer()
+                    }                    // **
 
                     // **
                     // Intent
@@ -119,27 +125,13 @@ struct TagComponentView: View {
                     .font(.title2)
                     .bold()
 
-                if self.version == .swiftUI {
-                    TagView(theme: SparkTheme.shared)
-                        .intent(self.intent)
-                        .variant(self.variant)
-                        .iconImage(self.content.shouldShowIcon ? Image(self.viewModel.imageNamed) : nil)
-                        .text(self.content.shouldShowText ? self.viewModel.text : nil)
-                        .accessibility(identifier: "MyTag1",
-                                       label: "It's my first tag")
-
-                } else {
-                    GeometryReader { geometry in
-                        TagComponentItemsUIView(
-                            viewModel: self.viewModel,
-                            height: self.$uiKitViewHeight,
-                            intent: self.intent,
-                            variant: self.variant,
-                            content: self.content
-                        )
-                        .frame(height: self.uiKitViewHeight, alignment: .leading)
-                    }
-                }
+                TagView(theme: SparkTheme.shared)
+                    .intent(self.intent)
+                    .variant(self.variant)
+                    .iconImage(self.content.shouldShowIcon ? Image(self.viewModel.imageNamed) : nil)
+                    .text(self.content.shouldShowText ? self.viewModel.text : nil)
+                    .accessibility(identifier: "MyTag1",
+                                   label: "It's my first tag")
 
                 Spacer()
             }
