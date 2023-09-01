@@ -311,7 +311,7 @@ public final class CheckboxUIView: UIView {
             self.controlViewTrailingConstraint = controlView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: padding)
             self.controlViewTrailingConstraint?.isActive = true
         }
-        let controlViewCenterConstraint = controlView.topAnchor.constraint(equalTo: textLabel.topAnchor)
+        let controlViewCenterConstraint = self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: self.controlView.heightAnchor)
         controlViewCenterConstraint.isActive = true
 
         self.button.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
