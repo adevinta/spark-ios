@@ -74,29 +74,15 @@ final class TabItemViewModel: ObservableObject {
         }
     }
 
-    var icon: UIImage? {
-        get {
-            return self.content.icon
-        }
-        set {
-            self.content = self.content.update(\.icon, value: newValue)
-        }
-    }
-
-    var text: String? {
-        get {
-            return self.content.text
-        }
-        set {
-            guard self.content.text != newValue else { return }
-            self.content = self.content.update(\.text, value: newValue)
+    var hasTitle: Bool {
+        didSet {
             self.updateStateAttributes()
         }
     }
-    
+
     // MARK: Published Properties
     @Published var tabStateAttributes: TabStateAttributes
-    @Published var content: TabUIItemContent
+//    @Published var content: TabUIItemContentable
     
     // MARK: Init
     /// Init
@@ -111,13 +97,13 @@ final class TabItemViewModel: ObservableObject {
         intent: TabIntent = .main,
         tabSize: TabSize = .md,
         tabState: TabState = .init(),
-        content: TabUIItemContent = TabUIItemContent(),
+        hasTitle: Bool = true,
         tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable = TabGetStateAttributesUseCase()
     ) {
         self.tabState = tabState
         self.theme = theme
         self.intent = intent
-        self.content = content
+        self.hasTitle = hasTitle
         self.tabSize = tabSize
         self.tabGetStateAttributesUseCase = tabGetStateAttributesUseCase
 
@@ -125,22 +111,19 @@ final class TabItemViewModel: ObservableObject {
             theme: theme,
             intent: intent,
             state: tabState,
-            size: content.defaultTabSize(tabSize)
+            tabSize: tabSize,
+            hasTitle: false
         )
     }
-    
+
+    // MARK: - Private functions
     private func updateStateAttributes() {
         self.tabStateAttributes = self.tabGetStateAttributesUseCase.execute(
             theme: self.theme,
             intent: self.intent,
             state: self.tabState,
-            size: content.defaultTabSize(self.tabSize)
+            tabSize: self.tabSize,
+            hasTitle: self.hasTitle
         )
-    }
-}
-
-private extension TabUIItemContent {
-    func defaultTabSize(_ tabSize: TabSize) -> TabSize {
-        return text == nil ? .sm : tabSize
     }
 }

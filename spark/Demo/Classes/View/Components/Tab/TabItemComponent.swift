@@ -144,15 +144,16 @@ struct TabItemComponent: View {
                     .bold()
 
                 TabItemView<BadgeView>(
-                    theme: themePublisher.theme,
-                    intent: intent,
-                    size: tabSize,
-                    image: showIcon.isSelected ? Image(systemName: "pencil") : nil,
-                    title: showText.isSelected ? "Tab" : nil,
-                    badge: showBadge.isSelected ? badge() : nil
+                    theme: self.themePublisher.theme,
+                    intent: self.intent,
+                    size: self.tabSize,
+                    image: self.showIcon.isSelected ? Image(systemName: "pencil") : nil,
+                    title: self.showText.isSelected ? "Tab" : nil,
+                    badge: self.showBadge.isSelected ? badge() : nil,
+                    fullWidth: self.equalSize.isSelected,
+                    isSelected: true
                 )
                 .disabled(!isEnabled.isSelected)
-                .selected(true)
                 Spacer()
             }
         }

@@ -11,29 +11,35 @@ import UIKit
 /// Contents of the tab:
 /// - icon: The icon of the tab item
 /// - text: The text of the tab item.
-public struct TabUIItemContent: Equatable, Updateable {
-    public internal (set) var icon: UIImage?
-    public internal (set) var title: String?
+struct TabUIItemContent: Equatable, Updateable {
+    var icon: UIImage?
+    var title: String?
+    var attributedTitle: NSAttributedString?
 
-    public init(
+    var hasTitle: Bool {
+        return title != nil || attributedTitle != nil
+    }
+
+    init(
         title: String
     ) {
         self.icon = nil
         self.title = title
     }
 
-    public init(
+    init(
         icon: UIImage
     ) {
         self.icon = icon
         self.title = nil
     }
 
-    public init(
+    init(
         icon: UIImage? = nil,
         title: String? = nil
     ) {
         self.icon = icon
         self.title = title
     }
+
 }
