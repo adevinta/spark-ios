@@ -143,15 +143,15 @@ struct TabItemComponent: View {
                     .font(.title2)
                     .bold()
 
-                TabItemView<BadgeView>(
+                TabView<BadgeView>(
                     theme: self.themePublisher.theme,
                     intent: self.intent,
-                    size: self.tabSize,
-                    image: self.showIcon.isSelected ? Image(systemName: "pencil") : nil,
-                    title: self.showText.isSelected ? "Tab" : nil,
-                    badge: self.showBadge.isSelected ? badge() : nil,
-                    fullWidth: self.equalSize.isSelected,
-                    isSelected: true
+                    tabSize: self.tabSize,
+                    content: self.tabs(),
+                    selectedIndex: self.$selectedTab
+//                    badge: self.showBadge.isSelected ? badge() : nil,
+//                    fullWidth: self.equalSize.isSelected,
+//                    isSelected: true
                 )
                 .disabled(!isEnabled.isSelected)
                 Spacer()
@@ -163,6 +163,14 @@ struct TabItemComponent: View {
 
     func badge() -> BadgeView {
         BadgeView(theme: theme, intent: .danger, value: 99)
+    }
+
+    private func tabs() -> [(Image?, String?)] {
+        (0..<self.numberOfTabs).map{
+            (self.showIcon.isSelected ? .image(at: $0) : nil,
+             self.showText.isSelected ? "Tab \($0)" : nil
+            )
+        }
     }
 
 }
@@ -182,6 +190,33 @@ private extension TabSize {
         @unknown default:
             fatalError()
         }
+    }
+}
+
+private extension Image {
+    static let names = [
+        "fleuron",
+        "trash",
+        "folder",
+        "paperplane",
+        "tray",
+        "externaldrive",
+        "internaldrive",
+        "archivebox",
+        "doc",
+        "clipboard",
+        "terminal",
+        "book",
+        "greetingcard",
+        "menucard",
+        "magazine"
+    ]
+
+    // swiftlint: disable force_unwrapping
+    static func image(at index: Int) -> Image {
+        let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
+        let imageName = allSfs[index % names.count]
+        return Image(systemName: imageName)
     }
 }
 
