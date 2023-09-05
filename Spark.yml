@@ -73,6 +73,12 @@ targetTemplates:
                 UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
     sources:
       - path: spark/Demo
+      - path: spark/Sources/Resources
+        excludes:
+        - "Generated/"
+      - path: spark/Sources/Theming
+        excludes:
+        - "**/*Tests.swift"
       - path: core/Sources/Common/UIKit/GlobalExtension
       - path: core/Sources/Common/Combine/Global
     dependencies:
