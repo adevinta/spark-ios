@@ -75,7 +75,7 @@ final class CheckboxViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.title = "Checkbox"
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentView)
 
