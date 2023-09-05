@@ -1,8 +1,8 @@
 //
-//  TabItemComponent.swift
+//  TabItem_Preview.swift
 //  SparkDemo
 //
-//  Created by michael.zimmermann on 01.08.23.
+//  Created by michael.zimmermann on 04.09.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
@@ -11,16 +11,12 @@ import SparkCore
 import SwiftUI
 
 struct TabComponent: View {
-
     // MARK: Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     var theme: Theme {
         self.themePublisher.theme
     }
-
-    @State private var versionSheetIsPresented = false
-    @State var version: ComponentVersion = .uiKit
 
     @State var intent: TabIntent = .basic
     @State var isIntentPresented = false
@@ -44,21 +40,6 @@ struct TabComponent: View {
                     .font(.title2)
                     .bold()
                     .padding(.bottom, 6)
-                HStack() {
-                    Text("Version: ").bold()
-                    Button(self.version.name) {
-                        self.versionSheetIsPresented = true
-                    }
-                    .confirmationDialog("Select a version",
-                                        isPresented: self.$versionSheetIsPresented) {
-                        ForEach(ComponentVersion.allCases, id: \.self) { version in
-                            Button(version.name) {
-                                self.version = version
-                            }
-                        }
-                    }
-                    Spacer()
-                }
                 HStack() {
                     Text("Intent: ").bold()
                     Button(self.intent.name) {
@@ -154,44 +135,44 @@ struct TabComponent: View {
 
                 Divider()
 
+                Button("Button", action: {}
+                )
+                .disabled(!isEnabled.isSelected)
+
                 Text("Integration \(self.selectedTab)")
                     .font(.title2)
                     .bold()
 
-                if version == .swiftUI {
-                    Text("Not available yet!")
-                } else {
-                    GeometryReader { geometry in
-                        TabUIComponentRepresentableView(
-                            theme: self.theme,
-                            intent: self.intent,
-                            tabSize: self.tabSize,
-                            showText: self.showText.isSelected,
-                            showIcon: self.showIcon.isSelected,
-                            showBadge: self.showBadge.isSelected,
-                            isEnabled: self.isEnabled.isSelected,
-                            numberOfTabs: self.numberOfTabs,
-                            selectedTab: self.$selectedTab,
-                            height: self.$height,
-                            equalSize: self.equalSize.isSelected,
-                            longLabel: self.longLabel.isSelected,
-                            maxWidth: geometry.size.width
-                        )
-                        .frame(width: geometry.size.width, height: self.height)
-                    }
-                }
+                TabView<BadgeView>(
+                    theme: self.themePublisher.theme,
+                    intent: self.intent,
+                    tabSize: self.tabSize,
+                    content: self.tabs(),
+                    selectedIndex: self.$selectedTab,
+//                    badge: self.showBadge.isSelected ? badge() : nil,
+                    apportionsSegmentWidthsByContent: !self.equalSize.isSelected
+//                    isSelected: true
+                )
+                .disabled(!isEnabled.isSelected)
                 Spacer()
             }
         }
         .padding(.horizontal, 16)
         .navigationBarTitle(Text("Tab Item"))
     }
-}
 
-struct TabComponent_Previews: PreviewProvider {
-    static var previews: some View {
-        TabComponent()
+    func badge() -> BadgeView {
+        BadgeView(theme: theme, intent: .danger, value: 99)
     }
+
+    private func tabs() -> [(Image?, String?)] {
+        (0..<self.numberOfTabs).map{
+            (self.showIcon.isSelected ? .image(at: $0) : nil,
+             self.showText.isSelected ? "Tab \($0)" : nil
+            )
+        }
+    }
+
 }
 
 private extension CheckboxSelectionState {
@@ -199,3 +180,50 @@ private extension CheckboxSelectionState {
         return self == .selected
     }
 }
+
+private extension TabSize {
+    var name: String {
+        switch self {
+        case .md: return "Medium"
+        case .sm: return "Small"
+        case .xs: return "Xtra Small"
+        @unknown default:
+            fatalError()
+        }
+    }
+}
+
+private extension Image {
+    static let names = [
+        "fleuron",
+        "trash",
+        "folder",
+        "paperplane",
+        "tray",
+        "externaldrive",
+        "internaldrive",
+        "archivebox",
+        "doc",
+        "clipboard",
+        "terminal",
+        "book",
+        "greetingcard",
+        "menucard",
+        "magazine"
+    ]
+
+    // swiftlint: disable force_unwrapping
+    static func image(at index: Int) -> Image {
+        let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
+        let imageName = allSfs[index % names.count]
+        return Image(systemName: imageName)
+    }
+}
+
+struct TabItem_Preview_Previews: PreviewProvider {
+
+    static var previews: some View {
+        TabComponent()
+    }
+}
+

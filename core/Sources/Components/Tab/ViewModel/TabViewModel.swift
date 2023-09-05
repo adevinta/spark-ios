@@ -25,14 +25,17 @@ final class TabViewModel: ObservableObject {
 
     @Published var apportionsSegmentWidthsByContent: Bool = false
     @Published var tabsAttributes: TabsAttributes
+    @Published var numberOfTabs: Int
 
     init(theme: some Theme,
          apportionsSegmentWidthsByContent: Bool = false,
+         numberOfTabs: Int,
          useCase: some TabsGetAttributesUseCaseable = TabsGetAttributesUseCase()
     ) {
         self.theme = theme
         self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
         self.useCase = useCase
+        self.numberOfTabs = numberOfTabs
         self.tabsAttributes = useCase.execute(theme: theme, isEnabled: true)
     }
 }

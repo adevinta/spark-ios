@@ -59,7 +59,7 @@ struct ComponentsView: View {
             }
 
             Button("Tab") {
-                self.navigateToView(TabItemComponent())
+                self.navigateToView(TabComponent())
             }
 
             Button("Tag") {

@@ -15,7 +15,8 @@ public struct TabItemView<Badge: View>: View {
     private let title: String?
     private let attributedTitle: AttributedString?
     private let badge: Badge?
-    private var fullWidth: Bool
+    private let apportionsSegmentWidthsByContent: Bool
+    private let tapAction: () -> Void
     @ScaledMetric private var lineHeight: CGFloat
     @ScaledMetric private var itemHeight: CGFloat
     @ScaledMetric private var iconHeight: CGFloat
@@ -31,8 +32,9 @@ public struct TabItemView<Badge: View>: View {
         title: String? = nil,
         attributedTitle: AttributedString? = nil,
         badge: Badge? = nil,
-        fullWidth: Bool = true,
-        isSelected: Bool = true
+        apportionsSegmentWidthsByContent: Bool = false,
+        isSelected: Bool = true,
+        tapAction: @escaping () -> Void
     ) {
         let viewModel = TabItemViewModel(theme: theme,
                                          intent: intent,
@@ -44,7 +46,9 @@ public struct TabItemView<Badge: View>: View {
                   title: title,
                   attributedTitle: attributedTitle,
                   badge: badge,
-                  fullWidth: fullWidth)
+                  apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent,
+                  tapAction: tapAction
+        )
     }
 
     init(
@@ -53,26 +57,29 @@ public struct TabItemView<Badge: View>: View {
         title: String?,
         attributedTitle: AttributedString?,
         badge: Badge?,
-        fullWidth: Bool
+        apportionsSegmentWidthsByContent: Bool,
+        tapAction: @escaping () -> Void
     ) {
         self.viewModel = viewModel
         self.badge = badge
         self.image = image
         self.title = title
         self.attributedTitle = attributedTitle
-        self.fullWidth = fullWidth
+        self.tapAction = tapAction
+        self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
+
         self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.separatorLineHeight)
         self._itemHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.itemHeight)
         self._iconHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.iconHeight)
         self._spacing = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
         self._paddingVertical = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.verticalEdge)
         self._paddingHorizontal = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
-
     }
+
     public var body: some View {
         Button(
             action: {
-                print("BUTTON PRESSED")
+                self.tapAction()
             },
             label: {
                 self.tabContent()
@@ -98,6 +105,7 @@ public struct TabItemView<Badge: View>: View {
             tabTitle()
                 .foregroundColor(self.viewModel.tabStateAttributes.colors.label.color)
                 .font(self.viewModel.tabStateAttributes.font.font)
+                .fixedSize(horizontal: true, vertical: false)
 
             if let badge {
                 badge
@@ -115,7 +123,7 @@ public struct TabItemView<Badge: View>: View {
 
     @ViewBuilder
     private func spacer() -> some View {
-        if self.fullWidth {
+        if !self.apportionsSegmentWidthsByContent {
             Spacer().frame(minWidth: self.paddingHorizontal)
         } else  {
             Spacer().frame(width: self.paddingHorizontal)

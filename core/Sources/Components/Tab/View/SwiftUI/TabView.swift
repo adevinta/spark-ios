@@ -15,6 +15,7 @@ public struct TabView: View {
     @ObservedObject private var viewModel: TabViewModel
     private let content: [(image: Image?, title: String?)]
     @Binding var selectedIndex: Int
+    @ScaledMetric var lineHeight: CGFloat
 
     // MARK: - Initialization
     /// Initializer
@@ -66,17 +67,31 @@ public struct TabView: View {
                 intent: TabIntent = .main,
                 tabSize: TabSize = .md,
                 content: [(Image?, String?)],
-                selectedIndex: Binding<Int>
+                selectedIndex: Binding<Int>,
+                apportionsSegmentWidthsByContent: Bool = false
     ) {
         self.theme = theme
         self.intent = intent
         self.tabSize = tabSize
         self.content = content
         self._selectedIndex = selectedIndex
-        self.viewModel = TabViewModel(theme: theme, apportionsSegmentWidthsByContent: false)
+        let viewModel = TabViewModel(
+            theme: theme,
+            apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent,
+            numberOfTabs: content.count
+        )
+        self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabsAttributes.lineHeight)
+        self.viewModel = viewModel
     }
 
     public var body: some View {
+        self.tabItems()
+            .background(self.viewModel.tabsAttributes.backgroundColor.color)
+            .scrollOnOverflow(numberOfItems: self.$viewModel.numberOfTabs)
+    }
+
+    @ViewBuilder
+    private func tabItems() -> some View {
         HStack {
             ForEach(Array(self.content.enumerated()), id: \.offset) { (index, content) in
                 TabItemView<BadgeView>(
@@ -85,10 +100,18 @@ public struct TabView: View {
                     size: self.tabSize,
                     image: content.image,
                     title: content.title,
+                    apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
                     isSelected: self.selectedIndex == index
-                )
+                ) {
+                    self.selectedIndex = index
+                }
             }
         }
-        .background(self.viewModel.tabsAttributes.backgroundColor.color)
+    }
+
+
+    public func apportionsSegmentWidthsByContent(_ value: Bool) -> Self {
+        self.viewModel.apportionsSegmentWidthsByContent = value
+        return self
     }
 }
