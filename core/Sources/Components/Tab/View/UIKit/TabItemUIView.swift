@@ -17,6 +17,11 @@ import UIKit
 /// The layout of the tab item is orgianized with a stack view. This stack view is publicly accessible, and further views may be added to it. The developer needs to pay caution, not to break constraints.
 public final class TabItemUIView: UIControl {
 
+    private enum Constants {
+        static let numberOfSpacerViews = 2
+        static let indexOfBadge = 3
+    }
+
     // MARK: - Private variables
     private var subscriptions = Set<AnyCancellable>()
     private var bottomLineHeightConstraint: NSLayoutConstraint?
@@ -123,7 +128,7 @@ public final class TabItemUIView: UIControl {
             if let newBadge = self.badge {
                 newBadge.isUserInteractionEnabled = false
 
-                self.stackView.insertArrangedSubview(newBadge, at: 3)
+                self.stackView.insertArrangedSubview(newBadge, at: Constants.indexOfBadge)
                 // A hack to get the stack view to render properly.
                 // When only an icon is being displayed and a badge is added,
                 // then the badge is rendered on top of the icon.
@@ -259,14 +264,15 @@ public final class TabItemUIView: UIControl {
             itemsWidth += badge.intrinsicContentSize.width == UIView.noIntrinsicMetric ? self.height: badge.intrinsicContentSize.width
         }
 
-        let numberOfSpacings = max(self.stackView.arrangedSubviews.filter(\.isNotHidden).count - 3, 0)
+        let numberOfSpacings = max(
+            self.stackView.arrangedSubviews.filter(\.isNotHidden).count - (Constants.numberOfSpacerViews + 1),
+            0)
         let spacingsWidth = CGFloat(numberOfSpacings) * self.spacing
 
         let totalWidth = self.paddingHorizontal + (itemsWidth + spacingsWidth) + self.paddingHorizontal
 
         let size = CGSize(width: totalWidth, height: self.height)
 
-        print("Intrinsic content size \(size)")
         return size
     }
 
