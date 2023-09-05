@@ -1,5 +1,5 @@
 //
-//  TagComponentItemsUIView.swift
+//  TagComponentItemsRepresentable.swift
 //  SparkDemo
 //
 //  Created by robin.lemaire on 17/04/2023.
@@ -10,7 +10,7 @@ import SwiftUI
 import Spark
 import SparkCore
 
-struct TagComponentItemsUIView: UIViewRepresentable {
+struct TagComponentItemsRepresentable: UIViewRepresentable {
 
     // MARK: - Properties
 

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class ComponentsViewController: UICollectionViewController {
 
@@ -71,8 +72,24 @@ extension ComponentsViewController {
             viewController = BadgeComponentViewController.build()
         case .button:
             viewController = ButtonComponentViewController.build()
-        default:
-            break
+        case .checkbox:
+            viewController = UIHostingController(
+                rootView: ComponentsCheckboxListView(
+                    isSwiftUI: false
+                ).environment(\.navigationController, self.navigationController)
+            )
+        case .chip:
+            viewController = ChipComponentViewController.build()
+        case .icon:
+            viewController = IconComponentUIViewController.build()
+        case .radioButton:
+            viewController = RadioButtonUIGroupViewController()
+        case .spinner:
+            viewController = SpinnerComponentUIViewController.build()
+        case .switchButton:
+            viewController = SwitchComponentUIViewController.build()
+        case .tag:
+            viewController = TagComponentUIViewController.build()
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)

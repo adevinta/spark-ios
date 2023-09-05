@@ -14,10 +14,16 @@ struct IconComponentView: View {
 
     // MARK: - Properties
 
-    @State private var uiKitViewHeight: CGFloat = .zero
+    @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
-    @State private var versionSheetIsPresented = false
-    @State var version: ComponentVersion = .uiKit
+    var theme: Theme {
+        self.themePublisher.theme
+    }
+    @State private var isThemePresented = false
+
+    let themes = ThemeCellModel.themes
+
+    @State private var uiKitViewHeight: CGFloat = .zero
 
     @State private var sizeSheetIsPresented = false
     @State var size: IconSize = .medium
@@ -35,22 +41,22 @@ struct IconComponentView: View {
                     .bold()
 
                 VStack(alignment: .leading, spacing: 16) {
-                    // Version
+                    // Theme
                     HStack() {
-                        Text("Version: ")
-                            .bold()
-                        Button("\(self.version.name)") {
-                            self.versionSheetIsPresented = true
+                        Text("Theme: ").bold()
+                        let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
+                        Button(selectedTheme?.title ?? "") {
+                            self.isThemePresented = true
                         }
-                        .confirmationDialog(
-                            "Select a version",
-                            isPresented: self.$versionSheetIsPresented) {
-                                ForEach(ComponentVersion.allCases, id: \.self) { version in
-                                    Button("\(version.name)") {
-                                        self.version = version
-                                    }
+                        .confirmationDialog("Select a theme",
+                                            isPresented: self.$isThemePresented) {
+                            ForEach(themes, id: \.self) { theme in
+                                Button(theme.title) {
+                                    themePublisher.theme = theme.theme
                                 }
                             }
+                        }
+                        Spacer()
                     }
 
                     // Intent
@@ -96,19 +102,13 @@ struct IconComponentView: View {
                     .font(.title2)
                     .bold()
 
-                if self.version == .swiftUI {
-                    IconView(
-                        theme: SparkTheme.shared,
-                        intent: self.intent,
-                        size: self.size,
-                        iconImage: Image("alert")
-                    )
-                } else {
-                    IconComponentUIView(
-                        intent: self.$intent,
-                        size: self.$size
-                    )
-                }
+
+                IconView(
+                    theme: SparkTheme.shared,
+                    intent: self.intent,
+                    size: self.size,
+                    iconImage: Image("alert")
+                )
 
                 Spacer()
             }

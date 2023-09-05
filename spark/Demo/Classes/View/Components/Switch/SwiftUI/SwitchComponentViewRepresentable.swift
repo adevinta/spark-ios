@@ -11,7 +11,7 @@ import Spark
 import SparkCore
 import Combine
 
-struct SwitchComponentItemsUIView: UIViewRepresentable {
+struct SwitchComponentViewRepresentable: UIViewRepresentable {
 
     // MARK: - Properties
 
@@ -189,7 +189,7 @@ struct SwitchComponentItemsUIView: UIViewRepresentable {
     }
 }
 
-extension SwitchComponentItemsUIView {
+extension SwitchComponentViewRepresentable {
 
     class Coordinator: NSObject, SwitchUIViewDelegate {
 

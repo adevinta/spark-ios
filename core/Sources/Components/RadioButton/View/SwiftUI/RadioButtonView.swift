@@ -98,7 +98,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         .disabled(self.viewModel.isDisabled)
         .opacity(self.viewModel.opacity)
         .buttonStyle(RadioButtonButtonStyle(isPressed: self.$isPressed))
-        .accessibilityLabel(self.viewModel.label.rightValue)
+        .accessibilityLabel(self.viewModel.label.rightValue ?? RadioButtonAccessibilityIdentifier.radioButton)
         .accessibilityValue(self.viewModel.id.description)
     }
 
@@ -141,11 +141,15 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
     @ViewBuilder
     private func label() -> some View {
-        Text(self.viewModel.label.rightValue)
-            .font(self.viewModel.font.font)
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .foregroundColor(self.viewModel.surfaceColor.color)
+        if let text = self.viewModel.label.rightValue  {
+            Text(text)
+                .font(self.viewModel.font.font)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .foregroundColor(self.viewModel.surfaceColor.color)
+        } else {
+            EmptyView()
+        }
     }
 
     @ViewBuilder

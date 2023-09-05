@@ -32,11 +32,15 @@ struct ComponentsView: View {
             }
 
             Button("Checkbox") {
-                self.navigateToView(ComponentsCheckboxListView())
+                self.navigateToView(
+                    ComponentsCheckboxListView(
+                        isSwiftUI: true
+                    ).environment(\.navigationController, self.navigationController)
+                )
             }
 
             Button("Chip") {
-                self.navigateToView(ChipComponent())
+                self.navigateToView(ChipComponentView())
             }
 
             Button("Icon") {
@@ -44,7 +48,7 @@ struct ComponentsView: View {
             }
 
             Button("Radio Button") {
-                self.navigateToView(RadioButtonOverview())
+                self.navigateToView(RadioButtonGroup())
             }
 
             Button("Spinner") {

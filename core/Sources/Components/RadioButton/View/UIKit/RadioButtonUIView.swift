@@ -49,12 +49,35 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     /// The label of radio button
-    public var label: NSAttributedString {
+    public var text: String? {
         get {
-            return self.viewModel.label.leftValue
+            return self.textLabel.text
+        }
+        set {
+            self.viewModel.label = .right(newValue)
+            self.updateLabel()
+        }
+    }
+
+    /// The label of radio button
+    public var attributedText: NSAttributedString? {
+        get {
+            return self.textLabel.attributedText
         }
         set {
             self.viewModel.label = .left(newValue)
+            self.updateLabel()
+        }
+    }
+
+    /// The label of radio button
+    @available(*, deprecated, renamed: "attributedText")
+    public var label: NSAttributedString {
+        get {
+            return self.attributedText ?? NSAttributedString(string: "")
+        }
+        set {
+            self.attributedText = newValue
         }
     }
 
@@ -183,7 +206,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
             guard let self else { return }
             self.updateColors(colors)
-            self.textLabel.attributedText = self.viewModel.label.leftValue
+            self.updateLabel()
         }
 
         self.viewModel.$isDisabled.subscribe(in: &self.subscriptions) { [weak self] isDisabled in
@@ -193,11 +216,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.viewModel.$font.subscribe(in: &self.subscriptions) { [weak self] font in
             guard let self else { return }
             self.textLabel.font = font.uiFont
-            self.textLabel.attributedText = self.viewModel.label.leftValue
-        }
-
-        self.viewModel.$label.subscribe(in: &self.subscriptions) { [weak self] label in
-            self?.textLabel.attributedText = label.leftValue
+            self.updateLabel()
         }
 
         self.viewModel.$labelPosition.subscribe(in: &self.subscriptions) { [weak self] _ in
@@ -224,16 +243,23 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.addSubview(self.button)
 
         self.setupConstraints()
-        self.textLabel.attributedText = self.viewModel.label.leftValue
+        self.updateLabel()
     }
 
     private func updateViewAttributes() {
         self.updateColors(self.viewModel.colors)
 
-        self.textLabel.attributedText = self.viewModel.label.leftValue
-        self.textLabel.font = self.viewModel.font.uiFont
+        self.updateLabel()
 
         self.alpha = self.viewModel.opacity
+    }
+
+    private func updateLabel() {
+        self.textLabel.font = self.viewModel.font.uiFont
+        switch self.viewModel.label {
+        case let .left(attributedText): self.textLabel.attributedText = attributedText
+        case let .right(text): self.textLabel.text = text
+        }
     }
 
     private func updateColors(_ colors: RadioButtonColors) {
