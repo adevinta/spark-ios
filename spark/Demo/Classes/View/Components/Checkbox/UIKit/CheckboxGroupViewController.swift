@@ -23,8 +23,6 @@ final class CheckboxGroupViewController: UIViewController {
         return scrollView
     }()
 
-    private var contentView = UIView()
-
     private lazy var shuffleButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Shuffle", for: .normal)
@@ -71,7 +69,7 @@ final class CheckboxGroupViewController: UIViewController {
 
     private var checkboxGroup: CheckboxGroupUIView?
 
-    private var checkboxGroupLayout: CheckboxGroupLayout = .vertical
+    private var checkboxGroupLayout: CheckboxGroupLayout = .horizontal
 
     private var selectedItems: [any CheckboxGroupItemProtocol] {
         self.items.filter { $0.selectionState == .selected }
@@ -109,32 +107,10 @@ final class CheckboxGroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        self.navigationItem.title = "Checkbox Group"
 
-        let views = [self.selectionLabel, self.shuffleButton, self.changeLayoutButton, self.changePositionButton, self.addItemButton]
-        var previousView: UIView?
-        for aView in views {
-            view.addSubview(aView)
-
-            aView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-            aView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-            if let previousView = previousView {
-                aView.topAnchor.constraint(equalTo: previousView.bottomAnchor).isActive = true
-            } else {
-                aView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            }
-            previousView = aView
-        }
-
-        guard let lastView = views.last else { return }
-
-        view.addSubview(self.scrollView)
-        self.scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        self.scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        self.scrollView.topAnchor.constraint(equalTo: lastView.bottomAnchor).isActive = true
-        self.scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-        self.setUpScrollContentView()
         self.subscribe()
+        self.setupView()
     }
 
     private func subscribe() {
@@ -145,34 +121,42 @@ final class CheckboxGroupViewController: UIViewController {
             .store(in: &self.cancellables)
     }
 
+    private func setupView() {
+        let views = [
+            self.selectionLabel,
+            self.shuffleButton,
+            self.changeLayoutButton,
+            self.changePositionButton,
+            self.addItemButton
+        ]
+        views.enumerated().forEach { i, item in
+            view.addSubview(item)
+
+            NSLayoutConstraint.activate([
+                item.topAnchor.constraint(equalTo: i == 0 ? self.view.safeAreaLayoutGuide.topAnchor : views[i - 1].bottomAnchor),
+                item.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                item.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+
+            ])
+        }
+        self.setUpScrollContentView()
+
+        self.view.addSubview(self.scrollView)
+        NSLayoutConstraint.activate([
+            self.scrollView.topAnchor.constraint(equalTo: self.addItemButton.bottomAnchor),
+            self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.scrollView.bottomAnchor.constraint(lessThanOrEqualTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+
     private func setUpScrollContentView() {
         self.checkboxGroup?.removeFromSuperview()
-        self.contentView.removeFromSuperview()
-
-        self.contentView = UIView()
-        self.contentView.translatesAutoresizingMaskIntoConstraints = false
-        self.scrollView.addSubview(self.contentView)
-
-        switch checkboxGroupLayout {
-        case .vertical:
-            self.contentView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
-            self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor).isActive = true
-            self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
-            self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
-        case .horizontal:
-            self.contentView.centerYAnchor.constraint(equalTo: self.scrollView.centerYAnchor).isActive = true
-            self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor).isActive = true
-            self.contentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor).isActive = true
-            self.contentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor).isActive = true
-        }
-
         self.setUpCheckboxGroupView()
         self.updateSelection()
     }
 
     private func setUpCheckboxGroupView() {
-        let view = self.contentView
-
         let checkedImage = DemoIconography.shared.checkmark
 
         let groupView = CheckboxGroupUIView(
@@ -184,20 +168,30 @@ final class CheckboxGroupViewController: UIViewController {
             theme: theme,
             accessibilityIdentifierPrefix: "abc"
         )
-        self.checkboxGroup = groupView
         groupView.translatesAutoresizingMaskIntoConstraints = false
         groupView.publisher.sink { [weak self] in
             self?.items = $0
         }
         .store(in: &self.cancellables)
 
-        view.addSubview(groupView)
+        self.checkboxGroup = groupView
+        self.scrollView.addSubview(groupView)
 
         let spacing: CGFloat = self.checkboxGroupLayout == .vertical ? 0 : 16
-        groupView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: spacing).isActive = true
-        groupView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        groupView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
-        groupView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            groupView.topAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: 8),
+            groupView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: spacing),
+
+            self.checkboxGroupLayout == .vertical ?
+            groupView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor) :
+            groupView.centerYAnchor.constraint(equalTo: self.scrollView.centerYAnchor),
+
+            self.checkboxGroupLayout == .vertical ?
+            groupView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor) :
+            groupView.trailingAnchor.constraint(lessThanOrEqualTo: self.scrollView.trailingAnchor),
+
+            groupView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
+        ])
     }
 
     private func updateSelection() {
@@ -235,6 +229,7 @@ final class CheckboxGroupViewController: UIViewController {
         self.items.append(newItem)
         self.checkboxGroup?.update()
     }
+
 
     @objc private func actionChangePosition(sender: UIButton) {
         self.checkboxGroup?.checkboxPosition = self.checkboxGroup?.checkboxPosition == .right ? .left : .right
