@@ -17,93 +17,16 @@ final class ButtonViewModelTests: XCTestCase {
 
     // MARK: - Properties
 
-    private let iconImageMock = IconographyTests.shared.arrow
-
-    private let themeMock = ThemeGeneratedMock.mocked()
-
-    private let borderMock = ButtonBorder.mocked()
-
-    private let colorsMock = ButtonColors.mocked()
-
-    private let contentMock = ButtonContent.mocked()
-    private let currentColorsMock = ButtonCurrentColors.mocked()
-    private let isIconOnlyMock = false
-    private let sizesMock = ButtonSizes.mocked()
-    private let spacingsMock = ButtonSpacings.mocked()
-    private let stateMock = ButtonState.mocked()
-
-    private let displayedTextViewModelMock: DisplayedTextViewModelGeneratedMock = {
-        let mock = DisplayedTextViewModelGeneratedMock()
-        mock.text = "Text"
-        mock.attributedText = .left(.init(string: "AText"))
-        mock.underlyingDisplayedTextType = .text
-        return mock
-    }()
-
-    private lazy var getBorderUseCaseMock: ButtonGetBorderUseCaseableGeneratedMock = {
-        let mock = ButtonGetBorderUseCaseableGeneratedMock()
-        mock.executeWithShapeAndBorderAndVariantReturnValue = self.borderMock
-        return mock
-    }()
-    private lazy var getColorsUseCaseMock: ButtonGetColorsUseCaseableGeneratedMock = {
-        let mock = ButtonGetColorsUseCaseableGeneratedMock()
-        mock.executeWithThemeAndIntentAndVariantReturnValue = self.colorsMock
-        return mock
-    }()
-    private lazy var getContentUseCaseMock: ButtonGetContentUseCaseableGeneratedMock = {
-        let mock = ButtonGetContentUseCaseableGeneratedMock()
-        mock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReturnValue = self.contentMock
-        return mock
-    }()
-    private lazy var getCurrentColorsUseCaseMock: ButtonGetCurrentColorsUseCaseableGeneratedMock = {
-        let mock = ButtonGetCurrentColorsUseCaseableGeneratedMock()
-        mock.executeWithColorsAndIsPressedAndDisplayedTextTypeReturnValue = self.currentColorsMock
-        return mock
-    }()
-    private lazy var getIsIconOnlyUseCaseMock: ButtonGetIsOnlyIconUseCaseableGeneratedMock = {
-        let mock = ButtonGetIsOnlyIconUseCaseableGeneratedMock()
-        mock.executeWithIconImageAndTextAndAttributedTextReturnValue = self.isIconOnlyMock
-        return mock
-    }()
-    private lazy var getSizesUseCaseMock: ButtonGetSizesUseCaseableGeneratedMock = {
-        let mock = ButtonGetSizesUseCaseableGeneratedMock()
-        mock.executeWithSizeAndIsOnlyIconReturnValue = self.sizesMock
-        return mock
-    }()
-    private lazy var getSpacingsUseCaseMock: ButtonGetSpacingsUseCaseableGeneratedMock = {
-        let mock = ButtonGetSpacingsUseCaseableGeneratedMock()
-        mock.executeWithSpacingAndIsOnlyIconReturnValue = self.spacingsMock
-        return mock
-    }()
-    private lazy var getStateUseCaseMock: ButtonGetStateUseCaseableGeneratedMock = {
-        let mock = ButtonGetStateUseCaseableGeneratedMock()
-        mock.executeWithIsEnabledAndDimsReturnValue = self.stateMock
-        return mock
-    }()
-
-    private lazy var dependenciesMock: ButtonViewModelDependenciesProtocolGeneratedMock = {
-        let mock = ButtonViewModelDependenciesProtocolGeneratedMock()
-        mock.underlyingGetBorderUseCase = self.getBorderUseCaseMock
-        mock.underlyingGetColorsUseCase = self.getColorsUseCaseMock
-        mock.underlyingGetContentUseCase = self.getContentUseCaseMock
-        mock.underlyingGetCurrentColorsUseCase = self.getCurrentColorsUseCaseMock
-        mock.underlyingGetIsIconOnlyUseCase = self.getIsIconOnlyUseCaseMock
-        mock.underlyingGetSizesUseCase = self.getSizesUseCaseMock
-        mock.underlyingGetSpacingsUseCase = self.getSpacingsUseCaseMock
-        mock.underlyingGetStateUseCase = self.getStateUseCaseMock
-        mock.makeDisplayedTextViewModelWithTextAndAttributedTextReturnValue = self.displayedTextViewModelMock
-        return mock
-    }()
-
-    private var statePublishedSinkCount = 0
-    private var currentColorsPublishedSinkCount = 0
-    private var sizesPublishedSinkCount = 0
-    private var borderPublishedSinkCount = 0
-    private var spacingsPublishedSinkCount = 0
-    private var contentPublishedSinkCount = 0
-    private var textFontTokenPublishedSinkCount = 0
-
     private var subscriptions = Set<AnyCancellable>()
+
+    // MARK: - Setup
+
+    override func tearDown() {
+        super.tearDown()
+
+        // Clear publishers
+        self.subscriptions.removeAll()
+    }
 
     // MARK: - Init Tests
 
@@ -118,24 +41,26 @@ final class ButtonViewModelTests: XCTestCase {
         let attributedTextMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = true
 
-        // WHEN
-        let viewModel = self.classToTest(
+        let stub = Stub(
             intent: intentMock,
             variant: variantMock,
             size: sizeMock,
             shape: shapeMock,
             alignment: alignmentMock,
-            iconImage: self.iconImageMock,
+            isIconImage: true,
             text: textMock,
             attributedText: attributedTextMock,
             isEnabled: isEnabledMock
         )
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        // WHEN
+        let viewModel = stub.viewModel
+
+        stub.subscribePublishers(on: &self.subscriptions)
 
         // THEN
         XCTAssertIdentical(viewModel.theme as? ThemeGeneratedMock,
-                           self.themeMock,
+                           stub.themeMock,
                            "Wrong theme value")
         XCTAssertEqual(viewModel.intent,
                        intentMock,
@@ -153,63 +78,78 @@ final class ButtonViewModelTests: XCTestCase {
                        alignmentMock,
                        "Wrong alignment value")
         XCTAssertEqual(viewModel.iconImage?.leftValue,
-                       self.iconImageMock,
+                       stub.iconImageMock,
                        "Wrong images value")
         XCTAssertEqual(viewModel.isEnabled,
                        isEnabledMock,
                        "Wrong isEnabled value")
         // **
         // Published count
-        XCTAssertEqual(self.statePublishedSinkCount,
-                       1,
-                       "Wrong statePublishedSinkCount value")
-        XCTAssertEqual(self.currentColorsPublishedSinkCount,
-                       1,
-                       "Wrong currentColorsPublishedSinkCount value")
-        XCTAssertEqual(self.sizesPublishedSinkCount,
-                       1,
-                       "Wrong sizesPublishedSinkCount value")
-        XCTAssertEqual(self.borderPublishedSinkCount,
-                       1,
-                       "Wrong borderPublishedSinkCount value")
-        XCTAssertEqual(self.spacingsPublishedSinkCount,
-                       1,
-                       "Wrong spacingsPublishedSinkCount value")
-        XCTAssertEqual(self.contentPublishedSinkCount,
-                       1,
-                       "Wrong contentPublishedSinkCount value")
-        XCTAssertEqual(self.textFontTokenPublishedSinkCount,
-                       1,
-                       "Wrong textFontTokenPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.statePublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.currentColorsPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.sizesPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.borderPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.spacingsPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.contentPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.textFontTokenPublisherMock,
+            1
+        )
         // **
 
         // **
         // Use Cases
         self.testGetBorderUseCaseMock(
+            on: stub,
             numberOfCalls: 0
         )
         self.testGetColorsUseCaseMock(
+            on: stub,
             numberOfCalls: 0
         )
         self.testGetContentUseCaseMock(
+            on: stub,
             numberOfCalls: 0
         )
         self.testGetCurrentColorsUseCaseMock(
+            on: stub,
             numberOfCalls: 0
         )
         self.testGetIsIconOnlyUseCaseMock(
+            on: stub,
             numberOfCalls: 1,
-            givenIconImage: self.iconImageMock
+            givenIconImage: stub.iconImageMock
         )
         self.testGetSizesUseCaseMock(
+            on: stub,
             numberOfCalls: 1,
             givenSize: sizeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
+            on: stub,
             numberOfCalls: 0
         )
         self.testGetStateUseCaseMock(
+            on: stub,
             numberOfCalls: 0
         )
         // **
@@ -228,91 +168,115 @@ final class ButtonViewModelTests: XCTestCase {
         let attributedTextMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = false
 
-        // WHEN
-        let viewModel = self.classToTest(
+        let stub = Stub(
             intent: intentMock,
             variant: variantMock,
             size: sizeMock,
             shape: shapeMock,
             alignment: alignmentMock,
-            iconImage: self.iconImageMock,
+            isIconImage: true,
             text: textMock,
             attributedText: attributedTextMock,
             isEnabled: isEnabledMock
         )
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        // WHEN
+        let viewModel = stub.viewModel
+
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load()
 
         // THEN
         // **
         // Published properties
-        self.testState(on: viewModel)
-        self.testCurrentColors(on: viewModel)
-        self.testSizes(on: viewModel)
-        self.testBorder(on: viewModel)
-        self.testSpacings(on: viewModel)
-        self.testContent(on: viewModel)
-        self.testTextFontToken(on: viewModel, theme: self.themeMock)
+        self.testState(on: stub)
+        self.testCurrentColors(on: stub)
+        self.testSizes(on: stub)
+        self.testBorder(on: stub)
+        self.testSpacings(on: stub)
+        self.testContent(on: stub)
+        self.testTextFontToken(on: stub)
 
-        XCTAssertEqual(self.statePublishedSinkCount,
-                       2,
-                       "Wrong statePublishedSinkCount value")
-        XCTAssertEqual(self.currentColorsPublishedSinkCount,
-                       2,
-                       "Wrong currentColorsPublishedSinkCount value")
-        XCTAssertEqual(self.sizesPublishedSinkCount,
-                       2,
-                       "Wrong sizesPublishedSinkCount value")
-        XCTAssertEqual(self.borderPublishedSinkCount,
-                       2,
-                       "Wrong borderPublishedSinkCount value")
-        XCTAssertEqual(self.spacingsPublishedSinkCount,
-                       2,
-                       "Wrong spacingsPublishedSinkCount value")
-        XCTAssertEqual(self.contentPublishedSinkCount,
-                       2,
-                       "Wrong contentPublishedSinkCount value")
-        XCTAssertEqual(self.textFontTokenPublishedSinkCount,
-                       2,
-                       "Wrong textFontTokenPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.statePublisherMock,
+            2
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.currentColorsPublisherMock,
+            2
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.sizesPublisherMock,
+            2
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.borderPublisherMock,
+            2
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.spacingsPublisherMock,
+            2
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.contentPublisherMock,
+            2
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.textFontTokenPublisherMock,
+            2
+        )
         // **
 
         // **
         // Use Cases
         self.testGetBorderUseCaseMock(
+            on: stub,
+            numberOfCalls: 1,
             givenShape: shapeMock,
-            givenTheme: self.themeMock,
+            givenTheme: stub.themeMock,
             givenVariant: variantMock
         )
         self.testGetColorsUseCaseMock(
-            givenTheme: self.themeMock,
+            on: stub,
+            numberOfCalls: 1,
+            givenTheme: stub.themeMock,
             givenIntent: intentMock,
             givenVariant: variantMock
         )
         self.testGetContentUseCaseMock(
+            on: stub,
+            numberOfCalls: 1,
             givenAlignment: alignmentMock,
-            givenIconImage: self.iconImageMock
+            givenIconImage: stub.iconImageMock
         )
         self.testGetCurrentColorsUseCaseMock(
-            givenColors: self.colorsMock,
+            on: stub,
+            numberOfCalls: 1,
+            givenColors: stub.colorsMock,
             givenIsPressed: false
         )
         self.testGetIsIconOnlyUseCaseMock(
-            givenIconImage: self.iconImageMock
+            on: stub,
+            numberOfCalls: 3,
+            givenIconImage: stub.iconImageMock
         )
         self.testGetSizesUseCaseMock(
+            on: stub,
             numberOfCalls: 2,
             givenSize: sizeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
-            givenTheme: self.themeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            on: stub,
+            numberOfCalls: 1,
+            givenTheme: stub.themeMock,
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         self.testGetStateUseCaseMock(
-            givenTheme: self.themeMock,
+            on: stub,
+            numberOfCalls: 1,
+            givenTheme: stub.themeMock,
             givenIsEnabled: isEnabledMock
         )
         // **
@@ -353,11 +317,12 @@ final class ButtonViewModelTests: XCTestCase {
         isAlreadyOnPressedState: Bool
     ) {
         // GIVEN
-        let viewModel = self.classToTest()
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
-        viewModel.load() // Needed to get colors from usecase one time
+        viewModel.load()// Needed to get colors from usecase one time
 
         // Simulate action to toggle the isPressed value on viewModel
         if isPressedAction {
@@ -373,7 +338,7 @@ final class ButtonViewModelTests: XCTestCase {
         }
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
         if isPressedAction {
@@ -384,18 +349,21 @@ final class ButtonViewModelTests: XCTestCase {
 
         // THEN
         // Published count
-        XCTAssertEqual(self.currentColorsPublishedSinkCount,
-                       !isAlreadyOnPressedState ? 1 : 0,
-                       "Wrong currentColorsPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.currentColorsPublisherMock,
+            !isAlreadyOnPressedState ? 1 : 0
+        )
 
         // **
         // Use Cases
         self.testGetColorsUseCaseMock(
+            on: stub,
             numberOfCalls: 0
         )
         self.testGetCurrentColorsUseCaseMock(
+            on: stub,
             numberOfCalls: !isAlreadyOnPressedState ? 1 : 0,
-            givenColors: self.colorsMock,
+            givenColors: stub.colorsMock,
             givenIsPressed: isPressedAction
         )
         // **
@@ -403,10 +371,8 @@ final class ButtonViewModelTests: XCTestCase {
 
     // MARK: - Setter Tests
 
-    func test_set_theme_with_new_value() {
+    func test_set_theme() {
         // GIVEN
-        let newThemeMock = themeMock
-
         let intentMock: ButtonIntent = .support
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
@@ -416,24 +382,27 @@ final class ButtonViewModelTests: XCTestCase {
         let attributedTextMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = false
 
-        let viewModel = self.classToTest(
+        let stub = Stub(
             intent: intentMock,
             variant: variantMock,
             size: sizeMock,
             shape: shapeMock,
             alignment: alignmentMock,
-            iconImage: self.iconImageMock,
+            isIconImage: true,
             text: textMock,
             attributedText: attributedTextMock,
             isEnabled: isEnabledMock
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        let newThemeMock = stub.themeMock
+
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
         viewModel.set(theme: newThemeMock)
@@ -441,726 +410,752 @@ final class ButtonViewModelTests: XCTestCase {
         // THEN
         // **
         // Published count
-        XCTAssertEqual(self.statePublishedSinkCount,
-                       1,
-                       "Wrong statePublishedSinkCount value")
-        XCTAssertEqual(self.currentColorsPublishedSinkCount,
-                       1,
-                       "Wrong currentColorsPublishedSinkCount value")
-        XCTAssertEqual(self.sizesPublishedSinkCount,
-                       1,
-                       "Wrong sizesPublishedSinkCount value")
-        XCTAssertEqual(self.borderPublishedSinkCount,
-                       1,
-                       "Wrong borderPublishedSinkCount value")
-        XCTAssertEqual(self.spacingsPublishedSinkCount,
-                       1,
-                       "Wrong spacingsPublishedSinkCount value")
-        XCTAssertEqual(self.textFontTokenPublishedSinkCount,
-                       1,
-                       "Wrong textFontTokenPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.statePublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.currentColorsPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.sizesPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.borderPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.spacingsPublisherMock,
+            1
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.textFontTokenPublisherMock,
+            1
+        )
         // **
 
         // **
         // Use Cases
         self.testGetBorderUseCaseMock(
+            on: stub,
+            numberOfCalls: 1,
             givenShape: shapeMock,
             givenTheme: newThemeMock,
             givenVariant: variantMock
         )
         self.testGetColorsUseCaseMock(
+            on: stub,
+            numberOfCalls: 1,
             givenTheme: newThemeMock,
             givenIntent: intentMock,
             givenVariant: variantMock
         )
         self.testGetCurrentColorsUseCaseMock(
-            givenColors: self.colorsMock,
+            on: stub,
+            numberOfCalls: 1,
+            givenColors: stub.colorsMock,
             givenIsPressed: false
         )
         self.testGetSizesUseCaseMock(
+            on: stub,
+            numberOfCalls: 1,
             givenSize: sizeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
+            on: stub,
+            numberOfCalls: 1,
             givenTheme: newThemeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         self.testGetStateUseCaseMock(
+            on: stub,
+            numberOfCalls: 1,
             givenTheme: newThemeMock,
             givenIsEnabled: isEnabledMock
         )
         // **
     }
 
-    func test_set_intent_with_new_value() {
+    func test_set_intent_with_different_new_value() {
         self.testSetIntent(
-            givenValue: .danger,
-            givenNewValue: .main
+            givenIsDifferentNewValue: true
         )
     }
-    
-    func test_set_intent_without_new_value() {
-        let valueMock: ButtonIntent = .main
+
+    func test_set_intent_with_same_new_value() {
         self.testSetIntent(
-            givenValue: valueMock,
-            givenNewValue: valueMock
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetIntent(
-        givenValue: ButtonIntent,
-        givenNewValue: ButtonIntent
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
+        let defaultValue: ButtonIntent = .alert
+        let newValue: ButtonIntent = givenIsDifferentNewValue ? .accent : defaultValue
 
         let variantMock: ButtonVariant = .outlined
 
-        let viewModel = self.classToTest(
-            intent: givenValue,
+        let stub = Stub(
+            intent: defaultValue,
             variant: variantMock
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        viewModel.set(intent: givenNewValue)
+        viewModel.set(intent: newValue)
 
         // THEN
+        XCTAssertEqual(viewModel.intent,
+                       newValue,
+                       "Wrong intent value")
 
         // Published count
-        XCTAssertEqual(self.currentColorsPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong currentColorsPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.currentColorsPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
 
         // **
         // Use Cases
         self.testGetColorsUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenTheme: self.themeMock,
-            givenIntent: givenNewValue,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenTheme: stub.themeMock,
+            givenIntent: newValue,
             givenVariant: variantMock
         )
         self.testGetCurrentColorsUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenColors: self.colorsMock,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenColors: stub.colorsMock,
             givenIsPressed: false
         )
         // **
     }
 
-    func test_set_variant_with_new_value() {
+    func test_set_variant_with_different_new_value() {
         self.testSetVariant(
-            givenValue: .contrast,
-            givenNewValue: .outlined
+            givenIsDifferentNewValue: true
         )
     }
 
-    func test_set_variant_without_new_value() {
-        let valueMock: ButtonVariant = .filled
+    func test_set_variant_with_same_new_value() {
         self.testSetVariant(
-            givenValue: valueMock,
-            givenNewValue: valueMock
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetVariant(
-        givenValue: ButtonVariant,
-        givenNewValue: ButtonVariant
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
+        let defaultValue: ButtonVariant = .contrast
+        let newValue: ButtonVariant = givenIsDifferentNewValue ? .outlined : defaultValue
 
         let intentMock: ButtonIntent = .success
         let shapeMock: ButtonShape = .square
 
-        let viewModel = self.classToTest(
+        let stub = Stub(
             intent: intentMock,
-            variant: givenValue,
+            variant: defaultValue,
             shape: shapeMock
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        viewModel.set(variant: givenNewValue)
+        viewModel.set(variant: newValue)
 
         // THEN
+        XCTAssertEqual(viewModel.variant,
+                       newValue,
+                       "Wrong variant value")
+
         // **
         // Published count
-        XCTAssertEqual(self.currentColorsPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong currentColorsPublishedSinkCount value")
-        XCTAssertEqual(self.borderPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong borderPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.currentColorsPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.borderPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
         // **
 
         // **
         // Use Cases
         self.testGetColorsUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenTheme: self.themeMock,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenTheme: stub.themeMock,
             givenIntent: intentMock,
-            givenVariant: givenNewValue
+            givenVariant: newValue
         )
         self.testGetCurrentColorsUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenColors: self.colorsMock,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenColors: stub.colorsMock,
             givenIsPressed: false
         )
         self.testGetBorderUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
             givenShape: shapeMock,
-            givenTheme: self.themeMock,
-            givenVariant: givenNewValue
+            givenTheme: stub.themeMock,
+            givenVariant: newValue
         )
         // **
     }
 
-    func test_set_size_with_new_value() {
+    func test_set_size_with_different_new_value() {
         self.testSetSize(
-            givenValue: .large,
-            givenNewValue: .small
+            givenIsDifferentNewValue: true
         )
     }
 
-    func test_set_size_without_new_value() {
-        let mockValue: ButtonSize = .medium
+    func test_set_size_with_same_new_value() {
         self.testSetSize(
-            givenValue: mockValue,
-            givenNewValue: mockValue
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetSize(
-        givenValue: ButtonSize,
-        givenNewValue: ButtonSize
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
+        let defaultValue: ButtonSize = .large
+        let newValue: ButtonSize = givenIsDifferentNewValue ? .small : defaultValue
 
-        let viewModel = self.classToTest(
-            size: givenValue
+        let stub = Stub(
+            size: defaultValue
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        viewModel.set(size: givenNewValue)
+        viewModel.set(size: newValue)
 
         // THEN
+        XCTAssertEqual(viewModel.size,
+                       newValue,
+                       "Wrong size value")
 
         // Published count
-        XCTAssertEqual(self.sizesPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong sizesPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.sizesPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
 
         // **
         // Use Cases
         self.testGetSizesUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenSize: givenNewValue,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenSize: newValue,
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         // **
     }
 
-    func test_set_shape_with_new_value() {
+    func test_set_shape_with_different_new_value() {
         self.testSetShape(
-            givenValue: .pill,
-            givenNewValue: .rounded
+            givenIsDifferentNewValue: true
         )
     }
 
-    func test_set_shape_without_new_value() {
-        let valueMock: ButtonShape = .pill
+    func test_set_shape_with_same_new_value() {
         self.testSetShape(
-            givenValue: valueMock,
-            givenNewValue: valueMock
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetShape(
-        givenValue: ButtonShape,
-        givenNewValue: ButtonShape
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
+        let defaultValue: ButtonShape = .pill
+        let newValue: ButtonShape = givenIsDifferentNewValue ? .rounded : defaultValue
 
         let variantMock: ButtonVariant = .tinted
 
-        let viewModel = self.classToTest(
+        let stub = Stub(
             variant: variantMock,
-            shape: givenValue
+            shape: defaultValue
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        viewModel.set(shape: givenNewValue)
+        viewModel.set(shape: newValue)
 
         // THEN
+        XCTAssertEqual(viewModel.shape,
+                       newValue,
+                       "Wrong shape value")
 
         // Published count
-        XCTAssertEqual(self.borderPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong borderPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.borderPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
 
         // **
         // Use Cases
         self.testGetBorderUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenShape: givenNewValue,
-            givenTheme: self.themeMock,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenShape: newValue,
+            givenTheme: stub.themeMock,
             givenVariant: variantMock
         )
         // **
     }
 
-    func test_set_alignment_with_new_value() {
+    func test_set_alignment_with_different_new_value() {
         self.testSetAlignment(
-            givenValue: .leadingIcon,
-            givenNewValue: .trailingIcon
+            givenIsDifferentNewValue: true
         )
     }
-    
-    func test_set_alignment_without_new_value() {
-        let valueMock: ButtonAlignment = .leadingIcon
+
+    func test_set_alignment_with_same_new_value() {
         self.testSetAlignment(
-            givenValue: valueMock,
-            givenNewValue: valueMock
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetAlignment(
-        givenValue: ButtonAlignment,
-        givenNewValue: ButtonAlignment
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
+        let defaultValue: ButtonAlignment = .leadingIcon
+        let newValue: ButtonAlignment = givenIsDifferentNewValue ? .trailingIcon : defaultValue
 
         let sizeMock: ButtonSize = .medium
 
-        let viewModel = self.classToTest(
+        let stub = Stub(
             size: sizeMock,
-            alignment: givenValue
+            alignment: defaultValue
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        viewModel.set(alignment: givenNewValue)
+        viewModel.set(alignment: newValue)
 
         // THEN
+        XCTAssertEqual(viewModel.alignment,
+                       newValue,
+                       "Wrong alignment value")
+
         // Published count
-        XCTAssertEqual(self.contentPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong contentPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.contentPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
 
         // **
         // Use Cases
         self.testGetContentUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenAlignment: givenNewValue
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenAlignment: newValue
         )
         // **
     }
 
     func test_set_text_when_displayedTextViewModel_textChanged_return_true_and_new_value_is_NOT_nil() {
         self.testSetText(
-            givenNewValueIsNil: false,
-            givenTextChanged: true
+            newValueIsNil: false,
+            givenIsDifferentNewValue: true
         )
     }
 
     func test_set_text_when_displayedTextViewModel_textChanged_return_true_and_new_value_is_nil() {
         self.testSetText(
-            givenNewValueIsNil: true,
-            givenTextChanged: true
+            newValueIsNil: true,
+            givenIsDifferentNewValue: true
         )
     }
 
     func test_set_text_when_displayedTextViewModel_textChanged_return_false() {
         self.testSetText(
-            givenTextChanged: false
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetText(
-        givenNewValueIsNil: Bool = true,
-        givenTextChanged: Bool
+        newValueIsNil: Bool = true,
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let givenNewValue: String? = givenNewValueIsNil ? nil : "My New Text"
+        let newValue: String? = newValueIsNil ? nil : "My New Text"
 
         let sizeMock: ButtonSize = .medium
         let alignmentMock: ButtonAlignment = .trailingIcon
 
-        let viewModel = self.classToTest(
+        let stub = Stub(
             size: sizeMock,
             alignment: alignmentMock,
             text: "Text"
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        self.displayedTextViewModelMock.textChangedWithTextReturnValue = givenTextChanged
-        viewModel.set(text: givenNewValue)
+        stub.displayedTextViewModelMock.textChangedWithTextReturnValue = givenIsDifferentNewValue
+        viewModel.set(text: newValue)
 
         // THEN
         // **
         // Published count
-        XCTAssertEqual(self.contentPublishedSinkCount,
-                       givenTextChanged ? 1 : 0,
-                       "Wrong contentPublishedSinkCount value")
-        XCTAssertEqual(self.sizesPublishedSinkCount,
-                       givenTextChanged ? 1 : 0,
-                       "Wrong sizesPublishedSinkCount value")
-        XCTAssertEqual(self.spacingsPublishedSinkCount,
-                       givenTextChanged ? 1 : 0,
-                       "Wrong spacingsPublishedSinkCount value")
-        XCTAssertEqual(self.currentColorsPublishedSinkCount,
-                       givenTextChanged && !givenNewValueIsNil ? 1 : 0,
-                       "Wrong currentColorsPublishedSinkCount value")
-        XCTAssertEqual(self.textFontTokenPublishedSinkCount,
-                       givenTextChanged && !givenNewValueIsNil ? 1 : 0,
-                       "Wrong textFontTokenPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.contentPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.sizesPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.spacingsPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.currentColorsPublisherMock,
+            givenIsDifferentNewValue && !newValueIsNil ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.textFontTokenPublisherMock,
+            givenIsDifferentNewValue && !newValueIsNil ? 1 : 0
+        )
         // **
 
         // **
         // DisplayedText ViewModel
-        XCTAssertEqual(self.displayedTextViewModelMock.textChangedWithTextCallsCount,
-                       1,
-                       "Wrong call number on textChanged on displayedTextViewModel")
-        XCTAssertEqual(self.displayedTextViewModelMock.textChangedWithTextReceivedText,
-                       givenNewValue,
-                       "Wrong textChanged parameter on displayedTextViewModel")
+        XCTAssertEqual(
+            stub.displayedTextViewModelMock.textChangedWithTextCallsCount,
+            1,
+            "Wrong call number on textChanged on displayedTextViewModel"
+        )
+        XCTAssertEqual(
+            stub.displayedTextViewModelMock.textChangedWithTextReceivedText,
+            newValue,
+            "Wrong textChanged parameter on displayedTextViewModel"
+        )
         // **
 
         // **
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: givenTextChanged ? 2 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 2 : 0,
             givenIconImage: nil
         )
         self.testGetContentUseCaseMock(
-            numberOfCalls: givenTextChanged ? 1 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
             givenAlignment: alignmentMock,
             givenIconImage: nil
         )
         self.testGetSizesUseCaseMock(
-            numberOfCalls: givenTextChanged ? 1 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
             givenSize: sizeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
-            numberOfCalls: givenTextChanged ? 1 : 0,
-            givenTheme: self.themeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenTheme: stub.themeMock,
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         // **
     }
 
     func test_set_attributedText_when_displayedTextViewModel_attributedTextChanged_return_true() {
         self.testSetAttributedText(
-            givenAttributedTextChanged: true
+            givenIsDifferentNewValue: true
         )
     }
 
     func test_set_attributedText_when_displayedTextViewModel_attributedTextChanged_return_false() {
         self.testSetAttributedText(
-            givenAttributedTextChanged: false
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetAttributedText(
-        givenAttributedTextChanged: Bool
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let givenNewValue = NSAttributedString(string: "My new AT Button")
+        let newValue = NSAttributedString(string: "My new AT Button")
 
         let sizeMock: ButtonSize = .medium
         let alignmentMock: ButtonAlignment = .trailingIcon
 
-        let viewModel = self.classToTest(
+        let stub = Stub(
             size: sizeMock,
             alignment: alignmentMock,
             attributedText: .init(string: "My AT Button")
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        self.displayedTextViewModelMock.attributedTextChangedWithAttributedTextReturnValue = givenAttributedTextChanged
-        viewModel.set(attributedText: .left(givenNewValue))
+        stub.displayedTextViewModelMock.attributedTextChangedWithAttributedTextReturnValue = givenIsDifferentNewValue
+        viewModel.set(attributedText: .left(newValue))
 
         // THEN
         // **
         // Published count
-        XCTAssertEqual(self.contentPublishedSinkCount,
-                       givenAttributedTextChanged ? 1 : 0,
-                       "Wrong contentPublishedSinkCount value")
-        XCTAssertEqual(self.sizesPublishedSinkCount,
-                       givenAttributedTextChanged ? 1 : 0,
-                       "Wrong sizesPublishedSinkCount value")
-        XCTAssertEqual(self.spacingsPublishedSinkCount,
-                       givenAttributedTextChanged ? 1 : 0,
-                       "Wrong spacingsPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.contentPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.sizesPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.spacingsPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
         // **
 
         // **
         // DisplayedText ViewModel
-        XCTAssertEqual(self.displayedTextViewModelMock.attributedTextChangedWithAttributedTextCallsCount,
-                       1,
-                       "Wrong call number on attributedText on displayedTextViewModel")
-        XCTAssertEqual(self.displayedTextViewModelMock.attributedTextChangedWithAttributedTextReceivedAttributedText?.leftValue,
-                       givenNewValue,
-                       "Wrong attributedText parameter on displayedTextViewModel")
+        XCTAssertEqual(
+            stub.displayedTextViewModelMock.attributedTextChangedWithAttributedTextCallsCount,
+            1,
+            "Wrong call number on attributedText on displayedTextViewModel"
+        )
+        XCTAssertEqual(
+            stub.displayedTextViewModelMock.attributedTextChangedWithAttributedTextReceivedAttributedText?.leftValue,
+            newValue,
+            "Wrong attributedText parameter on displayedTextViewModel"
+        )
         // **
 
         // **
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: givenAttributedTextChanged ? 2 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 2 : 0,
             givenIconImage: nil
         )
         self.testGetContentUseCaseMock(
-            numberOfCalls: givenAttributedTextChanged ? 1 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
             givenAlignment: alignmentMock,
             givenIconImage: nil
         )
         self.testGetSizesUseCaseMock(
-            numberOfCalls: givenAttributedTextChanged ? 1 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
             givenSize: sizeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
-            numberOfCalls: givenAttributedTextChanged ? 1 : 0,
-            givenTheme: self.themeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenTheme: stub.themeMock,
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         // **
     }
 
-    func test_set_iconImage_with_new_value() {
+    func test_set_iconImage_with_different_new_value() {
         // GIVEN
         self.testSetIconImage(
-            givenValue: self.iconImageMock,
-            givenNewValue: IconographyTests.shared.checkmark
+            givenIsDifferentNewValue: true
         )
     }
 
-    func test_set_iconImage_without_new_value() {
+    func test_set_iconImage_with_same_new_value() {
         self.testSetIconImage(
-            givenValue: self.iconImageMock,
-            givenNewValue: self.iconImageMock
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetIconImage(
-        givenValue: UIImage,
-        givenNewValue: UIImage
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
-
         let sizeMock: ButtonSize = .medium
         let alignmentMock: ButtonAlignment = .trailingIcon
 
-        let viewModel = self.classToTest(
+        let stub = Stub(
             size: sizeMock,
             alignment: alignmentMock,
-            iconImage: givenValue
+            isIconImage: true
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        let newValue = givenIsDifferentNewValue ? IconographyTests.shared.checkmark : stub.iconImageMock
+
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        viewModel.set(iconImage: .left(givenNewValue))
+        viewModel.set(iconImage: .left(newValue))
 
         // THEN
         XCTAssertEqual(viewModel.iconImage?.leftValue,
-                       givenNewValue,
+                       newValue,
                        "Wrong iconImage value")
 
         // **
         // Published count
-        XCTAssertEqual(self.contentPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong contentPublishedSinkCount value")
-        XCTAssertEqual(self.sizesPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong sizesPublishedSinkCount value")
-        XCTAssertEqual(self.spacingsPublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong spacingsPublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.contentPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.sizesPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.spacingsPublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
         // **
 
         // **
         // Use Cases
         self.testGetIsIconOnlyUseCaseMock(
-            numberOfCalls: isNewValue ? 2 : 0,
-            givenIconImage: givenNewValue
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 2 : 0,
+            givenIconImage: newValue
         )
         self.testGetContentUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
             givenAlignment: alignmentMock,
-            givenIconImage: givenNewValue
+            givenIconImage: newValue
         )
         self.testGetSizesUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
             givenSize: sizeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         self.testGetSpacingsUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenTheme: self.themeMock,
-            givenIsOnlyIcon: self.isIconOnlyMock
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenTheme: stub.themeMock,
+            givenIsOnlyIcon: stub.isIconOnlyMock
         )
         // **
     }
 
-    func test_set_isEnabled_with_new_value() {
+    func test_set_isEnabled_with_different_new_value() {
         self.testSetIsEnabled(
-            givenValue: true,
-            givenNewValue: false
+            givenIsDifferentNewValue: true
         )
     }
 
-    func test_set_isEnabled_without_new_value() {
+    func test_set_isEnabled_with_same_new_value() {
         let valueMock = true
         self.testSetIsEnabled(
-            givenValue: valueMock,
-            givenNewValue: valueMock
+            givenIsDifferentNewValue: false
         )
     }
 
     private func testSetIsEnabled(
-        givenValue: Bool,
-        givenNewValue: Bool
+        givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let isNewValue = givenValue != givenNewValue
+        let defaultValue: Bool = true
+        let newValue: Bool = givenIsDifferentNewValue ? false : defaultValue
 
-        let viewModel = self.classToTest(
-            isEnabled: givenValue
+        let stub = Stub(
+            isEnabled: defaultValue
         )
+        let viewModel = stub.viewModel
 
-        self.subscribeAllPublishedValues(on: viewModel)
+        stub.subscribePublishers(on: &self.subscriptions)
 
         viewModel.load() // Needed to get colors from usecase one time
 
         // Reset all dependencies mocked data
-        self.resetMockedData()
+        stub.resetMockedData()
 
         // WHEN
-        viewModel.set(isEnabled: givenNewValue)
+        viewModel.set(isEnabled: newValue)
 
         // THEN
         XCTAssertEqual(viewModel.isEnabled,
-                       givenNewValue,
+                       newValue,
                        "Wrong isEnabled value")
 
         // Published count
-        XCTAssertEqual(self.statePublishedSinkCount,
-                       isNewValue ? 1 : 0,
-                       "Wrong statePublishedSinkCount value")
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.statePublisherMock,
+            givenIsDifferentNewValue ? 1 : 0
+        )
 
         // **
         // Use Cases
         self.testGetStateUseCaseMock(
-            numberOfCalls: isNewValue ? 1 : 0,
-            givenTheme: self.themeMock,
-            givenIsEnabled: givenNewValue
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0,
+            givenTheme: stub.themeMock,
+            givenIsEnabled: newValue
         )
         // **
-    }
-}
-
-// MARK: - Class to test
-
-private extension ButtonViewModelTests {
-
-    private func classToTest(
-        intent: ButtonIntent = .main,
-        variant: ButtonVariant = .tinted,
-        size: ButtonSize = .medium,
-        shape: ButtonShape = .rounded,
-        alignment: ButtonAlignment = .leadingIcon,
-        iconImage: UIImage? = nil,
-        text: String? = nil,
-        attributedText: NSAttributedString? = nil,
-        isEnabled: Bool = true
-    ) -> ButtonViewModel {
-        let iconImageEither: ImageEither?
-        if let iconImage {
-            iconImageEither = .left(iconImage)
-        } else {
-            iconImageEither = nil
-        }
-
-        let attributedTextEither: AttributedStringEither?
-        if let attributedText {
-            attributedTextEither = .left(attributedText)
-        } else {
-            attributedTextEither = nil
-        }
-
-        return .init(
-            theme: self.themeMock,
-            intent: intent,
-            variant: variant,
-            size: size,
-            shape: shape,
-            alignment: alignment,
-            iconImage: iconImageEither,
-            text: text,
-            attributedText: attributedTextEither,
-            isEnabled: isEnabled,
-            dependencies: self.dependenciesMock
-        )
     }
 }
 
@@ -1168,76 +1163,53 @@ private extension ButtonViewModelTests {
 
 private extension ButtonViewModelTests {
 
-    private func subscribeAllPublishedValues(on viewModel: ButtonViewModel) {
-        viewModel.$state.sink { _ in
-            self.statePublishedSinkCount += 1
-        }.store(in: &self.subscriptions)
-
-        viewModel.$currentColors.sink { _ in
-            self.currentColorsPublishedSinkCount += 1
-        }.store(in: &self.subscriptions)
-
-        viewModel.$sizes.sink { _ in
-            self.sizesPublishedSinkCount += 1
-        }.store(in: &self.subscriptions)
-
-        viewModel.$border.sink { _ in
-            self.borderPublishedSinkCount += 1
-        }.store(in: &self.subscriptions)
-
-        viewModel.$spacings.sink { _ in
-            self.spacingsPublishedSinkCount += 1
-        }.store(in: &self.subscriptions)
-
-        viewModel.$content.sink { _ in
-            self.contentPublishedSinkCount += 1
-        }.store(in: &self.subscriptions)
-
-        viewModel.$textFontToken.sink { _ in
-            self.textFontTokenPublishedSinkCount += 1
-        }.store(in: &self.subscriptions)
+    private func testState(on stub: Stub) {
+        XCTAssertPublisherSinkValueEqual(
+            on: stub.statePublisherMock,
+            stub.stateMock
+        )
     }
 
-    private func testState(on viewModel: ButtonViewModel) {
-        XCTAssertEqual(viewModel.state,
-                           self.stateMock,
-                           "Wrong state value")
+    private func testCurrentColors(on stub: Stub) {
+        XCTAssertPublisherSinkValueEqual(
+            on: stub.currentColorsPublisherMock,
+            stub.currentColorsMock
+        )
     }
 
-    private func testCurrentColors(on viewModel: ButtonViewModel) {
-        XCTAssertEqual(viewModel.currentColors,
-                           self.currentColorsMock,
-                           "Wrong currentColors value")
+    private func testSizes(on stub: Stub) {
+        XCTAssertPublisherSinkValueEqual(
+            on: stub.sizesPublisherMock,
+            stub.sizesMock
+        )
     }
 
-    private func testSizes(on viewModel: ButtonViewModel) {
-        XCTAssertEqual(viewModel.sizes,
-                           self.sizesMock,
-                           "Wrong sizes value")
+    private func testBorder(on stub: Stub) {
+        XCTAssertPublisherSinkValueEqual(
+            on: stub.borderPublisherMock,
+            stub.borderMock
+        )
     }
 
-    private func testBorder(on viewModel: ButtonViewModel) {
-        XCTAssertEqual(viewModel.border,
-                           self.borderMock,
-                           "Wrong border value")
+    private func testSpacings(on stub: Stub) {
+        XCTAssertPublisherSinkValueEqual(
+            on: stub.spacingsPublisherMock,
+            stub.spacingsMock
+        )
     }
 
-    private func testSpacings(on viewModel: ButtonViewModel) {
-        XCTAssertEqual(viewModel.spacings,
-                           self.spacingsMock,
-                           "Wrong spacings value")
+    private func testContent(on stub: Stub) {
+        XCTAssertPublisherSinkValueEqual(
+            on: stub.contentPublisherMock,
+            stub.contentMock
+        )
     }
 
-    private func testContent(on viewModel: ButtonViewModel) {
-        XCTAssertEqual(viewModel.content,
-                           self.contentMock,
-                           "Wrong content value")
-    }
-
-    private func testTextFontToken(on viewModel: ButtonViewModel, theme: Theme) {
-        XCTAssertIdentical(viewModel.textFontToken as? TypographyFontTokenGeneratedMock,
-                           theme.typography.callout as? TypographyFontTokenGeneratedMock,
-                           "Wrong textFontToken value")
+    private func testTextFontToken(on stub: Stub) {
+        XCTAssertPublisherSinkValueIdentical(
+            on: stub.textFontTokenPublisherMock,
+            stub.themeMock.typography.callout as? TypographyFontTokenGeneratedMock
+        )
     }
 }
 
@@ -1246,17 +1218,18 @@ private extension ButtonViewModelTests {
 private extension ButtonViewModelTests {
 
     private func testGetBorderUseCaseMock(
-        numberOfCalls: Int = 1,
+        on stub: Stub,
+        numberOfCalls: Int,
         givenShape: ButtonShape? = nil,
         givenTheme: ThemeGeneratedMock? = nil,
         givenVariant: ButtonVariant? = nil
     ) {
-        XCTAssertEqual(self.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantCallsCount,
+        XCTAssertEqual(stub.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getBorderUseCase")
 
         if numberOfCalls > 0, let givenShape, let givenTheme, let givenVariant {
-            let getBorderUseCaseArgs = self.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantReceivedArguments
+            let getBorderUseCaseArgs = stub.getBorderUseCaseMock.executeWithShapeAndBorderAndVariantReceivedArguments
             XCTAssertEqual(getBorderUseCaseArgs?.shape,
                            givenShape,
                            "Wrong shape parameter on execute on getBorderUseCase")
@@ -1270,17 +1243,18 @@ private extension ButtonViewModelTests {
     }
 
     private func testGetColorsUseCaseMock(
-        numberOfCalls: Int = 1,
+        on stub: Stub,
+        numberOfCalls: Int,
         givenTheme: ThemeGeneratedMock? = nil,
         givenIntent: ButtonIntent? = nil,
         givenVariant: ButtonVariant? = nil
     ) {
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
+        XCTAssertEqual(stub.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getColorsUseCase")
 
         if numberOfCalls > 0, let givenTheme, let givenIntent, let givenVariant {
-            let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
+            let getColorsUseCaseArgs = stub.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
             XCTAssertIdentical(try XCTUnwrap(getColorsUseCaseArgs?.theme as? ThemeGeneratedMock),
                                givenTheme,
                                "Wrong theme parameter on execute on getColorsUseCase")
@@ -1294,16 +1268,17 @@ private extension ButtonViewModelTests {
     }
 
     private func testGetContentUseCaseMock(
-        numberOfCalls: Int = 1,
+        on stub: Stub,
+        numberOfCalls: Int,
         givenAlignment: ButtonAlignment? = nil,
         givenIconImage: UIImage? = nil
     ) {
-        XCTAssertEqual(self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextCallsCount,
+        XCTAssertEqual(stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getContentUseCase")
 
         if numberOfCalls > 0, let givenAlignment {
-            let getContentUseCaseArgs = self.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReceivedArguments
+            let getContentUseCaseArgs = stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReceivedArguments
             XCTAssertEqual(getContentUseCaseArgs?.alignment,
                            givenAlignment,
                            "Wrong alignment parameter on execute on getContentUseCase")
@@ -1311,28 +1286,29 @@ private extension ButtonViewModelTests {
                            givenIconImage,
                            "Wrong iconImage parameter on execute on getContentUseCase")
             XCTAssertEqual(getContentUseCaseArgs?.text,
-                           self.displayedTextViewModelMock.text,
+                           stub.displayedTextViewModelMock.text,
                            "Wrong text parameter on execute on getContentUseCase")
             XCTAssertEqual(getContentUseCaseArgs?.attributedText,
-                           self.displayedTextViewModelMock.attributedText,
+                           stub.displayedTextViewModelMock.attributedText,
                            "Wrong attributedText parameter on execute on getContentUseCase")
         }
     }
 
     private func testGetCurrentColorsUseCaseMock(
-        numberOfCalls: Int = 1,
+        on stub: Stub,
+        numberOfCalls: Int,
         givenColors: ButtonColors? = nil,
         givenIsPressed: Bool? = nil
     ) {
-        XCTAssertEqual(self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeCallsCount,
+        XCTAssertEqual(stub.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getCurrentColorsUseCase")
 
         if numberOfCalls > 0, let givenColors, let givenIsPressed {
-            let getCurrentColorsUseCaseArgs = self.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReceivedArguments
+            let getCurrentColorsUseCaseArgs = stub.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReceivedArguments
             XCTAssertEqual(try XCTUnwrap(getCurrentColorsUseCaseArgs?.colors),
-                               givenColors,
-                               "Wrong colors parameter on execute on getCurrentColorsUseCase")
+                           givenColors,
+                           "Wrong colors parameter on execute on getCurrentColorsUseCase")
             XCTAssertEqual(getCurrentColorsUseCaseArgs?.isPressed,
                            givenIsPressed,
                            "Wrong isPressed parameter on execute on getCurrentColorsUseCase")
@@ -1340,38 +1316,40 @@ private extension ButtonViewModelTests {
     }
 
     private func testGetIsIconOnlyUseCaseMock(
-        numberOfCalls: Int = 3,
+        on stub: Stub,
+        numberOfCalls: Int,
         givenIconImage: UIImage? = nil
     ) {
-        XCTAssertEqual(self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextCallsCount,
+        XCTAssertEqual(stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getIsIconOnlyUseCase")
 
         if numberOfCalls > 0 {
-            let getIsIconOnlyUseCaseArgs = self.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextReceivedArguments
+            let getIsIconOnlyUseCaseArgs = stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextReceivedArguments
             XCTAssertEqual(getIsIconOnlyUseCaseArgs?.iconImage?.leftValue,
                            givenIconImage,
                            "Wrong iconImage parameter on execute on getIsIconOnlyUseCase")
             XCTAssertEqual(getIsIconOnlyUseCaseArgs?.text,
-                           self.displayedTextViewModelMock.text,
+                           stub.displayedTextViewModelMock.text,
                            "Wrong text parameter on execute on getIsIconOnlyUseCase")
             XCTAssertEqual(getIsIconOnlyUseCaseArgs?.attributedText,
-                           self.displayedTextViewModelMock.attributedText,
+                           stub.displayedTextViewModelMock.attributedText,
                            "Wrong attributedText parameter on execute on getIsIconOnlyUseCase")
         }
     }
 
     private func testGetSizesUseCaseMock(
-        numberOfCalls: Int = 1,
+        on stub: Stub,
+        numberOfCalls: Int,
         givenSize: ButtonSize? = nil,
         givenIsOnlyIcon: Bool? = nil
     ) {
-        XCTAssertEqual(self.getSizesUseCaseMock.executeWithSizeAndIsOnlyIconCallsCount,
+        XCTAssertEqual(stub.getSizesUseCaseMock.executeWithSizeAndIsOnlyIconCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getSizesUseCase")
 
         if numberOfCalls > 0, let givenSize, let givenIsOnlyIcon {
-            let getSizesUseCaseArgs = self.getSizesUseCaseMock.executeWithSizeAndIsOnlyIconReceivedArguments
+            let getSizesUseCaseArgs = stub.getSizesUseCaseMock.executeWithSizeAndIsOnlyIconReceivedArguments
             XCTAssertEqual(getSizesUseCaseArgs?.size,
                            givenSize,
                            "Wrong size parameter on execute on getSizesUseCase")
@@ -1382,16 +1360,17 @@ private extension ButtonViewModelTests {
     }
 
     private func testGetSpacingsUseCaseMock(
-        numberOfCalls: Int = 1,
+        on stub: Stub,
+        numberOfCalls: Int,
         givenTheme: ThemeGeneratedMock? = nil,
         givenIsOnlyIcon: Bool? = nil
     ) {
-        XCTAssertEqual(self.getSpacingsUseCaseMock.executeWithSpacingAndIsOnlyIconCallsCount,
+        XCTAssertEqual(stub.getSpacingsUseCaseMock.executeWithSpacingAndIsOnlyIconCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getSpacingsUseCase")
 
         if numberOfCalls > 0, let givenTheme, let givenIsOnlyIcon {
-            let getSpacingsUseCaseArgs = self.getSpacingsUseCaseMock.executeWithSpacingAndIsOnlyIconReceivedArguments
+            let getSpacingsUseCaseArgs = stub.getSpacingsUseCaseMock.executeWithSpacingAndIsOnlyIconReceivedArguments
             XCTAssertEqual(getSpacingsUseCaseArgs?.isOnlyIcon,
                            givenIsOnlyIcon,
                            "Wrong isOnlyIcon parameter on execute on getSpacingsUseCase")
@@ -1402,16 +1381,17 @@ private extension ButtonViewModelTests {
     }
 
     private func testGetStateUseCaseMock(
-        numberOfCalls: Int = 1,
+        on stub: Stub,
+        numberOfCalls: Int,
         givenTheme: ThemeGeneratedMock? = nil,
         givenIsEnabled: Bool? = nil
     ) {
-        XCTAssertEqual(self.getStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount,
+        XCTAssertEqual(stub.getStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getStateUseCase")
 
         if numberOfCalls > 0, let givenTheme, let givenIsEnabled {
-            let getStateUseCaseArgs = self.getStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments
+            let getStateUseCaseArgs = stub.getStateUseCaseMock.executeWithIsEnabledAndDimsReceivedArguments
             XCTAssertEqual(getStateUseCaseArgs?.isEnabled,
                            givenIsEnabled,
                            "Wrong isEnabled parameter on execute on getStateUseCase")
@@ -1420,8 +1400,177 @@ private extension ButtonViewModelTests {
                                "Wrong dims parameter on execute on getStateUseCase")
         }
     }
+}
 
-    private func resetMockedData() {
+// MARK: - Stub
+
+private final class Stub {
+
+    // MARK: - Properties
+
+    let viewModel: ButtonViewModel
+
+    // MARK: - Data Properties
+
+    let iconImageMock = IconographyTests.shared.arrow
+    let themeMock = ThemeGeneratedMock.mocked()
+
+    let borderMock = ButtonBorder.mocked()
+    let colorsMock = ButtonColors.mocked()
+    let contentMock = ButtonContent.mocked()
+    let currentColorsMock = ButtonCurrentColors.mocked()
+    let isIconOnlyMock = false
+    let sizesMock = ButtonSizes.mocked()
+    let spacingsMock = ButtonSpacings.mocked()
+    let stateMock = ButtonState.mocked()
+
+    // MARK: - Dependencies Properties
+
+    let displayedTextViewModelMock: DisplayedTextViewModelGeneratedMock
+    let getBorderUseCaseMock: ButtonGetBorderUseCaseableGeneratedMock
+    let getColorsUseCaseMock: ButtonGetColorsUseCaseableGeneratedMock
+    let getContentUseCaseMock: ButtonGetContentUseCaseableGeneratedMock
+    let getCurrentColorsUseCaseMock: ButtonGetCurrentColorsUseCaseableGeneratedMock
+    let getIsIconOnlyUseCaseMock: ButtonGetIsOnlyIconUseCaseableGeneratedMock
+    let getSizesUseCaseMock: ButtonGetSizesUseCaseableGeneratedMock
+    let getSpacingsUseCaseMock: ButtonGetSpacingsUseCaseableGeneratedMock
+    let getStateUseCaseMock: ButtonGetStateUseCaseableGeneratedMock
+
+    private let dependenciesMock: ButtonViewModelDependenciesProtocolGeneratedMock
+
+    // MARK: - Publisher Properties
+
+    let statePublisherMock: PublisherMock<Published<ButtonState?>.Publisher>
+    let currentColorsPublisherMock: PublisherMock<Published<ButtonCurrentColors?>.Publisher>
+    let sizesPublisherMock: PublisherMock<Published<ButtonSizes?>.Publisher>
+    let borderPublisherMock: PublisherMock<Published<ButtonBorder?>.Publisher>
+    let spacingsPublisherMock: PublisherMock<Published<ButtonSpacings?>.Publisher>
+    let contentPublisherMock: PublisherMock<Published<ButtonContent?>.Publisher>
+    let textFontTokenPublisherMock: PublisherMock<Published<(any TypographyFontToken)?>.Publisher>
+
+    // MARK: - Initialization
+
+    init(
+        intent: ButtonIntent = .main,
+        variant: ButtonVariant = .tinted,
+        size: ButtonSize = .medium,
+        shape: ButtonShape = .rounded,
+        alignment: ButtonAlignment = .leadingIcon,
+        isIconImage: Bool = false,
+        text: String? = nil,
+        attributedText: NSAttributedString? = nil,
+        isEnabled: Bool = true
+    ) {
+        // **
+        // Dependencies
+        let displayedTextViewModelMock = DisplayedTextViewModelGeneratedMock()
+        displayedTextViewModelMock.text = "Text"
+        displayedTextViewModelMock.attributedText = .left(.init(string: "AText"))
+        displayedTextViewModelMock.underlyingDisplayedTextType = .text
+        self.displayedTextViewModelMock = displayedTextViewModelMock
+
+        let getBorderUseCaseMock = ButtonGetBorderUseCaseableGeneratedMock()
+        getBorderUseCaseMock.executeWithShapeAndBorderAndVariantReturnValue = self.borderMock
+        self.getBorderUseCaseMock = getBorderUseCaseMock
+
+        let getColorsUseCaseMock = ButtonGetColorsUseCaseableGeneratedMock()
+        getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReturnValue = self.colorsMock
+        self.getColorsUseCaseMock = getColorsUseCaseMock
+
+        let getContentUseCaseMock = ButtonGetContentUseCaseableGeneratedMock()
+        getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReturnValue = self.contentMock
+        self.getContentUseCaseMock = getContentUseCaseMock
+
+        let getCurrentColorsUseCaseMock = ButtonGetCurrentColorsUseCaseableGeneratedMock()
+        getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReturnValue = self.currentColorsMock
+        self.getCurrentColorsUseCaseMock = getCurrentColorsUseCaseMock
+
+        let getIsIconOnlyUseCaseMock = ButtonGetIsOnlyIconUseCaseableGeneratedMock()
+        getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextReturnValue = self.isIconOnlyMock
+        self.getIsIconOnlyUseCaseMock = getIsIconOnlyUseCaseMock
+
+        let getSizesUseCaseMock = ButtonGetSizesUseCaseableGeneratedMock()
+        getSizesUseCaseMock.executeWithSizeAndIsOnlyIconReturnValue = self.sizesMock
+        self.getSizesUseCaseMock = getSizesUseCaseMock
+
+        let getSpacingsUseCaseMock = ButtonGetSpacingsUseCaseableGeneratedMock()
+        getSpacingsUseCaseMock.executeWithSpacingAndIsOnlyIconReturnValue = self.spacingsMock
+        self.getSpacingsUseCaseMock = getSpacingsUseCaseMock
+
+        let getStateUseCaseMock = ButtonGetStateUseCaseableGeneratedMock()
+        getStateUseCaseMock.executeWithIsEnabledAndDimsReturnValue = self.stateMock
+        self.getStateUseCaseMock = getStateUseCaseMock
+
+        let dependenciesMock = ButtonViewModelDependenciesProtocolGeneratedMock()
+        dependenciesMock.underlyingGetBorderUseCase = getBorderUseCaseMock
+        dependenciesMock.underlyingGetColorsUseCase = getColorsUseCaseMock
+        dependenciesMock.underlyingGetContentUseCase = getContentUseCaseMock
+        dependenciesMock.underlyingGetCurrentColorsUseCase = getCurrentColorsUseCaseMock
+        dependenciesMock.underlyingGetIsIconOnlyUseCase = getIsIconOnlyUseCaseMock
+        dependenciesMock.underlyingGetSizesUseCase = getSizesUseCaseMock
+        dependenciesMock.underlyingGetSpacingsUseCase = getSpacingsUseCaseMock
+        dependenciesMock.underlyingGetStateUseCase = getStateUseCaseMock
+        dependenciesMock.makeDisplayedTextViewModelWithTextAndAttributedTextReturnValue = displayedTextViewModelMock
+        self.dependenciesMock = dependenciesMock
+        // **
+
+        // **
+        // View Model
+        let iconImageEither: ImageEither?
+        if isIconImage {
+            iconImageEither = .left(self.iconImageMock)
+        } else {
+            iconImageEither = nil
+        }
+
+        let attributedTextEither: AttributedStringEither?
+        if let attributedText {
+            attributedTextEither = .left(attributedText)
+        } else {
+            attributedTextEither = nil
+        }
+
+        let viewModel = ButtonViewModel(
+            theme: self.themeMock,
+            intent: intent,
+            variant: variant,
+            size: size,
+            shape: shape,
+            alignment: alignment,
+            iconImage: iconImageEither,
+            text: text,
+            attributedText: attributedTextEither,
+            isEnabled: isEnabled,
+            dependencies: dependenciesMock
+        )
+        self.viewModel = viewModel
+        // **
+
+        // **
+        // Publishers
+        self.statePublisherMock = .init(publisher: viewModel.$state)
+        self.currentColorsPublisherMock = .init(publisher: viewModel.$currentColors)
+        self.sizesPublisherMock = .init(publisher: viewModel.$sizes)
+        self.borderPublisherMock = .init(publisher: viewModel.$border)
+        self.spacingsPublisherMock = .init(publisher: viewModel.$spacings)
+        self.contentPublisherMock = .init(publisher: viewModel.$content)
+        self.textFontTokenPublisherMock = .init(publisher: viewModel.$textFontToken)
+        //
+    }
+
+    // MARK: - Method
+
+    func subscribePublishers(on subscriptions: inout Set<AnyCancellable>) {
+        self.statePublisherMock.loadTesting(on: &subscriptions)
+        self.currentColorsPublisherMock.loadTesting(on: &subscriptions)
+        self.sizesPublisherMock.loadTesting(on: &subscriptions)
+        self.borderPublisherMock.loadTesting(on: &subscriptions)
+        self.spacingsPublisherMock.loadTesting(on: &subscriptions)
+        self.contentPublisherMock.loadTesting(on: &subscriptions)
+        self.textFontTokenPublisherMock.loadTesting(on: &subscriptions)
+    }
+
+    func resetMockedData() {
         // Clear UseCases Mock
         let useCases: [ResetGeneratedMock] = [
             self.getBorderUseCaseMock,
@@ -1436,12 +1585,12 @@ private extension ButtonViewModelTests {
         useCases.forEach { $0.reset() }
 
         // Reset published sink counter
-        self.statePublishedSinkCount = 0
-        self.currentColorsPublishedSinkCount = 0
-        self.sizesPublishedSinkCount = 0
-        self.borderPublishedSinkCount = 0
-        self.spacingsPublishedSinkCount = 0
-        self.contentPublishedSinkCount = 0
-        self.textFontTokenPublishedSinkCount = 0
+        self.statePublisherMock.reset()
+        self.currentColorsPublisherMock.reset()
+        self.sizesPublisherMock.reset()
+        self.borderPublisherMock.reset()
+        self.spacingsPublisherMock.reset()
+        self.contentPublisherMock.reset()
+        self.textFontTokenPublisherMock.reset()
     }
 }
