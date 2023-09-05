@@ -106,7 +106,15 @@ public struct TabView: View {
                     self.selectedIndex = index
                 }
             }
+            if self.viewModel.apportionsSegmentWidthsByContent {
+                Spacer()
+            }
         }
+        .overlay(
+            Rectangle()
+                .frame(width: nil, height: self.lineHeight, alignment: .top)
+                .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
+            alignment: .bottom)
     }
 
 
