@@ -17,7 +17,7 @@ public final class TabUIView: UIControl {
         let stackView = UIStackView()
         stackView.spacing = 0
         stackView.axis = .horizontal
-        stackView.alignment = .fill //.lastBaseline // .fill //.lastBaseline
+        stackView.alignment = .fill
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
