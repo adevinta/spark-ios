@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct SwitchImages {
+public struct SwitchImages: Equatable {
 
     // MARK: - Properties
 

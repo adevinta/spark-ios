@@ -18,8 +18,10 @@ struct SwitchGetToggleColorUseCase: SwitchGetToggleColorUseCaseable {
 
     // MARK: - Methods
 
-    func execute(isOn: Bool,
-                 statusAndStateColor: SwitchStatusColors) -> any ColorToken {
+    func execute(
+        isOn: Bool,
+        statusAndStateColor: SwitchStatusColors
+    ) -> any ColorToken {
         return isOn ? statusAndStateColor.onColorToken : statusAndStateColor.offColorToken
     }
 }

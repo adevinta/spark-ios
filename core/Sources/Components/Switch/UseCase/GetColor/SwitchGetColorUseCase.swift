@@ -16,8 +16,10 @@ struct SwitchGetColorUseCase: SwitchGetColorUseCaseable {
 
     // MARK: - Methods
 
-    func execute(intent: SwitchIntent,
-                 colors: Colors) -> any ColorToken {
+    func execute(
+        intent: SwitchIntent,
+        colors: Colors
+    ) -> any ColorToken {
         switch intent {
         case .alert:
             return colors.feedback.alert

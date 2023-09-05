@@ -10,33 +10,4 @@ enum SwitchTextContentDefault: CaseIterable {
     case text
     case attributedText
     case multilineText
-
-    // MARK: - Properties
-
-    var shouldShowText: Bool {
-        switch self {
-        case .text, .multilineText:
-            return true
-        default:
-            return false
-        }
-    }
-
-    var shouldShowShowAttributeText: Bool {
-        switch self {
-        case .attributedText:
-            return true
-        default:
-            return false
-        }
-    }
-
-    var isMultilineText: Bool {
-        switch self {
-        case .multilineText:
-            return true
-        default:
-            return false
-        }
-    }
 }

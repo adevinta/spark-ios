@@ -18,8 +18,10 @@ struct SwitchGetPositionUseCase: SwitchGetPositionUseCaseable {
 
     // MARK: - Methods
 
-    func execute(alignment: SwitchAlignment,
-                 spacing: LayoutSpacing) -> SwitchPosition {
+    func execute(
+        alignment: SwitchAlignment,
+        spacing: LayoutSpacing
+    ) -> SwitchPosition {
         let horizontalSpacing: CGFloat
         let isToggleOnLeft: Bool
         switch alignment {

@@ -29,9 +29,11 @@ struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(intent: SwitchIntent,
-                 colors: Colors,
-                 dims: Dims) -> SwitchColors {
+    func execute(
+        intent: SwitchIntent,
+        colors: Colors,
+        dims: Dims
+    ) -> SwitchColors {
 
         // Get color from use case
         let color = self.getColorUseCase.execute(
