@@ -95,6 +95,14 @@ struct ButtonGetVariantGhostUseCase: ButtonGetVariantUseCaseable {
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
+        case .info:
+            return .init(
+                foregroundColor: colors.feedback.info,
+                backgroundColor: ColorTokenDefault.clear,
+                pressedBackgroundColor: colors.feedback.info.opacity(dim5),
+                borderColor: borderColor,
+                pressedBorderColor: pressedBorderColor
+            )
         }
     }
 }

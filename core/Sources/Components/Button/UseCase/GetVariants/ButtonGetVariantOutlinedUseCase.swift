@@ -94,6 +94,14 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
                 borderColor: colors.base.surface,
                 pressedBorderColor: colors.base.surface
             )
+        case .info:
+            return .init(
+                foregroundColor: colors.feedback.info,
+                backgroundColor: backgroundColor,
+                pressedBackgroundColor: colors.feedback.info.opacity(dim5),
+                borderColor: colors.feedback.info,
+                pressedBorderColor: colors.feedback.info
+            )
         }
     }
 }

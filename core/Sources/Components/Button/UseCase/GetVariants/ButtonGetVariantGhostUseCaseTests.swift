@@ -167,6 +167,28 @@ final class ButtonGetVariantGhostUseCaseTests: ButtonVariantUseCaseTests {
             ].map(\.color))
     }
 
+    func test_info_colors() throws {
+        // Given
+        let sut = self.sut()
+
+        // When
+        let colors = sut.execute(intent: .info, colors: self.theme.colors, dims: self.theme.dims)
+
+        // Then
+        XCTAssertEqual(
+            [colors.foregroundColor,
+             colors.backgroundColor,
+             colors.pressedBackgroundColor,
+             colors.borderColor,
+             colors.pressedBorderColor].map(\.color),
+            [self.theme.colors.feedback.info,
+             ColorTokenDefault.clear,
+             self.theme.colors.feedback.info.opacity(self.theme.dims.dim5),
+             ColorTokenDefault.clear,
+             ColorTokenDefault.clear
+            ].map(\.color))
+    }
+
     // MARK: - Helper Functions
     func sut() -> ButtonGetVariantGhostUseCase {
         return ButtonGetVariantGhostUseCase()
