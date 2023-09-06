@@ -1,5 +1,5 @@
 //
-//  SparkTagIntentColorsUseCase.swift
+//  CheckboxGetStateColorsUseCase.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 29/03/2023.
@@ -7,23 +7,23 @@
 //
 
 // sourcery: AutoMockable
-protocol CheckboxStateColorsUseCaseable {
-    func execute(for intentColor: SelectButtonState,
-                 on colors: Colors) -> CheckboxStateColorables
+protocol CheckboxGetStateColorsUseCaseable {
+    func execute(for state: SelectButtonState,
+                 from colors: Colors) -> CheckboxStateColorables
 }
 
-struct CheckboxStateColorsUseCase: CheckboxStateColorsUseCaseable {
+struct CheckboxGetStateColorsUseCase: CheckboxGetStateColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for intentColor: SelectButtonState,
-                 on colors: Colors) -> CheckboxStateColorables {
+    func execute(for state: SelectButtonState,
+                 from colors: Colors) -> CheckboxStateColorables {
         let surfaceColor = colors.main.main
         let textColor = colors.base.onSurface
         let iconColor = colors.main.onMain
         let pressedBorderColor = colors.main.mainContainer
 
-        switch intentColor {
+        switch state {
         case .enabled:
             return CheckboxStateColors(
                 textColor: textColor,

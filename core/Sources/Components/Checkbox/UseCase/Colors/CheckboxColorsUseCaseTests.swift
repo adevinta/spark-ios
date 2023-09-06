@@ -38,8 +38,8 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
             let themeMock = ThemeGeneratedMock()
             themeMock.underlyingColors = themeColorsMock
 
-            let getIntentColorsUseCaseMock = CheckboxStateColorsUseCaseableGeneratedMock()
-            getIntentColorsUseCaseMock.executeWithIntentColorAndColorsReturnValue = intentColorsMock
+            let getIntentColorsUseCaseMock = CheckboxGetStateColorsUseCaseableGeneratedMock()
+            getIntentColorsUseCaseMock.executeWithStateAndColorsReturnValue = intentColorsMock
 
             let useCase = CheckboxColorsUseCase(stateColorsUseCase: getIntentColorsUseCaseMock)
 
@@ -66,15 +66,15 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
 private struct Tester {
 
     static func testGetIntentColorsUseCaseExecuteCalling(
-        givenGetIntentColorsUseCase: CheckboxStateColorsUseCaseableGeneratedMock,
+        givenGetIntentColorsUseCase: CheckboxGetStateColorsUseCaseableGeneratedMock,
         givenState: SelectButtonState,
         givenThemeColors: ColorsGeneratedMock
     ) {
-        let getIntentColorsUseCaseArgs = givenGetIntentColorsUseCase.executeWithIntentColorAndColorsReceivedArguments
-        XCTAssertEqual(givenGetIntentColorsUseCase.executeWithIntentColorAndColorsCallsCount,
+        let getIntentColorsUseCaseArgs = givenGetIntentColorsUseCase.executeWithStateAndColorsReceivedArguments
+        XCTAssertEqual(givenGetIntentColorsUseCase.executeWithStateAndColorsCallsCount,
                        1,
                        "Wrong call number on execute on getIntentColorsUseCase")
-        XCTAssertEqual(getIntentColorsUseCaseArgs?.intentColor,
+        XCTAssertEqual(getIntentColorsUseCaseArgs?.state,
                        givenState,
                        "Wrong intent parameter on execute on getIntentColorsUseCase")
         XCTAssertIdentical(getIntentColorsUseCaseArgs?.colors as? ColorsGeneratedMock,

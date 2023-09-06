@@ -36,7 +36,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.main = main
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .main)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intent: .main)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
@@ -57,7 +57,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.support = support
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .support)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intent: .support)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
@@ -77,7 +77,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.base = base
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .surface)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intent: .surface)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
@@ -100,7 +100,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.feedback = feedback
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .neutral)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intent: .neutral)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
@@ -121,7 +121,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.feedback = feedback
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .info)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intent: .info)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
@@ -142,7 +142,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.feedback = feedback
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .success)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intent: .success)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
@@ -163,7 +163,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.feedback = feedback
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .alert)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intent: .alert)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
@@ -184,7 +184,7 @@ final class GetChipIntentColorsUseCaseTests: XCTestCase {
         self.colors.feedback = feedback
 
         // When
-        let chipIntentColors = self.sut.execute(colors: self.colors, intentColor: .danger)
+        let chipIntentColors = self.sut.execute(colors: self.colors, intent: .danger)
 
         // Then
         XCTAssertEqual([chipIntentColors.principal,
