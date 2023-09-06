@@ -14,18 +14,18 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
 
     // MARK: - Properties
 
-    private let stateColorsUseCase: CheckboxStateColorsUseCaseable
+    private let stateColorsUseCase: CheckboxGetStateColorsUseCaseable
 
     // MARK: - Initialization
 
-    init(stateColorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase()) {
+    init(stateColorsUseCase: CheckboxGetStateColorsUseCaseable = CheckboxGetStateColorsUseCase()) {
         self.stateColorsUseCase = stateColorsUseCase
     }
 
     // MARK: - Methods
 
     func execute(from theme: Theme, state: SelectButtonState) -> CheckboxColorables {
-        let colors = self.stateColorsUseCase.execute(for: state, on: theme.colors)
+        let colors = self.stateColorsUseCase.execute(for: state, from: theme.colors)
 
         return CheckboxColors(
             textColor: colors.textColor,
