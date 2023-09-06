@@ -56,7 +56,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                  variant: ChipVariant,
                  intent: ChipIntent,
                  state: ChipState) -> ChipStateColors {
-        let intentColors = intentColorsUseCase.execute(colors: theme.colors, intentColor: intent)
+        let intentColors = intentColorsUseCase.execute(colors: theme.colors, intent: intent)
 
         let chipColors: ChipColors
         switch variant {

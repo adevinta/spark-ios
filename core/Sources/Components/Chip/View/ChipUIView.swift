@@ -120,7 +120,7 @@ public final class ChipUIView: UIControl {
                 return UIView.noIntrinsicMetric
             }
 
-            var width: CGFloat = (self.imageView.isHidden ? 0 : self.imageSize)
+            let width: CGFloat = (self.imageView.isHidden ? 0 : self.imageSize)
             + (self.textLabel.isHidden ? 0 : self.textLabel.intrinsicContentSize.width)
             + (self.component?.intrinsicContentSize.width ?? 0.0)
 

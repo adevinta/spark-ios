@@ -29,11 +29,3 @@ public struct SparkTheme: Theme {
                                         dim4: 0.16,
                                         dim5: 0.08)
 }
-
-public class SparkThemePublisher: ObservableObject {
-    public static let shared = SparkThemePublisher()
-
-    private init() {}
-
-    @Published public var theme: Theme = SparkTheme()
-}

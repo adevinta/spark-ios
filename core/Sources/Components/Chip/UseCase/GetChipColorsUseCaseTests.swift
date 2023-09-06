@@ -32,7 +32,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -56,7 +56,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -80,7 +80,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -107,7 +107,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -134,7 +134,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -159,7 +159,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -184,7 +184,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -208,7 +208,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -233,7 +233,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,
@@ -255,7 +255,7 @@ final class GetChipColorsUseCaseTests: XCTestCase {
         // Given
         self.theme.border = BorderGeneratedMock()
         self.theme.colors = ColorsGeneratedMock()
-        self.intentColorsUseCase.executeWithColorsAndIntentColorReturnValue = ChipIntentColors(
+        self.intentColorsUseCase.executeWithColorsAndIntentReturnValue = ChipIntentColors(
             principal: .red,
             subordinate: .green,
             tintedPrincipal: .purple,

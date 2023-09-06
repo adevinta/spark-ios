@@ -28,7 +28,7 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(for: .enabled, on: theme.colors)
+        let colors = sut.execute(for: .enabled, from: theme.colors)
 
         // Then
         XCTAssertEqual(
@@ -48,7 +48,7 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(for: .disabled, on: theme.colors)
+        let colors = sut.execute(for: .disabled, from: theme.colors)
 
         // Then
         XCTAssertEqual(
@@ -68,7 +68,7 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(for: .success(message: "message"), on: theme.colors)
+        let colors = sut.execute(for: .success(message: "message"), from: theme.colors)
 
         // Then
         XCTAssertEqual(
@@ -88,7 +88,7 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(for: .warning(message: "message"), on: theme.colors)
+        let colors = sut.execute(for: .warning(message: "message"), from: theme.colors)
 
         // Then
         XCTAssertEqual(
@@ -108,7 +108,7 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
         let sut = self.sut()
 
         // When
-        let colors = sut.execute(for: .error(message: "message"), on: theme.colors)
+        let colors = sut.execute(for: .error(message: "message"), from: theme.colors)
 
         // Then
         XCTAssertEqual(
@@ -124,8 +124,8 @@ final class CheckboxStateColorsUseCaseTests: XCTestCase {
     }
 
     // MARK: - Helper Functions
-    func sut() ->  CheckboxStateColorsUseCase {
-        return CheckboxStateColorsUseCase()
+    func sut() ->  CheckboxGetStateColorsUseCase {
+        return CheckboxGetStateColorsUseCase()
     }
 }
 
