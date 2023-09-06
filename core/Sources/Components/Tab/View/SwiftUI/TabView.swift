@@ -13,7 +13,7 @@ public struct TabView: View {
     private let intent: TabIntent
     private let tabSize: TabSize
     @ObservedObject private var viewModel: TabViewModel
-    private let content: [(image: Image?, title: String?)]
+    private let content: [(image: Image?, title: String?, badge: BadgeView?)]
     @Binding var selectedIndex: Int
     @ScaledMetric var lineHeight: CGFloat
 
@@ -33,7 +33,7 @@ public struct TabView: View {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: titles.map{ (nil, $0) },
+                  content: titles.map{ (nil, $0, nil) },
                   selectedIndex: selectedIndex)
     }
 
@@ -52,7 +52,7 @@ public struct TabView: View {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: icons.map{ ($0, nil) },
+                  content: icons.map{ ($0, nil, nil) },
                   selectedIndex: selectedIndex
         )
     }
@@ -66,7 +66,7 @@ public struct TabView: View {
     public init(theme: Theme,
                 intent: TabIntent = .main,
                 tabSize: TabSize = .md,
-                content: [(Image?, String?)],
+                content: [(Image?, String?, BadgeView?)],
                 selectedIndex: Binding<Int>,
                 apportionsSegmentWidthsByContent: Bool = false
     ) {
@@ -100,6 +100,7 @@ public struct TabView: View {
                     size: self.tabSize,
                     image: content.image,
                     title: content.title,
+                    badge: content.badge,
                     apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
                     isSelected: self.selectedIndex == index
                 ) {

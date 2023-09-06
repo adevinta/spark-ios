@@ -112,13 +112,13 @@ public struct TabItemView<Badge: View>: View {
             }
             spacer()
         }
+        .frame(height: self.itemHeight)
         .padding(EdgeInsets(vertical: self.paddingVertical, horizontal: 0))
         .overlay(
             Rectangle()
                 .frame(width: nil, height: self.lineHeight, alignment: .top)
                 .foregroundColor(self.viewModel.tabStateAttributes.colors.line.color),
             alignment: .bottom)
-        .frame(idealHeight: self.itemHeight)
     }
 
     @ViewBuilder

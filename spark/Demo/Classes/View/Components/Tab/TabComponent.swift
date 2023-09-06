@@ -31,6 +31,7 @@ struct TabComponent: View {
     @State var numberOfTabs = 2
     @State var selectedTab = 0
     @State var height = CGFloat(50)
+    @State var badgePosition = 0
 
     // MARK: - View
     var body: some View {
@@ -111,6 +112,9 @@ struct TabComponent: View {
                     state: .enabled,
                     selectionState: self.$showBadge
                 )
+                .onChange(of: self.showBadge) { _ in
+                    self.badgePosition = (0..<self.numberOfTabs).randomElement() ?? 0
+                }
 
                 CheckboxView(
                     text: "Is Enabled",
@@ -149,9 +153,7 @@ struct TabComponent: View {
                     tabSize: self.tabSize,
                     content: self.tabs(),
                     selectedIndex: self.$selectedTab,
-//                    badge: self.showBadge.isSelected ? badge() : nil,
                     apportionsSegmentWidthsByContent: !self.equalSize.isSelected
-//                    isSelected: true
                 )
                 .disabled(!isEnabled.isSelected)
                 Spacer()
@@ -159,17 +161,28 @@ struct TabComponent: View {
         }
         .padding(.horizontal, 16)
         .navigationBarTitle(Text("Tab Item"))
+
     }
 
     func badge() -> BadgeView {
         BadgeView(theme: theme, intent: .danger, value: 99)
     }
 
-    private func tabs() -> [(Image?, String?)] {
-        (0..<self.numberOfTabs).map{
+    private func tabs() -> [(Image?, String?, BadgeView?)] {
+
+        return (0..<self.numberOfTabs).map {
             (self.showIcon.isSelected ? .image(at: $0) : nil,
-             self.showText.isSelected ? "Tab \($0)" : nil
+             self.showText.isSelected ? self.label($0) : nil,
+             self.showBadge.isSelected && self.badgePosition == $0 ? self.badge() : nil
             )
+        }
+    }
+
+    private func label(_ index: Int) -> String {
+        if self.longLabel.isSelected && index == 1 {
+            return "Long label \(index)"
+        } else {
+            return "Tab \(index)"
         }
     }
 
