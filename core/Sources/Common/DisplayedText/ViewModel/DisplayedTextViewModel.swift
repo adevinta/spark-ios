@@ -12,7 +12,13 @@ protocol DisplayedTextViewModel {
     var attributedText: AttributedStringEither? { get }
     var displayedTextType: DisplayedTextType { get }
 
+    /// Update the text only if the value changed.
+    /// Return true if value changed.
+    @discardableResult
     func textChanged(_ text: String?) -> Bool
+    /// Update the attributed text only if the value changed.
+    /// Return true if value changed.
+    @discardableResult
     func attributedTextChanged(_ attributedText: AttributedStringEither?) -> Bool
 }
 

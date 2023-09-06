@@ -6,8 +6,12 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+/// Enum used for components which have a text/attributed management.
 enum DisplayedTextType: CaseIterable {
+    /// No text/attributed text is displayed on label
     case none
+    /// Text is displayed on label
     case text
+    /// Attributed text is displayed on label
     case attributedText
 }

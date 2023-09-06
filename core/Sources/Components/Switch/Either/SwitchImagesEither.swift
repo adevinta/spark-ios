@@ -1,12 +1,12 @@
 //
-//  SwitchTypeAlias.swift
+//  SwitchImagesEither.swift
 //  SparkCore
 //
-//  Created by robin.lemaire on 29/06/2023.
+//  Created by robin.lemaire on 04/07/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SwiftUI
 import UIKit
+import SwiftUI
 
 typealias SwitchImagesEither = Either<SwitchUIImages, SwitchImages>

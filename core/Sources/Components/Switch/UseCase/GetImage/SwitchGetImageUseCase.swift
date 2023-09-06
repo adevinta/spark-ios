@@ -18,8 +18,10 @@ struct SwitchGetImageUseCase: SwitchGetImageUseCaseable {
 
     // MARK: - Methods
 
-    func execute(isOn: Bool,
-                 images: SwitchImagesEither) -> ImageEither {
+    func execute(
+        isOn: Bool,
+        images: SwitchImagesEither
+    ) -> ImageEither {
         switch images {
         case .left(let images):
             return .left(isOn ? images.on : images.off)
