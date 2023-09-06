@@ -134,12 +134,13 @@ struct SwitchComponentViewRepresentable: UIViewRepresentable {
             switchView.images = self.hasImages ? self.images() : nil
         }
 
-        if self.textContent.shouldShowText {
-            switchView.text = self.viewModel.text(isMultilineText: self.textContent.isMultilineText)
-        }
-
-        if self.textContent.shouldShowShowAttributeText {
+        switch self.textContent {
+        case .text:
+            switchView.text = self.viewModel.text(isMultilineText: false)
+        case .attributedText:
             switchView.attributedText = self.attributedText
+        case .multilineText:
+            switchView.text = self.viewModel.text(isMultilineText: true)
         }
 
         DispatchQueue.main.async {

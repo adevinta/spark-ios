@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct SwitchUIImages {
+public struct SwitchUIImages: Equatable {
 
     // MARK: - Properties
 
