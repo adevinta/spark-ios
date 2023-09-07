@@ -118,6 +118,6 @@ struct ChipComponentUIViewRepresentation: UIViewRepresentable {
 
 struct ChipComponentView_Previews: PreviewProvider {
     static var previews: some View {
-        ChipComponentUIView()
+        ChipComponentViewRepresentable()
     }
 }

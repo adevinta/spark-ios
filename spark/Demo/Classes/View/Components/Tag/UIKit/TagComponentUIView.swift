@@ -43,12 +43,11 @@ final class TagComponentUIView: ComponentUIView {
     private func setupSubscriptions() {
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in
             guard let self = self else { return }
-            let color = self.viewModel.theme.colors.main.main.uiColor
             let themes = self.viewModel.themes
             let themeTitle: String? = theme is SparkTheme ? themes.first?.title : themes.last?.title
 
             self.viewModel.themeConfigurationItemViewModel.buttonTitle = themeTitle
-            self.viewModel.configurationViewModel.update(color: color)
+            self.viewModel.configurationViewModel.update(theme: theme)
 
             self.componentView.theme = theme
         }

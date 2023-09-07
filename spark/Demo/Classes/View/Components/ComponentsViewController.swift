@@ -88,6 +88,8 @@ extension ComponentsViewController {
             viewController = SpinnerComponentUIViewController.build()
         case .switchButton:
             viewController = SwitchComponentUIViewController.build()
+        case .tab:
+            viewController = TabComponentUIViewController.build()
         case .tag:
             viewController = TagComponentUIViewController.build()
         case .textField:

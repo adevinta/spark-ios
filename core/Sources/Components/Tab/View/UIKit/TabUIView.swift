@@ -495,6 +495,7 @@ public final class TabUIView: UIControl {
 
     private func pressed(_ index: Int) {
         self.setSelectedSegment(index, animated: true)
+        self.scrollToSelectedSegement(animated: true)
         self.selectedIndexSubject.send(index)
         self.sendActions(for: .valueChanged)
         self.delegate?.segmentSelected(index: index, sender: self)

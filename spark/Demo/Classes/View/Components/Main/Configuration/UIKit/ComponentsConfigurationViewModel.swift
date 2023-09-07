@@ -7,6 +7,7 @@
 //
 
 import Combine
+import SparkCore
 import UIKit
 
 struct ComponentsConfigurationUIViewModel {
@@ -17,9 +18,9 @@ struct ComponentsConfigurationUIViewModel {
 
     // MARK: - Update
 
-    func update(color: UIColor) {
+    func update(theme: Theme) {
         for viewModel in self.itemsViewModel {
-            viewModel.color = color
+            viewModel.theme = theme
+            viewModel.color = theme.colors.main.main.uiColor
         }
-    }
-}
+    }}
