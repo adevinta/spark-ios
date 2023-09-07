@@ -80,6 +80,7 @@ public final class TabUIView: UIControl {
             self.segments.forEach { tab in
                 tab.tabSize = tabSize
             }
+            self.invalidateIntrinsicContentSize()
         }
     }
 
