@@ -7,6 +7,7 @@
 //
 
 import Combine
+import SparkCore
 import UIKit
 
 final class ComponentsConfigurationItemUIViewModel {
@@ -25,6 +26,11 @@ final class ComponentsConfigurationItemUIViewModel {
     @Published var color: UIColor = .blue
     @Published var buttonTitle: String?
     @Published var isOn: Bool?
+    @Published var theme: Theme {
+        didSet {
+            self.color = self.theme.colors.main.main.uiColor
+        }
+    }
 
     // MARK: - Initialization
 
@@ -36,5 +42,7 @@ final class ComponentsConfigurationItemUIViewModel {
         self.name = name
         self.type = type
         self.target = target
+        self.theme = SparkTheme.shared
+        self.color = self.theme.colors.main.main.uiColor
     }
 }
