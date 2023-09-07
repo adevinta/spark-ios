@@ -83,7 +83,7 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
     lazy var badgeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Show Badge",
-            type: .checkbox(title: "", isOn: self.showIcon),
+            type: .checkbox(title: "", isOn: self.showBadge),
             target: (source: self, action: #selector(self.showBadgeChanged)))
     }()
 
