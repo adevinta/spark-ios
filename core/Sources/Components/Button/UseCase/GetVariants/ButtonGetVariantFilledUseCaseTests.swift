@@ -167,6 +167,28 @@ final class ButtonGetVariantFilledUseCaseTests: ButtonVariantUseCaseTests {
             ].map(\.color))
     }
 
+    func test_info_colors() throws {
+        // Given
+        let sut = self.sut()
+
+        // When
+        let colors = sut.execute(intent: .info, colors: self.theme.colors, dims: self.theme.dims)
+
+        // Then
+        XCTAssertEqual(
+            [colors.foregroundColor,
+             colors.backgroundColor,
+             colors.pressedBackgroundColor,
+             colors.borderColor,
+             colors.pressedBorderColor].map(\.color),
+            [self.theme.colors.feedback.onInfo,
+             self.theme.colors.feedback.info,
+             self.theme.colors.states.infoPressed,
+             ColorTokenDefault.clear,
+             ColorTokenDefault.clear
+            ].map(\.color))
+    }
+
     // MARK: - Helper Functions
     func sut() -> ButtonGetVariantFilledUseCase {
         return ButtonGetVariantFilledUseCase()

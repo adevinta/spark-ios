@@ -93,6 +93,14 @@ struct ButtonGetVariantTintedUseCase: ButtonGetVariantUseCaseable {
                 borderColor: borderColor,
                 pressedBorderColor: pressedBorderColor
             )
+        case .info:
+            return .init(
+                foregroundColor: colors.feedback.onInfoContainer,
+                backgroundColor: colors.feedback.infoContainer,
+                pressedBackgroundColor: colors.states.infoContainerPressed,
+                borderColor: borderColor,
+                pressedBorderColor: pressedBorderColor
+            )
         }
     }
 }
