@@ -1108,7 +1108,6 @@ final class ButtonViewModelTests: XCTestCase {
     }
 
     func test_set_isEnabled_with_same_new_value() {
-        let valueMock = true
         self.testSetIsEnabled(
             givenIsDifferentNewValue: false
         )
