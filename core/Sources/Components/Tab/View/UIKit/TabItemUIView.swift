@@ -334,8 +334,8 @@ public final class TabItemUIView: UIControl {
         self._iconHeight.update(traitCollection: self.traitCollection)
 
         self.invalidateIntrinsicContentSize()
+        self.superview?.invalidateIntrinsicContentSize()
         self.updateLayoutConstraints()
-        self.setNeedsLayout()
     }
 
     // MARK: - Control functions
@@ -366,13 +366,12 @@ public final class TabItemUIView: UIControl {
     }
 
     private func setupSubscriptions() {
-        self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
+        self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions, on: RunLoop.main) { [weak self] attributes in
             guard let self else { return }
             self.setupColors(attributes: attributes)
             self.updateSizes(attributes: attributes)
             self.updateLayoutConstraints()
             self.invalidateIntrinsicContentSize()
-            self.setNeedsLayout()
         }
     }
 
@@ -461,7 +460,6 @@ public final class TabItemUIView: UIControl {
         self.imageView.isHidden = icon == nil
 
         self.invalidateIntrinsicContentSize()
-        self.setNeedsLayout()
     }
 
     private func addOrRemoveTitle(_ text: String?) {
@@ -472,7 +470,6 @@ public final class TabItemUIView: UIControl {
         self.label.isHidden = text == nil
 
         self.invalidateIntrinsicContentSize()
-        self.setNeedsLayout()
     }
 }
 
