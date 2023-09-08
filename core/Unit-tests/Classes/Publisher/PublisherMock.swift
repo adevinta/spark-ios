@@ -46,10 +46,15 @@ final class PublisherMock<T: Publisher> {
 extension PublisherMock where T.Failure == Never {
 
     func loadTesting(on subscriptions: inout Set<AnyCancellable>) {
-        self.publisher.sink { value in
-            self.sinkValue = value
-            self.sinkValues.append(value)
+        self.publisher.sink { [weak self] value in
+            guard let self = self else { return }
             self.sinkCount += 1
+
+            // T.Output is optional and nil ? We don't set the value
+            if !((value as AnyObject) is NSNull) {
+                self.sinkValue = value
+                self.sinkValues.append(value)
+            }
         }.store(in: &subscriptions)
     }
 }
