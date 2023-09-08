@@ -402,14 +402,15 @@ public final class TabUIView: UIControl {
         self.stackView.addArrangedSubviews(tabItemViews)
 
         self.addSubviewSizedEqually(scrollView)
+        self.scrollView.addSubview(self.bottomLine)
+        self.bottomLine.backgroundColor = self.viewModel.tabsAttributes.lineColor.uiColor
+
         self.scrollView.addSubview(self.stackView)
+        self.scrollView.bringSubviewToFront(self.stackView)
 
         self.selectedSegmentIndex = 0
         self.updateAccessibilityIdentifiers()
 
-        self.scrollView.addSubview(self.bottomLine)
-        self.bottomLine.layer.zPosition = -1
-        self.bottomLine.backgroundColor = self.viewModel.tabsAttributes.lineColor.uiColor
         self.scrollView.backgroundColor = self.viewModel.tabsAttributes.backgroundColor.uiColor
     }
 

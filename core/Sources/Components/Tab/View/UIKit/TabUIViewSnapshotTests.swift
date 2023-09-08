@@ -67,6 +67,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
 
     func test_tabs_with_icon_and_text() throws {
         let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
+            .map(TabUIItemContent.init(icon:title:))
 
         let sut = TabUIView(
             theme: self.theme,
@@ -80,6 +81,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
 
     func test_tabs_with_icon_and_text_size_small() throws {
         let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
+            .map(TabUIItemContent.init(icon:title:))
 
         let sut = TabUIView(
             theme: self.theme,
@@ -93,6 +95,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
 
     func test_tabs_with_icon_and_text_size_xtra_small() throws {
         let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
+            .map(TabUIItemContent.init(icon:title:))
 
         let sut = TabUIView(
             theme: self.theme,
@@ -106,6 +109,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
 
     func test_many_tabs_with_icon_and_text() throws {
         let content = Array(zip(images, names.map(\.capitalized)))
+            .map(TabUIItemContent.init(icon:title:))
 
         let sut = TabUIView(
             theme: self.theme,
