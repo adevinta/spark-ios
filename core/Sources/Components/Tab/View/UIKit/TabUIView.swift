@@ -147,7 +147,7 @@ public final class TabUIView: UIControl {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  items: titles.map(TabUIItemContent.init(title:)))
+                  content: titles.map(TabUIItemContent.init(title:)))
     }
 
     /// Initializer
@@ -164,7 +164,7 @@ public final class TabUIView: UIControl {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  items: icons.map(TabUIItemContent.init(icon:)))
+                  content: icons.map(TabUIItemContent.init(icon:)))
     }
 
     /// Initializer
@@ -172,23 +172,11 @@ public final class TabUIView: UIControl {
     /// - theme: the current theme
     /// - intent: the tab intent. The default value is `main`.
     /// - tab size: the default value is `md`.
-    /// - An array of tuples of image and string.
-    public convenience init(theme: Theme,
-                intent: TabIntent = .main,
-                tabSize: TabSize = .md,
-                content: [(UIImage?, String?)]
-    ) {
-        self.init(theme: theme,
-                  intent: intent,
-                  tabSize: tabSize,
-                  items: content.map(TabUIItemContent.init(icon:title:)))
-    }
-
-    // Internal initializer
-    init(theme: Theme,
+    /// - content: An array of TabUIItemContent with of image and string.
+    public init(theme: Theme,
          intent: TabIntent = .main,
          tabSize: TabSize = .md,
-         items: [TabUIItemContent]) {
+         content: [TabUIItemContent]) {
 
         self.theme = theme
         self.intent = intent
@@ -197,7 +185,7 @@ public final class TabUIView: UIControl {
 
         super.init(frame: .zero)
 
-        self.setupViews(items: items)
+        self.setupViews(items: content)
         self.setupConstraints()
         self.setupSubscriptions()
     }
@@ -221,7 +209,8 @@ public final class TabUIView: UIControl {
 
     /// Sets the content of a segment to a given image.
     public func setImage(_ image: UIImage?, forSegmentAt index: Int) {
-        self.segments[safe: index]?.icon = image
+        guard let segment = self.segments[safe: index] else { return }
+        segment.icon = image
         self.invalidateIntrinsicContentSize()
     }
 
@@ -232,7 +221,8 @@ public final class TabUIView: UIControl {
 
     /// Sets the title of a segment.
     public func setTitle(_ title: String?, forSegmentAt index: Int) {
-        self.segments[safe: index]?.title = title
+        guard let segment = self.segments[safe: index] else { return }
+        segment.title = title
         self.invalidateIntrinsicContentSize()
     }
 
@@ -243,7 +233,8 @@ public final class TabUIView: UIControl {
 
     /// Set a badge (or any UIView) on the tab at the given index.
     public func setBadge(_ badge: UIView?, forSegementAt index: Int) {
-        self.segments[safe: index]?.badge = badge
+        guard let segment = self.segments[safe: index] else { return }
+        segment.badge = badge
         self.invalidateIntrinsicContentSize()
     }
 
@@ -330,18 +321,18 @@ public final class TabUIView: UIControl {
 
     ///Replace all current segments with segments with just icons
     public func setSegments(withImages icons: [UIImage]) {
-        let content: [(icon: UIImage?, title: String?)] = icons.map{ (icon: $0, title: nil) }
+        let content: [TabUIItemContent] = icons.map{ .init(icon: $0, title: nil) }
         self.setTabItems(content: content)
     }
 
     ///Replace all current segments with segments with just titles
     public func setSegments(withTitles titles: [String]) {
-        let content: [(icon: UIImage?, title: String?)] = titles.map{ (icon: nil, title: $0) }
+        let content: [TabUIItemContent] = titles.map{ .init(icon: nil, title: $0) }
         self.setTabItems(content: content)
     }
 
     ///Replace all current segments with segments with icons & titles
-    public func setSegments(withContent content: [(icon: UIImage, title: String)]) {
+    public func setSegments(withContent content: [TabUIItemContent]) {
         self.setTabItems(content: content)
     }
 
@@ -447,12 +438,14 @@ public final class TabUIView: UIControl {
 
     }
 
-    private func setTabItems(content: [(icon: UIImage?, title: String?)]) {
-        let items = content.map{ TabItemUIView(theme: self.theme,
-                                   intent: self.intent,
-                                   tabSize: self.tabSize,
-                                   title: $0.title,
-                                   icon: $0.icon) }
+    private func setTabItems(content: [TabUIItemContent]) {
+        let items = content.map {
+            TabItemUIView(theme: self.theme,
+                          intent: self.intent,
+                          tabSize: self.tabSize,
+                          title: $0.title,
+                          icon: $0.icon)
+        }
         self.stackView.removeArrangedSubviews()
         self.stackView.addArrangedSubviews(items)
 

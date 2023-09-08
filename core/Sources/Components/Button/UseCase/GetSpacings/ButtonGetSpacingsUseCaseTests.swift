@@ -29,7 +29,7 @@ final class ButtonGetSpacingsUseCaseTests: XCTestCase {
         // THEN
         XCTAssertEqual(spacings.verticalSpacing,
                        0,
-                       "Wrong vertical value")
+                       "Wrong verticalSpacing value")
         XCTAssertEqual(spacings.horizontalSpacing,
                        0,
                        "Wrong horizontalSpacing value")
@@ -53,7 +53,7 @@ final class ButtonGetSpacingsUseCaseTests: XCTestCase {
         // THEN
         XCTAssertEqual(spacings.verticalSpacing,
                        spacingMock.medium,
-                       "Wrong vertical value")
+                       "Wrong verticalSpacing value")
         XCTAssertEqual(spacings.horizontalSpacing,
                        spacingMock.large,
                        "Wrong horizontalSpacing value")

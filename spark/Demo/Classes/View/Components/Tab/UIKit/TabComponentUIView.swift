@@ -66,8 +66,9 @@ final class TabComponentUIView: ComponentUIView {
         self.viewModel.$showLabel.subscribe(in: &self.cancellables) { [weak self] showLabel in
             guard let self = self else { return }
 
-            for (index, segment) in self.componentView.segments.enumerated() {
-                segment.title = showLabel ? self.viewModel.title(at: index) : nil
+            for index in 0..<self.viewModel.numberOfTabs {
+                let title = showLabel ? self.viewModel.title(at: index) : nil
+                self.componentView.setTitle(title, forSegmentAt: index)
             }
         }
 
@@ -77,19 +78,20 @@ final class TabComponentUIView: ComponentUIView {
             let index = self.componentView.segments.count > 1 ? 1 : 0
 
             if showLongLabel {
-                self.componentView.segments[index].title = self.viewModel.longTitle(at: index)
+                self.componentView.setTitle(self.viewModel.longTitle(at: index), forSegmentAt: index)
             } else if self.viewModel.showLabel {
-                self.componentView.segments[index].title = self.viewModel.title(at: index)
+                self.componentView.setTitle(self.viewModel.title(at: index), forSegmentAt: index)
             } else {
-                self.componentView.segments[index].title = nil
+                self.componentView.setTitle(nil, forSegmentAt: index)
             }
         }
 
         self.viewModel.$showIcon.subscribe(in: &self.cancellables) { [weak self] showIcon in
             guard let self = self else { return }
 
-            for (index, segment) in self.componentView.segments.enumerated() {
-                segment.icon = showIcon ? self.viewModel.image(at: index) : nil
+            for index in 0..<self.componentView.numberOfSegments {
+                let image = showIcon ? self.viewModel.image(at: index) : nil
+                self.componentView.setImage(image, forSegmentAt: index)
             }
         }
 
@@ -97,8 +99,8 @@ final class TabComponentUIView: ComponentUIView {
             guard let self = self else { return }
 
             if !showBadge {
-                for segment in self.componentView.segments {
-                    segment.badge = nil
+                for index in 0..<self.componentView.numberOfSegments {
+                    self.componentView.setBadge(nil, forSegementAt: index)
                 }
             } else {
                 self.componentView.setBadge(
@@ -124,8 +126,8 @@ final class TabComponentUIView: ComponentUIView {
                 let index = numberOfTabs - 1
                 let content = self.viewModel.content[index]
                 self.componentView.addSegment(with: content.title ?? "")
-                self.componentView.segments[index].icon = content.image
-                self.componentView.segments[index].title = content.title
+                self.componentView.setImage(content.icon, forSegmentAt: index)
+                self.componentView.setTitle(content.title, forSegmentAt: index)
             }
         }
     }

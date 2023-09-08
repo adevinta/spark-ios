@@ -124,7 +124,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
 private extension CGFloat {
     static let medium: CGFloat = 40
     static let small: CGFloat = 36
-    static let xtraSmall: CGFloat = 34
+    static let extraSmall: CGFloat = 34
 
     static let fontMd: CGFloat = 16
     static let fontSm: CGFloat = 14
@@ -136,7 +136,7 @@ private extension TabSize {
         switch self {
         case .md: return .medium
         case .sm: return .small
-        case .xs: return .xtraSmall
+        case .xs: return .extraSmall
         }
     }
 

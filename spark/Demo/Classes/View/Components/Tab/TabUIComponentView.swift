@@ -98,9 +98,11 @@ struct TabUIComponentRepresentableView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> SparkCore.TabUIView {
 
-        let content: [(UIImage?, String?)] = (1...numberOfTabs).map { tabNo in
-            (self.showIcon ? .image(at: tabNo) : nil,
-             self.showText ? self.label(for: tabNo) : nil )
+        let content: [TabUIItemContent] = (1...numberOfTabs).map { tabNo in
+                .init(
+                    icon: self.showIcon ? .image(at: tabNo) : nil,
+                    title: self.showText ? self.label(for: tabNo) : nil
+                )
         }
 
         let view = TabUIView(

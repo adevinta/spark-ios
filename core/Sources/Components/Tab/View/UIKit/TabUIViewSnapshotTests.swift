@@ -27,7 +27,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
     }
 
     // MARK: - Tests
-    func x_test_tabs_with_icons_only() throws {
+    func test_tabs_with_icons_only() throws {
         let sut = TabUIView(theme: self.theme, icons: Array(self.images[0..<3]))
         sut.apportionsSegmentWidthsByContent = true
         sut.setBadge(self.badge, forSegementAt: 2)
@@ -35,7 +35,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
-    func x_test_tabs_with_icons_only_equal_width() throws {
+    func test_tabs_with_icons_only_equal_width() throws {
         let sut = TabUIView(theme: self.theme, icons: Array(self.images[0..<3]))
         sut.apportionsSegmentWidthsByContent = false
         sut.setBadge(self.badge, forSegementAt: 2)
@@ -43,7 +43,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
-    func x_test_tabs_with_text_only() throws {
+    func test_tabs_with_text_only() throws {
         let sut = TabUIView(
             theme: self.theme,
             titles: Array(self.names[0..<3].map(\.capitalized))
@@ -54,7 +54,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut)
     }
 
-    func x_test_tabs_with_text_only_equal_width() throws {
+    func test_tabs_with_text_only_equal_width() throws {
         let sut = TabUIView(
             theme: self.theme,
             titles: Array(self.names[0..<2].map(\.capitalized))
@@ -65,7 +65,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut)
     }
 
-    func x_test_tabs_with_icon_and_text() throws {
+    func test_tabs_with_icon_and_text() throws {
         let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
 
         let sut = TabUIView(
@@ -78,7 +78,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
-    func x_test_tabs_with_icon_and_text_size_small() throws {
+    func test_tabs_with_icon_and_text_size_small() throws {
         let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
 
         let sut = TabUIView(
@@ -91,7 +91,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
-    func x_test_tabs_with_icon_and_text_size_xtra_small() throws {
+    func test_tabs_with_icon_and_text_size_xtra_small() throws {
         let content = Array(Array(zip(images, names.map(\.capitalized)))[0..<3])
 
         let sut = TabUIView(
@@ -104,7 +104,7 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
-    func x_test_many_tabs_with_icon_and_text() throws {
+    func test_many_tabs_with_icon_and_text() throws {
         let content = Array(zip(images, names.map(\.capitalized)))
 
         let sut = TabUIView(
