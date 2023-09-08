@@ -117,9 +117,9 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
         return .random(in: 0...numberOfTabs - 1)
     }
 
-    var content: [(image: UIImage?, title: String?)] {
-        (0...self.numberOfTabs).map{
-            (self.image(at: $0), self.title(at: $0))
+    var content: [TabUIItemContent] {
+        (0...self.numberOfTabs).map {
+            .init(icon: self.image(at: $0), title: self.title(at: $0))
         }
     }
 
