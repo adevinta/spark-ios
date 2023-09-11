@@ -232,7 +232,7 @@ final class ChipComponentUIView: UIView {
 
     // MARK: - Setup Views
     private func setupView() {
-        backgroundColor = .white
+        self.backgroundColor = UIColor.systemBackground
 
         self.makeChipView()
         addSubview(configurationLabel)
