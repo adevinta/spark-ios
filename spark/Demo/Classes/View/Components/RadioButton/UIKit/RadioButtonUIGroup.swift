@@ -183,7 +183,7 @@ final class RadioButtonUIGroupViewController: UIViewController {
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         self.navigationItem.title = "Radio Button"
 
         self.setupView()

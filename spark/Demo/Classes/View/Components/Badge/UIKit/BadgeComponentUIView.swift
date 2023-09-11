@@ -214,7 +214,7 @@ final class BadgeComponentUIView: UIView {
 
     // MARK: - Setup Views
     private func setupView() {
-        backgroundColor = .white
+        self.backgroundColor = UIColor.systemBackground
 
         addSubview(configurationLabel)
         addSubview(configurationStackView)

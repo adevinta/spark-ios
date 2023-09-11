@@ -113,7 +113,7 @@ class ComponentUIView: UIView {
 
     private func setupView() {
         // Properties
-        self.backgroundColor = .white
+        self.backgroundColor = UIColor.systemBackground
         self.accessibilityIdentifier = self.viewModel.identifier
 
         // Subviews

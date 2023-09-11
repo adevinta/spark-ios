@@ -63,7 +63,7 @@ struct ComponentsView: View {
                 self.navigateToView(TagComponentView())
             }
         }
-        .foregroundColor(.black)
+        .foregroundColor(.primary)
         .navigationBarHidden(false)
         .navigationTitle("Components")
         .background(Color.gray)

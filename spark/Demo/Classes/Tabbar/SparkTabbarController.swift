@@ -35,6 +35,14 @@ final class SparkTabbarController: UITabBarController {
         return viewController
     }()
 
+    /// Third Tab
+    private lazy var settingsViewController: UIViewController = {
+        var layout = SettingsViewController.makeLayout()
+        let viewController = UINavigationController(rootViewController: SettingsViewController(collectionViewLayout: layout))
+        viewController.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gear"), tag: 0)
+        return viewController
+    }()
+
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +60,8 @@ final class SparkTabbarController: UITabBarController {
     private func setUpControllers() {
         viewControllers = [
             self.themeViewController,
-            self.componentVersionViewController
+            self.componentVersionViewController,
+            self.settingsViewController
         ]
     }
 
