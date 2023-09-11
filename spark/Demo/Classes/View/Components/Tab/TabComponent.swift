@@ -194,18 +194,6 @@ private extension CheckboxSelectionState {
     }
 }
 
-private extension TabSize {
-    var name: String {
-        switch self {
-        case .md: return "Medium"
-        case .sm: return "Small"
-        case .xs: return "Xtra Small"
-        @unknown default:
-            fatalError()
-        }
-    }
-}
-
 private extension Image {
     static let names = [
         "fleuron",
