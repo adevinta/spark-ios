@@ -8,7 +8,7 @@
 
 import Combine
 
-final class TabViewModel: ObservableObject {
+final class TabViewModel<Content>: ObservableObject {
 
     private var useCase: any TabsGetAttributesUseCaseable
     var theme: Theme {
@@ -26,16 +26,18 @@ final class TabViewModel: ObservableObject {
     @Published var apportionsSegmentWidthsByContent: Bool = false
     @Published var tabsAttributes: TabsAttributes
     @Published var numberOfTabs: Int
+    @Published var content: [Content]
 
     init(theme: some Theme,
          apportionsSegmentWidthsByContent: Bool = false,
-         numberOfTabs: Int,
+         content: [Content],
          useCase: some TabsGetAttributesUseCaseable = TabsGetAttributesUseCase()
     ) {
         self.theme = theme
         self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
         self.useCase = useCase
-        self.numberOfTabs = numberOfTabs
+        self.numberOfTabs = content.count
+        self.content = content
         self.tabsAttributes = useCase.execute(theme: theme, isEnabled: true)
     }
 }

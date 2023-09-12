@@ -83,8 +83,8 @@ public struct TabItemView<Badge: View>: View {
             },
             label: {
                 self.tabContent()
+                    .background(self.viewModel.tabStateAttributes.colors.background.color)
             })
-        .background(self.viewModel.tabStateAttributes.colors.background.color)
         .disabled(!self.viewModel.isEnabled)
         .opacity(self.viewModel.tabStateAttributes.colors.opacity)
         .buttonStyle(TabItemButtonStyle(viewModel: self.viewModel))

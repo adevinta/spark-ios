@@ -42,7 +42,7 @@ public final class TabUIView: UIControl {
     }()
 
     private let selectedIndexSubject = PassthroughSubject<Int, Never>()
-    private let viewModel: TabViewModel
+    private let viewModel: TabViewModel<TabUIItemContent>
     private var widthConstraint: NSLayoutConstraint?
     private var bottomLineHeightConstraint: NSLayoutConstraint?
     private var subscriptions = Set<AnyCancellable>()
@@ -196,7 +196,10 @@ public final class TabUIView: UIControl {
         self.theme = theme
         self.intent = intent
         self.tabSize = tabSize
-        self.viewModel = TabViewModel(theme: theme, apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent)
+        self.viewModel = TabViewModel(
+            theme: theme,
+            apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent,
+            content: content)
 
         super.init(frame: .zero)
 

@@ -12,10 +12,10 @@ public struct TabView: View {
     private let theme: Theme
     private let intent: TabIntent
     private let tabSize: TabSize
-    @ObservedObject private var viewModel: TabViewModel
-    private let content: [TabItemContent]
+    @ObservedObject private var viewModel: TabViewModel<TabItemContent>
     @Binding var selectedIndex: Int
     @ScaledMetric var lineHeight: CGFloat
+    @State var minWidth: CGFloat = 0
 
     // MARK: - Initialization
     /// Initializer
@@ -73,12 +73,11 @@ public struct TabView: View {
         self.theme = theme
         self.intent = intent
         self.tabSize = tabSize
-        self.content = content
         self._selectedIndex = selectedIndex
         let viewModel = TabViewModel(
             theme: theme,
             apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent,
-            numberOfTabs: content.count
+            content: content
         )
         self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabsAttributes.lineHeight)
         self.viewModel = viewModel
@@ -94,8 +93,8 @@ public struct TabView: View {
     private func tabItems() -> some View {
         ScrollViewReader { proxy in
             HStack {
-                ForEach(Array(self.content.enumerated()), id: \.offset) { (index, content) in
-                    self.tabItem(index: index, content: content, proxy: proxy)
+                ForEach(Array(self.viewModel.content.enumerated()), id: \.offset) { (index, content) in
+                    self.tabContent(index: index, content: content, proxy: proxy)
                 }
                 if self.viewModel.apportionsSegmentWidthsByContent {
                     Spacer()
@@ -119,10 +118,32 @@ public struct TabView: View {
         if self.viewModel.apportionsSegmentWidthsByContent {
             tabItem(index: index, content: content, proxy: proxy)
         } else {
-            VStack {
-                tabItem(index: index, content: content, proxy: proxy)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-            }
+            tabItem(index: index, content: content, proxy: proxy)
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear
+                            .onAppear {
+                                print("Width \(index) \(geometry.size.width)")
+                                if index == self.viewModel.numberOfTabs - 1 {
+                                    self.minWidth = geometry.size.width
+                                } else {
+                                    self.minWidth = max(self.minWidth, geometry.size.width)
+                                }
+                                print("MINWIDTH (onAppear) \(self.minWidth)")
+
+                            }
+                            .onChange(of: self.viewModel.content) { _ in
+                                print("MINWIDTH (onChange)\(self.minWidth)")
+                                if index == self.viewModel.numberOfTabs - 1 {
+                                    self.minWidth = geometry.size.width
+                                } else {
+                                    self.minWidth = max(self.minWidth, geometry.size.width)
+                                }
+                            }
+                    }
+
+                }
+                .frame(minWidth: self.minWidth)
         }
     }
 

@@ -24,11 +24,11 @@ struct TabComponent: View {
     @State var showIcon = CheckboxSelectionState.selected
     @State var showBadge = CheckboxSelectionState.unselected
     @State var isEnabled = CheckboxSelectionState.selected
-    @State var equalSize = CheckboxSelectionState.unselected
+    @State var equalSize = CheckboxSelectionState.selected
     @State var longLabel = CheckboxSelectionState.unselected
     @State var tabSize: TabSize = .md
     @State var isSizePresented = false
-    @State var numberOfTabs = 2
+    @State var numberOfTabs = 3
     @State var selectedTab = 0
     @State var height = CGFloat(50)
     @State var badgePosition = 0
