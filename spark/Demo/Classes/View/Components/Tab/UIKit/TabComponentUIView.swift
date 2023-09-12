@@ -109,6 +109,16 @@ final class TabComponentUIView: ComponentUIView {
             }
         }
 
+        self.viewModel.$disabledIndex.subscribe(in: &self.cancellables) { [weak self] index in
+            self?.componentView.segments.forEach{
+                $0.isEnabled = true
+            }
+
+            guard let index = index else { return }
+
+            self?.componentView.segments[index].isEnabled = false
+        }
+
         self.viewModel.$isEqualWidth.subscribe(in: &self.cancellables) { [weak self] equalWidth in
             guard let self = self else { return }
 
@@ -148,7 +158,7 @@ extension TabSize {
         switch self {
         case .md: return "Medium"
         case .sm: return "Small"
-        case .xs: return "Xtra Small"
+        case .xs: return "Extra Small"
         @unknown default:
             fatalError()
         }
