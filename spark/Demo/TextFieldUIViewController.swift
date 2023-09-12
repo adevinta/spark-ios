@@ -30,10 +30,10 @@ class TextFieldUIViewController: UIViewController {
         self.textField.translatesAutoresizingMaskIntoConstraints = false
         self.textField.input.clearButtonMode = .always
         //        self.textField.input.inputAccessoryView = self.toolbar
-        if let button = self.textField.input.value(forKeyPath: "_clearButton") as? UIButton {
-            button.setImage(UIImage(systemName: "cross"), for: .normal)
-            button.setImage(UIImage(systemName: "cross.fill"), for: .highlighted)
-        }
+//        if let button = self.textField.input.value(forKeyPath: "_clearButton") as? UIButton {
+//            button.setImage(UIImage(systemName: "cross"), for: .normal)
+//            button.setImage(UIImage(systemName: "cross.fill"), for: .highlighted)
+//        }
 
         //        self.textField.input.leftView =
 
@@ -45,7 +45,7 @@ class TextFieldUIViewController: UIViewController {
             self.textField.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20)
         ])
 
-        self.textField.rightIcon = UIImage(systemName: "rectangle.portrait.and.arrow.right.fill")
+//        self.textField.rightIcon = UIImage(systemName: "rectangle.portrait.and.arrow.right.fill")
 
         self.view = view
     }
@@ -54,5 +54,14 @@ class TextFieldUIViewController: UIViewController {
     private func dismissKeyboard() {
         //        self.textField.setRightIcon(icon: nil)
         self.textField.input.resignFirstResponder()
+    }
+}
+
+extension TextFieldUIViewController {
+
+    static func build() -> TextFieldUIViewController {
+//        let viewModel = BadgeComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
+        let viewController = TextFieldUIViewController()
+        return viewController
     }
 }

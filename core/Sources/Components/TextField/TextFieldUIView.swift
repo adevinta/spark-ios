@@ -82,12 +82,18 @@ public final class TextFieldUIView: UIControl {
         ])
 
         let leftImageView = self.createImageView()
+        let rightImageView = self.createImageView()
         leftImageView.image = UIImage(systemName: "square.and.pencil.circle.fill")
+        rightImageView.image = UIImage(systemName: "square.and.pencil.circle.fill")
         leftImageView.translatesAutoresizingMaskIntoConstraints = false
-        leftImageView.backgroundColor = .green
-        self.input.rightView = leftImageView
+        rightImageView.translatesAutoresizingMaskIntoConstraints = false
+//        rightImageView.backgroundColor = .green
+//        leftImageView.backgroundColor = .green
+        self.input.leftView = leftImageView
+        self.input.rightView = rightImageView
 //        self.setRightIcon(icon: UIImage(systemName: "square.and.pencil.circle.fill"))
-        self.input.rightViewMode = .always
+        self.input.leftViewMode = .never
+        self.input.rightViewMode = .never
 
         // Content
 //        self.addSubview(self.contentStackView)
@@ -119,10 +125,10 @@ public final class TextFieldUIView: UIControl {
 //    }
 
     private func createImageView() -> UIImageView {
-        let imageView = UIImageView()
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
         imageView.contentMode = .scaleAspectFit
         return imageView
     }
@@ -156,38 +162,59 @@ extension TextFieldUIView {
 //            }
 //        }
 
-//        var padding = UIEdgeInsets(
-//            top: 0,
-//            left: 16,
-//            bottom: 0,
-//            right: 16
-//        )
+        var insets = UIEdgeInsets(
+            top: 0,
+            left: 16,
+            bottom: 0,
+            right: 16
+        )
 //
-//        public override func textRect(forBounds bounds: CGRect) -> CGRect {
-//            return super.textRect(forBounds: bounds)
-//                .inset(by: self.padding)
-//        }
+        public override func textRect(forBounds bounds: CGRect) -> CGRect {
+            return self.setInsets(forBounds: bounds)
+        }
 //
 //        public override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
 //            return super.placeholderRect(forBounds: bounds)
 //                .inset(by: self.padding)
 //        }
 //
-//        public override func editingRect(forBounds bounds: CGRect) -> CGRect {
-//            return super.editingRect(forBounds: bounds)
-//                .inset(by: self.padding)
-//        }
-//
-//        public override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
-//            return super.clearButtonRect(forBounds: bounds)
-//        }
-//
-//        public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-//            return super.rightViewRect(forBounds: bounds)
-//        }
-//
-//        public override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-//            return super.leftViewRect(forBounds: bounds)
-//        }
+        public override func editingRect(forBounds bounds: CGRect) -> CGRect {
+            return setInsets(forBounds: bounds)
+        }
+
+        public override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
+            var rect = super.clearButtonRect(forBounds: bounds)
+                rect.origin.x -= insets.right
+            return rect
+        }
+
+        public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+            var rect = super.rightViewRect(forBounds: bounds)
+                rect.origin.x -= insets.right
+            return rect
+        }
+
+        public override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+            var rect = super.leftViewRect(forBounds: bounds)
+            rect.origin.x += insets.left
+
+            return rect
+        }
+
+        private func setInsets(forBounds bounds: CGRect) -> CGRect {
+
+            var totalInsets = self.insets
+            if let leftView = self.leftView, leftView.frame.origin.x > 0  { totalInsets.left += leftView.bounds.size.width + 8 }
+            if let rightView = self.rightView, rightView.frame.origin.x > 0 { totalInsets.right += rightView.bounds.size.width + 8 }
+            if let button = self.value(forKeyPath: "_clearButton") as? UIButton {
+                print(button.frame.origin.x)
+                if button.frame.origin.x > 0 {
+                    totalInsets.right += button.bounds.size.width + 8
+                }
+            }
+
+
+            return bounds.inset(by: totalInsets)
+        }
     }
 }
