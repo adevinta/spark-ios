@@ -284,11 +284,11 @@ public final class TabItemUIView: UIControl {
     ///
     /// - Parameters:
     /// theme: the current theme, which will determine the colors and spacings
-    /// intent: the intent of the tab item
+    /// intent: the intent of the tab item. The default is `basic`.
     /// text: optional string, the label if the tab item if set
     /// icon: optional image of the tab item
     public convenience init(theme: Theme,
-                            intent: TabIntent = .main,
+                            intent: TabIntent = .basic,
                             tabSize: TabSize = .md,
                             title: String? = nil,
                             icon: UIImage? = nil) {
