@@ -136,7 +136,7 @@ public final class TabUIView: UIControl {
     /// Initializer
     /// - Parameters:
     /// - theme: the current theme
-    /// - intent: the tab intent. The default value is `main`.
+    /// - intent: the tab intent. The default value is `basic`.
     /// - tabSize: The tab size, see `TabSize`. The default value is medium `md`.
     /// - titles: An array of labels.
     public convenience init(theme: Theme,
@@ -153,11 +153,11 @@ public final class TabUIView: UIControl {
     /// Initializer
     /// - Parameters:
     /// - theme: the current theme
-    /// - intent: the tab intent. The default value is `main`.
+    /// - intent: the tab intent. The default value is `basic`.
     /// - tabSize: The tab size, see `TabSize`. The default value is medium `md`.
     /// - icons: An array of images.
     public convenience init(theme: Theme,
-                intent: TabIntent = .main,
+                intent: TabIntent = .basic,
                 tabSize: TabSize = .md,
                 icons: [UIImage]
     ) {
@@ -170,11 +170,11 @@ public final class TabUIView: UIControl {
     /// Initializer
     /// - Parameters:
     /// - theme: the current theme
-    /// - intent: the tab intent. The default value is `main`.
+    /// - intent: the tab intent. The default value is `basic`.
     /// - tab size: the default value is `md`.
     /// - content: An array of TabUIItemContent with of image and string.
     public init(theme: Theme,
-         intent: TabIntent = .main,
+         intent: TabIntent = .basic,
          tabSize: TabSize = .md,
          content: [TabUIItemContent]) {
 
