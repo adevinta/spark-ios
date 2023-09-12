@@ -87,6 +87,13 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.showBadgeChanged)))
     }()
 
+    lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Disable",
+            type: .checkbox(title: "", isOn: self.disabledIndex != nil),
+            target: (source: self, action: #selector(self.disableChanged)))
+    }()
+
     lazy var equalWidthConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Equal width",
@@ -132,6 +139,7 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
             self.longLabelConfigurationItemViewModel,
             self.iconConfigurationItemViewModel,
             self.badgeConfigurationItemViewModel,
+            self.disableConfigurationItemViewModel,
             self.equalWidthConfigurationItemViewModel,
             self.numberOfTabsConfigurationItemViewModel
         ])
@@ -151,6 +159,7 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
     @Published var showLongLabel = false
     @Published var showIcon = true
     @Published var showBadge = false
+    @Published var disabledIndex: Int?
     @Published var isEqualWidth = true
     @Published var numberOfTabs = 2
 
@@ -210,6 +219,14 @@ extension TabComponentUIViewModel {
 
     @objc func showBadgeChanged() {
         self.showBadge.toggle()
+    }
+
+    @objc func disableChanged() {
+        if self.disabledIndex != nil {
+            self.disabledIndex = nil
+        } else {
+            self.disabledIndex = Int.random(in: 0..<self.numberOfTabs)
+        }
     }
 
     @objc func equalWidthChanged() {
