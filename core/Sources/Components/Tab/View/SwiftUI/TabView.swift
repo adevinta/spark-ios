@@ -92,30 +92,36 @@ public struct TabView: View {
 
     @ViewBuilder
     private func tabItems() -> some View {
-        HStack {
-            ForEach(Array(self.content.enumerated()), id: \.offset) { (index, content) in
-                TabItemView<BadgeView>(
-                    theme: self.theme,
-                    intent: self.intent,
-                    size: self.tabSize,
-                    image: content.image,
-                    title: content.title,
-                    badge: content.badge,
-                    apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
-                    isSelected: self.selectedIndex == index
-                ) {
-                    self.selectedIndex = index
+        ScrollViewReader { proxy in
+            HStack {
+                ForEach(Array(self.content.enumerated()), id: \.offset) { (index, content) in
+                    TabItemView<BadgeView>(
+                        theme: self.theme,
+                        intent: self.intent,
+                        size: self.tabSize,
+                        image: content.image,
+                        title: content.title,
+                        badge: content.badge,
+                        apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
+                        isSelected: self.selectedIndex == index
+                    ) {
+                        self.selectedIndex = index
+                        withAnimation{
+                            proxy.scrollTo(index)
+                        }
+                    }
+                    .id(index)
+                }
+                if self.viewModel.apportionsSegmentWidthsByContent {
+                    Spacer()
                 }
             }
-            if self.viewModel.apportionsSegmentWidthsByContent {
-                Spacer()
-            }
+            .overlay(
+                Rectangle()
+                    .frame(width: nil, height: self.lineHeight, alignment: .top)
+                    .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
+                alignment: .bottom)
         }
-        .overlay(
-            Rectangle()
-                .frame(width: nil, height: self.lineHeight, alignment: .top)
-                .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
-            alignment: .bottom)
     }
 
 
