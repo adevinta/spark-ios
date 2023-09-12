@@ -8,9 +8,19 @@
 
 import SwiftUI
 
-struct TabItemContent: Equatable {
-    let image: Image?
-    let title: String?
-    let attributedTitle: String?
+public struct TabItemContent: Equatable {
+    public static func == (lhs: TabItemContent, rhs: TabItemContent) -> Bool {
+        return lhs.image == rhs.image &&
+        lhs.title == rhs.title
+    }
 
+    public let image: Image?
+    public let title: String?
+    public let badge: BadgeView?
+
+    public init(image: Image?, title: String?, badge: BadgeView?) {
+        self.image = image
+        self.title = title
+        self.badge = badge
+    }
 }

@@ -168,12 +168,13 @@ struct TabComponent: View {
         BadgeView(theme: theme, intent: .danger, value: 99)
     }
 
-    private func tabs() -> [(Image?, String?, BadgeView?)] {
+    private func tabs() -> [TabItemContent] {
 
         return (0..<self.numberOfTabs).map {
-            (self.showIcon.isSelected ? .image(at: $0) : nil,
-             self.showText.isSelected ? self.label($0) : nil,
-             self.showBadge.isSelected && self.badgePosition == $0 ? self.badge() : nil
+            .init(
+                image: self.showIcon.isSelected ? .image(at: $0) : nil,
+                title: self.showText.isSelected ? self.label($0) : nil,
+                badge: self.showBadge.isSelected && self.badgePosition == $0 ? self.badge() : nil
             )
         }
     }

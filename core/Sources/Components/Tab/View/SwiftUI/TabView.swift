@@ -13,7 +13,7 @@ public struct TabView: View {
     private let intent: TabIntent
     private let tabSize: TabSize
     @ObservedObject private var viewModel: TabViewModel
-    private let content: [(image: Image?, title: String?, badge: BadgeView?)]
+    private let content: [TabItemContent]
     @Binding var selectedIndex: Int
     @ScaledMetric var lineHeight: CGFloat
 
@@ -33,7 +33,7 @@ public struct TabView: View {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: titles.map{ (nil, $0, nil) },
+                  content: titles.map{ .init(image: nil, title: $0, badge: nil) },
                   selectedIndex: selectedIndex)
     }
 
@@ -52,7 +52,7 @@ public struct TabView: View {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: icons.map{ ($0, nil, nil) },
+                  content: icons.map{ .init(image: $0, title: nil, badge: nil) },
                   selectedIndex: selectedIndex
         )
     }
@@ -66,7 +66,7 @@ public struct TabView: View {
     public init(theme: Theme,
                 intent: TabIntent = .main,
                 tabSize: TabSize = .md,
-                content: [(Image?, String?, BadgeView?)],
+                content: [TabItemContent],
                 selectedIndex: Binding<Int>,
                 apportionsSegmentWidthsByContent: Bool = false
     ) {
@@ -95,28 +95,13 @@ public struct TabView: View {
         ScrollViewReader { proxy in
             HStack {
                 ForEach(Array(self.content.enumerated()), id: \.offset) { (index, content) in
-                    TabItemView<BadgeView>(
-                        theme: self.theme,
-                        intent: self.intent,
-                        size: self.tabSize,
-                        image: content.image,
-                        title: content.title,
-                        badge: content.badge,
-                        apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
-                        isSelected: self.selectedIndex == index
-                    ) {
-                        self.selectedIndex = index
-                        withAnimation{
-                            proxy.scrollTo(index)
-                        }
-                    }
-                    .id(index)
+                    self.tabItem(index: index, content: content, proxy: proxy)
                 }
                 if self.viewModel.apportionsSegmentWidthsByContent {
                     Spacer()
                 }
             }
-            .overlay(
+            .background(
                 Rectangle()
                     .frame(width: nil, height: self.lineHeight, alignment: .top)
                     .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
@@ -124,9 +109,40 @@ public struct TabView: View {
         }
     }
 
-
     public func apportionsSegmentWidthsByContent(_ value: Bool) -> Self {
         self.viewModel.apportionsSegmentWidthsByContent = value
         return self
+    }
+
+    @ViewBuilder
+    private func tabContent(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
+        if self.viewModel.apportionsSegmentWidthsByContent {
+            tabItem(index: index, content: content, proxy: proxy)
+        } else {
+            VStack {
+                tabItem(index: index, content: content, proxy: proxy)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func tabItem(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
+        TabItemView<BadgeView>(
+            theme: self.theme,
+            intent: self.intent,
+            size: self.tabSize,
+            image: content.image,
+            title: content.title,
+            badge: content.badge,
+            apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
+            isSelected: self.selectedIndex == index
+        ) {
+            self.selectedIndex = index
+            withAnimation{
+                proxy.scrollTo(index)
+            }
+        }
+        .id(index)
     }
 }
