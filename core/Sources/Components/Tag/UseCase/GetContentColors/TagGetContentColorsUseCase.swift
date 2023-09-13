@@ -18,7 +18,6 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
 
     func execute(intent: TagIntent,
                  colors: Colors) -> TagContentColors {
-        let surfaceColor = colors.base.surface
 
         switch intent {
         case .alert:
@@ -26,8 +25,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.feedback.alert,
                 onColor: colors.feedback.onAlert,
                 containerColor: colors.feedback.alertContainer,
-                onContainerColor: colors.feedback.onAlertContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.feedback.onAlertContainer
             )
 
         case .danger:
@@ -35,8 +33,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.feedback.error,
                 onColor: colors.feedback.onError,
                 containerColor: colors.feedback.errorContainer,
-                onContainerColor: colors.feedback.onErrorContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.feedback.onErrorContainer
             )
 
         case .info:
@@ -44,8 +41,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.feedback.info,
                 onColor: colors.feedback.onInfo,
                 containerColor: colors.feedback.infoContainer,
-                onContainerColor: colors.feedback.onInfoContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.feedback.onInfoContainer
             )
 
         case .neutral:
@@ -53,8 +49,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.feedback.neutral,
                 onColor: colors.feedback.onNeutral,
                 containerColor: colors.feedback.neutralContainer,
-                onContainerColor: colors.feedback.onNeutralContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.feedback.onNeutralContainer
             )
 
         case .main:
@@ -62,8 +57,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.main.main,
                 onColor: colors.main.onMain,
                 containerColor: colors.main.mainContainer,
-                onContainerColor: colors.main.onMainContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.main.onMainContainer
             )
 
         case .support:
@@ -71,8 +65,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.support.support,
                 onColor: colors.support.onSupport,
                 containerColor: colors.support.supportContainer,
-                onContainerColor: colors.support.onSupportContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.support.onSupportContainer
             )
 
         case .success:
@@ -80,8 +73,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.feedback.success,
                 onColor: colors.feedback.onSuccess,
                 containerColor: colors.feedback.successContainer,
-                onContainerColor: colors.feedback.onSuccessContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.feedback.onSuccessContainer
             )
 
         case .accent:
@@ -89,8 +81,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.accent.accent,
                 onColor: colors.accent.onAccent,
                 containerColor: colors.accent.accentContainer,
-                onContainerColor: colors.accent.onAccentContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.accent.onAccentContainer
             )
 
         case .basic:
@@ -98,8 +89,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
                 color: colors.basic.basic,
                 onColor: colors.basic.onBasic,
                 containerColor: colors.basic.basicContainer,
-                onContainerColor: colors.basic.onBasicContainer,
-                surfaceColor: surfaceColor
+                onContainerColor: colors.basic.onBasicContainer
             )
         }
     }

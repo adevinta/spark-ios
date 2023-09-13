@@ -14,144 +14,197 @@ final class TagGetColorsUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_for_all_variant_cases() throws {
+    func test_execute_variant_filled() throws {
         // GIVEN
-        let contentColorsMock = TagContentColors.mocked()
+        let getContentColorsUseCase = TagGetContentColorsUseCaseableGeneratedMock()
+        let getContentColorsUseCaseReturnValue = TagContentColors.mocked()
+        getContentColorsUseCase.executeWithIntentAndColorsReturnValue = getContentColorsUseCaseReturnValue
+        let colors = ColorsGeneratedMock()
+        let theme = ThemeGeneratedMock()
+        theme.underlyingColors = colors
 
-        let items: [TagGetColors] = [
-            .init(
-                givenVariant: .filled,
-                expectedBackgroundToken: contentColorsMock.color,
-                expectedBorderToken: contentColorsMock.color,
-                expectedForegroundToken: contentColorsMock.onColor
-            ),
-            .init(
-                givenVariant: .outlined,
-                expectedBackgroundToken: contentColorsMock.surfaceColor,
-                expectedBorderToken: contentColorsMock.color,
-                expectedForegroundToken: contentColorsMock.color
-            ),
-            .init(
-                givenVariant: .tinted,
-                expectedBackgroundToken: contentColorsMock.containerColor,
-                expectedBorderToken: contentColorsMock.containerColor,
-                expectedForegroundToken: contentColorsMock.onContainerColor
-            )
-        ]
+        let useCase = TagGetColorsUseCase(getContentColorsUseCase: getContentColorsUseCase)
+        let variant = TagVariant.filled
+        let intent = TagIntent.alert
 
-        for item in items {
-            let intentMock: TagIntent = .success
-
-            let themeColorsMock = ColorsGeneratedMock()
-
-            let themeMock = ThemeGeneratedMock()
-            themeMock.underlyingColors = themeColorsMock
-
-            let getContentColorsUseCaseMock = TagGetContentColorsUseCaseableGeneratedMock()
-            getContentColorsUseCaseMock.executeWithIntentAndColorsReturnValue = contentColorsMock
-
-            let useCase = TagGetColorsUseCase(getContentColorsUseCase: getContentColorsUseCaseMock)
-
-            // WHEN
-            let colors = useCase.execute(
-                theme: themeMock,
-                intent: intentMock,
-                variant: item.givenVariant
-            )
-
-            // Other UseCase
-            Tester.testGetContentColorsUseCaseExecuteCalling(
-                givenGetContentColorsUseCase: getContentColorsUseCaseMock,
-                givenIntent: intentMock,
-                givenThemeColors: themeColorsMock
-            )
-
-            // Colors Properties
-            try Tester.testColorsProperties(givenColors: colors,
-                                            getColors: item)
-        }
-    }
-}
-
-// MARK: - Tester
-
-private struct Tester {
-
-    static func testGetContentColorsUseCaseExecuteCalling(
-        givenGetContentColorsUseCase: TagGetContentColorsUseCaseableGeneratedMock,
-        givenIntent: TagIntent,
-        givenThemeColors: ColorsGeneratedMock
-    ) {
-        let getContentColorsUseCaseArgs = givenGetContentColorsUseCase.executeWithIntentAndColorsReceivedArguments
-        XCTAssertEqual(givenGetContentColorsUseCase.executeWithIntentAndColorsCallsCount,
-                       1,
-                       "Wrong call number on execute on getContentColorsUseCase")
-        XCTAssertEqual(getContentColorsUseCaseArgs?.intent,
-                       givenIntent,
-                       "Wrong intent parameter on execute on getContentColorsUseCase")
-        XCTAssertIdentical(getContentColorsUseCaseArgs?.colors as? ColorsGeneratedMock,
-                           givenThemeColors,
-                           "Wrong colors parameter on execute on getContentColorsUseCase")
-    }
-
-    static func testColorsProperties(
-        givenColors: TagColors,
-        getColors: TagGetColors
-    ) throws {
-        // Background Color
-        try self.testColor(
-            givenColorProperty: givenColors.backgroundColor,
-            givenPropertyName: "backgroundColor",
-            givenVariant: getColors.givenVariant,
-            expectedColorToken: getColors.expectedBackgroundToken
-        )
-        
-        // Border Color
-        try self.testColor(
-            givenColorProperty: givenColors.borderColor,
-            givenPropertyName: "borderColor",
-            givenVariant: getColors.givenVariant,
-            expectedColorToken: getColors.expectedBorderToken
+        // WHEN
+        let sut = useCase.execute(
+            theme: theme,
+            intent: intent,
+            variant: variant
         )
 
-        // Foreground Color
-        try self.testColor(
-            givenColorProperty: givenColors.foregroundColor,
-            givenPropertyName: "foregroundColor",
-            givenVariant: getColors.givenVariant,
-            expectedColorToken: getColors.expectedForegroundToken
+        // THEN
+        XCTAssertEqual(
+            getContentColorsUseCase.executeWithIntentAndColorsCallsCount,
+            1,
+            "getContentColorsUseCase.execute should be called once"
+        )
+        let receivedArguments = try XCTUnwrap(
+            getContentColorsUseCase.executeWithIntentAndColorsReceivedArguments,
+            "Couldn't unwrap getContentColorsUseCase.execute received arguments"
+        )
+        XCTAssertIdentical(
+            receivedArguments.colors as? ColorsGeneratedMock,
+            colors,
+            "Wrong getContentColorsUseCase.executereceived colors"
+        )
+        XCTAssertEqual(
+            receivedArguments.intent,
+            .alert,
+            "Wrong getContentColorsUseCase.executereceived intent"
+        )
+
+        let color = try XCTUnwrap(
+            getContentColorsUseCaseReturnValue.color as? ColorTokenGeneratedMock,
+            "Couldn't unwrap getContentColorsUseCaseReturnValue.color as a ColorTokenGeneratedMock"
+        )
+        XCTAssertIdentical(
+            sut.backgroundColor as? ColorTokenGeneratedMock,
+            color,
+            "Wrong sut.backgroundColor"
+        )
+        XCTAssertIdentical(
+            sut.borderColor as? ColorTokenGeneratedMock,
+            color,
+            "Wrong sut.borderColor"
+        )
+
+        let onColor = try XCTUnwrap(
+            getContentColorsUseCaseReturnValue.onColor as? ColorTokenGeneratedMock,
+            "Couldn't unwrap getContentColorsUseCaseReturnValue.onColor as a ColorTokenGeneratedMock"
+        )
+        XCTAssertIdentical(
+            sut.foregroundColor as? ColorTokenGeneratedMock,
+            onColor,
+            "Wrong sut.foregroundColor"
         )
     }
 
-    private static func testColor(
-        givenColorProperty: (any ColorToken)?,
-        givenPropertyName: String,
-        givenVariant: TagVariant,
-        expectedColorToken: (any ColorToken)?
-    ) throws {
-        let errorPrefixMessage = " \(givenPropertyName) for .\(givenVariant) case"
+    func test_execute_variant_outlined() throws {
+        // GIVEN
+        let getContentColorsUseCase = TagGetContentColorsUseCaseableGeneratedMock()
+        let getContentColorsUseCaseReturnValue = TagContentColors.mocked()
+        getContentColorsUseCase.executeWithIntentAndColorsReturnValue = getContentColorsUseCaseReturnValue
+        let colors = ColorsGeneratedMock()
+        let theme = ThemeGeneratedMock()
+        theme.underlyingColors = colors
 
-        if let givenColorProperty {
-            let color = try XCTUnwrap(givenColorProperty as? ColorTokenGeneratedMock,
-                                      "Wrong" + errorPrefixMessage)
-            XCTAssertIdentical(color,
-                               expectedColorToken as? ColorTokenGeneratedMock,
-                               "Wrong value" + errorPrefixMessage)
+        let useCase = TagGetColorsUseCase(getContentColorsUseCase: getContentColorsUseCase)
+        let variant = TagVariant.outlined
+        let intent = TagIntent.danger
 
-        } else {
-            XCTAssertNil(givenColorProperty,
-                         "Should be nil" + errorPrefixMessage)
-        }
+        // WHEN
+        let sut = useCase.execute(
+            theme: theme,
+            intent: intent,
+            variant: variant
+        )
+
+        // THEN
+        XCTAssertEqual(
+            getContentColorsUseCase.executeWithIntentAndColorsCallsCount,
+            1,
+            "getContentColorsUseCase.execute should be called once"
+        )
+        let receivedArguments = try XCTUnwrap(
+            getContentColorsUseCase.executeWithIntentAndColorsReceivedArguments,
+            "Couldn't unwrap getContentColorsUseCase.execute received arguments"
+        )
+        XCTAssertIdentical(
+            receivedArguments.colors as? ColorsGeneratedMock,
+            colors,
+            "Wrong getContentColorsUseCase.executereceived colors"
+        )
+        XCTAssertEqual(
+            receivedArguments.intent,
+            .danger,
+            "Wrong getContentColorsUseCase.executereceived intent"
+        )
+
+        let color = try XCTUnwrap(
+            getContentColorsUseCaseReturnValue.color as? ColorTokenGeneratedMock,
+            "Couldn't unwrap getContentColorsUseCaseReturnValue.color as a ColorTokenGeneratedMock"
+        )
+        XCTAssertIdentical(
+            sut.foregroundColor as? ColorTokenGeneratedMock,
+            color,
+            "Wrong sut.foregroundColor")
+        XCTAssertIdentical(
+            sut.borderColor as? ColorTokenGeneratedMock,
+            color,
+            "Wrong sut.borderColor"
+        )
+
+        XCTAssertTrue(
+            sut.backgroundColor.isClear,
+            "Wrong sut.backgroundColor"
+        )
     }
-}
 
-// MARK: - Others Strucs
+    func test_execute_variant_tinted() throws {
+        // GIVEN
+        let getContentColorsUseCase = TagGetContentColorsUseCaseableGeneratedMock()
+        let getContentColorsUseCaseReturnValue = TagContentColors.mocked()
+        getContentColorsUseCase.executeWithIntentAndColorsReturnValue = getContentColorsUseCaseReturnValue
+        let colors = ColorsGeneratedMock()
+        let theme = ThemeGeneratedMock()
+        theme.underlyingColors = colors
 
-private struct TagGetColors {
+        let useCase = TagGetColorsUseCase(getContentColorsUseCase: getContentColorsUseCase)
+        let variant = TagVariant.tinted
+        let intent = TagIntent.success
 
-    let givenVariant: TagVariant
+        // WHEN
+        let sut = useCase.execute(
+            theme: theme,
+            intent: intent,
+            variant: variant
+        )
 
-    let expectedBackgroundToken: any ColorToken
-    let expectedBorderToken: (any ColorToken)?
-    let expectedForegroundToken: any ColorToken
+        // THEN
+        XCTAssertEqual(
+            getContentColorsUseCase.executeWithIntentAndColorsCallsCount,
+            1,
+            "getContentColorsUseCase.execute should be called once"
+        )
+        let receivedArguments = try XCTUnwrap(
+            getContentColorsUseCase.executeWithIntentAndColorsReceivedArguments,
+            "Couldn't unwrap getContentColorsUseCase.execute received arguments"
+        )
+        XCTAssertIdentical(
+            receivedArguments.colors as? ColorsGeneratedMock,
+            colors,
+            "Wrong getContentColorsUseCase.executereceived colors"
+        )
+        XCTAssertEqual(
+            receivedArguments.intent,
+            .success,
+            "Wrong getContentColorsUseCase.executereceived intent"
+        )
+
+        let containerColor = try XCTUnwrap(
+            getContentColorsUseCaseReturnValue.containerColor as? ColorTokenGeneratedMock,
+            "Couldn't unwrap getContentColorsUseCaseReturnValue.containerColor as a ColorTokenGeneratedMock"
+        )
+        XCTAssertIdentical(
+            sut.backgroundColor as? ColorTokenGeneratedMock,
+            containerColor,
+            "Wrong sut.foregroundColor")
+        XCTAssertIdentical(
+            sut.borderColor as? ColorTokenGeneratedMock,
+            containerColor,
+            "Wrong sut.borderColor"
+        )
+
+        let onContainerColor = try XCTUnwrap(
+            getContentColorsUseCaseReturnValue.onContainerColor as? ColorTokenGeneratedMock,
+            "Couldn't unwrap getContentColorsUseCaseReturnValue.onContainerColor as a ColorTokenGeneratedMock"
+        )
+        XCTAssertIdentical(
+            sut.foregroundColor as? ColorTokenGeneratedMock,
+            onContainerColor,
+            "Wrong sut.foregroundColor"
+        )
+    }
 }
