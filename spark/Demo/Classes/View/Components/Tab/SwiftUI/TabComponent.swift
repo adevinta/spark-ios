@@ -23,7 +23,7 @@ struct TabComponent: View {
     @State var longLabel = CheckboxSelectionState.unselected
     @State var tabSize: TabSize = .md
     @State var isSizePresented = false
-    @State var numberOfTabs = 4
+    @State var numberOfTabs = 2
     @State var selectedTab = 0
     @State var height = CGFloat(50)
     @State var badgePosition = 0
@@ -156,10 +156,11 @@ struct TabComponent: View {
                     intent: self.intent,
                     tabSize: self.tabSize,
                     content: self.tabs(),
-                    selectedIndex: self.$selectedTab,
-                    apportionsSegmentWidthsByContent: !self.equalSize.isSelected
+                    selectedIndex: self.$selectedTab
                 )
+                .apportionsSegmentWidthsByContent(!self.equalSize.isSelected)
                 .disabled(isDisabled.isSelected, index: self.disabledTab)
+                .badge(self.badge(), index: self.badgePosition)
                 Spacer()
             }
         }
@@ -167,8 +168,13 @@ struct TabComponent: View {
         .navigationBarTitle(Text("Tab Item"))
     }
 
-    func badge() -> BadgeView {
-        BadgeView(theme: theme, intent: .danger, value: 99)
+    func badge() -> BadgeView? {
+        if self.showBadge.isSelected {
+            return BadgeView(theme: theme, intent: .danger, value: 99).borderVisible(false)
+        } else {
+            return nil
+        }
+
     }
 
     private func tabs() -> [TabItemContent] {
@@ -176,8 +182,7 @@ struct TabComponent: View {
         return (0..<self.numberOfTabs).map {
             .init(
                 image: self.showIcon.isSelected ? .image(at: $0) : nil,
-                title: self.showText.isSelected ? self.label($0) : nil,
-                badge: self.showBadge.isSelected && self.badgePosition == $0 ? self.badge() : nil
+                title: self.showText.isSelected ? self.label($0) : nil
             )
         }
     }

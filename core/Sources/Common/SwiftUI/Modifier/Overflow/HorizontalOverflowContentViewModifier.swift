@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct HorizontalOverflowContentViewModifier<Value>: ViewModifier where Value: Equatable {
     @State private var contentOverflow: Bool = false
     @State private var height: CGFloat = 0
@@ -18,14 +16,14 @@ struct HorizontalOverflowContentViewModifier<Value>: ViewModifier where Value: E
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             content
-                .background(
+                .overlay(
                     GeometryReader { contentGeometry in
                         Color.clear
-                            .onChange(of: self.value) { _ in
+                            .onAppear{
                                 self.height = contentGeometry.size.height
                                 contentOverflow = contentGeometry.size.width > geometry.size.width
                             }
-                            .onAppear{
+                            .onChange(of: self.value) { _ in
                                 self.height = contentGeometry.size.height
                                 contentOverflow = contentGeometry.size.width > geometry.size.width
                             }

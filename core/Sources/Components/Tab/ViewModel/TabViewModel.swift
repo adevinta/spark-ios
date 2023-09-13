@@ -45,6 +45,8 @@ final class TabViewModel<Content>: ObservableObject {
     }
 
     func disableTab(_ disabled: Bool, index: Int) {
+        guard index < self.numberOfTabs else { return }
+        
         self.disabledTabs[index] = disabled
     }
 }

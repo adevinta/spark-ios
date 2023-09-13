@@ -12,10 +12,12 @@ public struct TabView: View {
     private let theme: Theme
     private let intent: TabIntent
     private let tabSize: TabSize
+
     @ObservedObject private var viewModel: TabViewModel<TabItemContent>
-    @Binding var selectedIndex: Int
-    @ScaledMetric var lineHeight: CGFloat
-    @State var minWidth: CGFloat = 0
+    @Binding private var selectedIndex: Int
+    @ScaledMetric private var lineHeight: CGFloat
+    @State private var minWidth: CGFloat = 0
+    @State private var appeared: Bool = false
 
     // MARK: - Initialization
     /// Initializer
@@ -33,7 +35,7 @@ public struct TabView: View {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: titles.map{ .init(image: nil, title: $0, badge: nil) },
+                  content: titles.map{ .init(image: nil, title: $0) },
                   selectedIndex: selectedIndex)
     }
 
@@ -52,7 +54,7 @@ public struct TabView: View {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: icons.map{ .init(image: $0, title: nil, badge: nil) },
+                  content: icons.map{ .init(image: $0, title: nil) },
                   selectedIndex: selectedIndex
         )
     }
@@ -66,9 +68,8 @@ public struct TabView: View {
     public init(theme: Theme,
                 intent: TabIntent = .main,
                 tabSize: TabSize = .md,
-                content: [TabItemContent],
-                selectedIndex: Binding<Int>,
-                apportionsSegmentWidthsByContent: Bool = false
+                content: [TabItemContent] = [],
+                selectedIndex: Binding<Int>
     ) {
         self.theme = theme
         self.intent = intent
@@ -76,7 +77,7 @@ public struct TabView: View {
         self._selectedIndex = selectedIndex
         let viewModel = TabViewModel(
             theme: theme,
-            apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent,
+            apportionsSegmentWidthsByContent: false,
             content: content
         )
         self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabsAttributes.lineHeight)
@@ -93,11 +94,12 @@ public struct TabView: View {
                 alignment: .bottom)
     }
 
+    // MARK: - Private functions
     @ViewBuilder
     private func tabItems() -> some View {
         ScrollViewReader { proxy in
-            HStack {
-                ForEach(Array(self.viewModel.content.enumerated()), id: \.offset) { (index, content) in
+            HStack(spacing: 0) {
+                ForEach(Array(self.viewModel.content.enumerated()), id: \.element.id) { (index, content) in
                     self.tabContent(index: index, content: content, proxy: proxy)
                 }
                 if self.viewModel.apportionsSegmentWidthsByContent {
@@ -107,30 +109,12 @@ public struct TabView: View {
         }
     }
 
-    public func apportionsSegmentWidthsByContent(_ value: Bool) -> Self {
-        self.viewModel.apportionsSegmentWidthsByContent = value
-        return self
-    }
-
     @ViewBuilder
     private func tabContent(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
         if self.viewModel.apportionsSegmentWidthsByContent {
             tabItem(index: index, content: content, proxy: proxy)
-                .id("Tab \(index )\(content.id)")
         } else {
             tabItem(index: index, content: content, proxy: proxy)
-                .background {
-                    GeometryReader { geometry in
-                        Color.clear
-                            .onAppear {
-                                self.updateMinWidth(geometry.size.width, index: index)
-                            }
-                            .onChange(of: self.viewModel.content) { _ in
-                                self.updateMinWidth(geometry.size.width, index: index)
-                            }
-                    }
-                }
-                .id("Tab \(index )\(content.id)")
                 .frame(minWidth: self.minWidth)
         }
     }
@@ -157,10 +141,34 @@ public struct TabView: View {
         ) {
             self.selectedIndex = index
             withAnimation{
-                proxy.scrollTo(index)
+                proxy.scrollTo(content.id)
             }
         }
-        .disabled(self.viewModel.disabledTabs[index])
+        .id(content.id)
+        .disabled(self.viewModel.disabledTabs[safe: index] ?? false)
+        .background {
+            GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        self.updateMinWidth(geometry.size.width, index: index)
+                    }
+                    .onChange(of: self.viewModel.numberOfTabs) { _ in
+                        print("CONTENT CHANGED")
+                        self.updateMinWidth(geometry.size.width, index: index)
+                    }
+            }
+        }
+        .onChange(of: self.viewModel.numberOfTabs) { _ in
+            print("ON CHANGE")
+            self.updateMinWidth(10, index: 0)
+        }
+
+    }
+
+    // MARK: - Public view modifiers
+    public func apportionsSegmentWidthsByContent(_ value: Bool) -> Self {
+        self.viewModel.apportionsSegmentWidthsByContent = value
+        return self
     }
 
     public func disabled(_ disabled: Bool, index: Int) -> Self {
@@ -170,6 +178,24 @@ public struct TabView: View {
 
     public func disabled(_ disabled: Bool) -> Self {
         self.viewModel.isEnabled = !disabled
+        return self
+    }
+
+    public func selected(index: Int) -> Self {
+        self.selectedIndex = index
+        return self
+    }
+
+    public func content(_ content: [TabItemContent]) -> Self {
+        self.viewModel.content = content
+        return self
+    }
+
+    public func badge(_ badge: BadgeView?, index: Int) -> Self {
+        guard var content = self.viewModel.content[safe: index] else { return self }
+
+        content.badge = badge
+        self.viewModel.content[index] = content
         return self
     }
 }
