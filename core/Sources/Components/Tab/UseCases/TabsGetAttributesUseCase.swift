@@ -38,7 +38,7 @@ struct TabsGetAttributesUseCase: TabsGetAttributesUseCaseable {
         return TabsAttributes(
             lineHeight: theme.border.width.small,
             lineColor: lineColor,
-            backgroundColor: theme.colors.base.surface
+            backgroundColor: ColorTokenDefault.clear
         )
     }
 }

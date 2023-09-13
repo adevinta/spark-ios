@@ -35,7 +35,7 @@ final class TabsGetAttributesUseCaseTests: TestCase {
         let expectedAttributes = TabsAttributes(
             lineHeight: 5,
             lineColor: ColorTokenGeneratedMock(uiColor: .red),
-            backgroundColor: ColorTokenGeneratedMock(uiColor: .green)
+            backgroundColor: ColorTokenDefault.clear
         )
 
         let attributes = self.sut.execute(theme: self.theme, isEnabled: true)
@@ -49,7 +49,7 @@ final class TabsGetAttributesUseCaseTests: TestCase {
         let attributes = self.sut.execute(theme: self.theme, isEnabled: false)
 
         XCTAssertEqual(attributes.lineColor.uiColor, .red.withAlphaComponent(0.1), "Expect line to have an opacity.")
-        XCTAssertEqual(attributes.backgroundColor.uiColor, .green, "Expect background to remain the same.")
+        XCTAssertEqual(attributes.backgroundColor.uiColor, .clear, "Expect background to remain the same.")
     }
 }
 

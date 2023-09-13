@@ -34,6 +34,8 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             apportionsSegmentWidthsByContent: true
         )
         sut.setBadge(self.badge, forSegementAt: 2)
+        sut.maxWidth = 390
+        sut.backgroundColor = UIColor.systemBackground
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -45,6 +47,8 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             apportionsSegmentWidthsByContent: false
         )
         sut.setBadge(self.badge, forSegementAt: 2)
+        sut.maxWidth = 390
+        sut.backgroundColor = UIColor.systemBackground
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -56,6 +60,8 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             apportionsSegmentWidthsByContent: true
         )
         sut.setBadge(self.badge, forSegementAt: 1)
+        sut.maxWidth = 390
+        sut.backgroundColor = UIColor.systemBackground
 
         assertSnapshotInDarkAndLight(matching: sut)
     }
@@ -66,6 +72,8 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             titles: Array(self.names[0..<2].map(\.capitalized)),
             apportionsSegmentWidthsByContent: false
         )
+        sut.maxWidth = 390
+        sut.backgroundColor = UIColor.systemBackground
 
         assertSnapshotInDarkAndLight(matching: sut)
     }
@@ -79,6 +87,8 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             content: content,
             apportionsSegmentWidthsByContent: true
         )
+        sut.maxWidth = 390
+        sut.backgroundColor = UIColor.systemBackground
         sut.setBadge(self.badge, forSegementAt: 0)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
@@ -94,6 +104,8 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             content: content,
             apportionsSegmentWidthsByContent: true
         )
+        sut.maxWidth = 390
+        sut.backgroundColor = UIColor.systemBackground
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -108,6 +120,8 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             content: content,
             apportionsSegmentWidthsByContent: true
         )
+        sut.maxWidth = 390
+        sut.backgroundColor = UIColor.systemBackground
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -121,6 +135,8 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
             content: content,
             apportionsSegmentWidthsByContent: true
         )
+        sut.maxWidth = 390
+        sut.backgroundColor = UIColor.systemBackground
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }

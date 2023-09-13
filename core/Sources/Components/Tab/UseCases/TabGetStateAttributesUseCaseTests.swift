@@ -38,7 +38,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         self.colors = TabItemColors(
             label: self.theme.colors.base.onSurface,
             line: self.theme.colors.base.outline,
-            background: self.theme.colors.base.surface
+            background: ColorTokenDefault.clear
         )
 
         self.getFontUseCase.executeWithTypographyAndSizeReturnValue = self.theme.typography.body2
@@ -58,7 +58,7 @@ final class TabGetStateAttributesUseCaseTests: TestCase {
         let selectedColors = TabItemColors(
             label: mockedColor,
             line: mockedColor,
-            background: self.theme.colors.base.surface
+            background: ColorTokenDefault.clear
         )
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.medium,

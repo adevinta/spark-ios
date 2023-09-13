@@ -65,7 +65,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
         let colors = TabItemColors(
             label: theme.colors.base.onSurface,
             line: theme.colors.base.outline,
-            background: theme.colors.base.surface
+            background: ColorTokenDefault.clear
         )
 
         let heights = TabItemHeights(
@@ -102,7 +102,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
             let selectedColors = TabItemColors(
                 label: intentColor,
                 line: intentColor,
-                background: theme.colors.base.surface
+                background: ColorTokenDefault.clear
             )
             return TabStateAttributes(
                 spacings: spacings,
