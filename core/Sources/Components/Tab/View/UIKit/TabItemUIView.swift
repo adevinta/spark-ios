@@ -275,28 +275,39 @@ public final class TabItemUIView: UIControl {
     /// Create a tab item view.
     ///
     /// - Parameters:
-    /// theme: the current theme, which will determine the colors and spacings
-    /// intent: the intent of the tab item
-    /// text: optional string, the label if the tab item if set
-    /// icon: optional image of the tab item
-    public convenience init(theme: Theme,
-                            intent: TabIntent = .main,
-                            tabSize: TabSize = .md,
-                            title: String? = nil,
-                            icon: UIImage? = nil) {
+    /// - theme: the current theme, which will determine the colors and spacings
+    /// - intent: the intent of the tab item
+    /// - text: optional string, the label if the tab item if set
+    /// - icon: optional image of the tab item
+    /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
+    public convenience init(
+        theme: Theme,
+        intent: TabIntent = .main,
+        tabSize: TabSize = .md,
+        title: String? = nil,
+        icon: UIImage? = nil,
+        apportionsSegmentWidthsByContent: Bool = false
+    ) {
         let viewModel = TabItemViewModel(theme: theme, intent: intent, tabSize: tabSize)
         viewModel.hasTitle = title != nil
 
-        self.init(title: title,
-                  icon: icon,
-                  viewModel: viewModel)
+        self.init(
+            title: title,
+            icon: icon,
+            viewModel: viewModel,
+            apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent
+        )
     }
 
-    init(title: String?,
-         icon: UIImage?,
-         viewModel: TabItemViewModel) {
+    internal init(
+        title: String?,
+        icon: UIImage?,
+        viewModel: TabItemViewModel,
+        apportionsSegmentWidthsByContent: Bool
+    ) {
 
         self.viewModel = viewModel
+        self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
 
         self._spacing = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
         self._paddingVertical = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.verticalEdge)

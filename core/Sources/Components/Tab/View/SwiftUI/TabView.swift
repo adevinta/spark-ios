@@ -123,27 +123,23 @@ public struct TabView: View {
                     GeometryReader { geometry in
                         Color.clear
                             .onAppear {
-                                print("Width \(index) \(geometry.size.width)")
-                                if index == self.viewModel.numberOfTabs - 1 {
-                                    self.minWidth = geometry.size.width
-                                } else {
-                                    self.minWidth = max(self.minWidth, geometry.size.width)
-                                }
-                                print("MINWIDTH (onAppear) \(self.minWidth)")
-
+                                self.updateMinWidth(geometry.size.width, index: index)
                             }
                             .onChange(of: self.viewModel.content) { _ in
-                                print("MINWIDTH (onChange)\(self.minWidth)")
-                                if index == self.viewModel.numberOfTabs - 1 {
-                                    self.minWidth = geometry.size.width
-                                } else {
-                                    self.minWidth = max(self.minWidth, geometry.size.width)
-                                }
+                                self.updateMinWidth(geometry.size.width, index: index)
                             }
                     }
 
                 }
                 .frame(minWidth: self.minWidth)
+        }
+    }
+
+    private func updateMinWidth(_ width: CGFloat, index: Int) {
+        if index == self.viewModel.numberOfTabs - 1 {
+            self.minWidth = width
+        } else {
+            self.minWidth = max(self.minWidth,width)
         }
     }
 
@@ -164,6 +160,17 @@ public struct TabView: View {
                 proxy.scrollTo(index)
             }
         }
+        .disabled(self.viewModel.disabledTabs[index])
         .id(index)
+    }
+
+    public func disabled(_ disabled: Bool, index: Int) -> Self {
+        self.viewModel.disableTab(disabled, index: index)
+        return self
+    }
+
+    public func disabled(_ disabled: Bool) -> Self {
+        self.viewModel.isEnabled = !disabled
+        return self
     }
 }

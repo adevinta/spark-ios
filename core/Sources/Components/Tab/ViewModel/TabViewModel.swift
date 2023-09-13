@@ -23,6 +23,7 @@ final class TabViewModel<Content>: ObservableObject {
         }
     }
 
+    @Published var disabledTabs: [Bool]
     @Published var apportionsSegmentWidthsByContent: Bool = false
     @Published var tabsAttributes: TabsAttributes
     @Published var numberOfTabs: Int
@@ -38,6 +39,11 @@ final class TabViewModel<Content>: ObservableObject {
         self.useCase = useCase
         self.numberOfTabs = content.count
         self.content = content
+        self.disabledTabs = content.map{ _ in return false }
         self.tabsAttributes = useCase.execute(theme: theme, isEnabled: true)
+    }
+
+    func disableTab(_ disabled: Bool, index: Int) {
+        self.disabledTabs[index] = disabled
     }
 }
