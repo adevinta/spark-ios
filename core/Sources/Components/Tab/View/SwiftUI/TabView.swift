@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// TavView is the similar to a SegmentControl and not the SwiftUI.TaView
 public struct TabView: View {
     private let theme: Theme
     private let intent: TabIntent
@@ -35,7 +36,7 @@ public struct TabView: View {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: titles.map{ .init(image: nil, title: $0) },
+                  content: titles.map{ .init(icon: nil, title: $0) },
                   selectedIndex: selectedIndex)
     }
 
@@ -46,7 +47,7 @@ public struct TabView: View {
     /// - tabSize: The tab size, see `TabSize`. The default value is medium `md`.
     /// - icons: An array of images.
     public init(theme: Theme,
-                intent: TabIntent = .main,
+                intent: TabIntent = .basic,
                 tabSize: TabSize = .md,
                 icons: [Image],
                 selectedIndex: Binding<Int>
@@ -54,7 +55,7 @@ public struct TabView: View {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: icons.map{ .init(image: $0, title: nil) },
+                  content: icons.map{ .init(icon: $0, title: nil) },
                   selectedIndex: selectedIndex
         )
     }
@@ -66,7 +67,7 @@ public struct TabView: View {
     /// - tab size: the default value is `md`.
     /// - An array of tuples of image and string.
     public init(theme: Theme,
-                intent: TabIntent = .main,
+                intent: TabIntent = .basic,
                 tabSize: TabSize = .md,
                 content: [TabItemContent] = [],
                 selectedIndex: Binding<Int>
@@ -129,13 +130,11 @@ public struct TabView: View {
 
     @ViewBuilder
     private func tabItem(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
-        TabItemView<BadgeView>(
+        TabItemView(
             theme: self.theme,
             intent: self.intent,
             size: self.tabSize,
-            image: content.image,
-            title: content.title,
-            badge: content.badge,
+            content: content,
             apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
             isSelected: self.selectedIndex == index
         ) {

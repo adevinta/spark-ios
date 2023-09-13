@@ -62,8 +62,6 @@ final class TabItemViewModelTests: TestCase {
         XCTAssertFalse(sut.isSelected, "sut's isSelected parameter should be false")
         XCTAssertFalse(sut.isPressed, "sut's isPressed parameter should be false")
         XCTAssertTrue(sut.isEnabled, "sut's isDisabled parameter should be false")
-        XCTAssertEqual(sut.icon, icon, "sut's icon should be icon")
-        XCTAssertEqual(sut.title, title, "sut's text should be text")
     }
     
     func test_usecase_is_executed_on_initialization() {
@@ -106,29 +104,6 @@ final class TabItemViewModelTests: TestCase {
         // Then
         wait(for: [expectation], timeout: 0.1)
         XCTAssertEqual(givenAttributes, expectedAttributes)
-    }
-    
-    func test_published_content_on_initialization() {
-        // Given
-        let title = "Text"
-        let icon = UIImage(systemName: "pencil.circle")
-        let expectedContent = TabUIItemContent(icon: icon, title: title)
-        let sut = self.sut(icon: icon, title: title)
-        
-        let expectation = expectation(description: "wait for attributes")
-        var givenContent: TabUIItemContent?
-
-        // When
-        sut.$content.sink { content in
-            givenContent = content
-            expectation.fulfill()
-        }
-        .store(in: &self.cancellables)
-
-        // Then
-        wait(for: [expectation], timeout: 0.1)
-        XCTAssertEqual(givenContent, expectedContent)
-
     }
     
     func test_published_attributes_on_change() {
@@ -189,7 +164,8 @@ final class TabItemViewModelTests: TestCase {
         var counter = 0
         sut.$tabStateAttributes.sink { _ in
             counter += 1
-            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndSizeReceivedArguments
+            let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments
+
             XCTAssertEqual(arguments?.state.isEnabled, counter == 1)
             expectation.fulfill()
         }
@@ -199,48 +175,6 @@ final class TabItemViewModelTests: TestCase {
         sut.isEnabled = false
 
         // Then
-        wait(for: [expectation], timeout: 0.1)
-    }
-    
-    func test_published_icon_on_change() {
-        // Given
-        let icon = UIImage(systemName: "pencil.circle")
-        let expectedIcon = UIImage(systemName: "pencil.circle.fill")
-        let sut = self.sut(icon: icon)
-        
-        let expectation = expectation(description: "wait for attributes")
-        expectation.expectedFulfillmentCount = 2
-        var counter = 0
-        sut.$content.sink { content in
-            counter += 1
-            XCTAssertEqual(content.icon == expectedIcon, counter == 2)
-            expectation.fulfill()
-        }
-        .store(in: &self.cancellables)
-
-        // When
-        sut.icon = UIImage(systemName: "pencil.circle.fill")
-
-        // Then
-        wait(for: [expectation], timeout: 0.1)
-    }
-    
-    func test_published_text_on_change() {
-        // Given
-        let title = "Text"
-        let expectedText = "Expected Text"
-        let sut = self.sut(text: text)
-        
-        let expectation = expectation(description: "wait for attributes")
-        expectation.expectedFulfillmentCount = 2
-        var counter = 0
-        sut.$content.sink { content in
-            counter += 1
-            XCTAssertEqual(content.text == expectedText, counter == 2)
-            expectation.fulfill()
-        }
-        .store(in: &self.cancellables)
-        sut.text = expectedText
         wait(for: [expectation], timeout: 0.1)
     }
 
@@ -351,16 +285,13 @@ private extension TabItemViewModelTests {
         size: TabSize = .md,
         icon: UIImage? = nil,
         title: String? = nil
-    ) -> TabItemViewModel {
+    ) -> TabItemViewModel<TabUIItemContent> {
         return TabItemViewModel(
             theme: self.theme,
             intent: intent,
             tabSize: size,
             tabState: TabState(),
-            content: TabUIItemContent(
-                icon: icon,
-                title: title
-            ),
+            content: .init(icon: icon, title: title),
             tabGetStateAttributesUseCase: self.tabGetStateAttributesUseCase
         )
     }

@@ -8,15 +8,12 @@
 
 import SwiftUI
 
-public struct TabItemView<Badge: View>: View {
+public struct TabItemView: View {
 
-    @ObservedObject private var viewModel: TabItemViewModel
-    private let image: Image?
-    private let title: String?
-    private let attributedTitle: AttributedString?
-    private let badge: Badge?
-    private let apportionsSegmentWidthsByContent: Bool
+    @ObservedObject private var viewModel: TabItemViewModel<TabItemContent>
+
     private let tapAction: () -> Void
+
     @ScaledMetric private var lineHeight: CGFloat
     @ScaledMetric private var itemHeight: CGFloat
     @ScaledMetric private var iconHeight: CGFloat
@@ -28,45 +25,31 @@ public struct TabItemView<Badge: View>: View {
         theme: Theme,
         intent: TabIntent = .basic,
         size: TabSize = .md,
-        image: Image? = nil,
-        title: String? = nil,
-        attributedTitle: AttributedString? = nil,
-        badge: Badge? = nil,
+        content: TabItemContent,
         apportionsSegmentWidthsByContent: Bool = false,
-        isSelected: Bool = true,
+        isSelected: Bool = false,
         tapAction: @escaping () -> Void
     ) {
-        let viewModel = TabItemViewModel(theme: theme,
-                                         intent: intent,
-                                         tabSize: size)
-        viewModel.hasTitle = title != nil || attributedTitle != nil
+        let viewModel = TabItemViewModel(
+            theme: theme,
+            intent: intent,
+            tabSize: size,
+            content: content,
+            apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent
+        )
         viewModel.isSelected = isSelected
+
         self.init(viewModel: viewModel,
-                  image: image,
-                  title: title,
-                  attributedTitle: attributedTitle,
-                  badge: badge,
-                  apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent,
                   tapAction: tapAction
         )
     }
 
-    init(
-        viewModel: TabItemViewModel,
-        image: Image?,
-        title: String?,
-        attributedTitle: AttributedString?,
-        badge: Badge?,
-        apportionsSegmentWidthsByContent: Bool,
+    internal init(
+        viewModel: TabItemViewModel<TabItemContent>,
         tapAction: @escaping () -> Void
     ) {
         self.viewModel = viewModel
-        self.badge = badge
-        self.image = image
-        self.title = title
-        self.attributedTitle = attributedTitle
         self.tapAction = tapAction
-        self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
 
         self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.separatorLineHeight)
         self._itemHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.itemHeight)
@@ -94,8 +77,8 @@ public struct TabItemView<Badge: View>: View {
     private func tabContent() -> some View {
         HStack(alignment: .center, spacing: self.spacing) {
             spacer()
-            if let image {
-                image
+            if let icon = self.viewModel.content.icon {
+                icon
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(self.viewModel.tabStateAttributes.colors.icon.color)
@@ -107,7 +90,7 @@ public struct TabItemView<Badge: View>: View {
                 .font(self.viewModel.tabStateAttributes.font.font)
                 .fixedSize(horizontal: true, vertical: false)
 
-            if let badge {
+            if let badge = self.viewModel.content.badge {
                 badge
             }
             spacer()
@@ -123,7 +106,7 @@ public struct TabItemView<Badge: View>: View {
 
     @ViewBuilder
     private func spacer() -> some View {
-        if !self.apportionsSegmentWidthsByContent {
+        if !self.viewModel.apportionsSegmentWidthsByContent {
             Spacer().frame(minWidth: self.paddingHorizontal)
         } else  {
             Spacer().frame(width: self.paddingHorizontal)
@@ -132,9 +115,9 @@ public struct TabItemView<Badge: View>: View {
 
     @ViewBuilder
     private func tabTitle() -> some View {
-        if let title {
+        if let title = self.viewModel.content.title {
             Text(title)
-        } else if let attributedTitle {
+        } else if let attributedTitle = self.viewModel.content.attributedTitle {
             Text(attributedTitle)
         } else {
             EmptyView()
@@ -145,10 +128,25 @@ public struct TabItemView<Badge: View>: View {
         self.viewModel.isEnabled = !disabled
         return self
     }
+
+    public func apportionsSegmentWidthsByContent(_ newValue: Bool) -> Self {
+        self.viewModel.apportionsSegmentWidthsByContent = newValue
+        return self
+    }
+
+    public func badge(_ badge: BadgeView) -> Self {
+        self.viewModel.content.badge = badge
+        return self
+    }
+
+    public func selected(_ selected: Bool) -> Self {
+        self.viewModel.isSelected = selected
+        return self
+    }
 }
 
 private struct TabItemButtonStyle: ButtonStyle {
-    var viewModel: TabItemViewModel
+    var viewModel: TabItemViewModel<TabItemContent>
 
     func makeBody(configuration: Self.Configuration) -> some View {
         if configuration.isPressed != self.viewModel.isPressed {

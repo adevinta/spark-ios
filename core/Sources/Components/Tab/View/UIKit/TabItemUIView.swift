@@ -44,8 +44,12 @@ public final class TabItemUIView: UIControl {
 
     // An internal property to determin if the segment width should be aligned to the
     // content of the tab or to equally size the tabs.
-    internal var apportionsSegmentWidthsByContent: Bool = false {
-        didSet {
+    internal var apportionsSegmentWidthsByContent: Bool {
+        get {
+            return self.viewModel.apportionsSegmentWidthsByContent
+        }
+        set {
+            self.viewModel.apportionsSegmentWidthsByContent = newValue
             self.spaceConstraint?.isActive = self.apportionsSegmentWidthsByContent
             self.updateConstraintsIfNeeded()
         }
@@ -70,7 +74,7 @@ public final class TabItemUIView: UIControl {
     @ScaledUIMetric var height: CGFloat
     @ScaledUIMetric private var iconHeight: CGFloat
 
-    @ObservedObject var viewModel: TabItemViewModel
+    @ObservedObject var viewModel: TabItemViewModel<TabUIItemContent>
 
     // MARK: - Public variables
     /// The label shown in the tab item.
@@ -287,26 +291,22 @@ public final class TabItemUIView: UIControl {
         icon: UIImage? = nil,
         apportionsSegmentWidthsByContent: Bool = false
     ) {
-        let viewModel = TabItemViewModel(theme: theme, intent: intent, tabSize: tabSize)
-        viewModel.hasTitle = title != nil
+        let content = TabUIItemContent(icon: icon, title: title)
+        let viewModel = TabItemViewModel(
+            theme: theme,
+            intent: intent,
+            tabSize: tabSize,
+            content: content)
+        viewModel.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
 
-        self.init(
-            title: title,
-            icon: icon,
-            viewModel: viewModel,
-            apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent
-        )
+        self.init(viewModel: viewModel)
     }
 
     internal init(
-        title: String?,
-        icon: UIImage?,
-        viewModel: TabItemViewModel,
-        apportionsSegmentWidthsByContent: Bool
+        viewModel: TabItemViewModel<TabUIItemContent>
     ) {
 
         self.viewModel = viewModel
-        self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
 
         self._spacing = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
         self._paddingVertical = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.verticalEdge)
@@ -465,6 +465,7 @@ public final class TabItemUIView: UIControl {
     }
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
+        self.viewModel.content.icon = icon
         self.imageView.image = icon
         self.imageView.tintColor = self.viewModel.tabStateAttributes.colors.icon.uiColor
 
@@ -475,7 +476,7 @@ public final class TabItemUIView: UIControl {
     }
 
     private func addOrRemoveTitle(_ text: String?) {
-        self.viewModel.hasTitle = text != nil
+        self.viewModel.content.title = text
         self.label.font = self.viewModel.tabStateAttributes.font.uiFont
         self.label.textColor = self.viewModel.tabStateAttributes.colors.label.uiColor
 

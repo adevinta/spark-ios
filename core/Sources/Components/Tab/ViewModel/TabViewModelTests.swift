@@ -34,11 +34,14 @@ final class TabViewModelTests: TestCase {
             lineColor: ColorTokenGeneratedMock(uiColor: .red),
             backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
         )
+
+        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
         self.useCase.executeWithThemeAndIsEnabledReturnValue = expectedAttributes
 
         let sut = TabViewModel(
             theme: self.theme,
             apportionsSegmentWidthsByContent: false,
+            content: content,
             useCase: self.useCase
         )
 
@@ -64,11 +67,14 @@ final class TabViewModelTests: TestCase {
             lineColor: ColorTokenGeneratedMock(uiColor: .red),
             backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
         )
+        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+
         self.useCase.executeWithThemeAndIsEnabledReturnValue = expectedAttributes
 
         let sut = TabViewModel(
             theme: self.theme,
             apportionsSegmentWidthsByContent: false,
+            content: content,
             useCase: self.useCase
         )
 
@@ -96,11 +102,13 @@ final class TabViewModelTests: TestCase {
             lineColor: ColorTokenGeneratedMock(uiColor: .red),
             backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
         )
+        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
         self.useCase.executeWithThemeAndIsEnabledReturnValue = expectedAttributes
 
         let sut = TabViewModel(
             theme: self.theme,
             apportionsSegmentWidthsByContent: false,
+            content: content,
             useCase: self.useCase
         )
 

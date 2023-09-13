@@ -11,12 +11,12 @@ import UIKit
 /// Contents of the tab:
 /// - icon: The icon of the tab item
 /// - text: The text of the tab item.
-public struct TabUIItemContent: Equatable, Updateable {
+public struct TabUIItemContent: ContainsTitle, Equatable, Updateable {
     public var icon: UIImage?
     public var title: String?
     public var attributedTitle: NSAttributedString?
 
-    var hasTitle: Bool {
+    public var hasTitle: Bool {
         return title != nil || attributedTitle != nil
     }
 

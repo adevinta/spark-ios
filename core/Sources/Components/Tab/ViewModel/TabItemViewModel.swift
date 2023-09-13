@@ -13,7 +13,7 @@ import UIKit
 /// `TabItemViewModel` is the view model for both the SwiftUI `TabItemView` as well as the UIKit `TabItemUIView`.
 /// The view model is responsible for returning the varying attributes to the views, i.e. colors and attributes. These are determined by the theme, intent, tabState, content and tabGetStateAttributesUseCase.
 /// When the theme, intent, states or contents change the new values are calculated and published.
-final class TabItemViewModel: ObservableObject {
+final class TabItemViewModel<Content>: ObservableObject where Content: ContainsTitle {
 
     // MARK: - Private Properties
     private var tabState: TabState {
@@ -74,15 +74,14 @@ final class TabItemViewModel: ObservableObject {
         }
     }
 
-    var hasTitle: Bool {
+    // MARK: Published Properties
+    @Published var tabStateAttributes: TabStateAttributes
+    @Published var apportionsSegmentWidthsByContent: Bool
+    @Published var content: Content {
         didSet {
             self.updateStateAttributes()
         }
     }
-
-    // MARK: Published Properties
-    @Published var tabStateAttributes: TabStateAttributes
-//    @Published var content: TabUIItemContentable
     
     // MARK: Init
     /// Init
@@ -97,14 +96,16 @@ final class TabItemViewModel: ObservableObject {
         intent: TabIntent = .main,
         tabSize: TabSize = .md,
         tabState: TabState = .init(),
-        hasTitle: Bool = true,
+        content: Content,
+        apportionsSegmentWidthsByContent: Bool = false,
         tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable = TabGetStateAttributesUseCase()
     ) {
         self.tabState = tabState
         self.theme = theme
         self.intent = intent
-        self.hasTitle = hasTitle
+        self.content = content
         self.tabSize = tabSize
+        self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
         self.tabGetStateAttributesUseCase = tabGetStateAttributesUseCase
 
         self.tabStateAttributes = tabGetStateAttributesUseCase.execute(
@@ -112,7 +113,7 @@ final class TabItemViewModel: ObservableObject {
             intent: intent,
             state: tabState,
             tabSize: tabSize,
-            hasTitle: false
+            hasTitle: content.hasTitle
         )
     }
 
@@ -123,7 +124,7 @@ final class TabItemViewModel: ObservableObject {
             intent: self.intent,
             state: self.tabState,
             tabSize: self.tabSize,
-            hasTitle: self.hasTitle
+            hasTitle: self.content.hasTitle
         )
     }
 }
