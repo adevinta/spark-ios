@@ -28,16 +28,22 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
 
     // MARK: - Tests
     func test_tabs_with_icons_only() throws {
-        let sut = TabUIView(theme: self.theme, icons: Array(self.images[0..<3]))
-        sut.apportionsSegmentWidthsByContent = true
+        let sut = TabUIView(
+            theme: self.theme,
+            icons: Array(self.images[0..<3]),
+            apportionsSegmentWidthsByContent: true
+        )
         sut.setBadge(self.badge, forSegementAt: 2)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
 
     func test_tabs_with_icons_only_equal_width() throws {
-        let sut = TabUIView(theme: self.theme, icons: Array(self.images[0..<3]))
-        sut.apportionsSegmentWidthsByContent = false
+        let sut = TabUIView(
+            theme: self.theme,
+            icons: Array(self.images[0..<3]),
+            apportionsSegmentWidthsByContent: false
+        )
         sut.setBadge(self.badge, forSegementAt: 2)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
@@ -46,9 +52,9 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
     func test_tabs_with_text_only() throws {
         let sut = TabUIView(
             theme: self.theme,
-            titles: Array(self.names[0..<3].map(\.capitalized))
+            titles: Array(self.names[0..<3].map(\.capitalized)),
+            apportionsSegmentWidthsByContent: true
         )
-        sut.apportionsSegmentWidthsByContent = true
         sut.setBadge(self.badge, forSegementAt: 1)
 
         assertSnapshotInDarkAndLight(matching: sut)
@@ -57,10 +63,9 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
     func test_tabs_with_text_only_equal_width() throws {
         let sut = TabUIView(
             theme: self.theme,
-            titles: Array(self.names[0..<2].map(\.capitalized))
+            titles: Array(self.names[0..<2].map(\.capitalized)),
+            apportionsSegmentWidthsByContent: false
         )
-        sut.apportionsSegmentWidthsByContent = false
-        sut.setBadge(self.badge, forSegementAt: 1)
 
         assertSnapshotInDarkAndLight(matching: sut)
     }
@@ -71,9 +76,9 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
 
         let sut = TabUIView(
             theme: self.theme,
-            content: content
+            content: content,
+            apportionsSegmentWidthsByContent: true
         )
-        sut.apportionsSegmentWidthsByContent = true
         sut.setBadge(self.badge, forSegementAt: 0)
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
@@ -86,9 +91,9 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabUIView(
             theme: self.theme,
             tabSize: .sm,
-            content: content
+            content: content,
+            apportionsSegmentWidthsByContent: true
         )
-        sut.apportionsSegmentWidthsByContent = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -100,9 +105,9 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabUIView(
             theme: self.theme,
             tabSize: .xs,
-            content: content
+            content: content,
+            apportionsSegmentWidthsByContent: true
         )
-        sut.apportionsSegmentWidthsByContent = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }
@@ -113,9 +118,9 @@ final class TabUIViewSnapshotTests: UIKitComponentTestCase {
 
         let sut = TabUIView(
             theme: self.theme,
-            content: content
+            content: content,
+            apportionsSegmentWidthsByContent: true
         )
-        sut.apportionsSegmentWidthsByContent = true
 
         assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
     }

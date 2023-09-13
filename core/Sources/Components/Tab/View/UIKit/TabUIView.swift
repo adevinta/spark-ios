@@ -92,12 +92,14 @@ public final class TabUIView: UIControl {
         }
     }
 
+    /// Indicates the max possible width of the tab.
     public var maxWidth: CGFloat = UIScreen.main.bounds.width {
         didSet {
             self.invalidateIntrinsicContentSize()
         }
     }
 
+    /// Indicates whether the control attempts to adjust segment widths based on their content widths.
     public var apportionsSegmentWidthsByContent: Bool {
         get { return viewModel.apportionsSegmentWidthsByContent }
         set {
@@ -139,15 +141,20 @@ public final class TabUIView: UIControl {
     /// - intent: the tab intent. The default value is `basic`.
     /// - tabSize: The tab size, see `TabSize`. The default value is medium `md`.
     /// - titles: An array of labels.
-    public convenience init(theme: Theme,
-                intent: TabIntent = .basic,
-                tabSize: TabSize = .md,
-                titles: [String]
+    /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
+    public convenience init(
+        theme: Theme,
+        intent: TabIntent = .basic,
+        tabSize: TabSize = .md,
+        titles: [String],
+        apportionsSegmentWidthsByContent: Bool = false
     ) {
-        self.init(theme: theme,
-                  intent: intent,
-                  tabSize: tabSize,
-                  content: titles.map(TabUIItemContent.init(title:)))
+        self.init(
+            theme: theme,
+            intent: intent,
+            tabSize: tabSize,
+            content: titles.map(TabUIItemContent.init(title:)),
+            apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent)
     }
 
     /// Initializer
@@ -156,15 +163,20 @@ public final class TabUIView: UIControl {
     /// - intent: the tab intent. The default value is `basic`.
     /// - tabSize: The tab size, see `TabSize`. The default value is medium `md`.
     /// - icons: An array of images.
-    public convenience init(theme: Theme,
-                intent: TabIntent = .basic,
-                tabSize: TabSize = .md,
-                icons: [UIImage]
+    /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
+    public convenience init(
+        theme: Theme,
+        intent: TabIntent = .basic,
+        tabSize: TabSize = .md,
+        icons: [UIImage],
+        apportionsSegmentWidthsByContent: Bool = false
     ) {
         self.init(theme: theme,
                   intent: intent,
                   tabSize: tabSize,
-                  content: icons.map(TabUIItemContent.init(icon:)))
+                  content: icons.map(TabUIItemContent.init(icon:)),
+                  apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent
+        )
     }
 
     /// Initializer
@@ -173,15 +185,18 @@ public final class TabUIView: UIControl {
     /// - intent: the tab intent. The default value is `basic`.
     /// - tab size: the default value is `md`.
     /// - content: An array of TabUIItemContent with of image and string.
+    /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
     public init(theme: Theme,
          intent: TabIntent = .basic,
          tabSize: TabSize = .md,
-         content: [TabUIItemContent]) {
+         content: [TabUIItemContent],
+         apportionsSegmentWidthsByContent: Bool = false
+    ) {
 
         self.theme = theme
         self.intent = intent
         self.tabSize = tabSize
-        self.viewModel = TabViewModel(theme: theme, apportionsSegmentWidthsByContent: false)
+        self.viewModel = TabViewModel(theme: theme, apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent)
 
         super.init(frame: .zero)
 
@@ -393,7 +408,14 @@ public final class TabUIView: UIControl {
     // MARK: - Private Functions
     private func setupViews(items: [TabUIItemContent]) {
         let tabItemViews = items.map{ item in
-            return TabItemUIView(theme: theme, intent: intent, tabSize: tabSize, title: item.title, icon: item.icon)
+            return TabItemUIView(
+                theme: theme,
+                intent: intent,
+                tabSize: tabSize,
+                title: item.title,
+                icon: item.icon,
+                apportionsSegmentWidthsByContent: self.apportionsSegmentWidthsByContent
+            )
         }
 
         for (index, tabItem) in tabItemViews.enumerated() {
