@@ -286,13 +286,6 @@ private extension ChipIntentColors {
     }
 }
 
-private extension ColorTokenGeneratedMock {
-    convenience init(uiColor: UIColor) {
-        self.init()
-        self.uiColor = uiColor
-    }
-}
-
 private extension ChipStateColors {
     init(background: UIColor,
          border: UIColor,

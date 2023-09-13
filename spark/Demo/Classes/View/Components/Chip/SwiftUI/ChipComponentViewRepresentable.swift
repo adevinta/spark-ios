@@ -23,6 +23,27 @@ struct ChipComponentViewRepresentable: View {
     let isEnabled: Bool
     let action: (() -> Void)?
 
+    init(theme: Theme = SparkTheme.shared,
+         intent: ChipIntent = .alert,
+         variant: ChipVariant = .outlined,
+         alignment: ChipAlignment = .leadingIcon,
+         label: String? = "Test",
+         icon: UIImage? = nil,
+         component: UIView? = nil,
+         isEnabled: Bool = true,
+         action: (() -> Void)? = {}
+    ) {
+        self.theme = theme
+        self.intent = intent
+        self.variant = variant
+        self.alignment = alignment
+        self.label = label
+        self.icon = icon
+        self.component = component
+        self.action = action
+        self.isEnabled = isEnabled
+    }
+
     var body: some View {
         ChipComponentUIViewRepresentation(
             theme: self.theme,
@@ -91,5 +112,12 @@ struct ChipComponentUIViewRepresentation: UIViewRepresentable {
         chipView.component = self.component
         chipView.alignment = self.alignment
         chipView.isEnabled = self.isEnabled
+    }
+}
+
+
+struct ChipComponentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ChipComponentViewRepresentable()
     }
 }

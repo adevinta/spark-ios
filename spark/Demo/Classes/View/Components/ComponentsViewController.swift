@@ -88,6 +88,8 @@ extension ComponentsViewController {
             viewController = SpinnerComponentUIViewController.build()
         case .switchButton:
             viewController = SwitchComponentUIViewController.build()
+        case .tab:
+            viewController = TabComponentUIViewController.build()
         case .tag:
             viewController = TagComponentUIViewController.build()
         }
@@ -112,6 +114,7 @@ private extension ComponentsViewController {
         case radioButton
         case spinner
         case switchButton
+        case tab
         case tag
     }
 }

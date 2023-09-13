@@ -6,8 +6,9 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import UIKit
 import Combine
+import SparkCore
+import UIKit
 
 final class ComponentsConfigurationItemUIViewModelView: UIView {
 
@@ -18,6 +19,8 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
             self.label,
             self.button,
             self.toggle,
+            self.checkbox,
+            self.numberRange,
             UIView()
         ].compactMap { $0 })
         stackView.axis = .horizontal
@@ -62,6 +65,52 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
         }
     }()
 
+    private lazy var checkbox: CheckboxUIView? = {
+        switch self.viewModel.type {
+        case let .checkbox(title: title, isOn: isOn):
+            let checkbox = CheckboxUIView(
+                theme: viewModel.theme,
+                text: title,
+                checkedImage: DemoIconography.shared.checkmark,
+                selectionState: isOn ? .selected : .unselected,
+                checkboxPosition: .left)
+            checkbox.accessibilityIdentifier = self.viewModel.identifier + "Checkbox"
+
+            checkbox.publisher.subscribe(in: &self.subscriptions) { [weak self] isChecked in
+                guard let self else { return }
+                RunLoop.main.perform(
+                    self.viewModel.target.action,
+                    target: self.viewModel.target.source,
+                    argument: isChecked,
+                    order: 0,
+                    modes: [.default]
+                )
+            }
+
+            self.viewModel.$theme.subscribe(in: &self.subscriptions) { theme in
+                checkbox.theme = theme
+            }
+            return checkbox
+
+        default:
+            return nil
+        }
+    }()
+
+    private lazy var numberRange: NumberSelector? = {
+        switch self.viewModel.type {
+        case let .rangeSelector(selected: selectedValue, range: range):
+            let selector = NumberSelector(range: range, selectedValue: selectedValue)
+            selector.translatesAutoresizingMaskIntoConstraints = false
+            selector.accessibilityIdentifier = self.viewModel.identifier + "NumberSelector"
+
+            selector.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .valueChanged)
+
+            return selector
+        default:
+            return nil
+        }
+    }()
     // MARK: - Properties
 
     private let viewModel: ComponentsConfigurationItemUIViewModel
