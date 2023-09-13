@@ -126,4 +126,74 @@ final class TabViewModelTests: TestCase {
         XCTAssertEqual(attributes, expectedAttributes)
     }
 
+    func test_enable() {
+        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+
+        let expectedAttributes = TabsAttributes(
+            lineHeight: 1,
+            lineColor: ColorTokenGeneratedMock(uiColor: .red),
+            backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
+        )
+
+        self.useCase.executeWithThemeAndIsEnabledReturnValue = expectedAttributes
+
+        let sut = TabViewModel(
+            theme: self.theme,
+            apportionsSegmentWidthsByContent: false,
+            content: content,
+            useCase: self.useCase
+        )
+
+        sut.isEnabled = true
+
+        XCTAssertEqual(sut.disabledTabs, [false])
+
+    }
+
+    func test_disable() {
+        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+
+        let expectedAttributes = TabsAttributes(
+            lineHeight: 1,
+            lineColor: ColorTokenGeneratedMock(uiColor: .red),
+            backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
+        )
+
+        self.useCase.executeWithThemeAndIsEnabledReturnValue = expectedAttributes
+
+        let sut = TabViewModel(
+            theme: self.theme,
+            apportionsSegmentWidthsByContent: false,
+            content: content,
+            useCase: self.useCase
+        )
+
+        sut.isEnabled = false
+
+        XCTAssertEqual(sut.disabledTabs, [true])
+    }
+
+    func test_disable_single_tab() {
+        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+
+        let expectedAttributes = TabsAttributes(
+            lineHeight: 1,
+            lineColor: ColorTokenGeneratedMock(uiColor: .red),
+            backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
+        )
+
+        self.useCase.executeWithThemeAndIsEnabledReturnValue = expectedAttributes
+
+        let sut = TabViewModel(
+            theme: self.theme,
+            apportionsSegmentWidthsByContent: false,
+            content: content,
+            useCase: self.useCase
+        )
+
+        sut.disableTab(true, index: 0)
+
+        XCTAssertEqual(sut.disabledTabs, [true], "Expect tab to be disabled")
+        XCTAssertEqual(sut.isEnabled, false, "Expect tab control not to be enabled")
+    }
 }

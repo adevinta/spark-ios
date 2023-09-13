@@ -159,16 +159,19 @@ public struct TabView: View {
     }
 
     // MARK: - Public view modifiers
+    /// Indicates whether the control attempts to adjust segment widths based on their content widths.
     public func apportionsSegmentWidthsByContent(_ value: Bool) -> Self {
         self.viewModel.apportionsSegmentWidthsByContent = value
         return self
     }
 
+    /// Disable the tab of the index
     public func disabled(_ disabled: Bool, index: Int) -> Self {
         self.viewModel.disableTab(disabled, index: index)
         return self
     }
 
+    /// Disable the whole tab control
     public func disabled(_ disabled: Bool) -> Self {
         self.viewModel.isEnabled = !disabled
         return self

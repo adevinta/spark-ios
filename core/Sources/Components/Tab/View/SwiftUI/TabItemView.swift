@@ -124,27 +124,33 @@ public struct TabItemView: View {
         }
     }
 
+    //MARK: - Public modifiers
+    /// Set the tab to disabled
     public func disabled(_ disabled: Bool) -> Self {
         self.viewModel.isEnabled = !disabled
         return self
     }
 
+    /// Indicates whether the control attempts to adjust segment widths based on their content widths.
     public func apportionsSegmentWidthsByContent(_ newValue: Bool) -> Self {
         self.viewModel.apportionsSegmentWidthsByContent = newValue
         return self
     }
 
+    /// Add a badge to the view
     public func badge(_ badge: BadgeView) -> Self {
         self.viewModel.content.badge = badge
         return self
     }
 
+    /// Set the tab as selected
     public func selected(_ selected: Bool) -> Self {
         self.viewModel.isSelected = selected
         return self
     }
 }
 
+//MARK: - Private Button Style
 private struct TabItemButtonStyle: ButtonStyle {
     var viewModel: TabItemViewModel<TabItemContent>
 
