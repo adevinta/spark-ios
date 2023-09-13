@@ -12,26 +12,22 @@ import SwiftUI
 
 struct TabComponent: View {
     // MARK: Properties
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-
+    @State var theme: Theme = SparkThemePublisher.shared.theme
     @State var intent: TabIntent = .basic
     @State var isIntentPresented = false
     @State var showText = CheckboxSelectionState.selected
     @State var showIcon = CheckboxSelectionState.selected
     @State var showBadge = CheckboxSelectionState.unselected
-    @State var isEnabled = CheckboxSelectionState.selected
+    @State var isDisabled = CheckboxSelectionState.unselected
     @State var equalSize = CheckboxSelectionState.selected
     @State var longLabel = CheckboxSelectionState.unselected
     @State var tabSize: TabSize = .md
     @State var isSizePresented = false
-    @State var numberOfTabs = 3
+    @State var numberOfTabs = 2
     @State var selectedTab = 0
     @State var height = CGFloat(50)
     @State var badgePosition = 0
+    @State var disabledTab = 0
 
     // MARK: - View
     var body: some View {
@@ -41,6 +37,9 @@ struct TabComponent: View {
                     .font(.title2)
                     .bold()
                     .padding(.bottom, 6)
+
+                ThemeSelector(theme: self.$theme)
+
                 HStack() {
                     Text("Intent: ").bold()
                     Button(self.intent.name) {
@@ -117,12 +116,19 @@ struct TabComponent: View {
                 }
 
                 CheckboxView(
-                    text: "Is Enabled",
+                    text: "Disabled",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
                     state: .enabled,
-                    selectionState: self.$isEnabled
+                    selectionState: self.$isDisabled
                 )
+                .onChange(of: self.isDisabled) { _ in
+                    if self.isDisabled.isSelected {
+                        self.disabledTab = (0..<self.numberOfTabs).randomElement() ?? 0
+                    } else {
+                        self.disabledTab = 0
+                    }
+                }
 
                 CheckboxView(
                     text: "Equal sized",
@@ -139,29 +145,24 @@ struct TabComponent: View {
 
                 Divider()
 
-                Button("Button", action: {}
-                )
-                .disabled(!isEnabled.isSelected)
-
                 Text("Integration \(self.selectedTab)")
                     .font(.title2)
                     .bold()
 
                 TabView<BadgeView>(
-                    theme: self.themePublisher.theme,
+                    theme: self.theme,
                     intent: self.intent,
                     tabSize: self.tabSize,
                     content: self.tabs(),
                     selectedIndex: self.$selectedTab,
                     apportionsSegmentWidthsByContent: !self.equalSize.isSelected
                 )
-                .disabled(!isEnabled.isSelected)
+                .disabled(isDisabled.isSelected, index: self.disabledTab)
                 Spacer()
             }
         }
         .padding(.horizontal, 16)
         .navigationBarTitle(Text("Tab Item"))
-
     }
 
     func badge() -> BadgeView {
