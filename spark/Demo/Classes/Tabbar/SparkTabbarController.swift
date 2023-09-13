@@ -35,13 +35,20 @@ final class SparkTabbarController: UITabBarController {
         return viewController
     }()
 
+    /// Third Tab
+    private lazy var settingsViewController: UIViewController = {
+        var layout = SettingsViewController.makeLayout()
+        let viewController = UINavigationController(rootViewController: SettingsViewController(collectionViewLayout: layout))
+        viewController.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gear"), tag: 0)
+        return viewController
+    }()
+
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.loadSparkConfiguration()
         self.setUpControllers()
-        self.addObservers()
         self.addPublishers()
     }
 
@@ -52,14 +59,9 @@ final class SparkTabbarController: UITabBarController {
     private func setUpControllers() {
         viewControllers = [
             self.themeViewController,
-            self.componentVersionViewController
+            self.componentVersionViewController,
+            self.settingsViewController
         ]
-    }
-
-    private func addObservers() {
-        NotificationCenter.default.addObserver(forName: UIDevice.deviceDidShakeNotification, object: nil, queue: .main) { _ in
-            self.presentThemeSwitchViewController()
-        }
     }
 
     private func addPublishers() {
@@ -70,21 +72,5 @@ final class SparkTabbarController: UITabBarController {
             self.tabBar.tintColor = theme.colors.main.main.uiColor
         }
         .store(in: &cancellables)
-    }
-}
-
-// MARK: - Navigation
-extension SparkTabbarController {
-
-    private func presentThemeSwitchViewController() {
-        let themeSwitchViewController = UIHostingController(
-            rootView: ThemeSwitchView(
-                dismissAction: { self.presentedViewController?.dismiss(animated: false) }
-            )
-        )
-        themeSwitchViewController.modalPresentationStyle = .overCurrentContext
-        themeSwitchViewController.modalTransitionStyle = .crossDissolve
-        themeSwitchViewController.view.backgroundColor = .clear
-        self.present(themeSwitchViewController, animated: true)
     }
 }

@@ -40,7 +40,7 @@ struct ComponentsCheckboxListView: View {
             }
         }
         .navigationBarTitle("Checkbox List")
-        .foregroundColor(.black)
+        .foregroundColor(.primary)
         .navigationBarHidden(false)
         .navigationTitle("Components")
     }

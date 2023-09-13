@@ -106,7 +106,7 @@ final class CheckboxGroupViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         self.navigationItem.title = "Checkbox Group"
 
         self.subscribe()
