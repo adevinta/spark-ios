@@ -22,15 +22,13 @@ final class TagContentColorsTests: XCTestCase {
             color: colors.main.main,
             onColor: colors.main.onMain,
             containerColor: colors.base.background,
-            onContainerColor: colors.base.onBackground,
-            surfaceColor: colors.base.surface)
+            onContainerColor: colors.base.onBackground)
 
         let colors2 = TagContentColors(
             color: colors.main.main,
             onColor: colors.main.onMain,
             containerColor: colors.base.background,
-            onContainerColor: colors.base.onBackground,
-            surfaceColor: colors.base.surface)
+            onContainerColor: colors.base.onBackground)
 
         XCTAssertEqual(colors1, colors2)
     }
@@ -42,15 +40,13 @@ final class TagContentColorsTests: XCTestCase {
             color: colors.main.main,
             onColor: colors.main.onMain,
             containerColor: colors.base.background,
-            onContainerColor: colors.base.onBackground,
-            surfaceColor: colors.base.surface)
+            onContainerColor: colors.base.onBackground)
 
         let colors2 = TagContentColors(
             color: colors.support.support,
             onColor: colors.support.onSupport,
             containerColor: colors.base.background,
-            onContainerColor: colors.base.onBackground,
-            surfaceColor: colors.base.surface)
+            onContainerColor: colors.base.onBackground)
 
         XCTAssertNotEqual(colors1, colors2)
     }
