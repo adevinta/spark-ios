@@ -19,7 +19,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
     ) -> ButtonColors {
         let dim5 = dims.dim5
 
-        let backgroundColor = colors.base.surface
+        let backgroundColor = ColorTokenDefault.clear
 
         switch intent {
         case .accent:
@@ -89,7 +89,7 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
         case .surface:
             return .init(
                 foregroundColor: colors.base.surface,
-                backgroundColor: colors.base.surfaceInverse,
+                backgroundColor: backgroundColor,
                 pressedBackgroundColor: colors.base.surface.opacity(dim5),
                 borderColor: colors.base.surface,
                 pressedBorderColor: colors.base.surface
