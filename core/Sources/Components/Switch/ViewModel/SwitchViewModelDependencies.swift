@@ -15,6 +15,9 @@ protocol SwitchViewModelDependenciesProtocol {
     var getToggleColorUseCase: SwitchGetToggleColorUseCaseable { get }
     var getPositionUseCase: SwitchGetPositionUseCaseable { get }
     var getToggleStateUseCase: SwitchGetToggleStateUseCaseable { get }
+
+    func makeDisplayedTextViewModel(text: String?,
+                                    attributedText: AttributedStringEither?) -> DisplayedTextViewModel
 }
 
 struct SwitchViewModelDependencies: SwitchViewModelDependenciesProtocol {
@@ -41,5 +44,17 @@ struct SwitchViewModelDependencies: SwitchViewModelDependenciesProtocol {
         self.getToggleColorUseCase = getToggleColorUseCase
         self.getPositionUseCase = getPositionUseCase
         self.getToggleStateUseCase = getToggleStateUseCase
+    }
+
+    // MARK: - Maker
+
+    func makeDisplayedTextViewModel(
+        text: String?,
+        attributedText: AttributedStringEither?
+    ) -> DisplayedTextViewModel {
+        return DisplayedTextViewModelDefault(
+            text: text,
+            attributedText: attributedText
+        )
     }
 }
