@@ -85,8 +85,12 @@ public struct TabView: View {
 
     public var body: some View {
         self.tabItems()
-            .background(self.viewModel.tabsAttributes.backgroundColor.color)
-            .scrollOnOverflow(numberOfItems: self.$viewModel.numberOfTabs)
+            .scrollOnOverflow(value: self.$viewModel.content)
+            .background(
+                Rectangle()
+                    .frame(width: nil, height: self.lineHeight, alignment: .bottom)
+                    .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
+                alignment: .bottom)
     }
 
     @ViewBuilder
@@ -100,11 +104,6 @@ public struct TabView: View {
                     Spacer()
                 }
             }
-            .background(
-                Rectangle()
-                    .frame(width: nil, height: self.lineHeight, alignment: .top)
-                    .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
-                alignment: .bottom)
         }
     }
 
@@ -117,9 +116,10 @@ public struct TabView: View {
     private func tabContent(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
         if self.viewModel.apportionsSegmentWidthsByContent {
             tabItem(index: index, content: content, proxy: proxy)
+                .id("Tab \(index )\(content.id)")
         } else {
             tabItem(index: index, content: content, proxy: proxy)
-                .overlay {
+                .background {
                     GeometryReader { geometry in
                         Color.clear
                             .onAppear {
@@ -129,8 +129,8 @@ public struct TabView: View {
                                 self.updateMinWidth(geometry.size.width, index: index)
                             }
                     }
-
                 }
+                .id("Tab \(index )\(content.id)")
                 .frame(minWidth: self.minWidth)
         }
     }
@@ -161,7 +161,6 @@ public struct TabView: View {
             }
         }
         .disabled(self.viewModel.disabledTabs[index])
-        .id(index)
     }
 
     public func disabled(_ disabled: Bool, index: Int) -> Self {

@@ -20,6 +20,7 @@ final class TabViewModel<Content>: ObservableObject {
     var isEnabled: Bool = true {
         didSet {
             self.tabsAttributes = self.useCase.execute(theme: theme, isEnabled: self.isEnabled)
+            self.disabledTabs = self.disabledTabs.map{ _ in !self.isEnabled }
         }
     }
 

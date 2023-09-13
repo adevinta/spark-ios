@@ -23,7 +23,7 @@ struct TabComponent: View {
     @State var longLabel = CheckboxSelectionState.unselected
     @State var tabSize: TabSize = .md
     @State var isSizePresented = false
-    @State var numberOfTabs = 2
+    @State var numberOfTabs = 4
     @State var selectedTab = 0
     @State var height = CGFloat(50)
     @State var badgePosition = 0
@@ -96,23 +96,25 @@ struct TabComponent: View {
                     )
                 }
 
-                CheckboxView(
-                    text: "With Icon",
-                    checkedImage: DemoIconography.shared.checkmark,
-                    theme: theme,
-                    state: .enabled,
-                    selectionState: self.$showIcon
-                )
+                HStack {
+                    CheckboxView(
+                        text: "With Icon",
+                        checkedImage: DemoIconography.shared.checkmark,
+                        theme: theme,
+                        state: .enabled,
+                        selectionState: self.$showIcon
+                    )
 
-                CheckboxView(
-                    text: "Show Badge",
-                    checkedImage: DemoIconography.shared.checkmark,
-                    theme: theme,
-                    state: .enabled,
-                    selectionState: self.$showBadge
-                )
-                .onChange(of: self.showBadge) { _ in
-                    self.badgePosition = (0..<self.numberOfTabs).randomElement() ?? 0
+                    CheckboxView(
+                        text: "Show Badge",
+                        checkedImage: DemoIconography.shared.checkmark,
+                        theme: theme,
+                        state: .enabled,
+                        selectionState: self.$showBadge
+                    )
+                    .onChange(of: self.showBadge) { _ in
+                        self.badgePosition = (0..<self.numberOfTabs).randomElement() ?? 0
+                    }
                 }
 
                 CheckboxView(

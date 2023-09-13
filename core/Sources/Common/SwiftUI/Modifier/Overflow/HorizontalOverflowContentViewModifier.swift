@@ -10,22 +10,30 @@ import SwiftUI
 
 import SwiftUI
 
-struct HorizontalOverflowContentViewModifier: ViewModifier {
+struct HorizontalOverflowContentViewModifier<Value>: ViewModifier where Value: Equatable {
     @State private var contentOverflow: Bool = false
-    @Binding var numberOfItems: Int
+    @State private var height: CGFloat = 0
+    @Binding var value: Value
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             content
-            .background(
-                GeometryReader { contentGeometry in
-                    Color.clear.onChange(of: self.numberOfItems) { _ in
-                        contentOverflow = contentGeometry.size.width > geometry.size.width
+                .background(
+                    GeometryReader { contentGeometry in
+                        Color.clear
+                            .onChange(of: self.value) { _ in
+                                self.height = contentGeometry.size.height
+                                contentOverflow = contentGeometry.size.width > geometry.size.width
+                            }
+                            .onAppear{
+                                self.height = contentGeometry.size.height
+                                contentOverflow = contentGeometry.size.width > geometry.size.width
+                            }
                     }
-                }
-            )
-            .wrappedInScrollView(when: contentOverflow)
+                )
+                .wrappedInScrollView(when: contentOverflow)
         }
+        .frame(height: self.height)
     }
 }
 
@@ -43,7 +51,7 @@ extension View {
 }
 
 extension View {
-    func scrollOnOverflow(numberOfItems: Binding<Int>) -> some View {
-        modifier(HorizontalOverflowContentViewModifier(numberOfItems: numberOfItems))
+    func scrollOnOverflow<Value>(value: Binding<Value>) -> some View where Value: Equatable {
+        modifier(HorizontalOverflowContentViewModifier<Value>(value: value))
     }
 }

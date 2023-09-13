@@ -10,10 +10,10 @@ import SwiftUI
 
 public struct TabItemContent: Equatable {
     public static func == (lhs: TabItemContent, rhs: TabItemContent) -> Bool {
-        return lhs.image == rhs.image &&
-        lhs.title == rhs.title
+        return lhs.id == rhs.id 
     }
 
+    public let id = UUID()
     public let image: Image?
     public let title: String?
     public let badge: BadgeView?
