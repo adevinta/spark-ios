@@ -294,14 +294,24 @@ public final class TabUIView: UIControl {
     /// Inserts a segment at the last position you specify and gives it an image as content.
     public func addSegment(with icon: UIImage,
                            animated: Bool = false) {
-        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, icon: icon)
+        let tab = TabItemUIView(
+            theme: self.theme,
+            intent: self.intent,
+            tabSize: self.tabSize,
+            content: .init(icon: icon)
+        )
         self.insertTab(tab, at: self.numberOfSegments, animated: animated)
     }
 
     ///Inserts a segment at the last position you specify and gives it a title as content.
     public func addSegment(with title: String,
                            animated: Bool = false) {
-        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, title: title)
+        let tab = TabItemUIView(
+            theme: self.theme,
+            intent: self.intent,
+            tabSize: self.tabSize,
+            content: .init(title: title)
+        )
         self.insertTab(tab, at: self.numberOfSegments, animated: animated)
     }
 
@@ -309,7 +319,12 @@ public final class TabUIView: UIControl {
     public func addSegment(withImage icon: UIImage,
                            andTitle title: String,
                            animated: Bool = false) {
-        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, title: title, icon: icon)
+        let tab = TabItemUIView(
+            theme: self.theme,
+            intent: self.intent,
+            tabSize: self.tabSize,
+            content: .init(icon: icon, title: title)
+        )
         self.insertTab(tab, at: self.numberOfSegments, animated: animated)
     }
 
@@ -317,7 +332,12 @@ public final class TabUIView: UIControl {
     public func insertSegment(with icon: UIImage,
                               at index: Int,
                               animated: Bool = false) {
-        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, icon: icon)
+        let tab = TabItemUIView(
+            theme: self.theme,
+            intent: self.intent,
+            tabSize: self.tabSize,
+            content: .init(icon: icon)
+        )
         self.insertTab(tab, at: index, animated: animated)
     }
 
@@ -325,7 +345,12 @@ public final class TabUIView: UIControl {
     public func insertSegment(with title: String,
                               at index: Int,
                               animated: Bool = false) {
-        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, title: title)
+        let tab = TabItemUIView(
+            theme: self.theme,
+            intent: self.intent,
+            tabSize: self.tabSize,
+            content: .init(title: title)
+        )
         self.insertTab(tab, at: index, animated: animated)
     }
 
@@ -333,7 +358,12 @@ public final class TabUIView: UIControl {
     public func insertSegment(withImage icon: UIImage,
                               andTitle title: String,
                               at index: Int, animated: Bool = false) {
-        let tab = TabItemUIView(theme: self.theme, intent: self.intent, tabSize: self.tabSize, title: title, icon: icon)
+        let tab = TabItemUIView(
+            theme: self.theme,
+            intent: self.intent,
+            tabSize: self.tabSize,
+            content: .init(icon: icon, title: title)
+        )
         self.insertTab(tab, at: index, animated: animated)
     }
 
@@ -415,8 +445,7 @@ public final class TabUIView: UIControl {
                 theme: theme,
                 intent: intent,
                 tabSize: tabSize,
-                title: item.title,
-                icon: item.icon,
+                content: .init(icon: item.icon, title: item.title),
                 apportionsSegmentWidthsByContent: self.apportionsSegmentWidthsByContent
             )
         }
@@ -466,11 +495,12 @@ public final class TabUIView: UIControl {
 
     private func setTabItems(content: [TabUIItemContent]) {
         let items = content.map {
-            TabItemUIView(theme: self.theme,
-                          intent: self.intent,
-                          tabSize: self.tabSize,
-                          title: $0.title,
-                          icon: $0.icon)
+            TabItemUIView(
+                theme: self.theme,
+                intent: self.intent,
+                tabSize: self.tabSize,
+                content: $0
+            )
         }
         self.stackView.removeArrangedSubviews()
         self.stackView.addArrangedSubviews(items)

@@ -143,6 +143,7 @@ public struct TabView: View {
                 proxy.scrollTo(content.id)
             }
         }
+        .disabled(self.viewModel.disabledTabs[index])
         .id(content.id)
         .background {
             GeometryReader { geometry in

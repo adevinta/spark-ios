@@ -280,18 +280,15 @@ public final class TabItemUIView: UIControl {
     /// - Parameters:
     /// - theme: the current theme, which will determine the colors and spacings
     /// - intent: the intent of the tab item
-    /// - text: optional string, the label if the tab item if set
-    /// - icon: optional image of the tab item
+    /// - content: the content of the tab item
     /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
     public convenience init(
         theme: Theme,
         intent: TabIntent = .main,
         tabSize: TabSize = .md,
-        title: String? = nil,
-        icon: UIImage? = nil,
+        content: TabUIItemContent,
         apportionsSegmentWidthsByContent: Bool = false
     ) {
-        let content = TabUIItemContent(icon: icon, title: title)
         let viewModel = TabItemViewModel(
             theme: theme,
             intent: intent,
@@ -317,9 +314,6 @@ public final class TabItemUIView: UIControl {
 
         super.init(frame: .zero)
         
-        self.title = title
-        self.icon = icon
-
         self.setupView()
         self.setupConstraints()
         self.setupSubscriptions()
@@ -402,8 +396,9 @@ public final class TabItemUIView: UIControl {
         self.bringSubviewToFront(self.bottomLine)
 
         self.setupColors(attributes: self.viewModel.tabStateAttributes)
-        self.addOrRemoveIcon(self.icon)
-        self.addOrRemoveTitle(self.title)
+        
+        self.addOrRemoveIcon(self.viewModel.content.icon)
+        self.addOrRemoveTitle(self.viewModel.content.title)
     }
 
     private func setupColors(attributes: TabStateAttributes) {

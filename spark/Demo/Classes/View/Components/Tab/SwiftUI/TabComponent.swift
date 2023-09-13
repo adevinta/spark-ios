@@ -187,7 +187,7 @@ struct TabComponent: View {
     private func tabs() -> [TabItemContent] {
         return (0..<self.numberOfTabs).map {
             .init(
-                image: self.showIcon.isSelected ? .image(at: $0) : nil,
+                icon: self.showIcon.isSelected ? .image(at: $0) : nil,
                 title: self.showText.isSelected ? self.label($0) : nil
             )
         }
