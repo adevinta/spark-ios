@@ -145,7 +145,6 @@ public struct TabView: View {
             }
         }
         .id(content.id)
-        .disabled(self.viewModel.disabledTabs[safe: index] ?? false)
         .background {
             GeometryReader { geometry in
                 Color.clear
@@ -153,16 +152,10 @@ public struct TabView: View {
                         self.updateMinWidth(geometry.size.width, index: index)
                     }
                     .onChange(of: self.viewModel.numberOfTabs) { _ in
-                        print("CONTENT CHANGED")
                         self.updateMinWidth(geometry.size.width, index: index)
                     }
             }
         }
-        .onChange(of: self.viewModel.numberOfTabs) { _ in
-            print("ON CHANGE")
-            self.updateMinWidth(10, index: 0)
-        }
-
     }
 
     // MARK: - Public view modifiers

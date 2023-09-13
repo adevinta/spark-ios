@@ -29,6 +29,10 @@ struct TabComponent: View {
     @State var badgePosition = 0
     @State var disabledTab = 0
 
+    var stateVals: [CheckboxSelectionState] {
+        [self.showIcon, self.showIcon, self.showBadge, self.longLabel]
+    }
+
     // MARK: - View
     var body: some View {
         ScrollView {
@@ -67,17 +71,7 @@ struct TabComponent: View {
                     }
                 }
 
-                HStack() {
-                    Text("No. of Tabs ").bold()
-                    Button("-") {
-                        guard self.numberOfTabs > 1 else { return }
-                        self.numberOfTabs -= 1
-                    }
-                    Text("\(self.numberOfTabs)")
-                    Button("+") {
-                        self.numberOfTabs += 1
-                    }
-                }
+                RangeSelector(title: "No. of Tabs", range: 1...20, selectedValue: self.$numberOfTabs)
 
                 HStack {
                     CheckboxView(
@@ -166,6 +160,19 @@ struct TabComponent: View {
         }
         .padding(.horizontal, 16)
         .navigationBarTitle(Text("Tab Item"))
+        .onChange(of: self.numberOfTabs) { _ in
+            self.redraw()
+        }
+        .onChange(of: self.stateVals) { _ in
+            self.redraw()
+        }
+    }
+
+    func redraw() {
+        self.equalSize.toggle()
+        DispatchQueue.main.async {
+            self.equalSize.toggle()
+        }
     }
 
     func badge() -> BadgeView? {
@@ -178,7 +185,6 @@ struct TabComponent: View {
     }
 
     private func tabs() -> [TabItemContent] {
-
         return (0..<self.numberOfTabs).map {
             .init(
                 image: self.showIcon.isSelected ? .image(at: $0) : nil,
@@ -201,6 +207,15 @@ private extension CheckboxSelectionState {
     var isSelected: Bool {
         return self == .selected
     }
+
+    mutating func toggle() {
+        if self == .selected {
+            self = .unselected
+        } else {
+            self = .selected
+        }
+    }
+
 }
 
 private extension Image {

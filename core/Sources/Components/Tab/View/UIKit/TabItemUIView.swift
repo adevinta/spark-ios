@@ -264,7 +264,6 @@ public final class TabItemUIView: UIControl {
 
         let size = CGSize(width: totalWidth, height: self.height)
 
-        print("Intrinsic content size \(size)")
         return size
     }
 
