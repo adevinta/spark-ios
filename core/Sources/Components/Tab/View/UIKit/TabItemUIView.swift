@@ -299,11 +299,12 @@ public final class TabItemUIView: UIControl {
         let viewModel = TabItemViewModel(theme: theme, intent: intent, tabSize: tabSize)
         viewModel.title = title
         viewModel.icon = icon
-        self.init(viewModel: viewModel)
+        self.init(viewModel: viewModel, apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent)
     }
 
-    internal init(viewModel: TabItemViewModel,
-         apportionsSegmentWidthsByContent: Bool = false
+    internal init(
+        viewModel: TabItemViewModel,
+        apportionsSegmentWidthsByContent: Bool
     ) {
         self.viewModel = viewModel
         self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
