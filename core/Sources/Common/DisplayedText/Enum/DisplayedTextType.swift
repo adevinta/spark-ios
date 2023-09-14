@@ -14,4 +14,15 @@ enum DisplayedTextType: CaseIterable {
     case text
     /// Attributed text is displayed on label
     case attributedText
+
+    // MARK: - Properties
+
+    var containsText: Bool {
+        switch self {
+        case .none:
+            return false
+        case .text, .attributedText:
+            return true
+        }
+    }
 }
