@@ -46,20 +46,11 @@ public final class CheckboxUIView: UIView {
         return label
     }()
 
-    private var supplementaryTextLabel: UILabel = {
-        let label = UILabel()
-        label.isAccessibilityElement = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .clear
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-        return label
-    }()
-
     private lazy var controlView: CheckboxControlUIView = {
         let controlView = CheckboxControlUIView(
             selectionIcon: self.viewModel.checkedImage,
-            theme: self.theme
+            theme: self.theme,
+            state: self.state
         )
         controlView.isAccessibilityElement = false
         controlView.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +65,7 @@ public final class CheckboxUIView: UIView {
     private var controlViewLeadingConstraint: NSLayoutConstraint?
     private var controlViewTrailingConstraint: NSLayoutConstraint?
 
-    private var checkboxPosition: CheckboxPosition = .left
+    private var checkboxPosition: CheckboxAlignment = .left
     private var cancellables = Set<AnyCancellable>()
 
     @ScaledUIMetric private var checkboxSize: CGFloat = Constants.checkboxSize
@@ -84,7 +75,7 @@ public final class CheckboxUIView: UIView {
         return self.theme.layout.spacing
     }
 
-    private var colors: CheckboxColorables {
+    private var colors: CheckboxStateColors {
         return self.viewModel.colors
     }
 
@@ -133,7 +124,7 @@ public final class CheckboxUIView: UIView {
     }
 
     /// The control state of the checkbox (e.g. `.enabled` or `.disabled`).
-    public var state: SelectButtonState {
+    public var state: CheckboxState {
         get {
             return self.viewModel.state
         }
@@ -158,7 +149,22 @@ public final class CheckboxUIView: UIView {
         }
     }
 
-    var colorsUseCase: CheckboxColorsUseCaseable {
+    public var intent: CheckboxIntent {
+        get {
+            return self.viewModel.intent
+        }
+        set {
+            self.viewModel.intent = newValue
+        }
+    }
+
+    public var alignment: CheckboxAlignment? {
+        didSet {
+            alignment == .left ? self.update(content: .left(self.attributedText ?? NSAttributedString(string: ""))) : self.update(content: .right(self.text ?? ""))
+        }
+    }
+
+    var colorsUseCase: CheckboxStateColorsUseCaseable {
         get {
             return self.viewModel.colorsUseCase
         }
@@ -193,17 +199,19 @@ public final class CheckboxUIView: UIView {
     ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
         theme: Theme,
+        intent: CheckboxIntent = .main,
         text: String,
         checkedImage: UIImage,
-        state: SelectButtonState = .enabled,
+        state: CheckboxState = .enabled,
         selectionState: CheckboxSelectionState,
-        checkboxPosition: CheckboxPosition
+        checkboxPosition: CheckboxAlignment
     ) {
         self.init(
             theme: theme,
+            intent: intent,
             content: .right(text),
             checkedImage: checkedImage,
-            colorsUseCase: CheckboxColorsUseCase(),
+            colorsUseCase: CheckboxStateColorsUseCase(),
             state: state,
             selectionState: selectionState,
             checkboxPosition: checkboxPosition
@@ -220,17 +228,19 @@ public final class CheckboxUIView: UIView {
     ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
         theme: Theme,
+        intent: CheckboxIntent = .main,
         attributedText: NSAttributedString,
         checkedImage: UIImage,
-        state: SelectButtonState = .enabled,
+        state: CheckboxState = .enabled,
         selectionState: CheckboxSelectionState,
-        checkboxPosition: CheckboxPosition
+        checkboxPosition: CheckboxAlignment
     ) {
         self.init(
             theme: theme,
+            intent: intent,
             content: .left(attributedText),
             checkedImage: checkedImage,
-            colorsUseCase: CheckboxColorsUseCase(),
+            colorsUseCase: CheckboxStateColorsUseCase(),
             state: state,
             selectionState: selectionState,
             checkboxPosition: checkboxPosition
@@ -239,12 +249,13 @@ public final class CheckboxUIView: UIView {
 
     init(
         theme: Theme,
+        intent: CheckboxIntent = .main,
         content: Either<NSAttributedString, String>,
         checkedImage: UIImage,
-        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
-        state: SelectButtonState = .enabled,
+        colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
+        state: CheckboxState = .enabled,
         selectionState: CheckboxSelectionState,
-        checkboxPosition: CheckboxPosition
+        checkboxPosition: CheckboxAlignment
     ) {
         self.selectionState = selectionState
         self.checkboxPosition = checkboxPosition
@@ -376,7 +387,7 @@ public final class CheckboxUIView: UIView {
             self.accessibilityTraits.remove(.notEnabled)
         }
 
-        self.accessibilityLabel = [self.viewModel.text, self.viewModel.supplementaryMessage].compactMap { $0 }.joined(separator: ". ")
+        self.accessibilityLabel = [self.viewModel.text].compactMap { $0 }.joined(separator: ". ")
     }
 
     private func updateViewConstraints() {
@@ -396,32 +407,6 @@ public final class CheckboxUIView: UIView {
         self.textLabelLeadingConstraint?.constant = padding
         self.textLabelTrailingConstraint?.constant = -wideSpacing
 
-        if let supplementaryMessage = self.supplementaryMessage {
-            self.supplementaryTextLabel.text = supplementaryMessage
-
-            if self.supplementaryTextLabel.superview == nil {
-                self.addSubview(self.supplementaryTextLabel)
-
-                if let bottomConstraint = self.textLabelBottomConstraint {
-                    NSLayoutConstraint.deactivate([bottomConstraint])
-                }
-
-                self.supplementaryTextLabel.topAnchor.constraint(equalTo: self.textLabel.bottomAnchor).isActive = true
-                self.supplementaryTextLabel.leadingAnchor.constraint(equalTo: self.textLabel.leadingAnchor).isActive = true
-                self.supplementaryTextLabel.trailingAnchor.constraint(equalTo: self.textLabel.trailingAnchor).isActive = true
-                self.supplementaryTextLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
-            }
-        } else {
-            if self.supplementaryTextLabel.superview != nil {
-                self.supplementaryTextLabel.removeFromSuperview()
-            }
-
-            if let bottomConstraint = self.textLabelBottomConstraint {
-                NSLayoutConstraint.deactivate([bottomConstraint])
-            }
-            self.textLabelBottomConstraint = self.textLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor)
-            self.textLabelBottomConstraint?.isActive = true
-        }
 
         self.setNeedsLayout()
     }
@@ -434,21 +419,14 @@ public final class CheckboxUIView: UIView {
         return self.viewModel.opacity
     }
 
-    private var supplementaryMessage: String? {
-        return self.viewModel.supplementaryMessage
-    }
-
     private func updateTheme() {
         self.controlView.theme = self.theme
         self.controlView.colors = self.colors
 
         if self.attributedText == nil {
             self.textLabel.font = self.theme.typography.body1.uiFont
-            self.textLabel.textColor = self.colors.textColor.uiColor
+            self.textLabel.textColor = self.colors.enable.textColor.uiColor
         }
-
-        self.supplementaryTextLabel.font = self.theme.typography.caption.uiFont
-        self.supplementaryTextLabel.textColor = self.colors.checkboxTintColor.uiColor
     }
 
     private func update(content: Either<NSAttributedString, String>) {
@@ -468,7 +446,6 @@ public final class CheckboxUIView: UIView {
         let opacity = self.opacity
         self.textLabel.alpha = opacity
         self.controlView.alpha = opacity
-        self.supplementaryTextLabel.alpha = opacity
     }
 
     @IBAction func actionTapped(sender: UIButton) {

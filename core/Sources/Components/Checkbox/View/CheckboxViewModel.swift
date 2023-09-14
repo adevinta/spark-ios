@@ -17,7 +17,7 @@ final class CheckboxViewModel: ObservableObject {
     var attributedText: NSAttributedString?
     var checkedImage: UIImage
 
-    @Published var state: SelectButtonState {
+    @Published var state: CheckboxState {
         didSet {
             guard oldValue != state else { return }
 
@@ -31,9 +31,15 @@ final class CheckboxViewModel: ObservableObject {
         }
     }
 
-    @Published var colors: CheckboxColorables
+    @Published var intent: CheckboxIntent {
+        didSet {
+            self.updateColors()
+        }
+    }
 
-    var colorsUseCase: CheckboxColorsUseCaseable {
+    @Published var colors: CheckboxStateColors
+
+    var colorsUseCase: CheckboxStateColorsUseCaseable {
         didSet {
             self.updateColors()
         }
@@ -45,8 +51,9 @@ final class CheckboxViewModel: ObservableObject {
         text: Either<NSAttributedString, String>,
         checkedImage: UIImage,
         theme: Theme,
-        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
-        state: SelectButtonState = .enabled
+        intent: CheckboxIntent = .main,
+        colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
+        state: CheckboxState = .enabled
     ) {
         switch text {
         case .left(let attributedString):
@@ -61,13 +68,14 @@ final class CheckboxViewModel: ObservableObject {
         self.state = state
 
         self.colorsUseCase = colorsUseCase
-        self.colors = colorsUseCase.execute(from: theme, state: state)
+        self.colors = colorsUseCase.execute(from: theme.colors, dims: theme.dims, intent: intent)
+        self.intent = intent
     }
 
     // MARK: - Methods
 
     private func updateColors() {
-        self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
+        self.colors = self.colorsUseCase.execute(from: self.theme.colors, dims: self.theme.dims, intent: self.intent)
     }
 
     func update(content: Either<NSAttributedString, String>) {
@@ -98,15 +106,6 @@ final class CheckboxViewModel: ObservableObject {
             return self.theme.dims.dim3
         default:
             return 1.0
-        }
-    }
-
-    var supplementaryMessage: String? {
-        switch self.state {
-        case .error(let message), .success(let message), .warning(let message):
-            return message
-        default:
-            return nil
         }
     }
 }

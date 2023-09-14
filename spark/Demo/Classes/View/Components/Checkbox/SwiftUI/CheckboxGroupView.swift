@@ -20,14 +20,13 @@ struct CheckboxGroupListView: View {
 
     @State private var layout: CheckboxGroupLayout = .vertical
 
-    @State private var checkboxPosition: CheckboxPosition = .left
+    @State private var checkboxPosition: CheckboxAlignment = .left
 
     @State private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
+        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .disabled),
         CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
-        CheckboxGroupItem(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .disabled),
         CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
@@ -95,7 +94,7 @@ struct CheckboxGroupListView: View {
     }
 
     func shuffleAction() {
-        let states = [SelectButtonState.enabled, .disabled, .accent, .basic, .success(message: "Success"), .warning(message: "Warning"), .error(message: "Error")]
+        let states = [CheckboxState.enabled, CheckboxState.disabled]
         let selectionStates = [CheckboxSelectionState.selected, .unselected, .indeterminate]
 
         withAnimation {
@@ -143,13 +142,13 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     var attributedTitle: NSAttributedString?
     var id: String
     var selectionState: CheckboxSelectionState
-    var state: SelectButtonState
+    var state: CheckboxState
 
     init(
         title: String? = nil,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: SelectButtonState = .enabled
+        state: CheckboxState = .enabled
     ) {
         self.title = title
         self.attributedTitle = nil
@@ -162,7 +161,7 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         attributedTitle: NSAttributedString,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: SelectButtonState = .enabled
+        state: CheckboxState = .enabled
     ) {
         self.title = attributedTitle.string
         self.attributedTitle = attributedTitle

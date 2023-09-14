@@ -18,7 +18,7 @@ public struct CheckboxGroupView: View {
     @Binding private var items: [any CheckboxGroupItemProtocol]
     private var theme: Theme
     private var layout: CheckboxGroupLayout
-    private var checkboxPosition: CheckboxPosition
+    private var checkboxPosition: CheckboxAlignment
     private var accessibilityIdentifierPrefix: String
 
     @ScaledMetric private var spacingSmall: CGFloat
@@ -40,7 +40,7 @@ public struct CheckboxGroupView: View {
         checkedImage: UIImage,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
-        checkboxPosition: CheckboxPosition,
+        checkboxPosition: CheckboxAlignment,
         theme: Theme,
         accessibilityIdentifierPrefix: String
     ) {
