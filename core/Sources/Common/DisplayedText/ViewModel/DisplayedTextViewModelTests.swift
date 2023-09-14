@@ -21,7 +21,7 @@ final class DisplayedTextViewModelTests: XCTestCase {
 
         let getDisplayedTextTypeUseCaseMock = GetDisplayedTextTypeUseCaseableGeneratedMock()
         getDisplayedTextTypeUseCaseMock.executeWithTextAndAttributedTextReturnValue = displayedTextTypeMock
-        
+
         // WHEN
         let viewModel = DisplayedTextViewModelDefault(
             text: textMock,
@@ -30,18 +30,19 @@ final class DisplayedTextViewModelTests: XCTestCase {
         )
         
         // THEN
-        XCTAssertEqual(viewModel.text,
-                       textMock,
-                       "Wrong text value")
-        XCTAssertEqual(viewModel.attributedText,
-                       attributedTextMock,
-                       "Wrong attributed text value")
-        XCTAssertEqual(viewModel.text,
-                       textMock,
-                       "Wrong text value")
         XCTAssertEqual(viewModel.displayedTextType,
                        displayedTextTypeMock,
                        "Wrong displayedTextType value")
+        XCTAssertEqual(viewModel.displayedText?.text,
+                       textMock,
+                       "Wrong displayedTextType text value")
+        XCTAssertEqual(viewModel.displayedText?.attributedText,
+                       attributedTextMock,
+                       "Wrong displayedTextType attributedText value")
+        XCTAssertEqual(viewModel.containsText,
+                       displayedTextTypeMock.containsText,
+                       "Wrong containsText value")
+        
 
         // **
         // GetDisplayedTextTypeUseCase
@@ -97,14 +98,17 @@ final class DisplayedTextViewModelTests: XCTestCase {
         // THEN
         XCTAssertEqual(textChanged,
                        givenGetDidDisplayedTextChange,
-                      "Wrong textChanged value")
+                       "Wrong textChanged value")
 
-        XCTAssertEqual(viewModel.text,
-                       givenGetDidDisplayedTextChange ? newText : textMock,
-                       "Wrong text value")
+        XCTAssertEqual(viewModel.displayedText,
+                       .init(text: givenGetDidDisplayedTextChange ? newText : textMock),
+                       "Wrong displayedText value")
         XCTAssertEqual(viewModel.displayedTextType,
                        givenGetDidDisplayedTextChange ? .none : displayedTextTypeMock,
                        "Wrong displayedTextType value")
+        XCTAssertEqual(viewModel.containsText,
+                       givenGetDidDisplayedTextChange ? DisplayedTextType.none.containsText : displayedTextTypeMock.containsText,
+                       "Wrong containsText value")
 
         // **
         // GetDidDisplayedTextChangeUseCase
@@ -177,14 +181,17 @@ final class DisplayedTextViewModelTests: XCTestCase {
         // THEN
         XCTAssertEqual(attributedTextChanged,
                        givenGetIsDisplayedAttributedTextChanged,
-                      "Wrong attributedTextChanged value")
+                       "Wrong attributedTextChanged value")
 
-        XCTAssertEqual(viewModel.attributedText,
-                       givenGetIsDisplayedAttributedTextChanged ? newAttributedTextMock : attributedTextMock,
-                       "Wrong attributedText value")
+        XCTAssertEqual(viewModel.displayedText,
+                       .init(attributedText: givenGetIsDisplayedAttributedTextChanged ? newAttributedTextMock : attributedTextMock),
+                       "Wrong displayedText value")
         XCTAssertEqual(viewModel.displayedTextType,
                        givenGetIsDisplayedAttributedTextChanged ? .none : displayedTextTypeMock,
                        "Wrong displayedTextType value")
+        XCTAssertEqual(viewModel.containsText,
+                       givenGetIsDisplayedAttributedTextChanged ? DisplayedTextType.none.containsText : displayedTextTypeMock.containsText,
+                       "Wrong containsText value")
 
         // **
         // GetDidDisplayedTextChangeUseCase
