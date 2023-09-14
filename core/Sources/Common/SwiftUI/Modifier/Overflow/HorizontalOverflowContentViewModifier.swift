@@ -49,9 +49,7 @@ extension View {
             self
         }
     }
-}
 
-extension View {
     func scrollOnOverflow<Value>(value: Binding<Value>) -> some View where Value: Equatable {
         modifier(HorizontalOverflowContentViewModifier<Value>(value: value))
     }

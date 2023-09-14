@@ -229,6 +229,8 @@ public final class TabUIView: UIControl {
     public func setImage(_ image: UIImage?, forSegmentAt index: Int) {
         guard let segment = self.segments[safe: index] else { return }
         segment.icon = image
+        self.viewModel.content[index].icon = image
+
         self.invalidateIntrinsicContentSize()
     }
 
@@ -241,6 +243,8 @@ public final class TabUIView: UIControl {
     public func setTitle(_ title: String?, forSegmentAt index: Int) {
         guard let segment = self.segments[safe: index] else { return }
         segment.title = title
+        self.viewModel.content[index].title = title
+
         self.invalidateIntrinsicContentSize()
     }
 
@@ -294,44 +298,54 @@ public final class TabUIView: UIControl {
     /// Inserts a segment at the last position you specify and gives it an image as content.
     public func addSegment(with icon: UIImage,
                            animated: Bool = false) {
+        let index = self.numberOfSegments
+        self.viewModel.content.insert(.init(icon: icon), at: index)
+
         let tab = TabItemUIView(
             theme: self.theme,
             intent: self.intent,
             tabSize: self.tabSize,
             content: .init(icon: icon)
         )
-        self.insertTab(tab, at: self.numberOfSegments, animated: animated)
+        self.insertTab(tab, at: index, animated: animated)
     }
 
     ///Inserts a segment at the last position you specify and gives it a title as content.
     public func addSegment(with title: String,
                            animated: Bool = false) {
+        let index = self.numberOfSegments
+        self.viewModel.content.insert(.init(title: title), at: index)
+
         let tab = TabItemUIView(
             theme: self.theme,
             intent: self.intent,
             tabSize: self.tabSize,
             content: .init(title: title)
         )
-        self.insertTab(tab, at: self.numberOfSegments, animated: animated)
+        self.insertTab(tab, at: index, animated: animated)
     }
 
     ///Inserts a segment at the last position you specify and gives it a title as content.
     public func addSegment(withImage icon: UIImage,
                            andTitle title: String,
                            animated: Bool = false) {
+        let index = self.numberOfSegments
+        self.viewModel.content.insert(.init(icon: icon, title: title), at: index)
+
         let tab = TabItemUIView(
             theme: self.theme,
             intent: self.intent,
             tabSize: self.tabSize,
             content: .init(icon: icon, title: title)
         )
-        self.insertTab(tab, at: self.numberOfSegments, animated: animated)
+        self.insertTab(tab, at: index, animated: animated)
     }
 
     /// Inserts a segment at the position you specify and gives it an image as content.
     public func insertSegment(with icon: UIImage,
                               at index: Int,
                               animated: Bool = false) {
+        self.viewModel.content.insert(.init(icon: icon), at: index)
         let tab = TabItemUIView(
             theme: self.theme,
             intent: self.intent,
@@ -345,6 +359,7 @@ public final class TabUIView: UIControl {
     public func insertSegment(with title: String,
                               at index: Int,
                               animated: Bool = false) {
+        self.viewModel.content.insert(.init(title: title), at: index)
         let tab = TabItemUIView(
             theme: self.theme,
             intent: self.intent,
@@ -358,6 +373,7 @@ public final class TabUIView: UIControl {
     public func insertSegment(withImage icon: UIImage,
                               andTitle title: String,
                               at index: Int, animated: Bool = false) {
+        self.viewModel.content.insert(.init(icon: icon, title: title), at: index)
         let tab = TabItemUIView(
             theme: self.theme,
             intent: self.intent,
@@ -394,7 +410,7 @@ public final class TabUIView: UIControl {
     }
 
     ///Returns whether the indicated segment is enabled.
-    func isEnabledForSegment(at index: Int) -> Bool {
+    public func isEnabledForSegment(at index: Int) -> Bool {
         self.segments[safe: index]?.isEnabled ?? false
     }
 
@@ -406,6 +422,7 @@ public final class TabUIView: UIControl {
     /// Removes the segment you specify from the segmented control, optionally animating the transition.
     public func removeSegment(at index: Int, animated: Bool) {
         guard let tab = self.stackView.arrangedSubviews[safe: index] else { return }
+        self.viewModel.content.remove(at: index)
         self.removeTab(tab, animated: animated)
     }
 
@@ -490,10 +507,11 @@ public final class TabUIView: UIControl {
         }
 
         stackView.distribution = self.apportionsSegmentWidthsByContent ? .fill : .fillEqually
-
     }
 
     private func setTabItems(content: [TabUIItemContent]) {
+        self.viewModel.content = content
+
         let items = content.map {
             TabItemUIView(
                 theme: self.theme,

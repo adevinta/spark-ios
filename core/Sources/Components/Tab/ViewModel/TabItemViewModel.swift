@@ -93,7 +93,7 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
     /// - tabGetStateAttributesUseCase: `TabGetStateAttributesUseCasable` has a default value `TabGetStateAttributesUseCase`
     init(
         theme: Theme,
-        intent: TabIntent = .main,
+        intent: TabIntent = .basic,
         tabSize: TabSize = .md,
         tabState: TabState = .init(),
         content: Content,

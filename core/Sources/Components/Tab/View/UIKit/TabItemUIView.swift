@@ -18,9 +18,9 @@ import UIKit
 public final class TabItemUIView: UIControl {
 
     private enum Constants {
-         static let numberOfSpacerViews = 2
-         static let indexOfBadge = 3
-     }
+        static let numberOfSpacerViews = 2
+        static let indexOfBadge = 3
+    }
 
     // MARK: - Private variables
     private var subscriptions = Set<AnyCancellable>()
@@ -284,12 +284,12 @@ public final class TabItemUIView: UIControl {
     ///
     /// - Parameters:
     /// - theme: the current theme, which will determine the colors and spacings
-    /// - intent: the intent of the tab item
+    /// - intent: the intent of the tab item, the default is basic
     /// - content: the content of the tab item
     /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
     public convenience init(
         theme: Theme,
-        intent: TabIntent = .main,
+        intent: TabIntent = .basic,
         tabSize: TabSize = .md,
         content: TabUIItemContent,
         apportionsSegmentWidthsByContent: Bool = false
