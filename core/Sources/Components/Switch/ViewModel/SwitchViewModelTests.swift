@@ -29,15 +29,32 @@ final class SwitchViewModelTests: XCTestCase {
 
     // MARK: - Init Tests
 
-    func test_properties_on_init() throws {
+    func test_properties_on_init_when_frameworkType_is_UIKit() throws {
+        try self.testPropertiesOnInit(
+            givenFrameworkType: .uiKit
+        )
+    }
+
+    func test_properties_on_init_when_frameworkType_is_SwiftUI() throws {
+        try self.testPropertiesOnInit(
+            givenFrameworkType: .swiftUI
+        )
+    }
+
+    private func testPropertiesOnInit(
+        givenFrameworkType: FrameworkType
+    ) throws {
         // GIVEN
         let isOnMock = true
         let alignmentMock: SwitchAlignment = .left
         let intentMock: SwitchIntent = .alert
         let isEnabledMock = true
 
+        let isUIKit = givenFrameworkType == .uiKit
+
         // WHEN
         let stub = Stub(
+            frameworkType: givenFrameworkType,
             isOn: isOnMock,
             alignment: alignmentMock,
             intent: intentMock,
@@ -73,13 +90,15 @@ final class SwitchViewModelTests: XCTestCase {
 
         // **
         // Published properties
+        let publishedExpectedContainsValue = (isUIKit ? false : true)
         self.testIsOnChanged(on: stub, expectedValue: nil)
-        self.testToggleState(on: stub, expectedContainsValue: false)
-        self.testColors(on: stub, expectedContainsValue: false)
-        self.testPosition(on: stub, expectedContainsValue: false)
-        self.testToggleDotImage(on: stub, expectedContainsValue: false)
-        self.testTextFont(on: stub, expectedContainsValue: false)
-        self.testShowToggleLeftSpace(on: stub, expectedValue: nil)
+        self.testToggleState(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testColors(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testPosition(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testToggleDotImage(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testDisplayedText(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testTextFont(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testShowToggleLeftSpace(on: stub, expectedValue: isUIKit ? nil : true)
 
         self.testAllPublishedSinkCount(
             on: stub,
@@ -94,46 +113,66 @@ final class SwitchViewModelTests: XCTestCase {
             expectedHorizontalSpacingPublishedSinkCount: 1,
             expectedShowToggleLeftSpacePublishedSinkCount: 1,
             expectedToggleDotImagePublishedSinkCount: 1,
+            expectedDisplayedTextPublishedSinkCount: 1,
             expectedTextFontTokenPublishedSinkCount: 1
         )
         // **
 
         // **
         // Use Cases
+        let useCaseNumberOfCalls = (isUIKit ? 0 : 1)
         self.testGetColorsUseCaseMock(
             on: stub,
-            numberOfCalls: 0
+            numberOfCalls: useCaseNumberOfCalls
         )
         self.testGetImageUseCaseMock(
             on: stub,
-            numberOfCalls: 0
+            numberOfCalls: useCaseNumberOfCalls
         )
         self.testGetToggleColorUseCaseMock(
             on: stub,
-            numberOfCalls: 0
+            numberOfCalls: isUIKit ? 0 : 2
         )
         self.testGetPositionUseCaseMock(
             on: stub,
-            numberOfCalls: 0
+            numberOfCalls: useCaseNumberOfCalls
         )
         self.testGetToggleStateUseCaseMock(
             on: stub,
-            numberOfCalls: 0
+            numberOfCalls: useCaseNumberOfCalls
         )
         // **
+
     }
 
     // MARK: - Load Tests
 
-    func test_published_properties_on_load() throws {
+    func test_published_properties_on_load_when_frameworkType_is_UIKit() throws {
+        try self.testPublishedPropertiesOnLoad(
+            givenFrameworkType: .uiKit
+        )
+    }
+
+    func test_published_properties_on_load_when_frameworkType_is_SwiftUI() throws {
+        try self.testPublishedPropertiesOnLoad(
+            givenFrameworkType: .swiftUI
+        )
+    }
+
+    func testPublishedPropertiesOnLoad(
+        givenFrameworkType: FrameworkType
+    ) throws {
         // GIVEN
         let isOnMock = true
         let alignmentMock: SwitchAlignment = .left
         let intentMock: SwitchIntent = .alert
         let isEnabledMock = true
 
+        let isUIKit = givenFrameworkType == .uiKit
+
         // WHEN
         let stub = Stub(
+            frameworkType: givenFrameworkType,
             isOn: isOnMock,
             alignment: alignmentMock,
             intent: intentMock,
@@ -144,64 +183,71 @@ final class SwitchViewModelTests: XCTestCase {
 
         stub.subscribePublishers(on: &self.subscriptions)
 
+        // Reset all UseCase mock
+        stub.resetMockedData()
+
         viewModel.load()
 
         // THEN
         // **
         // Published properties
+        let publishedExpectedContainsValue = (isUIKit ? true : false)
         self.testIsOnChanged(on: stub, expectedValue: nil)
-        self.testToggleState(on: stub)
-        self.testColors(on: stub)
-        self.testPosition(on: stub)
-        self.testToggleDotImage(on: stub)
-        self.testTextFont(on: stub)
-        self.testShowToggleLeftSpace(on: stub, expectedValue: stub.isOnMock)
+        self.testToggleState(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testColors(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testPosition(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testToggleDotImage(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testDisplayedText(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testTextFont(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testShowToggleLeftSpace(on: stub, expectedValue: isUIKit ? stub.isOnMock : nil)
 
+        let publishedSinkCount = isUIKit ? 1 : 0
         self.testAllPublishedSinkCount(
             on: stub,
-            expectedIsOnChangedPublishedSinkCount: 1,
-            expectedIsToggleInteractionEnabledPublishedSinkCount: 2,
-            expectedToggleOpacityPublishedSinkCount: 2,
-            expectedToggleBackgroundColorTokenPublishedSinkCount: 2,
-            expectedToggleDotBackgroundColorTokenPublishedSinkCount: 2,
-            expectedToggleDotForegroundColorTokenPublishedSinkCount: 2,
-            expectedTextForegroundColorTokenPublishedSinkCount: 2,
-            expectedIsToggleOnLeftPublishedSinkCount: 2,
-            expectedHorizontalSpacingPublishedSinkCount: 2,
-            expectedShowToggleLeftSpacePublishedSinkCount: 2,
-            expectedToggleDotImagePublishedSinkCount: 2,
-            expectedTextFontTokenPublishedSinkCount: 2
+            expectedIsToggleInteractionEnabledPublishedSinkCount: publishedSinkCount,
+            expectedToggleOpacityPublishedSinkCount: publishedSinkCount,
+            expectedToggleBackgroundColorTokenPublishedSinkCount: publishedSinkCount,
+            expectedToggleDotBackgroundColorTokenPublishedSinkCount: publishedSinkCount,
+            expectedToggleDotForegroundColorTokenPublishedSinkCount: publishedSinkCount,
+            expectedTextForegroundColorTokenPublishedSinkCount: publishedSinkCount,
+            expectedIsToggleOnLeftPublishedSinkCount: publishedSinkCount,
+            expectedHorizontalSpacingPublishedSinkCount: publishedSinkCount,
+            expectedShowToggleLeftSpacePublishedSinkCount: publishedSinkCount,
+            expectedToggleDotImagePublishedSinkCount: publishedSinkCount,
+            expectedDisplayedTextPublishedSinkCount: publishedSinkCount,
+            expectedTextFontTokenPublishedSinkCount: publishedSinkCount
         )
         // **
 
         // **
         // Use Cases
+        let useCaseNumberOfCalls = (isUIKit ? 1 : 0)
         self.testGetColorsUseCaseMock(
             on: stub,
-            numberOfCalls: 1,
+            numberOfCalls: useCaseNumberOfCalls,
             givenTheme: stub.themeMock,
             givenIntent: intentMock
         )
         self.testGetImageUseCaseMock(
             on: stub,
-            numberOfCalls: 1,
+            numberOfCalls: useCaseNumberOfCalls,
             givenIsOn: isOnMock,
             givenImages: stub.imagesMock
         )
         self.testGetToggleColorUseCaseMock(
             on: stub,
-            numberOfCalls: 2,
+            numberOfCalls: isUIKit ? 2 : 0,
             givenIsOn: isOnMock
         )
         self.testGetPositionUseCaseMock(
             on: stub,
-            numberOfCalls: 1,
+            numberOfCalls: useCaseNumberOfCalls,
             givenTheme: stub.themeMock,
             givenAlignment: alignmentMock
         )
         self.testGetToggleStateUseCaseMock(
             on: stub,
-            numberOfCalls: 1,
+            numberOfCalls: useCaseNumberOfCalls,
             givenTheme: stub.themeMock,
             givenIsEnabled: isEnabledMock
         )
@@ -248,6 +294,7 @@ final class SwitchViewModelTests: XCTestCase {
         self.testColors(on: stub)
         self.testPosition(on: stub, expectedContainsValue: false)
         self.testToggleDotImage(on: stub)
+        self.testDisplayedText(on: stub, expectedContainsValue: false)
         self.testTextFont(on: stub, expectedContainsValue: false)
         self.testShowToggleLeftSpace(on: stub, expectedValue: expectedIsOn)
 
@@ -325,6 +372,7 @@ final class SwitchViewModelTests: XCTestCase {
         self.testColors(on: stub, expectedContainsValue: false)
         self.testPosition(on: stub, expectedContainsValue: false)
         self.testToggleDotImage(on: stub, expectedContainsValue: false)
+        self.testDisplayedText(on: stub, expectedContainsValue: false)
         self.testTextFont(on: stub, expectedContainsValue: false)
         self.testShowToggleLeftSpace(on: stub, expectedValue: nil)
 
@@ -390,6 +438,7 @@ final class SwitchViewModelTests: XCTestCase {
         self.testColors(on: stub)
         self.testPosition(on: stub)
         self.testToggleDotImage(on: stub)
+        self.testDisplayedText(on: stub)
         self.testTextFont(on: stub, givenNewTheme: newTheme)
         self.testShowToggleLeftSpace(on: stub, expectedValue: stub.isOnMock)
 
@@ -405,6 +454,7 @@ final class SwitchViewModelTests: XCTestCase {
             expectedHorizontalSpacingPublishedSinkCount: 1,
             expectedShowToggleLeftSpacePublishedSinkCount: 1,
             expectedToggleDotImagePublishedSinkCount: 1,
+            expectedDisplayedTextPublishedSinkCount: 1,
             expectedTextFontTokenPublishedSinkCount: 1
         )
         // **
@@ -487,6 +537,7 @@ final class SwitchViewModelTests: XCTestCase {
         self.testColors(on: stub, expectedContainsValue: false)
         self.testPosition(on: stub, expectedContainsValue: givenIsDifferentNewValue)
         self.testToggleDotImage(on: stub, expectedContainsValue: false)
+        self.testDisplayedText(on: stub, expectedContainsValue: false)
         self.testTextFont(on: stub, expectedContainsValue: false)
         self.testShowToggleLeftSpace(on: stub, expectedValue: nil)
 
@@ -556,6 +607,7 @@ final class SwitchViewModelTests: XCTestCase {
         self.testColors(on: stub, expectedContainsValue: givenIsDifferentNewValue)
         self.testPosition(on: stub, expectedContainsValue: false)
         self.testToggleDotImage(on: stub, expectedContainsValue: false)
+        self.testDisplayedText(on: stub, expectedContainsValue: false)
         self.testTextFont(on: stub, expectedContainsValue: false)
         self.testShowToggleLeftSpace(on: stub, expectedValue: nil)
 
@@ -636,6 +688,7 @@ final class SwitchViewModelTests: XCTestCase {
         self.testColors(on: stub, expectedContainsValue: givenIsDifferentNewValue)
         self.testPosition(on: stub, expectedContainsValue: false)
         self.testToggleDotImage(on: stub, expectedContainsValue: false)
+        self.testDisplayedText(on: stub, expectedContainsValue: false)
         self.testTextFont(on: stub, expectedContainsValue: false)
         self.testShowToggleLeftSpace(on: stub, expectedValue: nil)
 
@@ -724,6 +777,7 @@ final class SwitchViewModelTests: XCTestCase {
         self.testColors(on: stub, expectedContainsValue: false)
         self.testPosition(on: stub, expectedContainsValue: false)
         self.testToggleDotImage(on: stub, expectedContainsValue: givenIsDifferentNewValue)
+        self.testDisplayedText(on: stub, expectedContainsValue: false)
         self.testTextFont(on: stub, expectedContainsValue: false)
         self.testShowToggleLeftSpace(on: stub, expectedValue: nil)
 
@@ -797,8 +851,9 @@ final class SwitchViewModelTests: XCTestCase {
             expectedContainsValue: false,
             expectedTextForegroundColorContainsValue: publishedExpectedContainsValue
         )
-        self.testPosition(on: stub, expectedContainsValue: false)
+        self.testPosition(on: stub, expectedContainsValue: publishedExpectedContainsValue)
         self.testToggleDotImage(on: stub, expectedContainsValue: false)
+        self.testDisplayedText(on: stub, expectedContainsValue: givenIsDifferentNewValue)
         self.testTextFont(on: stub, expectedContainsValue: publishedExpectedContainsValue)
         self.testShowToggleLeftSpace(on: stub, expectedValue: nil)
 
@@ -806,6 +861,9 @@ final class SwitchViewModelTests: XCTestCase {
         self.testAllPublishedSinkCount(
             on: stub,
             expectedTextForegroundColorTokenPublishedSinkCount: publishedSinkCount,
+            expectedIsToggleOnLeftPublishedSinkCount: publishedSinkCount,
+            expectedHorizontalSpacingPublishedSinkCount: publishedSinkCount,
+            expectedDisplayedTextPublishedSinkCount: givenIsDifferentNewValue ? 1 : 0,
             expectedTextFontTokenPublishedSinkCount: publishedSinkCount
         )
         // **
@@ -865,13 +923,19 @@ final class SwitchViewModelTests: XCTestCase {
         self.testIsOnChanged(on: stub, expectedValue: nil)
         self.testToggleState(on: stub, expectedContainsValue: false)
         self.testColors(on: stub, expectedContainsValue: false)
-        self.testPosition(on: stub, expectedContainsValue: false)
+        self.testPosition(on: stub, expectedContainsValue: givenIsDifferentNewValue)
         self.testToggleDotImage(on: stub, expectedContainsValue: false)
+        self.testDisplayedText(on: stub, expectedContainsValue: givenIsDifferentNewValue)
         self.testTextFont(on: stub, expectedContainsValue: false)
         self.testShowToggleLeftSpace(on: stub, expectedValue: nil)
 
+        let publishedSinkCount = (givenIsDifferentNewValue) ? 1 : 0
         self.testAllPublishedSinkCount(
-            on: stub
+            on: stub,
+            expectedIsToggleOnLeftPublishedSinkCount: publishedSinkCount,
+            expectedHorizontalSpacingPublishedSinkCount: publishedSinkCount,
+            expectedDisplayedTextPublishedSinkCount: publishedSinkCount
+
         )
         // **
 
@@ -925,12 +989,12 @@ private extension SwitchViewModelTests {
         givenIsOn: Bool? = nil,
         givenImages: SwitchUIImages? = nil
     ) {
-        XCTAssertEqual(stub.getImageUseCaseMock.executeWithIsOnAndImagesCallsCount,
+        XCTAssertEqual(stub.getImagesStateUseCaseMock.executeWithIsOnAndImagesCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getImageUseCase")
 
         if numberOfCalls > 0, let givenIsOn {
-            let getImageUseCaseArgs = stub.getImageUseCaseMock.executeWithIsOnAndImagesReceivedArguments
+            let getImageUseCaseArgs = stub.getImagesStateUseCaseMock.executeWithIsOnAndImagesReceivedArguments
             XCTAssertEqual(getImageUseCaseArgs?.isOn,
                            givenIsOn,
                            "Wrong isOn parameter on execute on getImageUseCase")
@@ -992,18 +1056,21 @@ private extension SwitchViewModelTests {
         givenTheme: Theme? = nil,
         givenAlignment: SwitchAlignment? = nil
     ) {
-        XCTAssertEqual(stub.getPositionUseCaseMock.executeWithAlignmentAndSpacingCallsCount,
+        XCTAssertEqual(stub.getPositionUseCaseMock.executeWithAlignmentAndSpacingAndContainsTextCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getPositionUseCase")
 
         if numberOfCalls > 0, let givenTheme, let givenAlignment {
-            let getPositionUseCaseArgs = stub.getPositionUseCaseMock.executeWithAlignmentAndSpacingReceivedArguments
+            let getPositionUseCaseArgs = stub.getPositionUseCaseMock.executeWithAlignmentAndSpacingAndContainsTextReceivedArguments
             XCTAssertEqual(getPositionUseCaseArgs?.alignment,
                            givenAlignment,
                            "Wrong alignment parameter on execute on getPositionUseCase")
             XCTAssertIdentical(try XCTUnwrap(getPositionUseCaseArgs?.spacing as? LayoutSpacingGeneratedMock),
                                givenTheme.layout.spacing as? LayoutSpacingGeneratedMock,
                                "Wrong spacing parameter on execute on getPositionUseCase")
+            XCTAssertEqual(getPositionUseCaseArgs?.containsText,
+                           stub.displayedTextViewModelMock.containsText,
+                           "Wrong containsText parameter on execute on getContentUseCase")
         }
     }
 
@@ -1046,6 +1113,7 @@ private extension SwitchViewModelTests {
         expectedHorizontalSpacingPublishedSinkCount: Int = 0,
         expectedShowToggleLeftSpacePublishedSinkCount: Int = 0,
         expectedToggleDotImagePublishedSinkCount: Int = 0,
+        expectedDisplayedTextPublishedSinkCount: Int = 0,
         expectedTextFontTokenPublishedSinkCount: Int = 0
     ) {
         XCTAssertPublisherSinkCountEqual(
@@ -1089,8 +1157,13 @@ private extension SwitchViewModelTests {
         )
 
         XCTAssertPublisherSinkCountEqual(
-            on: stub.toggleDotImagePublisherMock,
+            on: stub.toggleDotImagesStatePublisherMock,
             expectedToggleDotImagePublishedSinkCount
+        )
+
+        XCTAssertPublisherSinkCountEqual(
+            on: stub.displayedTextPublisherMock,
+            expectedDisplayedTextPublishedSinkCount
         )
 
         XCTAssertPublisherSinkCountEqual(
@@ -1209,12 +1282,29 @@ private extension SwitchViewModelTests {
     ) {
         if expectedContainsValue {
             XCTAssertPublisherSinkValueEqual(
-                on: stub.toggleDotImagePublisherMock,
-                .left(stub.imageMock)
+                on: stub.toggleDotImagesStatePublisherMock,
+                .mocked()
             )
         } else {
             XCTAssertPublisherSinkValueNil(
-                on: stub.toggleDotImagePublisherMock
+                on: stub.toggleDotImagesStatePublisherMock
+            )
+        }
+    }
+
+    func testDisplayedText(
+        on stub: Stub,
+        givenNewTheme: Theme? = nil,
+        expectedContainsValue: Bool = true
+    ) {
+        if expectedContainsValue {
+            XCTAssertPublisherSinkValueEqual(
+                on: stub.displayedTextPublisherMock,
+                .mocked()
+            )
+        } else {
+            XCTAssertPublisherSinkValueNil(
+                on: stub.displayedTextPublisherMock
             )
         }
     }
@@ -1264,6 +1354,7 @@ private final class Stub {
 
     // MARK: - Data Properties
 
+    let frameworkType: FrameworkType
     let isOnMock: Bool
 
     let themeMock = ThemeGeneratedMock.mocked()
@@ -1282,7 +1373,7 @@ private final class Stub {
     // MARK: - Dependencies Properties
 
     let getColorsUseCaseMock: SwitchGetColorsUseCaseableGeneratedMock
-    let getImageUseCaseMock: SwitchGetImageUseCaseableGeneratedMock
+    let getImagesStateUseCaseMock: SwitchGetImagesStateUseCaseableGeneratedMock
     let getToggleColorUseCaseMock: SwitchGetToggleColorUseCaseableGeneratedMock
     let getPositionUseCaseMock: SwitchGetPositionUseCaseableGeneratedMock
     let getToggleStateUseCaseMock: SwitchGetToggleStateUseCaseableGeneratedMock
@@ -1302,12 +1393,14 @@ private final class Stub {
     let isToggleOnLeftPublisherMock: PublisherMock<Published<Bool?>.Publisher>
     let horizontalSpacingPublisherMock: PublisherMock<Published<CGFloat?>.Publisher>
     let showToggleLeftSpacePublisherMock: PublisherMock<Published<Bool?>.Publisher>
-    let toggleDotImagePublisherMock: PublisherMock<Published<ImageEither?>.Publisher>
+    let toggleDotImagesStatePublisherMock: PublisherMock<Published<SwitchImagesState?>.Publisher>
+    let displayedTextPublisherMock: PublisherMock<Published<DisplayedText?>.Publisher>
     let textFontTokenPublisherMock: PublisherMock<Published<TypographyFontToken?>.Publisher>
 
     // MARK: - Initialization
 
     init(
+        frameworkType: FrameworkType = .uiKit,
         isOn: Bool = true,
         alignment: SwitchAlignment = .left,
         intent: SwitchIntent = .alert,
@@ -1318,6 +1411,7 @@ private final class Stub {
         userInteractionEnabled: Bool = true
     ) {
         // Data properties
+        self.frameworkType = frameworkType
         self.isOnMock = isOn
 
         let toggleStateMock = SwitchToggleState.mocked(
@@ -1331,16 +1425,16 @@ private final class Stub {
         getColorsUseCaseMock.executeWithIntentAndColorsAndDimsReturnValue = self.colorsMock
         self.getColorsUseCaseMock = getColorsUseCaseMock
 
-        let getImageUseCaseMock = SwitchGetImageUseCaseableGeneratedMock()
-        getImageUseCaseMock.executeWithIsOnAndImagesReturnValue = .left(self.imageMock)
-        self.getImageUseCaseMock = getImageUseCaseMock
+        let getImagesStateUseCaseMock = SwitchGetImagesStateUseCaseableGeneratedMock()
+        getImagesStateUseCaseMock.executeWithIsOnAndImagesReturnValue = .mocked()
+        self.getImagesStateUseCaseMock = getImagesStateUseCaseMock
 
         let getToggleColorUseCaseMock = SwitchGetToggleColorUseCaseableGeneratedMock()
         getToggleColorUseCaseMock.executeWithIsOnAndStatusAndStateColorReturnValue = self.colorTokenMock
         self.getToggleColorUseCaseMock = getToggleColorUseCaseMock
 
         let getPositionUseCaseMock = SwitchGetPositionUseCaseableGeneratedMock()
-        getPositionUseCaseMock.executeWithAlignmentAndSpacingReturnValue = self.positionMock
+        getPositionUseCaseMock.executeWithAlignmentAndSpacingAndContainsTextReturnValue = self.positionMock
         self.getPositionUseCaseMock = getPositionUseCaseMock
 
         let getToggleStateUseCaseMock = SwitchGetToggleStateUseCaseableGeneratedMock()
@@ -1351,11 +1445,12 @@ private final class Stub {
         displayedTextViewModelMock.text = "Text"
         displayedTextViewModelMock.attributedText = .left(.init(string: "AText"))
         displayedTextViewModelMock.underlyingDisplayedTextType = .text
+        displayedTextViewModelMock.displayedText = .mocked()
         self.displayedTextViewModelMock = displayedTextViewModelMock
 
         let dependenciesMock = SwitchViewModelDependenciesProtocolGeneratedMock()
         dependenciesMock.underlyingGetColorsUseCase = self.getColorsUseCaseMock
-        dependenciesMock.underlyingGetImageUseCase = self.getImageUseCaseMock
+        dependenciesMock.underlyingGetImagesStateUseCase = self.getImagesStateUseCaseMock
         dependenciesMock.underlyingGetToggleColorUseCase = self.getToggleColorUseCaseMock
         dependenciesMock.underlyingGetPositionUseCase = self.getPositionUseCaseMock
         dependenciesMock.underlyingGetToggleStateUseCase = self.getToggleStateUseCaseMock
@@ -1380,6 +1475,7 @@ private final class Stub {
         }
 
         let viewModel = SwitchViewModel(
+            for: frameworkType,
             theme: self.themeMock,
             isOn: isOn,
             alignment: alignment,
@@ -1405,7 +1501,8 @@ private final class Stub {
         self.isToggleOnLeftPublisherMock = .init(publisher: viewModel.$isToggleOnLeft)
         self.horizontalSpacingPublisherMock = .init(publisher: viewModel.$horizontalSpacing)
         self.showToggleLeftSpacePublisherMock = .init(publisher: viewModel.$showToggleLeftSpace)
-        self.toggleDotImagePublisherMock = .init(publisher: viewModel.$toggleDotImage)
+        self.toggleDotImagesStatePublisherMock = .init(publisher: viewModel.$toggleDotImagesState)
+        self.displayedTextPublisherMock = .init(publisher: viewModel.$displayedText)
         self.textFontTokenPublisherMock = .init(publisher: viewModel.$textFontToken)
         // **
     }
@@ -1421,7 +1518,8 @@ private final class Stub {
         self.isToggleOnLeftPublisherMock.loadTesting(on: &subscriptions)
         self.horizontalSpacingPublisherMock.loadTesting(on: &subscriptions)
         self.showToggleLeftSpacePublisherMock.loadTesting(on: &subscriptions)
-        self.toggleDotImagePublisherMock.loadTesting(on: &subscriptions)
+        self.toggleDotImagesStatePublisherMock.loadTesting(on: &subscriptions)
+        self.displayedTextPublisherMock.loadTesting(on: &subscriptions)
         self.textFontTokenPublisherMock.loadTesting(on: &subscriptions)
     }
 
@@ -1429,7 +1527,7 @@ private final class Stub {
         // Clear UseCases Mock
         let useCases: [ResetGeneratedMock] = [
             self.getColorsUseCaseMock,
-            self.getImageUseCaseMock,
+            self.getImagesStateUseCaseMock,
             self.getToggleColorUseCaseMock,
             self.getPositionUseCaseMock,
             self.getToggleStateUseCaseMock
@@ -1447,7 +1545,8 @@ private final class Stub {
         self.isToggleOnLeftPublisherMock.reset()
         self.horizontalSpacingPublisherMock.reset()
         self.showToggleLeftSpacePublisherMock.reset()
-        self.toggleDotImagePublisherMock.reset()
+        self.toggleDotImagesStatePublisherMock.reset()
+        self.displayedTextPublisherMock.reset()
         self.textFontTokenPublisherMock.reset()
     }
 }

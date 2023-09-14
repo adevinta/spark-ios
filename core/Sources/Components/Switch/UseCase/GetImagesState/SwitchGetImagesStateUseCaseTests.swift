@@ -1,8 +1,8 @@
 //
-//  SwitchGetImageUseCaseTests.swift
+//  SwitchGetImagesStateUseCaseTests.swift
 //  SparkCoreTests
 //
-//  Created by robin.lemaire on 13/06/2023.
+//  Created by robin.lemaire on 12/09/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import XCTest
 import SwiftUI
 @testable import SparkCore
 
-final class SwitchGetImageUseCaseTests: XCTestCase {
+final class SwitchGetImagesStateUseCaseTests: XCTestCase {
 
     // MARK: - SwiftUI Properties
 
@@ -83,7 +83,7 @@ final class SwitchGetImageUseCaseTests: XCTestCase {
 
 // MARK: - Execute Testing
 
-private extension SwitchGetImageUseCaseTests {
+private extension SwitchGetImagesStateUseCaseTests {
 
     func testExecute(
         givenIsOn: Bool,
@@ -94,10 +94,10 @@ private extension SwitchGetImageUseCaseTests {
         // GIVEN
         let errorPrefixMessage = " for \(givenIsOn) isOn"
 
-        let useCase = SwitchGetImageUseCase()
+        let useCase = SwitchGetImagesStateUseCase()
 
         // WHEN
-        let image = useCase.execute(
+        let imageState = useCase.execute(
             isOn: givenIsOn,
             images: givenImages
         )
@@ -105,24 +105,49 @@ private extension SwitchGetImageUseCaseTests {
         // THEN
         if givenIsSwiftUIVersion {
             if givenIsOn {
-                XCTAssertEqual(image.rightValue,
-                               givenImages.rightValue.on,
-                               "Wrong on image" + errorPrefixMessage)
+                XCTAssertEqual(
+                    imageState.currentImage.rightValue,
+                    givenImages.rightValue.on,
+                    "Wrong on image" + errorPrefixMessage
+                )
             } else {
-                XCTAssertEqual(image.rightValue,
-                               givenImages.rightValue.off,
-                               "Wrong off image" + errorPrefixMessage)
+                XCTAssertEqual(
+                    imageState.currentImage.rightValue,
+                    givenImages.rightValue.off,
+                    "Wrong off image" + errorPrefixMessage
+                )
             }
         } else {
             if givenIsOn {
-                XCTAssertEqual(image.leftValue,
-                               givenImages.leftValue.on,
-                               "Wrong on UIImage" + errorPrefixMessage)
+                XCTAssertEqual(
+                    imageState.currentImage.leftValue,
+                    givenImages.leftValue.on,
+                    "Wrong on UIImage" + errorPrefixMessage
+                )
             } else {
-                XCTAssertEqual(image.leftValue,
-                               givenImages.leftValue.off,
-                               "Wrong off UIImage" + errorPrefixMessage)
+                XCTAssertEqual(
+                    imageState.currentImage.leftValue,
+                    givenImages.leftValue.off,
+                    "Wrong off UIImage" + errorPrefixMessage
+                )
             }
         }
+
+        XCTAssertEqual(
+            imageState.images,
+            givenImages,
+            "Wrong on images" + errorPrefixMessage
+        )
+
+        XCTAssertEqual(
+            imageState.onImageOpacity,
+            givenIsOn ? 1 : 0,
+            "Wrong on onImageOpacity" + errorPrefixMessage
+        )
+        XCTAssertEqual(
+            imageState.offImageOpacity,
+            givenIsOn ? 0 : 1,
+            "Wrong on images" + errorPrefixMessage
+        )
     }
 }

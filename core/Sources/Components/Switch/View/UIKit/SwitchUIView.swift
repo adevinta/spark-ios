@@ -255,6 +255,60 @@ public final class SwitchUIView: UIView {
 
     // MARK: - Initialization
 
+    /// Initialize a new switch view without images and text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the switch.
+    ///   - isOn: The value of the switch.
+    ///   - alignment: The alignment of the switch.
+    ///   - intent: The intent of the switch.
+    ///   - isEnabled: The state of the switch: enabled or not.
+    public convenience init(
+        theme: Theme,
+        isOn: Bool,
+        alignment: SwitchAlignment,
+        intent: SwitchIntent,
+        isEnabled: Bool
+    ) {
+        self.init(
+            theme,
+            isOn: isOn,
+            alignment: alignment,
+            intent: intent,
+            isEnabled: isEnabled,
+            images: nil,
+            text: nil,
+            attributedText: nil
+        )
+    }
+
+    /// Initialize a new switch view with images and without text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the switch.
+    ///   - isOn: The value of the switch.
+    ///   - alignment: The alignment of the switch.
+    ///   - intent: The intent of the switch.
+    ///   - isEnabled: The state of the switch: enabled or not.
+    ///   - images: The images of the switch.
+    public convenience init(
+        theme: Theme,
+        isOn: Bool,
+        alignment: SwitchAlignment,
+        intent: SwitchIntent,
+        isEnabled: Bool,
+        images: SwitchUIImages
+    ) {
+        self.init(
+            theme,
+            isOn: isOn,
+            alignment: alignment,
+            intent: intent,
+            isEnabled: isEnabled,
+            images: images,
+            text: nil,
+            attributedText: nil
+        )
+    }
+
     /// Initialize a new switch view without images and with text.
     /// - Parameters:
     ///   - theme: The spark theme of the switch.
@@ -382,6 +436,7 @@ public final class SwitchUIView: UIView {
         attributedText: NSAttributedString?
     ) {
         self.viewModel = .init(
+            for: .uiKit,
             theme: theme,
             isOn: isOn,
             alignment: alignment,
@@ -736,10 +791,10 @@ public final class SwitchUIView: UIView {
         // **
 
         // Show images
-        self.subscribeTo(self.viewModel.$toggleDotImage) { [weak self] toggleDotImage in
+        self.subscribeTo(self.viewModel.$toggleDotImagesState) { [weak self] toggleDotImagesState in
             guard let self else { return }
 
-            let image = toggleDotImage?.leftValue
+            let image = toggleDotImagesState?.currentImage.leftValue
 
             // Animate only if there is currently an image on ImageView and new image is exists
             let animated = self.toggleDotImageView.image != nil && image != nil
@@ -757,6 +812,11 @@ public final class SwitchUIView: UIView {
             } else {
                 self.toggleDotImageView.image = image
             }
+        }
+
+        // Displayed Text
+        self.subscribeTo(self.viewModel.$displayedText) { [weak self] _ in
+            self?.invalidateIntrinsicContentSize()
         }
 
         // Text Label Font
