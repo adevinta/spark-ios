@@ -95,6 +95,9 @@ public struct TabView: View {
                     .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
                 alignment: .bottom)
             .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
+            .onChange(of: self.viewModel.content) { _ in
+                self.minWidth = 0
+            }
     }
 
     // MARK: - Private functions
@@ -123,11 +126,7 @@ public struct TabView: View {
     }
 
     private func updateMinWidth(_ width: CGFloat, index: Int) {
-        if index == self.viewModel.numberOfTabs - 1 {
-            self.minWidth = width
-        } else {
-            self.minWidth = max(self.minWidth,width)
-        }
+        self.minWidth = max(self.minWidth,width)
     }
 
     @ViewBuilder
@@ -154,7 +153,7 @@ public struct TabView: View {
                     .onAppear {
                         self.updateMinWidth(geometry.size.width, index: index)
                     }
-                    .onChange(of: self.viewModel.numberOfTabs) { _ in
+                    .onChange(of: self.viewModel.content) { _ in
                         self.updateMinWidth(geometry.size.width, index: index)
                     }
             }
