@@ -14,7 +14,6 @@ struct TabComponent: View {
     // MARK: Properties
     @State var theme: Theme = SparkThemePublisher.shared.theme
     @State var intent: TabIntent = .basic
-    @State var isIntentPresented = false
     @State var showText = CheckboxSelectionState.selected
     @State var showIcon = CheckboxSelectionState.selected
     @State var showBadge = CheckboxSelectionState.unselected
@@ -22,7 +21,6 @@ struct TabComponent: View {
     @State var equalSize = CheckboxSelectionState.selected
     @State var longLabel = CheckboxSelectionState.unselected
     @State var tabSize: TabSize = .md
-    @State var isSizePresented = false
     @State var numberOfTabs = 2
     @State var selectedTab = 0
     @State var height = CGFloat(50)
@@ -44,32 +42,9 @@ struct TabComponent: View {
 
                 ThemeSelector(theme: self.$theme)
 
-                HStack() {
-                    Text("Intent: ").bold()
-                    Button(self.intent.name) {
-                        self.isIntentPresented = true
-                    }
-                    .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
-                        ForEach(TabIntent.allCases, id: \.self) { intent in
-                            Button(intent.name) {
-                                self.intent = intent
-                            }
-                        }
-                    }
-                }
-                HStack() {
-                    Text("Size: ").bold()
-                    Button(self.tabSize.name) {
-                        self.isSizePresented = true
-                    }
-                    .confirmationDialog("Select a size", isPresented: self.$isSizePresented) {
-                        ForEach(TabSize.allCases, id: \.self) { size in
-                            Button(size.name) {
-                                self.tabSize = size
-                            }
-                        }
-                    }
-                }
+                EnumSelector(title: "Intent", dialogTitle: "Select an intent", values: TabIntent.allCases, value: self.$intent)
+
+                EnumSelector(title: "Size", dialogTitle: "Select a size", values: TabSize.allCases, value: self.$tabSize)
 
                 RangeSelector(title: "No. of Tabs", range: 1...20, selectedValue: self.$numberOfTabs)
 
