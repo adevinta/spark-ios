@@ -8,25 +8,40 @@
 
 import SwiftUI
 
-public protocol ContainsTitle {
+public protocol TitleContaining {
     var hasTitle: Bool { get }
 }
 
-public struct TabItemContent: ContainsTitle, Equatable, Updateable {
+/// The content of a tab item.
+public struct TabItemContent: TitleContaining, Equatable, Updateable {
     public static func == (lhs: TabItemContent, rhs: TabItemContent) -> Bool {
         return lhs.id == rhs.id 
     }
 
+    /// A unique id of each tab item
     public var id = UUID()
+
+    /// An optional icon of a tab item
     public var icon: Image?
+
+    /// An optional title of a tab item
     public var title: String?
+
+    /// An optional attributed title. If a title is set, this will have preference over an attributed title
     public var attributedTitle: AttributedString?
+
+    /// An optional badge
     public var badge: BadgeView?
 
+    /// Return true if either title or attributed title have a value
     public var hasTitle: Bool {
-        self.title != nil || self.attributedTitle != nil
+        return self.title != nil || self.attributedTitle != nil
     }
 
+    /// Initialization
+    /// - Parameters:
+    /// - icon: An optional image
+    /// - title: An optional title
     public init(icon: Image? = nil, title: String? = nil) {
         self.icon = icon
         self.title = title

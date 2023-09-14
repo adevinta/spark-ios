@@ -11,13 +11,12 @@ import UIKit
 /// Contents of the tab:
 /// - icon: The icon of the tab item
 /// - text: The text of the tab item.
-public struct TabUIItemContent: ContainsTitle, Equatable, Updateable {
+public struct TabUIItemContent: TitleContaining, Equatable, Updateable {
     public var icon: UIImage?
     public var title: String?
-    public var attributedTitle: NSAttributedString?
 
     public var hasTitle: Bool {
-        return title != nil || attributedTitle != nil
+        return title != nil
     }
 
     public init(
@@ -25,7 +24,6 @@ public struct TabUIItemContent: ContainsTitle, Equatable, Updateable {
     ) {
         self.icon = nil
         self.title = title
-        self.attributedTitle = nil
     }
 
     public init(
@@ -33,7 +31,6 @@ public struct TabUIItemContent: ContainsTitle, Equatable, Updateable {
     ) {
         self.icon = icon
         self.title = nil
-        self.attributedTitle = nil
     }
 
     public init(
@@ -42,7 +39,6 @@ public struct TabUIItemContent: ContainsTitle, Equatable, Updateable {
     ) {
         self.icon = icon
         self.title = title
-        self.attributedTitle = nil
     }
 
 }

@@ -8,19 +8,30 @@
 
 import SwiftUI
 
+/// A single tab item used on the tab view.
 public struct TabItemView: View {
 
+    // MARK: - Private Variables
     @ObservedObject private var viewModel: TabItemViewModel<TabItemContent>
 
     private let tapAction: () -> Void
 
+    // MARK: - Scaled Metrics
     @ScaledMetric private var lineHeight: CGFloat
     @ScaledMetric private var itemHeight: CGFloat
     @ScaledMetric private var iconHeight: CGFloat
-    @ScaledMetric private var paddingVertical: CGFloat
     @ScaledMetric private var paddingHorizontal: CGFloat
     @ScaledMetric private var spacing: CGFloat
 
+    // MARK: Initialization
+    /// Initializer
+    /// - Parameters:
+    /// - theme: The current theme.
+    /// - intent: The intent, the default is `basic`.
+    /// - size: The tab size, the default is `md`.
+    /// - content: The content of the tab.
+    /// - apportionsSegmentWidthsByContent: Determins if the tab is to be as wide as it's content, or equally spaced.
+    /// - tapAction: the action triggered by tapping on the tab.
     public init(
         theme: Theme,
         intent: TabIntent = .basic,
@@ -55,10 +66,10 @@ public struct TabItemView: View {
         self._itemHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.itemHeight)
         self._iconHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.iconHeight)
         self._spacing = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
-        self._paddingVertical = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.verticalEdge)
         self._paddingHorizontal = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
     }
 
+    // MARK: - View
     public var body: some View {
         Button(
             action: {
@@ -73,6 +84,7 @@ public struct TabItemView: View {
         .buttonStyle(TabItemButtonStyle(viewModel: self.viewModel))
     }
 
+    // MARK: Private Functions
     @ViewBuilder
     private func tabContent() -> some View {
         HStack(alignment: .center, spacing: self.spacing) {
@@ -96,7 +108,6 @@ public struct TabItemView: View {
             spacer()
         }
         .frame(height: self.itemHeight)
-        .padding(EdgeInsets(vertical: self.paddingVertical, horizontal: 0))
         .overlay(
             Rectangle()
                 .frame(width: nil, height: self.lineHeight, alignment: .top)
@@ -108,7 +119,8 @@ public struct TabItemView: View {
     @ViewBuilder
     private func spacer() -> some View {
         if !self.viewModel.apportionsSegmentWidthsByContent {
-            Spacer().frame(minWidth: self.paddingHorizontal)
+            Spacer()
+                .frame(minWidth: self.paddingHorizontal)
         } else  {
             Spacer().frame(width: self.paddingHorizontal)
         }

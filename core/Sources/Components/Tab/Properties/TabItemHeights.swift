@@ -8,6 +8,10 @@
 
 import Foundation
 
+/// Heights of a tab item.
+/// - separatorLineHeight: The height of the bottom line.
+/// - itemHeight: The height of the item
+/// - iconHeight: The height of the icon
 struct TabItemHeights: Equatable, Updateable {
     var separatorLineHeight: CGFloat
     var itemHeight: CGFloat

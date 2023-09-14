@@ -1,5 +1,5 @@
 //
-//  OverflowContentViewModifier.swift
+//  HorizontalOverflowContentViewModifier.swift
 //  SparkCore
 //
 //  Created by michael.zimmermann on 05.09.23.
@@ -8,11 +8,14 @@
 
 import SwiftUI
 
+/// Wraps the content in a horizontal scroll view, if the content is too wide to display on screen.
 struct HorizontalOverflowContentViewModifier<Value>: ViewModifier where Value: Equatable {
+    // MARK: - Properties
     @State private var contentOverflow: Bool = false
     @State private var height: CGFloat = 0
     @Binding var value: Value
 
+    // MARK: - View
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             content

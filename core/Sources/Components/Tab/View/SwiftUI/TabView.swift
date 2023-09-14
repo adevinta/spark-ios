@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-/// TavView is the similar to a SegmentControl and not the SwiftUI.TaView
+/// TabView is the similar to a SegmentControl
 public struct TabView: View {
     private let theme: Theme
     private let intent: TabIntent
@@ -85,6 +85,7 @@ public struct TabView: View {
         self.viewModel = viewModel
     }
 
+    // MARK: - View
     public var body: some View {
         self.tabItems()
             .scrollOnOverflow(value: self.$viewModel.content)
@@ -179,16 +180,19 @@ public struct TabView: View {
         return self
     }
 
+    /// Set the selected tab
     public func selected(index: Int) -> Self {
         self.selectedIndex = index
         return self
     }
 
+    /// Change the content of the tabs
     public func content(_ content: [TabItemContent]) -> Self {
         self.viewModel.content = content
         return self
     }
 
+    /// Add a badge of a specific tab
     public func badge(_ badge: BadgeView?, index: Int) -> Self {
         guard var content = self.viewModel.content[safe: index] else { return self }
 
