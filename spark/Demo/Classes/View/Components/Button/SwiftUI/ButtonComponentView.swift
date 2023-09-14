@@ -16,37 +16,16 @@ struct ButtonComponentView: View {
 
     let viewModel = ButtonComponentViewModel()
 
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-    @State var isThemePresented = false
-
-    let themes = ThemeCellModel.themes
-
     @State private var uiKitViewHeight: CGFloat = .zero
 
-    @State private var intentSheetIsPresented = false
+    @State var theme: Theme = SparkThemePublisher.shared.theme
     @State var intent: ButtonIntent = .main
-
-    @State private var variantSheetIsPresented = false
     @State var variant: ButtonVariant = .filled
-
-    @State private var sizeSheetIsPresented = false
     @State var size: ButtonSize = .medium
-
-    @State private var shapeSheetIsPresented = false
     @State var shape: ButtonShape = .rounded
-
-    @State private var alignmentSheetIsPresented = false
     @State var alignment: ButtonAlignment = .leadingIcon
-
-    @State private var contentSheetIsPresented = false
     @State var content: ButtonContentDefault = .text
-
-    @State private var isEnabledSheetIsPresented = false
-    @State var isEnabled: Bool = true
+    @State var isEnabled: CheckboxSelectionState = .selected
 
     @State var shouldShowReverseBackgroundColor: Bool = false
 
@@ -60,144 +39,60 @@ struct ButtonComponentView: View {
                     .bold()
 
                 VStack(alignment: .leading, spacing: 16) {
-                    // **
-                    // Version
-                    HStack() {
-                        Text("Theme: ").bold()
-                        let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
-                        Button(selectedTheme?.title ?? "") {
-                            self.isThemePresented = true
-                        }
-                        .confirmationDialog("Select a theme",
-                                            isPresented: self.$isThemePresented) {
-                            ForEach(themes, id: \.self) { theme in
-                                Button(theme.title) {
-                                    themePublisher.theme = theme.theme
-                                }
-                            }
-                        }
-                        .onChange(of: self.intent) { newValue in
-                            self.shouldShowReverseBackgroundColor = (newValue == .surface)
-                        }
-                        Spacer()
-                    }
-                    // **
+                    ThemeSelector(theme: self.$theme)
 
-                    // **
-                    // Intent
-                    HStack() {
-                        Text("Intent: ")
-                            .bold()
-                        Button("\(self.intent.name)") {
-                            self.intentSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select an intent", isPresented: self.$intentSheetIsPresented) {
-                            ForEach(ButtonIntent.allCases, id: \.self) { intent in
-                                Button("\(intent.name)") {
-                                    self.intent = intent
-                                }
-                            }
-                        }
+                    EnumSelector(
+                        title: "Intent",
+                        dialogTitle: "Select an intent",
+                        values: ButtonIntent.allCases,
+                        value: self.$intent
+                    )
+                    .onChange(of: self.intent) { newValue in
+                        self.shouldShowReverseBackgroundColor = (newValue == .surface)
                     }
-                    // **
 
-                    // **
-                    // Variant
-                    HStack() {
-                        Text("Variant: ")
-                            .bold()
-                        Button("\(self.variant.name)") {
-                            self.variantSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select a variant", isPresented: self.$variantSheetIsPresented) {
-                            ForEach(ButtonVariant.allCases, id: \.self) { variant in
-                                Button("\(variant.name)") {
-                                    self.variant = variant
-                                }
-                            }
-                        }
-                    }
-                    // **
+                    EnumSelector(
+                        title: "Variant",
+                        dialogTitle: "Select a variant",
+                        values: ButtonVariant.allCases,
+                        value: self.$variant
+                    )
 
-                    // **
-                    // Size
-                    HStack() {
-                        Text("Size: ")
-                            .bold()
-                        Button("\(self.size.name)") {
-                            self.sizeSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select a size", isPresented: self.$sizeSheetIsPresented) {
-                            ForEach(ButtonSize.allCases, id: \.self) { size in
-                                Button("\(size.name)") {
-                                    self.size = size
-                                }
-                            }
-                        }
-                    }
-                    // **
+                    EnumSelector(
+                        title: "Size",
+                        dialogTitle: "Select a size",
+                        values: ButtonSize.allCases,
+                        value: self.$size
+                    )
 
-                    // **
-                    // Shape
-                    HStack() {
-                        Text("Shape: ")
-                            .bold()
-                        Button("\(self.shape.name)") {
-                            self.shapeSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select a shape", isPresented: self.$shapeSheetIsPresented) {
-                            ForEach(ButtonShape.allCases, id: \.self) { shape in
-                                Button("\(shape.name)") {
-                                    self.shape = shape
-                                }
-                            }
-                        }
-                    }
-                    // **
+                    EnumSelector(
+                        title: "Shape",
+                        dialogTitle: "Select a shape",
+                        values: ButtonShape.allCases,
+                        value: self.$shape
+                    )
 
-                    // **
-                    // Alignment
-                    HStack() {
-                        Text("Alignment: ")
-                            .bold()
-                        Button("\(self.alignment.name)") {
-                            self.alignmentSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select a alignment", isPresented: self.$alignmentSheetIsPresented) {
-                            ForEach(ButtonAlignment.allCases, id: \.self) { alignment in
-                                Button("\(alignment.name)") {
-                                    self.alignment = alignment
-                                }
-                            }
-                        }
-                    }
-                    // **
+                    EnumSelector(
+                        title: "Alignment",
+                        dialogTitle: "Select an alignment",
+                        values: ButtonAlignment.allCases,
+                        value: self.$alignment
+                    )
 
-                    // **
-                    // Content
-                    HStack() {
-                        Text("Content: ")
-                            .bold()
-                        Button("\(self.content.name)") {
-                            self.contentSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select a content", isPresented: self.$contentSheetIsPresented) {
-                            ForEach(ButtonContentDefault.allCases, id: \.self) { content in
-                                Button("\(content.name)") {
-                                    self.content = content
-                                }
-                            }
-                        }
-                    }
-                    // **
+                    EnumSelector(
+                        title: "Content",
+                        dialogTitle: "Select an content",
+                        values: ButtonContentDefault.allCases,
+                        value: self.$content
+                    )
 
-                    // Is Enabled
-                    HStack() {
-                        Text("Is enabled: ")
-                            .bold()
-                        Toggle("", isOn: self.$isEnabled)
-                            .labelsHidden()
-                    }
+                    CheckboxView(
+                        text: "Is enabled",
+                        checkedImage: DemoIconography.shared.checkmark,
+                        theme: self.theme,
+                        state: .enabled,
+                        selectionState: self.$isEnabled
+                    )
                 }
 
                 Divider()
@@ -217,7 +112,7 @@ struct ButtonComponentView: View {
                         shape: self.$shape.wrappedValue,
                         alignment: self.$alignment.wrappedValue,
                         content: self.$content.wrappedValue,
-                        isEnabled: self.$isEnabled.wrappedValue
+                        isEnabled: self.$isEnabled.wrappedValue == .selected
                     )
                     .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .center)
                     .padding(.horizontal, self.shouldShowReverseBackgroundColor ? 4 : 0)
