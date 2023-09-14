@@ -145,6 +145,7 @@ final class SwitchViewModelTests: XCTestCase {
 
     }
 
+
     // MARK: - Load Tests
 
     func test_published_properties_on_load_when_frameworkType_is_UIKit() throws {
