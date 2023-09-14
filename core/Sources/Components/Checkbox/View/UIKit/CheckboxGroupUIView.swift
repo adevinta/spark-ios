@@ -65,7 +65,7 @@ public final class CheckboxGroupUIView: UIView {
         }
     }
     ///  The checkbox is positioned on the leading or trailing edge of the view.
-    public var checkboxPosition: CheckboxPosition {
+    public var checkboxPosition: CheckboxAlignment {
         didSet {
             self.update()
         }
@@ -93,7 +93,7 @@ public final class CheckboxGroupUIView: UIView {
         checkedImage: UIImage,
         items: [any CheckboxGroupItemProtocol],
         layout: CheckboxGroupLayout = .vertical,
-        checkboxPosition: CheckboxPosition,
+        checkboxPosition: CheckboxAlignment,
         theme: Theme,
         accessibilityIdentifierPrefix: String
     ) {

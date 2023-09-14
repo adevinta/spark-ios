@@ -95,7 +95,7 @@ struct CheckboxGroupListView: View {
     }
 
     func shuffleAction() {
-        let states = [SelectButtonState.enabled, .disabled, .accent, .basic, .success(message: "Success"), .warning(message: "Warning"), .error(message: "Error")]
+        let states = [CheckboxState.enabled, CheckboxState.disabled]
         let selectionStates = [CheckboxSelectionState.selected, .unselected, .indeterminate]
 
         withAnimation {
@@ -143,13 +143,13 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     var attributedTitle: NSAttributedString?
     var id: String
     var selectionState: CheckboxSelectionState
-    var state: SelectButtonState
+    var state: CheckboxState
 
     init(
         title: String? = nil,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: SelectButtonState = .enabled
+        state: CheckboxState = .enabled
     ) {
         self.title = title
         self.attributedTitle = nil
@@ -162,7 +162,7 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         attributedTitle: NSAttributedString,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: SelectButtonState = .enabled
+        state: CheckboxState = .enabled
     ) {
         self.title = attributedTitle.string
         self.attributedTitle = attributedTitle

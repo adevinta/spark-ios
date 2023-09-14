@@ -67,22 +67,14 @@ struct CheckboxListView: View {
         .navigationBarTitle(Text("Checkbox"))
     }
 
-    private func title(for state: SelectButtonState) -> String {
+    private func title(for state: CheckboxState) -> String {
         switch state {
         case .enabled:
             return "Enabled"
         case .disabled:
             return "Disabled"
-        case .accent:
-            return "Accent"
-        case .basic:
-            return "Basic"
-        case .success:
-            return "Success"
-        case .warning:
-            return "Warning"
-        case .error:
-            return "Error"
+        @unknown default:
+            return ""
         }
     }
 }

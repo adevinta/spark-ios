@@ -109,7 +109,7 @@ final class CheckboxViewController: UIViewController {
 
     @objc private func actionShuffle(sender: UIButton) {
         let selectionStates = [CheckboxSelectionState.indeterminate, .selected, .unselected]
-        let states = [SelectButtonState.enabled, .disabled, .accent, .basic, .success(message: "Success message"), .warning(message: "Warning message"), .error(message: "Error message")]
+        let states = [CheckboxState.enabled, CheckboxState.disabled]
         for checkbox in self.checkboxes {
             checkbox.selectionState = selectionStates.randomElement() ?? .indeterminate
             checkbox.state = states.randomElement() ?? .disabled
@@ -173,7 +173,7 @@ final class CheckboxViewController: UIViewController {
             theme: theme,
             text: "Error checkbox",
             checkedImage: image,
-            state: .error(message: "Error message"),
+            state: .disabled,
             selectionState: self.checkboxValue3,
             checkboxPosition: .left
         )
@@ -190,7 +190,7 @@ final class CheckboxViewController: UIViewController {
             theme: theme,
             text: "Right checkbox",
             checkedImage: image,
-            state: .success(message: "Success message"),
+            state: .enabled,
             selectionState: self.checkboxValue4,
             checkboxPosition: .right
         )
@@ -207,7 +207,7 @@ final class CheckboxViewController: UIViewController {
             theme: theme,
             text: "Right checkbox",
             checkedImage: image,
-            state: .success(message: "Success message"),
+            state: .enabled,
             selectionState: self.checkboxValue4,
             checkboxPosition: .right
         )

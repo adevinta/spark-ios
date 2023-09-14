@@ -44,7 +44,7 @@ public struct CheckboxView: View {
 
     @ObservedObject var viewModel: CheckboxViewModel
 
-    var colors: CheckboxColorables {
+    var colors: CheckboxStateColors {
         return self.viewModel.colors
     }
 
@@ -52,7 +52,7 @@ public struct CheckboxView: View {
 
     @Namespace private var namespace
 
-    private let checkboxPosition: CheckboxPosition
+    private let checkboxPosition: CheckboxAlignment
 
     @ScaledMetric private var checkboxWidth: CGFloat = Constants.checkboxWidth
     @ScaledMetric private var checkboxHeight: CGFloat = Constants.checkboxHeight
@@ -74,10 +74,10 @@ public struct CheckboxView: View {
     init(
         text: String,
         checkedImage: UIImage,
-        checkboxPosition: CheckboxPosition = .left,
+        checkboxPosition: CheckboxAlignment = .left,
         theme: Theme,
-        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
-        state: SelectButtonState = .enabled,
+        colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
+        state: CheckboxState = .enabled,
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self._horizontalSpacing = .init(wrappedValue: theme.layout.spacing.medium)
@@ -104,9 +104,9 @@ public struct CheckboxView: View {
     public init(
         text: String,
         checkedImage: UIImage,
-        checkboxPosition: CheckboxPosition = .left,
+        checkboxPosition: CheckboxAlignment = .left,
         theme: Theme,
-        state: SelectButtonState = .enabled,
+        state: CheckboxState = .enabled,
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self.init(
@@ -114,7 +114,7 @@ public struct CheckboxView: View {
             checkedImage: checkedImage,
             checkboxPosition: checkboxPosition,
             theme: theme,
-            colorsUseCase: CheckboxColorsUseCase(),
+            colorsUseCase: CheckboxStateColorsUseCase(),
             state: state,
             selectionState: selectionState
         )
@@ -137,8 +137,8 @@ public struct CheckboxView: View {
     }
 
     @ViewBuilder private var checkboxView: some View {
-        let tintColor = self.colors.checkboxTintColor.color
-        let iconColor = self.colors.checkboxIconColor.color
+        let tintColor = self.colors.enable.tintColor.color
+        let iconColor = self.colors.enable.iconColor.color
         ZStack {
             RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
                 .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
@@ -151,7 +151,7 @@ public struct CheckboxView: View {
                     $0.overlay(
                         RoundedRectangle(cornerRadius: checkboxBorderRadius)
                             .inset(by: -checkboxSelectedBorderWidth / 2)
-                            .stroke(colors.pressedBorderColor.color, lineWidth: checkboxSelectedBorderWidth)
+                            .stroke(colors.pressed.pressedBorderColor.color, lineWidth: checkboxSelectedBorderWidth)
                             .animation(.easeInOut(duration: 0.1), value: isPressed)
                     )
                 }
@@ -210,13 +210,7 @@ public struct CheckboxView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(self.viewModel.text ?? "")
                 .font(self.theme.typography.body1.font)
-                .foregroundColor(self.colors.textColor.color)
-
-            if let message = self.viewModel.supplementaryMessage {
-                Text(message)
-                    .font(self.theme.typography.caption.font)
-                    .foregroundColor(self.colors.checkboxTintColor.color)
-            }
+                .foregroundColor(self.colors.enable.textColor.color)
         }
         .id(Identifier.content.rawValue)
         .matchedGeometryEffect(id: Identifier.content.rawValue, in: self.namespace)
