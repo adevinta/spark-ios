@@ -19,9 +19,6 @@ protocol ButtonViewModelDependenciesProtocol {
     var getSpacingsUseCase: ButtonGetSpacingsUseCaseable { get }
     var getStateUseCase: ButtonGetStateUseCaseable { get }
 
-    var getDisplayedTextTypeUseCase: GetDisplayedTextTypeUseCaseable { get }
-    var getDidDisplayedTextChangeUseCase: GetDidDisplayedTextChangeUseCaseable { get }
-
     func makeDisplayedTextViewModel(text: String?,
                                     attributedText: AttributedStringEither?) -> DisplayedTextViewModel
 }
@@ -39,9 +36,6 @@ struct ButtonViewModelDependencies: ButtonViewModelDependenciesProtocol {
     let getSpacingsUseCase: ButtonGetSpacingsUseCaseable
     let getStateUseCase: ButtonGetStateUseCaseable
 
-    let getDisplayedTextTypeUseCase: GetDisplayedTextTypeUseCaseable
-    let getDidDisplayedTextChangeUseCase: GetDidDisplayedTextChangeUseCaseable
-
     // MARK: - Initialization
 
     init(
@@ -52,9 +46,7 @@ struct ButtonViewModelDependencies: ButtonViewModelDependenciesProtocol {
         getIsIconOnlyUseCase: ButtonGetIsOnlyIconUseCaseable = ButtonGetIsOnlyIconUseCase(),
         getSizesUseCase: ButtonGetSizesUseCaseable = ButtonGetSizesUseCase(),
         getSpacingsUseCase: ButtonGetSpacingsUseCaseable = ButtonGetSpacingsUseCase(),
-        getStateUseCase: ButtonGetStateUseCaseable = ButtonGetStateUseCase(),
-        getDisplayedTextTypeUseCase: GetDisplayedTextTypeUseCaseable = GetDisplayedTextTypeUseCase(),
-        getDidDisplayedTextChangeUseCase: GetDidDisplayedTextChangeUseCaseable = GetDidDisplayedTextChangeUseCase()
+        getStateUseCase: ButtonGetStateUseCaseable = ButtonGetStateUseCase()
     ) {
         self.getBorderUseCase = getBorderUseCase
         self.getColorsUseCase = getColorsUseCase
@@ -64,8 +56,6 @@ struct ButtonViewModelDependencies: ButtonViewModelDependenciesProtocol {
         self.getSizesUseCase = getSizesUseCase
         self.getSpacingsUseCase = getSpacingsUseCase
         self.getStateUseCase = getStateUseCase
-        self.getDisplayedTextTypeUseCase = getDisplayedTextTypeUseCase
-        self.getDidDisplayedTextChangeUseCase = getDidDisplayedTextChangeUseCase
     }
 
     // MARK: - Maker
