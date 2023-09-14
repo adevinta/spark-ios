@@ -102,6 +102,7 @@ public struct TabItemView: View {
                 .frame(width: nil, height: self.lineHeight, alignment: .top)
                 .foregroundColor(self.viewModel.tabStateAttributes.colors.line.color),
             alignment: .bottom)
+        .accessibilityLabel(self.viewModel.content.title ?? TabAccessibilityIdentifier.tabItem)
     }
 
     @ViewBuilder

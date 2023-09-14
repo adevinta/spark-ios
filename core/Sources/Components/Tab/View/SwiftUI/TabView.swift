@@ -93,6 +93,7 @@ public struct TabView: View {
                     .frame(width: nil, height: self.lineHeight, alignment: .bottom)
                     .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
                 alignment: .bottom)
+            .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
     }
 
     // MARK: - Private functions
@@ -145,6 +146,7 @@ public struct TabView: View {
         }
         .disabled(self.viewModel.disabledTabs[index])
         .id(content.id)
+        .accessibilityIdentifier("\(TabAccessibilityIdentifier.tabItem)_\(index)")
         .background {
             GeometryReader { geometry in
                 Color.clear
