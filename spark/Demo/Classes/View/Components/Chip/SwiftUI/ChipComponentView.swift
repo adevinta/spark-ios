@@ -11,21 +11,11 @@ import SparkCore
 import SwiftUI
 
 struct ChipComponentView: View {
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-    @State private var isThemePresented = false
-
-    let themes = ThemeCellModel.themes
+    @State var theme: Theme = SparkThemePublisher.shared.theme
 
     @State var intent: ChipIntent = .main
-    @State var isIntentPresented = false
     @State var variant: ChipVariant = .filled
-    @State var isVariantPresented = false
     @State var alignment: ChipAlignment = .leadingIcon
-    @State var isAlignmentPressed = false
 
     @State var showLabel = CheckboxSelectionState.selected
     @State var showIcon = CheckboxSelectionState.selected
@@ -44,62 +34,28 @@ struct ChipComponentView: View {
                 .font(.title2)
                 .bold()
                 .padding(.bottom, 6)
+
             VStack(alignment: .leading, spacing: 8) {
-                HStack() {
-                    Text("Theme: ").bold()
-                    let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
-                    Button(selectedTheme?.title ?? "") {
-                        self.isThemePresented = true
-                    }
-                    .confirmationDialog("Select a theme",
-                                        isPresented: self.$isThemePresented) {
-                        ForEach(themes, id: \.self) { theme in
-                            Button(theme.title) {
-                                themePublisher.theme = theme.theme
-                            }
-                        }
-                    }
-                    Spacer()
-                }
-                HStack() {
-                    Text("Intent: ").bold()
-                    Button(self.intent.name) {
-                        self.isIntentPresented = true
-                    }
-                    .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
-                        ForEach(ChipIntent.allCases, id: \.self) { intent in
-                            Button(intent.name) {
-                                self.intent = intent
-                            }
-                        }
-                    }
-                }
-                HStack() {
-                    Text("Chip Variant: ").bold()
-                    Button(self.variant.name) {
-                        self.isVariantPresented = true
-                    }
-                    .confirmationDialog("Select a variant", isPresented: self.$isVariantPresented) {
-                        ForEach(ChipVariant.allCases, id: \.self) { variant in
-                            Button(variant.name) {
-                                self.variant = variant
-                            }
-                        }
-                    }
-                }
-                HStack() {
-                    Text("Alignment: ").bold()
-                    Button(self.alignment.name) {
-                        self.isAlignmentPressed = true
-                    }
-                    .confirmationDialog("Select an alignment", isPresented: self.$isAlignmentPressed) {
-                        ForEach(ChipAlignment.allCases, id: \.self) { alignment in
-                            Button(alignment.name) {
-                                self.alignment = alignment
-                            }
-                        }
-                    }
-                }
+                ThemeSelector(theme: self.$theme)
+
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an Intent",
+                    values: ChipIntent.allCases,
+                    value: self.$intent)
+
+                EnumSelector(
+                    title: "Chip Variant",
+                    dialogTitle: "Select a Chip Variant",
+                    values: ChipVariant.allCases,
+                    value: self.$variant)
+
+                EnumSelector(
+                    title: "Alignment",
+                    dialogTitle: "Select an Alignment",
+                    values: ChipAlignment.allCases,
+                    value: self.$alignment)
+
                 CheckboxView(
                     text: "With Label",
                     checkedImage: DemoIconography.shared.checkmark,

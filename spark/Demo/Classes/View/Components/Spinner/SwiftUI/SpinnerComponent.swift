@@ -12,19 +12,10 @@ import SwiftUI
 
 struct SpinnerComponent: View {
 
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-    @State private var isThemePresented = false
-
-    let themes = ThemeCellModel.themes
+    @State var theme: Theme = SparkThemePublisher.shared.theme
 
     @State var intent: SpinnerIntent = .main
-    @State var isIntentPresented = false
     @State var spinnerSize: SpinnerSize = .medium
-    @State var isSizesPresented = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -32,48 +23,20 @@ struct SpinnerComponent: View {
                 .font(.title2)
                 .bold()
                 .padding(.bottom, 6)
-            HStack() {
-                Text("Theme: ").bold()
-                let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
-                Button(selectedTheme?.title ?? "") {
-                    self.isThemePresented = true
-                }
-                .confirmationDialog("Select a theme",
-                                    isPresented: self.$isThemePresented) {
-                    ForEach(themes, id: \.self) { theme in
-                        Button(theme.title) {
-                            themePublisher.theme = theme.theme
-                        }
-                    }
-                }
-                Spacer()
-            }
-            HStack() {
-                Text("Intent: ").bold()
-                Button(self.intent.name) {
-                    self.isIntentPresented = true
-                }
-                .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
-                    ForEach(SpinnerIntent.allCases, id: \.self) { intent in
-                        Button(intent.name) {
-                            self.intent = intent
-                        }
-                    }
-                }
-            }
-            HStack() {
-                Text("Spinner Size: ").bold()
-                Button(self.spinnerSize.name) {
-                    self.isSizesPresented = true
-                }
-                .confirmationDialog("Select a size", isPresented: self.$isSizesPresented) {
-                    ForEach(SpinnerSize.allCases, id: \.self) { size in
-                        Button(size.name) {
-                            self.spinnerSize = size
-                        }
-                    }
-                }
-            }
+
+            ThemeSelector(theme: self.$theme)
+
+            EnumSelector(
+                title: "Intent",
+                dialogTitle: "Select an Intent",
+                values: SpinnerIntent.allCases,
+                value: self.$intent)
+
+            EnumSelector(
+                title: "Spinner Size",
+                dialogTitle: "Select a Size",
+                values: SpinnerSize.allCases,
+                value: self.$spinnerSize)
 
             Divider()
 
