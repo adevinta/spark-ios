@@ -59,33 +59,6 @@ targetTemplates:
       - target: Spark
       - package: SnapshotTesting
 
-  SparkCoreDemoTemplate:
-    type: application
-    platform: iOS
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.core.demo"
-        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
-        SUPPORTS_MACCATALYST: NO
-        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
-    info:
-      path: core/Demo/Info.plist
-      properties:
-        UIApplicationSceneManifest:
-          UIApplicationSupportsMultipleScenes: false
-          UISceneConfigurations: {}
-    sources:
-      - path: core/Demo
-      - path: spark/Sources/Resources
-        excludes:
-        - "Generated/"
-      - path: spark/Sources/Theming
-        excludes:
-        - "**/*Tests.swift"
-    dependencies:
-      - target: SparkCore
-      - target: Spark
-
 targets:
   SparkCore:
     templates:
@@ -94,7 +67,3 @@ targets:
   SparkCoreTests:
     templates:
       - SparkCoreTestsTemplate
-
-  SparkCoreDemo:
-    templates:
-      - SparkCoreDemoTemplate
