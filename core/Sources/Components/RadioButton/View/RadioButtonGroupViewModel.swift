@@ -26,38 +26,52 @@ final class RadioButtonGroupViewModel: ObservableObject {
             self.sublabelFont =   self.theme.typography.caption
             self.titleFont = self.theme.typography.subhead
             self.titleColor = self.theme.colors.base.onSurface
-            self.sublabelColor = useCase.execute(colors: self.theme.colors, state: self.state)
+            self.sublabelColor = useCase.execute(colors: self.theme.colors, intent: self.intent)
             self.spacing = self.theme.layout.spacing.large
             self.labelSpacing = self.theme.layout.spacing.medium
         }
     }
-    var state: RadioButtonGroupState {
-        didSet {
-            guard self.state != oldValue else { return }
 
-            self.sublabelColor = useCase.execute(colors: self.theme.colors, state: self.state)
+    var intent: RadioButtonIntent {
+        didSet {
+            guard self.intent != oldValue else { return }
+
+            self.sublabelColor = useCase.execute(colors: self.theme.colors, intent: self.intent)
         }
     }
+
+//    var state: RadioButtonGroupState {
+//        didSet {
+//            guard self.state != oldValue else { return }
+//
+//            self.sublabelColor = useCase.execute(colors: self.theme.colors, state: self.state)
+//        }
+//    }
 
     // MARK: Private Properties
     private let useCase: any GetRadioButtonGroupColorUseCaseable
 
     // MARK: Initializers
-    convenience init(theme: any Theme, state: RadioButtonGroupState) {
-        self.init(theme: theme, state: state, useCase: GetRadioButtonGroupColorUseCase())
+    convenience init(theme: any Theme, intent: RadioButtonIntent) {
+        self.init(
+            theme: theme,
+            intent: intent,
+            useCase: GetRadioButtonGroupColorUseCase()
+        )
     }
 
     init(theme: any Theme,
-             state: RadioButtonGroupState,
-             useCase: any GetRadioButtonGroupColorUseCaseable) {
+         intent: RadioButtonIntent,
+         useCase: any GetRadioButtonGroupColorUseCaseable) {
+
         self.theme = theme
-        self.state = state
+        self.intent = intent
         self.useCase = useCase
 
         self.sublabelFont = self.theme.typography.caption
         self.titleFont = self.theme.typography.subhead
         self.titleColor = self.theme.colors.base.onSurface
-        self.sublabelColor = useCase.execute(colors: theme.colors, state: state)
+        self.sublabelColor = useCase.execute(colors: theme.colors, intent: intent)
         self.spacing = self.theme.layout.spacing.large
         self.labelSpacing = self.theme.layout.spacing.medium
     }

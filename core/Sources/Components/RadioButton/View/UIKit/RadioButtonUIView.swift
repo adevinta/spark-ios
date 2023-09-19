@@ -39,12 +39,35 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     /// The current groupState
+    @available(*, deprecated, message: "Use intent and isEnabled instead.")
     public var groupState: RadioButtonGroupState {
         get {
-            return self.viewModel.groupState
+            if self.viewModel.state.isEnabled {
+                return .enabled
+            } else {
+                return .disabled
+            }
         }
         set {
-            self.viewModel.set(groupState: newValue)
+            self.viewModel.set(enabled: newValue != .disabled)
+        }
+    }
+
+    public var intent: RadioButtonIntent {
+        get {
+            return self.viewModel.intent
+        }
+        set {
+            self.viewModel.set(intent: newValue)
+        }
+    }
+
+    public var isEnabled: Bool {
+        get {
+            return self.viewModel.state.isEnabled
+        }
+        set {
+            self.viewModel.set(enabled: newValue)
         }
     }
 
@@ -148,6 +171,24 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
                                              selectedID: selectedID,
                                              groupState: groupState,
                                              labelPosition: labelPosition)
+
+        self.init(viewModel: viewModel)
+    }
+
+    public convenience init(theme: Theme,
+                            intent: RadioButtonIntent = .basic
+                            id: ID,
+                            label: NSAttributedString,
+                            selectedID: Binding<ID>,
+                            labelPosition: RadioButtonLabelPosition = .right
+    ) {
+        let viewModel = RadioButtonViewModel(
+            theme: theme,
+            intent: intent,
+            id: id,
+            label: .left(label),
+            selectedID: selectedID,
+            labelPosition: labelPosition)
 
         self.init(viewModel: viewModel)
     }

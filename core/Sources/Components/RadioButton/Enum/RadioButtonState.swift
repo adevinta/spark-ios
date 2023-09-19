@@ -9,6 +9,7 @@
 import Foundation
 
 @frozen
+@available(*, deprecated, message: "Use RadioButtonIntent and the attribute isEnabled instead. ")
 public enum RadioButtonGroupState: Equatable, Hashable, CaseIterable {
     case enabled
     case disabled

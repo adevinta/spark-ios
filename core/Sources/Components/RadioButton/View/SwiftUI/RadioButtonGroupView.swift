@@ -37,7 +37,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     private let title: String?
     private let groupLayout: RadioButtonGroupLayout
     private let radioButtonLabelPosition: RadioButtonLabelPosition
-    private let state: RadioButtonGroupState
+//    private let state: RadioButtonGroupState
     private let supplementaryLabel: String?
     private let viewModel: RadioButtonGroupViewModel
 
@@ -53,6 +53,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     ///   - title: An option string. The title is rendered above the radio button items, if it is not empty.
     ///   - selectedID: a binding to the selected value.
     ///   - items: A list of ``RadioButtonItem``
+    @available(*, deprecated, message: "Use init with intent instead.")
     public init(theme: Theme,
                 title: String? = nil,
                 selectedID: Binding<ID>,
@@ -68,7 +69,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
         self.groupLayout = groupLayout
         self.radioButtonLabelPosition = radioButtonLabelPosition
         self.supplementaryLabel = supplementaryLabel
-        self.state = state
+//        self.state = state
         self.viewModel = RadioButtonGroupViewModel(theme: theme, state: state)
         self._spacing = ScaledMetric(wrappedValue: self.viewModel.spacing)
         self._titleSpacing = ScaledMetric(wrappedValue: self.viewModel.labelSpacing)

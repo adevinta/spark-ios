@@ -19,4 +19,5 @@ struct RadioButtonColors {
     let label: any ColorToken
     let halo: any ColorToken
     let fill: any ColorToken
+    let surface: any ColorToken
 }
