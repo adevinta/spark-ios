@@ -16,23 +16,10 @@ struct TagComponentView: View {
 
     let viewModel = TagComponentViewModel()
 
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-    @State private var isThemePresented = false
-
-    let themes = ThemeCellModel.themes
-
+    @State var theme: Theme = SparkThemePublisher.shared.theme
     @State private var uiKitViewHeight: CGFloat = .zero
-
-    @State private var intentSheetIsPresented = false
     @State var intent: TagIntent = .main
-
-    @State private var variantSheetIsPresented = false
     @State var variant: TagVariant = .filled
-
-    @State private var contentSheetIsPresented = false
     @State var content: TagContent = .all
 
     // MARK: - View
@@ -47,75 +34,33 @@ struct TagComponentView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // **
                     // Theme
-                    HStack() {
-                        Text("Theme: ").bold()
-                        let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
-                        Button(selectedTheme?.title ?? "") {
-                            self.isThemePresented = true
-                        }
-                        .confirmationDialog("Select a theme",
-                                            isPresented: self.$isThemePresented) {
-                            ForEach(themes, id: \.self) { theme in
-                                Button(theme.title) {
-                                    themePublisher.theme = theme.theme
-                                }
-                            }
-                        }
-                        Spacer()
-                    }                    // **
+                    ThemeSelector(theme: self.$theme)
 
                     // **
                     // Intent
-                    HStack() {
-                        Text("Intent: ")
-                            .bold()
-                        Button("\(self.intent.name)") {
-                            self.intentSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select an intent", isPresented: self.$intentSheetIsPresented) {
-                            ForEach(TagIntent.allCases, id: \.self) { intent in
-                                Button("\(intent.name)") {
-                                    self.intent = intent
-                                }
-                            }
-                        }
-                    }
+                    EnumSelector(
+                        title: "Intent",
+                        dialogTitle: "Select an Intent",
+                        values: TagIntent.allCases,
+                        value: self.$intent)
                     // **
 
                     // **
                     // Variant
-                    HStack() {
-                        Text("Variant: ")
-                            .bold()
-                        Button("\(self.variant.name)") {
-                            self.variantSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select an variant", isPresented: self.$variantSheetIsPresented) {
-                            ForEach(TagVariant.allCases, id: \.self) { variant in
-                                Button("\(variant.name)") {
-                                    self.variant = variant
-                                }
-                            }
-                        }
-                    }
+                    EnumSelector(
+                        title: "Variant",
+                        dialogTitle: "Select a Variant",
+                        values: TagVariant.allCases,
+                        value: self.$variant)
                     // **
 
                     // **
                     // Content
-                    HStack() {
-                        Text("Content: ")
-                            .bold()
-                        Button("\(self.content.name)") {
-                            self.contentSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select an content", isPresented: self.$contentSheetIsPresented) {
-                            ForEach(TagContent.allCases, id: \.self) { content in
-                                Button("\(content.name)") {
-                                    self.content = content
-                                }
-                            }
-                        }
-                    }
+                    EnumSelector(
+                        title: "Content",
+                        dialogTitle: "Select a Content",
+                        values: TagContent.allCases,
+                        value: self.$content)
                     // **
                 }
 
@@ -125,7 +70,7 @@ struct TagComponentView: View {
                     .font(.title2)
                     .bold()
 
-                TagView(theme: SparkTheme.shared)
+                TagView(theme: self.theme )
                     .intent(self.intent)
                     .variant(self.variant)
                     .iconImage(self.content.shouldShowIcon ? Image(self.viewModel.imageNamed) : nil)

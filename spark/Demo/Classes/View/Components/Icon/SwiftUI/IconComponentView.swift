@@ -14,21 +14,10 @@ struct IconComponentView: View {
 
     // MARK: - Properties
 
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-    @State private var isThemePresented = false
-
-    let themes = ThemeCellModel.themes
+    @State var theme: Theme = SparkThemePublisher.shared.theme
 
     @State private var uiKitViewHeight: CGFloat = .zero
-
-    @State private var sizeSheetIsPresented = false
     @State var size: IconSize = .medium
-
-    @State private var intentSheetIsPresented = false
     @State var intent: IconIntent = .main
 
     // MARK: - View
@@ -41,59 +30,21 @@ struct IconComponentView: View {
                     .bold()
 
                 VStack(alignment: .leading, spacing: 16) {
-                    // Theme
-                    HStack() {
-                        Text("Theme: ").bold()
-                        let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
-                        Button(selectedTheme?.title ?? "") {
-                            self.isThemePresented = true
-                        }
-                        .confirmationDialog("Select a theme",
-                                            isPresented: self.$isThemePresented) {
-                            ForEach(themes, id: \.self) { theme in
-                                Button(theme.title) {
-                                    themePublisher.theme = theme.theme
-                                }
-                            }
-                        }
-                        Spacer()
-                    }
+                    ThemeSelector(theme: self.$theme)
 
                     // Intent
-                    HStack() {
-                        Text("Intent: ")
-                            .bold()
-                        Button("\(self.intent.name)") {
-                            self.intentSheetIsPresented = true
-                        }
-                        .confirmationDialog(
-                            "Select an intent",
-                            isPresented: self.$intentSheetIsPresented) {
-                                ForEach(IconIntent.allCases, id: \.self) { intent in
-                                    Button("\(intent.name)") {
-                                        self.intent = intent
-                                    }
-                                }
-                            }
-                    }
+                    EnumSelector(
+                        title: "Intent",
+                        dialogTitle: "Select an Intent",
+                        values: IconIntent.allCases,
+                        value: self.$intent)
 
                     // Size
-                    HStack() {
-                        Text("Size: ")
-                            .bold()
-                        Button("\(self.size.name)") {
-                            self.sizeSheetIsPresented = true
-                        }
-                        .confirmationDialog(
-                            "Select a size",
-                            isPresented: self.$sizeSheetIsPresented) {
-                                ForEach(IconSize.allCases, id: \.self) { size in
-                                    Button("\(size.name)") {
-                                        self.size = size
-                                    }
-                                }
-                            }
-                    }
+                    EnumSelector(
+                        title: "Size",
+                        dialogTitle: "Select a Size",
+                        values: IconSize.allCases,
+                        value: self.$size)
                 }
 
                 Divider()
