@@ -67,6 +67,23 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     ///   - state: The current state, default value is `.enabled`
     ///   - labelPostion: The position of the label according to the radio button toggle. Default is `right`
     public init(theme: Theme,
+                intent: RadioButtonIntent = .basic,
+                id: ID,
+                label: String,
+                selectedID: Binding<ID>,
+                labelPosition: RadioButtonLabelPosition = .right) {
+        let viewModel = RadioButtonViewModel(
+            theme: theme,
+            intent: intent,
+            id: id,
+            label: .right(label),
+            selectedID: selectedID,
+            labelPosition: labelPosition)
+        self.init(viewModel: viewModel)
+    }
+
+    @available(*, deprecated, message: "Use init with intent instead.")
+    public init(theme: Theme,
                 id: ID,
                 label: String,
                 selectedID: Binding<ID>,
@@ -74,11 +91,13 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                 labelPosition: RadioButtonLabelPosition = .right) {
         let viewModel = RadioButtonViewModel(
             theme: theme,
+            intent: .basic,
             id: id,
             label: .right(label),
             selectedID: selectedID,
-            groupState: groupState,
             labelPosition: labelPosition)
+
+        viewModel.set(enabled: groupState != .disabled)
         self.init(viewModel: viewModel)
     }
 
@@ -103,9 +122,14 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     }
 
     // MARK: - View modifier
-
+    @available(*, deprecated, message: "Use intent and disabled instead")
     public func groupState(_ groupState: RadioButtonGroupState) -> Self {
-        self.viewModel.set(groupState: groupState)
+        self.viewModel.set(enabled: groupState != .disabled)
+        return self
+    }
+
+    public func disabled(_ isDisabled: Bool) -> Self {
+        self.viewModel.set(enabled: !isDisabled)
         return self
     }
 
@@ -146,7 +170,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                 .font(self.viewModel.font.font)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(self.viewModel.surfaceColor.color)
+                .foregroundColor(self.viewModel.colors.surface.color)
         } else {
             EmptyView()
         }

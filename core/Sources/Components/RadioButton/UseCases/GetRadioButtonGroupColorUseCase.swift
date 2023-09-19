@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol GetRadioButtonGroupColorUseCaseable {
-    func execute(colors: Colors, state: RadioButtonGroupState) -> any ColorToken
+    func execute(colors: Colors, intent: RadioButtonIntent) -> any ColorToken
 }
 
 /// GetRadioButtonGroupColorUseCase
@@ -21,14 +21,8 @@ struct GetRadioButtonGroupColorUseCase: GetRadioButtonGroupColorUseCaseable {
     // MARK: - Functions
 
     /// Return the color token corresponding to the state
-    func execute(colors: Colors, state: RadioButtonGroupState) -> any ColorToken {
-        switch state {
-        case .warning: return colors.feedback.onAlertContainer
-        case .error: return colors.feedback.error
-        case .success: return colors.feedback.success
-        case .enabled: return colors.main.mainContainer
-        case .disabled: return colors.main.mainContainer
-        case .accent: return colors.accent.accent
+    func execute(colors: Colors, intent: RadioButtonIntent) -> any ColorToken {
+        switch intent {
         case .basic: return colors.basic.basic
         }
     }

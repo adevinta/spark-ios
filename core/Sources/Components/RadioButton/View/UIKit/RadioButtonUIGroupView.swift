@@ -89,12 +89,11 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     /// The current state `RadioButtonGroupState` of the items within the group, e.g. `enabled`.
     public var state: RadioButtonGroupState {
         get {
-            return self.viewModel.state
+            return .enabled
         }
         set {
-            self.viewModel.state = newValue
             for radioButtonView in radioButtonViews {
-                radioButtonView.groupState = newValue
+                radioButtonView.isEnabled = newValue != .disabled
             }
         }
 
@@ -168,6 +167,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     /// - radioButtonLabelPosition: The position of the label in each radio button item according to the toggle. The default value is, that the label is to the `right` of the toggle.
     /// - groupLayout: The layout of the items within the group. These can be `horizontal` or `vertical`. The defalt is `vertical`.
     /// - state: The state of the radiobutton group, see `RadioButtonGroupState`
+    @available(*, deprecated, message: "Use initializer with intent instead")
     public convenience init(theme: Theme,
                 title: String? = nil,
                 selectedID: ID,
@@ -176,7 +176,10 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                 groupLayout: RadioButtonGroupLayout = .vertical,
                 state: RadioButtonGroupState = .enabled,
                 supplementaryText: String? = nil) {
-        let viewModel = RadioButtonGroupViewModel(theme: theme, state: state)
+        let viewModel = RadioButtonGroupViewModel(
+            theme: theme,
+            intent: .basic
+        )
         self.init(viewModel: viewModel,
                   title: title,
                   selectedID: selectedID,
@@ -184,6 +187,41 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                   radioButtonLabelPosition: radioButtonLabelPosition,
                   groupLayout: groupLayout,
                   supplementaryText: supplementaryText)
+    }
+
+    /// Initializer of the radio button ui group component.
+    /// Parameters:
+    /// - theme: The current theme.
+    /// - intent: The default intent is `basic`
+    /// - title: The title of the radio button group. This is optional, if it's not given, no title will be shown.
+    /// - selectedID: The current selected value of the radio button group.
+    /// - items: A list of `RadioButtonUIItem` which represent each item in the radio button group.
+    /// - radioButtonLabelPosition: The position of the label in each radio button item according to the toggle. The default value is, that the label is to the `right` of the toggle.
+    /// - groupLayout: The layout of the items within the group. These can be `horizontal` or `vertical`. The defalt is `vertical`.
+    public convenience init(
+        theme: Theme,
+        intent: RadioButtonIntent = .basic,
+        title: String? = nil,
+        selectedID: ID,
+        items: [RadioButtonUIItem<ID>],
+        radioButtonLabelPosition: RadioButtonLabelPosition = .right,
+        groupLayout: RadioButtonGroupLayout = .vertical,
+        supplementaryText: String? = nil) {
+
+        let viewModel = RadioButtonGroupViewModel(
+            theme: theme,
+            intent: intent
+        )
+
+        self.init(
+            viewModel: viewModel,
+            title: title,
+            selectedID: selectedID,
+            items: items,
+            radioButtonLabelPosition: radioButtonLabelPosition,
+            groupLayout: groupLayout,
+            supplementaryText: supplementaryText)
+
     }
 
     init(viewModel: RadioButtonGroupViewModel,
@@ -262,12 +300,14 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     private func createRadioButtonViews() {
         self.radioButtonViews = items.map {
-            let radioButtonView = RadioButtonUIView(theme: theme,
-                                                    id: $0.id,
-                                                    label: $0.label,
-                                                    selectedID: self.backingSelectedID,
-                                                    groupState: self.viewModel.state,
-                                                    labelPosition: self.radioButtonLabelPosition
+            let radioButtonView = RadioButtonUIView(
+                theme: theme,
+                intent: self.viewModel.intent,
+                id: $0.id,
+                label: $0.label,
+                selectedID: self.backingSelectedID,
+//                groupState: self.viewModel.state,
+                labelPosition: self.radioButtonLabelPosition
             )
             radioButtonView.translatesAutoresizingMaskIntoConstraints = false
             return radioButtonView
