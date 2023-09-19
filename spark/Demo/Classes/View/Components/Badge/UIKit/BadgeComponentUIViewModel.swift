@@ -75,3 +75,7 @@ extension BadgeComponentUIViewModel {
         self.showFormatSheetSubject.send(BadgeFormat.allNames)
     }
 }
+
+private  extension BadgeFormat {
+    static var allNames: [String] = [Names.default, Names.custom, Names.overflowCounter]
+ }

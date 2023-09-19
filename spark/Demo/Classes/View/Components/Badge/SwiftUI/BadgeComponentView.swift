@@ -10,37 +10,12 @@ import Spark
 import SparkCore
 import SwiftUI
 
-private struct BadgePreviewFormatter: BadgeFormatting {
-    func formatText(for value: Int?) -> String {
-        guard let value else {
-            return "_"
-        }
-        return "Test \(value)"
-    }
-}
-
 struct BadgeComponentView: View {
-
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-    @State var isThemePresented = false
-
-    let themes = ThemeCellModel.themes
-
+    @State var theme: Theme = SparkThemePublisher.shared.theme
     @State var intent: BadgeIntentType = .danger
-    @State var isIntentPresented = false
-
     @State var size: BadgeSize = .medium
-    @State var isSizePresented = false
-
     @State var value: Int? = 99
-
     @State var format: BadgeFormat = .default
-    @State var isFormatPresented = false
-
     @State var isBorderVisible: CheckboxSelectionState = .unselected
 
     var body: some View {
@@ -51,61 +26,30 @@ struct BadgeComponentView: View {
                 .padding(.bottom, 6)
 
             VStack(alignment: .leading, spacing: 8) {
-                HStack() {
-                    Text("Theme: ").bold()
-                    let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
-                    Button(selectedTheme?.title ?? "") {
-                        self.isThemePresented = true
+                ThemeSelector(theme: self.$theme)
+
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an Intent",
+                    values: BadgeIntentType.allCases,
+                    value: self.$intent)
+
+                EnumSelector(
+                    title: "Badge Size",
+                    dialogTitle: "Select a Size",
+                    values: BadgeSize.allCases,
+                    value: self.$size)
+
+                EnumSelector(
+                    title: "Format",
+                    dialogTitle: "Select a Format",
+                    values: BadgeFormat.allCases,
+                    value: self.$format,
+                    nameFormatter: { badgeFormat in
+                        return badgeFormat.name
                     }
-                    .confirmationDialog("Select a theme",
-                                        isPresented: self.$isThemePresented) {
-                        ForEach(themes, id: \.self) { theme in
-                            Button(theme.title) {
-                                themePublisher.theme = theme.theme
-                            }
-                        }
-                    }
-                    Spacer()
-                }
-                HStack() {
-                    Text("Intent: ").bold()
-                    Button(self.intent.name) {
-                        self.isIntentPresented = true
-                    }
-                    .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
-                        ForEach(BadgeIntentType.allCases, id: \.self) { intent in
-                            Button(intent.name) {
-                                self.intent = intent
-                            }
-                        }
-                    }
-                }
-                HStack() {
-                    Text("Badge Size: ").bold()
-                    Button(self.size.name) {
-                        self.isSizePresented = true
-                    }
-                    .confirmationDialog("Select a size", isPresented: self.$isSizePresented) {
-                        ForEach(BadgeSize.allCases, id: \.self) { size in
-                            Button(size.name) {
-                                self.size = size
-                            }
-                        }
-                    }
-                }
-                HStack() {
-                    Text("Format ").bold()
-                    Button(self.format.name) {
-                        self.isFormatPresented = true
-                    }
-                    .confirmationDialog("Select a format", isPresented: self.$isFormatPresented) {
-                        ForEach(BadgeFormat.allNames, id: \.self) { name in
-                            Button(name) {
-                                self.format = BadgeFormat.from(name: name)
-                            }
-                        }
-                    }
-                }
+                )
+
                 HStack() {
                     Text("Value ").bold()
                     TextField("Value", value: self.$value, formatter: NumberFormatter())
@@ -144,30 +88,25 @@ struct BadgeComponentView_Previews: PreviewProvider {
     }
 }
 
-extension BadgeFormat {
-    enum Names {
-        static let `default` = "Default"
-        static let custom = "Custom"
-        static let overflowCounter = "Overflow Counter"
+extension BadgeFormat: CaseIterable {
+    public static var allCases: [SparkCore.BadgeFormat] {
+        [`default`,
+         custom(formatter: BadgePreviewFormatter()),
+         overflowCounter(maxValue: 99)
+        ]
     }
+}
 
-    static var allNames: [String] = [Names.default, Names.custom, Names.overflowCounter]
-
-    var name: String {
-        switch self {
-        case .default: return Names.default
-        case .custom: return Names.custom
-        case .overflowCounter: return Names.overflowCounter
-        @unknown default:
-            fatalError("Unknown Badge Format")
+extension BadgeFormat: Hashable {
+    public static func == (lhs: SparkCore.BadgeFormat, rhs: SparkCore.BadgeFormat) -> Bool {
+        switch (lhs, rhs) {
+        case (`default`, `default`): return true
+        case (custom, custom): return true
+        case (overflowCounter, overflowCounter): return true
+        default: return false
         }
     }
-
-    static func from(name: String) -> BadgeFormat {
-        switch name {
-        case Names.custom: return .custom(formatter: BadgePreviewFormatter())
-        case Names.overflowCounter: return .overflowCounter(maxValue: 99)
-        default: return .default
-        }
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.name)
     }
 }
