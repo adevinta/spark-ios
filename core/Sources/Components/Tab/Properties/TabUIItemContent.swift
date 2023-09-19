@@ -15,6 +15,8 @@ public struct TabUIItemContent: TitleContaining, Equatable, Updateable {
     public var icon: UIImage?
     public var title: String?
 
+    /// Return true if the title is not nil.
+    /// If the title is an empty string, `hasTitle` will return true.
     public var hasTitle: Bool {
         return title != nil
     }

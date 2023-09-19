@@ -20,6 +20,10 @@ final class TabViewModel<Content>: ObservableObject {
         }
     }
 
+    // Disable/Enable each tab in the tab control.
+    // The whole tab is regarded as enabled, if all tabs are enabled.
+    // When set, each tab will be disabled or enabled.
+    // To disable a single tab, use the function `disableTab`.
     var isEnabled: Bool {
         get {
             return self.disabledTabs.reduce(true) { return $0 && !$1 }
@@ -29,6 +33,7 @@ final class TabViewModel<Content>: ObservableObject {
             self.disabledTabs = self.disabledTabs.map { _ in return !newValue }
         }
     }
+
     var numberOfTabs: Int {
         return self.content.count
     }
@@ -53,6 +58,7 @@ final class TabViewModel<Content>: ObservableObject {
         self.tabsAttributes = useCase.execute(theme: theme, isEnabled: true)
     }
 
+    // Disable or enable a single tab.
     func disableTab(_ disabled: Bool, index: Int) {
         guard index < self.content.count else { return }
         

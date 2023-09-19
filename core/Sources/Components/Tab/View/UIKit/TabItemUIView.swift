@@ -47,7 +47,7 @@ public final class TabItemUIView: UIControl {
         return border
     }()
 
-    // An internal property to determin if the segment width should be aligned to the
+    // An internal property to determine if the segment width should be aligned to the
     // content of the tab or to equally size the tabs.
     internal var apportionsSegmentWidthsByContent: Bool {
         get {

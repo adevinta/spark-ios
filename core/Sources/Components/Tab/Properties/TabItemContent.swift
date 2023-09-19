@@ -33,7 +33,8 @@ public struct TabItemContent: TitleContaining, Equatable, Updateable {
     /// An optional badge
     public var badge: BadgeView?
 
-    /// Return true if either title or attributed title have a value
+    /// Return true if either title or attributed title are not nil.
+    /// An empty string in either title or attributed title will be treated as having a title and `hasTitle` will return true.
     public var hasTitle: Bool {
         return self.title != nil || self.attributedTitle != nil
     }
