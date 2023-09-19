@@ -115,7 +115,6 @@ final class TabUIViewTests: TestCase {
         expect.isInverted = true
 
         self.sut.publisher.sink { (selectedTab: Int) in
-            print(selectedTab)
             expect.fulfill()
         }.store(in: &self.subscriptions)
 
