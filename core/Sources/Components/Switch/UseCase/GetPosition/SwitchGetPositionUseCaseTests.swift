@@ -16,11 +16,12 @@ final class SwitchGetPositionUseCaseTests: XCTestCase {
 
     private let spacingMock = LayoutSpacingGeneratedMock.mocked()
 
-    // MARK: - Tests
+    // MARK: - Alignment Tests
 
     func test_execute_when_switchAlignment_is_left_case() throws {
         try self.testExecute(
             givenAlignment: .left,
+            givenContainsText: true,
             expectedPosition: .init(
                 isToggleOnLeft: true,
                 horizontalSpacing: self.spacingMock.medium
@@ -31,9 +32,23 @@ final class SwitchGetPositionUseCaseTests: XCTestCase {
     func test_execute_when_switchAlignment_is_right_case() throws {
         try self.testExecute(
             givenAlignment: .left,
+            givenContainsText: true,
             expectedPosition: .init(
                 isToggleOnLeft: true,
                 horizontalSpacing: self.spacingMock.medium
+            )
+        )
+    }
+
+    // MARK: - Contains Text Tests
+
+    func test_execute_when_containsText_is_false() throws {
+        try self.testExecute(
+            givenAlignment: .left,
+            givenContainsText: false,
+            expectedPosition: .init(
+                isToggleOnLeft: true,
+                horizontalSpacing: 0
             )
         )
     }
@@ -45,17 +60,19 @@ private extension SwitchGetPositionUseCaseTests {
 
     func testExecute(
         givenAlignment: SwitchAlignment,
+        givenContainsText: Bool,
         expectedPosition: SwitchPosition
     ) throws {
         // GIVEN
-        let errorPrefixMessage = " for .\(givenAlignment) case"
+        let errorPrefixMessage = " for .\(givenAlignment) alignment case - containsText = .\(givenContainsText)"
 
         let useCase = SwitchGetPositionUseCase()
 
         // WHEN
         let position = useCase.execute(
             alignment: givenAlignment,
-            spacing: self.spacingMock
+            spacing: self.spacingMock,
+            containsText: givenContainsText
         )
 
         // THEN

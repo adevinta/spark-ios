@@ -100,7 +100,6 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
             newAttributedText: attributedText,
             displayedTextType: self.displayedTextType
         ) {
-            self.attributedText = attributedText
             self.displayedTextType = self.getDisplayedTextTypeUseCase.execute(
                 attributedText: attributedText
             )
