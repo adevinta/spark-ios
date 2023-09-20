@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct ChipView: View {
 
-    @ObservedObject private var viewModel: ChipViewModel
+    @ObservedObject private var viewModel: ChipViewModel<BadgeUIView>
     @ScaledMetric private var imageSize = ChipConstants.imageSize
     @ScaledMetric private var height = ChipConstants.height
     @ScaledMetric private var borderWidth = ChipConstants.borderWidth
@@ -19,7 +19,8 @@ public struct ChipView: View {
     @ScaledMetric private var padding: CGFloat
     @ScaledMetric private var borderRadius: CGFloat
 
-    private var action: (() -> ())?
+    private var action: (() -> Void)?
+    
 
     /// An optional icon on the Chip. The icon is always rendered to the left of the text
     private var icon: Image?
@@ -44,51 +45,93 @@ public struct ChipView: View {
 //    }
 
     public init(theme: Theme,
-                intentColor: ChipIntentColor,
+                intent: ChipIntent,
                 variant: ChipVariant,
-                iconImage: Image) {
-        self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: nil, optionalIconImage: iconImage)
+                alignment: ChipAlignment = .leadingIcon,
+                iconImage: Image,
+                action: (() -> Void)? = nil
+    ) {
+        self.init(theme: theme,
+                  intent: intent,
+                  variant: variant,
+                  alignment: alignment,
+                  optionalLabel: nil,
+                  optionalIconImage: iconImage,
+                  action: action
+        )
     }
 
     public init(theme: Theme,
-                intentColor: ChipIntentColor,
+                intent: ChipIntent,
                 variant: ChipVariant,
+                alignment: ChipAlignment = .leadingIcon,
                 label: String,
-                iconImage: Image) {
-        self.init(theme: theme, intentColor: intentColor, variant: variant, optionalLabel: label , optionalIconImage: iconImage)
+                iconImage: Image,
+                action: (() -> Void)? = nil
+    ) {
+        self.init(theme: theme,
+                  intent: intent,
+                  variant: variant,
+                  alignment: alignment,
+                  optionalLabel: label ,
+                  optionalIconImage: iconImage,
+                  aciton: action
+        )
     }
 
     init(theme: Theme,
-         intentColor: ChipIntentColor,
+         intent: ChipIntent,
          variant: ChipVariant,
+         alignment: ChipAlignment,
          optionalLabel: String?,
-         optionalIconImage: Image?) {
-        let viewModel = ChipViewModel(theme: theme, variant: variant, intentColor: intentColor)
-        self.init(viewModel: viewModel, optionalLabel: optionalLabel, optionalIconImage: optionalIconImage)
+         optionalIconImage: Image?,
+         action: (() -> Void)? = nil
+    ) {
+        let viewModel = ChipViewModel(
+            theme: theme,
+            variant: variant,
+            intent: intent,
+            alignment: alignment)
+        self.init(viewModel: viewModel,
+                  optionalLabel: optionalLabel,
+                  optionalIconImage: optionalIconImage,
+                  action: action
+        )
     }
 
-    init(viewModel: ChipViewModel,
-         optionalLabel: String?,
-         optionalIconImage: Image?) {
+    internal init(viewModel: ChipViewModel,
+                  optionalLabel: String?,
+                  optionalIconImage: Image?,
+                  action: (() -> Void)? = nil
+    ) {
         self.viewModel = viewModel
         self.text = optionalLabel
         self.icon = optionalIconImage
+        self.action = action
 
         self._spacing = ScaledMetric(wrappedValue: viewModel.spacing)
         self._padding = ScaledMetric(wrappedValue: viewModel.padding)
         self._borderRadius = ScaledMetric(wrappedValue: viewModel.borderRadius)
 
-
     }
 
-    var body: some View {
+    public var body: some View {
         Button(action: {}) {
             HStack {
-                if let text = text {
-                    Text(text)
-                }
-                if let icon = icon {
-                    icon
+                if self.viewModel.alignment == .leadingIcon {
+                    if let icon = icon {
+                        icon
+                    }
+                    if let text = text {
+                        Text(text)
+                    }
+                } else {
+                    if let text = text {
+                        Text(text)
+                    }
+                    if let icon = icon {
+                        icon
+                    }
                 }
             }
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ChipViewModel: ObservableObject {
+class ChipViewModel<Badge>: ObservableObject {
 
     // MARK: - Properties Injected
     private (set) var theme: Theme
@@ -38,6 +38,7 @@ class ChipViewModel: ObservableObject {
     @Published var font: TypographyFontToken
     @Published var colors: ChipStateColors
     @Published var isIconLeading: Bool
+    @Published var badge: Badge? = nil
 
     // MARK: - Computed variables
     var isBorderDashed: Bool {

@@ -245,10 +245,12 @@ public final class ChipUIView: UIControl {
          optionalLabel: String?,
          optionalIconImage: UIImage?) {
 
-        self.viewModel = ChipViewModel(theme: theme,
-                                       variant: variant,
-                                       intent: intent,
-                                       alignment: alignment)
+        self.viewModel = ChipViewModel<UIView>(
+            theme: theme,
+            variant: variant,
+            intent: intent,
+            alignment: alignment
+        )
         self.spacing = self.viewModel.spacing
         self.padding = self.viewModel.padding
         self.borderRadius = self.viewModel.borderRadius
