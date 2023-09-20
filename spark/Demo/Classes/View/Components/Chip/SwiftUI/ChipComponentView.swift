@@ -27,7 +27,7 @@ struct ChipComponentView: View {
     @State private var showingAlert = false
 
     private let label = "Label"
-    private let icon = UIImage(imageLiteralResourceName: "alert")
+    private let icon = Image("alert")
 
     // MARK: - View
 
@@ -97,29 +97,29 @@ struct ChipComponentView: View {
                 )
             },
             integration: {
-                ChipComponentViewRepresentable(
+                ChipView(
                     theme: self.theme,
                     intent: self.intent,
                     variant: self.variant,
                     alignment: self.alignment,
-                    label: self.showLabel == .selected ? self.label : nil,
+                    title: self.showLabel == .selected ? self.label : nil,
                     icon: self.showIcon == .selected ? self.icon : nil,
-                    component: self.withComponent == .selected ? badge() : nil,
-                    isEnabled: self.isEnabled == .selected,
-                    action: self.withAction == .selected ? { self.showingAlert = true} : nil)
-                    .alert("Chip Pressed", isPresented: self.$showingAlert) {
-                        Button("OK", role: .cancel) { }
+                    action: self.withAction == .selected ? { self.showingAlert = true} : nil
+                )
+                .component(self.withComponent == .selected ? self.component() : nil)
+                .disabled(self.isEnabled == .unselected)
+                .alert("Chip Pressed", isPresented: self.$showingAlert) {
+                    Button("OK", role: .cancel) { }
                 }
-                .fixedSize()
             }
         )
     }
 
-    func badge() -> UIView {
-        return BadgeUIView(theme: self.theme,
-                           intent: .danger,
-                           size: .small,
-                           value: 99
+
+    private func component() -> AnyView {
+        return AnyView(
+            Image(systemName: "checkmark.seal.fill")
+                .foregroundColor(.gray)
         )
     }
 }
@@ -127,5 +127,23 @@ struct ChipComponentView: View {
 struct ChipComponent_Previews: PreviewProvider {
     static var previews: some View {
         ChipComponentView()
+    }
+}
+
+extension UIView {
+    func withTint(_ color: UIColor) -> Self {
+        self.tintColor = color
+        return self
+    }
+}
+
+private extension ChipAlignment {
+    var name: String {
+        switch self {
+        case .leadingIcon: return "Leading Icon"
+        case .trailingIcon: return "Trailing Icon"
+        @unknown default:
+            return "Unknown"
+        }
     }
 }

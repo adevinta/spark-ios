@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct ChipView: View {
 
-    @ObservedObject private var viewModel: ChipViewModel<BadgeUIView>
+    @ObservedObject private var viewModel: ChipViewModel<ChipContent>
     @ScaledMetric private var imageSize = ChipConstants.imageSize
     @ScaledMetric private var height = ChipConstants.height
     @ScaledMetric private var borderWidth = ChipConstants.borderWidth
@@ -20,43 +20,20 @@ public struct ChipView: View {
     @ScaledMetric private var borderRadius: CGFloat
 
     private var action: (() -> Void)?
-    
-
-    /// An optional icon on the Chip. The icon is always rendered to the left of the text
-    private var icon: Image?
-//    {
-//        set {
-//            self.imageView.image = newValue
-//        }
-//        get {
-//            return self.imageView.image
-//        }
-//    }
-
-    /// An optional text shown on the Chip. The text is rendered to the right of the icon.
-    private var text: String?
-//    {
-//        set {
-//            self.textLabel.text = newValue
-//        }
-//        get {
-//            return self.textLabel.text
-//        }
-//    }
 
     public init(theme: Theme,
                 intent: ChipIntent,
                 variant: ChipVariant,
                 alignment: ChipAlignment = .leadingIcon,
-                iconImage: Image,
+                icon: Image,
                 action: (() -> Void)? = nil
     ) {
         self.init(theme: theme,
                   intent: intent,
                   variant: variant,
                   alignment: alignment,
-                  optionalLabel: nil,
-                  optionalIconImage: iconImage,
+                  title: nil,
+                  icon: icon,
                   action: action
         )
     }
@@ -65,48 +42,47 @@ public struct ChipView: View {
                 intent: ChipIntent,
                 variant: ChipVariant,
                 alignment: ChipAlignment = .leadingIcon,
-                label: String,
-                iconImage: Image,
+                title: String,
                 action: (() -> Void)? = nil
     ) {
         self.init(theme: theme,
                   intent: intent,
                   variant: variant,
                   alignment: alignment,
-                  optionalLabel: label ,
-                  optionalIconImage: iconImage,
-                  aciton: action
+                  title: title,
+                  icon: nil,
+                  action: action
         )
     }
 
-    init(theme: Theme,
+    public init(theme: Theme,
          intent: ChipIntent,
          variant: ChipVariant,
          alignment: ChipAlignment,
-         optionalLabel: String?,
-         optionalIconImage: Image?,
+         title: String?,
+         icon: Image?,
          action: (() -> Void)? = nil
     ) {
-        let viewModel = ChipViewModel(
+        let viewModel = ChipViewModel<ChipContent>(
             theme: theme,
             variant: variant,
             intent: intent,
-            alignment: alignment)
+            alignment: alignment,
+            content: ChipContent(title: title, icon: icon))
+
         self.init(viewModel: viewModel,
-                  optionalLabel: optionalLabel,
-                  optionalIconImage: optionalIconImage,
+                  title: title,
+                  icon: icon,
                   action: action
         )
     }
 
-    internal init(viewModel: ChipViewModel,
-                  optionalLabel: String?,
-                  optionalIconImage: Image?,
+    internal init(viewModel: ChipViewModel<ChipContent>,
+                  title: String?,
+                  icon: Image?,
                   action: (() -> Void)? = nil
     ) {
         self.viewModel = viewModel
-        self.text = optionalLabel
-        self.icon = optionalIconImage
         self.action = action
 
         self._spacing = ScaledMetric(wrappedValue: viewModel.spacing)
@@ -116,34 +92,105 @@ public struct ChipView: View {
     }
 
     public var body: some View {
-        Button(action: {}) {
-            HStack {
-                if self.viewModel.alignment == .leadingIcon {
-                    if let icon = icon {
-                        icon
-                    }
-                    if let text = text {
-                        Text(text)
-                    }
-                } else {
-                    if let text = text {
-                        Text(text)
-                    }
-                    if let icon = icon {
-                        icon
-                    }
-                }
+
+        if let action = action  {
+            Button(action: action) {
+                self.content()
             }
+            .disabled(!self.viewModel.isEnabled)
+            .opacity(self.viewModel.colors.opacity)
+            .buttonStyle(ChipButtonStyle(viewModel: self.viewModel))
+        } else {
+            self.content()
         }
     }
 
-    public func icon(_ icon: UIImage) -> Self {
-//        self.icon = icon
+    @ViewBuilder
+    private func content() -> some View {
+        HStack(spacing: self.spacing) {
+            if self.viewModel.alignment == .leadingIcon {
+                icon()
+                title()
+            } else {
+                title()
+                icon()
+            }
+            if let component = self.viewModel.content.component {
+                component
+                    .frame(height: self.imageSize)
+            }
+        }
+        .padding(self.padding)
+        .background(self.viewModel.colors.background.color)
+        .if(self.viewModel.isBorderDashed,
+            then: { view in
+                view.overlay(
+                    RoundedRectangle(cornerRadius: self.borderRadius)
+                    .strokeBorder(
+                        self.viewModel.colors.foreground.color,
+                        style: StrokeStyle(lineWidth: self.borderWidth, dash: [self.dashLength]))
+                )
+            },
+            else: { view in
+                view.border(width: self.borderWidth,
+                        radius: self.borderRadius,
+                        colorToken: self.viewModel.colors.border)
+            }
+        )
+        .frame(height: self.height)
+    }
+
+    @ViewBuilder
+    private func icon() -> some View {
+        if let icon = self.viewModel.content.icon {
+            icon
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(self.viewModel.colors.foreground.color)
+                .frame(width: self.imageSize, height: self.imageSize)
+        } else {
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    private func title() -> some View {
+        if let title = self.viewModel.content.title {
+            Text(title)
+                .font(self.viewModel.font.font)
+                .foregroundColor(self.viewModel.colors.foreground.color)
+        } else {
+            EmptyView()
+        }
+    }
+
+    public func icon(_ icon: Image?) -> Self {
+        self.viewModel.content.icon = icon
         return self
     }
 
-    public func text(_ text: String) -> Self {
+    public func title(_ title: String?) -> Self {
+        self.viewModel.content.title = title
+        return self
+    }
+
+    public func component(_ component: AnyView?) -> Self {
+        self.viewModel.content.component = component
         return self
     }
 }
 
+//MARK: - Private Button Style
+private struct ChipButtonStyle: ButtonStyle {
+    var viewModel: ChipViewModel<ChipContent>
+
+    func makeBody(configuration: Self.Configuration) -> some View {
+        if configuration.isPressed != self.viewModel.isPressed {
+            DispatchQueue.main.async {
+                self.viewModel.isPressed = configuration.isPressed
+            }
+        }
+        return configuration.label
+            .animation(.easeOut(duration: 0.2), value: self.viewModel.isPressed)
+    }
+}

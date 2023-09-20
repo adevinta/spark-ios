@@ -11,6 +11,10 @@ import UIKit
 
 public final class ChipUIView: UIControl {
 
+    private enum Constants {
+        static let touchAreaTolerance: CGFloat = 100
+    }
+
     //MARK: - Public properties
     /// An optional icon on the Chip. The icon is always rendered to the left of the text
     public var icon: UIImage? {
@@ -123,7 +127,7 @@ public final class ChipUIView: UIControl {
     }
 
     //MARK: - Private properties
-    private let viewModel: ChipViewModel
+    private let viewModel: ChipViewModel<Void>
 
     private var dashBorder: CAShapeLayer?
 
@@ -245,11 +249,12 @@ public final class ChipUIView: UIControl {
          optionalLabel: String?,
          optionalIconImage: UIImage?) {
 
-        self.viewModel = ChipViewModel<UIView>(
+        self.viewModel = ChipViewModel<Void>(
             theme: theme,
             variant: variant,
             intent: intent,
-            alignment: alignment
+            alignment: alignment,
+            content: Void()
         )
         self.spacing = self.viewModel.spacing
         self.padding = self.viewModel.padding
