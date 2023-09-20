@@ -14,93 +14,83 @@ struct ButtonComponentView: View {
 
     // MARK: - Properties
 
-    let viewModel = ButtonComponentViewModel()
+    private let viewModel = ButtonComponentViewModel()
 
     @State private var uiKitViewHeight: CGFloat = .zero
 
-    @State var theme: Theme = SparkThemePublisher.shared.theme
-    @State var intent: ButtonIntent = .main
-    @State var variant: ButtonVariant = .filled
-    @State var size: ButtonSize = .medium
-    @State var shape: ButtonShape = .rounded
-    @State var alignment: ButtonAlignment = .leadingIcon
-    @State var content: ButtonContentDefault = .text
-    @State var isEnabled: CheckboxSelectionState = .selected
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: ButtonIntent = .main
+    @State private var variant: ButtonVariant = .filled
+    @State private var size: ButtonSize = .medium
+    @State private var shape: ButtonShape = .rounded
+    @State private var alignment: ButtonAlignment = .leadingIcon
+    @State private var content: ButtonContentDefault = .text
+    @State private var isEnabled: CheckboxSelectionState = .selected
 
-    @State var shouldShowReverseBackgroundColor: Bool = false
+    @State private var shouldShowReverseBackgroundColor: Bool = false
 
     // MARK: - View
 
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 24) {
-                Text("Configuration")
-                    .font(.title2)
-                    .bold()
+        Component(
+            name: "Button",
+            configuration: {
+                ThemeSelector(theme: self.$theme)
 
-                VStack(alignment: .leading, spacing: 16) {
-                    ThemeSelector(theme: self.$theme)
-
-                    EnumSelector(
-                        title: "Intent",
-                        dialogTitle: "Select an intent",
-                        values: ButtonIntent.allCases,
-                        value: self.$intent
-                    )
-                    .onChange(of: self.intent) { newValue in
-                        self.shouldShowReverseBackgroundColor = (newValue == .surface)
-                    }
-
-                    EnumSelector(
-                        title: "Variant",
-                        dialogTitle: "Select a variant",
-                        values: ButtonVariant.allCases,
-                        value: self.$variant
-                    )
-
-                    EnumSelector(
-                        title: "Size",
-                        dialogTitle: "Select a size",
-                        values: ButtonSize.allCases,
-                        value: self.$size
-                    )
-
-                    EnumSelector(
-                        title: "Shape",
-                        dialogTitle: "Select a shape",
-                        values: ButtonShape.allCases,
-                        value: self.$shape
-                    )
-
-                    EnumSelector(
-                        title: "Alignment",
-                        dialogTitle: "Select an alignment",
-                        values: ButtonAlignment.allCases,
-                        value: self.$alignment
-                    )
-
-                    EnumSelector(
-                        title: "Content",
-                        dialogTitle: "Select an content",
-                        values: ButtonContentDefault.allCases,
-                        value: self.$content
-                    )
-
-                    CheckboxView(
-                        text: "Is enabled",
-                        checkedImage: DemoIconography.shared.checkmark,
-                        theme: self.theme,
-                        state: .enabled,
-                        selectionState: self.$isEnabled
-                    )
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an intent",
+                    values: ButtonIntent.allCases,
+                    value: self.$intent
+                )
+                .onChange(of: self.intent) { newValue in
+                    self.shouldShowReverseBackgroundColor = (newValue == .surface)
                 }
 
-                Divider()
+                EnumSelector(
+                    title: "Variant",
+                    dialogTitle: "Select a variant",
+                    values: ButtonVariant.allCases,
+                    value: self.$variant
+                )
 
-                Text("Integration")
-                    .font(.title2)
-                    .bold()
+                EnumSelector(
+                    title: "Size",
+                    dialogTitle: "Select a size",
+                    values: ButtonSize.allCases,
+                    value: self.$size
+                )
 
+                EnumSelector(
+                    title: "Shape",
+                    dialogTitle: "Select a shape",
+                    values: ButtonShape.allCases,
+                    value: self.$shape
+                )
+
+                EnumSelector(
+                    title: "Alignment",
+                    dialogTitle: "Select an alignment",
+                    values: ButtonAlignment.allCases,
+                    value: self.$alignment
+                )
+
+                EnumSelector(
+                    title: "Content",
+                    dialogTitle: "Select an content",
+                    values: ButtonContentDefault.allCases,
+                    value: self.$content
+                )
+
+                CheckboxView(
+                    text: "Is enabled",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: self.theme,
+                    state: .enabled,
+                    selectionState: self.$isEnabled
+                )
+            },
+            integration: {
                 GeometryReader { geometry in
                     ButtonComponentItemsUIView(
                         viewModel: self.viewModel,
@@ -121,9 +111,7 @@ struct ButtonComponentView: View {
                 }
                 Spacer()
             }
-            .padding(.horizontal, 16)
-        }
-        .navigationBarTitle(Text("Button"))
+        )
     }
 }
 

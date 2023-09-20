@@ -14,58 +14,39 @@ struct IconComponentView: View {
 
     // MARK: - Properties
 
-    @State var theme: Theme = SparkThemePublisher.shared.theme
-
-    @State private var uiKitViewHeight: CGFloat = .zero
-    @State var size: IconSize = .medium
-    @State var intent: IconIntent = .main
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var size: IconSize = .medium
+    @State private var intent: IconIntent = .main
 
     // MARK: - View
 
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 24) {
-                Text("Configuration")
-                    .font(.title2)
-                    .bold()
+        Component(
+            name: "Icon",
+            configuration: {
+                ThemeSelector(theme: self.$theme)
 
-                VStack(alignment: .leading, spacing: 16) {
-                    ThemeSelector(theme: self.$theme)
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an Intent",
+                    values: IconIntent.allCases,
+                    value: self.$intent)
 
-                    // Intent
-                    EnumSelector(
-                        title: "Intent",
-                        dialogTitle: "Select an Intent",
-                        values: IconIntent.allCases,
-                        value: self.$intent)
-
-                    // Size
-                    EnumSelector(
-                        title: "Size",
-                        dialogTitle: "Select a Size",
-                        values: IconSize.allCases,
-                        value: self.$size)
-                }
-
-                Divider()
-
-                Text("Integration")
-                    .font(.title2)
-                    .bold()
-
-
+                EnumSelector(
+                    title: "Size",
+                    dialogTitle: "Select a Size",
+                    values: IconSize.allCases,
+                    value: self.$size)
+            },
+            integration: {
                 IconView(
                     theme: SparkTheme.shared,
                     intent: self.intent,
                     size: self.size,
                     iconImage: Image("alert")
                 )
-
-                Spacer()
             }
-            .padding(.horizontal, 16)
-        }
-        .navigationBarTitle(Text("Icon"))
+        )
     }
 }
 

@@ -27,6 +27,8 @@ final class TabComponentUIViewController: UIViewController {
         self.viewModel = viewModel
         self.componentView = TabComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
+
+        self.componentView.viewController = self
     }
 
     required init?(coder: NSCoder) {

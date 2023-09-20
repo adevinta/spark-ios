@@ -27,6 +27,8 @@ final class TagComponentUIViewController: UIViewController {
         self.viewModel = viewModel
         self.componentView = TagComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
+
+        self.componentView.viewController = self
     }
 
     required init?(coder: NSCoder) {

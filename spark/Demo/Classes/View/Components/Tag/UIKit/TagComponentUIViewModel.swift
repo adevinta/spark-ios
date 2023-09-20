@@ -73,17 +73,19 @@ final class TagComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    // MARK: - Inherited Properties
-    var identifier: String = "Tag"
+    // MARK: - Methods
 
-    lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
-        return .init(itemsViewModel: [
+    override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
+        return [
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
             self.contentConfigurationItemViewModel
-        ])
-    }()
+        ]
+    }
+
+    // MARK: - Inherited Properties
+
     var themes = ThemeCellModel.themes
 
     // MARK: - Default Value Properties
@@ -106,6 +108,8 @@ final class TagComponentUIViewModel: ComponentUIViewModel {
         self.intent = intent
         self.variant = variant
         self.content = content
+
+        super.init(identifier: "Tag")
     }
 }
 

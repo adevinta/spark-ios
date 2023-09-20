@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class ComponentUIView: UIView {
 
@@ -70,31 +71,72 @@ class ComponentUIView: UIView {
     }()
 
     private lazy var componentStackView: UIStackView = {
-        let stackView = UIStackView(
+        let horizontalStackView = UIStackView(
             arrangedSubviews: [
+                self.componentLeftSpaceView,
                 self.componentView,
-                self.componentSpaceView
+                self.componentRightSpaceView
             ]
         )
-        stackView.axis = .horizontal
-        return stackView
+        horizontalStackView.spacing = 16
+        horizontalStackView.axis = .horizontal
+
+        let verticalStackView = UIStackView(
+            arrangedSubviews: [
+                self.componentTopSpaceView,
+                horizontalStackView,
+                self.componentBottomSpaceView
+            ]
+        )
+        verticalStackView.spacing = 16
+        verticalStackView.axis = .vertical
+
+        return verticalStackView
     }()
 
     private let componentView: UIView
 
-    lazy var componentSpaceView: UIView = {
+    lazy var componentLeftSpaceView: UIView = {
         let view = UIView()
-        view.isHidden = true
+        view.spaceContainer(for: .left)
+        return view
+    }()
+
+    var componentTopSpaceView: UIView = {
+        let view = UIView()
+        view.spaceContainer(for: .top)
+        return view
+    }()
+
+    lazy var componentRightSpaceView: UIView = {
+        let view = UIView()
+        view.spaceContainer(for: .right)
+        return view
+    }()
+
+    lazy var componentBottomSpaceView: UIView = {
+        let view = UIView()
+        view.spaceContainer(for: .bottom)
         return view
     }()
 
     // MARK: - Properties
 
-    private let viewModel: any ComponentUIViewModel
+    private let viewModel: ComponentUIViewModel
+
+    weak var viewController: UIViewController?
+
+    var showRightSpacing: Bool = false {
+        didSet {
+            self.updateSpaceContainerViews()
+        }
+    }
+
+    private var subscriptions: Set<AnyCancellable> = []
 
     // MARK: - Initialization
 
-    init(viewModel: some ComponentUIViewModel,
+    init(viewModel: ComponentUIViewModel,
          componentView: UIView) {
         self.viewModel = viewModel
 
@@ -119,8 +161,14 @@ class ComponentUIView: UIView {
         // Subviews
         self.addSubview(self.scrollView)
 
+        // Spacing
+        self.updateSpaceContainerViews()
+
         // Add constraints
         self.setupConstraints()
+
+        // Setup
+        self.setupSubscriptions()
     }
 
     private func setupConstraints() {
@@ -150,5 +198,71 @@ class ComponentUIView: UIView {
         NSLayoutConstraint.activate([
             self.separationLineView.heightAnchor.constraint(equalToConstant: 1)
         ])
+    }
+
+    // MARK: - Update UI
+
+    func updateSpaceContainerViews() {
+        let type = self.viewModel.spaceContainerType
+
+        self.componentLeftSpaceView.isHidden = !SpaceContainer.left.showSpaceContainer(
+            from: type
+        )
+        self.componentTopSpaceView.isHidden = !SpaceContainer.top.showSpaceContainer(
+            from: type
+        )
+        self.componentRightSpaceView.isHidden = !(SpaceContainer.right.showSpaceContainer(
+            from: type
+        ) || self.showRightSpacing)
+        self.componentBottomSpaceView.isHidden = !SpaceContainer.bottom.showSpaceContainer(
+            from: type
+        )
+    }
+
+    // MARK: - Subscribe
+
+    private func setupSubscriptions() {
+        self.viewModel.$spaceContainerType.subscribe(in: &self.subscriptions) { [weak self] type in
+            guard let self = self else { return }
+            self.viewModel.spaceContainerTypeConfigurationItemViewModel.buttonTitle = type.name
+            self.updateSpaceContainerViews()
+        }
+
+        self.viewModel.showSpaceContainerTypeSheet.subscribe(in: &self.subscriptions) { types in
+            self.presentIntentActionSheet(types)
+        }
+    }
+
+    // MARK: - Navigation
+
+    private func presentIntentActionSheet(_ spaceContainerTypes: [SpaceContainerType]) {
+        guard let viewController = self.viewController else {
+            return
+        }
+
+        let actionSheet = SparkActionSheet<SpaceContainerType>.init(
+            values: spaceContainerTypes,
+            texts: spaceContainerTypes.map { $0.name }) { type in
+                self.viewModel.spaceContainerType = type
+            }
+        viewController.present(actionSheet, animated: true)
+    }
+}
+
+// MARK: - Extension
+
+private extension UIView {
+
+    func spaceContainer(for spaceContainer: SpaceContainer) {
+        self.backgroundColor = SparkTheme.shared.colors.main.mainContainer.uiColor
+        self.layer.cornerRadius = SparkTheme.shared.border.radius.medium
+
+        self.translatesAutoresizingMaskIntoConstraints = false
+        if let fixedWidth = spaceContainer.fixedWidth {
+            self.widthAnchor.constraint(equalToConstant: fixedWidth).isActive = true
+        }
+        if let fixedHeight = spaceContainer.fixedHeight {
+            self.heightAnchor.constraint(equalToConstant: fixedHeight).isActive = true
+        }
     }
 }
