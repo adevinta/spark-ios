@@ -125,3 +125,13 @@ extension BadgeComponentViewController {
             self.present(actionSheet, animated: true)
     }
 }
+
+private  extension BadgeFormat {
+    static func from(name: String) -> BadgeFormat {
+        switch name {
+        case Names.custom: return .custom(formatter: BadgePreviewFormatter())
+        case Names.overflowCounter: return .overflowCounter(maxValue: 99)
+        default: return .default
+        }
+    }
+ }
