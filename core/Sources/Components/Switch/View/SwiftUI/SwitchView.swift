@@ -71,14 +71,15 @@ public struct SwitchView: View {
         return (self.viewModel.isToggleOnLeft == true) ? SwitchSubviewType.leftAlignmentCases : SwitchSubviewType.rightAlignmentCases
     }
 
+    @ViewBuilder
     private func makeSubview(from type: SwitchSubviewType) -> some View {
         switch type {
         case .space:
-            return AnyView(self.space())
+            self.space()
         case .text:
-            return AnyView(self.text())
+            self.text()
         case .toggle:
-            return AnyView(self.toggle())
+            self.toggle()
         }
     }
 
