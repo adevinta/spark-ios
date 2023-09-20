@@ -143,6 +143,19 @@ final class ChipComponentUIView: UIView {
         return view
     }()
 
+    private lazy var isEnabledCheckbox: CheckboxUIView = {
+        let view = CheckboxUIView(
+            theme: viewModel.theme,
+            text: "Is Enabled",
+            checkedImage: DemoIconography.shared.checkmark,
+            state: .enabled,
+            selectionState: .selected,
+            checkboxPosition: .left
+        )
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private lazy var configurationStackView: UIStackView = {
         let stackView = UIStackView(
             arrangedSubviews: [
@@ -228,6 +241,7 @@ final class ChipComponentUIView: UIView {
         self.withIconCheckBox.selectionState = self.viewModel.icon == nil ? .unselected : .selected
         self.withComponentCheckBox.selectionState = self.viewModel.component == nil ? .unselected : .selected
         self.withActionCheckBox.selectionState = self.viewModel.action == nil ? .unselected : .selected
+        self.isEnabledCheckbox.selectionState = self.viewModel.isEnabled ? .selected : .unselected
     }
 
     // MARK: - Setup Views
@@ -241,6 +255,7 @@ final class ChipComponentUIView: UIView {
         addSubview(withIconCheckBox)
         addSubview(withActionCheckBox)
         addSubview(withComponentCheckBox)
+        addSubview(isEnabledCheckbox)
         addSubview(lineView)
         addSubview(integrationLabel)
         addSubview(chipView)
@@ -265,7 +280,10 @@ final class ChipComponentUIView: UIView {
             withComponentCheckBox.topAnchor.constraint(equalTo: withActionCheckBox.bottomAnchor, constant: 10),
             withComponentCheckBox.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
 
-            lineView.topAnchor.constraint(equalTo: withComponentCheckBox.bottomAnchor, constant: 16),
+            isEnabledCheckbox.topAnchor.constraint(equalTo: withComponentCheckBox.bottomAnchor, constant: 10),
+            isEnabledCheckbox.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+
+            lineView.topAnchor.constraint(equalTo: isEnabledCheckbox.bottomAnchor, constant: 16),
             lineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             lineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             lineView.heightAnchor.constraint(equalToConstant: 1),
@@ -294,6 +312,7 @@ final class ChipComponentUIView: UIView {
             self.withIconCheckBox.theme = theme
             self.withActionCheckBox.theme = theme
             self.withComponentCheckBox.theme = theme
+            self.isEnabledCheckbox.theme = theme
         }
 
         self.viewModel.$intent.subscribe(in: &self.cancellables) { [weak self] intent in
@@ -321,6 +340,11 @@ final class ChipComponentUIView: UIView {
         self.viewModel.$component.subscribe(in: &self.cancellables) { [weak self] component in
             guard let self = self else { return }
             self.chipView.component = component
+        }
+
+        self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
+            guard let self = self else { return }
+            self.chipView.isEnabled = isEnabled
         }
 
         self.viewModel.$action.subscribe(in: &self.cancellables) { [weak self] action in
@@ -353,6 +377,11 @@ final class ChipComponentUIView: UIView {
             guard let self = self else { return }
             let component: UIView = UIImageView(image: UIImage.strokedCheckmark)
             self.viewModel.component = state == .selected ? component : nil
+        }
+
+        self.isEnabledCheckbox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
+            guard let self = self else { return }
+            self.viewModel.isEnabled = state == .selected
         }
     }
 }

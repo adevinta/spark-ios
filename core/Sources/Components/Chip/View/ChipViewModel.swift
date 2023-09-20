@@ -47,6 +47,9 @@ class ChipViewModel<Content>: ObservableObject {
     var isBordered: Bool {
         return self.variant.isBordered
     }
+    var isBorderPlain: Bool {
+        return self.isBordered && !self.isBorderDashed
+    }
 
     // MARK: - Initializers
     convenience init(theme: Theme,

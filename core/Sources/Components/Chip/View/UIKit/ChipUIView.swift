@@ -9,6 +9,7 @@
 import Combine
 import UIKit
 
+/// ChipUIView is a control which can act like a button, if an action is attached to it, or it can act like a label.
 public final class ChipUIView: UIControl {
 
     private enum Constants {
@@ -141,7 +142,7 @@ public final class ChipUIView: UIControl {
 
     public let textLabel: UILabel = {
         let label = UILabel()
-        label.isAccessibilityElement = false
+        label.accessibilityIdentifier = ChipAccessibilityIdentifier.text
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
@@ -157,7 +158,7 @@ public final class ChipUIView: UIControl {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.isAccessibilityElement = false
+        imageView.accessibilityIdentifier = ChipAccessibilityIdentifier.icon
         imageView.setContentCompressionResistancePriority(.required,
                                                           for: .horizontal)
         imageView.setContentCompressionResistancePriority(.required,
@@ -349,6 +350,8 @@ public final class ChipUIView: UIControl {
         self.setupConstraints()
         self.setChipColors(self.viewModel.colors)
         self.setupSubscriptions()
+
+        self.accessibilityIdentifier = ChipAccessibilityIdentifier.identifier
     }
 
     private func updateLayoutMargins() {

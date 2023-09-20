@@ -44,6 +44,7 @@ final class ChipComponentUIViewModel: ObservableObject {
     @Published var icon: UIImage?
     @Published var component: UIView?
     @Published var action: (()->Void)?
+    @Published var isEnabled = true
 
     init(
         theme: Theme,
