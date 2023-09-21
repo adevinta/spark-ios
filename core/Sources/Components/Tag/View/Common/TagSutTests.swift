@@ -24,22 +24,11 @@ struct TagSutTests {
     // MARK: - Cases
 
     static var allCases: [Self] {
-        return Self.allVariantCases(for: .alert) +
-        Self.allVariantCases(for: .danger) +
-        Self.allVariantCases(for: .info) +
-        Self.allVariantCases(for: .neutral) +
-        Self.allVariantCases(for: .main) +
-        Self.allVariantCases(for: .support) +
-        Self.allVariantCases(for: .success) +
-        Self.allVariantCases(for: .accent) +
-        Self.allVariantCases(for: .basic)
-    }
-
-    private static func allVariantCases(for intent: TagIntent) -> [Self] {
-        return [
-            .init(intent: intent, variant: .filled),
-            .init(intent: intent, variant: .outlined),
-            .init(intent: intent, variant: .tinted)
-        ]
+        return TagIntent.allCases.flatMap { intent in
+            TagVariant.allCases.map { variant in
+                (intent, variant)
+            }
+        }
+        .map(Self.init)
     }
 }

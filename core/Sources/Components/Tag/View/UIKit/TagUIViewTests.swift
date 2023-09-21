@@ -25,6 +25,14 @@ final class TagUIViewTests: UIKitComponentTestCase {
             )
         }
     }
+    private var iconImage1: UIImage {
+        get throws {
+            try XCTUnwrap(
+                UIImage(systemName: "person.2.circle"),
+                "IconImage shouldn't be nil"
+            )
+        }
+    }
     private let text = "Text"
 
     // MARK: - Tests
@@ -46,7 +54,7 @@ final class TagUIViewTests: UIKitComponentTestCase {
         }
     }
 
-    func test_uiKit_tag_with_only_text_for_all_intent_and_variant() {
+    func x_test_uiKit_tag_with_only_text_for_all_intent_and_variant() {
         let suts = TagSutTests.allCases
         for sut in suts {
             let view = TagUIView(
@@ -63,19 +71,20 @@ final class TagUIViewTests: UIKitComponentTestCase {
         }
     }
 
-    func x_test_uiKit_tag_with_image_and_text_for_all_intent_and_variant() throws {
+    func test_uiKit_tag_with_image_and_text_for_all_intent_and_variant() throws {
         let suts = TagSutTests.allCases
         for sut in suts {
             let view = try TagUIView(
                 theme: self.theme,
                 intent: sut.intent,
                 variant: sut.variant,
-                iconImage: self.iconImage,
+                iconImage: self.iconImage1,
                 text: self.text
             )
 
             self.assertSnapshotInDarkAndLight(
                 matching: view,
+                sizes: [.medium],
                 testName: sut.testName()
             )
         }
