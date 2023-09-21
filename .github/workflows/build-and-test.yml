@@ -50,6 +50,7 @@ jobs:
         if: steps.checkout_snapshot_branch_similar_to_main_repo.outcome != 'success'
         uses: actions/checkout@v3
         with:
+          lfs: true
           repository: michael-zimmermann/spark-ios-snapshots
           path: spark-ios-snapshots
       - name: Run fastlane unit_tests TARGET_NAME:SparkCore

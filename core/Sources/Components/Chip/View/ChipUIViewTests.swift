@@ -35,7 +35,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
                                       variant: variant,
                                       iconImage: icon)
 
-            assertSnapshotInDarkAndLight(matching: chipView, record: true, testName: "\(#function)-\(variant)")
+            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
         }
     }
 
@@ -48,7 +48,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
                                       label: "Label",
                                       iconImage: icon)
 
-            assertSnapshotInDarkAndLight(matching: chipView, record: true, testName: "\(#function)-\(variant)")
+            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
         }
     }
 
