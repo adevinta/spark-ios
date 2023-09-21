@@ -56,7 +56,7 @@ public final class AddOnUIView: UIView {
 
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(equalToConstant: 44),
-            self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.content.frame.width)
+            self.widthAnchor.constraint(equalToConstant: self.content.intrinsicContentSize.width + 32)
         ])
 
         switch fillMode {
