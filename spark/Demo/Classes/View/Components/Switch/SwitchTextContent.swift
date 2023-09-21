@@ -10,4 +10,5 @@ enum SwitchTextContentDefault: CaseIterable {
     case text
     case attributedText
     case multilineText
+    case none
 }
