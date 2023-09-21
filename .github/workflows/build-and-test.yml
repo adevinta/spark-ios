@@ -42,7 +42,7 @@ jobs:
         continue-on-error: true
         id: checkout_snapshot_branch_similar_to_main_repo
         with:
-          repository: adevinta/spark-ios-snapshots
+          repository: michael-zimmermann/spark-ios-snapshots
           ref: ${{ steps.extract_branch.outputs.branch }}
           path: spark-ios-snapshots
       # If checking out (outputs.branch)-branch in spark-ios-snapshots fails, fallback to main branch.
@@ -50,7 +50,7 @@ jobs:
         if: steps.checkout_snapshot_branch_similar_to_main_repo.outcome != 'success'
         uses: actions/checkout@v3
         with:
-          repository: adevinta/spark-ios-snapshots
+          repository: michael-zimmermann/spark-ios-snapshots
           path: spark-ios-snapshots
       - name: Run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
