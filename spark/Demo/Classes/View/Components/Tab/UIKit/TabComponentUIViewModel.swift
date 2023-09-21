@@ -130,8 +130,12 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
         }
     }
 
-    lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
-        return .init(itemsViewModel: [
+    var themes = ThemeCellModel.themes
+
+    // MARK: - Methods
+
+    override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
+        return [
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
@@ -142,12 +146,11 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
             self.disableConfigurationItemViewModel,
             self.equalWidthConfigurationItemViewModel,
             self.numberOfTabsConfigurationItemViewModel
-        ])
-    }()
-    var themes = ThemeCellModel.themes
+        ]
+    }
 
     // MARK: - Inherited Properties
-    let identifier: String = "Tab"
+
     let text = "Tab"
     let longText = "Long Title"
 
@@ -172,6 +175,8 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
         self.theme = theme
         self.intent = intent
         self.size = size
+
+        super.init(identifier: "Tab")
     }
 
     func longTitle(at index: Int) -> String {

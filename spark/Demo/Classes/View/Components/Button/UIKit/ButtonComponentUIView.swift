@@ -156,7 +156,7 @@ final class ButtonComponentUIView: ComponentUIView {
 
             self.viewModel.contentConfigurationItemViewModel.buttonTitle = content.name
 
-            self.componentSpaceView.isHidden = content != .icon
+            self.showRightSpacing = content != .icon
             switch content {
             case .icon:
                 self.buttonView.text = nil

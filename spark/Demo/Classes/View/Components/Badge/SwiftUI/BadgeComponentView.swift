@@ -10,22 +10,26 @@ import Spark
 import SparkCore
 import SwiftUI
 
+// swiftlint:disable no_debugging_method
 struct BadgeComponentView: View {
-    @State var theme: Theme = SparkThemePublisher.shared.theme
-    @State var intent: BadgeIntentType = .danger
-    @State var size: BadgeSize = .medium
-    @State var value: Int? = 99
-    @State var format: BadgeFormat = .default
-    @State var isBorderVisible: CheckboxSelectionState = .unselected
+
+    // MARK: - Properties
+
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: BadgeIntentType = .danger
+    @State private var size: BadgeSize = .medium
+    @State private var value: Int = 99
+    @State private var format: BadgeFormat = .default
+    @State private var isBorderVisible: CheckboxSelectionState = .unselected
+
+    private let numberFormatter = NumberFormatter()
+
+    // MARK: - View
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Configuration")
-                .font(.title2)
-                .bold()
-                .padding(.bottom, 6)
-
-            VStack(alignment: .leading, spacing: 8) {
+        Component(
+            name: "Badge",
+            configuration: {
                 ThemeSelector(theme: self.$theme)
 
                 EnumSelector(
@@ -52,7 +56,11 @@ struct BadgeComponentView: View {
 
                 HStack() {
                     Text("Value ").bold()
-                    TextField("Value", value: self.$value, formatter: NumberFormatter())
+                    TextField(
+                        "Value",
+                        value: self.$value,
+                        formatter: self.numberFormatter
+                    )
                 }
 
                 CheckboxView(
@@ -62,23 +70,18 @@ struct BadgeComponentView: View {
                     state: .enabled,
                     selectionState: self.$isBorderVisible
                 )
-            }
-
-            Divider()
-
-            Text("Integration")
-                .font(.title2)
-                .bold()
-
-            BadgeView(theme: self.theme, intent: self.intent, value: self.value)
+            },
+            integration: {
+                BadgeView(
+                    theme: self.theme,
+                    intent: self.intent,
+                    value: self.value
+                )
                 .size(self.size)
                 .format(self.format)
                 .borderVisible(self.isBorderVisible == .selected)
-
-            Spacer()
-        }
-        .padding(.horizontal, 16)
-        .navigationBarTitle(Text("Badge"))
+            }
+        )
     }
 }
 

@@ -33,20 +33,30 @@ struct TabComponent: View {
 
     // MARK: - View
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Configuration")
-                    .font(.title2)
-                    .bold()
-                    .padding(.bottom, 6)
-
+        Component(
+            name: "Tab Item",
+            configuration: {
                 ThemeSelector(theme: self.$theme)
 
-                EnumSelector(title: "Intent", dialogTitle: "Select an intent", values: TabIntent.allCases, value: self.$intent)
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an intent",
+                    values: TabIntent.allCases,
+                    value: self.$intent
+                )
 
-                EnumSelector(title: "Size", dialogTitle: "Select a size", values: TabSize.allCases, value: self.$tabSize)
+                EnumSelector(
+                    title: "Size",
+                    dialogTitle: "Select a size",
+                    values: TabSize.allCases,
+                    value: self.$tabSize
+                )
 
-                RangeSelector(title: "No. of Tabs", range: 1...20, selectedValue: self.$numberOfTabs)
+                RangeSelector(
+                    title: "No. of Tabs",
+                    range: 1...20,
+                    selectedValue: self.$numberOfTabs
+                )
 
                 HStack {
                     CheckboxView(
@@ -109,17 +119,8 @@ struct TabComponent: View {
                     selectionState: self.$equalSize
                 )
 
-            }
-            .padding(.horizontal, 16)
-
-            VStack(alignment: .leading, spacing: 16) {
-
-                Divider()
-
-                Text("Integration \(self.selectedTab)")
-                    .font(.title2)
-                    .bold()
-
+            },
+            integration: {
                 TabView<BadgeView>(
                     theme: self.theme,
                     intent: self.intent,
@@ -130,11 +131,8 @@ struct TabComponent: View {
                 .apportionsSegmentWidthsByContent(!self.equalSize.isSelected)
                 .disabled(isDisabled.isSelected, index: self.disabledTab)
                 .badge(self.badge(), index: self.badgePosition)
-                Spacer()
             }
-        }
-        .padding(.horizontal, 16)
-        .navigationBarTitle(Text("Tab Item"))
+        )
         .onChange(of: self.numberOfTabs) { _ in
             self.redraw()
         }

@@ -11,31 +11,31 @@ import SparkCore
 import SwiftUI
 
 struct ChipComponentView: View {
-    @State var theme: Theme = SparkThemePublisher.shared.theme
 
-    @State var intent: ChipIntent = .main
-    @State var variant: ChipVariant = .filled
-    @State var alignment: ChipAlignment = .leadingIcon
+    // MARK: - Properties
 
-    @State var showLabel = CheckboxSelectionState.selected
-    @State var showIcon = CheckboxSelectionState.selected
-    @State var withAction = CheckboxSelectionState.selected
-    @State var withComponent = CheckboxSelectionState.unselected
-    @State var isEnabled = CheckboxSelectionState.selected
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: ChipIntent = .main
+    @State private var variant: ChipVariant = .filled
+    @State private var alignment: ChipAlignment = .leadingIcon
+    @State private var showLabel = CheckboxSelectionState.selected
+    @State private var showIcon = CheckboxSelectionState.selected
+    @State private var withAction = CheckboxSelectionState.selected
+    @State private var withComponent = CheckboxSelectionState.unselected
+    @State private var isEnabled = CheckboxSelectionState.selected
 
-    @State var showingAlert = false
+    @State private var showingAlert = false
 
     private let label = "Label"
     private let icon = UIImage(imageLiteralResourceName: "alert")
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Configuration")
-                .font(.title2)
-                .bold()
-                .padding(.bottom, 6)
+    // MARK: - View
 
-            VStack(alignment: .leading, spacing: 8) {
+    var body: some View {
+
+        Component(
+            name: "Chip",
+            configuration: {
                 ThemeSelector(theme: self.$theme)
 
                 EnumSelector(
@@ -95,33 +95,24 @@ struct ChipComponentView: View {
                     state: .enabled,
                     selectionState: self.$isEnabled
                 )
+            },
+            integration: {
+                ChipComponentViewRepresentable(
+                    theme: self.theme,
+                    intent: self.intent,
+                    variant: self.variant,
+                    alignment: self.alignment,
+                    label: self.showLabel == .selected ? self.label : nil,
+                    icon: self.showIcon == .selected ? self.icon : nil,
+                    component: self.withComponent == .selected ? badge() : nil,
+                    isEnabled: self.isEnabled == .selected,
+                    action: self.withAction == .selected ? { self.showingAlert = true} : nil)
+                    .alert("Chip Pressed", isPresented: self.$showingAlert) {
+                        Button("OK", role: .cancel) { }
+                }
+                .fixedSize()
             }
-
-            Divider()
-
-            Text("Integration")
-                .font(.title2)
-                .bold()
-
-            ChipComponentViewRepresentable(
-                theme: self.theme,
-                intent: self.intent,
-                variant: self.variant,
-                alignment: self.alignment,
-                label: self.showLabel == .selected ? self.label : nil,
-                icon: self.showIcon == .selected ? self.icon : nil,
-                component: self.withComponent == .selected ? badge() : nil,
-                isEnabled: self.isEnabled == .selected,
-                action: self.withAction == .selected ? { self.showingAlert = true} : nil)
-                .alert("Chip Pressed", isPresented: self.$showingAlert) {
-                    Button("OK", role: .cancel) { }
-            }
-            .fixedSize()
-
-            Spacer()
-        }
-        .padding(.horizontal, 16)
-        .navigationBarTitle(Text("Chip"))
+        )
     }
 
     func badge() -> UIView {
@@ -136,23 +127,5 @@ struct ChipComponentView: View {
 struct ChipComponent_Previews: PreviewProvider {
     static var previews: some View {
         ChipComponentView()
-    }
-}
-
-extension UIView {
-    func withTint(_ color: UIColor) -> Self {
-        self.tintColor = color
-        return self
-    }
-}
-
-private extension ChipAlignment {
-    var name: String {
-        switch self {
-        case .leadingIcon: return "Leading Icon"
-        case .trailingIcon: return "Trailing Icon"
-        @unknown default:
-            return "Unknown"
-        }
     }
 }
