@@ -27,28 +27,28 @@ final class ChipUIViewTests: UIKitComponentTestCase {
         }
     }
 
-    func x_test_main_with_icon_without_label() {
+    func test_main_with_icon_without_label() {
         for variant in ChipVariant.allCases {
-            let icon: UIImage = UIImage(systemName: "pencil.circle")!
+            let icon: UIImage = UIImage(systemName: "pencil.circle.fill")!
             let chipView = ChipUIView(theme: SparkTheme.shared,
                                       intent: .main,
                                       variant: variant,
                                       iconImage: icon)
 
-            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
+            assertSnapshotInDarkAndLight(matching: chipView, record: true, testName: "\(#function)-\(variant)")
         }
     }
 
-    func x_test_support_with_icon_and_label() {
+    func test_support_with_icon_and_label() {
         for variant in ChipVariant.allCases {
-            let icon: UIImage = UIImage(systemName: "pencil.circle")!
+            let icon: UIImage = UIImage(systemName: "pencil.circle.fill")!
             let chipView = ChipUIView(theme: SparkTheme.shared,
                                       intent: .support,
                                       variant: variant,
                                       label: "Label",
                                       iconImage: icon)
 
-            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
+            assertSnapshotInDarkAndLight(matching: chipView, record: true, testName: "\(#function)-\(variant)")
         }
     }
 
