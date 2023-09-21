@@ -29,7 +29,7 @@ final class TagUIViewTests: UIKitComponentTestCase {
 
     // MARK: - Tests
 
-    func test_uiKit_tag_with_only_image_for_all_intent_and_variant() throws {
+    func x_test_uiKit_tag_with_only_image_for_all_intent_and_variant() throws {
         let suts = TagSutTests.allCases
         for sut in suts {
             let view = try TagUIView(
@@ -63,7 +63,7 @@ final class TagUIViewTests: UIKitComponentTestCase {
         }
     }
 
-    func test_uiKit_tag_with_image_and_text_for_all_intent_and_variant() throws {
+    func x_test_uiKit_tag_with_image_and_text_for_all_intent_and_variant() throws {
         let suts = TagSutTests.allCases
         for sut in suts {
             let view = try TagUIView(

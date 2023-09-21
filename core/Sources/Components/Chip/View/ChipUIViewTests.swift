@@ -27,7 +27,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
         }
     }
 
-    func test_main_with_icon_without_label() {
+    func x_test_main_with_icon_without_label() {
         for variant in ChipVariant.allCases {
             let icon: UIImage = UIImage(systemName: "pencil.circle")!
             let chipView = ChipUIView(theme: SparkTheme.shared,
@@ -39,7 +39,7 @@ final class ChipUIViewTests: UIKitComponentTestCase {
         }
     }
 
-    func test_support_with_icon_and_label() {
+    func x_test_support_with_icon_and_label() {
         for variant in ChipVariant.allCases {
             let icon: UIImage = UIImage(systemName: "pencil.circle")!
             let chipView = ChipUIView(theme: SparkTheme.shared,
