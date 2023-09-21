@@ -102,8 +102,8 @@ struct ChipComponentView: View {
                     intent: self.intent,
                     variant: self.variant,
                     alignment: self.alignment,
-                    title: self.showLabel == .selected ? self.label : nil,
                     icon: self.showIcon == .selected ? self.icon : nil,
+                    title: self.showLabel == .selected ? self.label : nil,
                     action: self.withAction == .selected ? { self.showingAlert = true} : nil
                 )
                 .component(self.withComponent == .selected ? self.component() : nil)
