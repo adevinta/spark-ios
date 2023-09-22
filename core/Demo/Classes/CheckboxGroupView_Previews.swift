@@ -14,7 +14,7 @@ struct CheckboxGroupView_Previews: PreviewProvider {
     // MARK: - Container
 
     struct ContainerView: View {
-        let position: CheckboxPosition
+        let position: checkboxAlignment
 
         let theme: Theme = SparkTheme.shared
 
@@ -35,7 +35,7 @@ struct CheckboxGroupView_Previews: PreviewProvider {
                 CheckboxGroupView(
                     checkedImage: checkedImage,
                     items: $items,
-                    checkboxPosition: self.position,
+                    checkboxAlignment: self.position,
                     theme: self.theme,
                     accessibilityIdentifierPrefix: "group"
                 )

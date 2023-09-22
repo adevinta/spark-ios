@@ -130,7 +130,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: checkedImage,
             state: .enabled,
             selectionState: self.checkboxValue1,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.addSubview(checkbox)
         checkboxes.append(checkbox)
@@ -141,7 +141,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: checkedImage,
             state: .disabled,
             selectionState: self.checkboxValue2,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.addSubview(checkbox2)
         checkboxes.append(checkbox2)
@@ -153,7 +153,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: checkedImage,
             state: .error(message: "Error message"),
             selectionState: self.checkboxValue3,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.addSubview(errorCheckbox)
         checkboxes.append(errorCheckbox)
@@ -164,7 +164,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: checkedImage,
             state: .success(message: "Success message"),
             selectionState: self.checkboxValue4,
-            checkboxPosition: .right
+            checkboxAlignment: .right
         )
         view.addSubview(successCheckbox)
         checkboxes.append(successCheckbox)
@@ -181,7 +181,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: checkedImage,
             state: .success(message: "Success message"),
             selectionState: self.checkboxValue4,
-            checkboxPosition: .right
+            checkboxAlignment: .right
         )
         view.addSubview(attributedCheckbox)
         checkboxes.append(attributedCheckbox)

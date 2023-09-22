@@ -17,7 +17,7 @@ final class CheckboxGroupViewTests: SwiftUIComponentTestCase {
     // MARK: - Container View
 
     private struct GroupView: View {
-        let position: CheckboxPosition
+        let position: checkboxAlignment
 
         let theme: Theme = SparkTheme.shared
 
@@ -35,7 +35,7 @@ final class CheckboxGroupViewTests: SwiftUIComponentTestCase {
             CheckboxGroupView(
                 checkedImage: self.checkedImage,
                 items: self.$items,
-                checkboxPosition: self.position,
+                checkboxAlignment: self.position,
                 theme: self.theme,
                 accessibilityIdentifierPrefix: "group"
             ).fixedSize()

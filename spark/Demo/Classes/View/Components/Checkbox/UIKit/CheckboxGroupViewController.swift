@@ -163,7 +163,7 @@ final class CheckboxGroupViewController: UIViewController {
             checkedImage: checkedImage,
             items: self.items,
             layout: self.checkboxGroupLayout,
-            checkboxPosition: .left,
+            checkboxAlignment: .left,
             theme: theme,
             accessibilityIdentifierPrefix: "abc"
         )
@@ -231,7 +231,7 @@ final class CheckboxGroupViewController: UIViewController {
 
 
     @objc private func actionChangePosition(sender: UIButton) {
-        self.checkboxGroup?.checkboxPosition = self.checkboxGroup?.checkboxPosition == .right ? .left : .right
+        self.checkboxGroup?.checkboxAlignment = self.checkboxGroup?.checkboxAlignment == .right ? .left : .right
     }
 
     @objc private func actionChangeLayout(sender: UIButton) {

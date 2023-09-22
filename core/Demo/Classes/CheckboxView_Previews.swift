@@ -61,21 +61,21 @@ struct CheckboxView_Previews: PreviewProvider {
                     CheckboxView(
                         text: "Selected checkbox.",
                         checkedImage: checkedImage,
-                        checkboxPosition: .right,
+                        checkboxAlignment: .right,
                         theme: self.theme,
                         selectionState: $selection1
                     )
                     CheckboxView(
                         text: "Unselected checkbox.",
                         checkedImage: checkedImage,
-                        checkboxPosition: .right,
+                        checkboxAlignment: .right,
                         theme: self.theme,
                         selectionState: $selection2
                     )
                     CheckboxView(
                         text: "Indeterminate checkbox.",
                         checkedImage: checkedImage,
-                        checkboxPosition: .right,
+                        checkboxAlignment: .right,
                         theme: self.theme,
                         selectionState: $selection3
                     )

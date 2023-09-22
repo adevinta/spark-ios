@@ -98,7 +98,7 @@ final class ChipComponentUIView: UIView {
             checkedImage: DemoIconography.shared.checkmark,
             state: .enabled,
             selectionState: .selected,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -111,7 +111,7 @@ final class ChipComponentUIView: UIView {
             checkedImage: DemoIconography.shared.checkmark,
             state: .enabled,
             selectionState: .selected,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -124,7 +124,7 @@ final class ChipComponentUIView: UIView {
             checkedImage: DemoIconography.shared.checkmark,
             state: .enabled,
             selectionState: .selected,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -137,7 +137,7 @@ final class ChipComponentUIView: UIView {
             checkedImage: DemoIconography.shared.checkmark,
             state: .enabled,
             selectionState: .selected,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

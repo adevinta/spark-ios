@@ -20,7 +20,7 @@ struct CheckboxGroupListView: View {
 
     @State private var layout: CheckboxGroupLayout = .vertical
 
-    @State private var checkboxPosition: CheckboxAlignment = .left
+    @State private var checkboxAlignment: CheckboxAlignment = .left
 
     @State private var items: [any CheckboxGroupItemProtocol] = [
         CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .disabled),
@@ -57,7 +57,7 @@ struct CheckboxGroupListView: View {
 
             Button("Change position") {
                 withAnimation {
-                    self.checkboxPosition = self.checkboxPosition == .left ? .right : .left
+                    self.checkboxAlignment = self.checkboxAlignment == .left ? .right : .left
                 }
             }
 
@@ -80,7 +80,7 @@ struct CheckboxGroupListView: View {
                     checkedImage: checkedImage,
                     items: $items,
                     layout: layout,
-                    checkboxPosition: checkboxPosition,
+                    checkboxAlignment: checkboxAlignment,
                     theme: self.theme,
                     accessibilityIdentifierPrefix: "checkbox-group"
                 )

@@ -16,33 +16,27 @@ public final class CheckboxUIView: UIView {
     // MARK: - Constants
 
     private enum Constants {
-        static var checkboxSize: CGFloat = 20
-        static var hitTestMargin: CGFloat = 8
-        static var controlBorderWidth: CGFloat = 4
+        static var checkboxSize: CGFloat = 28
     }
 
-    // MARK: - Private properties.
+    // MARK: - Private Properties.
 
-    private let button: UIButton = {
+    private lazy var button: UIButton = {
         let button = UIButton()
         button.isAccessibilityElement = false
-        button.setContentCompressionResistancePriority(.required,
-                                                       for: .vertical)
-        button.setContentCompressionResistancePriority(.required,
-                                                       for: .horizontal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.actionTouchDown(sender:)), for: .touchDown)
+        button.addTarget(self, action: #selector(self.actionTouchUp(sender:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(self.actionTouchUp(sender:)), for: .touchCancel)
         return button
     }()
 
     private let textLabel: UILabel = {
         let label = UILabel()
         label.isAccessibilityElement = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         label.numberOfLines = 0
-        label.setContentCompressionResistancePriority(.required,
-                                                      for: .vertical)
-        label.adjustsFontForContentSizeCategory = true
-
         return label
     }()
 
@@ -53,39 +47,28 @@ public final class CheckboxUIView: UIView {
             state: self.state
         )
         controlView.isAccessibilityElement = false
-        controlView.translatesAutoresizingMaskIntoConstraints = false
         return controlView
     }()
 
-    private var controlViewWidthConstraint: NSLayoutConstraint?
-    private var controlViewHeightConstraint: NSLayoutConstraint?
-    private var textLabelBottomConstraint: NSLayoutConstraint?
-    private var textLabelLeadingConstraint: NSLayoutConstraint?
-    private var textLabelTrailingConstraint: NSLayoutConstraint?
-    private var controlViewLeadingConstraint: NSLayoutConstraint?
-    private var controlViewTrailingConstraint: NSLayoutConstraint?
+    private lazy var stackView: UIStackView = {
+        let arrangedSubviews = self.alignment == .left ? [controlView, textLabel] : [textLabel, controlView]
+        let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
+        stackView.axis = .horizontal
+        stackView.spacing = self.alignment == .left ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.alignment = .top
+        return stackView
+    }()
 
-    private var checkboxPosition: CheckboxAlignment = .left
     private var cancellables = Set<AnyCancellable>()
-
-    @ScaledUIMetric private var checkboxSize: CGFloat = Constants.checkboxSize
-    @ScaledUIMetric private var controlBorderWidth: CGFloat = Constants.controlBorderWidth
-
-    private var spacing: LayoutSpacing {
-        return self.theme.layout.spacing
-    }
-
-    private var colors: CheckboxStateColors {
-        return self.viewModel.colors
-    }
-
-    private var subject: PassthroughSubject<CheckboxSelectionState, Never>
+    private var checkboxSelectionStateSubject = PassthroughSubject<CheckboxSelectionState, Never>()
 
     // MARK: - Public properties.
 
     /// Changes to the checbox state are published to the publisher.
     public var publisher: some Publisher<CheckboxSelectionState, Never> {
-        return self.subject
+        return self.viewModel.$selectionState
+            .eraseToAnyPublisher()
     }
 
     /// Set a delegate to receive selection state change callbacks. Alternatively, you can use bindings.
@@ -117,9 +100,11 @@ public final class CheckboxUIView: UIView {
 
     /// The current selection state of the checkbox.
     public var selectionState: CheckboxSelectionState {
-        didSet {
-            self.controlView.selectionState = self.selectionState
-            self.updateAccessibility()
+        get {
+            return self.viewModel.selectionState
+        }
+        set {
+            self.viewModel.selectionState = newValue
         }
     }
 
@@ -130,13 +115,7 @@ public final class CheckboxUIView: UIView {
         }
         set {
             guard newValue != self.viewModel.state else { return }
-
             self.viewModel.state = newValue
-
-            self.updateState()
-            self.updateViewConstraints()
-
-            self.updateAccessibility()
         }
     }
     /// Returns the theme of the checkbox.
@@ -158,9 +137,12 @@ public final class CheckboxUIView: UIView {
         }
     }
 
-    public var alignment: CheckboxAlignment? {
-        didSet {
-            alignment == .left ? self.update(content: .left(self.attributedText ?? NSAttributedString(string: ""))) : self.update(content: .right(self.text ?? ""))
+    public var alignment: CheckboxAlignment {
+        get {
+            return self.viewModel.alignment
+        }
+        set {
+            self.viewModel.alignment = newValue
         }
     }
 
@@ -173,13 +155,13 @@ public final class CheckboxUIView: UIView {
         }
     }
 
-    var viewModel: CheckboxViewModel
-
     var isPressed: Bool = false {
         didSet {
             self.controlView.isPressed = self.isPressed
         }
     }
+
+    var viewModel: CheckboxViewModel
 
     // MARK: - Initialization
 
@@ -196,7 +178,7 @@ public final class CheckboxUIView: UIView {
     ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
-    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
         theme: Theme,
         intent: CheckboxIntent = .main,
@@ -204,7 +186,7 @@ public final class CheckboxUIView: UIView {
         checkedImage: UIImage,
         state: CheckboxState = .enabled,
         selectionState: CheckboxSelectionState,
-        checkboxPosition: CheckboxAlignment
+        checkboxAlignment: CheckboxAlignment
     ) {
         self.init(
             theme: theme,
@@ -214,7 +196,7 @@ public final class CheckboxUIView: UIView {
             colorsUseCase: CheckboxStateColorsUseCase(),
             state: state,
             selectionState: selectionState,
-            checkboxPosition: checkboxPosition
+            checkboxAlignment: checkboxAlignment
         )
     }
 
@@ -225,7 +207,7 @@ public final class CheckboxUIView: UIView {
     ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
-    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
         theme: Theme,
         intent: CheckboxIntent = .main,
@@ -233,7 +215,7 @@ public final class CheckboxUIView: UIView {
         checkedImage: UIImage,
         state: CheckboxState = .enabled,
         selectionState: CheckboxSelectionState,
-        checkboxPosition: CheckboxAlignment
+        checkboxAlignment: CheckboxAlignment
     ) {
         self.init(
             theme: theme,
@@ -243,7 +225,7 @@ public final class CheckboxUIView: UIView {
             colorsUseCase: CheckboxStateColorsUseCase(),
             state: state,
             selectionState: selectionState,
-            checkboxPosition: checkboxPosition
+            checkboxAlignment: checkboxAlignment
         )
     }
 
@@ -255,125 +237,85 @@ public final class CheckboxUIView: UIView {
         colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
         state: CheckboxState = .enabled,
         selectionState: CheckboxSelectionState,
-        checkboxPosition: CheckboxAlignment
+        checkboxAlignment: CheckboxAlignment
     ) {
-        self.selectionState = selectionState
-        self.checkboxPosition = checkboxPosition
-        self.viewModel = .init(text: content, checkedImage: checkedImage, theme: theme, colorsUseCase: colorsUseCase, state: state)
-        self.subject = PassthroughSubject()
-
+        self.viewModel = .init(
+            text: content,
+            checkedImage: checkedImage,
+            theme: theme,
+            colorsUseCase:colorsUseCase,
+            state: state,
+            alignment: checkboxAlignment,
+            selectionState: selectionState
+        )
         super.init(frame: .zero)
         self.commonInit()
     }
 
     private func commonInit() {
-        self.isAccessibilityElement = true
-        self.translatesAutoresizingMaskIntoConstraints = false
         self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkbox
-        self.controlView.selectionState = self.selectionState
 
-        if let attributedText = self.attributedText {
-            self.textLabel.attributedText = attributedText
-        } else {
-            self.textLabel.text = self.text
-        }
-        self.addSubview(self.textLabel)
-
-        self.addSubview(self.controlView)
-
-        let view = self
-        let textLabel = self.textLabel
-        let controlView = self.controlView
-
-        let controlSize = self.checkboxSize
-
-        let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: self.traitCollection) - self.controlBorderWidth
-        let wideSpacing = bodyFontMetrics.scaledValue(for: self.spacing.xxxLarge, compatibleWith: self.traitCollection) - self.controlBorderWidth
-
-        switch self.checkboxPosition {
-        case .left:
-            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            self.textLabelLeadingConstraint = textLabel.leadingAnchor.constraint(equalTo: controlView.trailingAnchor, constant: padding)
-            self.textLabelLeadingConstraint?.isActive = true
-            textLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-            self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
-            self.textLabelBottomConstraint?.isActive = true
-
-            self.controlViewWidthConstraint = controlView.widthAnchor.constraint(equalToConstant: controlSize)
-            self.controlViewWidthConstraint?.isActive = true
-            self.controlViewHeightConstraint = controlView.heightAnchor.constraint(equalToConstant: controlSize)
-            self.controlViewHeightConstraint?.isActive = true
-            self.controlViewLeadingConstraint = controlView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: -padding)
-            self.controlViewLeadingConstraint?.isActive = true
-
-        case .right:
-            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            textLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-            self.textLabelTrailingConstraint = textLabel.trailingAnchor.constraint(equalTo: controlView.leadingAnchor, constant: -wideSpacing)
-            self.textLabelTrailingConstraint?.isActive = true
-            self.textLabelBottomConstraint = textLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
-            self.textLabelBottomConstraint?.isActive = true
-
-            self.controlViewWidthConstraint = controlView.widthAnchor.constraint(equalToConstant: controlSize)
-            self.controlViewWidthConstraint?.isActive = true
-            self.controlViewHeightConstraint = controlView.heightAnchor.constraint(equalToConstant: controlSize)
-            self.controlViewHeightConstraint?.isActive = true
-            self.controlViewTrailingConstraint = controlView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: padding)
-            self.controlViewTrailingConstraint?.isActive = true
-        }
-        let controlViewCenterConstraint = self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: self.controlView.heightAnchor)
-        controlViewCenterConstraint.isActive = true
-
-        self.button.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
-        self.button.addTarget(self, action: #selector(self.actionTouchDown(sender:)), for: .touchDown)
-        self.button.addTarget(self, action: #selector(self.actionTouchUp(sender:)), for: .touchUpOutside)
-        self.button.addTarget(self, action: #selector(self.actionTouchUp(sender:)), for: .touchCancel)
-
-        self.button.translatesAutoresizingMaskIntoConstraints = true
-        self.button.frame = self.bounds.insetBy(dx: -Constants.hitTestMargin, dy: -Constants.hitTestMargin)
-        self.button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        addSubview(self.button)
-
-        self.updateTheme()
-        self.updateState()
-        self.updateViewConstraints()
-        self.updateAccessibility()
+        self.setupViews()
         self.subscribe()
+
+        self.updateAccessibility()
+    }
+
+    private func setupViews() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+
+        self.addSubview(self.stackView)
+        self.addSubview(self.button)
+        
+        NSLayoutConstraint.stickEdges(from: self.button, to: self)
+        NSLayoutConstraint.stickEdges(from: self.stackView, to: self)
+
+        NSLayoutConstraint.activate([
+            self.controlView.heightAnchor.constraint(equalToConstant: Constants.checkboxSize),
+            self.controlView.widthAnchor.constraint(equalToConstant: Constants.checkboxSize),
+            self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: controlView.heightAnchor)
+        ])
     }
 
     private func subscribe() {
-        self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] _ in
-            self?.updateTheme()
-        }
-
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] _ in
             guard let self else { return }
-
             self.updateTheme()
             self.updateState()
-            self.updateViewConstraints()
+        }
+
+        self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] _ in
+            guard let self else { return }
+            self.updateTheme()
+        }
+
+        self.viewModel.$state.subscribe(in: &self.cancellables) { [weak self] selectionState in
+            guard let self else { return }
+            self.updateState()
+            self.updateAccessibility()
+        }
+
+        self.viewModel.$selectionState.subscribe(in: &self.cancellables) { [weak self] selectionState in
+            guard let self else { return }
+            self.controlView.selectionState = selectionState
+            self.updateAccessibility()
+        }
+
+        self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
+            guard let self else { return }
+            self.updateAlignment(alignment)
         }
     }
+}
 
-    // MARK: - Override
-    /// The trait collection was updated causing the view to update its constraints (e.g. dynamic content size change).
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+// MARK: Updates
+private extension CheckboxUIView {
 
-        self._checkboxSize.update(traitCollection: self.traitCollection)
-        self._controlBorderWidth.update(traitCollection: self.traitCollection)
-
-        self.updateViewConstraints()
+    private func updateState() {
+        self.textLabel.alpha = self.viewModel.opacity
+        self.controlView.alpha = self.viewModel.opacity
     }
 
-    // Tap area is bigger than the bounds of self.
-    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let convertedPoint = button.convert(point, from: self)
-        return button.point(inside: convertedPoint, with: event)
-    }
-
-    // MARK: - Methods
     private func updateAccessibility() {
         if self.selectionState == .selected {
             self.accessibilityTraits.insert(.selected)
@@ -390,68 +332,43 @@ public final class CheckboxUIView: UIView {
         self.accessibilityLabel = [self.viewModel.text].compactMap { $0 }.joined(separator: ". ")
     }
 
-    private func updateViewConstraints() {
-        let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let controlBorderWidth = self.controlBorderWidth
-        let scaledSpacing = self.checkboxSize + 2 * controlBorderWidth
-
-        self.controlViewWidthConstraint?.constant = scaledSpacing
-        self.controlViewHeightConstraint?.constant = scaledSpacing
-
-        let padding = bodyFontMetrics.scaledValue(for: self.spacing.medium, compatibleWith: self.traitCollection) - controlBorderWidth
-        let wideSpacing = bodyFontMetrics.scaledValue(for: self.spacing.xxxLarge, compatibleWith: self.traitCollection) - controlBorderWidth
-
-        self.controlViewLeadingConstraint?.constant = -controlBorderWidth
-        self.controlViewTrailingConstraint?.constant = controlBorderWidth
-
-        self.textLabelLeadingConstraint?.constant = padding
-        self.textLabelTrailingConstraint?.constant = -wideSpacing
-
-
-        self.setNeedsLayout()
-    }
-
-    private var interactionEnabled: Bool {
-        return self.viewModel.interactionEnabled
-    }
-
-    private var opacity: CGFloat {
-        return self.viewModel.opacity
-    }
-
     private func updateTheme() {
         self.controlView.theme = self.theme
-        self.controlView.colors = self.colors
+        self.controlView.colors = self.viewModel.colors
 
         if self.attributedText == nil {
             self.textLabel.font = self.theme.typography.body1.uiFont
-            self.textLabel.textColor = self.colors.enable.textColor.uiColor
+            self.textLabel.textColor = self.viewModel.colors.enable.textColor.uiColor
         }
+    }
+
+    private func updateAlignment(_ alignment: CheckboxAlignment) {
+        let isAlignmentLeft = alignment == .left
+        self.stackView.spacing = isAlignmentLeft ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
+        self.stackView.insertArrangedSubview(isAlignmentLeft ? self.controlView : self.textLabel, at: 0)
     }
 
     private func update(content: Either<NSAttributedString, String>) {
         self.viewModel.update(content: content)
 
-        self.updateTheme()
         switch content {
         case .left(let attributedText):
             self.textLabel.attributedText = attributedText
         case .right(let text):
             self.textLabel.text = text
         }
+        self.updateTheme()
         self.updateAccessibility()
     }
+}
 
-    private func updateState() {
-        let opacity = self.opacity
-        self.textLabel.alpha = opacity
-        self.controlView.alpha = opacity
-    }
+// MARK: Actions
+private extension CheckboxUIView {
 
     @IBAction func actionTapped(sender: UIButton) {
         self.isPressed = false
 
-        guard self.interactionEnabled else { return }
+        guard self.viewModel.interactionEnabled else { return }
         switch self.selectionState {
         case .selected:
             self.selectionState = .unselected
@@ -459,31 +376,15 @@ public final class CheckboxUIView: UIView {
             self.selectionState = .selected
         }
         self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
-        self.subject.send(self.selectionState)
+        self.checkboxSelectionStateSubject.send(self.selectionState)
     }
 
     @IBAction private func actionTouchDown(sender: UIButton) {
-        guard self.interactionEnabled else { return }
-
+        guard self.viewModel.interactionEnabled else { return }
         self.isPressed = true
     }
 
     @IBAction private func actionTouchUp(sender: UIButton) {
         self.isPressed = false
-    }
-}
-
-// MARK: - Label priorities
-public extension CheckboxUIView {
-    func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
-                                                      for axis: NSLayoutConstraint.Axis) {
-        self.textLabel.setContentCompressionResistancePriority(priority,
-                                                               for: axis)
-    }
-
-    func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
-                                        for axis: NSLayoutConstraint.Axis) {
-        self.textLabel.setContentHuggingPriority(priority,
-                                                 for: axis)
     }
 }

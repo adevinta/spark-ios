@@ -140,7 +140,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: image,
             state: .enabled,
             selectionState: self.checkboxValue1,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
 
         checkbox.translatesAutoresizingMaskIntoConstraints = false
@@ -158,7 +158,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: image,
             state: .disabled,
             selectionState: self.checkboxValue2,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         checkbox2.translatesAutoresizingMaskIntoConstraints = false
         checkbox2.publisher.sink { [weak self] in
@@ -175,7 +175,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: image,
             state: .disabled,
             selectionState: self.checkboxValue3,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         errorCheckbox.translatesAutoresizingMaskIntoConstraints = false
         errorCheckbox.publisher.sink { [weak self] in
@@ -192,7 +192,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: image,
             state: .enabled,
             selectionState: self.checkboxValue4,
-            checkboxPosition: .right
+            checkboxAlignment: .right
         )
         successCheckbox.translatesAutoresizingMaskIntoConstraints = false
         successCheckbox.publisher.sink { [weak self] in
@@ -209,7 +209,7 @@ final class CheckboxViewController: UIViewController {
             checkedImage: image,
             state: .enabled,
             selectionState: self.checkboxValue4,
-            checkboxPosition: .right
+            checkboxAlignment: .right
         )
         attributedCheckbox.attributedText = self.attributedCheckboxLabel
         attributedCheckbox.publisher.sink { [weak self] in
