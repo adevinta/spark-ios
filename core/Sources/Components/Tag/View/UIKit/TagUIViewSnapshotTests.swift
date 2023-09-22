@@ -12,6 +12,7 @@ import SnapshotTesting
 @testable import SparkCore
 
 final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
+    typealias TagSutSnapshotTests = IntentAndVariantSnapshotTests<TagIntent, TagVariant>
 
     // MARK: - Properties
 

@@ -11,83 +11,108 @@ import XCTest
 @testable import SparkCore
 
 final class ChipUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
+    typealias ChipTestVariation = IntentAndVariantSnapshotTests<ChipIntent, ChipVariant>
+
+    let icon: UIImage = UIImage(systemName: "pencil.circle")!
 
     // MARK: Tests
-    func test_variants_without_icon() {
-        for intent in ChipIntent.allCases {
-            for variant in ChipVariant.allCases {
-                let chipView = ChipUIView(theme: SparkTheme.shared,
-                                          intent: intent,
-                                          variant: variant,
-                                          label: "Label")
 
-                assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(intent)-\(variant)")
-            }
-        }
-    }
-
-    func test_main_with_icon_without_label() {
-        for variant in ChipVariant.allCases {
-            let icon: UIImage = UIImage(systemName: "pencil.circle")!
+    func test_all_intents_and_variants() {
+        for variation in ChipTestVariation.allCases {
             let chipView = ChipUIView(theme: SparkTheme.shared,
-                                      intent: .main,
-                                      variant: variant,
-                                      iconImage: icon)
-
-            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
-        }
-    }
-
-    func test_support_with_icon_and_label() {
-        for variant in ChipVariant.allCases {
-            let icon: UIImage = UIImage(systemName: "pencil.circle")!
-            let chipView = ChipUIView(theme: SparkTheme.shared,
-                                      intent: .support,
-                                      variant: variant,
+                                      intent: variation.intent,
+                                      variant: variation.variant,
                                       label: "Label",
-                                      iconImage: icon)
-
-            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
+                                      iconImage: self.icon)
+            assertSnapshotInDarkAndLight(matching: chipView,
+                                         sizes: [.medium],
+                                         testName: variation.testName())
         }
     }
 
-    func test_support_with_icon_trailing_and_label() {
-        let icon: UIImage = UIImage(systemName: "pencil.circle")!
-        let chipView = ChipUIView(theme: SparkTheme.shared,
-                                  intent: .support,
-                                  variant: .filled,
-                                  alignment: .trailingIcon,
-                                  label: "Label",
-                                  iconImage: icon)
+    func test_with_icon_and_label_all_sizes() {
+        let variation = ChipTestVariation(intent: .basic, variant: .outlined)
 
-        assertSnapshotInDarkAndLight(matching: chipView, sizes: [.medium])
+        let chipView = ChipUIView(theme: SparkTheme.shared,
+                                  intent: variation.intent,
+                                  variant: variation.variant,
+                                  label: "Label",
+                                  iconImage: self.icon)
+
+        assertSnapshotInDarkAndLight(matching: chipView,
+                                     testName: variation.testName())
     }
 
-    func test_basic_disabled_with_icon_trailing_and_label() {
-        let icon: UIImage = UIImage(systemName: "pencil.circle")!
+    func test_with_icon_only() {
+        let variation = ChipTestVariation(intent: .main, variant: .dashed)
+
         let chipView = ChipUIView(theme: SparkTheme.shared,
-                                  intent: .basic,
-                                  variant: .filled,
+                                  intent: variation.intent,
+                                  variant: variation.variant,
+                                  iconImage: self.icon)
+
+        assertSnapshotInDarkAndLight(matching: chipView,
+                                     sizes: [.medium],
+                                     testName: variation.testName())
+    }
+
+    func test_with_label_only() {
+        let variation = ChipTestVariation(intent: .danger, variant: .tinted)
+
+        let chipView = ChipUIView(theme: SparkTheme.shared,
+                                  intent: variation.intent,
+                                  variant: variation.variant,
+                                  label: "Label")
+
+        assertSnapshotInDarkAndLight(matching: chipView,
+                                     sizes: [.medium],
+                                     testName: variation.testName())
+    }
+
+    func test_trailing_icon_and_label() {
+        let variation = ChipTestVariation(intent: .accent, variant: .tinted)
+
+        let chipView = ChipUIView(theme: SparkTheme.shared,
+                                  intent: variation.intent,
+                                  variant: variation.variant,
                                   alignment: .trailingIcon,
                                   label: "Label",
-                                  iconImage: icon)
+                                  iconImage: self.icon)
+
+        assertSnapshotInDarkAndLight(matching: chipView,
+                                     sizes: [.medium],
+                                     testName: variation.testName())
+    }
+
+    func test_disabled_icon_and_label() {
+        let variation = ChipTestVariation(intent: .accent, variant: .tinted)
+
+        let chipView = ChipUIView(theme: SparkTheme.shared,
+                                  intent: variation.intent,
+                                  variant: variation.variant,
+                                  alignment: .trailingIcon,
+                                  label: "Label",
+                                  iconImage: self.icon)
         chipView.isEnabled = false
 
-        assertSnapshotInDarkAndLight(matching: chipView, sizes: [.medium])
+        assertSnapshotInDarkAndLight(matching: chipView,
+                                     sizes: [.medium],
+                                     testName: variation.testName())
     }
 
-    func test_info_with_icon_and_label_and_component() {
-        for variant in ChipVariant.allCases {
-            let icon = UIImage(systemName: "pencil.circle")!
+    func test_with_extra_component() {
+        let variation = ChipTestVariation(intent: .basic, variant: .outlined)
 
-            let chipView = ChipUIView(theme: SparkTheme.shared,
-                                      intent: .info,
-                                      variant: variant,
-                                      label: "Label",
-                                      iconImage: icon)
-            chipView.component = UIImageView(image: .add)
+        let chipView = ChipUIView(theme: SparkTheme.shared,
+                                  intent: variation.intent,
+                                  variant: variation.variant,
+                                  label: "Label",
+                                  iconImage: self.icon)
+        chipView.isEnabled = false
+        chipView.component = UIImageView(image: .add)
 
-            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
-        }
+        assertSnapshotInDarkAndLight(matching: chipView,
+                                     sizes: [.medium],
+                                     testName: variation.testName())
     }
 }
