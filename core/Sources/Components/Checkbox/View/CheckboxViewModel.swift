@@ -38,6 +38,8 @@ final class CheckboxViewModel: ObservableObject {
     }
 
     @Published var colors: CheckboxStateColors
+    @Published var alignment: CheckboxAlignment
+    @Published var selectionState: CheckboxSelectionState
 
     var colorsUseCase: CheckboxStateColorsUseCaseable {
         didSet {
@@ -53,7 +55,9 @@ final class CheckboxViewModel: ObservableObject {
         theme: Theme,
         intent: CheckboxIntent = .main,
         colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
-        state: CheckboxState = .enabled
+        state: CheckboxState = .enabled,
+        alignment: CheckboxAlignment = .left,
+        selectionState: CheckboxSelectionState
     ) {
         switch text {
         case .left(let attributedString):
@@ -66,10 +70,11 @@ final class CheckboxViewModel: ObservableObject {
         self.checkedImage = checkedImage
         self.theme = theme
         self.state = state
-
         self.colorsUseCase = colorsUseCase
         self.colors = colorsUseCase.execute(from: theme.colors, dims: theme.dims, intent: intent)
         self.intent = intent
+        self.alignment = alignment
+        self.selectionState = selectionState
     }
 
     // MARK: - Methods

@@ -26,7 +26,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             let view = CheckboxView(
                 text: "Selected checkbox.",
                 checkedImage: self.checkedImage,
-                checkboxPosition: .right,
+                checkboxAlignment: .right,
                 theme: self.theme,
                 state: state,
                 selectionState: .init(

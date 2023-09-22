@@ -29,7 +29,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .selected,
-                checkboxPosition: .right
+                checkboxAlignment: .right
             )
 
             assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
@@ -44,7 +44,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .selected,
-                checkboxPosition: .left
+                checkboxAlignment: .left
             )
 
             assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
@@ -59,7 +59,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .unselected,
-                checkboxPosition: .left
+                checkboxAlignment: .left
             )
 
             assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
@@ -74,7 +74,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .indeterminate,
-                checkboxPosition: .left
+                checkboxAlignment: .left
             )
 
             assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
@@ -89,7 +89,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .selected,
-                checkboxPosition: .left
+                checkboxAlignment: .left
             )
 
             assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
@@ -105,7 +105,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkedImage: self.checkedImage,
                 state: state,
                 selectionState: .selected,
-                checkboxPosition: .left
+                checkboxAlignment: .left
             )
 
             assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)

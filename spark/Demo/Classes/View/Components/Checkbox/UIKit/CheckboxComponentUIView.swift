@@ -85,7 +85,7 @@ final class CheckboxComponentUIView: ComponentUIView {
             checkedImage: viewModel.image,
             state: viewModel.state,
             selectionState: viewModel.selectionState,
-            checkboxPosition: viewModel.alignment
+            checkboxAlignment: viewModel.alignment
         )
     }
 }

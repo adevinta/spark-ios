@@ -52,7 +52,7 @@ public struct CheckboxView: View {
 
     @Namespace private var namespace
 
-    private let checkboxPosition: CheckboxAlignment
+    private let checkboxAlignment: CheckboxAlignment
 
     @ScaledMetric private var checkboxWidth: CGFloat = Constants.checkboxWidth
     @ScaledMetric private var checkboxHeight: CGFloat = Constants.checkboxHeight
@@ -74,7 +74,7 @@ public struct CheckboxView: View {
     init(
         text: String,
         checkedImage: UIImage,
-        checkboxPosition: CheckboxAlignment = .left,
+        checkboxAlignment: CheckboxAlignment = .left,
         theme: Theme,
         colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
         state: CheckboxState = .enabled,
@@ -83,13 +83,14 @@ public struct CheckboxView: View {
         self._horizontalSpacing = .init(wrappedValue: theme.layout.spacing.medium)
         self._smallSpacing = .init(wrappedValue: theme.layout.spacing.small)
         self._selectionState = selectionState
-        self.checkboxPosition = checkboxPosition
+        self.checkboxAlignment = checkboxAlignment
         self.viewModel = .init(
             text: .right(text),
             checkedImage: checkedImage,
             theme: theme,
             colorsUseCase: colorsUseCase,
-            state: state
+            state: state,
+            selectionState: selectionState.wrappedValue
         )
     }
 
@@ -97,14 +98,14 @@ public struct CheckboxView: View {
     /// - Parameters:
     ///   - text: The checkbox text.
     ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
     ///   - theme: The current Spark-Theme.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     public init(
         text: String,
         checkedImage: UIImage,
-        checkboxPosition: CheckboxAlignment = .left,
+        checkboxAlignment: CheckboxAlignment = .left,
         theme: Theme,
         state: CheckboxState = .enabled,
         selectionState: Binding<CheckboxSelectionState>
@@ -112,7 +113,7 @@ public struct CheckboxView: View {
         self.init(
             text: text,
             checkedImage: checkedImage,
-            checkboxPosition: checkboxPosition,
+            checkboxAlignment: checkboxAlignment,
             theme: theme,
             colorsUseCase: CheckboxStateColorsUseCase(),
             state: state,
@@ -181,7 +182,7 @@ public struct CheckboxView: View {
 
     @ViewBuilder private var contentView: some View {
         HStack(alignment: .top, spacing: 0) {
-            switch checkboxPosition {
+            switch checkboxAlignment {
             case .left:
                 self.checkboxView.padding(.trailing, self.horizontalSpacing)
 

@@ -55,7 +55,7 @@ final class CheckboxGroupUIViewActionTests: TestCase {
     private func sut() -> CheckboxGroupUIView {
         let sut = CheckboxGroupUIView(checkedImage: IconographyTests.shared.checkmark,
                                    items: self.items,
-                                   checkboxPosition: .left,
+                                   checkboxAlignment: .left,
                                    theme: self.theme,
                                    accessibilityIdentifierPrefix: "XX")
 

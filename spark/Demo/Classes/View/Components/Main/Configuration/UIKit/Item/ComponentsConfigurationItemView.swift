@@ -74,7 +74,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
                 text: title,
                 checkedImage: DemoIconography.shared.checkmark,
                 selectionState: isOn ? .selected : .unselected,
-                checkboxPosition: .left)
+                checkboxAlignment: .left)
             checkbox.accessibilityIdentifier = self.viewModel.identifier + "Checkbox"
 
             checkbox.publisher.subscribe(in: &self.subscriptions) { [weak self] isChecked in

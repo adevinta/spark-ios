@@ -18,7 +18,7 @@ public struct CheckboxGroupView: View {
     @Binding private var items: [any CheckboxGroupItemProtocol]
     private var theme: Theme
     private var layout: CheckboxGroupLayout
-    private var checkboxPosition: CheckboxAlignment
+    private var checkboxAlignment: CheckboxAlignment
     private var accessibilityIdentifierPrefix: String
 
     @ScaledMetric private var spacingSmall: CGFloat
@@ -32,7 +32,7 @@ public struct CheckboxGroupView: View {
     ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
-    ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
     ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
@@ -40,7 +40,7 @@ public struct CheckboxGroupView: View {
         checkedImage: UIImage,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
-        checkboxPosition: CheckboxAlignment,
+        checkboxAlignment: CheckboxAlignment,
         theme: Theme,
         accessibilityIdentifierPrefix: String
     ) {
@@ -48,7 +48,7 @@ public struct CheckboxGroupView: View {
         self.checkedImage = checkedImage
         self._items = items
         self.layout = layout
-        self.checkboxPosition = checkboxPosition
+        self.checkboxAlignment = checkboxAlignment
         self.theme = theme
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
 
@@ -88,7 +88,7 @@ public struct CheckboxGroupView: View {
             CheckboxView(
                 text: item.title.wrappedValue ?? "",
                 checkedImage: self.checkedImage,
-                checkboxPosition: self.checkboxPosition,
+                checkboxAlignment: self.checkboxAlignment,
                 theme: self.theme,
                 state: item.state.wrappedValue,
                 selectionState: item.selectionState

@@ -58,7 +58,7 @@ struct CheckboxGroupListView: View {
 
             Button("Change position") {
                 withAnimation {
-                    self.checkboxPosition = self.checkboxPosition == .left ? .right : .left
+                    self.checkboxAlignment = self.checkboxAlignment == .left ? .right : .left
                 }
             }
 
@@ -81,7 +81,7 @@ struct CheckboxGroupListView: View {
                     checkedImage: checkedImage,
                     items: $items,
                     layout: layout,
-                    checkboxPosition: checkboxPosition,
+                    checkboxAlignment: checkboxAlignment,
                     theme: self.theme,
                     accessibilityIdentifierPrefix: "checkbox-group"
                 )
