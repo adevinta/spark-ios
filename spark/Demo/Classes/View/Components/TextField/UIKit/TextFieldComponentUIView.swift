@@ -12,7 +12,7 @@ import SparkCore
 import Spark
 
 final class TextFieldComponentUIView: UIView {
-    private let textField = TextFieldUIView()
+    private let textField: TextFieldUIView
     private let viewModel: TextFieldComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
@@ -70,29 +70,6 @@ final class TextFieldComponentUIView: UIView {
         return stackView
     }()
 
-    private lazy var variantLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Chip Variant:"
-        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        return label
-    }()
-
-    private lazy var variantButton: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(self.viewModel.theme.colors.main.main.uiColor, for: .normal)
-        button.addTarget(self.viewModel, action: #selector(viewModel.presentVariantSheet), for: .touchUpInside)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        return button
-    }()
-
-    private lazy var variantStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [variantLabel, variantButton, UIView()])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-
     private lazy var withRightViewCheckBox: CheckboxUIView = {
         let view = CheckboxUIView(
             theme: viewModel.theme,
@@ -121,7 +98,7 @@ final class TextFieldComponentUIView: UIView {
 
     private lazy var rightViewModeLabel: UILabel = {
         let label = UILabel()
-        label.text = "Selection mode for rightView"
+        label.text = "Mode for rightView:"
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -130,7 +107,7 @@ final class TextFieldComponentUIView: UIView {
     private lazy var  rightViewModeButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(self.viewModel.theme.colors.main.main.uiColor, for: .normal)
-        button.addTarget(self.viewModel, action: #selector(viewModel.presentViewModeSheet), for: .touchUpInside)
+        button.addTarget(self.viewModel, action: #selector(viewModel.presentRightViewModeSheet), for: .touchUpInside)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         return button
     }()
@@ -157,10 +134,26 @@ final class TextFieldComponentUIView: UIView {
 
     private lazy var leftViewModeLabel: UILabel = {
         let label = UILabel()
-        label.text = "Selection mode for leftView"
-        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        label.text = "Mode for leftView:"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+
+    private lazy var  leftViewModeButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(self.viewModel.theme.colors.main.main.uiColor, for: .normal)
+        button.addTarget(self.viewModel, action: #selector(viewModel.presentLeftViewModeSheet), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        return button
+    }()
+
+    private lazy var leftViewModeStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [leftViewModeLabel, leftViewModeButton, UIView()])
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
 
     private lazy var toolbar: UIToolbar = {
@@ -173,9 +166,9 @@ final class TextFieldComponentUIView: UIView {
 
     init(viewModel: TextFieldComponentUIViewModel) {
         self.viewModel = viewModel
+        self.textField = TextFieldUIView(theme: viewModel.theme)
         super.init(frame: .zero)
         self.setupView()
-//        self.setCheckboxStates()
         self.addPublishers()
     }
 
@@ -186,10 +179,7 @@ final class TextFieldComponentUIView: UIView {
     private func setupView() {
         backgroundColor = .white
 
-        self.textField.layer.borderWidth = 1
-        self.textField.layer.cornerRadius = 16
         self.textField.translatesAutoresizingMaskIntoConstraints = false
-        self.textField.input.clearButtonMode = .always
         self.textField.input.inputAccessoryView = self.toolbar
         self.textField.input.placeholder = ""
 
@@ -199,6 +189,7 @@ final class TextFieldComponentUIView: UIView {
         self.addSubview(self.withRightViewCheckBox)
         self.addSubview(self.withLeftViewCheckBox)
         self.addSubview(self.rightViewModeStackView)
+        self.addSubview(self.leftViewModeStackView)
 
         NSLayoutConstraint.activate([
             self.configurationLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
@@ -220,7 +211,11 @@ final class TextFieldComponentUIView: UIView {
             self.rightViewModeStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             self.rightViewModeStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
 
-            self.textField.topAnchor.constraint(equalTo: self.rightViewModeStackView.bottomAnchor, constant: 16),
+            self.leftViewModeStackView.topAnchor.constraint(equalTo: self.rightViewModeStackView.bottomAnchor, constant: 16),
+            self.leftViewModeStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            self.leftViewModeStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+
+            self.textField.topAnchor.constraint(equalTo: self.leftViewModeStackView.bottomAnchor, constant: 16),
             self.textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
             self.textField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
 
@@ -259,26 +254,16 @@ final class TextFieldComponentUIView: UIView {
             guard let self = self else { return }
             let color = self.viewModel.theme.colors.main.main.uiColor
             let themeTitle: String? = theme is SparkTheme ? viewModel.themes.first?.title : viewModel.themes.last?.title
-//            self.textField.theme = theme
             self.themeButton.setTitle(themeTitle, for: .normal)
             self.themeButton.setTitleColor(color, for: .normal)
             self.intentButton.setTitleColor(color, for: .normal)
-            self.variantButton.setTitleColor(color, for: .normal)
             self.rightViewModeButton.setTitleColor(color, for: .normal)
-//            self.withLabelCheckBox.theme = theme
-//            self.withIconCheckBox.theme = theme
-//            self.withActionCheckBox.theme = theme
-//            self.withComponentCheckBox.theme = theme
         }
 
         self.viewModel.$intent.subscribe(in: &self.cancellables) { [weak self] intent in
             guard let self = self else { return }
             self.intentButton.setTitle(intent.name, for: .normal)
-        }
-
-        self.viewModel.$variant.subscribe(in: &self.cancellables) { [weak self] variant in
-            guard let self = self else { return }
-            self.variantButton.setTitle(variant.name, for: .normal)
+            self.textField.intent = intent
         }
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] label in
@@ -296,15 +281,21 @@ final class TextFieldComponentUIView: UIView {
             self.textField.input.leftView = state == .unselected ? nil : self.createLeftView()
         }
 
-        self.viewModel.$viewMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
+        self.viewModel.$rightViewMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
             guard let self = self else { return }
-//            self.textField.input.rightViewMode = viewMode
+            self.rightViewModeButton.setTitle(viewMode.name, for: .normal)
+            self.textField.input.rightViewMode = .init(rawValue: viewMode.rawValue) ?? .never
+        }
+
+        self.viewModel.$leftViewMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
+            guard let self = self else { return }
+            self.leftViewModeButton.setTitle(viewMode.name, for: .normal)
+            self.textField.input.leftViewMode = .init(rawValue: viewMode.rawValue) ?? .never
         }
     }
 
     @objc
     private func dismissKeyboard() {
-        //        self.textField.setRightIcon(icon: nil)
         self.textField.input.resignFirstResponder()
     }
 }

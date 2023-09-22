@@ -18,18 +18,18 @@ final class TextFieldComponentUIViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
 
-    var showIntentSheet: AnyPublisher<[ChipIntent], Never> {
+    var showIntentSheet: AnyPublisher<[TextFieldIntent], Never> {
         showIntentSheetSubject
             .eraseToAnyPublisher()
     }
 
-    var showVariantSheet: AnyPublisher<[ChipVariant], Never> {
-        showVariantSheetSubject
+    var showRightViewModeSheet: AnyPublisher<[ViewMode], Never> {
+        showRightViewModeSheetSubject
             .eraseToAnyPublisher()
     }
 
-    var showViewModeSheet: AnyPublisher<[ViewMode], Never> {
-        showViewModeSheetSubject
+    var showLeftViewModeSheet: AnyPublisher<[ViewMode], Never> {
+        showLeftViewModeSheetSubject
             .eraseToAnyPublisher()
     }
 
@@ -37,15 +37,15 @@ final class TextFieldComponentUIViewModel: ObservableObject {
 
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
-    private var showIntentSheetSubject: PassthroughSubject<[ChipIntent], Never> = .init()
-    private var showVariantSheetSubject: PassthroughSubject<[ChipVariant], Never> = .init()
-    private var showViewModeSheetSubject: PassthroughSubject<[ViewMode], Never> = .init()
+    private var showIntentSheetSubject: PassthroughSubject<[TextFieldIntent], Never> = .init()
+    private var showLeftViewModeSheetSubject: PassthroughSubject<[ViewMode], Never> = .init()
+    private var showRightViewModeSheetSubject: PassthroughSubject<[ViewMode], Never> = .init()
 
     // MARK: - Initialization
     @Published var theme: Theme
-    @Published var intent: ChipIntent
-    @Published var variant: ChipVariant
-    @Published var viewMode: ViewMode
+    @Published var intent: TextFieldIntent
+    @Published var leftViewMode: ViewMode
+    @Published var rightViewMode: ViewMode
     @Published var text: String?
     @Published var icon: UIImage?
     @Published var component: UIView?
@@ -53,9 +53,9 @@ final class TextFieldComponentUIViewModel: ObservableObject {
 
     init(
         theme: Theme,
-        intent: ChipIntent = .main,
-        variant: ChipVariant = .filled,
-        viewMode: ViewMode = .never,
+        intent: TextFieldIntent = .neutral,
+        leftViewMode: ViewMode = .never,
+        rigthViewMode: ViewMode = .never,
         text: String? = "Label",
         icon: UIImage? = UIImage(imageLiteralResourceName: "alert"),
         component: UIView? = nil,
@@ -63,12 +63,12 @@ final class TextFieldComponentUIViewModel: ObservableObject {
     ) {
         self.theme = theme
         self.intent = intent
-        self.variant = variant
         self.text = text
         self.icon = icon
         self.component = component
         self.action = action
-        self.viewMode = viewMode
+        self.leftViewMode = leftViewMode
+        self.rightViewMode = rigthViewMode
     }
 }
 
@@ -80,22 +80,24 @@ extension TextFieldComponentUIViewModel {
     }
 
     @objc func presentIntentSheet() {
-        self.showIntentSheetSubject.send(ChipIntent.allCases)
+        self.showIntentSheetSubject.send(TextFieldIntent.allCases)
     }
 
-    @objc func presentVariantSheet() {
-        self.showVariantSheetSubject.send(ChipVariant.allCases)
+    @objc func presentLeftViewModeSheet() {
+        self.showLeftViewModeSheetSubject.send(ViewMode.allCases)
     }
 
-    @objc func presentViewModeSheet() {
-        self.showViewModeSheetSubject.send(ViewMode.allCases)
+    @objc func presentRightViewModeSheet() {
+        self.showRightViewModeSheetSubject.send(ViewMode.allCases)
     }
-
 }
 
-public enum ViewMode: CaseIterable {
-    case never
-    case always
-    case whileEditing
-    case unlessEditing
+public enum ViewMode: Int, CaseIterable {
+    case never = 0
+
+    case whileEditing = 1
+
+    case unlessEditing = 2
+
+    case always = 3
 }
