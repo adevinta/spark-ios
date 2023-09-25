@@ -1443,8 +1443,6 @@ private final class Stub {
         self.getToggleStateUseCaseMock = getToggleStateUseCaseMock
 
         let displayedTextViewModelMock = DisplayedTextViewModelGeneratedMock()
-        displayedTextViewModelMock.text = "Text"
-        displayedTextViewModelMock.attributedText = .left(.init(string: "AText"))
         displayedTextViewModelMock.underlyingDisplayedTextType = .text
         displayedTextViewModelMock.displayedText = .mocked()
         self.displayedTextViewModelMock = displayedTextViewModelMock
