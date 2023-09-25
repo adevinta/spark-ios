@@ -12,27 +12,15 @@ struct TextFieldColors {
 
     // MARK: - Properties
 
-    let labelColor: any ColorToken
-    let borderColor: any ColorToken
-    let helperColor: any ColorToken
-    let iconColor: any ColorToken
+    let border: any ColorToken
+    //TODO: let statusColor: any ColorToken
 }
 
-// MARK: Hashable & Equatable
+// MARK: Equatable
 
-extension TextFieldColors: Hashable, Equatable {
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.labelColor)
-        hasher.combine(self.borderColor)
-        hasher.combine(self.helperColor)
-        hasher.combine(self.iconColor)
-    }
+extension TextFieldColors: Equatable {
 
     static func == (lhs: TextFieldColors, rhs: TextFieldColors) -> Bool {
-        return lhs.labelColor.equals(rhs.labelColor) &&
-        lhs.borderColor.equals(rhs.borderColor) &&
-        lhs.helperColor.equals(rhs.helperColor) &&
-        lhs.iconColor.equals(rhs.iconColor)
+        lhs.border.equals(rhs.border)
     }
 }

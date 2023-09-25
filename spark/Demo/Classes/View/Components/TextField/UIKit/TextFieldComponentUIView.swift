@@ -156,14 +156,6 @@ final class TextFieldComponentUIView: UIView {
         return stackView
     }()
 
-    private lazy var toolbar: UIToolbar = {
-        let toolbar = UIToolbar()
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.dismissKeyboard))
-        toolbar.items = [UIBarButtonItem.flexibleSpace(), doneButton]
-        toolbar.sizeToFit()
-        return toolbar
-    }()
-
     init(viewModel: TextFieldComponentUIViewModel) {
         self.viewModel = viewModel
         self.textField = TextFieldUIView(theme: viewModel.theme)
@@ -180,8 +172,8 @@ final class TextFieldComponentUIView: UIView {
         backgroundColor = .white
 
         self.textField.translatesAutoresizingMaskIntoConstraints = false
-        self.textField.input.inputAccessoryView = self.toolbar
-        self.textField.input.placeholder = ""
+        self.textField.addDoneButtonOnKeyboard()
+        self.textField.backgroundColor = .red
 
         self.addSubview(self.textField)
         self.addSubview(self.configurationLabel)
@@ -220,10 +212,8 @@ final class TextFieldComponentUIView: UIView {
             self.textField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
 
         ])
-        self.textField.input.rightView = self.createRightView()
-        self.textField.input.rightViewMode = .always
-        self.textField.input.leftView = self.createLeftView()
-        self.textField.input.leftViewMode = .always
+        self.textField.rightView = self.createRightView()
+        self.textField.leftView = self.createLeftView()
     }
 
     private func createRightView() -> UIImageView {
@@ -268,34 +258,29 @@ final class TextFieldComponentUIView: UIView {
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] label in
             guard let self = self else { return }
-            self.textField.input.placeholder = label
+            self.textField.placeholder = label
         }
 
         self.withRightViewCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self = self else { return }
-            self.textField.input.rightView = state == .unselected ? nil : self.createRightView()
+            self.textField.rightView = state == .unselected ? nil : self.createRightView()
         }
 
         self.withLeftViewCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self = self else { return }
-            self.textField.input.leftView = state == .unselected ? nil : self.createLeftView()
+            self.textField.leftView = state == .unselected ? nil : self.createLeftView()
         }
 
         self.viewModel.$rightViewMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
             guard let self = self else { return }
             self.rightViewModeButton.setTitle(viewMode.name, for: .normal)
-            self.textField.input.rightViewMode = .init(rawValue: viewMode.rawValue) ?? .never
+            self.textField.rightViewMode = .init(rawValue: viewMode.rawValue) ?? .never
         }
 
         self.viewModel.$leftViewMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
             guard let self = self else { return }
             self.leftViewModeButton.setTitle(viewMode.name, for: .normal)
-            self.textField.input.leftViewMode = .init(rawValue: viewMode.rawValue) ?? .never
+            self.textField.leftViewMode = .init(rawValue: viewMode.rawValue) ?? .never
         }
-    }
-
-    @objc
-    private func dismissKeyboard() {
-        self.textField.input.resignFirstResponder()
     }
 }
