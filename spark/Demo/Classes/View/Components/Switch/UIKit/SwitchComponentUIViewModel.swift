@@ -102,11 +102,10 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    // MARK: - Inherited Properties
-    var identifier: String = "Switch"
+    // MARK: - Methods
 
-    lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
-        return .init(itemsViewModel: [
+    override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
+        return  [
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.alignmentConfigurationItemViewModel,
@@ -114,8 +113,8 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
             self.isOnConfigurationItemViewModel,
             self.isEnabledConfigurationItemViewModel,
             self.hasImagesConfigurationItemViewModel
-        ])
-    }()
+        ]
+    }
 
     // MARK: - Default Value Properties
     let themes = ThemeCellModel.themes
@@ -161,6 +160,8 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
             string: self.text,
             attributes: atttributes
         )
+
+        super.init(identifier: "Switch")
     }
 }
 

@@ -12,47 +12,40 @@ import SwiftUI
 
 struct SpinnerComponent: View {
 
-    @State var theme: Theme = SparkThemePublisher.shared.theme
+    // MARK: - Properties
 
-    @State var intent: SpinnerIntent = .main
-    @State var spinnerSize: SpinnerSize = .medium
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: SpinnerIntent = .main
+    @State private var spinnerSize: SpinnerSize = .medium
+
+    // MARK: - View
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Configuration")
-                .font(.title2)
-                .bold()
-                .padding(.bottom, 6)
+        Component(
+            name: "Spinner",
+            configuration: {
+                ThemeSelector(theme: self.$theme)
 
-            ThemeSelector(theme: self.$theme)
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an Intent",
+                    values: SpinnerIntent.allCases,
+                    value: self.$intent)
 
-            EnumSelector(
-                title: "Intent",
-                dialogTitle: "Select an Intent",
-                values: SpinnerIntent.allCases,
-                value: self.$intent)
-
-            EnumSelector(
-                title: "Spinner Size",
-                dialogTitle: "Select a Size",
-                values: SpinnerSize.allCases,
-                value: self.$spinnerSize)
-
-            Divider()
-
-            Text("Integration")
-                .font(.title2)
-                .bold()
-
-            SpinnerView(theme: self.theme,
-                        intent: self.intent,
-                        spinnerSize: self.spinnerSize
-            )
-
-            Spacer()
-        }
-        .padding(.horizontal, 16)
-        .navigationBarTitle(Text("Spinner"))
+                EnumSelector(
+                    title: "Spinner Size",
+                    dialogTitle: "Select a Size",
+                    values: SpinnerSize.allCases,
+                    value: self.$spinnerSize)
+            },
+            integration: {
+                SpinnerView(
+                    theme: self.theme,
+                    intent: self.intent,
+                    spinnerSize: self.spinnerSize
+                )
+            }
+        )
     }
 }
 
