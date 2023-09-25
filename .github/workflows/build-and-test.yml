@@ -1,24 +1,30 @@
 name: build-framework
 on:
+  push:
+    branches:
+      - "**"
   pull_request:
     types: [ opened, edited, synchronize ]
+    branches:
+      - "main"
+
 jobs:
   core_build:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
-          spec: project.yml
+          spec: project-ci.yml
           version: '2.33.0'
       - name: Run fastlane build_framework TARGET_NAME:SparkCore
         run: fastlane build_framework TARGET_NAME:SparkCore
   core_unit_tests:
     name: core_unit_tests
     needs: [ core_build ]
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
@@ -29,7 +35,34 @@ jobs:
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
-          spec: project.yml
+          spec: project-ci.yml
+          version: '2.33.0'
+      - name: Run fastlane unit_tests TARGET_NAME:SparkCore
+        run: fastlane unit_tests TARGET_NAME:SparkCore
+      - name: Tar files
+        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
+        continue-on-error: true
+      - name: Archive xcresult
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult-SparkCore
+          path: xcresult-SparkCore.tar
+          retention-days: 15
+  core_snapshot_tests:
+    name: core_snapshot_tests
+    needs: [ core_build ]
+    runs-on: macos-13
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v3
+      - name: Run sourcery
+        run: |
+          brew install sourcery
+          sourcery
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project-ci.yml
           version: '2.33.0'
       # Get the current source branch name of the spark-ios-repository-PR and store it in "outputs.branch".
       - name: Extract branch name
@@ -52,42 +85,42 @@ jobs:
         with:
           repository: adevinta/spark-ios-snapshots
           path: spark-ios-snapshots
-      - name: Run fastlane unit_tests TARGET_NAME:SparkCore
-        run: fastlane unit_tests TARGET_NAME:SparkCore
+      - name: Run fastlane unit_tests TARGET_NAME:SparkDemo
+        run: fastlane unit_tests TARGET_NAME:SparkDemo
       - name: Tar files
         run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
         continue-on-error: true
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
         with:
-          name: xcresult-SparkCore
-          path: xcresult-SparkCore.tar
+          name: xcresult-SparkDemo
+          path: xcresult-SparkDemo.tar
           retention-days: 15
 
   build:
     needs: [ core_build ]
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
-          spec: project.yml
+          spec: project-ci.yml
           version: '2.33.0'
       - name: Run fastlane build_framework TARGET_NAME:Spark
         run: fastlane build_framework TARGET_NAME:Spark
   unit_tests:
     name: unit_tests
     needs: [ build ]
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
-          spec: project.yml
+          spec: project-ci.yml
           version: '2.33.0'
       - name: Run fastlane lane unit_tests TARGET_NAME:Spark
         run: fastlane unit_tests TARGET_NAME:Spark

@@ -253,7 +253,7 @@ final class BadgeComponentUIView: UIView {
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in
             guard let self = self else { return }
             let color = self.viewModel.theme.colors.main.main.uiColor
-            let themeTitle: String? = theme is SparkTheme ? viewModel.themes.first?.title : viewModel.themes.last?.title
+            let themeTitle: String? = theme is SparkTheme ? self.viewModel.themes.first?.title : self.viewModel.themes.last?.title
             self.badgeView.theme = theme
             self.themeButton.setTitle(themeTitle, for: .normal)
             self.themeButton.setTitleColor(color, for: .normal)
@@ -284,7 +284,7 @@ final class BadgeComponentUIView: UIView {
 
         self.borderCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self = self else { return }
-            badgeView.isBorderVisible = state == .selected
+            self.badgeView.isBorderVisible = state == .selected
         }
     }
 }

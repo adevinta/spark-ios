@@ -121,7 +121,7 @@ struct TabComponent: View {
 
             },
             integration: {
-                TabView<BadgeView>(
+                TabView(
                     theme: self.theme,
                     intent: self.intent,
                     tabSize: self.tabSize,

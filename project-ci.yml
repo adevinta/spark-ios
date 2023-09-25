@@ -1,0 +1,35 @@
+name: Spark
+include:
+  - xcodegen/spark-shared.yml
+  - xcodegen/spark-core.yml
+  - xcodegen/spark-core-unit-tests.yml
+  - xcodegen/spark-core-snapshot-tests.yml
+  - xcodegen/spark.yml
+
+targetTemplates:
+  SparkCoreSchemeTemplate:
+    templates:
+      - SparkCoreTemplate
+    scheme:
+      testTargets:
+        - name: SparkCoreUnitTests
+      gatherCoverageData: true
+  SparkDemoSchemeTemplate:
+    templates:
+      - SparkDemoTemplate
+    scheme:
+      testTargets:
+        - name: SparkCoreSnapshotTests
+      environmentVariables:
+        - variable: SNAPSHOT_REFERENCE_DIR
+          value: "$(SRCROOT)/spark-ios-snapshots"
+          isEnabled: true
+      gatherCoverageData: true
+
+targets:
+  SparkCore:
+    templates:
+      - SparkCoreSchemeTemplate
+  SparkDemo:
+    templates:
+      - SparkDemoSchemeTemplate

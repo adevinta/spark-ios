@@ -12,7 +12,7 @@ import XCTest
 
 @testable import SparkCore
 
-final class ChipViewModelTests: TestCase {
+final class ChipViewModelTests: XCTestCase {
 
     // MARK: - Properties
 

@@ -72,14 +72,14 @@ final class TagComponentUIView: ComponentUIView {
             switch content {
             case .text:
                 self.componentView.iconImage = nil
-                self.componentView.text = viewModel.text
+                self.componentView.text = self.viewModel.text
             case .icon:
                 self.componentView.text = nil
-                self.componentView.iconImage = viewModel.image
+                self.componentView.iconImage = self.viewModel.image
 
             case .all:
-                self.componentView.text = viewModel.text
-                self.componentView.iconImage = viewModel.image
+                self.componentView.text = self.viewModel.text
+                self.componentView.iconImage = self.viewModel.image
             }
         }
     }

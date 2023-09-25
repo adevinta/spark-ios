@@ -6,7 +6,6 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-@testable import Spark
 import XCTest
 
 final class ColorTokenTests: XCTestCase {

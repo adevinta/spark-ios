@@ -80,14 +80,14 @@ final class CheckboxGroupViewController: UIViewController {
     }
 
     private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
-        CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
-        CheckboxGroupItem(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
-        CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
+        CheckboxGroupItemDefault(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
+        CheckboxGroupItemDefault(title: "Entry 2", id: "2", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 3", id: "3", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
+        CheckboxGroupItemDefault(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItemDefault(title: "Entry 6", id: "6", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 7", id: "7", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 8", id: "8", selectionState: .unselected)
     ] {
         didSet {
             self.updateSelection()
@@ -221,7 +221,7 @@ final class CheckboxGroupViewController: UIViewController {
 
     @objc private func actionAddItem(sender: UIButton) {
         let identifier = "\(self.items.count + 1)"
-        let newItem = CheckboxGroupItem(
+        let newItem = CheckboxGroupItemDefault(
             attributedTitle: self.attributedCheckboxLabel(for: identifier),
             id: identifier,
             selectionState: .unselected
