@@ -45,7 +45,7 @@ final class ColorSnapshotTests: SnapshotTestCase {
             let vc = UIHostingController(rootView: view)
             vc.view.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
             vc.overrideUserInterfaceStyle = .light
-            sparktAssertSnapshot(
+            sparkAssertSnapshot(
                 matching: vc.view,
                 as: .image,
                 named: value.key,
@@ -53,7 +53,7 @@ final class ColorSnapshotTests: SnapshotTestCase {
             )
 
             vc.overrideUserInterfaceStyle = .dark
-            sparktAssertSnapshot(
+            sparkAssertSnapshot(
                 matching: vc.view,
                 as: .image,
                 named: value.key + "-dark",

@@ -50,8 +50,7 @@ open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
             let traits = UITraitCollection(traitsFrom: [.darkMode])
             let filename = [testName, Constants.namedSuffixForDark, size.identifier]
                 .joined(separator: Constants.separator)
-
-            sparktAssertSnapshot(
+            sparkAssertSnapshot(
                 matching: view().environment(\.sizeCategory, ContentSizeCategory(size) ?? .extraSmall),
                 as: .image(precision: Constants.imagePrecision,
                            perceptualPrecision: Constants.imagePerceptualPrecision,
@@ -69,8 +68,7 @@ open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
         for size in sizes {
             let filename = [testName, Constants.namedSuffixForLight, size.identifier]
                 .joined(separator: Constants.separator)
-
-            sparktAssertSnapshot(
+            sparkAssertSnapshot(
                 matching: view().environment(\.sizeCategory, ContentSizeCategory(size) ?? .extraSmall),
                 as: .image(precision: Constants.imagePrecision,
                            perceptualPrecision: Constants.imagePerceptualPrecision),
@@ -108,7 +106,7 @@ open class UIKitComponentSnapshotTestCase: SnapshotTestCase {
             let traits = UITraitCollection(traitsFrom: [.darkMode, UITraitCollection(preferredContentSizeCategory: size)])
             let filename = [testName, Constants.namedSuffixForDark, size.identifier]
                 .joined(separator: Constants.separator)
-            sparktAssertSnapshot(
+            sparkAssertSnapshot(
                 matching: view(),
                 as: .wait(
                     for: delay,
@@ -133,7 +131,7 @@ open class UIKitComponentSnapshotTestCase: SnapshotTestCase {
             let filename = [testName, Constants.namedSuffixForLight, size.identifier]
                 .joined(separator: Constants.separator)
             
-            sparktAssertSnapshot(
+            sparkAssertSnapshot(
                 matching: view(),
                 as: .wait(
                     for: delay,

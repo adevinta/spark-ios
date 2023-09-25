@@ -1,12 +1,7 @@
 name: build-framework
 on:
-  push:
-    branches:
-      - "**"
   pull_request:
     types: [ opened, edited, synchronize ]
-    branches:
-      - "main"
 
 jobs:
   core_build:
@@ -88,13 +83,13 @@ jobs:
       - name: Run fastlane unit_tests TARGET_NAME:SparkDemo
         run: fastlane unit_tests TARGET_NAME:SparkDemo
       - name: Tar files
-        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
+        run: tar -cvf xcresult-SparkCoreSnapshots.tar out/SparkCoreSnapshots.xcresult
         continue-on-error: true
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
         with:
-          name: xcresult-SparkDemo
-          path: xcresult-SparkDemo.tar
+          name: xcresult-SparkCoreSnapshots
+          path: xcresult-SparkCoreSnapshots.tar
           retention-days: 15
 
   build:

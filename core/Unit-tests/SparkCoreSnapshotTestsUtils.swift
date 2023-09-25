@@ -9,7 +9,7 @@
 import XCTest
 import SnapshotTesting
 
-public func sparktAssertSnapshot<Value, Format>(
+public func sparkAssertSnapshot<Value, Format>(
     matching value: @autoclosure () throws -> Value,
     as snapshotting: Snapshotting<Value, Format>,
     named name: String? = nil,
@@ -30,5 +30,5 @@ public func sparktAssertSnapshot<Value, Format>(
         testName: testName
     )
     guard let message = failure else { return }
-    XCTFail(message, file: file, line: line)
+    XCTFail("\(testName): \(message)", file: file, line: line)
 }

@@ -17,6 +17,7 @@ targetTemplates:
         SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
         SUPPORTS_MACCATALYST: NO
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        PRODUCT_NAME: SparkCoreSnapshotTests
     sources:
       - path: ../core/Unit-tests
       - path: ../core/Sources
