@@ -117,7 +117,7 @@ final class CheckboxViewController: UIViewController {
     }
 
     private func setUpView() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         let view = self.contentView
         let theme = self.theme
 

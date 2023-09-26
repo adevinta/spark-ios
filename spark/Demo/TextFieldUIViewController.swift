@@ -48,12 +48,12 @@ class TextFieldUIViewController: UIViewController {
             self.presentIntentActionSheet(intents)
         }
 
-        self.viewModel.showVariantSheet.subscribe(in: &self.cancellables) { variants in
-            self.presentVariantActionSheet(variants)
+        self.viewModel.showRightViewModeSheet.subscribe(in: &self.cancellables) { viewMode in
+            self.presentRightViewModeActionSheet(viewMode)
         }
 
-        self.viewModel.showViewModeSheet.subscribe(in: &self.cancellables) { viewMode in
-            self.presentViewModeActionSheet(viewMode)
+        self.viewModel.showLeftViewModeSheet.subscribe(in: &self.cancellables) { viewMode in
+            self.presentLeftViewModeActionSheet(viewMode)
         }
     }
 
@@ -97,8 +97,8 @@ extension TextFieldUIViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentIntentActionSheet(_ intents: [ChipIntent]) {
-        let actionSheet = SparkActionSheet<ChipIntent>.init(
+    private func presentIntentActionSheet(_ intents: [TextFieldIntent]) {
+        let actionSheet = SparkActionSheet<TextFieldIntent>.init(
             values: intents,
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
@@ -106,20 +106,20 @@ extension TextFieldUIViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentVariantActionSheet(_ variants: [ChipVariant]) {
-        let actionSheet = SparkActionSheet<ChipVariant>.init(
-            values: variants,
-            texts: variants.map{ $0.name }) { variant in
-                self.viewModel.variant = variant
-            }
-            self.present(actionSheet, animated: true)
-    }
-
-    private func presentViewModeActionSheet(_ viewModes: [ViewMode]) {
+    private func presentLeftViewModeActionSheet(_ viewModes: [ViewMode]) {
         let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
                                                           texts: viewModes.map{ $0.name }) { viewMode in
-            self.viewModel.viewMode = viewMode
+            self.viewModel.leftViewMode = viewMode
         }
         self.present(actionSheet, animated: true)
     }
+
+    private func presentRightViewModeActionSheet(_ viewModes: [ViewMode]) {
+        let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
+                                                          texts: viewModes.map{ $0.name }) { viewMode in
+            self.viewModel.rightViewMode = viewMode
+        }
+        self.present(actionSheet, animated: true)
+    }
+
 }

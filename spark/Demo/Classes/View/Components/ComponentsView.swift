@@ -5,7 +5,6 @@
 //  Created by robin.lemaire on 14/04/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
-// swiftlint:disable all
 
 import SwiftUI
 import Spark
@@ -20,7 +19,7 @@ struct ComponentsView: View {
     var theme: Theme {
         self.themePublisher.theme
     }
-    
+
     var body: some View {
         List {
             Button("Badge") {
@@ -59,11 +58,15 @@ struct ComponentsView: View {
                 self.navigateToView(SwitchComponentView())
             }
 
+            Button("Tab") {
+                self.navigateToView(TabComponent())
+            }
+
             Button("Tag") {
                 self.navigateToView(TagComponentView())
             }
         }
-        .foregroundColor(.black)
+        .foregroundColor(.primary)
         .navigationBarHidden(false)
         .navigationTitle("Components")
         .background(Color.gray)

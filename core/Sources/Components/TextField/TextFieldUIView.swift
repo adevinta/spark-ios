@@ -7,25 +7,49 @@
 //
 
 import UIKit
+import Combine
 
-public final class TextFieldUIView: UIControl {
+public final class TextFieldUIView: UITextField {
 
-    public let input = TextFieldUIView.InputUIView()
+    private let viewModel: TextFieldUIViewModel
+    private var cancellable = Set<AnyCancellable>()
 
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(
-            arrangedSubviews: [
-                self.input,
-            ]
-        )
-        stackView.alignment = .center
-        stackView.spacing = 8
-        return stackView
-    }()
+    public var theme: Theme {
+        get {
+            return self.viewModel.theme
+        }
+        set {
+            self.viewModel.setTheme(newValue)
+        }
+    }
 
-    public init() {
+    public var intent: TextFieldIntent {
+        get {
+            return self.viewModel.intent
+        }
+        set {
+            self.viewModel.setIntent(newValue)
+        }
+    }
+
+    public override var borderStyle: UITextField.BorderStyle {
+        @available(*, unavailable)
+        set {}
+        get { return .init(self.viewModel.borderStyle) }
+    }
+
+    internal init(viewModel: TextFieldUIViewModel) {
+        self.viewModel = viewModel
         super.init(frame: .zero)
         self.setupView()
+    }
+
+    public convenience init(theme: Theme,
+                            intent: TextFieldIntent = .neutral) {
+        let viewModel = TextFieldUIViewModel(theme: theme,
+                                             intent: intent,
+                                             borderStyle: .roundedRect)
+        self.init(viewModel: viewModel)
     }
 
     required init?(coder: NSCoder) {
@@ -33,74 +57,104 @@ public final class TextFieldUIView: UIControl {
     }
 
     private func setupView() {
-        self.backgroundColor = .white
-
-
-        self.addSubview(self.input)
-        self.input.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.input.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.input.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.input.topAnchor.constraint(equalTo: self.topAnchor),
-            self.input.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            self.input.widthAnchor.constraint(greaterThanOrEqualToConstant: 280),
-            self.input.heightAnchor.constraint(equalToConstant: 44)
+            self.heightAnchor.constraint(equalToConstant: 44)
         ])
+        self.setupSubscriptions()
+    }
 
+    private func setupSubscriptions() {
+        self.viewModel.$colors.subscribe(in: &self.cancellable) { [weak self] colors in
+            UIView.animate(withDuration: 0.1, animations: { self?.setupColors(colors) })
+        }
+        self.viewModel.$borders.subscribe(in: &self.cancellable) { [weak self] borders in
+            UIView.animate(withDuration: 0.1, animations: { self?.setupBorders(borders) })
+        }
+        self.viewModel.$spacings.subscribe(in: &self.cancellable) { [weak self] spacings in
+            UIView.animate(withDuration: 0.1, animations: { self?.setNeedsLayout() })
+        }
+    }
+
+    private func setupColors(_ colors: TextFieldColors) {
+        self.setBorderColor(from: colors.border)
+    }
+
+    private func setupBorders(_ borders: TextFieldBorders) {
+        self.setBorderWidth(borders.width)
+        self.setCornerRadius(borders.radius)
+    }
+
+    // MARK: - Rects
+
+    public override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return self.setInsets(forBounds: bounds)
+    }
+
+    public override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return self.setInsets(forBounds: bounds)
+    }
+    public override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return self.setInsets(forBounds: bounds)
+    }
+
+    public override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
+        var rect = super.clearButtonRect(forBounds: bounds)
+        rect.origin.x -= self.viewModel.spacings.right
+        return rect
+    }
+
+    public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        var rect = super.rightViewRect(forBounds: bounds)
+        rect.origin.x -= self.viewModel.spacings.right
+        return rect
+    }
+
+    public override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+        var rect = super.leftViewRect(forBounds: bounds)
+        rect.origin.x += self.viewModel.spacings.left
+        return rect
+    }
+
+    private func setInsets(forBounds bounds: CGRect) -> CGRect {
+        var totalInsets = UIEdgeInsets(
+            top: .zero,
+            left: self.viewModel.spacings.left,
+            bottom: .zero,
+            right: self.viewModel.spacings.right
+        )
+        let contentSpacing = self.viewModel.spacings.content
+        if let leftView = self.leftView, leftView.frame.origin.x > 0 { totalInsets.left += leftView.bounds.size.width + (0.5 * contentSpacing) }
+        if let rightView = self.rightView, rightView.frame.origin.x > 0 { totalInsets.right += rightView.bounds.size.width + (0.75 * contentSpacing) }
+        if let button = self.value(forKeyPath: "_clearButton") as? UIButton,
+           button.frame.origin.x > 0 && !((rightView?.frame.origin.x) ?? 0 > 0) {
+            totalInsets.right += button.bounds.size.width + (0.75 * contentSpacing)
+        }
+        return bounds.inset(by: totalInsets)
     }
 }
 
-extension TextFieldUIView {
-    public final class InputUIView: UITextField {
+enum TextFieldBorderStyle {
+    case roundedRect
+    case none
 
-        var insets = UIEdgeInsets(
-            top: 0,
-            left: 16,
-            bottom: 0,
-            right: 16
-        )
+    init(_ borderStyle: UITextField.BorderStyle) {
+        switch borderStyle {
+        case .roundedRect:
+            self = .roundedRect
+        default:
+            self = .none
+        }
+    }
+}
 
-        public override func textRect(forBounds bounds: CGRect) -> CGRect {
-            return self.setInsets(forBounds: bounds)
+extension UITextField.BorderStyle {
+    init(_ borderStyle: TextFieldBorderStyle) {
+        switch borderStyle {
+        case .roundedRect:
+            self = .roundedRect
+        case .none:
+            self = .none
         }
 
-        public override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-            return self.setInsets(forBounds: bounds)
-        }
-        public override func editingRect(forBounds bounds: CGRect) -> CGRect {
-            return self.setInsets(forBounds: bounds)
-        }
-
-        public override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
-            var rect = super.clearButtonRect(forBounds: bounds)
-                rect.origin.x -= insets.right
-            return rect
-        }
-
-        public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-            var rect = super.rightViewRect(forBounds: bounds)
-                rect.origin.x -= insets.right
-            return rect
-        }
-
-        public override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-            var rect = super.leftViewRect(forBounds: bounds)
-            rect.origin.x += insets.left
-
-            return rect
-        }
-
-        private func setInsets(forBounds bounds: CGRect) -> CGRect {
-
-            var totalInsets = self.insets
-            if let leftView = self.leftView, leftView.frame.origin.x > 0  { totalInsets.left += leftView.bounds.size.width + 8 }
-            if let rightView = self.rightView, rightView.frame.origin.x > 0 { totalInsets.right += rightView.bounds.size.width + 8 }
-            if let button = self.value(forKeyPath: "_clearButton") as? UIButton {
-                if button.frame.origin.x > 0 {
-                    totalInsets.right += button.bounds.size.width + 12
-                }
-            }
-            return bounds.inset(by: totalInsets)
-        }
     }
 }

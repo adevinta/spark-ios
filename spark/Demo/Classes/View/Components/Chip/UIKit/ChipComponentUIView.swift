@@ -232,7 +232,7 @@ final class ChipComponentUIView: UIView {
 
     // MARK: - Setup Views
     private func setupView() {
-        backgroundColor = .white
+        self.backgroundColor = UIColor.systemBackground
 
         self.makeChipView()
         addSubview(configurationLabel)
@@ -351,7 +351,7 @@ final class ChipComponentUIView: UIView {
 
         self.withComponentCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self = self else { return }
-            let component: UIView = UIImageView(image: UIImage.strokedCheckmark).withTint(.red)
+            let component: UIView = UIImageView(image: UIImage.strokedCheckmark)
             self.viewModel.component = state == .selected ? component : nil
         }
     }

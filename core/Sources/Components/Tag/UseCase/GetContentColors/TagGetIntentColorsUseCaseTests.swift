@@ -14,177 +14,201 @@ final class  TagGetContentColorsUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_for_all_intent_cases() throws {
+    func test_execute_intent_alert() {
         // GIVEN
-        let colorsMock = ColorsGeneratedMock.mocked()
+        let intent = TagIntent.alert
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
 
-        let items: [TagGetContentColors] = [
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
             .init(
-                givenIntent: .alert,
-                expectedColor: colorsMock.feedback.alert,
-                expectedOnColor: colorsMock.feedback.onAlert,
-                expectedContainerColor: colorsMock.feedback.alertContainer,
-                expectedOnContainerColor: colorsMock.feedback.onAlertContainer,
-                expectedSurfaceColor: colorsMock.base.surface
-            ),
-            .init(
-                givenIntent: .danger,
-                expectedColor: colorsMock.feedback.error,
-                expectedOnColor: colorsMock.feedback.onError,
-                expectedContainerColor: colorsMock.feedback.errorContainer,
-                expectedOnContainerColor: colorsMock.feedback.onErrorContainer,
-                expectedSurfaceColor: colorsMock.base.surface
-            ),
-            .init(
-                givenIntent: .info,
-                expectedColor: colorsMock.feedback.info,
-                expectedOnColor: colorsMock.feedback.onInfo,
-                expectedContainerColor: colorsMock.feedback.infoContainer,
-                expectedOnContainerColor: colorsMock.feedback.onInfoContainer,
-                expectedSurfaceColor: colorsMock.base.surface
-            ),
-            .init(
-                givenIntent: .neutral,
-                expectedColor: colorsMock.feedback.neutral,
-                expectedOnColor: colorsMock.feedback.onNeutral,
-                expectedContainerColor: colorsMock.feedback.neutralContainer,
-                expectedOnContainerColor: colorsMock.feedback.onNeutralContainer,
-                expectedSurfaceColor: colorsMock.base.surface
-            ),
-            .init(
-                givenIntent: .main,
-                expectedColor: colorsMock.main.main,
-                expectedOnColor: colorsMock.main.onMain,
-                expectedContainerColor: colorsMock.main.mainContainer,
-                expectedOnContainerColor: colorsMock.main.onMainContainer,
-                expectedSurfaceColor: colorsMock.base.surface
-            ),
-            .init(
-                givenIntent: .support,
-                expectedColor: colorsMock.support.support,
-                expectedOnColor: colorsMock.support.onSupport,
-                expectedContainerColor: colorsMock.support.supportContainer,
-                expectedOnContainerColor: colorsMock.support.onSupportContainer,
-                expectedSurfaceColor: colorsMock.base.surface
-            ),
-            .init(
-                givenIntent: .success,
-                expectedColor: colorsMock.feedback.success,
-                expectedOnColor: colorsMock.feedback.onSuccess,
-                expectedContainerColor: colorsMock.feedback.successContainer,
-                expectedOnContainerColor: colorsMock.feedback.onSuccessContainer,
-                expectedSurfaceColor: colorsMock.base.surface
-            ),
-            .init(
-                givenIntent: .accent,
-                expectedColor: colorsMock.accent.accent,
-                expectedOnColor: colorsMock.accent.onAccent,
-                expectedContainerColor: colorsMock.accent.accentContainer,
-                expectedOnContainerColor: colorsMock.accent.onAccentContainer,
-                expectedSurfaceColor: colorsMock.base.surface
-            ),
-            .init(
-                givenIntent: .basic,
-                expectedColor: colorsMock.basic.basic,
-                expectedOnColor: colorsMock.basic.onBasic,
-                expectedContainerColor: colorsMock.basic.basicContainer,
-                expectedOnContainerColor: colorsMock.basic.onBasicContainer,
-                expectedSurfaceColor: colorsMock.base.surface
+                color: colors.feedback.alert,
+                onColor: colors.feedback.onAlert,
+                containerColor: colors.feedback.alertContainer,
+                onContainerColor: colors.feedback.onAlertContainer
             )
-        ]
-
-        for item in items {
-
-            let useCase = TagGetContentColorsUseCase()
-
-            // WHEN
-            let contentColors = useCase.execute(
-                intent: item.givenIntent,
-                colors: colorsMock
-            )
-            
-            //  Content Colors Properties
-            try Tester.testContentColorsProperties(
-                givenContentColors: contentColors,
-                getContentColors: item
-            )
-        }
-    }
-}
-
-// MARK: - Tester
-
-private struct Tester {
-
-    static func testContentColorsProperties(
-        givenContentColors: TagContentColors,
-        getContentColors: TagGetContentColors
-    ) throws {
-        // Color
-        try self.testColor(
-            givenColorProperty: givenContentColors.color,
-            givenPropertyName: "color",
-            givenIntent: getContentColors.givenIntent,
-            expectedColorToken: getContentColors.expectedColor
-        )
-        // On Color
-        try self.testColor(
-            givenColorProperty: givenContentColors.onColor,
-            givenPropertyName: "onColor",
-            givenIntent: getContentColors.givenIntent,
-            expectedColorToken: getContentColors.expectedOnColor
-        )
-
-        // Container Color
-        try self.testColor(
-            givenColorProperty: givenContentColors.containerColor,
-            givenPropertyName: "containerColor",
-            givenIntent: getContentColors.givenIntent,
-            expectedColorToken: getContentColors.expectedContainerColor
-        )
-
-        // On Container Color
-        try self.testColor(
-            givenColorProperty: givenContentColors.onContainerColor,
-            givenPropertyName: "onContainerColor",
-            givenIntent: getContentColors.givenIntent,
-            expectedColorToken: getContentColors.expectedOnContainerColor
-        )
-
-        // Surface Color
-        try self.testColor(
-            givenColorProperty: givenContentColors.surfaceColor,
-            givenPropertyName: "surfaceColor",
-            givenIntent: getContentColors.givenIntent,
-            expectedColorToken: getContentColors.expectedSurfaceColor
         )
     }
 
-    private static func testColor(
-        givenColorProperty: any ColorToken,
-        givenPropertyName: String,
-        givenIntent: TagIntent,
-        expectedColorToken: any ColorToken
-    ) throws {
-        let errorPrefixMessage = " \(givenPropertyName) for .\(givenIntent) case"
+    func test_execute_intent_danger() {
+        // GIVEN
+        let intent = TagIntent.danger
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
 
-        let color = try XCTUnwrap(givenColorProperty as? ColorTokenGeneratedMock,
-                                  "Wrong" + errorPrefixMessage)
-        XCTAssertIdentical(color,
-                           expectedColorToken as? ColorTokenGeneratedMock,
-                           "Wrong value" + errorPrefixMessage)
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.feedback.error,
+                onColor: colors.feedback.onError,
+                containerColor: colors.feedback.errorContainer,
+                onContainerColor: colors.feedback.onErrorContainer
+            )
+        )
     }
-}
 
-// MARK: - Others Strucs
+    func test_execute_intent_info() {
+        // GIVEN
+        let intent = TagIntent.info
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
 
-private struct TagGetContentColors {
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
 
-    let givenIntent: TagIntent
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.feedback.info,
+                onColor: colors.feedback.onInfo,
+                containerColor: colors.feedback.infoContainer,
+                onContainerColor: colors.feedback.onInfoContainer
+            )
+        )
+    }
 
-    let expectedColor: any ColorToken
-    let expectedOnColor: any ColorToken
-    let expectedContainerColor: any ColorToken
-    let expectedOnContainerColor: any ColorToken
-    let expectedSurfaceColor: any ColorToken
+    func test_execute_intent_neutral() {
+        // GIVEN
+        let intent = TagIntent.neutral
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
+
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.feedback.neutral,
+                onColor: colors.feedback.onNeutral,
+                containerColor: colors.feedback.neutralContainer,
+                onContainerColor: colors.feedback.onNeutralContainer
+            )
+        )
+    }
+
+    func test_execute_intent_main() {
+        // GIVEN
+        let intent = TagIntent.main
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
+
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.main.main,
+                onColor: colors.main.onMain,
+                containerColor: colors.main.mainContainer,
+                onContainerColor: colors.main.onMainContainer
+            )
+        )
+    }
+
+    func test_execute_intent_support() {
+        // GIVEN
+        let intent = TagIntent.support
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
+
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.support.support,
+                onColor: colors.support.onSupport,
+                containerColor: colors.support.supportContainer,
+                onContainerColor: colors.support.onSupportContainer
+            )
+        )
+    }
+
+    func test_execute_intent_success() {
+        // GIVEN
+        let intent = TagIntent.success
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
+
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.feedback.success,
+                onColor: colors.feedback.onSuccess,
+                containerColor: colors.feedback.successContainer,
+                onContainerColor: colors.feedback.onSuccessContainer
+            )
+        )
+    }
+
+    func test_execute_intent_accent() {
+        // GIVEN
+        let intent = TagIntent.accent
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
+
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.accent.accent,
+                onColor: colors.accent.onAccent,
+                containerColor: colors.accent.accentContainer,
+                onContainerColor: colors.accent.onAccentContainer
+            )
+        )
+    }
+
+    func test_execute_intent_basic() {
+        // GIVEN
+        let intent = TagIntent.basic
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
+
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.basic.basic,
+                onColor: colors.basic.onBasic,
+                containerColor: colors.basic.basicContainer,
+                onContainerColor: colors.basic.onBasicContainer
+            )
+        )
+    }
 }

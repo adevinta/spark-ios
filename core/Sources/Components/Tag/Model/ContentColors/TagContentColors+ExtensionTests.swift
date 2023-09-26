@@ -16,15 +16,13 @@ extension TagContentColors {
         color: any ColorToken = ColorTokenGeneratedMock.random(),
         onColor: any ColorToken = ColorTokenGeneratedMock.random(),
         containerColor: any ColorToken = ColorTokenGeneratedMock.random(),
-        onContainerColor: any ColorToken = ColorTokenGeneratedMock.random(),
-        surfaceColor: any ColorToken = ColorTokenGeneratedMock.random()
+        onContainerColor: any ColorToken = ColorTokenGeneratedMock.random()
     ) -> Self {
         return .init(
             color: color,
             onColor: onColor,
             containerColor: containerColor,
-            onContainerColor: onContainerColor,
-            surfaceColor: surfaceColor
+            onContainerColor: onContainerColor
         )
     }
 }
