@@ -22,11 +22,6 @@ final class TextFieldGetBordersUseCase: TextFieldGetBordersUseCasable {
                 radius: .zero,
                 width: .zero
             )
-        case .line:
-            return .init(
-                radius: .zero,
-                width: theme.border.width.small
-            )
         case .roundedRect:
             return .init(
                 radius: theme.border.radius.large,

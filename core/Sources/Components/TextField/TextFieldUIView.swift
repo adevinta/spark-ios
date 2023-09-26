@@ -33,22 +33,23 @@ public final class TextFieldUIView: UITextField {
     }
 
     public override var borderStyle: UITextField.BorderStyle {
-        set {
-            self.viewModel.setBorderStyle(.init(newValue))
-        }
-        get {
-            return .init(self.viewModel.borderStyle)
-        }
+        @available(*, unavailable)
+        set {}
+        get { return .init(self.viewModel.borderStyle) }
     }
 
-    public init(theme: Theme,
-                intent: TextFieldIntent = .neutral) {
-        self.viewModel = TextFieldUIViewModel(theme: theme,
-                                              intent: intent,
-                                              borderStyle: .none)
+    internal init(viewModel: TextFieldUIViewModel) {
+        self.viewModel = viewModel
         super.init(frame: .zero)
-        self.borderStyle = .line
         self.setupView()
+    }
+
+    public convenience init(theme: Theme,
+                            intent: TextFieldIntent = .neutral) {
+        let viewModel = TextFieldUIViewModel(theme: theme,
+                                             intent: intent,
+                                             borderStyle: .roundedRect)
+        self.init(viewModel: viewModel)
     }
 
     required init?(coder: NSCoder) {
@@ -104,7 +105,7 @@ public final class TextFieldUIView: UITextField {
 
     public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.rightViewRect(forBounds: bounds)
-            rect.origin.x -= self.viewModel.spacings.right
+        rect.origin.x -= self.viewModel.spacings.right
         return rect
     }
 
@@ -126,7 +127,7 @@ public final class TextFieldUIView: UITextField {
         if let rightView = self.rightView, rightView.frame.origin.x > 0 { totalInsets.right += rightView.bounds.size.width + (0.75 * contentSpacing) }
         if let button = self.value(forKeyPath: "_clearButton") as? UIButton,
            button.frame.origin.x > 0 && !((rightView?.frame.origin.x) ?? 0 > 0) {
-                totalInsets.right += button.bounds.size.width + (0.75 * contentSpacing)
+            totalInsets.right += button.bounds.size.width + (0.75 * contentSpacing)
         }
         return bounds.inset(by: totalInsets)
     }
@@ -134,13 +135,10 @@ public final class TextFieldUIView: UITextField {
 
 enum TextFieldBorderStyle {
     case roundedRect
-    case line
     case none
 
     init(_ borderStyle: UITextField.BorderStyle) {
         switch borderStyle {
-        case .line, .bezel:
-            self = .line
         case .roundedRect:
             self = .roundedRect
         default:
@@ -152,8 +150,6 @@ enum TextFieldBorderStyle {
 extension UITextField.BorderStyle {
     init(_ borderStyle: TextFieldBorderStyle) {
         switch borderStyle {
-        case .line:
-            self = .line
         case .roundedRect:
             self = .roundedRect
         case .none:

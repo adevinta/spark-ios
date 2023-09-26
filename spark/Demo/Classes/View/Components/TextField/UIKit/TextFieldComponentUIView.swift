@@ -173,7 +173,6 @@ final class TextFieldComponentUIView: UIView {
 
         self.textField.translatesAutoresizingMaskIntoConstraints = false
         self.textField.addDoneButtonOnKeyboard()
-        self.textField.backgroundColor = .red
 
         self.addSubview(self.textField)
         self.addSubview(self.configurationLabel)

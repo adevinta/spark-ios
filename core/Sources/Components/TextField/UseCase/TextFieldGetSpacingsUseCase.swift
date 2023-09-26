@@ -22,7 +22,7 @@ final class TextFieldGetSpacingsUseCase: TextFieldGetSpacingsUseCasable {
                 content: theme.layout.spacing.medium,
                 right: .zero
             )
-        case .roundedRect, .line:
+        case .roundedRect:
             return .init(
                 left: theme.layout.spacing.large,
                 content: theme.layout.spacing.medium,
