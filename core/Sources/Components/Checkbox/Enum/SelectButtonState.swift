@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum CheckboxState: CaseIterable {
+public enum SelectButtonState: CaseIterable {
     case enabled
     case disabled
 }

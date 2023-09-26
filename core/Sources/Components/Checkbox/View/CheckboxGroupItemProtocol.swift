@@ -23,5 +23,8 @@ public protocol CheckboxGroupItemProtocol: Hashable {
     var selectionState: CheckboxSelectionState { get set }
 
     /// The current control state of the checkbox.
-    var state: CheckboxState { get set }
+    var state: SelectButtonState { get set }
+
+    /// The current control state of the checkbox.
+    var isEnabled: Bool { get set }
 }

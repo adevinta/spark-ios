@@ -115,7 +115,7 @@ struct BadgeComponentView: View {
                     text: "With Border",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isBorderVisible
                 )
             }

@@ -23,10 +23,10 @@ struct CheckboxGroupListView: View {
     @State private var checkboxAlignment: CheckboxAlignment = .left
 
     @State private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .disabled),
+        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, isEnabled: false),
         CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, isEnabled: false),
         CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
@@ -94,14 +94,14 @@ struct CheckboxGroupListView: View {
     }
 
     func shuffleAction() {
-        let states = [CheckboxState.enabled, CheckboxState.disabled]
+        let states = [true, false]
         let selectionStates = [CheckboxSelectionState.selected, .unselected, .indeterminate]
 
         withAnimation {
             for index in 0..<items.count {
                 var item = self.items[index]
                 if let randomState = states.randomElement() {
-                    item.state = randomState
+                    item.isEnabled = randomState
                 }
 
                 if let randomSelectionState = selectionStates.randomElement() {
@@ -130,6 +130,7 @@ struct CheckboxGroupView_Previews: PreviewProvider {
 // MARK: - Demo item
 
 class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
+
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
         lhs.id == rhs.id
     }
@@ -142,31 +143,34 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     var attributedTitle: NSAttributedString?
     var id: String
     var selectionState: CheckboxSelectionState
-    var state: CheckboxState
+    var isEnabled: Bool
+    var state: SparkCore.SelectButtonState
 
     init(
         title: String? = nil,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: CheckboxState = .enabled
+        isEnabled: Bool = true
     ) {
         self.title = title
         self.attributedTitle = nil
         self.id = id
         self.selectionState = selectionState
-        self.state = state
+        self.isEnabled = isEnabled
+        self.state = isEnabled ? .enabled : .disabled
     }
 
     init(
         attributedTitle: NSAttributedString,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: CheckboxState = .enabled
+        isEnabled: Bool = true
     ) {
         self.title = attributedTitle.string
         self.attributedTitle = attributedTitle
         self.id = id
         self.selectionState = selectionState
-        self.state = state
+        self.isEnabled = isEnabled
+        self.state = isEnabled ? .enabled : .disabled
     }
 }

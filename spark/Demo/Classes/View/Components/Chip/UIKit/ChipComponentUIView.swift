@@ -96,7 +96,7 @@ final class ChipComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Label",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: .selected,
             checkboxAlignment: .left
         )
@@ -109,7 +109,7 @@ final class ChipComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Icon",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: .selected,
             checkboxAlignment: .left
         )
@@ -122,7 +122,7 @@ final class ChipComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Action",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: .selected,
             checkboxAlignment: .left
         )
@@ -135,7 +135,7 @@ final class ChipComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Extra Component",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: .selected,
             checkboxAlignment: .left
         )

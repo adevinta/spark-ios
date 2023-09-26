@@ -90,7 +90,7 @@ public struct CheckboxGroupView: View {
                 checkedImage: self.checkedImage,
                 checkboxAlignment: self.checkboxAlignment,
                 theme: self.theme,
-                state: item.state.wrappedValue,
+                isEnabled: item.isEnabled.wrappedValue,
                 selectionState: item.selectionState
             )
             .if(self.layout == .horizontal) {

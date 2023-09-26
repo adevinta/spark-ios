@@ -80,10 +80,10 @@ final class CheckboxGroupViewController: UIViewController {
     }
 
     private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .disabled),
+        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, isEnabled: false),
         CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, isEnabled: false),
         CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
@@ -242,11 +242,11 @@ final class CheckboxGroupViewController: UIViewController {
 
     @objc private func actionShuffle(sender: UIButton) {
         let selectionStates = [CheckboxSelectionState.indeterminate, .selected, .unselected]
-        let states = [CheckboxState.enabled, CheckboxState.disabled]
+        let states = [true, false]
         for index in 0..<items.count {
             var item = items[index]
             if let randomState = states.randomElement() {
-                item.state = randomState
+                item.isEnabled = randomState
             }
 
             if let randomSelectionState = selectionStates.randomElement() {

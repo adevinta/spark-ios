@@ -44,7 +44,7 @@ public final class CheckboxUIView: UIView {
         let controlView = CheckboxControlUIView(
             selectionIcon: self.viewModel.checkedImage,
             theme: self.theme,
-            state: self.state
+            isEnabled: self.isEnabled
         )
         controlView.isAccessibilityElement = false
         return controlView
@@ -98,6 +98,15 @@ public final class CheckboxUIView: UIView {
         }
     }
 
+    public var checkedImage: UIImage {
+        get {
+            return self.viewModel.checkedImage
+        }
+        set {
+            self.viewModel.checkedImage = newValue
+        }
+    }
+
     /// The current selection state of the checkbox.
     public var selectionState: CheckboxSelectionState {
         get {
@@ -109,15 +118,27 @@ public final class CheckboxUIView: UIView {
     }
 
     /// The control state of the checkbox (e.g. `.enabled` or `.disabled`).
-    public var state: CheckboxState {
+    public var state: SelectButtonState {
         get {
-            return self.viewModel.state
+            return self.viewModel.isEnabled ? .enabled : .disabled
         }
         set {
-            guard newValue != self.viewModel.state else { return }
-            self.viewModel.state = newValue
+            let state: SelectButtonState = self.viewModel.isEnabled ? .enabled : .disabled
+            guard newValue != state else { return }
+            self.viewModel.isEnabled = newValue == .enabled
         }
     }
+
+    public var isEnabled: Bool {
+        get {
+            return self.viewModel.isEnabled
+        }
+        set {
+            guard newValue != self.viewModel.isEnabled else { return }
+            self.viewModel.isEnabled = newValue
+        }
+    }
+
     /// Returns the theme of the checkbox.
     public var theme: Theme {
         get {
@@ -184,7 +205,7 @@ public final class CheckboxUIView: UIView {
         intent: CheckboxIntent = .main,
         text: String,
         checkedImage: UIImage,
-        state: CheckboxState = .enabled,
+        isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
         checkboxAlignment: CheckboxAlignment
     ) {
@@ -194,7 +215,7 @@ public final class CheckboxUIView: UIView {
             content: .right(text),
             checkedImage: checkedImage,
             colorsUseCase: CheckboxStateColorsUseCase(),
-            state: state,
+            isEnabled: isEnabled,
             selectionState: selectionState,
             checkboxAlignment: checkboxAlignment
         )
@@ -213,7 +234,7 @@ public final class CheckboxUIView: UIView {
         intent: CheckboxIntent = .main,
         attributedText: NSAttributedString,
         checkedImage: UIImage,
-        state: CheckboxState = .enabled,
+        isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
         checkboxAlignment: CheckboxAlignment
     ) {
@@ -223,7 +244,7 @@ public final class CheckboxUIView: UIView {
             content: .left(attributedText),
             checkedImage: checkedImage,
             colorsUseCase: CheckboxStateColorsUseCase(),
-            state: state,
+            isEnabled: isEnabled,
             selectionState: selectionState,
             checkboxAlignment: checkboxAlignment
         )
@@ -235,7 +256,7 @@ public final class CheckboxUIView: UIView {
         content: Either<NSAttributedString, String>,
         checkedImage: UIImage,
         colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
-        state: CheckboxState = .enabled,
+        isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
         checkboxAlignment: CheckboxAlignment
     ) {
@@ -244,7 +265,7 @@ public final class CheckboxUIView: UIView {
             checkedImage: checkedImage,
             theme: theme,
             colorsUseCase:colorsUseCase,
-            state: state,
+            isEnabled: isEnabled,
             alignment: checkboxAlignment,
             selectionState: selectionState
         )
@@ -289,7 +310,7 @@ public final class CheckboxUIView: UIView {
             self.updateTheme()
         }
 
-        self.viewModel.$state.subscribe(in: &self.cancellables) { [weak self] selectionState in
+        self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] _ in
             guard let self else { return }
             self.updateState()
             self.updateAccessibility()
@@ -304,6 +325,23 @@ public final class CheckboxUIView: UIView {
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
             guard let self else { return }
             self.updateAlignment(alignment)
+        }
+
+        self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] text in
+            guard let self else { return }
+            self.textLabel.text = text
+            self.textLabel.font = self.theme.typography.body1.uiFont
+            self.textLabel.textColor = self.viewModel.colors.enable.textColor.uiColor
+        }
+
+        self.viewModel.$attributedText.subscribe(in: &self.cancellables) { [weak self] attributedText in
+            guard let self else { return }
+            self.textLabel.attributedText = attributedText
+        }
+
+        self.viewModel.$checkedImage.subscribe(in: &self.cancellables) { [weak self] icon in
+            guard let self else { return }
+            self.controlView.selectionIcon = icon
         }
     }
 }
@@ -350,15 +388,6 @@ private extension CheckboxUIView {
 
     private func update(content: Either<NSAttributedString, String>) {
         self.viewModel.update(content: content)
-
-        switch content {
-        case .left(let attributedText):
-            self.textLabel.attributedText = attributedText
-        case .right(let text):
-            self.textLabel.text = text
-        }
-        self.updateTheme()
-        self.updateAccessibility()
     }
 }
 

@@ -13,14 +13,16 @@ import UIKit
 final class CheckboxViewModel: ObservableObject {
     // MARK: - Internal properties
 
-    var text: String?
-    var attributedText: NSAttributedString?
-    var checkedImage: UIImage
+    @Published var text: String?
+    @Published var attributedText: NSAttributedString?
+    @Published var checkedImage: UIImage
+    @Published var colors: CheckboxStateColors
+    @Published var alignment: CheckboxAlignment
+    @Published var selectionState: CheckboxSelectionState
 
-    @Published var state: CheckboxState {
+    @Published var isEnabled: Bool {
         didSet {
-            guard oldValue != state else { return }
-
+            guard oldValue != isEnabled else { return }
             self.updateColors()
         }
     }
@@ -37,9 +39,6 @@ final class CheckboxViewModel: ObservableObject {
         }
     }
 
-    @Published var colors: CheckboxStateColors
-    @Published var alignment: CheckboxAlignment
-    @Published var selectionState: CheckboxSelectionState
 
     var colorsUseCase: CheckboxStateColorsUseCaseable {
         didSet {
@@ -55,7 +54,7 @@ final class CheckboxViewModel: ObservableObject {
         theme: Theme,
         intent: CheckboxIntent = .main,
         colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
-        state: CheckboxState = .enabled,
+        isEnabled: Bool = true,
         alignment: CheckboxAlignment = .left,
         selectionState: CheckboxSelectionState
     ) {
@@ -69,7 +68,7 @@ final class CheckboxViewModel: ObservableObject {
         }
         self.checkedImage = checkedImage
         self.theme = theme
-        self.state = state
+        self.isEnabled = isEnabled
         self.colorsUseCase = colorsUseCase
         self.colors = colorsUseCase.execute(from: theme.colors, dims: theme.dims, intent: intent)
         self.intent = intent
@@ -87,30 +86,21 @@ final class CheckboxViewModel: ObservableObject {
         switch content {
         case .left(let attributedString):
             self.attributedText = attributedString
-            self.text = attributedString.string
         case .right(let string):
             self.text = string
-            self.attributedText = nil
         }
     }
 
     // MARK: - Computed properties
 
     var interactionEnabled: Bool {
-        switch state {
-        case .disabled:
-            return false
-        default:
-            return true
-        }
+        return self.isEnabled
     }
 
     var opacity: CGFloat {
-        switch self.state {
-        case .disabled:
-            return self.theme.dims.dim3
-        default:
+        if isEnabled {
             return 1.0
         }
+        return self.theme.dims.dim3
     }
 }

@@ -103,14 +103,14 @@ struct TabComponent: View {
                         text: "With Label",
                         checkedImage: DemoIconography.shared.checkmark,
                         theme: theme,
-                        state: .enabled,
+                        isEnabled: true,
                         selectionState: self.$showText
                     )
                     CheckboxView(
                         text: "Long",
                         checkedImage: DemoIconography.shared.checkmark,
                         theme: theme,
-                        state: .enabled,
+                        isEnabled: true,
                         selectionState: self.$longLabel
                     )
                 }
@@ -119,7 +119,7 @@ struct TabComponent: View {
                     text: "With Icon",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$showIcon
                 )
 
@@ -127,7 +127,7 @@ struct TabComponent: View {
                     text: "Show Badge",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$showBadge
                 )
 
@@ -135,7 +135,7 @@ struct TabComponent: View {
                     text: "Is Enabled",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isEnabled
                 )
 
@@ -143,7 +143,7 @@ struct TabComponent: View {
                     text: "Equal sized",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$equalSize
                 )
 
