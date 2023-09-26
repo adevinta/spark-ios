@@ -32,34 +32,35 @@ struct CheckboxListView: View {
 
     var body: some View {
         List(self.viewModel.states, id: \.self) { state in
-            Section(header: Text("State \(self.title(for: state))")) {
+            let isEnabled = state == .enabled
+            Section(header: Text("State \(self.title(for: isEnabled))")) {
                 let checkedImage = DemoIconography.shared.checkmark
                 CheckboxView(
                     text: "Selected",
                     checkedImage: checkedImage,
                     theme: theme,
-                    state: state,
+                    isEnabled: isEnabled,
                     selectionState: self.$selection1
                 )
                 CheckboxView(
                     text: "Unselected",
                     checkedImage: checkedImage,
                     theme: theme,
-                    state: state,
+                    isEnabled: isEnabled,
                     selectionState: self.$selection2
                 )
                 CheckboxView(
                     text: "Indeterminate",
                     checkedImage: checkedImage,
                     theme: theme,
-                    state: state,
+                    isEnabled: isEnabled,
                     selectionState: self.$selection3
                 )
                 CheckboxView(
                     text: "Long text lorem ipsum dolor sit et amet abcdefghjijkl",
                     checkedImage: checkedImage,
                     theme: theme,
-                    state: state,
+                    isEnabled: isEnabled,
                     selectionState: self.$selection4
                 )
             }
@@ -67,15 +68,8 @@ struct CheckboxListView: View {
         .navigationBarTitle(Text("Checkbox"))
     }
 
-    private func title(for state: CheckboxState) -> String {
-        switch state {
-        case .enabled:
-            return "Enabled"
-        case .disabled:
-            return "Disabled"
-        @unknown default:
-            return ""
-        }
+    private func title(for isEnable: Bool) -> String {
+        return isEnable ? "Enabled" : "Disabled"
     }
 }
 

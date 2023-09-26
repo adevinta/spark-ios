@@ -12,7 +12,7 @@ import SparkCore
 struct CheckboxViewModel {
 
     // MARK: - Properties
-    let states: [CheckboxState] = [.enabled, .disabled]
+    let states: [SelectButtonState] = [.enabled, .disabled]
 
     // MARK: - Initialization
 

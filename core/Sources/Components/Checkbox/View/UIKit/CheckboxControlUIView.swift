@@ -23,7 +23,11 @@ class CheckboxControlUIView: UIView {
 
     // MARK: - Properties.
 
-    var selectionIcon: UIImage
+    var selectionIcon: UIImage {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
 
     var isPressed: Bool = false {
         didSet {
@@ -45,7 +49,7 @@ class CheckboxControlUIView: UIView {
 
     var theme: Theme
 
-    var state: CheckboxState
+    var isEnabled: Bool
 
     @ScaledUIMetric private var cornerRadius: CGFloat = Constants.cornerRadius
     @ScaledUIMetric private var cornerRadiusPressed: CGFloat = Constants.cornerRadiusPressed
@@ -55,10 +59,10 @@ class CheckboxControlUIView: UIView {
 
     // MARK: - Initialization
 
-    init(selectionIcon: UIImage, theme: Theme, state: CheckboxState) {
+    init(selectionIcon: UIImage, theme: Theme, isEnabled: Bool) {
         self.selectionIcon = selectionIcon
         self.theme = theme
-        self.state = state
+        self.isEnabled = isEnabled
         super.init(frame: .zero)
         self.commonInit()
     }
@@ -134,11 +138,10 @@ class CheckboxControlUIView: UIView {
         let fillColor: UIColor
         let strokeColor: UIColor
 
-        switch self.state {
-        case .enabled:
+        if isEnabled {
             fillColor = colors.enable.tintColor.uiColor
             strokeColor = colors.enable.borderColor.uiColor
-        case .disabled:
+        } else {
             fillColor = colors.disable.tintColor.uiColor
             strokeColor = colors.disable.borderColor.uiColor
         }

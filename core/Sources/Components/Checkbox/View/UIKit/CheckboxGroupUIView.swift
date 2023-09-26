@@ -180,7 +180,7 @@ public final class CheckboxGroupUIView: UIView {
                 theme: theme,
                 content: content,
                 checkedImage: self.checkedImage,
-                state: item.state,
+                isEnabled: item.isEnabled,
                 selectionState: item.selectionState,
                 checkboxAlignment: self.checkboxAlignment
             )

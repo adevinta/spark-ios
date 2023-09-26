@@ -147,7 +147,7 @@ final class BadgeComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Border",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: viewModel.isBorderVisible ? .selected : .unselected,
             checkboxAlignment: .left
         )

@@ -66,12 +66,16 @@ final class CheckboxComponentUIViewController: UIViewController {
             self.presentIntentActionSheet(intents)
         }
 
-        self.viewModel.showStateSheet.subscribe(in: &self.cancellables) { states in
-            self.presentStateActionSheet(states)
-        }
-
         self.viewModel.showAlignmentSheet.subscribe(in: &self.cancellables) { alignments in
             self.presentAlignmentActionSheet(alignments)
+        }
+
+        self.viewModel.showTextSheet.subscribe(in: &self.cancellables) { textStyles in
+            self.presentTextStyleActionSheet(textStyles)
+        }
+
+        self.viewModel.showImageSheet.subscribe(in: &self.cancellables) { icons in
+            self.presentIconActionSheet(icons)
         }
     }
 }
@@ -107,20 +111,29 @@ extension CheckboxComponentUIViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentStateActionSheet(_ states: [CheckboxState]) {
-        let actionSheet = SparkActionSheet<CheckboxState>.init(
-            values: states.map { $0 },
-            texts: states.map { $0.name }) { state in
-                self.viewModel.state = state
-            }
-        self.present(actionSheet, animated: true)
-    }
-
     private func presentAlignmentActionSheet(_ alignments: [CheckboxAlignment]) {
         let actionSheet = SparkActionSheet<CheckboxAlignment>.init(
             values: alignments,
             texts: alignments.map { $0.name }) { alignment in
                 self.viewModel.alignment = alignment
+            }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentTextStyleActionSheet(_ textStyles: [CheckboxComponentUIViewModel.TextStyle]) {
+        let actionSheet = SparkActionSheet<CheckboxComponentUIViewModel.TextStyle>.init(
+            values: textStyles,
+            texts: textStyles.map { $0.name }) { textStyle in
+                self.viewModel.textStyle = textStyle
+            }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentIconActionSheet(_ icons: [String: UIImage]) {
+        let actionSheet = SparkActionSheet<String>.init(
+            values: icons.map { $0.0 },
+            texts: icons.map { $0.0 }) { iconKey in
+                self.viewModel.icon = icons.filter { $0.0 == iconKey }
             }
         self.present(actionSheet, animated: true)
     }

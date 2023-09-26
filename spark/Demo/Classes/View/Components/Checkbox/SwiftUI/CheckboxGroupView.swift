@@ -20,14 +20,14 @@ struct CheckboxGroupListView: View {
 
     @State private var layout: CheckboxGroupLayout = .vertical
 
-    @State private var checkboxPosition: CheckboxPosition = .left
+    @State private var checkboxAlignment: CheckboxAlignment = .left
 
     @State private var items: [any CheckboxGroupItemProtocol] = [
         CheckboxGroupItemDefault(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
         CheckboxGroupItemDefault(title: "Entry 2", id: "2", selectionState: .unselected),
         CheckboxGroupItemDefault(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItemDefault(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
-        CheckboxGroupItemDefault(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItemDefault(title: "Entry 4", id: "4", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 5", id: "5", selectionState: .unselected, isEnabled: false),
         CheckboxGroupItemDefault(title: "Entry 6", id: "6", selectionState: .unselected),
         CheckboxGroupItemDefault(title: "Entry 7", id: "7", selectionState: .unselected),
         CheckboxGroupItemDefault(title: "Entry 8", id: "8", selectionState: .unselected)
@@ -95,14 +95,14 @@ struct CheckboxGroupListView: View {
     }
 
     func shuffleAction() {
-        let states = [CheckboxState.enabled, CheckboxState.disabled]
+        let states = [true, false]
         let selectionStates = [CheckboxSelectionState.selected, .unselected, .indeterminate]
 
         withAnimation {
             for index in 0..<items.count {
                 var item = self.items[index]
                 if let randomState = states.randomElement() {
-                    item.state = randomState
+                    item.isEnabled = randomState
                 }
 
                 if let randomSelectionState = selectionStates.randomElement() {
@@ -131,6 +131,7 @@ struct CheckboxGroupView_Previews: PreviewProvider {
 // MARK: - Demo item
 
 class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
+
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
         lhs.id == rhs.id
     }
@@ -143,31 +144,34 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     var attributedTitle: NSAttributedString?
     var id: String
     var selectionState: CheckboxSelectionState
-    var state: CheckboxState
+    var isEnabled: Bool
+    var state: SparkCore.SelectButtonState
 
     init(
         title: String? = nil,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: CheckboxState = .enabled
+        isEnabled: Bool = true
     ) {
         self.title = title
         self.attributedTitle = nil
         self.id = id
         self.selectionState = selectionState
-        self.state = state
+        self.isEnabled = isEnabled
+        self.state = isEnabled ? .enabled : .disabled
     }
 
     init(
         attributedTitle: NSAttributedString,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: CheckboxState = .enabled
+        isEnabled: Bool = true
     ) {
         self.title = attributedTitle.string
         self.attributedTitle = attributedTitle
         self.id = id
         self.selectionState = selectionState
-        self.state = state
+        self.isEnabled = isEnabled
+        self.state = isEnabled ? .enabled : .disabled
     }
 }

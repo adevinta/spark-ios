@@ -58,10 +58,10 @@ final class CheckboxComponentUIView: ComponentUIView {
             self.componentView.intent = intent
         }
 
-        self.viewModel.$state.subscribe(in: &self.cancellables) { [weak self] state in
+        self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
             guard let self = self else { return }
-            self.viewModel.stateConfigurationItemViewModel.buttonTitle = state.name
-            self.componentView.state = state
+            self.viewModel.isEnableConfigurationItemViewModel.isOn = isEnabled
+            self.componentView.state = isEnabled ? .enabled : .disabled
         }
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
@@ -70,20 +70,43 @@ final class CheckboxComponentUIView: ComponentUIView {
             self.componentView.alignment = alignment
         }
 
-        self.viewModel.$isMultilineText.subscribe(in: &self.cancellables) { [weak self] isMultilineText in
+        self.viewModel.$textStyle.subscribe(in: &self.cancellables) { [weak self] textStyle in
             guard let self = self else { return }
-            self.viewModel.isMultilineConfigurationItemViewModel.isOn = isMultilineText
-            self.componentView.text = isMultilineText ? viewModel.multilineText : viewModel.text
+            self.viewModel.textStyleConfigurationItemViewModel.buttonTitle = textStyle.name
+            switch textStyle {
+            case .text:
+                self.componentView.text = self.viewModel.text
+            case .multilineText:
+                self.componentView.text = self.viewModel.multilineText
+            case .attributeText:
+                self.componentView.attributedText = self.viewModel.attributeText
+            }
+        }
+
+        self.viewModel.$icon.subscribe(in: &self.cancellables) { [weak self] icon in
+            guard let self = self else { return }
+            self.viewModel.iconConfigurationItemViewModel.buttonTitle = icon.map { $0.0 }.first
+            self.componentView.checkedImage = icon.map { $0.1 }.first ?? UIImage()
         }
     }
 
     static func makeCheckboxView(_ viewModel: CheckboxComponentUIViewModel) -> CheckboxUIView {
 
-        return CheckboxUIView(
+        return viewModel.textStyle == .attributeText ?
+        CheckboxUIView(
             theme: viewModel.theme,
-            text: viewModel.isMultilineText ? viewModel.multilineText : viewModel.text,
-            checkedImage: viewModel.image,
-            state: viewModel.state,
+            attributedText: viewModel.attributeText,
+            checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
+            isEnabled: viewModel.isEnabled,
+            selectionState: viewModel.selectionState,
+            checkboxAlignment: viewModel.alignment
+        )
+        :
+        CheckboxUIView(
+            theme: viewModel.theme,
+            text: viewModel.textStyle == .multilineText ? viewModel.multilineText : viewModel.text,
+            checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
+            isEnabled: viewModel.isEnabled,
             selectionState: viewModel.selectionState,
             checkboxAlignment: viewModel.alignment
         )

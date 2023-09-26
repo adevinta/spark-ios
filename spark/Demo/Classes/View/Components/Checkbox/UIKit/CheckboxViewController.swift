@@ -109,10 +109,10 @@ final class CheckboxViewController: UIViewController {
 
     @objc private func actionShuffle(sender: UIButton) {
         let selectionStates = [CheckboxSelectionState.indeterminate, .selected, .unselected]
-        let states = [CheckboxState.enabled, CheckboxState.disabled]
+        let states = [true, false]
         for checkbox in self.checkboxes {
             checkbox.selectionState = selectionStates.randomElement() ?? .indeterminate
-            checkbox.state = states.randomElement() ?? .disabled
+            checkbox.isEnabled = states.randomElement() ?? true
         }
     }
 
@@ -138,7 +138,7 @@ final class CheckboxViewController: UIViewController {
             theme: theme,
             text: "Hello world!",
             checkedImage: image,
-            state: .enabled,
+            isEnabled: true,
             selectionState: self.checkboxValue1,
             checkboxAlignment: .left
         )
@@ -156,7 +156,7 @@ final class CheckboxViewController: UIViewController {
             theme: theme,
             text: "Second checkbox! This is a very very long descriptive text.",
             checkedImage: image,
-            state: .disabled,
+            isEnabled: false,
             selectionState: self.checkboxValue2,
             checkboxAlignment: .left
         )
@@ -173,7 +173,7 @@ final class CheckboxViewController: UIViewController {
             theme: theme,
             text: "Error checkbox",
             checkedImage: image,
-            state: .disabled,
+            isEnabled: false,
             selectionState: self.checkboxValue3,
             checkboxAlignment: .left
         )
@@ -190,7 +190,7 @@ final class CheckboxViewController: UIViewController {
             theme: theme,
             text: "Right checkbox",
             checkedImage: image,
-            state: .enabled,
+            isEnabled: false,
             selectionState: self.checkboxValue4,
             checkboxAlignment: .right
         )
@@ -207,7 +207,7 @@ final class CheckboxViewController: UIViewController {
             theme: theme,
             text: "Right checkbox",
             checkedImage: image,
-            state: .enabled,
+            isEnabled: false,
             selectionState: self.checkboxValue4,
             checkboxAlignment: .right
         )

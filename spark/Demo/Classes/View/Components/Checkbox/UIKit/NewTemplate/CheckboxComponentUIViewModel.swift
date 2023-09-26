@@ -13,6 +13,12 @@ import UIKit
 
 final class CheckboxComponentUIViewModel: ComponentUIViewModel {
 
+    enum TextStyle: CaseIterable {
+        case text
+        case multilineText
+        case attributeText
+    }
+
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         showThemeSheetSubject
@@ -24,22 +30,27 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showStateSheet: AnyPublisher<[CheckboxState], Never> {
-        showStateSheetSubject
-            .eraseToAnyPublisher()
-    }
-
     var showAlignmentSheet: AnyPublisher<[CheckboxAlignment], Never> {
         showAlignmentSheetSubject
             .eraseToAnyPublisher()
     }
 
+    var showTextSheet: AnyPublisher<[TextStyle], Never> {
+        showTextStyleSheetSubject
+            .eraseToAnyPublisher()
+    }
+
+    var showImageSheet: AnyPublisher<[String: UIImage], Never> {
+        showIconSheetSubject
+            .eraseToAnyPublisher()
+    }
 
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[CheckboxIntent], Never> = .init()
-    private var showStateSheetSubject: PassthroughSubject<[CheckboxState], Never> = .init()
     private var showAlignmentSheetSubject: PassthroughSubject<[CheckboxAlignment], Never> = .init()
+    private var showTextStyleSheetSubject: PassthroughSubject<[TextStyle], Never> = .init()
+    private var showIconSheetSubject: PassthroughSubject<[String: UIImage], Never> = .init()
 
     // MARK: - Items Properties
     lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -58,14 +69,6 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var stateConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "State",
-            type: .button,
-            target: (source: self, action: #selector(self.presentStateSheet))
-        )
-    }()
-
     lazy var alignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Aligment",
@@ -74,11 +77,27 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var isMultilineConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var textStyleConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Is Multiline Text",
-            type: .toggle(isOn: self.isMultilineText),
-            target: (source: self, action: #selector(self.toggleIsMultilineText))
+            name: "Text Style",
+            type: .button,
+            target: (source: self, action: #selector(self.presentTextStyleSheet))
+        )
+    }()
+
+    lazy var iconConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Icons",
+            type: .button,
+            target: (source: self, action: #selector(self.presentIconSheet))
+        )
+    }()
+
+    lazy var isEnableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is Enable",
+            type: .toggle(isOn: self.isEnabled),
+            target: (source: self, action: #selector(self.toggleIsEnable))
         )
     }()
 
@@ -88,41 +107,66 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         return .init(itemsViewModel: [
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
-            self.stateConfigurationItemViewModel,
+            self.textStyleConfigurationItemViewModel,
+            self.iconConfigurationItemViewModel,
             self.alignmentConfigurationItemViewModel,
-            self.isMultilineConfigurationItemViewModel
+            self.isEnableConfigurationItemViewModel
         ])
     }()
 
     var themes = ThemeCellModel.themes
 
     // MARK: - Default Value Properties
-    let image: UIImage = DemoIconography.shared.checkmark
+    let icons: [String: UIImage] = [
+        "Checkmark": DemoIconography.shared.checkmark,
+        "Close": DemoIconography.shared.close
+    ]
+
     let text: String = "Hello World"
+
     let multilineText: String = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+    var attributeText: NSAttributedString {
+        let attributeString = NSMutableAttributedString(
+            string: multilineText,
+            attributes: [.font: UIFont.italicSystemFont(ofSize: 18)]
+        )
+        let attributes: [NSMutableAttributedString.Key: Any] = [
+            .font: UIFont(
+                descriptor: UIFontDescriptor().withSymbolicTraits([.traitBold, .traitItalic]) ?? UIFontDescriptor(),
+                size: 18
+            ),
+            .foregroundColor: UIColor.red
+        ]
+        attributeString.setAttributes(attributes, range: NSRange(location: 0, length: 11))
+        return attributeString
+    }
+
     let selectionState: CheckboxSelectionState
 
     // MARK: - Initialization
     @Published var theme: Theme
     @Published var intent: CheckboxIntent
-    @Published var state: CheckboxState
+    @Published var isEnabled: Bool
     @Published var alignment: CheckboxAlignment
-    @Published var isMultilineText: Bool
+    @Published var textStyle: TextStyle
+    @Published var icon: [String: UIImage]
 
     init(
         theme: Theme,
         intent: CheckboxIntent = .main,
-        state: CheckboxState = .enabled,
+        isEnabled: Bool = true,
         selectionState: CheckboxSelectionState = .unselected,
         alignment: CheckboxAlignment = .left,
-        isMultilineText: Bool = false
+        textStyle: TextStyle = .attributeText,
+        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark]
     ) {
         self.theme = theme
         self.intent = intent
-        self.state = state
+        self.isEnabled = isEnabled
         self.selectionState = selectionState
         self.alignment = alignment
-        self.isMultilineText = isMultilineText
+        self.textStyle = textStyle
+        self.icon = icon
     }
 }
 
@@ -137,15 +181,19 @@ extension CheckboxComponentUIViewModel {
         self.showIntentSheetSubject.send(CheckboxIntent.allCases)
     }
 
-    @objc func presentStateSheet() {
-        self.showStateSheetSubject.send(CheckboxState.allCases)
-    }
-
     @objc func presentAlignmentSheet() {
         self.showAlignmentSheetSubject.send(CheckboxAlignment.allCases)
     }
 
-    @objc func toggleIsMultilineText() {
-        self.isMultilineText.toggle()
+    @objc func presentTextStyleSheet() {
+        self.showTextStyleSheetSubject.send(TextStyle.allCases)
+    }
+
+    @objc func presentIconSheet() {
+        self.showIconSheetSubject.send(icons)
+    }
+
+    @objc func toggleIsEnable() {
+        self.isEnabled.toggle()
     }
 }

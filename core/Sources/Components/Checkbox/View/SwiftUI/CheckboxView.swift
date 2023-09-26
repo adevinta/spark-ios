@@ -77,7 +77,7 @@ public struct CheckboxView: View {
         checkboxAlignment: CheckboxAlignment = .left,
         theme: Theme,
         colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
-        state: CheckboxState = .enabled,
+        isEnabled: Bool = true,
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self._horizontalSpacing = .init(wrappedValue: theme.layout.spacing.medium)
@@ -89,7 +89,7 @@ public struct CheckboxView: View {
             checkedImage: checkedImage,
             theme: theme,
             colorsUseCase: colorsUseCase,
-            state: state,
+            isEnabled: isEnabled,
             selectionState: selectionState.wrappedValue
         )
     }
@@ -107,7 +107,7 @@ public struct CheckboxView: View {
         checkedImage: UIImage,
         checkboxAlignment: CheckboxAlignment = .left,
         theme: Theme,
-        state: CheckboxState = .enabled,
+        isEnabled: Bool = true,
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self.init(
@@ -116,7 +116,7 @@ public struct CheckboxView: View {
             checkboxAlignment: checkboxAlignment,
             theme: theme,
             colorsUseCase: CheckboxStateColorsUseCase(),
-            state: state,
+            isEnabled: isEnabled,
             selectionState: selectionState
         )
     }
