@@ -60,6 +60,7 @@ public final class AddOnTextField: UIView {
     private func setupView() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
+        self.hStack.addBorder()
 
         self.addSubviewSizedEqually(hStack)
 
@@ -68,7 +69,7 @@ public final class AddOnTextField: UIView {
             leadingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.leadingAddOn
             leadingAddOn.setContentHuggingPriority(.required, for: .horizontal)
             leadingAddOn.setContentHuggingPriority(.required, for: .vertical)
-            leadingAddOn.addBorder(toThe: .right)
+            leadingAddOn.addSeparator(toThe: .right)
             hStack.addArrangedSubview(leadingAddOn)
         }
 
@@ -78,7 +79,7 @@ public final class AddOnTextField: UIView {
             trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
             trailingAddOn.setContentHuggingPriority(.required, for: .horizontal)
             trailingAddOn.setContentHuggingPriority(.required, for: .horizontal)
-            trailingAddOn.addBorder(toThe: .left)
+            trailingAddOn.addSeparator(toThe: .left)
             hStack.addArrangedSubview(trailingAddOn)
         }
     }
@@ -86,7 +87,14 @@ public final class AddOnTextField: UIView {
 }
 
 private extension UIView {
-    func addBorder(toThe side: AddOnTextField.Side) {
+    func addBorder() {
+        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.borderWidth = 1.0
+        self.layer.cornerRadius = 16
+        self.layer.masksToBounds = true
+    }
+
+    func addSeparator(toThe side: AddOnTextField.Side) {
         let border = UIView()
         border.backgroundColor = .black
 
