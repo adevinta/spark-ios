@@ -8,10 +8,6 @@
 
 // sourcery: AutoMockable
 protocol DisplayedTextViewModel {
-    @available(*, deprecated, message: "use displayedText.text")
-    var text: String? { get }
-    @available(*, deprecated, message: "use displayedText.attributedText")
-    var attributedText: AttributedStringEither? { get }
     var displayedTextType: DisplayedTextType { get }
     var displayedText: DisplayedText? { get }
 
@@ -31,11 +27,6 @@ protocol DisplayedTextViewModel {
 final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
 
     // MARK: - Internal Properties
-
-    @available(*, deprecated, message: "use displayedText.text")
-    private(set) var text: String?
-    @available(*, deprecated, message: "use displayedText.attributedText")
-    private(set) var attributedText: AttributedStringEither?
 
     private(set) var displayedTextType: DisplayedTextType
     private(set) var displayedText: DisplayedText?
@@ -57,8 +48,6 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
         getDisplayedTextTypeUseCase: GetDisplayedTextTypeUseCaseable = GetDisplayedTextTypeUseCase(),
         getDidDisplayedTextChangeUseCase: GetDidDisplayedTextChangeUseCaseable = GetDidDisplayedTextChangeUseCase()
     ) {
-        self.text = text
-        self.attributedText = attributedText
         self.displayedText = .init(
             text: text,
             attributedText: attributedText
@@ -81,7 +70,6 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
             newText: text,
             displayedTextType: self.displayedTextType
         ) {
-            self.text = text
             self.displayedText = text.map { .init(text: $0) }
             self.displayedTextType = self.getDisplayedTextTypeUseCase.execute(
                 text: text
