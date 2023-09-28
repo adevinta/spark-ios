@@ -28,7 +28,7 @@ struct TextFieldGetColorsUseCase: TextFieldGetColorsUseCaseInterface {
             )
         case .neutral:
             return .init(
-                border: theme.colors.feedback.neutral
+                border: theme.colors.base.outline
             )
         case .success:
             return .init(

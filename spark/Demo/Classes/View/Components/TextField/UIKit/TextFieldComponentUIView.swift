@@ -12,6 +12,7 @@ import SparkCore
 import Spark
 
 final class TextFieldComponentUIView: UIView {
+    private let addOnTextField: AddOnTextFieldUIView
     private let textField: TextFieldUIView
     private let viewModel: TextFieldComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
@@ -156,9 +157,49 @@ final class TextFieldComponentUIView: UIView {
         return stackView
     }()
 
+    private var leadingAddOn: UIView = {
+        let container = UIView()
+        let label = UILabel()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "https://"
+        container.addSubview(label)
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 32),
+            container.heightAnchor.constraint(equalToConstant: 44),
+            label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+        label.textColor = .black
+        return container
+    }()
+
+    private var trailingAddOn: UIView = {
+        let container = UIView()
+        let label = UILabel()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ".com"
+        container.addSubview(label)
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 32),
+            container.heightAnchor.constraint(equalToConstant: 44),
+            label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+        label.textColor = .black
+        return container
+    }()
+
     init(viewModel: TextFieldComponentUIViewModel) {
         self.viewModel = viewModel
         self.textField = TextFieldUIView(theme: viewModel.theme)
+        self.addOnTextField = AddOnTextFieldUIView(
+            theme: viewModel.theme,
+            intent: .neutral,
+            leadingAddOn: leadingAddOn,
+            trailingAddOn: trailingAddOn
+        )
         super.init(frame: .zero)
         self.setupView()
         self.addPublishers()
@@ -172,6 +213,7 @@ final class TextFieldComponentUIView: UIView {
         backgroundColor = .white
 
         self.textField.translatesAutoresizingMaskIntoConstraints = false
+        self.addOnTextField.translatesAutoresizingMaskIntoConstraints = false
         self.textField.addDoneButtonOnKeyboard()
 
         self.addSubview(self.textField)
@@ -181,6 +223,7 @@ final class TextFieldComponentUIView: UIView {
         self.addSubview(self.withLeftViewCheckBox)
         self.addSubview(self.rightViewModeStackView)
         self.addSubview(self.leftViewModeStackView)
+        self.addSubview(self.addOnTextField)
 
         NSLayoutConstraint.activate([
             self.configurationLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
@@ -210,9 +253,16 @@ final class TextFieldComponentUIView: UIView {
             self.textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
             self.textField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
 
+            self.addOnTextField.topAnchor.constraint(equalTo: self.textField.bottomAnchor, constant: 16),
+            self.addOnTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            self.addOnTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20)
+
         ])
         self.textField.rightView = self.createRightView()
         self.textField.leftView = self.createLeftView()
+
+        self.addOnTextField.addTextFieldRightView(self.createRightView())
+        self.addOnTextField.addTextFieldLeftView(self.createRightView())
     }
 
     private func createRightView() -> UIImageView {
@@ -253,33 +303,44 @@ final class TextFieldComponentUIView: UIView {
             guard let self = self else { return }
             self.intentButton.setTitle(intent.name, for: .normal)
             self.textField.intent = intent
+            self.addOnTextField.intent = intent
         }
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] label in
             guard let self = self else { return }
             self.textField.placeholder = label
+            self.addOnTextField.addTextFieldPlaceholder(label)
         }
 
         self.withRightViewCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self = self else { return }
-            self.textField.rightView = state == .unselected ? nil : self.createRightView()
+            if state != .unselected {
+                self.textField.rightView = self.createRightView()
+                self.addOnTextField.addTextFieldRightView(self.createRightView())
+            }
         }
 
         self.withLeftViewCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self = self else { return }
             self.textField.leftView = state == .unselected ? nil : self.createLeftView()
+            if state != .unselected {
+                self.textField.leftView = self.createLeftView()
+                self.addOnTextField.addTextFieldLeftView(self.createLeftView())
+            }
         }
 
         self.viewModel.$rightViewMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
             guard let self = self else { return }
             self.rightViewModeButton.setTitle(viewMode.name, for: .normal)
             self.textField.rightViewMode = .init(rawValue: viewMode.rawValue) ?? .never
+            self.addOnTextField.setTextFieldRightViewMode(.init(rawValue: viewMode.rawValue) ?? .never)
         }
 
         self.viewModel.$leftViewMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
             guard let self = self else { return }
             self.leftViewModeButton.setTitle(viewMode.name, for: .normal)
             self.textField.leftViewMode = .init(rawValue: viewMode.rawValue) ?? .never
+            self.addOnTextField.setTextFieldLeftViewMode(.init(rawValue: viewMode.rawValue) ?? .never)
         }
     }
 }

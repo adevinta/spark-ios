@@ -6,9 +6,10 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import UIKit
 
-public final class AddOnTextField: UIView {
+public final class AddOnTextFieldUIView: UIView {
 
     // MARK: - Private enum
 
@@ -16,13 +17,36 @@ public final class AddOnTextField: UIView {
         case left
         case right
     }
+
+    // MARK: - Public properties
+
+    public var theme: Theme {
+        get {
+            return self.viewModel.theme
+        }
+        set {
+            self.viewModel.setTheme(newValue)
+            self.textField.theme = newValue
+        }
+    }
+
+    public var intent: TextFieldIntent {
+        get {
+            return self.viewModel.intent
+        }
+        set {
+            self.viewModel.setIntent(newValue)
+            self.textField.intent = newValue
+        }
+    }
     
     // MARK: - Private properties
 
     private let leadingAddOn: UIView?
     private let trailingAddOn: UIView?
-    private let viewModel: TextFieldUIViewModel
     private let textField: TextFieldUIView
+    private let viewModel: AddOnTextFieldViewModel
+    private var cancellable = Set<AnyCancellable>()
 
     private lazy var hStack: UIStackView = {
         let stackView = UIStackView()
@@ -35,20 +59,27 @@ public final class AddOnTextField: UIView {
 
     public init(
         theme: Theme,
-        intent: TabIntent,
+        intent: TextFieldIntent = .neutral,
         leadingAddOn: UIView? = nil,
         trailingAddOn: UIView? = nil
     ) {
         self.leadingAddOn = leadingAddOn
         self.trailingAddOn = trailingAddOn
-        self.viewModel = TextFieldUIViewModel(
+
+        let textFieldViewModel = TextFieldUIViewModel(
             theme: theme,
             borderStyle: leadingAddOn != nil || trailingAddOn != nil ? .none : .roundedRect
         )
-        self.textField = TextFieldUIView(viewModel: viewModel)
+        self.textField = TextFieldUIView(viewModel: textFieldViewModel)
+        
+        self.viewModel = AddOnTextFieldViewModel(
+            theme: theme,
+            intent: intent
+        )
 
         super.init(frame: .zero)
         self.setupView()
+        self.setupSubscriptions()
     }
 
     required init?(coder: NSCoder) {
@@ -60,7 +91,7 @@ public final class AddOnTextField: UIView {
     private func setupView() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
-        self.hStack.addBorder()
+        self.hStack.addBorder(color: self.viewModel.borderColor)
 
         self.addSubviewSizedEqually(hStack)
 
@@ -69,7 +100,10 @@ public final class AddOnTextField: UIView {
             leadingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.leadingAddOn
             leadingAddOn.setContentHuggingPriority(.required, for: .horizontal)
             leadingAddOn.setContentHuggingPriority(.required, for: .vertical)
-            leadingAddOn.addSeparator(toThe: .right)
+            leadingAddOn.addSeparator(
+                toThe: .right,
+                color: self.viewModel.theme.colors.base.outline
+            )
             hStack.addArrangedSubview(leadingAddOn)
         }
 
@@ -79,24 +113,60 @@ public final class AddOnTextField: UIView {
             trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
             trailingAddOn.setContentHuggingPriority(.required, for: .horizontal)
             trailingAddOn.setContentHuggingPriority(.required, for: .horizontal)
-            trailingAddOn.addSeparator(toThe: .left)
+            trailingAddOn.addSeparator(
+                toThe: .left,
+                color: self.viewModel.theme.colors.base.outline
+            )
             hStack.addArrangedSubview(trailingAddOn)
         }
+    }
+
+    private func setupSubscriptions() {
+        self.viewModel.$borderColor.subscribe(in: &self.cancellable) { [weak self] color in
+            UIView.animate(withDuration: 0.1) {
+                self?.addBorder(color: color)
+            }
+        }
+    }
+
+    // MARK: - Public methods
+
+    public func addTextFieldLeftView(_ leftView: UIView) {
+        self.textField.leftView = leftView
+    }
+
+    public func addTextFieldRightView(_ rightView: UIView) {
+        self.textField.rightView = rightView
+    }
+
+    public func addTextFieldPlaceholder(_ placeholder: String?) {
+        self.textField.placeholder = placeholder
+    }
+
+    public func setTextFieldRightViewMode(_ viewMode: UITextField.ViewMode) {
+        self.textField.rightViewMode = viewMode
+    }
+
+    public func setTextFieldLeftViewMode(_ viewMode: UITextField.ViewMode) {
+        self.textField.leftViewMode = viewMode
     }
 
 }
 
 private extension UIView {
-    func addBorder() {
-        self.layer.borderColor = UIColor.black.cgColor
+    func addBorder(color: any ColorToken) {
+        self.layer.borderColor = color.uiColor.cgColor
         self.layer.borderWidth = 1.0
         self.layer.cornerRadius = 16
         self.layer.masksToBounds = true
     }
 
-    func addSeparator(toThe side: AddOnTextField.Side) {
+    func addSeparator(
+        toThe side: AddOnTextFieldUIView.Side,
+        color: any ColorToken
+    ) {
         let border = UIView()
-        border.backgroundColor = .black
+        border.backgroundColor = color.uiColor
 
         switch side {
         case .left:
