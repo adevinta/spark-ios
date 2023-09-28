@@ -43,7 +43,7 @@ public final class AddOnTextField: UIView {
         self.trailingAddOn = trailingAddOn
         self.viewModel = TextFieldUIViewModel(
             theme: theme,
-            borderStyle: .roundedRect
+            borderStyle: leadingAddOn != nil || trailingAddOn != nil ? .none : .roundedRect
         )
         self.textField = TextFieldUIView(viewModel: viewModel)
 
