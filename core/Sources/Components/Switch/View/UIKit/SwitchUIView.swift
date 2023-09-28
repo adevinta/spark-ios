@@ -135,8 +135,7 @@ public final class SwitchUIView: UIView {
             return self.viewModel.isOn
         }
         set {
-            self.viewModel.isOn = newValue
-            self.viewModel.reloadToggle()
+            self.viewModel.set(isOn: newValue)
         }
     }
 
@@ -775,6 +774,13 @@ public final class SwitchUIView: UIView {
         // Show spaces
         self.viewModel.$showToggleLeftSpace.subscribe(in: &self.subscriptions) { [weak self] showSpace in
             guard let self, let showSpace else { return }
+
+            // showSpace MUST be different to continue
+            // Or if the both space have the same isHidden (default state)
+            guard self.toggleLeftSpaceView.isHidden == showSpace ||
+            self.toggleRightSpaceView.isHidden == self.toggleLeftSpaceView.isHidden else {
+                return
+            }
 
             // Lock interaction before animation
             let currentUserInteraction = self.toggleView.isUserInteractionEnabled

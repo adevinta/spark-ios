@@ -12,7 +12,7 @@ final class SwitchViewModel: ObservableObject {
 
     // MARK: - Properties
 
-    var isOn: Bool
+    private(set) var isOn: Bool
 
     private let frameworkType: FrameworkType
     private(set) var theme: Theme
@@ -104,18 +104,24 @@ final class SwitchViewModel: ObservableObject {
             // Manual action: update isOnChanged value
             self.isOnChanged = self.isOn
 
-            self.reloadToggle()
+            self.colorsDidUpdate()
+            self.toggleStateDidUpdate()
+            self.toggleDotImageDidUpdate()
+            self.toggleSpacesVisibilityDidUpdate()
         }
     }
 
-    func reloadToggle() {
-        self.colorsDidUpdate()
-        self.toggleStateDidUpdate()
-        self.toggleDotImageDidUpdate()
-        self.toggleSpacesVisibilityDidUpdate()
-    }
-
     // MARK: - Setter
+
+    func set(isOn: Bool) {
+        if self.isOn != isOn {
+            self.isOn = isOn
+
+            self.colorsDidUpdate()
+            self.toggleDotImageDidUpdate()
+            self.toggleSpacesVisibilityDidUpdate()
+        }
+    }
 
     func set(theme: Theme) {
         self.theme = theme
