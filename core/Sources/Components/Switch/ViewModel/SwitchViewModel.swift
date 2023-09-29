@@ -166,11 +166,11 @@ final class SwitchViewModel: ObservableObject {
         // Reload text properties (font and color) if consumer set a new text
         if self.displayedTextViewModel.textChanged(text) {
             self.displayTextDidUpdate()
+            self.alignmentDidUpdate()
 
             if text != nil {
                 self.textFontDidUpdate()
                 self.textForegroundColorTokenDidUpdate()
-                self.alignmentDidUpdate()
             }
         }
     }
