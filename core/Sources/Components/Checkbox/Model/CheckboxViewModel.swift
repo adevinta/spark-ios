@@ -16,13 +16,17 @@ final class CheckboxViewModel: ObservableObject {
     @Published var text: String?
     @Published var attributedText: NSAttributedString?
     @Published var checkedImage: UIImage
-    @Published var colors: CheckboxStateColors
+    @Published var colors: CheckboxColors
     @Published var alignment: CheckboxAlignment
-    @Published var selectionState: CheckboxSelectionState
+
+    @Published var selectionState: CheckboxSelectionState {
+        didSet {
+            self.updateColors()
+        }
+    }
 
     @Published var isEnabled: Bool {
         didSet {
-            guard oldValue != isEnabled else { return }
             self.updateColors()
         }
     }
@@ -40,7 +44,7 @@ final class CheckboxViewModel: ObservableObject {
     }
 
 
-    var colorsUseCase: CheckboxStateColorsUseCaseable {
+    var colorsUseCase: CheckboxColorsUseCaseable {
         didSet {
             self.updateColors()
         }
@@ -53,7 +57,7 @@ final class CheckboxViewModel: ObservableObject {
         checkedImage: UIImage,
         theme: Theme,
         intent: CheckboxIntent = .main,
-        colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
+        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         isEnabled: Bool = true,
         alignment: CheckboxAlignment = .left,
         selectionState: CheckboxSelectionState
@@ -70,7 +74,10 @@ final class CheckboxViewModel: ObservableObject {
         self.theme = theme
         self.isEnabled = isEnabled
         self.colorsUseCase = colorsUseCase
-        self.colors = colorsUseCase.execute(from: theme.colors, dims: theme.dims, intent: intent)
+        self.colors = colorsUseCase.execute(
+            from: theme.colors,
+            intent: intent
+        )
         self.intent = intent
         self.alignment = alignment
         self.selectionState = selectionState
@@ -79,7 +86,10 @@ final class CheckboxViewModel: ObservableObject {
     // MARK: - Methods
 
     private func updateColors() {
-        self.colors = self.colorsUseCase.execute(from: self.theme.colors, dims: self.theme.dims, intent: self.intent)
+        self.colors = self.colorsUseCase.execute(
+            from: self.theme.colors,
+            intent: self.intent
+        )
     }
 
     func update(content: Either<NSAttributedString, String>) {
@@ -89,18 +99,5 @@ final class CheckboxViewModel: ObservableObject {
         case .right(let string):
             self.text = string
         }
-    }
-
-    // MARK: - Computed properties
-
-    var interactionEnabled: Bool {
-        return self.isEnabled
-    }
-
-    var opacity: CGFloat {
-        if isEnabled {
-            return 1.0
-        }
-        return self.theme.dims.dim3
     }
 }

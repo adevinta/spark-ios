@@ -12,10 +12,6 @@ import SwiftUI
 
 struct CheckboxGroupListView: View {
 
-    // MARK: - Properties
-
-    private let viewModel = CheckboxViewModel()
-
     // MARK: - View
 
     @State private var layout: CheckboxGroupLayout = .vertical
@@ -144,7 +140,6 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     var id: String
     var selectionState: CheckboxSelectionState
     var isEnabled: Bool
-    var state: SparkCore.SelectButtonState
 
     init(
         title: String? = nil,
@@ -157,7 +152,6 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         self.id = id
         self.selectionState = selectionState
         self.isEnabled = isEnabled
-        self.state = isEnabled ? .enabled : .disabled
     }
 
     init(
@@ -171,6 +165,5 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         self.id = id
         self.selectionState = selectionState
         self.isEnabled = isEnabled
-        self.state = isEnabled ? .enabled : .disabled
     }
 }

@@ -11,13 +11,7 @@ import SwiftUI
 import UIKit
 
 /// The `CheckboxUIView`renders a single checkbox using UIKit.
-public final class CheckboxUIView: UIView {
-
-    // MARK: - Constants
-
-    private enum Constants {
-        static var checkboxSize: CGFloat = 28
-    }
+public final class CheckboxUIView: UIControl {
 
     // MARK: - Private Properties.
 
@@ -37,14 +31,17 @@ public final class CheckboxUIView: UIView {
         label.isAccessibilityElement = false
         label.backgroundColor = .clear
         label.numberOfLines = 0
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return label
     }()
 
     private lazy var controlView: CheckboxControlUIView = {
         let controlView = CheckboxControlUIView(
-            selectionIcon: self.viewModel.checkedImage,
-            theme: self.theme,
-            isEnabled: self.isEnabled
+            selectionIcon: self.checkedImage,
+            colors: self.viewModel.colors,
+            isEnabled: self.isEnabled,
+            selectionState: self.selectionState,
+            isPressed: self.isPressed
         )
         controlView.isAccessibilityElement = false
         return controlView
@@ -117,24 +114,11 @@ public final class CheckboxUIView: UIView {
         }
     }
 
-    /// The control state of the checkbox (e.g. `.enabled` or `.disabled`).
-    public var state: SelectButtonState {
-        get {
-            return self.viewModel.isEnabled ? .enabled : .disabled
-        }
-        set {
-            let state: SelectButtonState = self.viewModel.isEnabled ? .enabled : .disabled
-            guard newValue != state else { return }
-            self.viewModel.isEnabled = newValue == .enabled
-        }
-    }
-
-    public var isEnabled: Bool {
+    public override var isEnabled: Bool {
         get {
             return self.viewModel.isEnabled
         }
         set {
-            guard newValue != self.viewModel.isEnabled else { return }
             self.viewModel.isEnabled = newValue
         }
     }
@@ -167,7 +151,7 @@ public final class CheckboxUIView: UIView {
         }
     }
 
-    var colorsUseCase: CheckboxStateColorsUseCaseable {
+    var colorsUseCase: CheckboxColorsUseCaseable {
         get {
             return self.viewModel.colorsUseCase
         }
@@ -214,7 +198,7 @@ public final class CheckboxUIView: UIView {
             intent: intent,
             content: .right(text),
             checkedImage: checkedImage,
-            colorsUseCase: CheckboxStateColorsUseCase(),
+            colorsUseCase: CheckboxColorsUseCase(),
             isEnabled: isEnabled,
             selectionState: selectionState,
             checkboxAlignment: checkboxAlignment
@@ -243,7 +227,7 @@ public final class CheckboxUIView: UIView {
             intent: intent,
             content: .left(attributedText),
             checkedImage: checkedImage,
-            colorsUseCase: CheckboxStateColorsUseCase(),
+            colorsUseCase: CheckboxColorsUseCase(),
             isEnabled: isEnabled,
             selectionState: selectionState,
             checkboxAlignment: checkboxAlignment
@@ -255,7 +239,7 @@ public final class CheckboxUIView: UIView {
         intent: CheckboxIntent = .main,
         content: Either<NSAttributedString, String>,
         checkedImage: UIImage,
-        colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
+        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
         checkboxAlignment: CheckboxAlignment
@@ -292,9 +276,10 @@ public final class CheckboxUIView: UIView {
         NSLayoutConstraint.stickEdges(from: self.stackView, to: self)
 
         NSLayoutConstraint.activate([
-            self.controlView.heightAnchor.constraint(equalToConstant: Constants.checkboxSize),
-            self.controlView.widthAnchor.constraint(equalToConstant: Constants.checkboxSize),
-            self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: controlView.heightAnchor)
+            self.controlView.heightAnchor.constraint(equalToConstant: CheckboxControlUIView.Constants.size),
+            self.controlView.widthAnchor.constraint(equalToConstant: CheckboxControlUIView.Constants.size),
+            self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: controlView.heightAnchor),
+            self.heightAnchor.constraint(equalTo: textLabel.heightAnchor)
         ])
     }
 
@@ -302,7 +287,6 @@ public final class CheckboxUIView: UIView {
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] _ in
             guard let self else { return }
             self.updateTheme()
-            self.updateState()
         }
 
         self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] _ in
@@ -310,16 +294,16 @@ public final class CheckboxUIView: UIView {
             self.updateTheme()
         }
 
-        self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] _ in
+        self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
             guard let self else { return }
-            self.updateState()
+            self.layer.opacity = Float(isEnabled ? self.theme.dims.none : self.theme.dims.dim3)
+            self.updateTheme()
             self.updateAccessibility()
         }
 
         self.viewModel.$selectionState.subscribe(in: &self.cancellables) { [weak self] selectionState in
             guard let self else { return }
             self.controlView.selectionState = selectionState
-            self.updateAccessibility()
         }
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
@@ -331,7 +315,7 @@ public final class CheckboxUIView: UIView {
             guard let self else { return }
             self.textLabel.text = text
             self.textLabel.font = self.theme.typography.body1.uiFont
-            self.textLabel.textColor = self.viewModel.colors.enable.textColor.uiColor
+            self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
         }
 
         self.viewModel.$attributedText.subscribe(in: &self.cancellables) { [weak self] attributedText in
@@ -349,11 +333,6 @@ public final class CheckboxUIView: UIView {
 // MARK: Updates
 private extension CheckboxUIView {
 
-    private func updateState() {
-        self.textLabel.alpha = self.viewModel.opacity
-        self.controlView.alpha = self.viewModel.opacity
-    }
-
     private func updateAccessibility() {
         if self.selectionState == .selected {
             self.accessibilityTraits.insert(.selected)
@@ -361,7 +340,7 @@ private extension CheckboxUIView {
             self.accessibilityTraits.remove(.selected)
         }
 
-        if self.state == .disabled {
+        if !isEnabled {
             self.accessibilityTraits.insert(.notEnabled)
         } else {
             self.accessibilityTraits.remove(.notEnabled)
@@ -371,12 +350,12 @@ private extension CheckboxUIView {
     }
 
     private func updateTheme() {
-        self.controlView.theme = self.theme
         self.controlView.colors = self.viewModel.colors
 
         if self.attributedText == nil {
-            self.textLabel.font = self.theme.typography.body1.uiFont
-            self.textLabel.textColor = self.viewModel.colors.enable.textColor.uiColor
+            self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
+        } else {
+            self.textLabel.alpha = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
         }
     }
 
@@ -397,19 +376,21 @@ private extension CheckboxUIView {
     @IBAction func actionTapped(sender: UIButton) {
         self.isPressed = false
 
-        guard self.viewModel.interactionEnabled else { return }
+        guard self.isEnabled else { return }
+
         switch self.selectionState {
         case .selected:
             self.selectionState = .unselected
         case .unselected, .indeterminate:
             self.selectionState = .selected
         }
+
         self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
         self.checkboxSelectionStateSubject.send(self.selectionState)
     }
 
     @IBAction private func actionTouchDown(sender: UIButton) {
-        guard self.viewModel.interactionEnabled else { return }
+        guard self.isEnabled else { return }
         self.isPressed = true
     }
 

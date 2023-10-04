@@ -15,8 +15,6 @@ struct CheckboxListView: View {
 
     // MARK: - Properties
 
-    private let viewModel = CheckboxViewModel()
-
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     var theme: Theme {
@@ -31,8 +29,7 @@ struct CheckboxListView: View {
     // MARK: - View
 
     var body: some View {
-        List(self.viewModel.states, id: \.self) { state in
-            let isEnabled = state == .enabled
+        List([true, false], id: \.self) { isEnabled in
             Section(header: Text("State \(self.title(for: isEnabled))")) {
                 let checkedImage = DemoIconography.shared.checkmark
                 CheckboxView(

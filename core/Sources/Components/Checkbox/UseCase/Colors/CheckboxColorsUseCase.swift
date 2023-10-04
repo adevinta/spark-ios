@@ -21,15 +21,15 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 borderColor: colors.base.outline,
                 tintColor: colors.basic.basic,
                 iconColor: colors.basic.onBasic,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         case .accent:
             return CheckboxColors(
                 textColor: colors.base.onSurface,
                 borderColor: colors.base.outline,
-                tintColor: colors.accent.onAccent,
+                tintColor: colors.accent.accent,
                 iconColor: colors.accent.onAccent,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         case .error:
             return CheckboxColors(
@@ -37,7 +37,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.error,
                 iconColor: colors.main.onMain,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         case .success:
             return CheckboxColors(
@@ -45,7 +45,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.success,
                 iconColor: colors.main.onMain,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         case .alert:
             return CheckboxColors(
@@ -53,7 +53,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.alert,
                 iconColor: colors.main.onMain,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         case .info:
             return CheckboxColors(
@@ -61,7 +61,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.info,
                 iconColor: colors.main.onMain,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         case .neutral:
             return CheckboxColors(
@@ -69,7 +69,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.neutral,
                 iconColor: colors.main.onMain,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         case .support:
             return CheckboxColors(
@@ -77,7 +77,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 borderColor: colors.base.outline,
                 tintColor: colors.support.support,
                 iconColor: colors.support.onSupport,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         case .main:
             return CheckboxColors(
@@ -85,7 +85,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 borderColor: colors.base.outline,
                 tintColor: colors.main.main,
                 iconColor: colors.main.onMain,
-                pressedBorderColor: ColorTokenDefault.clear
+                pressedBorderColor: colors.basic.basicContainer
             )
         }
     }

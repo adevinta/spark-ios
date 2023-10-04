@@ -44,7 +44,7 @@ public struct CheckboxView: View {
 
     @ObservedObject var viewModel: CheckboxViewModel
 
-    var colors: CheckboxStateColors {
+    var colors: CheckboxColors {
         return self.viewModel.colors
     }
 
@@ -76,7 +76,7 @@ public struct CheckboxView: View {
         checkedImage: UIImage,
         checkboxAlignment: CheckboxAlignment = .left,
         theme: Theme,
-        colorsUseCase: CheckboxStateColorsUseCaseable = CheckboxStateColorsUseCase(),
+        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         isEnabled: Bool = true,
         selectionState: Binding<CheckboxSelectionState>
     ) {
@@ -115,7 +115,7 @@ public struct CheckboxView: View {
             checkedImage: checkedImage,
             checkboxAlignment: checkboxAlignment,
             theme: theme,
-            colorsUseCase: CheckboxStateColorsUseCase(),
+            colorsUseCase: CheckboxColorsUseCase(),
             isEnabled: isEnabled,
             selectionState: selectionState
         )
@@ -138,8 +138,8 @@ public struct CheckboxView: View {
     }
 
     @ViewBuilder private var checkboxView: some View {
-        let tintColor = self.colors.enable.tintColor.color
-        let iconColor = self.colors.enable.iconColor.color
+        let tintColor = self.colors.tintColor.color
+        let iconColor = self.colors.iconColor.color
         ZStack {
             RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
                 .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
@@ -148,11 +148,11 @@ public struct CheckboxView: View {
                     $0.strokeBorder(tintColor, lineWidth: self.checkboxBorderWidth)
                 }
                 .frame(width: self.checkboxWidth, height: self.checkboxHeight)
-                .if(self.isPressed && self.viewModel.interactionEnabled) {
+                .if(self.isPressed && self.viewModel.isEnabled) {
                     $0.overlay(
                         RoundedRectangle(cornerRadius: checkboxBorderRadius)
                             .inset(by: -checkboxSelectedBorderWidth / 2)
-                            .stroke(colors.pressed.pressedBorderColor.color, lineWidth: checkboxSelectedBorderWidth)
+                            .stroke(colors.pressedBorderColor.color, lineWidth: checkboxSelectedBorderWidth)
                             .animation(.easeInOut(duration: 0.1), value: isPressed)
                     )
                 }
@@ -198,8 +198,8 @@ public struct CheckboxView: View {
             }
         }
         .padding(.vertical, self.smallSpacing)
-        .opacity(self.viewModel.opacity)
-        .allowsHitTesting(self.viewModel.interactionEnabled)
+//        .opacity(self.viewModel.opacity)
+        .allowsHitTesting(self.viewModel.isEnabled)
         .contentShape(Rectangle())
     }
 
@@ -211,7 +211,7 @@ public struct CheckboxView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(self.viewModel.text ?? "")
                 .font(self.theme.typography.body1.font)
-                .foregroundColor(self.colors.enable.textColor.color)
+                .foregroundColor(self.colors.textColor.color)
         }
         .id(Identifier.content.rawValue)
         .matchedGeometryEffect(id: Identifier.content.rawValue, in: self.namespace)
@@ -220,7 +220,7 @@ public struct CheckboxView: View {
     // MARK: - Action
 
     func tapped() {
-        guard self.viewModel.interactionEnabled else { return }
+        guard self.viewModel.isEnabled else { return }
 
         switch self.selectionState {
         case .selected:
