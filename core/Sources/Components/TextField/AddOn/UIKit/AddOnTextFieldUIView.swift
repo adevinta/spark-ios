@@ -55,6 +55,10 @@ public final class AddOnTextFieldUIView: UIView {
         return stackView
     }()
 
+    private lazy var textFieldContainer: UIView = {
+        return UIView()
+    }()
+
     // MARK: - Initializers
 
     public init(
@@ -91,6 +95,7 @@ public final class AddOnTextFieldUIView: UIView {
     private func setupView() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
+        self.textField.translatesAutoresizingMaskIntoConstraints = false
         self.hStack.addBorder(color: self.viewModel.borderColor)
 
         self.addSubviewSizedEqually(hStack)
@@ -104,10 +109,11 @@ public final class AddOnTextFieldUIView: UIView {
                 toThe: .right,
                 color: self.viewModel.theme.colors.base.outline
             )
-            hStack.addArrangedSubview(leadingAddOn)
+            self.hStack.addArrangedSubview(leadingAddOn)
         }
 
-        hStack.addArrangedSubview(textField)
+        self.hStack.addArrangedSubview(self.textFieldContainer)
+        self.textFieldContainer.addSubview(self.textField)
 
         if let trailingAddOn {
             trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
@@ -117,8 +123,30 @@ public final class AddOnTextFieldUIView: UIView {
                 toThe: .left,
                 color: self.viewModel.theme.colors.base.outline
             )
-            hStack.addArrangedSubview(trailingAddOn)
+            self.hStack.addArrangedSubview(trailingAddOn)
         }
+
+        self.setupSpacing()
+    }
+
+    private func setupSpacing() {
+        var constraints = [
+            textField.topAnchor.constraint(equalTo: textFieldContainer.topAnchor),
+            textField.bottomAnchor.constraint(equalTo: textFieldContainer.bottomAnchor)
+        ]
+
+        if leadingAddOn != nil, trailingAddOn != nil {
+            constraints.append(self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 8))
+            constraints.append(self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -8))
+        } else if leadingAddOn != nil, trailingAddOn == nil {
+            constraints.append(self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 8))
+            constraints.append(self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -16))
+        } else if leadingAddOn == nil, trailingAddOn != nil {
+            constraints.append(self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 16))
+            constraints.append(self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -8))
+        }
+
+        NSLayoutConstraint.activate(constraints)
     }
 
     private func setupSubscriptions() {
