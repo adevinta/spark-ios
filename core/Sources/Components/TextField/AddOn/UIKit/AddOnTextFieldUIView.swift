@@ -83,7 +83,7 @@ public final class AddOnTextFieldUIView: UIView {
 
         let textFieldViewModel = TextFieldUIViewModel(
             theme: theme,
-            borderStyle: leadingAddOn != nil || trailingAddOn != nil ? .none : .roundedRect
+            borderStyle: .none
         )
         self.textField = TextFieldUIView(viewModel: textFieldViewModel)
         
