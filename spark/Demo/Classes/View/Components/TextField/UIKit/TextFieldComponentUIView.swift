@@ -12,7 +12,7 @@ import SparkCore
 import Spark
 
 final class TextFieldComponentUIView: UIView {
-    private let addOnTextField: AddOnTextFieldUIView
+    private var addOnTextField: AddOnTextFieldUIView
     private let textField: TextFieldUIView
     private let viewModel: TextFieldComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
@@ -95,6 +95,30 @@ final class TextFieldComponentUIView: UIView {
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+
+    private lazy var showLeadingAddOnCheckBox: CheckboxUIView = {
+        let checkbox = CheckboxUIView(
+            theme: viewModel.theme,
+            text: "Display leading add-on",
+            checkedImage: DemoIconography.shared.checkmark,
+            state: .enabled,
+            selectionState: .selected,
+            checkboxPosition: .left
+        )
+        return checkbox
+    }()
+
+    private lazy var showTrailingAddOnCheckBox: CheckboxUIView = {
+        let checkbox = CheckboxUIView(
+            theme: viewModel.theme,
+            text: "Display trailing add-on",
+            checkedImage: DemoIconography.shared.checkmark,
+            state: .enabled,
+            selectionState: .selected,
+            checkboxPosition: .left
+        )
+        return checkbox
     }()
 
     private lazy var rightViewModeLabel: UILabel = {
@@ -191,6 +215,22 @@ final class TextFieldComponentUIView: UIView {
         return container
     }()
 
+    private lazy var standaloneTextFieldLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Standalone text field:"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var addOnTextFieldLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Add-on text field:"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     init(viewModel: TextFieldComponentUIViewModel) {
         self.viewModel = viewModel
         self.textField = TextFieldUIView(theme: viewModel.theme)
@@ -221,9 +261,13 @@ final class TextFieldComponentUIView: UIView {
         self.addSubview(self.configurationStackView)
         self.addSubview(self.withRightViewCheckBox)
         self.addSubview(self.withLeftViewCheckBox)
+        self.addSubview(self.showLeadingAddOnCheckBox)
+        self.addSubview(self.showTrailingAddOnCheckBox)
         self.addSubview(self.rightViewModeStackView)
         self.addSubview(self.leftViewModeStackView)
         self.addSubview(self.addOnTextField)
+        self.addSubview(self.standaloneTextFieldLabel)
+        self.addSubview(self.addOnTextFieldLabel)
 
         NSLayoutConstraint.activate([
             self.configurationLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
@@ -241,7 +285,15 @@ final class TextFieldComponentUIView: UIView {
             self.withLeftViewCheckBox.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             self.withLeftViewCheckBox.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
 
-            self.rightViewModeStackView.topAnchor.constraint(equalTo: self.withLeftViewCheckBox.bottomAnchor, constant: 16),
+            self.showLeadingAddOnCheckBox.topAnchor.constraint(equalTo: self.withLeftViewCheckBox.bottomAnchor, constant: 16),
+            self.showLeadingAddOnCheckBox.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            self.showLeadingAddOnCheckBox.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+
+            self.showTrailingAddOnCheckBox.topAnchor.constraint(equalTo: self.showLeadingAddOnCheckBox.bottomAnchor, constant: 16),
+            self.showTrailingAddOnCheckBox.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            self.showTrailingAddOnCheckBox.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+
+            self.rightViewModeStackView.topAnchor.constraint(equalTo: self.showTrailingAddOnCheckBox.bottomAnchor, constant: 16),
             self.rightViewModeStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             self.rightViewModeStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
 
@@ -249,11 +301,19 @@ final class TextFieldComponentUIView: UIView {
             self.leftViewModeStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             self.leftViewModeStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
 
-            self.textField.topAnchor.constraint(equalTo: self.leftViewModeStackView.bottomAnchor, constant: 16),
+            self.standaloneTextFieldLabel.topAnchor.constraint(equalTo: self.leftViewModeStackView.bottomAnchor, constant: 16),
+            self.standaloneTextFieldLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            self.standaloneTextFieldLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+
+            self.textField.topAnchor.constraint(equalTo: self.standaloneTextFieldLabel.bottomAnchor, constant: 16),
             self.textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
             self.textField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
 
-            self.addOnTextField.topAnchor.constraint(equalTo: self.textField.bottomAnchor, constant: 16),
+            self.addOnTextFieldLabel.topAnchor.constraint(equalTo: self.textField.bottomAnchor, constant: 16),
+            self.addOnTextFieldLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            self.addOnTextFieldLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+
+            self.addOnTextField.topAnchor.constraint(equalTo: self.addOnTextFieldLabel.bottomAnchor, constant: 16),
             self.addOnTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
             self.addOnTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20)
 
@@ -326,6 +386,24 @@ final class TextFieldComponentUIView: UIView {
             if state != .unselected {
                 self.textField.leftView = self.createLeftView()
                 self.addOnTextField.addTextFieldLeftView(self.createLeftView())
+            }
+        }
+
+        self.showLeadingAddOnCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
+            guard let self else { return }
+            if state == .selected {
+                self.addOnTextField.addLeadingAddOn(self.leadingAddOn)
+            } else if state == .unselected {
+                self.addOnTextField.removeLeadingAddOn()
+            }
+        }
+
+        self.showTrailingAddOnCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
+            guard let self else { return }
+            if state == .selected {
+                self.addOnTextField.addTrailingAddOn(self.trailingAddOn)
+            } else if state == .unselected {
+                self.addOnTextField.removeTrailingAddOn()
             }
         }
 

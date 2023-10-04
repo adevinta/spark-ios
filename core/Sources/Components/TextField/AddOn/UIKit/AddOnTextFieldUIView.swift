@@ -42,20 +42,31 @@ public final class AddOnTextFieldUIView: UIView {
     
     // MARK: - Private properties
 
-    private let leadingAddOn: UIView?
-    private let trailingAddOn: UIView?
+    private var leadingAddOn: UIView?
+    private var trailingAddOn: UIView?
     private let textField: TextFieldUIView
     private let viewModel: AddOnTextFieldViewModel
     private var cancellable = Set<AnyCancellable>()
 
+    private var textFieldLeadingConstraint: NSLayoutConstraint = .init()
+    private var textFieldTrailingConstraint: NSLayoutConstraint = .init()
+
     private lazy var hStack: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .fill
+        stackView.distribution = .fillProportionally
         return stackView
     }()
 
+    private lazy var leadingAddOnContainer: UIView = {
+        return UIView()
+    }()
+
     private lazy var textFieldContainer: UIView = {
+        return UIView()
+    }()
+
+    private lazy var trailingAddOnContainer: UIView = {
         return UIView()
     }()
 
@@ -96,55 +107,67 @@ public final class AddOnTextFieldUIView: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
         self.textField.translatesAutoresizingMaskIntoConstraints = false
+
         self.hStack.addBorder(color: self.viewModel.borderColor)
 
         self.addSubviewSizedEqually(hStack)
+        self.hStack.addArrangedSubviews([
+            self.leadingAddOnContainer,
+            self.textFieldContainer,
+            self.trailingAddOnContainer
+        ])
 
         if let leadingAddOn {
             leadingAddOn.translatesAutoresizingMaskIntoConstraints = false
             leadingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.leadingAddOn
-            leadingAddOn.setContentHuggingPriority(.required, for: .horizontal)
-            leadingAddOn.setContentHuggingPriority(.required, for: .vertical)
             leadingAddOn.addSeparator(
                 toThe: .right,
                 color: self.viewModel.theme.colors.base.outline
             )
-            self.hStack.addArrangedSubview(leadingAddOn)
+            self.leadingAddOnContainer.addSubviewSizedEqually(leadingAddOn)
         }
 
-        self.hStack.addArrangedSubview(self.textFieldContainer)
         self.textFieldContainer.addSubview(self.textField)
 
         if let trailingAddOn {
             trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
-            trailingAddOn.setContentHuggingPriority(.required, for: .horizontal)
-            trailingAddOn.setContentHuggingPriority(.required, for: .horizontal)
             trailingAddOn.addSeparator(
                 toThe: .left,
                 color: self.viewModel.theme.colors.base.outline
             )
-            self.hStack.addArrangedSubview(trailingAddOn)
+            self.trailingAddOnContainer.addSubviewSizedEqually(trailingAddOn)
         }
 
         self.setupSpacing()
     }
 
     private func setupSpacing() {
+        NSLayoutConstraint.deactivate([
+            self.textFieldLeadingConstraint,
+            self.textFieldTrailingConstraint
+        ])
+
         var constraints = [
             textField.topAnchor.constraint(equalTo: textFieldContainer.topAnchor),
             textField.bottomAnchor.constraint(equalTo: textFieldContainer.bottomAnchor)
         ]
 
         if leadingAddOn != nil, trailingAddOn != nil {
-            constraints.append(self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 8))
-            constraints.append(self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -8))
+            self.textFieldLeadingConstraint = self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 8)
+            self.textFieldTrailingConstraint = self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -8)
         } else if leadingAddOn != nil, trailingAddOn == nil {
-            constraints.append(self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 8))
-            constraints.append(self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -16))
+            self.textFieldLeadingConstraint = self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 8)
+            self.textFieldTrailingConstraint = self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -16)
         } else if leadingAddOn == nil, trailingAddOn != nil {
-            constraints.append(self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 16))
-            constraints.append(self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -8))
+            self.textFieldLeadingConstraint = self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 16)
+            self.textFieldTrailingConstraint = self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -8)
+        } else {
+            self.textFieldLeadingConstraint = self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 16)
+            self.textFieldTrailingConstraint = self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -16)
         }
+
+        constraints.append(self.textFieldLeadingConstraint)
+        constraints.append(self.textFieldTrailingConstraint)
 
         NSLayoutConstraint.activate(constraints)
     }
@@ -177,6 +200,34 @@ public final class AddOnTextFieldUIView: UIView {
 
     public func setTextFieldLeftViewMode(_ viewMode: UITextField.ViewMode) {
         self.textField.leftViewMode = viewMode
+    }
+
+    public func addLeadingAddOn(_ addOn: UIView) {
+        self.leadingAddOnContainer.isHidden = false
+        self.leadingAddOn = addOn
+        self.leadingAddOnContainer.addSubviewSizedEqually(addOn)
+        self.setupSpacing()
+    }
+
+    public func removeLeadingAddOn() {
+        self.leadingAddOnContainer.isHidden = true
+        self.leadingAddOn = nil
+        self.leadingAddOnContainer.subviews.forEach { $0.removeFromSuperview() }
+        self.setupSpacing()
+    }
+
+    public func addTrailingAddOn(_ addOn: UIView) {
+        self.trailingAddOnContainer.isHidden = false
+        self.trailingAddOn = addOn
+        self.trailingAddOnContainer.addSubviewSizedEqually(addOn)
+        self.setupSpacing()
+    }
+
+    public func removeTrailingAddOn() {
+        self.trailingAddOnContainer.isHidden = true
+        self.trailingAddOn = nil
+        self.trailingAddOnContainer.subviews.forEach { $0.removeFromSuperview() }
+        self.setupSpacing()
     }
 
 }
