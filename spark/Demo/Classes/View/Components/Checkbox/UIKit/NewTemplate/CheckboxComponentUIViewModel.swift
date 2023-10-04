@@ -101,6 +101,14 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var isIndeterminateConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is Indeterminate",
+            type: .toggle(isOn: self.isIndeterminate),
+            target: (source: self, action: #selector(self.toggleIsIndeterminate))
+        )
+    }()
+
     var identifier: String = "Checkbox"
 
     lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
@@ -110,7 +118,8 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
             self.textStyleConfigurationItemViewModel,
             self.iconConfigurationItemViewModel,
             self.alignmentConfigurationItemViewModel,
-            self.isEnableConfigurationItemViewModel
+            self.isEnableConfigurationItemViewModel,
+            self.isIndeterminateConfigurationItemViewModel
         ])
     }()
 
@@ -150,6 +159,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
     @Published var alignment: CheckboxAlignment
     @Published var textStyle: TextStyle
     @Published var icon: [String: UIImage]
+    @Published var isIndeterminate: Bool
 
     init(
         theme: Theme,
@@ -157,8 +167,9 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState = .unselected,
         alignment: CheckboxAlignment = .left,
-        textStyle: TextStyle = .attributeText,
-        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark]
+        textStyle: TextStyle = .text,
+        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark],
+        isIndeterminate: Bool = false
     ) {
         self.theme = theme
         self.intent = intent
@@ -167,6 +178,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         self.alignment = alignment
         self.textStyle = textStyle
         self.icon = icon
+        self.isIndeterminate = isIndeterminate
     }
 }
 
@@ -195,5 +207,9 @@ extension CheckboxComponentUIViewModel {
 
     @objc func toggleIsEnable() {
         self.isEnabled.toggle()
+    }
+
+    @objc func toggleIsIndeterminate() {
+        self.isIndeterminate.toggle()
     }
 }

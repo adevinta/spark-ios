@@ -61,7 +61,7 @@ final class CheckboxComponentUIView: ComponentUIView {
         self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
             guard let self = self else { return }
             self.viewModel.isEnableConfigurationItemViewModel.isOn = isEnabled
-            self.componentView.state = isEnabled ? .enabled : .disabled
+            self.componentView.isEnabled = isEnabled
         }
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
@@ -87,6 +87,11 @@ final class CheckboxComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.viewModel.iconConfigurationItemViewModel.buttonTitle = icon.map { $0.0 }.first
             self.componentView.checkedImage = icon.map { $0.1 }.first ?? UIImage()
+        }
+
+        self.viewModel.$isIndeterminate.subscribe(in: &self.cancellables) { [weak self] isIndeterminate in
+            guard let self = self else { return }
+            self.componentView.selectionState = isIndeterminate ? .indeterminate : .selected
         }
     }
 

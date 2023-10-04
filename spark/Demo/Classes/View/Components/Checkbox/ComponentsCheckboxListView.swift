@@ -31,15 +31,11 @@ struct ComponentsCheckboxListView: View {
                 }
             } else {
                 Button("Checkbox") {
-                    self.navigationController?.pushViewController(CheckboxViewController(), animated: true)
+                    self.navigationController?.pushViewController(CheckboxComponentUIViewController.build(), animated: true)
                 }
 
                 Button("Checkbox Group") {
                     self.navigationController?.pushViewController(CheckboxGroupViewController(), animated: true)
-                }
-
-                Button("New Template Checkbox") {
-                    self.navigationController?.pushViewController(CheckboxComponentUIViewController.build(), animated: true)
                 }
             }
         }
