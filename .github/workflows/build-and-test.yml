@@ -18,7 +18,7 @@ jobs:
   core_unit_tests:
     name: core_unit_tests
     needs: [ core_build ]
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
