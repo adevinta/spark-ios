@@ -315,6 +315,10 @@ final class SwitchViewModelTests: XCTestCase {
 
         // **
         // Use Cases
+        self.testGetColorsUseCaseMock(
+            on: stub,
+            numberOfCalls: 0
+        )
         self.testGetImageUseCaseMock(
             on: stub,
             numberOfCalls: 1
@@ -381,6 +385,10 @@ final class SwitchViewModelTests: XCTestCase {
 
         // **
         // Use Cases
+        self.testGetColorsUseCaseMock(
+            on: stub,
+            numberOfCalls: 0
+        )
         self.testGetImageUseCaseMock(
             on: stub,
             numberOfCalls: 0
@@ -397,6 +405,88 @@ final class SwitchViewModelTests: XCTestCase {
     }
 
     // MARK: - Setter Tests
+
+    func test_set_isOn_with_different_new_value() {
+        self.testSetIsOn(
+            givenIsDifferentNewValue: true
+        )
+    }
+
+    func test_set_isOn_with_same_new_value() {
+        self.testSetIsOn(
+            givenIsDifferentNewValue: false
+        )
+    }
+
+    func testSetIsOn(
+        givenIsDifferentNewValue: Bool
+    ) {
+        // GIVEN
+        let defaultValue = true
+        let newValue = givenIsDifferentNewValue ? !defaultValue : defaultValue
+
+        let stub = Stub(
+            isOn: defaultValue,
+            isImages: true
+        )
+        let viewModel = stub.viewModel
+
+        stub.subscribePublishers(on: &self.subscriptions)
+
+        viewModel.load() // Needed to get colors from usecase one time
+
+        // Reset all UseCase mock
+        stub.resetMockedData()
+
+        // WHEN
+        viewModel.set(isOn: newValue)
+
+        // THEN
+        XCTAssertEqual(viewModel.isOn,
+                       newValue,
+                       "Wrong isOn value")
+
+        // **
+        // Published properties
+        self.testIsOnChanged(on: stub, expectedValue: nil)
+        self.testToggleState(on: stub, expectedContainsValue: false)
+        self.testColors(on: stub, expectedContainsValue: givenIsDifferentNewValue)
+        self.testPosition(on: stub, expectedContainsValue: false)
+        self.testToggleDotImage(on: stub, expectedContainsValue: givenIsDifferentNewValue)
+        self.testDisplayedText(on: stub, expectedContainsValue: false)
+        self.testTextFont(on: stub, expectedContainsValue: false)
+        self.testShowToggleLeftSpace(on: stub, expectedValue: givenIsDifferentNewValue ? newValue : nil)
+
+        let publishedExpectedContainsValue = givenIsDifferentNewValue ? 1 : 0
+        self.testAllPublishedSinkCount(
+            on: stub,
+            expectedToggleBackgroundColorTokenPublishedSinkCount: publishedExpectedContainsValue,
+            expectedToggleDotBackgroundColorTokenPublishedSinkCount: publishedExpectedContainsValue,
+            expectedToggleDotForegroundColorTokenPublishedSinkCount: publishedExpectedContainsValue,
+            expectedTextForegroundColorTokenPublishedSinkCount: publishedExpectedContainsValue,
+            expectedIsToggleOnLeftPublishedSinkCount: publishedExpectedContainsValue,
+            expectedShowToggleLeftSpacePublishedSinkCount: publishedExpectedContainsValue,
+            expectedToggleDotImagePublishedSinkCount: publishedExpectedContainsValue
+        )
+        // **
+
+        // **
+        // Use Cases
+        self.testGetColorsUseCaseMock(
+            on: stub,
+            numberOfCalls: 0
+        )
+        self.testGetImageUseCaseMock(
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0
+        )
+        self.testGetToggleColorUseCaseMock(
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 2 : 0,
+            givenIsOn: newValue
+        )
+        // **
+    }
 
     func test_set_theme() {
         // GIVEN

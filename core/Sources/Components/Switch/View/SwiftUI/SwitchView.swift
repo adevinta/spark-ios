@@ -144,6 +144,7 @@ public struct SwitchView: View {
                                 viewModel: self.viewModel
                             )
                     }
+                    .opacity(self.viewModel.toggleOpacity ?? .zero)
                     .padding(.init(
                         all: self.toggleDotPadding
                     ))
