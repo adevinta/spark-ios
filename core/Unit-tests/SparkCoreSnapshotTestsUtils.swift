@@ -30,5 +30,5 @@ public func sparkAssertSnapshot<Value, Format>(
         testName: testName
     )
     guard let message = failure else { return }
-    XCTFail("\(testName): \(message)", file: file, line: line)
+    XCTFail("\(message): \(testName)", file: file, line: line)
 }
