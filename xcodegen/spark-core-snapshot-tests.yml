@@ -5,7 +5,7 @@ include:
 packages:
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    from: 1.11.0
+    exactVersion: 1.14.0
 
 targetTemplates:
   SparkCoreSnapshotTestsTemplate:

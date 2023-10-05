@@ -16,35 +16,9 @@ jobs:
           version: '2.33.0'
       - name: Run fastlane build_framework TARGET_NAME:SparkCore
         run: fastlane build_framework TARGET_NAME:SparkCore
-  core_unit_tests:
-    name: core_unit_tests
-    needs: [ core_build ]
-    runs-on: macos-13
-    steps:
-      - name: Checkout actions
-        uses: actions/checkout@v3
-      - name: Run sourcery
-        run: |
-          brew install sourcery
-          sourcery
-      - name: Run xcodegen
-        uses: xavierLowmiller/xcodegen-action@1.1.2
-        with:
-          spec: project-ci.yml
-          version: '2.33.0'
-      - name: Run fastlane unit_tests TARGET_NAME:SparkCore
-        run: fastlane unit_tests TARGET_NAME:SparkCore
-      - name: Tar files
-        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
-        continue-on-error: true
-      - name: Archive xcresult
-        uses: actions/upload-artifact@v3
-        with:
-          name: xcresult-SparkCore
-          path: xcresult-SparkCore.tar
-          retention-days: 15
-#  core_snapshot_tests:
-#    name: core_snapshot_tests
+
+#  core_unit_tests:
+#    name: core_unit_tests
 #    needs: [ core_build ]
 #    runs-on: macos-13
 #    steps:
@@ -59,72 +33,101 @@ jobs:
 #        with:
 #          spec: project-ci.yml
 #          version: '2.33.0'
-#      # Get the current source branch name of the spark-ios-repository-PR and store it in "outputs.branch".
-#      - name: Extract branch name
-#        shell: bash
-#        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >>$GITHUB_OUTPUT
-#        id: extract_branch
-#      # Now try to checkout the same branch (outputs.branch) in spark-ios-snapshots-repository.
-#      - name: Run snapshots
-#        uses: actions/checkout@v3
-#        continue-on-error: true
-#        id: checkout_snapshot_branch_similar_to_main_repo
-#        with:
-#          repository: adevinta/spark-ios-snapshots
-#          ref: ${{ steps.extract_branch.outputs.branch }}
-#          path: spark-ios-snapshots
-#      # If checking out (outputs.branch)-branch in spark-ios-snapshots fails, fallback to main branch.
-#      - name: Run snapshot on main
-#        if: steps.checkout_snapshot_branch_similar_to_main_repo.outcome != 'success'
-#        uses: actions/checkout@v3
-#        with:
-#          repository: adevinta/spark-ios-snapshots
-#          path: spark-ios-snapshots
-#      - name: Run fastlane unit_tests TARGET_NAME:SparkDemo
-#        run: fastlane unit_tests TARGET_NAME:SparkDemo
+#      - name: Run fastlane unit_tests TARGET_NAME:SparkCore
+#        run: fastlane unit_tests TARGET_NAME:SparkCore
 #      - name: Tar files
-#        run: tar -cvf xcresult-SparkCoreSnapshots.tar out/SparkCoreSnapshots.xcresult
+#        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
 #        continue-on-error: true
 #      - name: Archive xcresult
 #        uses: actions/upload-artifact@v3
 #        with:
-#          name: xcresult-SparkCoreSnapshots
-#          path: xcresult-SparkCoreSnapshots.tar
+#          name: xcresult-SparkCore
+#          path: xcresult-SparkCore.tar
 #          retention-days: 15
 
-  build:
+  core_snapshot_tests:
+    name: core_snapshot_tests
     needs: [ core_build ]
     runs-on: macos-13
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
+      - name: Run sourcery
+        run: |
+          brew install sourcery
+          sourcery
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
           version: '2.33.0'
-      - name: Run fastlane build_framework TARGET_NAME:Spark
-        run: fastlane build_framework TARGET_NAME:Spark
-  unit_tests:
-    name: unit_tests
-    needs: [ build ]
-    runs-on: macos-13
-    steps:
-      - name: Checkout actions
+      # Get the current source branch name of the spark-ios-repository-PR and store it in "outputs.branch".
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >>$GITHUB_OUTPUT
+        id: extract_branch
+      # Now try to checkout the same branch (outputs.branch) in spark-ios-snapshots-repository.
+      - name: Run snapshots
         uses: actions/checkout@v3
-      - name: Run xcodegen
-        uses: xavierLowmiller/xcodegen-action@1.1.2
+        continue-on-error: true
+        id: checkout_snapshot_branch_similar_to_main_repo
         with:
-          spec: project-ci.yml
-          version: '2.33.0'
-      - name: Run fastlane lane unit_tests TARGET_NAME:Spark
-        run: fastlane unit_tests TARGET_NAME:Spark
+          repository: adevinta/spark-ios-snapshots
+          ref: ${{ steps.extract_branch.outputs.branch }}
+          path: spark-ios-snapshots
+      # If checking out (outputs.branch)-branch in spark-ios-snapshots fails, fallback to main branch.
+      - name: Run snapshot on main
+        if: steps.checkout_snapshot_branch_similar_to_main_repo.outcome != 'success'
+        uses: actions/checkout@v3
+        with:
+          repository: adevinta/spark-ios-snapshots
+          path: spark-ios-snapshots
+      - name: Run fastlane unit_tests TARGET_NAME:SparkDemo
+        run: fastlane unit_tests TARGET_NAME:SparkDemo
       - name: Tar files
-        run: tar -cvf xcresult-Spark.tar out/Spark.xcresult
+        run: tar -cvf xcresult-SparkCoreSnapshots.tar out/SparkCoreSnapshots.xcresult
         continue-on-error: true
       - name: Archive xcresult
         uses: actions/upload-artifact@v3
         with:
-          name: xcresult-Spark
-          path: xcresult-Spark.tar
+          name: xcresult-SparkCoreSnapshots
+          path: xcresult-SparkCoreSnapshots.tar
           retention-days: 15
+
+#  build:
+#    needs: [ core_build ]
+#    runs-on: macos-13
+#    steps:
+#      - name: Checkout actions
+#        uses: actions/checkout@v3
+#      - name: Run xcodegen
+#        uses: xavierLowmiller/xcodegen-action@1.1.2
+#        with:
+#          spec: project-ci.yml
+#          version: '2.33.0'
+#      - name: Run fastlane build_framework TARGET_NAME:Spark
+#        run: fastlane build_framework TARGET_NAME:Spark
+
+#  unit_tests:
+#    name: unit_tests
+#    needs: [ build ]
+#    runs-on: macos-13
+#    steps:
+#      - name: Checkout actions
+#        uses: actions/checkout@v3
+#      - name: Run xcodegen
+#        uses: xavierLowmiller/xcodegen-action@1.1.2
+#        with:
+#          spec: project-ci.yml
+#          version: '2.33.0'
+#      - name: Run fastlane lane unit_tests TARGET_NAME:Spark
+#        run: fastlane unit_tests TARGET_NAME:Spark
+#      - name: Tar files
+#        run: tar -cvf xcresult-Spark.tar out/Spark.xcresult
+#        continue-on-error: true
+#      - name: Archive xcresult
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: xcresult-Spark
+#          path: xcresult-Spark.tar
+#          retention-days: 15
