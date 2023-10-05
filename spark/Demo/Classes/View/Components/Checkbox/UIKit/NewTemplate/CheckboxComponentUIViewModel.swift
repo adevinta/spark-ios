@@ -109,19 +109,11 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    var identifier: String = "Checkbox"
-
-    lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
-        return .init(itemsViewModel: [
-            self.themeConfigurationItemViewModel,
-            self.intentConfigurationItemViewModel,
-            self.textStyleConfigurationItemViewModel,
-            self.iconConfigurationItemViewModel,
-            self.alignmentConfigurationItemViewModel,
-            self.isEnableConfigurationItemViewModel,
-            self.isIndeterminateConfigurationItemViewModel
-        ])
-    }()
+//    var identifier: String = "Checkbox"
+//
+//    lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
+//        return
+//    }()
 
     var themes = ThemeCellModel.themes
 
@@ -179,6 +171,17 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         self.textStyle = textStyle
         self.icon = icon
         self.isIndeterminate = isIndeterminate
+        super.init(identifier: "Checkbox")
+
+        self.configurationViewModel = .init(itemsViewModel: [
+            self.themeConfigurationItemViewModel,
+            self.intentConfigurationItemViewModel,
+            self.textStyleConfigurationItemViewModel,
+            self.iconConfigurationItemViewModel,
+            self.alignmentConfigurationItemViewModel,
+            self.isEnableConfigurationItemViewModel,
+            self.isIndeterminateConfigurationItemViewModel
+        ])
     }
 }
 
