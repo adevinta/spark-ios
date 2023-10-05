@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*, deprecated)
 public enum SelectButtonState: CaseIterable {
     case enabled
     case disabled
