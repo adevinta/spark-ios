@@ -102,7 +102,7 @@ final class TabUIViewTests: XCTestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        self.sut.segments[2].touchesEnded([UITouch()], with: nil)
+        self.sut.segments[2].sendActions(for: .touchUpInside)
 
         // Then
         waitForExpectations(timeout: 1)
@@ -131,7 +131,7 @@ final class TabUIViewTests: XCTestCase {
         self.sut.delegate = delegate
 
         // When
-        self.sut.segments[2].touchesEnded([UITouch()], with: nil)
+        self.sut.segments[2].sendActions(for: .touchUpInside)
 
         // Then
         XCTAssertEqual(
@@ -156,7 +156,7 @@ final class TabUIViewTests: XCTestCase {
         self.sut.addAction(action, for: .valueChanged)
 
         // When
-        self.sut.segments[2].touchesEnded([UITouch()], with: nil)
+        self.sut.segments[2].sendActions(for: .touchUpInside)
 
         // Then
         waitForExpectations(timeout: 1)
@@ -193,7 +193,7 @@ final class TabUIViewTests: XCTestCase {
         self.sut.setAction(action, forSegmentAt: 2)
 
         // When
-        self.sut.segments[2].touchesEnded([UITouch()], with: nil)
+        self.sut.segments[2].sendActions(for: .touchUpInside)
 
         // Then
         waitForExpectations(timeout: 1)

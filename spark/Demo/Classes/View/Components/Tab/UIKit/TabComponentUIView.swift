@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import SparkCore
+import UIKit
 
 final class TabComponentUIView: ComponentUIView {
     // MARK: - Components
@@ -144,11 +145,13 @@ final class TabComponentUIView: ComponentUIView {
 
     // MARK: - Private construction helper
     static private func makeTabView(_ viewModel: TabComponentUIViewModel) -> TabUIView {
-        return TabUIView(
+        let tabView = TabUIView(
             theme: viewModel.theme,
             intent: viewModel.intent,
             tabSize: viewModel.size,
             content: viewModel.content)
+
+        return tabView
     }
 }
 
