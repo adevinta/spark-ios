@@ -198,7 +198,7 @@ public struct CheckboxView: View {
             }
         }
         .padding(.vertical, self.smallSpacing)
-//        .opacity(self.viewModel.opacity)
+        .opacity(self.viewModel.opacity)
         .allowsHitTesting(self.viewModel.isEnabled)
         .contentShape(Rectangle())
     }

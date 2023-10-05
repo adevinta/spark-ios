@@ -12,7 +12,6 @@ protocol CheckboxColorsUseCaseable {
 
 struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
 
-    // MARK: - Methods
     func execute(from colors: Colors, intent: CheckboxIntent) -> CheckboxColors {
         switch intent {
         case .basic:
