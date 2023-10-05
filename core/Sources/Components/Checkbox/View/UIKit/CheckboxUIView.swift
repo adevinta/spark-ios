@@ -95,6 +95,7 @@ public final class CheckboxUIView: UIControl {
         }
     }
 
+    /// The checkedImage displayed in the checkbox when status is selected.
     public var checkedImage: UIImage {
         get {
             return self.viewModel.checkedImage
@@ -114,6 +115,7 @@ public final class CheckboxUIView: UIControl {
         }
     }
 
+    /// The current state of the checkbox.
     public override var isEnabled: Bool {
         get {
             return self.viewModel.isEnabled
@@ -133,6 +135,7 @@ public final class CheckboxUIView: UIControl {
         }
     }
 
+    /// Returns the intent of the checkbox.
     public var intent: CheckboxIntent {
         get {
             return self.viewModel.intent
@@ -142,6 +145,7 @@ public final class CheckboxUIView: UIControl {
         }
     }
 
+    /// Returns the alignment of the checkbox.
     public var alignment: CheckboxAlignment {
         get {
             return self.viewModel.alignment
@@ -179,9 +183,10 @@ public final class CheckboxUIView: UIControl {
     /// Initialize a new checkbox UIKit-view.
     /// - Parameters:
     ///   - theme: The current Spark-Theme.
+    ///   - intent: The current Intent.
     ///   - text: The checkbox text.
     ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
+    ///   - isEnabled: IsEnabled describes whether the checkbox is enabled or disabled.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
@@ -208,9 +213,10 @@ public final class CheckboxUIView: UIControl {
     /// Initialize a new checkbox UIKit-view.
     /// - Parameters:
     ///   - theme: The current Spark-Theme.
-    ///   - text: The checkbox text.
+    ///   - intent: The current Intent.
+    ///   - attributedText: The checkbox attributeText.
     ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
+    ///   - isEnabled: IsEnabled describes whether the checkbox is enabled or disabled.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
@@ -262,10 +268,10 @@ public final class CheckboxUIView: UIControl {
 
         self.setupViews()
         self.subscribe()
-
         self.updateAccessibility()
     }
-
+    
+    // MARK: - Methods
     private func setupViews() {
         self.translatesAutoresizingMaskIntoConstraints = false
 
@@ -296,7 +302,7 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
             guard let self else { return }
-            self.layer.opacity = Float(isEnabled ? self.theme.dims.none : self.theme.dims.dim3)
+            self.layer.opacity = Float(self.viewModel.opacity)
             self.updateTheme()
             self.updateAccessibility()
         }

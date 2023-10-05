@@ -9,6 +9,7 @@
 import Foundation
 
 @available(*, deprecated)
+/// "isEnabled" Bool parameter is used instead of this enum.
 public enum SelectButtonState: CaseIterable {
     case enabled
     case disabled

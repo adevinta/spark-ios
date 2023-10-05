@@ -11,6 +11,7 @@ import SwiftUI
 import UIKit
 
 final class CheckboxViewModel: ObservableObject {
+    
     // MARK: - Internal properties
 
     @Published var text: String?
@@ -48,6 +49,10 @@ final class CheckboxViewModel: ObservableObject {
         didSet {
             self.updateColors()
         }
+    }
+
+    var opacity: CGFloat {
+        self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
     }
 
     // MARK: - Init
