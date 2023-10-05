@@ -83,8 +83,14 @@ private extension SwitchUIViewTests {
                     isEnabled: sut.isEnabled,
                     attributedText: attributedText.leftValue
                 )
-            } else {
-                XCTFail("Missing case, view should be init")
+            } else { // Without image and text
+                view = SwitchUIView(
+                    theme: self.theme,
+                    isOn: sut.isOn,
+                    alignment: sut.alignment,
+                    intent: sut.intent,
+                    isEnabled: sut.isEnabled
+                )
             }
 
             view.backgroundColor = self.theme.colors.base.background.uiColor

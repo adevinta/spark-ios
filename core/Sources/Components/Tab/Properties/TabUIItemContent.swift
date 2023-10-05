@@ -11,9 +11,15 @@ import UIKit
 /// Contents of the tab:
 /// - icon: The icon of the tab item
 /// - text: The text of the tab item.
-public struct TabUIItemContent: Equatable, Updateable {
-    public internal (set) var icon: UIImage?
-    public internal (set) var title: String?
+public struct TabUIItemContent: TitleContaining, Equatable, Updateable {
+    public var icon: UIImage?
+    public var title: String?
+
+    /// Return true if the title is not nil.
+    /// If the title is an empty string, `hasTitle` will return true.
+    public var hasTitle: Bool {
+        return title != nil
+    }
 
     public init(
         title: String
@@ -36,4 +42,5 @@ public struct TabUIItemContent: Equatable, Updateable {
         self.icon = icon
         self.title = title
     }
+
 }

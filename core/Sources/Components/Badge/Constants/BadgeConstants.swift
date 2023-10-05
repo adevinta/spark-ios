@@ -1,6 +1,6 @@
 //
 //  BadgeConstants.swift
-//  SparkCoreDemo
+//  SparkCore
 //
 //  Created by alex.vecherov on 22.05.23.
 //  Copyright © 2023 Adevinta. All rights reserved.

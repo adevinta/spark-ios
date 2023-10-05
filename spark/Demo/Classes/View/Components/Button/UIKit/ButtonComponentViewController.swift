@@ -27,6 +27,8 @@ final class ButtonComponentViewController: UIViewController {
         self.viewModel = viewModel
         self.buttonComponentView = ButtonComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
+
+        self.buttonComponentView.viewController = self
     }
 
     required init?(coder: NSCoder) {

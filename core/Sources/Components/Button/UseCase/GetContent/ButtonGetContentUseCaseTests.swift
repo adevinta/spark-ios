@@ -15,17 +15,14 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
     // MARK: - Properties
 
     private let imageMock = IconographyTests.shared.switchOn
-    private let textMock = "My Text"
-    private let attributedText = NSAttributedString(string: "My attributed String")
 
     // MARK: - Tests
 
-    func test_execute_when_alignment_is_leadingIcon_and_image_is_set() {
+    func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_containsText_is_false() {
         self.testExecute(
             givenAlignment: .leadingIcon,
             givenIconImage: self.imageMock,
-            givenText: nil,
-            givenAttributedText: nil,
+            givenContainsText: false,
             expectedContent: .init(
                 shouldShowIconImage: true,
                 isIconImageTrailing: false,
@@ -35,12 +32,11 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
         )
     }
 
-    func test_execute_when_alignment_is_trailingIcon_and_image_is_set() {
+    func test_execute_when_alignment_is_trailingIcon_and_image_is_set_and_containsText_is_false() {
         self.testExecute(
             givenAlignment: .trailingIcon,
             givenIconImage: self.imageMock,
-            givenText: nil,
-            givenAttributedText: nil,
+            givenContainsText: false,
             expectedContent: .init(
                 shouldShowIconImage: true,
                 isIconImageTrailing: true,
@@ -50,12 +46,11 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
         )
     }
 
-    func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_text_is_set() {
+    func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_containsText_is_true() {
         self.testExecute(
             givenAlignment: .leadingIcon,
             givenIconImage: self.imageMock,
-            givenText: self.textMock,
-            givenAttributedText: nil,
+            givenContainsText: true,
             expectedContent: .init(
                 shouldShowIconImage: true,
                 isIconImageTrailing: false,
@@ -65,42 +60,11 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
         )
     }
 
-    func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_attributedText_is_set() {
-        self.testExecute(
-            givenAlignment: .leadingIcon,
-            givenIconImage: self.imageMock,
-            givenText: nil,
-            givenAttributedText: self.attributedText,
-            expectedContent: .init(
-                shouldShowIconImage: true,
-                isIconImageTrailing: false,
-                iconImage: .left(self.imageMock),
-                shouldShowText: true
-            )
-        )
-    }
-
-    func test_execute_when_alignment_is_leadingIcon_and_text_is_set() {
+    func test_execute_when_alignment_is_leadingIcon_and_containsText_is_true() {
         self.testExecute(
             givenAlignment: .leadingIcon,
             givenIconImage: nil,
-            givenText: self.textMock,
-            givenAttributedText: nil,
-            expectedContent: .init(
-                shouldShowIconImage: false,
-                isIconImageTrailing: false,
-                iconImage: nil,
-                shouldShowText: true
-            )
-        )
-    }
-
-    func test_execute_when_alignment_is_leadingIcon_and_attributedText_is_set() {
-        self.testExecute(
-            givenAlignment: .leadingIcon,
-            givenIconImage: nil,
-            givenText: nil,
-            givenAttributedText: self.attributedText,
+            givenContainsText: true,
             expectedContent: .init(
                 shouldShowIconImage: false,
                 isIconImageTrailing: false,
@@ -118,8 +82,7 @@ private extension ButtonGetContentUseCaseTests {
     func testExecute(
         givenAlignment: ButtonAlignment,
         givenIconImage: UIImage?,
-        givenText: String?,
-        givenAttributedText: NSAttributedString?,
+        givenContainsText: Bool,
         expectedContent: ButtonContent
     ) {
         // GIVEN
@@ -127,11 +90,8 @@ private extension ButtonGetContentUseCaseTests {
         if givenIconImage != nil {
             errorSuffixMessage += " - with icon image"
         }
-        if givenText != nil {
-            errorSuffixMessage += " - with text"
-        }
-        if givenAttributedText != nil {
-            errorSuffixMessage += " - with attributed text"
+        if givenContainsText {
+            errorSuffixMessage += " - with displayed text"
         }
 
         let useCase = ButtonGetContentUseCase()
@@ -143,19 +103,11 @@ private extension ButtonGetContentUseCaseTests {
             iconImage = nil
         }
 
-        let attributedString: AttributedStringEither?
-        if let givenAttributedText {
-            attributedString = .left(givenAttributedText)
-        } else {
-            attributedString = nil
-        }
-
         // GIVEN
         let content = useCase.execute(
             alignment: givenAlignment,
             iconImage: iconImage,
-            text: givenText,
-            attributedText: attributedString
+            containsText: givenContainsText
         )
 
         // THEN

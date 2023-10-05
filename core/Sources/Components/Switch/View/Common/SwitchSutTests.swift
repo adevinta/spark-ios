@@ -79,7 +79,8 @@ struct SwitchSutTests {
             (images: images, text: "My Full Content Switch", attributedText: nil), // Images + text
             (images: nil, text: "My Content Switch", attributedText: nil), // Only text
             (images: images, text: nil, attributedText: attributedText), // Images + attributed text
-            (images: nil, text: nil, attributedText: attributedText) // Only attributed text
+            (images: nil, text: nil, attributedText: attributedText), // Only attributed text
+            (images: nil, text: nil, attributedText: nil) // Nothing
         ]
 
         return items.map { item -> SwitchSutTests in

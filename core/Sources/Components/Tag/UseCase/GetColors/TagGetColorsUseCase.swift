@@ -45,7 +45,7 @@ struct TagGetColorsUseCase: TagGetColorsUseCaseable {
 
         case .outlined:
             return .init(
-                backgroundColor: contentColors.surfaceColor,
+                backgroundColor: ColorTokenDefault.clear,
                 borderColor: contentColors.color,
                 foregroundColor: contentColors.color
             )

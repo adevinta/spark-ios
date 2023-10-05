@@ -14,235 +14,137 @@ struct SwitchComponentView: View {
 
     // MARK: - Properties
 
-    let viewModel = SwitchComponentViewModel()
+    private let viewModel = SwitchComponentViewModel()
 
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-    @State private var isThemePresented = false
-
-    let themes = ThemeCellModel.themes
-
-    @State private var uiKitViewHeight: CGFloat = .zero
-
-    @State private var isOnSheetIsPresented = false
-    @State var isOn: Bool = true
-
-    @State private var alignmentSheetIsPresented = false
-    @State var alignment: SwitchAlignment = .left
-
-    @State private var intentSheetIsPresented = false
-    @State var intent: SwitchIntent = .main
-
-    @State private var isEnabledSheetIsPresented = false
-    @State var isEnabled: Bool = true
-
-    @State private var hasImagesSheetIsPresented = false
-    @State var hasImages: Bool = false
-
-    @State private var isMultilineTextSheetIsPresented = false
-    @State var isMultilineText: Bool = true
-
-    @State private var textContentSheetIsPresented = false
-    @State var textContent: SwitchTextContentDefault = .text
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var isOn: Bool = true
+    @State private var alignment: SwitchAlignment = .left
+    @State private var intent: SwitchIntent = .main
+    @State private var isEnabled: CheckboxSelectionState = .selected
+    @State private var hasImages: CheckboxSelectionState = .unselected
+    @State private var textContent: SwitchTextContentDefault = .text
 
     // MARK: - View
 
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 24) {
-                Text("Configuration")
-                    .font(.title2)
-                    .bold()
+        Component(
+            name: "Switch",
+            configuration: {
+                ThemeSelector(theme: self.$theme)
 
-                VStack(alignment: .leading, spacing: 16) {
-                    // **
-                    // Theme
-                    HStack() {
-                        Text("Theme: ").bold()
-                        let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
-                        Button(selectedTheme?.title ?? "") {
-                            self.isThemePresented = true
-                        }
-                        .confirmationDialog("Select a theme",
-                                            isPresented: self.$isThemePresented) {
-                            ForEach(themes, id: \.self) { theme in
-                                Button(theme.title) {
-                                    themePublisher.theme = theme.theme
-                                }
-                            }
-                        }
-                        Spacer()
-                    }
-                    // **
+                EnumSelector(
+                    title: "Alignment",
+                    dialogTitle: "Select an alignment",
+                    values: SwitchAlignment.allCases,
+                    value: self.$alignment
+                )
 
-                    // Is On
-                    HStack() {
-                        Text("Is on: ")
-                            .bold()
-                        Toggle("", isOn: self.$isOn)
-                            .labelsHidden()
-                    }
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an intent",
+                    values: SwitchIntent.allCases,
+                    value: self.$intent
+                )
 
-                    // **
-                    // Alignment
-                    HStack() {
-                        Text("Alignment: ")
-                            .bold()
-                        Button("\(self.alignment.name)") {
-                            self.alignmentSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select an alignment", isPresented: self.$alignmentSheetIsPresented) {
-                            ForEach(SwitchAlignment.allCases, id: \.self) { alignment in
-                                Button("\(alignment.name)") {
-                                    self.alignment = alignment
-                                }
-                            }
-                        }
-                    }
-                    // **
+                EnumSelector(
+                    title: "Text content",
+                    dialogTitle: "Select an text content",
+                    values: SwitchTextContentDefault.allCases,
+                    value: self.$textContent
+                )
 
-                    // **
-                    // Intent
-                    HStack() {
-                        Text("Intent: ")
-                            .bold()
-                        Button("\(self.intent.name)") {
-                            self.intentSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select an intent", isPresented: self.$intentSheetIsPresented) {
-                            ForEach(SwitchIntent.allCases, id: \.self) { intent in
-                                Button("\(intent.name)") {
-                                    self.intent = intent
-                                }
-                            }
-                        }
-                    }
-                    // **
-
-                    // Is Enabled
-                    HStack() {
-                        Text("Is enabled: ")
-                            .bold()
-                        Toggle("", isOn: self.$isEnabled)
-                            .labelsHidden()
-                    }
-
-                    // Has Images
-                    HStack() {
-                        Text("Has images: ")
-                            .bold()
-                        Toggle("", isOn: self.$hasImages)
-                            .labelsHidden()
-                    }
-
-                    // Text Content
-                    HStack() {
-                        Text("Text content: ")
-                            .bold()
-                        Button("\(self.textContent.name)") {
-                            self.textContentSheetIsPresented = true
-                        }
-                        .confirmationDialog("Select an text content", isPresented: self.$textContentSheetIsPresented) {
-                            ForEach(SwitchTextContentDefault.allCases, id: \.self) { textContent in
-                                Button("\(textContent.name)") {
-                                    self.textContent = textContent
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Divider()
-
-                Text("Integration")
-                    .font(.title2)
-                    .bold()
-
-                GeometryReader { geometry in
-                    SwitchComponentViewRepresentable(
-                        viewModel: self.viewModel,
-                        width: geometry.size.width,
-                        height: self.$uiKitViewHeight,
-                        isOn: self.$isOn,
-                        alignment: self.$alignment.wrappedValue,
-                        intent: self.$intent.wrappedValue,
-                        isEnabled: self.$isEnabled.wrappedValue,
-                        hasImages: self.$hasImages.wrappedValue,
-                        textContent: self.$textContent.wrappedValue
+                CheckboxView(
+                    text: "Is on",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: self.theme,
+                    state: .enabled,
+                    selectionState: Binding(
+                        get: { self.isOn ? .selected : .unselected },
+                        set: { self.isOn = ($0 == .selected) }
                     )
-                    .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .leading)
-                }
+                )
 
-                Spacer()
+                CheckboxView(
+                    text: "Is enabled",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: self.theme,
+                    state: .enabled,
+                    selectionState: self.$isEnabled
+                )
+
+                CheckboxView(
+                    text: "Has images",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: self.theme,
+                    state: .enabled,
+                    selectionState: self.$hasImages
+                )
+            },
+            integration: {
+                SwitchView(
+                    theme: self.theme,
+                    isOn: self.$isOn
+                )
+                .alignment(self.alignment)
+                .intent(self.intent)
+                .isEnabled(self.isEnabled == .selected)
+                .images(self.hasImages == .selected ? self.images() : nil)
+                .textContent(
+                    viewModel: self.viewModel,
+                    textContent: self.textContent,
+                    attributedText: self.attributedText()
+                )
             }
-            .padding(.horizontal, 16)
-        }
-        .navigationBarTitle(Text("Switch"))
+        )
+    }
+
+    // MARK: - UIKit
+
+    private func images() -> SwitchImages {
+        let onImage = Image(self.viewModel.onImageNamed)
+        let offImage = Image(self.viewModel.offImageNamed)
+
+        return SwitchImages(
+            on: onImage,
+            off: offImage
+        )
+    }
+
+    private func attributedText() -> AttributedString {
+        var attributedText = AttributedString(self.viewModel.text)
+        attributedText.font = SparkTheme.shared.typography.body2.font
+        attributedText.foregroundColor = SparkTheme.shared.colors.main.main.color
+        attributedText.backgroundColor = SparkTheme.shared.colors.main.onMain.color
+        return attributedText
     }
 }
+
+// MARK: - Modifier
+
+extension SwitchView {
+
+    func textContent(
+        viewModel: SwitchComponentViewModel,
+        textContent: SwitchTextContentDefault,
+        attributedText: AttributedString
+    ) -> SwitchView {
+        switch textContent {
+        case .text:
+            return self.text(viewModel.text(isMultilineText: false))
+        case .attributedText:
+            return self.attributedText(attributedText)
+        case .multilineText:
+            return self.text(viewModel.text(isMultilineText: true))
+        case .none:
+            return self.text(nil).attributedText(nil)
+        }
+    }
+}
+
+// MARK: - Preview
 
 struct SwitchComponentView_Previews: PreviewProvider {
     static var previews: some View {
         SwitchComponentView()
-    }
-}
-
-// MARK: - Extension
-
-private extension SwitchAlignment {
-
-    var name: String {
-        switch self {
-        case .left:
-            return "Toggle on left"
-        case .right:
-            return "Toggle on right"
-        @unknown default:
-            return "Please, add this unknow alignment value"
-        }
-    }
-}
-
-private extension SwitchIntent {
-
-    var name: String {
-        switch self {
-        case .alert:
-            return "Alert"
-        case .error:
-            return "Error"
-        case .info:
-            return "Info"
-        case .neutral:
-            return "Neutral"
-        case .main:
-            return "Main"
-        case .support:
-            return "Support"
-        case .success:
-            return "Success"
-        case .accent:
-            return "Accent"
-        case .basic:
-            return "Basic"
-        @unknown default:
-            return "Please, add this unknow intent value"
-        }
-    }
-}
-
-private extension SwitchTextContentDefault {
-
-    var name: String {
-        switch self {
-        case .text:
-            return "Text"
-        case .attributedText:
-            return "Attributed Text"
-        case .multilineText:
-            return "Multiline Text"
-        }
     }
 }

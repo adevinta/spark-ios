@@ -19,10 +19,12 @@ final class TabItemUIViewTests: TestCase {
 
     override func setUp() {
         super.setUp()
-        self.sut = TabItemUIView(theme: theme,
-                                 intent: .main,
-                                 title: "Label",
-                                 icon: .init(systemName: "trash"))
+        self.sut = TabItemUIView(
+            theme: theme,
+            intent: .main,
+            content: .init(icon: .init(systemName: "trash"),
+                           title: "Label")
+        )
     }
 
     func test_theme_change_triggers_attributes_change() {
