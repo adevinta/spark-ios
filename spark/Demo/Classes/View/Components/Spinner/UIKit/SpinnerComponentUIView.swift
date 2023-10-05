@@ -182,7 +182,7 @@ final class SpinnerComponentUIView: UIView {
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in
             guard let self = self else { return }
             let color = self.viewModel.theme.colors.main.main.uiColor
-            let themeTitle: String? = theme is SparkTheme ? viewModel.themes.first?.title : viewModel.themes.last?.title
+            let themeTitle: String? = theme is SparkTheme ? self.viewModel.themes.first?.title : self.viewModel.themes.last?.title
             self.themeButton.setTitle(themeTitle, for: .normal)
             self.themeButton.setTitleColor(color, for: .normal)
             self.intentButton.setTitleColor(color, for: .normal)

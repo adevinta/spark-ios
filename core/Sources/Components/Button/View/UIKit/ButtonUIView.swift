@@ -452,6 +452,7 @@ public final class ButtonUIView: UIView {
     // MARK: - View setup
 
     private func setupView() {
+        self.accessibilityTraits = [.button]
         // Add subviews
         self.addSubview(self.contentStackView)
         self.addSubview(self.clearButton)

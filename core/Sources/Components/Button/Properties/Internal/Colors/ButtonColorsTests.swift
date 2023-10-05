@@ -6,9 +6,9 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-@testable import Spark
-@testable import SparkCore
 import XCTest
+
+@testable import SparkCore
 
 final class ButtonColorsTests: XCTestCase {
 

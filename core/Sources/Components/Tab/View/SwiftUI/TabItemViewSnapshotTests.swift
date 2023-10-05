@@ -6,12 +6,12 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-@testable import Spark
-@testable import SparkCore
 import SwiftUI
 import XCTest
 
-final class TabItemViewSnapshotTests: SwiftUIComponentTestCase {
+@testable import SparkCore
+
+final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     // MARK: - Properties
     let theme = SparkTheme.shared
     var image: Image!
