@@ -17,33 +17,33 @@ jobs:
       - name: Run fastlane build_framework TARGET_NAME:SparkCore
         run: fastlane build_framework TARGET_NAME:SparkCore
 
-#  core_unit_tests:
-#    name: core_unit_tests
-#    needs: [ core_build ]
-#    runs-on: macos-13
-#    steps:
-#      - name: Checkout actions
-#        uses: actions/checkout@v3
-#      - name: Run sourcery
-#        run: |
-#          brew install sourcery
-#          sourcery
-#      - name: Run xcodegen
-#        uses: xavierLowmiller/xcodegen-action@1.1.2
-#        with:
-#          spec: project-ci.yml
-#          version: '2.33.0'
-#      - name: Run fastlane unit_tests TARGET_NAME:SparkCore
-#        run: fastlane unit_tests TARGET_NAME:SparkCore
-#      - name: Tar files
-#        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
-#        continue-on-error: true
-#      - name: Archive xcresult
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: xcresult-SparkCore
-#          path: xcresult-SparkCore.tar
-#          retention-days: 15
+  core_unit_tests:
+    name: core_unit_tests
+    needs: [ core_build ]
+    runs-on: macos-13
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v3
+      - name: Run sourcery
+        run: |
+          brew install sourcery
+          sourcery
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project-ci.yml
+          version: '2.33.0'
+      - name: Run fastlane unit_tests TARGET_NAME:SparkCore
+        run: fastlane unit_tests TARGET_NAME:SparkCore
+      - name: Tar files
+        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
+        continue-on-error: true
+      - name: Archive xcresult
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult-SparkCore
+          path: xcresult-SparkCore.tar
+          retention-days: 15
 
   core_snapshot_tests:
     name: core_snapshot_tests
@@ -94,40 +94,40 @@ jobs:
           path: xcresult-SparkCoreSnapshots.tar
           retention-days: 15
 
-#  build:
-#    needs: [ core_build ]
-#    runs-on: macos-13
-#    steps:
-#      - name: Checkout actions
-#        uses: actions/checkout@v3
-#      - name: Run xcodegen
-#        uses: xavierLowmiller/xcodegen-action@1.1.2
-#        with:
-#          spec: project-ci.yml
-#          version: '2.33.0'
-#      - name: Run fastlane build_framework TARGET_NAME:Spark
-#        run: fastlane build_framework TARGET_NAME:Spark
+  build:
+    needs: [ core_build ]
+    runs-on: macos-13
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v3
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project-ci.yml
+          version: '2.33.0'
+      - name: Run fastlane build_framework TARGET_NAME:Spark
+        run: fastlane build_framework TARGET_NAME:Spark
 
-#  unit_tests:
-#    name: unit_tests
-#    needs: [ build ]
-#    runs-on: macos-13
-#    steps:
-#      - name: Checkout actions
-#        uses: actions/checkout@v3
-#      - name: Run xcodegen
-#        uses: xavierLowmiller/xcodegen-action@1.1.2
-#        with:
-#          spec: project-ci.yml
-#          version: '2.33.0'
-#      - name: Run fastlane lane unit_tests TARGET_NAME:Spark
-#        run: fastlane unit_tests TARGET_NAME:Spark
-#      - name: Tar files
-#        run: tar -cvf xcresult-Spark.tar out/Spark.xcresult
-#        continue-on-error: true
-#      - name: Archive xcresult
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: xcresult-Spark
-#          path: xcresult-Spark.tar
-#          retention-days: 15
+  unit_tests:
+    name: unit_tests
+    needs: [ build ]
+    runs-on: macos-13
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v3
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project-ci.yml
+          version: '2.33.0'
+      - name: Run fastlane lane unit_tests TARGET_NAME:Spark
+        run: fastlane unit_tests TARGET_NAME:Spark
+      - name: Tar files
+        run: tar -cvf xcresult-Spark.tar out/Spark.xcresult
+        continue-on-error: true
+      - name: Archive xcresult
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult-Spark
+          path: xcresult-Spark.tar
+          retention-days: 15
