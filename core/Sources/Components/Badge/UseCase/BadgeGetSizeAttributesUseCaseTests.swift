@@ -9,7 +9,7 @@
 @testable import SparkCore
 import XCTest
 
-final class BadgeGetSizeAttributesUseCaseTests: TestCase {
+final class BadgeGetSizeAttributesUseCaseTests: XCTestCase {
 
     // MARK: - Properties
     var sut: BadgeGetSizeAttributesUseCase!

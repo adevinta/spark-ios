@@ -112,3 +112,4 @@ spark-ios-snapshots
 *Generated/
 
 vendor/
+*.lock

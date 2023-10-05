@@ -9,7 +9,7 @@
 @testable import SparkCore
 import XCTest
 
-final class TabGetIntentColorUseCaseTests: TestCase {
+final class TabGetIntentColorUseCaseTests: XCTestCase {
     
     // MARK: - Private properties
     private var sut: TabGetIntentColorUseCase!

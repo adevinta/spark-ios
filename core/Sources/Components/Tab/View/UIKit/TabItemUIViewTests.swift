@@ -7,11 +7,11 @@
 //
 
 import Combine
-@testable import Spark
-@testable import SparkCore
 import XCTest
 
-final class TabItemUIViewTests: TestCase {
+@testable import SparkCore
+
+final class TabItemUIViewTests: XCTestCase {
 
     let theme = SparkTheme.shared
     var sut: TabItemUIView!

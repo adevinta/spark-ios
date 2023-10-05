@@ -7,11 +7,11 @@
 //
 
 import Combine
-@testable import Spark
-@testable import SparkCore
 import XCTest
 
-final class TabUIViewTests: TestCase {
+@testable import SparkCore
+
+final class TabUIViewTests: XCTestCase {
     var sut: TabUIView!
     var subscriptions = Set<AnyCancellable>()
 
