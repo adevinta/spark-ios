@@ -49,6 +49,15 @@ public final class ChipUIView: UIControl {
             return self.viewModel.isEnabled
         }
     }
+
+    public override var isSelected: Bool {
+        set {
+            self.viewModel.isSelected = newValue
+        }
+        get {
+            return self.viewModel.isSelected
+        }
+    }
     
     /// An optional action. If the action is given, the Chip will act like a button and have a pressed state.
     public var action: (() -> ())?

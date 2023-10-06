@@ -52,6 +52,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
     /// - theme: The current theme to be used
     /// - variant: The variant of the chip, whether it's filled, outlined, etc.
     /// - intent: The intent color of the chip, e.g. main, support
+    /// - state: The current state of the chip, e.g. selected, enabled, pressed
     func execute(theme: Theme,
                  variant: ChipVariant,
                  intent: ChipIntent,
@@ -68,7 +69,10 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                                    foreground: intentColors.subordinate),
                     pressed: .init(background: intentColors.tintedSubordinate,
                                    border: intentColors.tintedSubordinate,
-                                   foreground: intentColors.principal)
+                                   foreground: intentColors.principal),
+                    selected: .init(background: intentColors.subordinate,
+                                    border: intentColors.subordinate,
+                                    foreground: intentColors.principal)
                 )
             } else {
                 chipColors = ChipColors(
@@ -77,29 +81,32 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                                    foreground: intentColors.principal),
                     pressed: .init(background: intentColors.tintedPrincipal,
                                    border: intentColors.tintedPrincipal,
-                                   foreground: intentColors.principal)
+                                   foreground: intentColors.principal),
+                    selected: .init(background: intentColors.tintedPrincipal,
+                                    border: intentColors.principal,
+                                    foreground: intentColors.subordinate)
                 )
             }
-        case .filled:
-            if intent == .surface {
-                chipColors = ChipColors(
-                    default: .init(background: intentColors.principal,
-                                   border: intentColors.principal,
-                                   foreground: intentColors.subordinate),
-                    pressed: .init(background: intentColors.tintedSubordinate,
-                                   border: intentColors.tintedSubordinate,
-                                   foreground: intentColors.principal)
-                )
-            } else {
-                chipColors = ChipColors(
-                    default: .init(background: intentColors.principal,
-                                   border: intentColors.principal,
-                                   foreground: intentColors.subordinate),
-                    pressed: .init(background: intentColors.tintedPrincipal,
-                                   border: intentColors.tintedPrincipal,
-                                   foreground: intentColors.principal)
-                )
-            }
+//        case .filled:
+//            if intent == .surface {
+//                chipColors = ChipColors(
+//                    default: .init(background: intentColors.principal,
+//                                   border: intentColors.principal,
+//                                   foreground: intentColors.subordinate),
+//                    pressed: .init(background: intentColors.tintedSubordinate,
+//                                   border: intentColors.tintedSubordinate,
+//                                   foreground: intentColors.principal)
+//                )
+//            } else {
+//                chipColors = ChipColors(
+//                    default: .init(background: intentColors.principal,
+//                                   border: intentColors.principal,
+//                                   foreground: intentColors.subordinate),
+//                    pressed: .init(background: intentColors.tintedPrincipal,
+//                                   border: intentColors.tintedPrincipal,
+//                                   foreground: intentColors.principal)
+//                )
+//            }
         case .tinted:
             chipColors = ChipColors(
                 default: .init(background: intentColors.tintedPrincipal,
@@ -107,12 +114,17 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                                foreground: intentColors.tintedSubordinate),
                 pressed: .init(background: intentColors.tintedSubordinate,
                                border: intentColors.tintedSubordinate,
-                               foreground: intentColors.tintedPrincipal)
+                               foreground: intentColors.tintedPrincipal),
+                selected: .init(background: intentColors.principal,
+                                border: intentColors.principal,
+                                foreground: intentColors.subordinate)
             )
         }
 
         if state.isPressed {
             return chipColors.pressed
+        } else if state.isSelected {
+            return chipColors.selected
         } else if state.isDisabled {
             return chipColors.default.withOpacity(theme.dims.dim3)
         } else {

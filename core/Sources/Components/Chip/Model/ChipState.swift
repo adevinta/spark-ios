@@ -10,10 +10,11 @@ import Foundation
 
 struct ChipState {
 
-    static let `default` = ChipState(isEnabled: true, isPressed: false)
+    static let `default` = ChipState(isEnabled: true, isPressed: false, isSelected: false)
 
     let isEnabled: Bool
     let isPressed: Bool
+    let isSelected: Bool
 
     var isDisabled: Bool {
         return !self.isEnabled

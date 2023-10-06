@@ -12,4 +12,5 @@ struct ChipColors: Equatable {
 
     let `default`: ChipStateColors
     let pressed: ChipStateColors
+    let selected: ChipStateColors
 }
