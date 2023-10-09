@@ -13,7 +13,7 @@ class CheckboxControlUIView: UIView {
 
     // MARK: - Constants
 
-    private enum Constants {
+    enum Constants {
         static var cornerRadius: CGFloat = 4
         static var cornerRadiusPressed: CGFloat = 7
         static var lineWidth: CGFloat = 2
@@ -55,32 +55,34 @@ class CheckboxControlUIView: UIView {
         }
     }
 
+
     // MARK: - Private Properties.
     @ScaledUIMetric private var cornerRadius: CGFloat = Constants.cornerRadius
     @ScaledUIMetric private var cornerRadiusPressed: CGFloat = Constants.cornerRadiusPressed
     @ScaledUIMetric private var lineWidth: CGFloat = Constants.lineWidth
     @ScaledUIMetric private var lineWidthPressed: CGFloat = Constants.lineWidthPressed
-    @ScaledUIMetric var controlSize: CGFloat = Constants.size
+    @ScaledUIMetric private var controlSize: CGFloat = Constants.size
 
     private lazy var pressedBorderView: UIView = {
-        let view = UIView(
-            frame: CGRect(
-                x: -self.lineWidthPressed,
-                y: -self.lineWidthPressed,
-                width: self.controlSize + 2*self.lineWidthPressed,
-                height: self.controlSize + 2*self.lineWidthPressed
-            )
-        )
-        view.layer.borderWidth = self.lineWidthPressed
-        view.layer.borderColor = colors.pressedBorderColor.uiColor.cgColor
-        view.layer.cornerRadius = cornerRadiusPressed
+        let view = UIView()
+        self.addBorderToView(for: view)
         return view
     }()
 
-
+    private var iconSize: CGSize {
+        let iconSize: CGSize
+        switch self.selectionState {
+        case .unselected:
+            return .zero
+        case .selected:
+            iconSize = Constants.selectedIconSize
+        case .indeterminate:
+            iconSize = Constants.indeterminateIconSize
+        }
+        return iconSize.scaled(for: self.traitCollection)
+    }
 
     // MARK: - Initialization
-
     init(
         selectionIcon: UIImage,
         colors: CheckboxColors,
@@ -99,32 +101,34 @@ class CheckboxControlUIView: UIView {
         self.addSubview(pressedBorderView)
     }
 
+    private func addBorderToView(for view: UIView) {
+        view.frame = CGRect(
+            x: -self.lineWidthPressed,
+            y: -self.lineWidthPressed,
+            width: self.controlSize + 2*self.lineWidthPressed,
+            height: self.controlSize + 2*self.lineWidthPressed
+        )
+        view.layer.borderWidth = self.lineWidthPressed
+        view.layer.borderColor = colors.pressedBorderColor.uiColor.cgColor
+        view.layer.cornerRadius = cornerRadiusPressed
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else { return }
 
         let traitCollection = self.traitCollection
-        _cornerRadius.update(traitCollection: traitCollection)
-        _cornerRadiusPressed.update(traitCollection: traitCollection)
-        _lineWidth.update(traitCollection: traitCollection)
-        _lineWidthPressed.update(traitCollection: traitCollection)
-        _controlSize.update(traitCollection: traitCollection)
+        self._cornerRadius.update(traitCollection: traitCollection)
+        self._cornerRadiusPressed.update(traitCollection: traitCollection)
+        self._lineWidth.update(traitCollection: traitCollection)
+        self._lineWidthPressed.update(traitCollection: traitCollection)
+        self._controlSize.update(traitCollection: traitCollection)
+
+        self.addBorderToView(for: self.pressedBorderView)
     }
 
     required init?(coder: NSCoder) {
         fatalError("not implemented")
-    }
-
-    private var iconSize: CGSize {
-        let iconSize: CGSize
-        switch self.selectionState {
-        case .unselected:
-            return .zero
-        case .selected:
-            iconSize = Constants.selectedIconSize
-        case .indeterminate:
-            iconSize = Constants.indeterminateIconSize
-        }
-        return iconSize.scaled(for: self.traitCollection)
     }
 
     override func draw(_ rect: CGRect) {
