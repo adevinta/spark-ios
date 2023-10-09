@@ -157,7 +157,7 @@ final class TabItemUIViewTests: XCTestCase {
         self.sut.addAction(action, for: .touchDown)
 
         // When
-        self.sut.touchesBegan([UITouch()], with: nil)
+        self.sut.sendActions(for: .touchDown)
 
         // Then
         waitForExpectations(timeout: 1)
@@ -195,7 +195,7 @@ final class TabItemUIViewTests: XCTestCase {
         self.sut.addAction(action, for: .touchUpInside)
 
         // When
-        self.sut.touchesEnded([UITouch()], with: nil)
+        self.sut.sendActions(for: .touchUpInside)
 
         // Then
         waitForExpectations(timeout: 1)
@@ -228,7 +228,7 @@ final class TabItemUIViewTests: XCTestCase {
         self.sut.addAction(action, for: .touchCancel)
 
         // When
-        self.sut.touchesCancelled([UITouch()], with: nil)
+        self.sut.sendActions(for: .touchCancel)
 
         // Then
         waitForExpectations(timeout: 1)

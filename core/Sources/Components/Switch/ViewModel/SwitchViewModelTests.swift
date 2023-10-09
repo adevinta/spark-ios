@@ -941,7 +941,7 @@ final class SwitchViewModelTests: XCTestCase {
             expectedContainsValue: false,
             expectedTextForegroundColorContainsValue: publishedExpectedContainsValue
         )
-        self.testPosition(on: stub, expectedContainsValue: publishedExpectedContainsValue)
+        self.testPosition(on: stub, expectedContainsValue: givenIsDifferentNewValue)
         self.testToggleDotImage(on: stub, expectedContainsValue: false)
         self.testDisplayedText(on: stub, expectedContainsValue: givenIsDifferentNewValue)
         self.testTextFont(on: stub, expectedContainsValue: publishedExpectedContainsValue)
@@ -952,7 +952,7 @@ final class SwitchViewModelTests: XCTestCase {
             on: stub,
             expectedTextForegroundColorTokenPublishedSinkCount: publishedSinkCount,
             expectedIsToggleOnLeftPublishedSinkCount: publishedSinkCount,
-            expectedHorizontalSpacingPublishedSinkCount: publishedSinkCount,
+            expectedHorizontalSpacingPublishedSinkCount: givenIsDifferentNewValue ? 1 : 0,
             expectedDisplayedTextPublishedSinkCount: givenIsDifferentNewValue ? 1 : 0,
             expectedTextFontTokenPublishedSinkCount: publishedSinkCount
         )
@@ -971,6 +971,12 @@ final class SwitchViewModelTests: XCTestCase {
             "Wrong textChanged parameter on displayedTextViewModel"
         )
         // **
+
+        // Use Cases
+        self.testGetPositionUseCaseMock(
+            on: stub,
+            numberOfCalls: givenIsDifferentNewValue ? 1 : 0
+        )
     }
 
     func test_set_attributedText_when_displayedTextViewModel_attributedTextChanged_return_true() {

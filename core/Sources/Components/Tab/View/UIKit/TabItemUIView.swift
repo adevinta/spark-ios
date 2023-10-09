@@ -277,7 +277,15 @@ public final class TabItemUIView: UIControl {
     }
 
     /// An optional action which can be set. The action will be invoked when the tab is tapped.
-    public var action: UIAction?
+    public var action: UIAction? {
+        didSet {
+            if let action = action {
+                self.addAction(action, for: .touchUpInside)
+            } else if let action = oldValue {
+                self.removeAction(action, for: .touchUpInside)
+            }
+        }
+    }
 
     // MARK: - Initializers
     /// Create a tab item view.
@@ -351,29 +359,19 @@ public final class TabItemUIView: UIControl {
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         self.viewModel.isPressed = true
-        self.sendActions(for: .touchDown)
     }
 
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        self.pressFinised()
+        self.viewModel.isPressed = false
     }
 
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         self.viewModel.isPressed = false
-        self.sendActions(for: .touchCancel)
     }
 
     // MARK: - Private functions
-    private func pressFinised() {
-        self.viewModel.isPressed = false
-        self.sendActions(for: .touchUpInside)
-        if let action = self.action {
-            self.sendAction(action)
-        }
-    }
-
     private func setupSubscriptions() {
         self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
             guard let self else { return }
