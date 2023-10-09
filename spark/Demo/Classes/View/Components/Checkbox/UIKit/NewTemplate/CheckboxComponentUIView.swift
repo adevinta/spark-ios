@@ -80,6 +80,8 @@ final class CheckboxComponentUIView: ComponentUIView {
                 self.componentView.text = self.viewModel.multilineText
             case .attributeText:
                 self.componentView.attributedText = self.viewModel.attributeText
+            case .none:
+                self.componentView.text = nil
             }
         }
 
@@ -97,23 +99,34 @@ final class CheckboxComponentUIView: ComponentUIView {
 
     static func makeCheckboxView(_ viewModel: CheckboxComponentUIViewModel) -> CheckboxUIView {
 
-        return viewModel.textStyle == .attributeText ?
-        CheckboxUIView(
-            theme: viewModel.theme,
-            attributedText: viewModel.attributeText,
-            checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
-            isEnabled: viewModel.isEnabled,
-            selectionState: viewModel.selectionState,
-            checkboxAlignment: viewModel.alignment
-        )
-        :
-        CheckboxUIView(
-            theme: viewModel.theme,
-            text: viewModel.textStyle == .multilineText ? viewModel.multilineText : viewModel.text,
-            checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
-            isEnabled: viewModel.isEnabled,
-            selectionState: viewModel.selectionState,
-            checkboxAlignment: viewModel.alignment
-        )
+        switch viewModel.textStyle {
+        case .attributeText:
+            return CheckboxUIView(
+                theme: viewModel.theme,
+                attributedText: viewModel.attributeText,
+                checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
+                isEnabled: viewModel.isEnabled,
+                selectionState: viewModel.selectionState,
+                checkboxAlignment: viewModel.alignment
+            )
+        case .text, .multilineText:
+            return CheckboxUIView(
+                theme: viewModel.theme,
+                text: viewModel.textStyle == .multilineText ? viewModel.multilineText : viewModel.text,
+                checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
+                isEnabled: viewModel.isEnabled,
+                selectionState: viewModel.selectionState,
+                checkboxAlignment: viewModel.alignment
+            )
+        case .none:
+            return CheckboxUIView(
+                theme: viewModel.theme,
+                text: "",
+                checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
+                isEnabled: viewModel.isEnabled,
+                selectionState: viewModel.selectionState,
+                checkboxAlignment: viewModel.alignment
+            )
+        }
     }
 }

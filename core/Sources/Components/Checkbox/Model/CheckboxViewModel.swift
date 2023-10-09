@@ -14,7 +14,7 @@ final class CheckboxViewModel: ObservableObject {
     
     // MARK: - Internal properties
 
-    @Published var text: String?
+    @Published var text: String
     @Published var attributedText: NSAttributedString?
     @Published var checkedImage: UIImage
     @Published var colors: CheckboxColors

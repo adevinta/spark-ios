@@ -320,6 +320,7 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] text in
             guard let self else { return }
+            self.textLabel.isHidden = text.isEmpty
             self.textLabel.text = text
             self.textLabel.font = self.theme.typography.body1.uiFont
             self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
