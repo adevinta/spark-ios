@@ -13,12 +13,14 @@ class CheckboxControlUIView: UIView {
 
     // MARK: - Constants
 
-    enum Constants {
+    private enum Constants {
         static var cornerRadius: CGFloat = 4
         static var cornerRadiusPressed: CGFloat = 7
         static var lineWidth: CGFloat = 2
         static var lineWidthPressed: CGFloat = 4
         static var size: CGFloat = 24
+        static var selectedIconSize: CGSize = CGSize(width: 17, height: 17)
+        static var indeterminateIconSize: CGSize = CGSize(width: 14, height: 2)
     }
 
     // MARK: - Properties.
@@ -53,20 +55,29 @@ class CheckboxControlUIView: UIView {
         }
     }
 
+    // MARK: - Private Properties.
+    @ScaledUIMetric private var cornerRadius: CGFloat = Constants.cornerRadius
+    @ScaledUIMetric private var cornerRadiusPressed: CGFloat = Constants.cornerRadiusPressed
+    @ScaledUIMetric private var lineWidth: CGFloat = Constants.lineWidth
+    @ScaledUIMetric private var lineWidthPressed: CGFloat = Constants.lineWidthPressed
+    @ScaledUIMetric var controlSize: CGFloat = Constants.size
+
     private lazy var pressedBorderView: UIView = {
         let view = UIView(
             frame: CGRect(
-                x: -Constants.lineWidthPressed,
-                y: -Constants.lineWidthPressed,
-                width: Constants.size + 2*Constants.lineWidthPressed,
-                height: Constants.size + 2*Constants.lineWidthPressed
+                x: -self.lineWidthPressed,
+                y: -self.lineWidthPressed,
+                width: self.controlSize + 2*self.lineWidthPressed,
+                height: self.controlSize + 2*self.lineWidthPressed
             )
         )
-        view.layer.borderWidth = Constants.lineWidthPressed
+        view.layer.borderWidth = self.lineWidthPressed
         view.layer.borderColor = colors.pressedBorderColor.uiColor.cgColor
-        view.layer.cornerRadius = Constants.cornerRadiusPressed
+        view.layer.cornerRadius = cornerRadiusPressed
         return view
     }()
+
+
 
     // MARK: - Initialization
 
@@ -88,6 +99,17 @@ class CheckboxControlUIView: UIView {
         self.addSubview(pressedBorderView)
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        let traitCollection = self.traitCollection
+        _cornerRadius.update(traitCollection: traitCollection)
+        _cornerRadiusPressed.update(traitCollection: traitCollection)
+        _lineWidth.update(traitCollection: traitCollection)
+        _lineWidthPressed.update(traitCollection: traitCollection)
+        _controlSize.update(traitCollection: traitCollection)
+    }
+
     required init?(coder: NSCoder) {
         fatalError("not implemented")
     }
@@ -98,9 +120,9 @@ class CheckboxControlUIView: UIView {
         case .unselected:
             return .zero
         case .selected:
-            iconSize = CGSize(width: 17, height: 17)
+            iconSize = Constants.selectedIconSize
         case .indeterminate:
-            iconSize = CGSize(width: 14, height: 2)
+            iconSize = Constants.indeterminateIconSize
         }
         return iconSize.scaled(for: self.traitCollection)
     }
@@ -113,17 +135,17 @@ class CheckboxControlUIView: UIView {
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
 
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
-        let rect = CGRect(x: 0, y: 0, width: Constants.size, height: Constants.size)
+        let rect = CGRect(x: 0, y: 0, width: self.controlSize, height: self.controlSize)
 
-        let fillPath = UIBezierPath(roundedRect: rect, cornerRadius: Constants.cornerRadius)
+        let fillPath = UIBezierPath(roundedRect: rect, cornerRadius: self.cornerRadius)
         let fillColor = colors.tintColor.uiColor
         fillColor.setFill()
         ctx.setFillColor(fillColor.cgColor)
 
         if isPressed {
-            let path = UIBezierPath(roundedRect: rect, cornerRadius: Constants.cornerRadius)
+            let path = UIBezierPath(roundedRect: rect, cornerRadius: self.cornerRadius)
             let color = colors.pressedBorderColor.uiColor
-            path.lineWidth = 1
+            path.lineWidth = self.lineWidth/2
             color.setStroke()
             ctx.setStrokeColor(color.cgColor)
             path.stroke()
@@ -131,10 +153,10 @@ class CheckboxControlUIView: UIView {
 
         switch self.selectionState {
         case .unselected:
-            let strokeRectangle = rect.insetBy(dx: Constants.lineWidth/2, dy: Constants.lineWidth/2)
-            let strokePath = UIBezierPath(roundedRect: strokeRectangle, cornerRadius: Constants.cornerRadius)
+            let strokeRectangle = rect.insetBy(dx: self.lineWidth/2, dy: self.lineWidth/2)
+            let strokePath = UIBezierPath(roundedRect: strokeRectangle, cornerRadius: self.cornerRadius)
             let strokeColor = colors.borderColor.uiColor
-            strokePath.lineWidth = Constants.lineWidth
+            strokePath.lineWidth = self.lineWidth
             strokeColor.setStroke()
             ctx.setStrokeColor(strokeColor.cgColor)
             strokePath.stroke()
