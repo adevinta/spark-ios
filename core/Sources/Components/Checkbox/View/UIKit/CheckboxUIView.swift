@@ -32,6 +32,7 @@ public final class CheckboxUIView: UIControl {
         label.backgroundColor = .clear
         label.numberOfLines = 0
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
 
@@ -51,7 +52,7 @@ public final class CheckboxUIView: UIControl {
         let arrangedSubviews = self.alignment == .left ? [controlView, textLabel] : [textLabel, controlView]
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
         stackView.axis = .horizontal
-        stackView.spacing = self.alignment == .left ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
+        stackView.spacing = self.stackViewSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.alignment = .top
         return stackView
@@ -59,6 +60,11 @@ public final class CheckboxUIView: UIControl {
 
     private var cancellables = Set<AnyCancellable>()
     private var checkboxSelectionStateSubject = PassthroughSubject<CheckboxSelectionState, Never>()
+    private var stackViewSpacing: CGFloat {
+        let spacing = self.alignment == .left ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
+        let metrics = UIFontMetrics(forTextStyle: .body)
+        return metrics.scaledValue(for: spacing, compatibleWith: self.traitCollection)
+    }
 
     // MARK: - Public properties.
 
@@ -155,15 +161,6 @@ public final class CheckboxUIView: UIControl {
         }
     }
 
-    var colorsUseCase: CheckboxColorsUseCaseable {
-        get {
-            return self.viewModel.colorsUseCase
-        }
-        set {
-            self.viewModel.colorsUseCase = newValue
-        }
-    }
-
     var isPressed: Bool = false {
         didSet {
             self.controlView.isPressed = self.isPressed
@@ -203,7 +200,6 @@ public final class CheckboxUIView: UIControl {
             intent: intent,
             content: .right(text),
             checkedImage: checkedImage,
-            colorsUseCase: CheckboxColorsUseCase(),
             isEnabled: isEnabled,
             selectionState: selectionState,
             checkboxAlignment: checkboxAlignment
@@ -233,7 +229,6 @@ public final class CheckboxUIView: UIControl {
             intent: intent,
             content: .left(attributedText),
             checkedImage: checkedImage,
-            colorsUseCase: CheckboxColorsUseCase(),
             isEnabled: isEnabled,
             selectionState: selectionState,
             checkboxAlignment: checkboxAlignment
@@ -245,7 +240,6 @@ public final class CheckboxUIView: UIControl {
         intent: CheckboxIntent = .main,
         content: Either<NSAttributedString, String>,
         checkedImage: UIImage,
-        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
         checkboxAlignment: CheckboxAlignment
@@ -254,7 +248,6 @@ public final class CheckboxUIView: UIControl {
             text: content,
             checkedImage: checkedImage,
             theme: theme,
-            colorsUseCase:colorsUseCase,
             isEnabled: isEnabled,
             alignment: checkboxAlignment,
             selectionState: selectionState
@@ -282,29 +275,22 @@ public final class CheckboxUIView: UIControl {
         NSLayoutConstraint.stickEdges(from: self.stackView, to: self)
 
         NSLayoutConstraint.activate([
-            self.controlView.heightAnchor.constraint(equalToConstant: CheckboxControlUIView.Constants.size),
-            self.controlView.widthAnchor.constraint(equalToConstant: CheckboxControlUIView.Constants.size),
+            self.controlView.heightAnchor.constraint(equalToConstant: self.controlView.controlSize),
+            self.controlView.widthAnchor.constraint(equalToConstant: self.controlView.controlSize),
             self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: controlView.heightAnchor),
             self.heightAnchor.constraint(equalTo: textLabel.heightAnchor)
         ])
     }
 
     private func subscribe() {
-        self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] _ in
-            guard let self else { return }
-            self.updateTheme()
-        }
-
         self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] _ in
             guard let self else { return }
             self.updateTheme()
         }
 
-        self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
+        self.viewModel.$opacity.subscribe(in: &self.cancellables) { [weak self] opacity in
             guard let self else { return }
-            self.layer.opacity = Float(self.viewModel.opacity)
-            self.updateTheme()
-            self.updateAccessibility()
+            self.layer.opacity = Float(opacity)
         }
 
         self.viewModel.$selectionState.subscribe(in: &self.cancellables) { [weak self] selectionState in
@@ -314,11 +300,12 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
             guard let self else { return }
-            self.updateAlignment(alignment)
+            self.updateAlignment()
         }
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] text in
             guard let self else { return }
+
             self.textLabel.text = text
             self.textLabel.font = self.theme.typography.body1.uiFont
             self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
@@ -326,7 +313,12 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$attributedText.subscribe(in: &self.cancellables) { [weak self] attributedText in
             guard let self else { return }
+
             self.textLabel.attributedText = attributedText
+            let attributes = attributedText?.attributes(at: 0, effectiveRange: nil)
+            if let font = attributes?[NSAttributedString.Key.font] as? UIFont {
+                self.textLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: font, compatibleWith: self.traitCollection)
+            }
         }
 
         self.viewModel.$checkedImage.subscribe(in: &self.cancellables) { [weak self] icon in
@@ -365,10 +357,9 @@ private extension CheckboxUIView {
         }
     }
 
-    private func updateAlignment(_ alignment: CheckboxAlignment) {
-        let isAlignmentLeft = alignment == .left
-        self.stackView.spacing = isAlignmentLeft ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
-        self.stackView.insertArrangedSubview(isAlignmentLeft ? self.controlView : self.textLabel, at: 0)
+    private func updateAlignment() {
+        self.stackView.spacing = self.stackViewSpacing
+        self.stackView.insertArrangedSubview(self.alignment == .left ? self.controlView : self.textLabel, at: 0)
     }
 
     private func update(content: Either<NSAttributedString, String>) {

@@ -19,41 +19,31 @@ final class CheckboxViewModel: ObservableObject {
     @Published var checkedImage: UIImage
     @Published var colors: CheckboxColors
     @Published var alignment: CheckboxAlignment
-
-    @Published var selectionState: CheckboxSelectionState {
-        didSet {
-            self.updateColors()
-        }
-    }
-
-    @Published var isEnabled: Bool {
-        didSet {
-            self.updateColors()
-        }
-    }
-
-    @Published var theme: Theme {
-        didSet {
-            self.updateColors()
-        }
-    }
+    @Published var selectionState: CheckboxSelectionState
+    @Published var opacity: CGFloat
 
     @Published var intent: CheckboxIntent {
         didSet {
+            guard oldValue != intent else { return }
             self.updateColors()
         }
     }
 
+    var isEnabled: Bool {
+        didSet {
+            self.updateOpacity()
+        }
+    }
 
-    var colorsUseCase: CheckboxColorsUseCaseable {
+    var theme: Theme {
         didSet {
             self.updateColors()
+            self.updateOpacity()
         }
     }
 
-    var opacity: CGFloat {
-        self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-    }
+    // MARK: - Private properties
+    private let colorsUseCase: CheckboxColorsUseCaseable
 
     // MARK: - Init
 
@@ -75,6 +65,7 @@ final class CheckboxViewModel: ObservableObject {
             self.attributedText = nil
             self.text = string
         }
+
         self.checkedImage = checkedImage
         self.theme = theme
         self.isEnabled = isEnabled
@@ -86,6 +77,7 @@ final class CheckboxViewModel: ObservableObject {
         self.intent = intent
         self.alignment = alignment
         self.selectionState = selectionState
+        self.opacity = self.theme.dims.none
     }
 
     // MARK: - Methods
@@ -95,6 +87,10 @@ final class CheckboxViewModel: ObservableObject {
             from: self.theme.colors,
             intent: self.intent
         )
+    }
+
+    private func updateOpacity() {
+        self.opacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
     }
 
     func update(content: Either<NSAttributedString, String>) {
