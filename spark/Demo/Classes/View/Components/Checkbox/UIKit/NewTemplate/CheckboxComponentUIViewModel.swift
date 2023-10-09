@@ -17,6 +17,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         case text
         case multilineText
         case attributeText
+        case none
     }
 
     // MARK: - Published Properties
