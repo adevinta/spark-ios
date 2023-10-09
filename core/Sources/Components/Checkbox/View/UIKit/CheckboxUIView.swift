@@ -60,11 +60,14 @@ public final class CheckboxUIView: UIControl {
 
     private var cancellables = Set<AnyCancellable>()
     private var checkboxSelectionStateSubject = PassthroughSubject<CheckboxSelectionState, Never>()
+
     private var stackViewSpacing: CGFloat {
         let spacing = self.alignment == .left ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
-        let metrics = UIFontMetrics(forTextStyle: .body)
-        return metrics.scaledValue(for: spacing, compatibleWith: self.traitCollection)
+        return self.fontMetrics.scaledValue(for: spacing, compatibleWith: self.traitCollection)
     }
+    private var fontMetrics = UIFontMetrics(forTextStyle: .body)
+    @ScaledUIMetric private var checkboxSize: CGFloat = CheckboxControlUIView.Constants.size
+    private var checkboxSizeConstraint: NSLayoutConstraint?
 
     // MARK: - Public properties.
 
@@ -274,12 +277,24 @@ public final class CheckboxUIView: UIControl {
         NSLayoutConstraint.stickEdges(from: self.button, to: self)
         NSLayoutConstraint.stickEdges(from: self.stackView, to: self)
 
+        let checkboxWidthConstraint = self.controlView.widthAnchor.constraint(equalToConstant: self.checkboxSize)
+        self.checkboxSizeConstraint = checkboxWidthConstraint
+
         NSLayoutConstraint.activate([
-            self.controlView.heightAnchor.constraint(equalToConstant: self.controlView.controlSize),
-            self.controlView.widthAnchor.constraint(equalToConstant: self.controlView.controlSize),
-            self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: controlView.heightAnchor),
+            checkboxWidthConstraint,
+            self.controlView.heightAnchor.constraint(equalTo: self.controlView.widthAnchor),
+            self.textLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: self.checkboxSize),
             self.heightAnchor.constraint(equalTo: textLabel.heightAnchor)
         ])
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else { return }
+
+        self._checkboxSize.update(traitCollection: self.traitCollection)
+        self.checkboxSizeConstraint?.constant = self.checkboxSize
+        self.stackView.spacing = self.stackViewSpacing
     }
 
     private func subscribe() {
@@ -305,7 +320,6 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] text in
             guard let self else { return }
-
             self.textLabel.text = text
             self.textLabel.font = self.theme.typography.body1.uiFont
             self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
@@ -313,11 +327,11 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$attributedText.subscribe(in: &self.cancellables) { [weak self] attributedText in
             guard let self else { return }
-
             self.textLabel.attributedText = attributedText
-            let attributes = attributedText?.attributes(at: 0, effectiveRange: nil)
-            if let font = attributes?[NSAttributedString.Key.font] as? UIFont {
-                self.textLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: font, compatibleWith: self.traitCollection)
+
+            if let attributes = attributedText?.attributes(at: 0, effectiveRange: nil),
+               let font = attributes[NSAttributedString.Key.font] as? UIFont {
+                self.textLabel.font = self.fontMetrics.scaledFont(for: font, compatibleWith: self.traitCollection)
             }
         }
 
