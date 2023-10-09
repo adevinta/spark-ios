@@ -31,10 +31,11 @@ fileprivate enum Constants {
 
 // MARK: - SwiftUI
 
-open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
+extension SwiftUIComponentSnapshotTestCase {
 
     // MARK: - Snapshot Testing
 
+    @available(*, deprecated, message: "Use assertSnapshot instead !")
     func assertSnapshotInDarkAndLight(
         matching view: @autoclosure () -> some View,
         named name: String? = nil,
@@ -85,10 +86,11 @@ open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
 
 // MARK: - UIKit
 
-open class UIKitComponentSnapshotTestCase: SnapshotTestCase {
+extension UIKitComponentSnapshotTestCase {
 
     // MARK: - Snapshot Testing
 
+    @available(*, deprecated, message: "Use assertSnapshot instead !")
     func assertSnapshotInDarkAndLight(
         matching view: @autoclosure () -> some UIView,
         named name: String? = nil,
