@@ -32,7 +32,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     intent: badgeIntent,
                     isBorderVisible: bool)
 
-                assertSnapshot(matching: view, named: "test_badge_\(badgeIntent)_isBorderVisible_\(bool)")
+                assertSnapshot(of: view, named: "test_badge_\(badgeIntent)_isBorderVisible_\(bool)")
             }
         }
     }
@@ -47,7 +47,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     isBorderVisible: bool
                 )
 
-                assertSnapshot(matching: view, named: "test_badge_with_text_\(badgeIntent)_isBorderVisible_\(bool)")
+                assertSnapshot(of: view, named: "test_badge_with_text_\(badgeIntent)_isBorderVisible_\(bool)")
             }
         }
     }
@@ -63,7 +63,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     isBorderVisible: bool
                 )
 
-                assertSnapshot(matching: view, named: "test_badge_with_text_\(badgeIntent)_small_size_isBorderVisible_\(bool)")
+                assertSnapshot(of: view, named: "test_badge_with_text_\(badgeIntent)_small_size_isBorderVisible_\(bool)")
             }
         }
     }
@@ -79,7 +79,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     isBorderVisible: bool
                 )
 
-                assertSnapshot(matching: view, named: "test_badge_overflow_format_text_\(badgeIntent)_isBorderVisible_\(bool)")
+                assertSnapshot(of: view, named: "test_badge_overflow_format_text_\(badgeIntent)_isBorderVisible_\(bool)")
             }
         }
     }
@@ -97,7 +97,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     isBorderVisible: bool
                 )
 
-                assertSnapshot(matching: view, named: "test_badge_custom_format_text_\(badgeIntent)_isBorderVisible_\(bool)")
+                assertSnapshot(of: view, named: "test_badge_custom_format_text_\(badgeIntent)_isBorderVisible_\(bool)")
             }
         }
     }
@@ -114,7 +114,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     isBorderVisible: bool
                 )
 
-                assertSnapshot(matching: view, named: "test_badge_custom_format_no_text_\(badgeIntent)_isBorderVisible_\(bool)")
+                assertSnapshot(of: view, named: "test_badge_custom_format_no_text_\(badgeIntent)_isBorderVisible_\(bool)")
             }
         }
     }
@@ -143,7 +143,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                             isBorderVisible: bool)
                     let view = self.createAttachTestView(badge: badge,
                                                          position: position)
-                    assertSnapshot(matching: view, named: "test_badge_attach_no_text_\(size)_\(position)_isBorderVisible_\(bool)")
+                    assertSnapshot(of: view, named: "test_badge_attach_no_text_\(size)_\(position)_isBorderVisible_\(bool)")
                 }
             }
         }
@@ -160,7 +160,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                             isBorderVisible: bool)
                     let view = self.createAttachTestView(badge: badge,
                                                          position: position)
-                    assertSnapshot(matching: view, named: "test_badge_attach_text_\(size)_\(position)_isBorderVisible_\(bool)")
+                    assertSnapshot(of: view, named: "test_badge_attach_text_\(size)_\(position)_isBorderVisible_\(bool)")
                 }
             }
         }
@@ -177,7 +177,7 @@ final class BadgeUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                             isBorderVisible: bool)
                     let view = self.createAttachTestView(badge: badge,
                                                          position: position)
-                    assertSnapshot(matching: view, named: "test_badge_attach_large_text_\(size)_\(position)_isBorderVisible_\(bool)")
+                    assertSnapshot(of: view, named: "test_badge_attach_large_text_\(size)_\(position)_isBorderVisible_\(bool)")
                 }
             }
         }

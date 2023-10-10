@@ -15,7 +15,7 @@ final class SparkCoreUISnapshotTests: UIKitComponentSnapshotTestCase {
     func testExample() throws {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 300))
         view.backgroundColor = .red
-        sparkAssertSnapshot(matching: view, as: .image)
+        sparkassertSnapshot(of: view, as: .image)
     }
 
     func testDynamicContentSize() throws {
@@ -24,7 +24,7 @@ final class SparkCoreUISnapshotTests: UIKitComponentSnapshotTestCase {
         view.font = .preferredFont(forTextStyle: .body)
         view.adjustsFontForContentSizeCategory = true
         view.translatesAutoresizingMaskIntoConstraints = false
-        assertSnapshot(matching: view)
+        assertSnapshot(of: view)
     }
 }
 
@@ -32,6 +32,6 @@ final class SparkCoreUISnapshotTests: UIKitComponentSnapshotTestCase {
 final class SparkCoreSnapshotTests: SwiftUIComponentSnapshotTestCase {
     func testDynamicContentSize() throws {
         let view = Text("Hello world").fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshot(of: view)
     }
 }

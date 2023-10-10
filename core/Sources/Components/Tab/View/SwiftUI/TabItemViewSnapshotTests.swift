@@ -38,7 +38,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .badge(self.badge)
             .background(.systemBackground)
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_selected_tab_with_intent_main() throws {
@@ -50,7 +50,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .selected(true)
             .background(.systemBackground)
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_with_badge_only() throws {
@@ -64,7 +64,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .selected(true)
             .background(.systemBackground)
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_with_label_only() throws {
@@ -75,7 +75,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .apportionsSegmentWidthsByContent(true)
             .background(.systemBackground)
 
-        assertSnapshot(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+        assertSnapshot(of: sut, sizes: [.small, .medium, .large, .extraLarge])
     }
 
     func test_with_icon_only() throws {
@@ -86,7 +86,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .apportionsSegmentWidthsByContent(true)
             .background(.systemBackground)
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_with_label_and_badge() throws {
@@ -99,7 +99,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .selected(true)
             .background(.systemBackground)
 
-        assertSnapshot(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+        assertSnapshot(of: sut, sizes: [.small, .medium, .large, .extraLarge])
     }
 
     func test_with_icon_and_label() throws {
@@ -112,7 +112,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .apportionsSegmentWidthsByContent(false)
             .background(.systemBackground)
 
-        assertSnapshot(matching: sut, sizes: [.large])
+        assertSnapshot(of: sut, sizes: [.large])
     }
 
     func test_with_icon_and_badge() throws {
@@ -124,6 +124,6 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .badge(self.badge)
             .background(.systemBackground)
 
-        assertSnapshot(matching: sut, sizes: [.extraSmall])
+        assertSnapshot(of: sut, sizes: [.extraSmall])
     }
 }

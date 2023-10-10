@@ -30,7 +30,7 @@ final class BadgeViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             let view = BadgeView(theme: theme, intent: badgeIntent)
                 .fixedSize()
 
-            assertSnapshot(matching: view, named: "test_badge_\(badgeIntent)")
+            assertSnapshot(of: view, named: "test_badge_\(badgeIntent)")
         }
     }
 
@@ -42,7 +42,7 @@ final class BadgeViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 value: 23
             ).fixedSize()
 
-            assertSnapshot(matching: view, named: "test_badge_with_text_\(badgeIntent)")
+            assertSnapshot(of: view, named: "test_badge_with_text_\(badgeIntent)")
         }
     }
 
@@ -56,7 +56,7 @@ final class BadgeViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 .size(.small)
                 .fixedSize()
 
-            assertSnapshot(matching: view, named: "test_badge_with_text_\(badgeIntent)_small_size")
+            assertSnapshot(of: view, named: "test_badge_with_text_\(badgeIntent)_small_size")
         }
     }
 
@@ -70,7 +70,7 @@ final class BadgeViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 .format(.overflowCounter(maxValue: 20))
                 .fixedSize()
 
-            assertSnapshot(matching: view, named: "test_badge_overflow_format_text_\(badgeIntent)")
+            assertSnapshot(of: view, named: "test_badge_overflow_format_text_\(badgeIntent)")
         }
     }
 
@@ -86,7 +86,7 @@ final class BadgeViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 ))
                 .fixedSize()
 
-            assertSnapshot(matching: view, named: "test_badge_custom_format_text_\(badgeIntent)")
+            assertSnapshot(of: view, named: "test_badge_custom_format_text_\(badgeIntent)")
         }
     }
 
@@ -101,7 +101,7 @@ final class BadgeViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 ))
                 .fixedSize()
 
-            assertSnapshot(matching: view, named: "test_badge_custom_format_no_text_\(badgeIntent)")
+            assertSnapshot(of: view, named: "test_badge_custom_format_no_text_\(badgeIntent)")
         }
     }
 }

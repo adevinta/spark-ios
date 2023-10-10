@@ -48,7 +48,7 @@ final class TabViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .frame(width: 390)
             .fixedSize()
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_tabs_with_icons_only_equal_width() throws {
@@ -62,7 +62,7 @@ final class TabViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .frame(width: 390)
             .fixedSize()
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_tabs_with_text_only() throws {
@@ -76,7 +76,7 @@ final class TabViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .frame(width: 390)
             .fixedSize()
 
-        assertSnapshot(matching: sut)
+        assertSnapshot(of: sut)
     }
 
     func test_tabs_with_text_only_equal_width() throws {
@@ -89,7 +89,7 @@ final class TabViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .frame(width: 390)
             .fixedSize()
 
-        assertSnapshot(matching: sut)
+        assertSnapshot(of: sut)
     }
 
     func test_tabs_with_icon_and_text() throws {
@@ -106,7 +106,7 @@ final class TabViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .frame(width: 390)
             .fixedSize()
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_tabs_with_icon_and_text_size_small() throws {
@@ -123,7 +123,7 @@ final class TabViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .frame(width: 390)
             .fixedSize()
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_tabs_with_icon_and_text_size_xtra_small() throws {
@@ -140,7 +140,7 @@ final class TabViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .frame(width: 390)
             .fixedSize()
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 
     func test_many_tabs_with_icon_and_text() throws {
@@ -156,7 +156,7 @@ final class TabViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .frame(width: 390)
             .fixedSize()
 
-        assertSnapshot(matching: sut, sizes: [.medium])
+        assertSnapshot(of: sut, sizes: [.medium])
     }
 }
 

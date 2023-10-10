@@ -21,7 +21,7 @@ final class IconUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 intent: intent,
                 size: .medium
             )
-            assertSnapshot(matching: iconView, testName: "\(#function)-\(intent)")
+            assertSnapshot(of: iconView, testName: "\(#function)-\(intent)")
         }
     }
 
@@ -33,7 +33,7 @@ final class IconUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 intent: .neutral,
                 size: size
             )
-            assertSnapshot(matching: iconView, testName: "\(#function)-\(size)")
+            assertSnapshot(of: iconView, testName: "\(#function)-\(size)")
         }
     }
 }
