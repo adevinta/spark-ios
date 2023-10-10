@@ -9,15 +9,10 @@
 import Combine
 import UIKit
 
+/// ChipUIView is a control which can act like a button, if an action is attached to it, or it can act like a label.
 public final class ChipUIView: UIControl {
 
-    // MARK: - Constants
-
     private enum Constants {
-        static let imageSize: CGFloat = 13.33
-        static let height: CGFloat = 32
-        static let borderWidth: CGFloat = 1
-        static let dashLength: CGFloat = 1.9
         static let touchAreaTolerance: CGFloat = 100
     }
 
@@ -133,21 +128,21 @@ public final class ChipUIView: UIControl {
     }
 
     //MARK: - Private properties
-    private let viewModel: ChipViewModel
+    private let viewModel: ChipViewModel<Void>
 
     private var dashBorder: CAShapeLayer?
 
-    @ScaledUIMetric private var imageSize = Constants.imageSize
-    @ScaledUIMetric private var height = Constants.height
-    @ScaledUIMetric private var borderWidth = Constants.borderWidth
-    @ScaledUIMetric private var dashLength = Constants.dashLength
+    @ScaledUIMetric private var imageSize = ChipConstants.imageSize
+    @ScaledUIMetric private var height = ChipConstants.height
+    @ScaledUIMetric private var borderWidth = ChipConstants.borderWidth
+    @ScaledUIMetric private var dashLength = ChipConstants.dashLength
     @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var padding: CGFloat
     @ScaledUIMetric private var borderRadius: CGFloat
 
     public let textLabel: UILabel = {
         let label = UILabel()
-        label.isAccessibilityElement = false
+        label.accessibilityIdentifier = ChipAccessibilityIdentifier.text
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
@@ -163,7 +158,7 @@ public final class ChipUIView: UIControl {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.isAccessibilityElement = false
+        imageView.accessibilityIdentifier = ChipAccessibilityIdentifier.icon
         imageView.setContentCompressionResistancePriority(.required,
                                                           for: .horizontal)
         imageView.setContentCompressionResistancePriority(.required,
@@ -255,10 +250,13 @@ public final class ChipUIView: UIControl {
          optionalLabel: String?,
          optionalIconImage: UIImage?) {
 
-        self.viewModel = ChipViewModel(theme: theme,
-                                       variant: variant,
-                                       intent: intent,
-                                       alignment: alignment)
+        self.viewModel = ChipViewModel<Void>(
+            theme: theme,
+            variant: variant,
+            intent: intent,
+            alignment: alignment,
+            content: Void()
+        )
         self.spacing = self.viewModel.spacing
         self.padding = self.viewModel.padding
         self.borderRadius = self.viewModel.borderRadius
@@ -352,6 +350,8 @@ public final class ChipUIView: UIControl {
         self.setupConstraints()
         self.setChipColors(self.viewModel.colors)
         self.setupSubscriptions()
+
+        self.accessibilityIdentifier = ChipAccessibilityIdentifier.identifier
     }
 
     private func updateLayoutMargins() {
