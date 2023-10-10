@@ -18,15 +18,17 @@ final class ChipComponentViewController: UIViewController {
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     // MARK: - Properties
-    let chipComponentView: ChipComponentUIView
+    let componentView: ChipComponentUIView
     let viewModel: ChipComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Initializer
     init(viewModel: ChipComponentUIViewModel) {
         self.viewModel = viewModel
-        self.chipComponentView = ChipComponentUIView(viewModel: viewModel)
+        self.componentView = ChipComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
+
+        self.componentView.viewController = self
     }
 
     required init?(coder: NSCoder) {
@@ -36,7 +38,7 @@ final class ChipComponentViewController: UIViewController {
     // MARK: - Lifecycle
     override func loadView() {
         super.loadView()
-        view = chipComponentView
+        view = componentView
     }
 
     // MARK: - ViewDidLoad

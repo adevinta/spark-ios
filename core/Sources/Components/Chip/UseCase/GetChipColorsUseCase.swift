@@ -79,12 +79,12 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                     default: .init(background: ColorTokenDefault.clear,
                                    border: intentColors.principal,
                                    foreground: intentColors.principal),
-                    pressed: .init(background: intentColors.tintedPrincipal,
-                                   border: intentColors.tintedPrincipal,
+                    pressed: .init(background: intentColors.principal.opacity(theme.dims.dim5),
+                                   border: intentColors.principal,
                                    foreground: intentColors.principal),
                     selected: .init(background: intentColors.tintedPrincipal,
                                     border: intentColors.principal,
-                                    foreground: intentColors.subordinate)
+                                    foreground: intentColors.principal)
                 )
             }
 //        case .filled:
@@ -114,7 +114,7 @@ struct GetChipColorsUseCase: GetChipColorsUseCasable {
                                foreground: intentColors.tintedSubordinate),
                 pressed: .init(background: intentColors.tintedSubordinate,
                                border: intentColors.tintedSubordinate,
-                               foreground: intentColors.tintedPrincipal),
+                               foreground: intentColors.principal),
                 selected: .init(background: intentColors.principal,
                                 border: intentColors.principal,
                                 foreground: intentColors.subordinate)

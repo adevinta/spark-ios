@@ -21,7 +21,7 @@ public final class ChipUIView: UIControl {
     public var icon: UIImage? {
         set {
             self.imageView.image = newValue
-            self.imageView.isHidden = newValue == nil
+            self.setupIconConstraints(icon: newValue)
             self.invalidateIntrinsicContentSize()
         }
         get {
@@ -419,14 +419,21 @@ public final class ChipUIView: UIControl {
         self.sizeConstraints = sizeConstraints
         self.heightConstraint = heightConstraint
 
-        if self.icon == nil {
-            self.imageView.isHidden = true
-        } else {
-            NSLayoutConstraint.activate(sizeConstraints)
-        }
+        self.setupIconConstraints(icon: self.icon)
 
         if self.text == nil {
             self.textLabel.isHidden = true
+        }
+    }
+
+
+    private func setupIconConstraints(icon: UIImage?) {
+        if icon == nil {
+            self.imageView.isHidden = true
+            NSLayoutConstraint.deactivate(self.sizeConstraints)
+        } else {
+            self.imageView.isHidden = false
+            NSLayoutConstraint.activate(self.sizeConstraints)
         }
     }
 

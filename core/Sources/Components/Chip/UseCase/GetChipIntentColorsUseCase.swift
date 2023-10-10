@@ -34,7 +34,7 @@ struct GetChipIntentColorsUseCase: GetChipIntentColorsUseCasable {
             return .init(principal: colors.support.support,
                          subordinate: colors.support.onSupport,
                          tintedPrincipal: colors.support.supportContainer,
-                         tintedSubordinate: colors.support.onSupportContainer)
+                         tintedSubordinate: colors.states.supportPressed)
         case .surface:
             return .init(principal: colors.base.surface,
                          subordinate: colors.base.onSurface,

@@ -186,6 +186,7 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
             intent: .danger,
             value: 99
         )
+        badge.size = .small
         badge.translatesAutoresizingMaskIntoConstraints = false
         badge.isBorderVisible = false
         return badge
