@@ -93,7 +93,7 @@ jobs:
           ref: ${{ env.branch }}
           path: spark-ios-snapshots
       - name: Run fastlane unit_tests TARGET_NAME:SparkDemo
-        run: fastlane unit_tests TARGET_NAME:SparkDemo
+        run: bundle exec fastlane unit_tests TARGET_NAME:SparkDemo
       - name: Tar files
         run: tar -cvf xcresult-SparkCoreSnapshots.tar out/SparkCoreSnapshots.xcresult
         continue-on-error: true
