@@ -17,57 +17,33 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     // MARK: - Properties
 
     private let theme: Theme = SparkTheme.shared
-    private var iconImage = Image(systemName: "person.2.circle.fill")
-    private let text = "Text"
 
     // MARK: - Tests
 
-    func test_swiftUI_tag_with_only_image_for_all_intent_and_variant() throws {
-        let suts = TagSutSnapshotTests.allCases
-        for sut in suts {
-            let view = TagView(theme: self.theme)
-                .intent(sut.intent)
-                .variant(sut.variant)
-                .iconImage(self.iconImage)
-                .fixedSize()
+    func test() {
+        let strategies = TagSutSnapshotStrategy.allCases
 
-            self.assertSnapshotInDarkAndLight(
-                matching: view,
-                testName: sut.testName()
+        for strategy in strategies {
+            let suts = TagSutSnapshotTests.test(
+                for: strategy,
+                isSwiftUIComponent: true
             )
-        }
-    }
+            for sut in suts {
+                let view = TagView(theme: self.theme)
+                    .intent(sut.intent)
+                    .variant(sut.variant)
+                    .iconImage(sut.iconImage?.rightValue)
+                    .text(sut.text)
+                    .frame(width: sut.width)
+                    .fixedSize()
 
-    func test_swiftUI_tag_with_only_text_for_all_intent_and_variant() {
-        let suts = TagSutSnapshotTests.allCases
-        for sut in suts {
-            let view = TagView(theme: self.theme)
-                .intent(sut.intent)
-                .variant(sut.variant)
-                .text(self.text)
-                .fixedSize()
-
-            self.assertSnapshotInDarkAndLight(
-                matching: view,
-                testName: sut.testName()
-            )
-        }
-    }
-
-    func test_swiftUI_tag_with_image_and_text_for_all_intent_and_variant() throws {
-        let suts = TagSutSnapshotTests.allCases
-        for sut in suts {
-            let view = TagView(theme: self.theme)
-                .intent(sut.intent)
-                .variant(sut.variant)
-                .iconImage(self.iconImage)
-                .text(self.text)
-                .fixedSize()
-
-            self.assertSnapshotInDarkAndLight(
-                matching: view,
-                testName: sut.testName()
-            )
+                self.assertSnapshot(
+                    matching: view,
+                    modes: sut.modes,
+                    sizes: sut.sizes,
+                    testName: sut.testName()
+                )
+            }
         }
     }
 }
