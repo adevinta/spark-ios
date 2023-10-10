@@ -9,9 +9,9 @@ jobs:
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             **/Pods
@@ -31,9 +31,9 @@ jobs:
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             **/Pods
@@ -66,9 +66,9 @@ jobs:
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             **/Pods
@@ -109,9 +109,9 @@ jobs:
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             **/Pods
@@ -131,9 +131,9 @@ jobs:
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             **/Pods
