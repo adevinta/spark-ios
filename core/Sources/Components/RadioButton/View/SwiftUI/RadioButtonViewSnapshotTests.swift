@@ -21,64 +21,64 @@ final class RadioButtonViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     func test_multiline_label() throws {
         let view = sut(groupState: .enabled, isSelected: false, label: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.").frame(width: 300, height: 300)
 
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_enabled_selected() throws {
         let view = sut(groupState: .enabled, isSelected: true).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_enabled_not_selected() throws {
         let view = sut(groupState: .enabled, isSelected: false).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_disabled_not_selected() throws {
         let view = sut(groupState: .disabled, isSelected: false).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_disabled_selected() throws {
         let view = sut(groupState: .disabled, isSelected: true).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_success_not_selected() throws {
         let view = sut(groupState: .success, isSelected: false).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_success_selected() throws {
         let view = sut(groupState: .success, isSelected: true).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_warning_not_selected() throws {
         let view = sut(groupState: .warning, isSelected: false).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_warning_selected() throws {
         let view = sut(groupState: .warning, isSelected: true).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_error_not_selected() throws {
         let view = sut(groupState: .error, isSelected: false).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_error_selected() throws {
         let view = sut(groupState: .error, isSelected: true).fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     func test_label_left() throws {
         let view = sut(groupState: .enabled, isSelected: true, label: "Label")
             .labelPosition(.left)
             .fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 
     // MARK: - Private Helper Functions

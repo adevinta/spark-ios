@@ -66,7 +66,7 @@ final class RadioButtonUIGroupViewSnapshotTests: UIKitComponentSnapshotTestCase 
             sut.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
         ])
 
-        assertSnapshotInDarkAndLight(matching: scrollView)
+        assertSnapshot(matching: scrollView)
     }
 
     func test_uikit_radioButtonGroup_horizontal() throws {
@@ -80,7 +80,7 @@ final class RadioButtonUIGroupViewSnapshotTests: UIKitComponentSnapshotTestCase 
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
         sut.translatesAutoresizingMaskIntoConstraints = false
 
-        assertSnapshotInDarkAndLight(matching: sut)
+        assertSnapshot(matching: sut)
     }
 
     func test_uikit_radioButtonGroup_horizontal_with_title() throws {
@@ -98,7 +98,7 @@ final class RadioButtonUIGroupViewSnapshotTests: UIKitComponentSnapshotTestCase 
             sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
             sut.translatesAutoresizingMaskIntoConstraints = false
 
-            assertSnapshotInDarkAndLight(matching: sut)
+            assertSnapshot(matching: sut)
         }
     }
 
@@ -118,7 +118,7 @@ final class RadioButtonUIGroupViewSnapshotTests: UIKitComponentSnapshotTestCase 
             sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
             sut.translatesAutoresizingMaskIntoConstraints = false
 
-            assertSnapshotInDarkAndLight(matching: sut)
+            assertSnapshot(matching: sut)
         }
     }
 
@@ -134,7 +134,7 @@ final class RadioButtonUIGroupViewSnapshotTests: UIKitComponentSnapshotTestCase 
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
         sut.translatesAutoresizingMaskIntoConstraints = false
 
-        assertSnapshotInDarkAndLight(matching: sut)
+        assertSnapshot(matching: sut)
     }
 
     func test_uikit_radioButtonGroup_label_left_with_title() throws {
@@ -150,7 +150,7 @@ final class RadioButtonUIGroupViewSnapshotTests: UIKitComponentSnapshotTestCase 
         sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
         sut.translatesAutoresizingMaskIntoConstraints = false
 
-        assertSnapshotInDarkAndLight(matching: sut)
+        assertSnapshot(matching: sut)
     }
 
     func test_uikit_radioButtonGroup_all_states() {
@@ -166,7 +166,7 @@ final class RadioButtonUIGroupViewSnapshotTests: UIKitComponentSnapshotTestCase 
             sut.backgroundColor = SparkTheme.shared.colors.base.background.uiColor
             sut.translatesAutoresizingMaskIntoConstraints = false
 
-            assertSnapshotInDarkAndLight(matching: sut)
+            assertSnapshot(matching: sut)
         }
     }
 

@@ -31,7 +31,7 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 .iconImage(self.iconImage)
                 .fixedSize()
 
-            self.assertSnapshotInDarkAndLight(
+            self.assertSnapshot(
                 matching: view,
                 testName: sut.testName()
             )
@@ -47,7 +47,7 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 .text(self.text)
                 .fixedSize()
 
-            self.assertSnapshotInDarkAndLight(
+            self.assertSnapshot(
                 matching: view,
                 testName: sut.testName()
             )
@@ -64,7 +64,7 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 .text(self.text)
                 .fixedSize()
 
-            self.assertSnapshotInDarkAndLight(
+            self.assertSnapshot(
                 matching: view,
                 testName: sut.testName()
             )

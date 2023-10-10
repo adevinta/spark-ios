@@ -21,7 +21,7 @@ final class ChipUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                           variant: variant,
                                           label: "Label")
 
-                assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(intent)-\(variant)")
+                assertSnapshot(matching: chipView, testName: "\(#function)-\(intent)-\(variant)")
             }
         }
     }
@@ -34,7 +34,7 @@ final class ChipUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                       variant: variant,
                                       iconImage: icon)
 
-            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
+            assertSnapshot(matching: chipView, testName: "\(#function)-\(variant)")
         }
     }
 
@@ -47,7 +47,7 @@ final class ChipUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                       label: "Label",
                                       iconImage: icon)
 
-            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
+            assertSnapshot(matching: chipView, testName: "\(#function)-\(variant)")
         }
     }
 
@@ -60,7 +60,7 @@ final class ChipUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                   label: "Label",
                                   iconImage: icon)
 
-        assertSnapshotInDarkAndLight(matching: chipView, sizes: [.medium])
+        assertSnapshot(matching: chipView, sizes: [.medium])
     }
 
     func test_basic_disabled_with_icon_trailing_and_label() {
@@ -73,7 +73,7 @@ final class ChipUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                   iconImage: icon)
         chipView.isEnabled = false
 
-        assertSnapshotInDarkAndLight(matching: chipView, sizes: [.medium])
+        assertSnapshot(matching: chipView, sizes: [.medium])
     }
 
     func test_info_with_icon_and_label_and_component() {
@@ -87,7 +87,7 @@ final class ChipUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                                       iconImage: icon)
             chipView.component = UIImageView(image: .add)
 
-            assertSnapshotInDarkAndLight(matching: chipView, testName: "\(#function)-\(variant)")
+            assertSnapshot(matching: chipView, testName: "\(#function)-\(variant)")
         }
     }
 }

@@ -116,7 +116,7 @@ private extension ButtonUIViewSnapshotTests {
                 view.testPressedAction()
             }
 
-            self.assertSnapshotInDarkAndLight(
+            self.assertSnapshot(
                 matching: view,
                 testName: sut.testName(on: function)
             )

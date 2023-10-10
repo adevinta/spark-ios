@@ -32,7 +32,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkboxPosition: .right
             )
 
-            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
+            assertSnapshot(matching: checkbox, named: state.identifier)
         }
     }
 
@@ -47,7 +47,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkboxPosition: .left
             )
 
-            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
+            assertSnapshot(matching: checkbox, named: state.identifier)
         }
     }
 
@@ -62,7 +62,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkboxPosition: .left
             )
 
-            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
+            assertSnapshot(matching: checkbox, named: state.identifier)
         }
     }
 
@@ -77,7 +77,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkboxPosition: .left
             )
 
-            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
+            assertSnapshot(matching: checkbox, named: state.identifier)
         }
     }
 
@@ -92,7 +92,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkboxPosition: .left
             )
 
-            assertSnapshotInDarkAndLight(matching: view, named: state.identifier)
+            assertSnapshot(matching: view, named: state.identifier)
         }
     }
 
@@ -108,7 +108,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 checkboxPosition: .left
             )
 
-            assertSnapshotInDarkAndLight(matching: checkbox, named: state.identifier)
+            assertSnapshot(matching: checkbox, named: state.identifier)
         }
     }
 

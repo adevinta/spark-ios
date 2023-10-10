@@ -21,7 +21,7 @@ final class IconUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 intent: intent,
                 size: .medium
             )
-            assertSnapshotInDarkAndLight(matching: iconView, testName: "\(#function)-\(intent)")
+            assertSnapshot(matching: iconView, testName: "\(#function)-\(intent)")
         }
     }
 
@@ -33,7 +33,7 @@ final class IconUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 intent: .neutral,
                 size: size
             )
-            assertSnapshotInDarkAndLight(matching: iconView, testName: "\(#function)-\(size)")
+            assertSnapshot(matching: iconView, testName: "\(#function)-\(size)")
         }
     }
 }

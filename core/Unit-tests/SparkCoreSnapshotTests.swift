@@ -24,7 +24,7 @@ final class SparkCoreUISnapshotTests: UIKitComponentSnapshotTestCase {
         view.font = .preferredFont(forTextStyle: .body)
         view.adjustsFontForContentSizeCategory = true
         view.translatesAutoresizingMaskIntoConstraints = false
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 }
 
@@ -32,6 +32,6 @@ final class SparkCoreUISnapshotTests: UIKitComponentSnapshotTestCase {
 final class SparkCoreSnapshotTests: SwiftUIComponentSnapshotTestCase {
     func testDynamicContentSize() throws {
         let view = Text("Hello world").fixedSize()
-        assertSnapshotInDarkAndLight(matching: view)
+        assertSnapshot(matching: view)
     }
 }
