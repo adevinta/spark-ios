@@ -1,5 +1,5 @@
 //
-//  GetChipColorsUseCaseTests.swift
+//  ChipGetColorsUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by michael.zimmermann on 08.05.23.
@@ -11,10 +11,10 @@ import XCTest
 
 @testable import SparkCore
 
-final class GetChipColorsUseCaseTests: XCTestCase {
+final class ChipGetColorsUseCaseTests: XCTestCase {
 
     // MARK: - Properties
-    private var sut: GetChipColorsUseCase!
+    private var sut: ChipGetColorsUseCase!
     private var intentColorsUseCase: GetChipIntentColorsUseCasableGeneratedMock!
     private var theme: ThemeGeneratedMock!
 

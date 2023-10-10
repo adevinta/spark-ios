@@ -115,18 +115,13 @@ final class ChipComponentUIView: ComponentUIView {
 
         self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
             guard let self = self else { return }
-            self.chipView.isEnabled = isEnabled
+            self.componentView.isEnabled = isEnabled
         }
 
         self.viewModel.$action.subscribe(in: &self.cancellables) { [weak self] action in
             guard let self = self else { return }
 
             self.componentView.action = action
-        }
-
-        self.isEnabledCheckbox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
-            guard let self = self else { return }
-            self.viewModel.isEnabled = state == .selected
         }
     }
 }

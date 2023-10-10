@@ -1,5 +1,5 @@
 //
-//  GetChipIntentColorsUseCaseTests.swift
+//  ChipGetIntentColorsUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by michael.zimmermann on 09.05.23.
@@ -10,17 +10,17 @@ import XCTest
 
 @testable import SparkCore
 
-final class GetChipIntentColorsUseCaseTests: XCTestCase {
+final class ChipGetIntentColorsUseCaseTests: XCTestCase {
 
     // MARK: - Properties
-    private var sut: GetChipIntentColorsUseCase!
+    private var sut: ChipGetIntentColorsUseCase!
     private var colors: ColorsGeneratedMock!
 
     // MARK: - Setup
     override func setUpWithError() throws {
         try super.setUpWithError()
 
-        self.sut = GetChipIntentColorsUseCase()
+        self.sut = ChipGetIntentColorsUseCase()
         self.colors = ColorsGeneratedMock()
     }
 
