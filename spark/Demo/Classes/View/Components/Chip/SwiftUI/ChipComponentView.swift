@@ -16,7 +16,7 @@ struct ChipComponentView: View {
 
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: ChipIntent = .main
-    @State private var variant: ChipVariant = .filled
+    @State private var variant: ChipVariant = .outlined
     @State private var alignment: ChipAlignment = .leadingIcon
     @State private var showLabel = CheckboxSelectionState.selected
     @State private var showIcon = CheckboxSelectionState.selected
