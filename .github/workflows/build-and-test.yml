@@ -18,7 +18,7 @@ jobs:
             **/Carthage
           key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run xcodegen
-        uses: xavierLowmiller/xcodegen-action@2.37.0
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
           version: "2.33.0"
@@ -44,7 +44,7 @@ jobs:
           brew install sourcery
           sourcery
       - name: Run xcodegen
-        uses: xavierLowmiller/xcodegen-action@2.37.0
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
           version: "2.33.0"
@@ -79,7 +79,7 @@ jobs:
           brew install sourcery
           sourcery
       - name: Run xcodegen
-        uses: xavierLowmiller/xcodegen-action@2.37.0
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
           version: "2.33.0"
@@ -118,7 +118,7 @@ jobs:
             **/Carthage
           key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run xcodegen
-        uses: xavierLowmiller/xcodegen-action@2.37.0
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
           version: "2.33.0"
@@ -140,7 +140,7 @@ jobs:
             **/Carthage
           key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run xcodegen
-        uses: xavierLowmiller/xcodegen-action@2.37.0
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
           version: "2.33.0"
