@@ -77,7 +77,7 @@ extension SwiftUIComponentSnapshotTestCase {
                 matching: view().environment(\.sizeCategory, ContentSizeCategory(size) ?? .extraSmall),
                 as: .image(precision: Constants.imagePrecision,
                            perceptualPrecision: Constants.imagePerceptualPrecision,
-                          layout: layout),
+                           layout: layout),
                 named: name,
                 record: recording,
                 timeout: timeout,
