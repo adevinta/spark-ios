@@ -11,33 +11,39 @@ import SwiftUI
 import UIKit
 
 final class CheckboxViewModel: ObservableObject {
+    
     // MARK: - Internal properties
 
-    var text: String?
-    var attributedText: NSAttributedString?
-    var checkedImage: UIImage
+    @Published var text: String
+    @Published var attributedText: NSAttributedString?
+    @Published var checkedImage: UIImage
+    @Published var colors: CheckboxColors
+    @Published var alignment: CheckboxAlignment
+    @Published var selectionState: CheckboxSelectionState
+    @Published var opacity: CGFloat
 
-    @Published var state: SelectButtonState {
+    @Published var intent: CheckboxIntent {
         didSet {
-            guard oldValue != state else { return }
-
+            guard oldValue != intent else { return }
             self.updateColors()
         }
     }
 
-    @Published var theme: Theme {
+    var isEnabled: Bool {
         didSet {
-            self.updateColors()
+            self.updateOpacity()
         }
     }
 
-    @Published var colors: CheckboxColorables
-
-    var colorsUseCase: CheckboxColorsUseCaseable {
+    var theme: Theme {
         didSet {
             self.updateColors()
+            self.updateOpacity()
         }
     }
+
+    // MARK: - Private properties
+    private let colorsUseCase: CheckboxColorsUseCaseable
 
     // MARK: - Init
 
@@ -45,8 +51,11 @@ final class CheckboxViewModel: ObservableObject {
         text: Either<NSAttributedString, String>,
         checkedImage: UIImage,
         theme: Theme,
+        intent: CheckboxIntent = .main,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
-        state: SelectButtonState = .enabled
+        isEnabled: Bool = true,
+        alignment: CheckboxAlignment = .left,
+        selectionState: CheckboxSelectionState
     ) {
         switch text {
         case .left(let attributedString):
@@ -56,57 +65,40 @@ final class CheckboxViewModel: ObservableObject {
             self.attributedText = nil
             self.text = string
         }
+
         self.checkedImage = checkedImage
         self.theme = theme
-        self.state = state
-
+        self.isEnabled = isEnabled
         self.colorsUseCase = colorsUseCase
-        self.colors = colorsUseCase.execute(from: theme, state: state)
+        self.colors = colorsUseCase.execute(
+            from: theme.colors,
+            intent: intent
+        )
+        self.intent = intent
+        self.alignment = alignment
+        self.selectionState = selectionState
+        self.opacity = self.theme.dims.none
     }
 
     // MARK: - Methods
 
     private func updateColors() {
-        self.colors = self.colorsUseCase.execute(from: self.theme, state: self.state)
+        self.colors = self.colorsUseCase.execute(
+            from: self.theme.colors,
+            intent: self.intent
+        )
+    }
+
+    private func updateOpacity() {
+        self.opacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
     }
 
     func update(content: Either<NSAttributedString, String>) {
         switch content {
         case .left(let attributedString):
             self.attributedText = attributedString
-            self.text = attributedString.string
         case .right(let string):
             self.text = string
-            self.attributedText = nil
-        }
-    }
-
-    // MARK: - Computed properties
-
-    var interactionEnabled: Bool {
-        switch state {
-        case .disabled:
-            return false
-        default:
-            return true
-        }
-    }
-
-    var opacity: CGFloat {
-        switch self.state {
-        case .disabled:
-            return self.theme.dims.dim3
-        default:
-            return 1.0
-        }
-    }
-
-    var supplementaryMessage: String? {
-        switch self.state {
-        case .error(let message), .success(let message), .warning(let message):
-            return message
-        default:
-            return nil
         }
     }
 }

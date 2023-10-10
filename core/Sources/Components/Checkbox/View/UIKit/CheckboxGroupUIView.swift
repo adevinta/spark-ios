@@ -65,7 +65,7 @@ public final class CheckboxGroupUIView: UIView {
         }
     }
     ///  The checkbox is positioned on the leading or trailing edge of the view.
-    public var checkboxPosition: CheckboxPosition {
+    public var checkboxAlignment: CheckboxAlignment {
         didSet {
             self.update()
         }
@@ -85,7 +85,7 @@ public final class CheckboxGroupUIView: UIView {
     ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
-    ///   - checkboxPosition: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
     ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
@@ -93,7 +93,7 @@ public final class CheckboxGroupUIView: UIView {
         checkedImage: UIImage,
         items: [any CheckboxGroupItemProtocol],
         layout: CheckboxGroupLayout = .vertical,
-        checkboxPosition: CheckboxPosition,
+        checkboxAlignment: CheckboxAlignment,
         theme: Theme,
         accessibilityIdentifierPrefix: String
     ) {
@@ -101,7 +101,7 @@ public final class CheckboxGroupUIView: UIView {
         self.checkedImage = checkedImage
         self.items = items
         self.layout = layout
-        self.checkboxPosition = checkboxPosition
+        self.checkboxAlignment = checkboxAlignment
         self.theme = theme
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
         self.spacingXLarge = theme.layout.spacing.xLarge
@@ -180,9 +180,9 @@ public final class CheckboxGroupUIView: UIView {
                 theme: theme,
                 content: content,
                 checkedImage: self.checkedImage,
-                state: item.state,
+                isEnabled: item.isEnabled,
                 selectionState: item.selectionState,
-                checkboxPosition: self.checkboxPosition
+                checkboxAlignment: self.checkboxAlignment
             )
             let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id)"
             checkbox.accessibilityIdentifier = identifier

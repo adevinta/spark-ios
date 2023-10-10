@@ -60,7 +60,7 @@ struct ChipComponentView: View {
                     text: "With Label",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$showLabel
                 )
 
@@ -68,7 +68,7 @@ struct ChipComponentView: View {
                     text: "With Icon",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$showIcon
                 )
 
@@ -76,7 +76,7 @@ struct ChipComponentView: View {
                     text: "With Action",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$withAction
                 )
 
@@ -84,7 +84,7 @@ struct ChipComponentView: View {
                     text: "With Extra Component",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$withComponent
                 )
 
@@ -92,7 +92,7 @@ struct ChipComponentView: View {
                     text: "Is Enabled",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isEnabled
                 )
             },

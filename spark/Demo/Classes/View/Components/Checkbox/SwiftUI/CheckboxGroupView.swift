@@ -12,22 +12,17 @@ import SwiftUI
 
 struct CheckboxGroupListView: View {
 
-    // MARK: - Properties
-
-    private let viewModel = CheckboxViewModel()
-
     // MARK: - View
 
     @State private var layout: CheckboxGroupLayout = .vertical
 
-    @State private var checkboxPosition: CheckboxPosition = .left
+    @State private var checkboxAlignment: CheckboxAlignment = .left
 
     @State private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
+        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, isEnabled: false),
         CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
-        CheckboxGroupItem(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, isEnabled: false),
         CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
         CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
@@ -58,7 +53,7 @@ struct CheckboxGroupListView: View {
 
             Button("Change position") {
                 withAnimation {
-                    self.checkboxPosition = self.checkboxPosition == .left ? .right : .left
+                    self.checkboxAlignment = self.checkboxAlignment == .left ? .right : .left
                 }
             }
 
@@ -81,7 +76,7 @@ struct CheckboxGroupListView: View {
                     checkedImage: checkedImage,
                     items: $items,
                     layout: layout,
-                    checkboxPosition: checkboxPosition,
+                    checkboxAlignment: checkboxAlignment,
                     theme: self.theme,
                     accessibilityIdentifierPrefix: "checkbox-group"
                 )
@@ -95,14 +90,14 @@ struct CheckboxGroupListView: View {
     }
 
     func shuffleAction() {
-        let states = [SelectButtonState.enabled, .disabled, .accent, .basic, .success(message: "Success"), .warning(message: "Warning"), .error(message: "Error")]
+        let states = [true, false]
         let selectionStates = [CheckboxSelectionState.selected, .unselected, .indeterminate]
 
         withAnimation {
             for index in 0..<items.count {
                 var item = self.items[index]
                 if let randomState = states.randomElement() {
-                    item.state = randomState
+                    item.isEnabled = randomState
                 }
 
                 if let randomSelectionState = selectionStates.randomElement() {
@@ -131,6 +126,7 @@ struct CheckboxGroupView_Previews: PreviewProvider {
 // MARK: - Demo item
 
 class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
+
     static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
         lhs.id == rhs.id
     }
@@ -143,31 +139,31 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
     var attributedTitle: NSAttributedString?
     var id: String
     var selectionState: CheckboxSelectionState
-    var state: SelectButtonState
+    var isEnabled: Bool
 
     init(
         title: String? = nil,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: SelectButtonState = .enabled
+        isEnabled: Bool = true
     ) {
         self.title = title
         self.attributedTitle = nil
         self.id = id
         self.selectionState = selectionState
-        self.state = state
+        self.isEnabled = isEnabled
     }
 
     init(
         attributedTitle: NSAttributedString,
         id: String,
         selectionState: CheckboxSelectionState,
-        state: SelectButtonState = .enabled
+        isEnabled: Bool = true
     ) {
         self.title = attributedTitle.string
         self.attributedTitle = attributedTitle
         self.id = id
         self.selectionState = selectionState
-        self.state = state
+        self.isEnabled = isEnabled
     }
 }

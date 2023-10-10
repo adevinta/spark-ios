@@ -15,8 +15,6 @@ struct CheckboxListView: View {
 
     // MARK: - Properties
 
-    private let viewModel = CheckboxViewModel()
-
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     var theme: Theme {
@@ -31,35 +29,35 @@ struct CheckboxListView: View {
     // MARK: - View
 
     var body: some View {
-        List(self.viewModel.states, id: \.self) { state in
-            Section(header: Text("State \(self.title(for: state))")) {
+        List([true, false], id: \.self) { isEnabled in
+            Section(header: Text("State \(self.title(for: isEnabled))")) {
                 let checkedImage = DemoIconography.shared.checkmark
                 CheckboxView(
                     text: "Selected",
                     checkedImage: checkedImage,
                     theme: theme,
-                    state: state,
+                    isEnabled: isEnabled,
                     selectionState: self.$selection1
                 )
                 CheckboxView(
                     text: "Unselected",
                     checkedImage: checkedImage,
                     theme: theme,
-                    state: state,
+                    isEnabled: isEnabled,
                     selectionState: self.$selection2
                 )
                 CheckboxView(
                     text: "Indeterminate",
                     checkedImage: checkedImage,
                     theme: theme,
-                    state: state,
+                    isEnabled: isEnabled,
                     selectionState: self.$selection3
                 )
                 CheckboxView(
                     text: "Long text lorem ipsum dolor sit et amet abcdefghjijkl",
                     checkedImage: checkedImage,
                     theme: theme,
-                    state: state,
+                    isEnabled: isEnabled,
                     selectionState: self.$selection4
                 )
             }
@@ -67,23 +65,8 @@ struct CheckboxListView: View {
         .navigationBarTitle(Text("Checkbox"))
     }
 
-    private func title(for state: SelectButtonState) -> String {
-        switch state {
-        case .enabled:
-            return "Enabled"
-        case .disabled:
-            return "Disabled"
-        case .accent:
-            return "Accent"
-        case .basic:
-            return "Basic"
-        case .success:
-            return "Success"
-        case .warning:
-            return "Warning"
-        case .error:
-            return "Error"
-        }
+    private func title(for isEnable: Bool) -> String {
+        return isEnable ? "Enabled" : "Disabled"
     }
 }
 

@@ -22,7 +22,7 @@ final class CheckboxGroupUIViewTests: UIKitComponentTestCase {
         CheckboxGroupItem(title: "Vegetables", id: "5", selectionState: .unselected, state: .disabled)
     ]
 
-    private func createGroupView(position: CheckboxPosition) -> UIView {
+    private func createGroupView(position: checkboxAlignment) -> UIView {
         let theme = SparkTheme.shared
         let checkedImage = IconographyTests.shared.checkmark
 
@@ -30,7 +30,7 @@ final class CheckboxGroupUIViewTests: UIKitComponentTestCase {
             checkedImage: checkedImage,
             items: self.items,
             layout: .vertical,
-            checkboxPosition: position,
+            checkboxAlignment: position,
             theme: theme,
             accessibilityIdentifierPrefix: "abc"
         )

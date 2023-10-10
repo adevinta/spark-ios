@@ -44,7 +44,7 @@ public struct CheckboxView: View {
 
     @ObservedObject var viewModel: CheckboxViewModel
 
-    var colors: CheckboxColorables {
+    var colors: CheckboxColors {
         return self.viewModel.colors
     }
 
@@ -52,7 +52,7 @@ public struct CheckboxView: View {
 
     @Namespace private var namespace
 
-    private let checkboxPosition: CheckboxPosition
+    private let checkboxAlignment: CheckboxAlignment
 
     @ScaledMetric private var checkboxWidth: CGFloat = Constants.checkboxWidth
     @ScaledMetric private var checkboxHeight: CGFloat = Constants.checkboxHeight
@@ -74,22 +74,23 @@ public struct CheckboxView: View {
     init(
         text: String,
         checkedImage: UIImage,
-        checkboxPosition: CheckboxPosition = .left,
+        checkboxAlignment: CheckboxAlignment = .left,
         theme: Theme,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
-        state: SelectButtonState = .enabled,
+        isEnabled: Bool = true,
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self._horizontalSpacing = .init(wrappedValue: theme.layout.spacing.medium)
         self._smallSpacing = .init(wrappedValue: theme.layout.spacing.small)
         self._selectionState = selectionState
-        self.checkboxPosition = checkboxPosition
+        self.checkboxAlignment = checkboxAlignment
         self.viewModel = .init(
             text: .right(text),
             checkedImage: checkedImage,
             theme: theme,
             colorsUseCase: colorsUseCase,
-            state: state
+            isEnabled: isEnabled,
+            selectionState: selectionState.wrappedValue
         )
     }
 
@@ -97,25 +98,25 @@ public struct CheckboxView: View {
     /// - Parameters:
     ///   - text: The checkbox text.
     ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
     ///   - theme: The current Spark-Theme.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     public init(
         text: String,
         checkedImage: UIImage,
-        checkboxPosition: CheckboxPosition = .left,
+        checkboxAlignment: CheckboxAlignment = .left,
         theme: Theme,
-        state: SelectButtonState = .enabled,
+        isEnabled: Bool = true,
         selectionState: Binding<CheckboxSelectionState>
     ) {
         self.init(
             text: text,
             checkedImage: checkedImage,
-            checkboxPosition: checkboxPosition,
+            checkboxAlignment: checkboxAlignment,
             theme: theme,
             colorsUseCase: CheckboxColorsUseCase(),
-            state: state,
+            isEnabled: isEnabled,
             selectionState: selectionState
         )
     }
@@ -137,8 +138,8 @@ public struct CheckboxView: View {
     }
 
     @ViewBuilder private var checkboxView: some View {
-        let tintColor = self.colors.checkboxTintColor.color
-        let iconColor = self.colors.checkboxIconColor.color
+        let tintColor = self.colors.tintColor.color
+        let iconColor = self.colors.iconColor.color
         ZStack {
             RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
                 .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
@@ -147,7 +148,7 @@ public struct CheckboxView: View {
                     $0.strokeBorder(tintColor, lineWidth: self.checkboxBorderWidth)
                 }
                 .frame(width: self.checkboxWidth, height: self.checkboxHeight)
-                .if(self.isPressed && self.viewModel.interactionEnabled) {
+                .if(self.isPressed && self.viewModel.isEnabled) {
                     $0.overlay(
                         RoundedRectangle(cornerRadius: checkboxBorderRadius)
                             .inset(by: -checkboxSelectedBorderWidth / 2)
@@ -181,7 +182,7 @@ public struct CheckboxView: View {
 
     @ViewBuilder private var contentView: some View {
         HStack(alignment: .top, spacing: 0) {
-            switch checkboxPosition {
+            switch checkboxAlignment {
             case .left:
                 self.checkboxView.padding(.trailing, self.horizontalSpacing)
 
@@ -198,7 +199,7 @@ public struct CheckboxView: View {
         }
         .padding(.vertical, self.smallSpacing)
         .opacity(self.viewModel.opacity)
-        .allowsHitTesting(self.viewModel.interactionEnabled)
+        .allowsHitTesting(self.viewModel.isEnabled)
         .contentShape(Rectangle())
     }
 
@@ -211,12 +212,6 @@ public struct CheckboxView: View {
             Text(self.viewModel.text ?? "")
                 .font(self.theme.typography.body1.font)
                 .foregroundColor(self.colors.textColor.color)
-
-            if let message = self.viewModel.supplementaryMessage {
-                Text(message)
-                    .font(self.theme.typography.caption.font)
-                    .foregroundColor(self.colors.checkboxTintColor.color)
-            }
         }
         .id(Identifier.content.rawValue)
         .matchedGeometryEffect(id: Identifier.content.rawValue, in: self.namespace)
@@ -225,7 +220,7 @@ public struct CheckboxView: View {
     // MARK: - Action
 
     func tapped() {
-        guard self.viewModel.interactionEnabled else { return }
+        guard self.viewModel.isEnabled else { return }
 
         switch self.selectionState {
         case .selected:

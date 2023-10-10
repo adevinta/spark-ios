@@ -1,5 +1,5 @@
 //
-//  CheckboxPosition.swift
+//  CheckboxAlignment.swift
 //  SparkCore
 //
 //  Created by janniklas.freundt.ext on 17.04.23.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// The checkbox can be either on the leading or trailing edge of the view.
-public enum CheckboxPosition {
+public enum CheckboxAlignment: CaseIterable {
     /// Checkbox on leading edge.
     case left
 

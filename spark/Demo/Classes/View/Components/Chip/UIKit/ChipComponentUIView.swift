@@ -96,9 +96,9 @@ final class ChipComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Label",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: .selected,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -109,9 +109,9 @@ final class ChipComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Icon",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: .selected,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -122,9 +122,9 @@ final class ChipComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Action",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: .selected,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -135,9 +135,9 @@ final class ChipComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Extra Component",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: .selected,
-            checkboxPosition: .left
+            checkboxAlignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
