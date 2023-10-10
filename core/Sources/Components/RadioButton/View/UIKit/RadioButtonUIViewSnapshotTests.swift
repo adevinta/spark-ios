@@ -35,57 +35,57 @@ final class RadioButtonUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
             sut.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             sut.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
         ])
-        assertSnapshot(matching: scrollView)
+        assertSnapshotInDarkAndLight(matching: scrollView)
     }
 
     func test_enabled_selected() throws {
         let view = sut(groupState: .enabled, isSelected: true).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_enabled_not_selected() throws {
         let view = sut(groupState: .enabled, isSelected: false).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_disabled_not_selected() throws {
         let view = sut(groupState: .disabled, isSelected: false).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_disabled_selected() throws {
         let view = sut(groupState: .disabled, isSelected: true).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_success_not_selected() throws {
         let view = sut(groupState: .success, isSelected: false).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_success_selected() throws {
         let view = sut(groupState: .success, isSelected: true).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_warning_not_selected() throws {
         let view = sut(groupState: .warning, isSelected: false).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_warning_selected() throws {
         let view = sut(groupState: .warning, isSelected: true).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_error_not_selected() throws {
         let view = sut(groupState: .error, isSelected: false).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_error_selected() throws {
         let view = sut(groupState: .error, isSelected: true).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_label_right() throws {
@@ -93,7 +93,7 @@ final class RadioButtonUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                        isSelected: true,
                        label: NSAttributedString(string: "Label"),
                        labelPosition: .left).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_label_with_sublabel_right() throws {
@@ -101,7 +101,7 @@ final class RadioButtonUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                        isSelected: true,
                        label: NSAttributedString(string: "Label"),
                        labelPosition: .left).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_attributed_label_right() throws {
@@ -114,7 +114,7 @@ final class RadioButtonUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                        isSelected: true,
                        label: label,
                        labelPosition: .left).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     func test_attributed_label_with_sublabel_right() throws {
@@ -127,7 +127,7 @@ final class RadioButtonUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                        isSelected: true,
                        label: label,
                        labelPosition: .left).fixedSize()
-        assertSnapshot(matching: view)
+        assertSnapshotInDarkAndLight(matching: view)
     }
 
     // MARK: - Private Helper Functions

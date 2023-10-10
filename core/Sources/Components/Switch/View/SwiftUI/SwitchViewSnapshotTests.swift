@@ -67,7 +67,7 @@ private extension SwitchViewSnapshotTests {
                     .attributedText(attributedText.rightValue)
             }
 
-            self.assertSnapshot(
+            self.assertSnapshotInDarkAndLight(
                 matching: view
                     .background(self.theme.colors.base.background.color)
                     .fixedSize(),

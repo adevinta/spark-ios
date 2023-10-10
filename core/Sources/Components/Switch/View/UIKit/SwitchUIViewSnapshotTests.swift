@@ -94,7 +94,7 @@ private extension SwitchUIViewSnapshotTests {
 
             view.backgroundColor = self.theme.colors.base.background.uiColor
 
-            self.assertSnapshot(
+            self.assertSnapshotInDarkAndLight(
                 matching: view,
                 testName: sut.testName(on: function)
             )

@@ -37,7 +37,7 @@ extension SwiftUIComponentSnapshotTestCase {
     // MARK: - Snapshot Testing
 
     @available(*, deprecated, message: "Use assertSnapshot instead !")
-    func assertSnapshot(
+    func assertSnapshotInDarkAndLight(
         matching view: @autoclosure () -> some View,
         named name: String? = nil,
         sizes: [UIContentSizeCategory] = Constants.sizes,
@@ -96,7 +96,7 @@ extension UIKitComponentSnapshotTestCase {
     // MARK: - Snapshot Testing
 
     @available(*, deprecated, message: "Use assertSnapshot instead !")
-    func assertSnapshot(
+    func assertSnapshotInDarkAndLight(
         matching view: @autoclosure () -> some UIView,
         named name: String? = nil,
         sizes: [UIContentSizeCategory] = Constants.sizes,

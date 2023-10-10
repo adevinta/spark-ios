@@ -38,7 +38,7 @@ final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 iconImage: self.iconImage
             )
             
-            self.assertSnapshot(
+            self.assertSnapshotInDarkAndLight(
                 matching: view,
                 testName: sut.testName()
             )
@@ -55,7 +55,7 @@ final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 text: self.text
             )
 
-            self.assertSnapshot(
+            self.assertSnapshotInDarkAndLight(
                 matching: view,
                 testName: sut.testName()
             )
@@ -73,7 +73,7 @@ final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 text: self.text
             )
 
-            self.assertSnapshot(
+            self.assertSnapshotInDarkAndLight(
                 matching: view,
                 testName: sut.testName()
             )

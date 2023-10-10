@@ -58,7 +58,7 @@ final class RadioButtonGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase 
                 .frame(width: 400)
                 .fixedSize(horizontal: false, vertical: true)
 
-            assertSnapshot(matching: sut)
+            assertSnapshotInDarkAndLight(matching: sut)
         }
     }
 
@@ -73,7 +73,7 @@ final class RadioButtonGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase 
             .frame(width: 400)
             .fixedSize(horizontal: false, vertical: true)
 
-        assertSnapshot(matching: sut)
+        assertSnapshotInDarkAndLight(matching: sut)
     }
 
     func test_horizontal_group_with_title() {
@@ -85,7 +85,7 @@ final class RadioButtonGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase 
             groupLayout: .horizontal
         ).fixedSize()
 
-        assertSnapshot(matching: sut)
+        assertSnapshotInDarkAndLight(matching: sut)
     }
 
     func test_horizontal_group_no_title() {
@@ -96,7 +96,7 @@ final class RadioButtonGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase 
             groupLayout: .horizontal
         ).fixedSize()
 
-        assertSnapshot(matching: sut)
+        assertSnapshotInDarkAndLight(matching: sut)
     }
 
     func test_vertical_group_no_title_left_label() {
@@ -108,7 +108,7 @@ final class RadioButtonGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase 
             groupLayout: .vertical
         ).fixedSize()
 
-        assertSnapshot(matching: sut)
+        assertSnapshotInDarkAndLight(matching: sut)
     }
 }
 
