@@ -68,12 +68,13 @@ jobs:
       - name: Checkout actions
         uses: actions/checkout@v4
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
+        id: packages-cache
         with:
-          path: |
-            **/Pods
-            **/Carthage
-          key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
+          path: packages_cache
+          key: ${{ runner.os }}-packages-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-packages-
       - name: Run sourcery
         run: |
           brew install sourcery
@@ -94,6 +95,8 @@ jobs:
           path: spark-ios-snapshots
       - name: Run fastlane unit_tests TARGET_NAME:SparkDemo
         run: bundle exec fastlane unit_tests TARGET_NAME:SparkDemo
+        env:
+          HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
       - name: Tar files
         run: tar -cvf xcresult-SparkCoreSnapshots.tar out/SparkCoreSnapshots.xcresult
         continue-on-error: true
