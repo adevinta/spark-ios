@@ -1,7 +1,7 @@
 name: build-framework
 on:
   pull_request:
-    types: [ opened, edited, synchronize ]
+    types: [opened, edited, synchronize]
 
 jobs:
   core_build:
@@ -9,21 +9,35 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/Pods
+            **/Carthage
+          key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
-          version: '2.33.0'
+          version: "2.33.0"
       - name: Run fastlane build_framework TARGET_NAME:SparkCore
         run: fastlane build_framework TARGET_NAME:SparkCore
 
   core_unit_tests:
     name: core_unit_tests
-    needs: [ core_build ]
+    needs: [core_build]
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/Pods
+            **/Carthage
+          key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run sourcery
         run: |
           brew install sourcery
@@ -32,7 +46,7 @@ jobs:
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
-          version: '2.33.0'
+          version: "2.33.0"
       - name: Run fastlane unit_tests TARGET_NAME:SparkCore
         run: fastlane unit_tests TARGET_NAME:SparkCore
       - name: Tar files
@@ -47,11 +61,18 @@ jobs:
 
   core_snapshot_tests:
     name: core_snapshot_tests
-    needs: [ core_build ]
+    needs: [core_build]
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/Pods
+            **/Carthage
+          key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run sourcery
         run: |
           brew install sourcery
@@ -60,27 +81,15 @@ jobs:
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
-          version: '2.33.0'
-      # Get the current source branch name of the spark-ios-repository-PR and store it in "outputs.branch".
+          version: "2.33.0"
       - name: Extract branch name
         shell: bash
-        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >>$GITHUB_OUTPUT
-        id: extract_branch
-      # Now try to checkout the same branch (outputs.branch) in spark-ios-snapshots-repository.
+        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
       - name: Run snapshots
-        uses: actions/checkout@v3
-        continue-on-error: true
-        id: checkout_snapshot_branch_similar_to_main_repo
+        uses: actions/checkout@v2
         with:
           repository: adevinta/spark-ios-snapshots
-          ref: ${{ steps.extract_branch.outputs.branch }}
-          path: spark-ios-snapshots
-      # If checking out (outputs.branch)-branch in spark-ios-snapshots fails, fallback to main branch.
-      - name: Run snapshot on main
-        if: steps.checkout_snapshot_branch_similar_to_main_repo.outcome != 'success'
-        uses: actions/checkout@v3
-        with:
-          repository: adevinta/spark-ios-snapshots
+          ref: ${{ env.branch }}
           path: spark-ios-snapshots
       - name: Run fastlane unit_tests TARGET_NAME:SparkDemo
         run: fastlane unit_tests TARGET_NAME:SparkDemo
@@ -95,31 +104,45 @@ jobs:
           retention-days: 15
 
   build:
-    needs: [ core_build ]
+    needs: [core_build]
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/Pods
+            **/Carthage
+          key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
-          version: '2.33.0'
+          version: "2.33.0"
       - name: Run fastlane build_framework TARGET_NAME:Spark
         run: fastlane build_framework TARGET_NAME:Spark
 
   unit_tests:
     name: unit_tests
-    needs: [ build ]
+    needs: [build]
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
         uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/Pods
+            **/Carthage
+          key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
-          version: '2.33.0'
+          version: "2.33.0"
       - name: Run fastlane lane unit_tests TARGET_NAME:Spark
         run: fastlane unit_tests TARGET_NAME:Spark
       - name: Tar files
