@@ -19,7 +19,7 @@ final class RadioButtonToggleUIViewSnapshotTests: UIKitComponentSnapshotTestCase
         sut.frame = CGRect(x: 0, y: 0, width: 28, height: 28)
         sut.translatesAutoresizingMaskIntoConstraints = false
 
-        assertSnapshot(of: sut)
+        assertSnapshot(matching: sut)
     }
 
     func test_pressed() {
@@ -28,7 +28,7 @@ final class RadioButtonToggleUIViewSnapshotTests: UIKitComponentSnapshotTestCase
         sut.frame = CGRect(x: 0, y: 0, width: 28, height: 28)
         sut.translatesAutoresizingMaskIntoConstraints = false
 
-        assertSnapshot(of: sut)
+        assertSnapshot(matching: sut)
     }
 
 }

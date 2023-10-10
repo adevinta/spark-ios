@@ -41,11 +41,11 @@ final class CheckboxGroupUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
     func test_left_layout() throws {
         let group = self.createGroupView(position: .left)
-        assertSnapshot(of: group)
+        assertSnapshot(matching: group)
     }
 
     func test_right_layout() throws {
         let group = self.createGroupView(position: .right)
-        assertSnapshot(of: group)
+        assertSnapshot(matching: group)
     }
 }

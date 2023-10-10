@@ -35,7 +35,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 )
             ).fixedSize()
 
-            assertSnapshot(of: view, named: state.identifier)
+            assertSnapshot(matching: view, named: state.identifier)
         }
     }
 
@@ -52,7 +52,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 )
             ).fixedSize().environment(\.sizeCategory, .medium)
 
-            assertSnapshot(of: view, named: state.identifier)
+            assertSnapshot(matching: view, named: state.identifier)
         }
     }
 
@@ -69,7 +69,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 )
             ).fixedSize().environment(\.sizeCategory, .medium)
 
-            assertSnapshot(of: view, named: state.identifier)
+            assertSnapshot(matching: view, named: state.identifier)
         }
     }
 
@@ -86,7 +86,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 )
             ).fixedSize().environment(\.sizeCategory, .medium)
 
-            assertSnapshot(of: view, named: state.identifier)
+            assertSnapshot(matching: view, named: state.identifier)
         }
     }
 
@@ -103,7 +103,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 )
             ).fixedSize().environment(\.sizeCategory, .medium)
 
-            assertSnapshot(of: view, named: state.identifier)
+            assertSnapshot(matching: view, named: state.identifier)
         }
     }
 }

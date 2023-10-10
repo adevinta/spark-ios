@@ -37,7 +37,7 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         sut.maxWidth = 390
         sut.backgroundColor = UIColor.systemBackground
 
-        assertSnapshot(of: sut, sizes: [.medium])
+        assertSnapshot(matching: sut, sizes: [.medium])
     }
 
     func test_tabs_with_icons_only_equal_width() throws {
@@ -50,7 +50,7 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         sut.maxWidth = 390
         sut.backgroundColor = UIColor.systemBackground
 
-        assertSnapshot(of: sut, sizes: [.medium])
+        assertSnapshot(matching: sut, sizes: [.medium])
     }
 
     func test_tabs_with_text_only() throws {
@@ -63,7 +63,7 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         sut.maxWidth = 390
         sut.backgroundColor = UIColor.systemBackground
 
-        assertSnapshot(of: sut)
+        assertSnapshot(matching: sut)
     }
 
     func test_tabs_with_text_only_equal_width() throws {
@@ -75,7 +75,7 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         sut.maxWidth = 390
         sut.backgroundColor = UIColor.systemBackground
 
-        assertSnapshot(of: sut)
+        assertSnapshot(matching: sut)
     }
 
     func test_tabs_with_icon_and_text() throws {
@@ -91,7 +91,7 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         sut.backgroundColor = UIColor.systemBackground
         sut.setBadge(self.badge, forSegementAt: 0)
 
-        assertSnapshot(of: sut, sizes: [.medium])
+        assertSnapshot(matching: sut, sizes: [.medium])
     }
 
     func test_tabs_with_icon_and_text_size_small() throws {
@@ -107,7 +107,7 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         sut.maxWidth = 390
         sut.backgroundColor = UIColor.systemBackground
 
-        assertSnapshot(of: sut, sizes: [.medium])
+        assertSnapshot(matching: sut, sizes: [.medium])
     }
 
     func test_tabs_with_icon_and_text_size_xtra_small() throws {
@@ -123,7 +123,7 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         sut.maxWidth = 390
         sut.backgroundColor = UIColor.systemBackground
 
-        assertSnapshot(of: sut, sizes: [.medium])
+        assertSnapshot(matching: sut, sizes: [.medium])
     }
 
     func test_many_tabs_with_icon_and_text() throws {
@@ -138,6 +138,6 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         sut.maxWidth = 390
         sut.backgroundColor = UIColor.systemBackground
 
-        assertSnapshot(of: sut, sizes: [.medium])
+        assertSnapshot(matching: sut, sizes: [.medium])
     }
 }
