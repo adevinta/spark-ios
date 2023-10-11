@@ -135,9 +135,13 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
         }
     }
 
-    var hasAction = false {
-        didSet {
-            self.action = self.hasAction ? {} : nil
+    // swiftlint:disable all
+    var hasAction: Bool {
+        set {
+            self.action = newValue ? {} : nil
+        }
+        get {
+            self.action != nil
         }
     }
 
@@ -178,6 +182,7 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
         self.variant = variant
 
         super.init(identifier: "Chip")
+        self.action = {}
     }
 
     private func createBadge() -> BadgeUIView {

@@ -35,10 +35,12 @@ final class ChipComponentUIView: ComponentUIView {
     }
 
     private static func makeChipView(viewModel: ChipComponentUIViewModel) -> ChipUIView {
-        return ChipUIView(theme: viewModel.theme,
+        // swiftlint:disable all
+        let chipView = ChipUIView(theme: viewModel.theme,
                           intent: viewModel.intent,
                           variant: viewModel.variant,
                           label: viewModel.title ?? "No Title")
+        return chipView
 
     }
 

@@ -94,10 +94,3 @@ struct ChipGetColorsUseCase: ChipGetColorsUseCasable {
         return stateColors
     }
 }
-
-// MARK: - Private extensions
-private extension ChipStateColors {
-    func withOpacity(_ opacity: CGFloat) -> ChipStateColors {
-        return .init(background: self.background, border: self.border, foreground: self.foreground, opacity: opacity)
-    }
-}

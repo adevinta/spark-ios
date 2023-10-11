@@ -60,7 +60,22 @@ public final class ChipUIView: UIControl {
     }
     
     /// An optional action. If the action is given, the Chip will act like a button and have a pressed state.
-    public var action: (() -> ())?
+    /// As an alternative, a .touchUpInside action can be set
+    public var action: (() -> ())? {
+        didSet {
+            if let uiAction = self.uiAction {
+                self.removeAction(uiAction, for: .touchUpInside)
+            }
+            if let uiAction = self.action.map({ action in
+                return UIAction{ _ in action() }
+            }) {
+                self.uiAction = uiAction
+                self.addAction(uiAction, for: .touchUpInside)
+            } else {
+                self.uiAction = nil
+            }
+        }
+    }
 
     /// The intent of the chip.
     public var intent: ChipIntent {
@@ -137,6 +152,13 @@ public final class ChipUIView: UIControl {
     }
 
     //MARK: - Private properties
+
+    var hasAction: Bool {
+        return self.allControlEvents == .touchUpInside
+    }
+
+    private var uiAction: UIAction?
+
     private let viewModel: ChipViewModel<Void>
 
     private var dashBorder: CAShapeLayer?
@@ -151,6 +173,7 @@ public final class ChipUIView: UIControl {
 
     public let textLabel: UILabel = {
         let label = UILabel()
+        label.isUserInteractionEnabled = false
         label.accessibilityIdentifier = ChipAccessibilityIdentifier.text
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -165,6 +188,7 @@ public final class ChipUIView: UIControl {
 
     public let imageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.isUserInteractionEnabled = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = ChipAccessibilityIdentifier.icon
@@ -177,6 +201,7 @@ public final class ChipUIView: UIControl {
 
     private let stackView: UIStackView = {
         let stackView = UIStackView()
+        stackView.isUserInteractionEnabled = false
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -277,7 +302,6 @@ public final class ChipUIView: UIControl {
         self.textLabel.sizeToFit()
 
         self.setupView()
-
     }
 
     /// Function traitCollectionDidChange: all dynamic sizing and padding will be recalculated here
@@ -318,11 +342,11 @@ public final class ChipUIView: UIControl {
         self.imageView.tintColor = chipColors.foreground.uiColor
         self.layer.opacity = Float(chipColors.opacity)
 
-        self.removeBorder()
-
         if self.viewModel.isBorderDashed {
+            self.removeBorder()
             self.addDashedBorder(borderColor: chipColors.border)
         } else if viewModel.isBordered {
+            self.removeDashedBorder()
             self.stackView.layer.borderWidth = self.borderWidth
             self.stackView.layer.borderColor = chipColors.border.uiColor.cgColor
         } else {
@@ -493,39 +517,26 @@ public final class ChipUIView: UIControl {
     // MARK: - Control functions
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        if self.action != nil {
+
+        if self.hasAction {
             self.viewModel.isPressed = true
         }
-        self.sendActions(for: .touchDown)
     }
 
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
 
-        guard let touchPoint = touches.first?.location(in: self) else { return }
-        guard self.bounds.padded(offset: Constants.touchAreaTolerance).contains(touchPoint) else { return }
-
-        if let action = self.action {
+        if self.hasAction {
             self.viewModel.isPressed = false
-            action()
         }
-        self.sendActions(for: .touchUpInside)
-    }
-
-    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-
-        guard let touchPoint = touches.first?.location(in: self) else { return }
-
-        self.viewModel.isPressed = self.bounds.padded(offset: Constants.touchAreaTolerance).contains(touchPoint)
     }
 
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
-        if action != nil {
+
+        if self.hasAction {
             self.viewModel.isPressed = false
         }
-        self.sendActions(for: .touchCancel)
     }
 }
 
