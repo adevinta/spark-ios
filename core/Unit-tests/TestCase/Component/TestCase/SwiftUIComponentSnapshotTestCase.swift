@@ -46,15 +46,15 @@ open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
                             size: size
                         )
                     ),
-                    named: Helpers.testName(
+                    named: name,
+                    record: recording,
+                    timeout: timeout,
+                    file: file,
+                    testName: Helpers.testName(
                         testName,
                         mode: mode,
                         size: size
                     ),
-                    record: recording,
-                    timeout: timeout,
-                    file: file,
-                    testName: testName,
                     line: line
                 )
             }
