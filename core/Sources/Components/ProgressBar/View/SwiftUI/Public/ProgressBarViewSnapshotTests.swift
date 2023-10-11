@@ -1,5 +1,5 @@
 //
-//  ProgressBarDoubleUIViewSnapshotTests.swift
+//  ProgressBarViewSnapshotTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 05/10/2023.
@@ -9,8 +9,9 @@
 import XCTest
 import SnapshotTesting
 @testable import SparkCore
+import SwiftUI
 
-final class ProgressBarDoubleUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
+final class ProgressBarViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 
     // MARK: - Properties
 
@@ -22,18 +23,16 @@ final class ProgressBarDoubleUIViewSnapshotTests: UIKitComponentSnapshotTestCase
         let scenarios = ProgressBarScenarioSnapshotTests.allCases
 
         for scenario in scenarios {
-            let configurations: [ProgressBarConfigurationSnapshotTests<ProgressBarDoubleIntent>] = try scenario.configuration()
+            let configurations: [ProgressBarConfigurationSnapshotTests<ProgressBarIntent>] = try scenario.configuration()
             for configuration in configurations {
-                let view: ProgressBarDoubleUIView = .init(
+                let view = ProgressBarView(
                     theme: self.theme,
                     intent: configuration.intent,
-                    shape: configuration.shape
+                    shape: configuration.shape,
+                    value: configuration.value
                 )
-                view.topValue = configuration.value
-                view.bottomValue = configuration.bottomValue
-
-                view.translatesAutoresizingMaskIntoConstraints = false
-                view.widthAnchor.constraint(equalToConstant: configuration.width).isActive = true
+                    .frame(width: configuration.width)
+                    .fixedSize()
 
                 self.assertSnapshot(
                     matching: view,

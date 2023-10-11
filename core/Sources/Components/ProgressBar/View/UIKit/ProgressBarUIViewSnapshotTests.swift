@@ -18,11 +18,11 @@ final class ProgressBarUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
     // MARK: - Tests
 
-    func test() {
+    func test() throws {
         let scenarios = ProgressBarScenarioSnapshotTests.allCases
 
         for scenario in scenarios {
-            let configurations: [ProgressBarConfigurationSnapshotTests<ProgressBarIntent>] = scenario.configuration()
+            let configurations: [ProgressBarConfigurationSnapshotTests<ProgressBarIntent>] = try scenario.configuration()
             for configuration in configurations {
                 let view: ProgressBarUIView = .init(
                     theme: self.theme,
