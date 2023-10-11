@@ -40,11 +40,11 @@ platform :ios do
   lane :unit_tests do |options|
     scan(
       clean: true,
-      build_for_testing: true,
+      # build_for_testing: true,
       scheme: options[:TARGET_NAME],
-      cloned_source_packages_path: packages_path,
-      disable_package_automatic_updates: true,
-      skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
+      # cloned_source_packages_path: packages_path,
+      # disable_package_automatic_updates: true,
+      # skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
       project: "Spark.xcodeproj",
       output_directory: "out",
       result_bundle: true,

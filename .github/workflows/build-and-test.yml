@@ -32,17 +32,19 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v2
+      - name: Cache Homebrew Packages
+        id: cache-homebrew-packages
+        uses: actions/cache@v3
+        env:
+          cache-name: homebrew-packages
         with:
-          path: |
-            **/Pods
-            **/Carthage
-          key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
+          path: $(brew --prefix)
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('.config/brew/Brewfile') }}
+      - name: Install sourcery
+        if: steps.cache-homebrew-packages.outputs.cache-hit != 'true'
+        run: brew install sourcery
       - name: Run sourcery
-        run: |
-          brew install sourcery
-          sourcery
+        run: sourcery
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
@@ -67,18 +69,19 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
-      - name: Cache dependencies
+      - name: Cache Homebrew Packages
+        id: cache-homebrew-packages
         uses: actions/cache@v3
-        id: packages-cache
+        env:
+          cache-name: homebrew-packages
         with:
-          path: packages_cache
-          key: ${{ runner.os }}-packages-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-packages-
+          path: $(brew --prefix)
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('.config/brew/Brewfile') }}
+      - name: Install sourcery
+        if: steps.cache-homebrew-packages.outputs.cache-hit != 'true'
+        run: brew install sourcery
       - name: Run sourcery
-        run: |
-          brew install sourcery
-          sourcery
+        run: sourcery
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
