@@ -1,0 +1,88 @@
+// swiftlint:disable all
+ 
+import Combine
+import UIKit
+import SwiftUI
+import XCTest
+
+{% for import in argument.autoMockableImports %}
+import {{ import }}
+{% endfor %}
+{% for import in argument.autoMockableTestableImports %}
+@testable import {{ import }}
+{% endfor %}
+
+{% macro publisherName variable %}{{ variable.name }}PublisherMock{% endmacro %}
+{% macro viewModelType class %}{{ class.name }}{% for key in class.annotations where key|contains: "<" and key|contains: ">" %}{% if forloop.first %}<{% endif %}{{ key|replace:"<", "" | replace:">", "" | upperFirstLetter }}{% if forloop.last %}>{% else %},{% endif %}{% endfor %}{% endmacro %}
+{% macro useCaseName variable %}{{ variable.name }}Mock{% endmacro %}
+{% macro useCaseMock class variable %}{{ variable.typeName }}GeneratedMock{% endmacro %}
+{% macro genericTypeName class variable %}{% if class.annotations[variable.name] %}{{ class.annotations[variable.name] }}{% else %}{% call useCaseMock class variable %}{% endif %}{% endmacro %}
+{% macro genericTypeFromAnnotation key %}{{ key|replace:"<", ""|replace:">", "" }}{% endmacro %}
+
+{% for class in types.classes where class|annotated:"AutoViewModelStub" %}{% if class.name != "AutoViewModelStub" %}
+class {{ class.name }}Stub {
+
+    {% for key, value in class.annotations where key|contains: "<" and key|contains: ">" %}{% if forloop.first %}// MARK: - Type Alias
+
+    {% endif %}
+    typealias {% call genericTypeFromAnnotation key %} = {{ value }}
+    typealias {% call genericTypeFromAnnotation key %}GeneratedMock = {% call genericTypeFromAnnotation key %}
+    {% endfor %}
+
+    // MARK: - Properties
+
+    let viewModel: {% call viewModelType class %}
+
+    // MARK: - Published Properties
+
+    {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}
+    let {% call publisherName variable %}: PublisherMock<Published<{{ variable.typeName }}>.Publisher>
+    {% endfor %}
+
+    // MARK: Dependencies
+
+    {% for variable in class.allVariables|!definedInExtension where variable.name|contains: "UseCase" %}
+    let {% call useCaseName variable %}: {% call genericTypeName class variable %}
+    {% endfor %}
+
+    // MARK: - Initialization
+
+    init(
+        viewModel: {% call viewModelType class %}{% for variable in class.allVariables|!definedInExtension where variable.name|contains: "UseCase" %}{% if forloop.first %},{% endif %}
+        {% call useCaseName variable %}: {% call genericTypeName class variable %}{% if not forloop.last %},{% endif %}{% endfor %}
+    ) {
+        self.viewModel = viewModel
+
+        // UseCases
+        {% for variable in class.allVariables|!definedInExtension where variable.name|contains: "UseCase" %}
+        self.{% call useCaseName variable %} = {% call useCaseName variable %}
+        {% endfor %}
+
+        // Publishers
+        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}
+        self.{% call publisherName variable %} = .init(publisher: viewModel.${{ variable.name }})
+        {% endfor %}
+    }
+
+    // MARK: - Subscription
+
+    func subscribePublishers(on subscriptions: inout Set<AnyCancellable>) {
+        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}
+        self.{% call publisherName variable %}.loadTesting(on: &subscriptions)
+        {% endfor %}
+    }
+
+    // MARK: - Reset
+
+    func resetMockedData() {
+        {% for variable in class.allVariables|!definedInExtension where variable.name|contains: "UseCase" %}{% if forloop.first %}// Clear UseCases Mock{% endif %}
+        self.{% call useCaseName variable %}.reset()
+        {% endfor %}
+
+        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}{% if forloop.first %}// Reset published sink counter{% endif %}
+        self.{% call publisherName variable %}.reset()
+        {% endfor %}
+    }
+}
+
+{% endif %}{% endfor %}
