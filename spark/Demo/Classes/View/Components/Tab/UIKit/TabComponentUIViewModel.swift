@@ -104,7 +104,12 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
     lazy var numberOfTabsConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Number of tabs",
-            type: .rangeSelector(selected: self.numberOfTabs, range: 1...20),
+            type: .rangeSelector(
+                selected: self.numberOfTabs,
+                range: 1...20,
+                stepper: 1,
+                conversion: 1
+            ),
             target: (source: self, action: #selector(self.numberOfTabsChanged)))
     }()
 

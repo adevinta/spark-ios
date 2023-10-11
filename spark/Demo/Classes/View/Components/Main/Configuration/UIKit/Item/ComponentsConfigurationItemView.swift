@@ -100,8 +100,13 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
 
     private lazy var numberRange: NumberSelector? = {
         switch self.viewModel.type {
-        case let .rangeSelector(selected: selectedValue, range: range):
-            let selector = NumberSelector(range: range, selectedValue: selectedValue)
+        case let .rangeSelector(selected: selectedValue, range: range, stepper: stepper, conversion: conversion):
+            let selector = NumberSelector(
+                range: range,
+                selectedValue: selectedValue,
+                stepper: stepper,
+                conversion: conversion
+            )
             selector.translatesAutoresizingMaskIntoConstraints = false
             selector.accessibilityIdentifier = self.viewModel.identifier + "NumberSelector"
 
@@ -132,6 +137,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
             return nil
         }
     }()
+
     // MARK: - Properties
 
     private let viewModel: ComponentsConfigurationItemUIViewModel
