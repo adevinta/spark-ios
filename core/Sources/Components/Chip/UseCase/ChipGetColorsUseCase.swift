@@ -19,7 +19,7 @@ protocol ChipGetColorsUseCasable {
     ///   - theme: The spark theme.
     ///   - variant: The variant of the chip, if it is outlined, filled, etc.
     ///   - intent: The intent color, e.g. main, support.
-    ///
+    ///   - state: The current state of the chip
     /// Returns:
     ///       ChipColors: all the colors used for the chip
     func execute(theme: Theme,
@@ -36,11 +36,11 @@ struct ChipGetColorsUseCase: ChipGetColorsUseCasable {
     private let tintedIntentColorsUseCase: ChipGetIntentColorsUseCasable
 
     // MARK: - Initializer
-
     /// Initializer
     ///
     /// Parameters:
-    /// - intentColorsUsedCase: A use case to calcualte the intent colors.
+    /// - outlinedIntentColorsUseCase: A use case to calculate the intent colors of outlined chips.
+    /// - tintedIntentColorsUseCase: A use case to calculate the intent colors of tinted chips.
     init(outlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable = ChipGetOutlinedIntentColorsUseCase(),
          tintedIntentColorsUseCase: ChipGetIntentColorsUseCasable = ChipGetTintedIntentColorsUseCase()
     ) {
@@ -71,7 +71,7 @@ struct ChipGetColorsUseCase: ChipGetColorsUseCasable {
             return .init(
                 background: colors.pressedBackground,
                 border: colors.border,
-                foreground: colors.border)
+                foreground: colors.text)
         }
 
         var stateColors = ChipStateColors(
@@ -85,6 +85,9 @@ struct ChipGetColorsUseCase: ChipGetColorsUseCasable {
         }
 
         if state.isDisabled {
+            if let backgroundColor = colors.disabledBackground {
+                stateColors.background = backgroundColor
+            }
             stateColors.opacity = theme.dims.dim3
         }
 
@@ -92,6 +95,7 @@ struct ChipGetColorsUseCase: ChipGetColorsUseCasable {
     }
 }
 
+// MARK: - Private extensions
 private extension ChipStateColors {
     func withOpacity(_ opacity: CGFloat) -> ChipStateColors {
         return .init(background: self.background, border: self.border, foreground: self.foreground, opacity: opacity)

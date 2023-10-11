@@ -45,7 +45,8 @@ struct ChipGetTintedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             selectedText: colors.base.onSurface,
             background: colors.base.surface.opacity(theme.dims.dim1),
             pressedBackground: colors.states.surfacePressed,
-            selectedBackground: colors.base.surface
+            selectedBackground: colors.base.surface,
+            disabledBackground: colors.base.surface
         )
 
         case .neutral: return .init(

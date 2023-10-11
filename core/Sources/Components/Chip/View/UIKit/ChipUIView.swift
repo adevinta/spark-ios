@@ -21,7 +21,7 @@ public final class ChipUIView: UIControl {
     public var icon: UIImage? {
         set {
             self.imageView.image = newValue
-            self.setupIconConstraints(icon: newValue)
+            self.imageView.isHidden = newValue == nil
             self.invalidateIntrinsicContentSize()
         }
         get {
@@ -318,7 +318,7 @@ public final class ChipUIView: UIControl {
         self.imageView.tintColor = chipColors.foreground.uiColor
         self.layer.opacity = Float(chipColors.opacity)
 
-        self.removeDashedBorder()
+        self.removeBorder()
 
         if self.viewModel.isBorderDashed {
             self.addDashedBorder(borderColor: chipColors.border)
@@ -375,19 +375,25 @@ public final class ChipUIView: UIControl {
 
     private func updateBorder() {
         self.stackView.layer.cornerRadius = self.borderRadius
-        self.removeDashedBorder()
-        self.stackView.layer.borderWidth = 0
+        self.removeBorder()
 
         if self.viewModel.isBorderDashed {
             self.addDashedBorder(borderColor: self.viewModel.colors.border)
         } else if self.viewModel.isBordered {
             self.stackView.layer.borderWidth = self.borderWidth
+            self.stackView.layer.borderColor = self.viewModel.colors.border.uiColor.cgColor
         }
     }
 
     private func removeDashedBorder() {
         self.dashBorder?.removeFromSuperlayer()
         self.dashBorder = nil
+    }
+
+    private func removeBorder() {
+        self.stackView.layer.borderWidth = 0
+        self.stackView.layer.borderColor = nil
+        self.removeDashedBorder()
     }
 
     private func updateFont() {
@@ -419,22 +425,10 @@ public final class ChipUIView: UIControl {
         self.sizeConstraints = sizeConstraints
         self.heightConstraint = heightConstraint
 
-        self.setupIconConstraints(icon: self.icon)
+        NSLayoutConstraint.activate(self.sizeConstraints)
 
-        if self.text == nil {
-            self.textLabel.isHidden = true
-        }
-    }
-
-
-    private func setupIconConstraints(icon: UIImage?) {
-        if icon == nil {
-            self.imageView.isHidden = true
-            NSLayoutConstraint.deactivate(self.sizeConstraints)
-        } else {
-            self.imageView.isHidden = false
-            NSLayoutConstraint.activate(self.sizeConstraints)
-        }
+        self.imageView.isHidden = self.icon == nil
+        self.textLabel.isHidden = self.text == nil
     }
 
     private func setupSubscriptions() {

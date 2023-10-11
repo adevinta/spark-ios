@@ -24,12 +24,14 @@ struct ChipStateColors {
         self.foreground = foreground
         self.opacity = opacity
     }
+    
 }
 
 extension ChipStateColors: Equatable {
     static func == (lhs: ChipStateColors, rhs: ChipStateColors) -> Bool {
         return lhs.background.equals(rhs.background) &&
         lhs.border.equals(rhs.border) &&
-        lhs.foreground.equals(rhs.foreground) && lhs.opacity == rhs.opacity
+        lhs.foreground.equals(rhs.foreground) &&
+        lhs.opacity == rhs.opacity
     }
 }

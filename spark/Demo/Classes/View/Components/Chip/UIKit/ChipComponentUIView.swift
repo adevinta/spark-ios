@@ -65,6 +65,12 @@ final class ChipComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.viewModel.intentConfigurationItemViewModel.buttonTitle = intent.name
             self.componentView.intent = intent
+
+            if intent == .surface {
+                self.componentStackView.backgroundColor = .darkGray
+            } else {
+                self.componentStackView.backgroundColor = .clear
+            }
         }
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
