@@ -28,6 +28,7 @@ platform :ios do
     packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
     gym(
       clean: true,
+      build_for_testing: true,
       scheme: options[:TARGET_NAME],
       project: "Spark.xcodeproj",
       skip_package_ipa: true,
