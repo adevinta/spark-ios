@@ -22,7 +22,6 @@ public final class SpinnerUIView: UIView {
 
     // MARK: - Private attributes
     private let viewModel: SpinnerViewModel
-    private var subscriptions = Set<AnyCancellable>()
 
     @ScaledUIMetric private var size: CGFloat
     @ScaledUIMetric private var strokeWidth: CGFloat
@@ -31,19 +30,32 @@ public final class SpinnerUIView: UIView {
     /// The current theme
     public var theme: Theme {
         get { return self.viewModel.theme }
-        set { self.viewModel.theme = newValue }
+        set {
+            self.viewModel.theme = newValue
+            self.setNeedsDisplay()
+        }
     }
 
     /// The spinner size (`medium` or `small`)
     public var spinnerSize: SpinnerSize {
         get { return self.viewModel.spinnerSize }
-        set { self.viewModel.spinnerSize = newValue }
+        set {
+            guard newValue != self.viewModel.spinnerSize else { return }
+            self.viewModel.spinnerSize = newValue
+            self.size = self.viewModel.size
+            self.invalidateIntrinsicContentSize()
+        }
     }
 
     /// The spinner intent
     public var intent: SpinnerIntent {
         get { return self.viewModel.intent }
-        set { self.viewModel.intent = newValue}
+        set {
+            guard newValue != self.viewModel.intent else { return }
+
+            self.viewModel.intent = newValue
+            self.setNeedsDisplay()
+        }
     }
 
     // MARK: - Init
@@ -74,7 +86,6 @@ public final class SpinnerUIView: UIView {
         self.setContentCompressionResistancePriority(.required, for: .vertical)
         self.backgroundColor = .clear
 
-        self.setupSubscriptions()
         self.accessibilityIdentifier = AccessibilityIdentifier.spinner
     }
 
@@ -119,22 +130,6 @@ public final class SpinnerUIView: UIView {
     }
 
     // MARK: - Private functions
-    private func setupSubscriptions() {
-        self.viewModel.$size.subscribe(in: &self.subscriptions) { [weak self] size in
-            guard let self else { return }
-            let oldSize = self.size
-            self.size = size
-
-            if oldSize != self.size {
-                self.invalidateIntrinsicContentSize()
-            }
-        }
-
-        self.viewModel.$intentColor.subscribe(in: &self.subscriptions) { [weak self] _ in
-            self?.setNeedsDisplay()
-        }
-    }
-
     private func animate() {
         self.layer.removeAllAnimations()
         
