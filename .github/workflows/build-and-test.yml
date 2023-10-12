@@ -39,10 +39,10 @@ jobs:
       - name: Create packages_cache directory
         if: steps.packages-cache.outputs.cache-hit != 'true'
         run: mkdir -p packages_cache
-      - name: Run fastlane build_framework TARGET_NAME:SparkCore
-        run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
-        env:
-          HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
+      # - name: Run fastlane build_framework TARGET_NAME:SparkCore
+      #   run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
+      #   env:
+      #     HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
       - name: run ls
         run: ls -R > project_contents.txt
       - name: Save Project Contents as Artifact
