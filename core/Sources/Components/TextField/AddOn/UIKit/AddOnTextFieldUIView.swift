@@ -128,7 +128,7 @@ public final class AddOnTextFieldUIView: UIView {
             self.leadingAddOnContainer.addSubviewSizedEqually(leadingAddOn)
         }
 
-        self.textFieldContainer.addSubview(self.textField)
+        self.textFieldContainer.addSubviewSizedEqually(self.textField)
 
         if let trailingAddOn {
             trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
@@ -139,39 +139,6 @@ public final class AddOnTextFieldUIView: UIView {
             )
             self.trailingAddOnContainer.addSubviewSizedEqually(trailingAddOn)
         }
-
-        self.setupSpacing()
-    }
-
-    private func setupSpacing() {
-        NSLayoutConstraint.deactivate([
-            self.textFieldLeadingConstraint,
-            self.textFieldTrailingConstraint
-        ])
-
-        var constraints = [
-            textField.topAnchor.constraint(equalTo: textFieldContainer.topAnchor),
-            textField.bottomAnchor.constraint(equalTo: textFieldContainer.bottomAnchor)
-        ]
-
-        if leadingAddOn != nil, trailingAddOn != nil {
-            self.textFieldLeadingConstraint = self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 8)
-            self.textFieldTrailingConstraint = self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -8)
-        } else if leadingAddOn != nil, trailingAddOn == nil {
-            self.textFieldLeadingConstraint = self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 8)
-            self.textFieldTrailingConstraint = self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -16)
-        } else if leadingAddOn == nil, trailingAddOn != nil {
-            self.textFieldLeadingConstraint = self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 16)
-            self.textFieldTrailingConstraint = self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -8)
-        } else {
-            self.textFieldLeadingConstraint = self.textField.leadingAnchor.constraint(equalTo: self.textFieldContainer.leadingAnchor, constant: 16)
-            self.textFieldTrailingConstraint = self.textField.trailingAnchor.constraint(equalTo: self.textFieldContainer.trailingAnchor, constant: -16)
-        }
-
-        constraints.append(self.textFieldLeadingConstraint)
-        constraints.append(self.textFieldTrailingConstraint)
-
-        NSLayoutConstraint.activate(constraints)
     }
 
     private func setupSubscriptions() {
@@ -209,28 +176,24 @@ public final class AddOnTextFieldUIView: UIView {
         self.leadingAddOnContainer.isHidden = false
         self.leadingAddOn = addOn
         self.leadingAddOnContainer.addSubviewSizedEqually(addOn)
-        self.setupSpacing()
     }
 
     public func removeLeadingAddOn() {
         self.leadingAddOnContainer.isHidden = true
         self.leadingAddOn = nil
         self.leadingAddOnContainer.subviews.forEach { $0.removeFromSuperview() }
-        self.setupSpacing()
     }
 
     public func addTrailingAddOn(_ addOn: UIView) {
         self.trailingAddOnContainer.isHidden = false
         self.trailingAddOn = addOn
         self.trailingAddOnContainer.addSubviewSizedEqually(addOn)
-        self.setupSpacing()
     }
 
     public func removeTrailingAddOn() {
         self.trailingAddOnContainer.isHidden = true
         self.trailingAddOn = nil
         self.trailingAddOnContainer.subviews.forEach { $0.removeFromSuperview() }
-        self.setupSpacing()
     }
 
 }

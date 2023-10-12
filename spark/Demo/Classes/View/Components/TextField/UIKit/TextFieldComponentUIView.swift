@@ -322,7 +322,7 @@ final class TextFieldComponentUIView: UIView {
         self.textField.leftView = self.createLeftView()
 
         self.addOnTextField.addTextFieldRightView(self.createRightView())
-        self.addOnTextField.addTextFieldLeftView(self.createRightView())
+        self.addOnTextField.addTextFieldLeftView(self.createLeftView())
     }
 
     private func createRightView() -> UIImageView {
