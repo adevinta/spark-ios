@@ -1,5 +1,5 @@
 //
-//  Publisher-Subscribe.swift
+//  Publisher+SubscribeExtension.swift
 //  SparkCore
 //
 //  Created by michael.zimmermann on 05.07.23.
@@ -12,7 +12,7 @@ import Foundation
 extension Publisher where Failure == Never {
     func subscribe<S>(
         in subscriptions: inout Set<AnyCancellable>,
-        on scheduler: S = RunLoop.main,
+        on scheduler: S = UIScheduler.shared,
         action: @escaping (Self.Output) -> Void ) where S: Scheduler {
             self
                 .receive(on: scheduler)
