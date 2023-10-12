@@ -33,6 +33,9 @@ platform :ios do
       scheme: options[:TARGET_NAME],
       project: "Spark.xcodeproj",
       skip_package_ipa: true,
+      cloned_source_packages_path: packages_path,
+      disable_package_automatic_updates: true,
+      skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
     )
   end
 
