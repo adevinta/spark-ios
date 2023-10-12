@@ -10,13 +10,6 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/Pods
-            **/Carthage
-          key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
@@ -24,6 +17,8 @@ jobs:
           version: "2.33.0"
       - name: Run fastlane build_framework TARGET_NAME:SparkCore
         run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
+      - name: run ls
+        run: ls -R > project_contents.txt
 
   core_unit_tests:
     name: core_unit_tests
