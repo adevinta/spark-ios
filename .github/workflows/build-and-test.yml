@@ -20,7 +20,7 @@ jobs:
         id: packages-cache
         with:
           path: packages_cache
-          key: ${{ runner.os }}-packages-${{ hashFiles('Spark.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          key: ${{ runner.os }}-packages-${{ hashFiles('xcodegen/spark-core-snapshot-tests.yml') }}
       - name: Create packages_cache directory
         if: steps.packages-cache.outputs.cache-hit != 'true'
         run: mkdir -p packages_cache
