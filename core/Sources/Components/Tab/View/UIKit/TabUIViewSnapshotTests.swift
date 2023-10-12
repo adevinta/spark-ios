@@ -14,7 +14,7 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
     // MARK: - Properties
     let theme = SparkTheme.shared
-    let names = ["paperplane", "folder", "trash", "pencil", "eraser", "scribble", "lasso"]
+    let names = ["paperplane", "folder", "trash", "pencil", "scribble", "lasso"]
     var badge: BadgeUIView!
     var images: [UIImage]!
 
@@ -22,7 +22,11 @@ final class TabUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
     override func setUp() {
         super.setUp()
 
-        self.images = names.map{ UIImage.init(systemName: $0)! }
+        self.images = names.compactMap{
+            let image = UIImage.init(systemName: $0)
+            XCTAssertNotNil(image, "Expected to have image for system name '\($0)'")
+            return image
+        }
         self.badge = BadgeUIView(theme: theme, intent: .danger, value: 99, isBorderVisible: false)
     }
 
