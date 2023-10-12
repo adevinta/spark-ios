@@ -21,13 +21,10 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     // MARK: - Tests
 
     func test() {
-        let strategies = TagSutSnapshotStrategy.allCases
+        let scenarios = TagScenarioSnapshotTests.allCases
 
-        for strategy in strategies {
-            let suts = TagSutSnapshotTests.test(
-                for: strategy,
-                isSwiftUIComponent: true
-            )
+        for scenario in scenarios {
+            let suts = scenario.sut(isSwiftUIComponent: true)
             for sut in suts {
                 let view = TagView(theme: self.theme)
                     .intent(sut.intent)
