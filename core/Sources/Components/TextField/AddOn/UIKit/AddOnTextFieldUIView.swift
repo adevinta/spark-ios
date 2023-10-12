@@ -108,7 +108,7 @@ public final class AddOnTextFieldUIView: UIView {
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
         self.textField.translatesAutoresizingMaskIntoConstraints = false
 
-        self.hStack.addBorder(color: self.viewModel.borderColor)
+        self.hStack.addBorder(color: self.viewModel.borderColor, theme: self.theme)
 
         self.addSubviewSizedEqually(hStack)
         self.hStack.addArrangedSubviews([
@@ -122,7 +122,8 @@ public final class AddOnTextFieldUIView: UIView {
             leadingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.leadingAddOn
             leadingAddOn.addSeparator(
                 toThe: .right,
-                color: self.viewModel.theme.colors.base.outline
+                color: self.viewModel.theme.colors.base.outline,
+                theme: self.theme
             )
             self.leadingAddOnContainer.addSubviewSizedEqually(leadingAddOn)
         }
@@ -133,7 +134,8 @@ public final class AddOnTextFieldUIView: UIView {
             trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
             trailingAddOn.addSeparator(
                 toThe: .left,
-                color: self.viewModel.theme.colors.base.outline
+                color: self.viewModel.theme.colors.base.outline,
+                theme: self.theme
             )
             self.trailingAddOnContainer.addSubviewSizedEqually(trailingAddOn)
         }
@@ -174,8 +176,9 @@ public final class AddOnTextFieldUIView: UIView {
 
     private func setupSubscriptions() {
         self.viewModel.$borderColor.subscribe(in: &self.cancellable) { [weak self] color in
+            guard let self else { return }
             UIView.animate(withDuration: 0.1) {
-                self?.addBorder(color: color)
+                self.addBorder(color: color, theme: self.theme)
             }
         }
     }
@@ -233,27 +236,29 @@ public final class AddOnTextFieldUIView: UIView {
 }
 
 private extension UIView {
-    func addBorder(color: any ColorToken) {
-        self.layer.borderColor = color.uiColor.cgColor
-        self.layer.borderWidth = 1.0
-        self.layer.cornerRadius = 16
-        self.layer.masksToBounds = true
+    func addBorder(color: any ColorToken, theme: Theme) {
+        self.setBorderColor(from: color)
+        self.setBorderWidth(theme.border.width.small)
+        self.setCornerRadius(theme.border.radius.large)
+        self.setMasksToBounds(true)
     }
 
     func addSeparator(
         toThe side: AddOnTextFieldUIView.Side,
-        color: any ColorToken
+        color: any ColorToken,
+        theme: Theme
     ) {
         let border = UIView()
+        let borderWidth = theme.border.width.small
         border.backgroundColor = color.uiColor
 
         switch side {
         case .left:
-            border.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: 1, height: frame.size.height)
+            border.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: borderWidth, height: frame.size.height)
             border.autoresizingMask = [.flexibleHeight, .flexibleRightMargin]
         case .right:
             border.autoresizingMask = [.flexibleHeight, .flexibleLeftMargin]
-            border.frame = CGRect(x: self.frame.maxX - 1, y: self.frame.minY, width: 1, height: frame.size.height)
+            border.frame = CGRect(x: self.frame.maxX - borderWidth, y: self.frame.minY, width: borderWidth, height: frame.size.height)
         }
 
         self.addSubview(border)
