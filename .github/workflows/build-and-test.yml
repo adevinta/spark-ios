@@ -10,26 +10,11 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
-      - name: Cache Dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            Gemfile.lock
-            xcodegen
-            project-ci.yml
-            Spark.xcodeproj
-          key: dependencies-${{ runner.os }}-${{ hashFiles('Gemfile.lock', 'xcodegen', 'project-ci.yml', 'Spark.xcodeproj') }}
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project-ci.yml
           version: "2.33.0"
-      - name: Cache Fastlane Config
-        uses: actions/cache@v3
-        with:
-          path: |
-            fastlane
-          key: fastlane-${{ hashFiles('fastlane/Fastfile') }}
       - name: Cache packages
         uses: actions/cache@v3
         id: packages-cache
@@ -43,13 +28,32 @@ jobs:
         run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
         env:
           HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
-      - name: run ls
-        run: ls -R > project_contents.txt
-      - name: Save Project Contents as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: project-contents
-          path: project_contents.txt
+
+      # for logging purpose only
+      # - name: run ls
+      #   run: ls -R > project_contents.txt
+      # - name: Save Project Contents as Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: project-contents
+      #     path: project_contents.txt
+
+      # do not keep, very small size
+      # - name: Cache Dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       Gemfile.lock
+      #       xcodegen
+      #       project-ci.yml
+      #       Spark.xcodeproj
+      #     key: dependencies-${{ runner.os }}-${{ hashFiles('Gemfile.lock', 'xcodegen', 'project-ci.yml', 'Spark.xcodeproj') }}
+      # - name: Cache Fastlane Config
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       fastlane
+      #     key: fastlane-${{ hashFiles('fastlane/Fastfile') }}
 
   # core_unit_tests:
   #   name: core_unit_tests
