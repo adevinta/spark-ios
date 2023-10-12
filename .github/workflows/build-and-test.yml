@@ -10,6 +10,15 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            Gemfile.lock
+            xcodegen
+            project-ci.yml
+            Spark.xcodeproj
+          key: dependencies-${{ runner.os }}-${{ hashFiles('Gemfile.lock', 'xcodegen', 'project-ci.yml', 'Spark.xcodeproj') }}
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
@@ -17,13 +26,13 @@ jobs:
           version: "2.33.0"
       - name: Run fastlane build_framework TARGET_NAME:SparkCore
         run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
-      - name: run ls
-        run: ls -R > project_contents.txt
-      - name: Save Project Contents as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: project-contents
-          path: project_contents.txt
+      # - name: run ls
+      #   run: ls -R > project_contents.txt
+      # - name: Save Project Contents as Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: project-contents
+      #     path: project_contents.txt
 
   # core_unit_tests:
   #   name: core_unit_tests
