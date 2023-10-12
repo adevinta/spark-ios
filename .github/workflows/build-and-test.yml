@@ -26,7 +26,15 @@ jobs:
         with:
           spec: project-ci.yml
           version: "2.33.0"
+      - name: Cache Fastlane Config
+        uses: actions/cache@v2
+        id: cache-fastlane
+        with:
+          path: |
+            fastlane
+          key: fastlane-${{ hashFiles('fastlane/Fastfile') }}
       - name: Run fastlane build_framework TARGET_NAME:SparkCore
+        if: steps.cache-fastlane.outputs.cache-hit == 'true' && steps.restore-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
       # - name: run ls
       #   run: ls -R > project_contents.txt
