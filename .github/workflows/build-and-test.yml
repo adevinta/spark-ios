@@ -30,8 +30,16 @@ jobs:
           path: |
             fastlane
           key: fastlane-${{ hashFiles('fastlane/Fastfile') }}
+      - name: Cache packages
+        uses: actions/cache@v3
+        id: packages-cache
+        with:
+          path: packages_cache
+          key: ${{ runner.os }}-packages-${{ hashFiles('Spark.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
       - name: Run fastlane build_framework TARGET_NAME:SparkCore
         run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
+        env:
+          HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
       # - name: run ls
       #   run: ls -R > project_contents.txt
       # - name: Save Project Contents as Artifact
