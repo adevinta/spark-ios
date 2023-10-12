@@ -19,6 +19,11 @@ jobs:
         run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
       - name: run ls
         run: ls -R > project_contents.txt
+      - name: Save Project Contents as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: project-contents
+          path: project_contents.txt
 
   # core_unit_tests:
   #   name: core_unit_tests
