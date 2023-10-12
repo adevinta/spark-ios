@@ -11,8 +11,7 @@ jobs:
       - name: Checkout actions
         uses: actions/checkout@v4
       - name: Cache Dependencies
-        uses: actions/cache@v2
-        id: restore-cache
+        uses: actions/cache@v3
         with:
           path: |
             Gemfile.lock
@@ -26,8 +25,7 @@ jobs:
           spec: project-ci.yml
           version: "2.33.0"
       - name: Cache Fastlane Config
-        uses: actions/cache@v2
-        id: cache-fastlane
+        uses: actions/cache@v3
         with:
           path: |
             fastlane
