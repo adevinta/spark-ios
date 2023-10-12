@@ -13,9 +13,6 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-# Define a packages_path in the root of our repository
-packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
-
 default_platform(:ios)
 
 platform :ios do
@@ -28,6 +25,7 @@ platform :ios do
 
   desc "Lane for build framework"
   lane :build_framework do |options|
+    packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
     gym(
       clean: true,
       scheme: options[:TARGET_NAME],
