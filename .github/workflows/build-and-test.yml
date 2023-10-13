@@ -42,58 +42,6 @@ jobs:
           path: xcresult-SparkCore.tar
           retention-days: 15
 
-  # - name: List Sourcery Installation Contents
-  #   run: ls -R /usr/local/Cellar/sourcery/
-  # for logging purpose only
-  # - name: run ls
-  #   run: ls -R > project_contents.txt
-  # - name: Save Project Contents as Artifact
-  #   uses: actions/upload-artifact@v2
-  #   with:
-  #     name: project-contents
-  #     path: project_contents.txt
-
-  # - name: Cache Sourcery Installation
-  #   id: sourcery-cache
-  #   uses: actions/cache@v3
-  #   with:
-  #     path: /usr/local/Cellar/sourcery/
-  #     key: sourcery-${{ runner.os }}-${{ hashFiles('/usr/local/Cellar/sourcery/') }}
-  # - name: Cache Homebrew Packages
-  #   id: cache-homebrew-packages
-  #   uses: actions/cache@v3
-  #   env:
-  #     cache-name: homebrew-packages
-  #   with:
-  #     path: $(brew --prefix)
-  #     key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('.config/brew/Brewfile') }}
-
-  # for logging purpose only
-  # - name: run ls
-  #   run: ls -R > project_contents.txt
-  # - name: Save Project Contents as Artifact
-  #   uses: actions/upload-artifact@v2
-  #   with:
-  #     name: project-contents
-  #     path: project_contents.txt
-
-  # do not keep, very small size
-  # - name: Cache Dependencies
-  #   uses: actions/cache@v3
-  #   with:
-  #     path: |
-  #       Gemfile.lock
-  #       xcodegen
-  #       project-ci.yml
-  #       Spark.xcodeproj
-  #     key: dependencies-${{ runner.os }}-${{ hashFiles('Gemfile.lock', 'xcodegen', 'project-ci.yml', 'Spark.xcodeproj') }}
-  # - name: Cache Fastlane Config
-  #   uses: actions/cache@v3
-  #   with:
-  #     path: |
-  #       fastlane
-  #     key: fastlane-${{ hashFiles('fastlane/Fastfile') }}
-
   # core_snapshot_tests:
   #   name: core_snapshot_tests
   #   needs: [core_build]
@@ -101,18 +49,10 @@ jobs:
   #   steps:
   #     - name: Checkout actions
   #       uses: actions/checkout@v4
-  #     - name: Cache Homebrew Packages
-  #       id: cache-homebrew-packages
-  #       uses: actions/cache@v3
-  #       env:
-  #         cache-name: homebrew-packages
-  #       with:
-  #         path: $(brew --prefix)
-  #         key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('.config/brew/Brewfile') }}
-  #     - name: Install sourcery
+  #     - name: Install Sourcery
   #       if: steps.cache-homebrew-packages.outputs.cache-hit != 'true'
   #       run: brew install sourcery
-  #     - name: Run sourcery
+  #     - name: Run Sourcery
   #       run: sourcery
   #     - name: Run xcodegen
   #       uses: xavierLowmiller/xcodegen-action@1.1.2
@@ -142,54 +82,36 @@ jobs:
   #         path: xcresult-SparkCoreSnapshots.tar
   #         retention-days: 15
 
-  # build:
-  #   needs: [core_build]
-  #   runs-on: macos-13-xl
-  #   steps:
-  #     - name: Checkout actions
-  #       uses: actions/checkout@v4
-  #     - name: Cache dependencies
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: |
-  #           **/Pods
-  #           **/Carthage
-  #         key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
-  #     - name: Run xcodegen
-  #       uses: xavierLowmiller/xcodegen-action@1.1.2
-  #       with:
-  #         spec: project-ci.yml
-  #         version: "2.33.0"
-  #     - name: Run fastlane build_framework TARGET_NAME:Spark
-  #       run: bundle exec fastlane build_framework TARGET_NAME:Spark
+  build:
+    needs: [core_build]
+    runs-on: macos-13-xl
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v4
+      - name: Run Fastlane
+        uses: ./.github/composite-actions/fastlane
+        with:
+          lane: "build_framework"
+          target: "Spark"
 
-  # unit_tests:
-  #   name: unit_tests
-  #   needs: [build]
-  #   runs-on: macos-13-xl
-  #   steps:
-  #     - name: Checkout actions
-  #       uses: actions/checkout@v4
-  #     - name: Cache dependencies
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: |
-  #           **/Pods
-  #           **/Carthage
-  #         key: dependencies-${{ runner.os }}-${{ hashFiles('**/Podfile.lock', '**/Cartfile.resolved') }}
-  #     - name: Run xcodegen
-  #       uses: xavierLowmiller/xcodegen-action@1.1.2
-  #       with:
-  #         spec: project-ci.yml
-  #         version: "2.33.0"
-  #     - name: Run fastlane lane unit_tests TARGET_NAME:Spark
-  #       run: bundle exec fastlane unit_tests TARGET_NAME:Spark
-  #     - name: Tar files
-  #       run: tar -cvf xcresult-Spark.tar out/Spark.xcresult
-  #       continue-on-error: true
-  #     - name: Archive xcresult
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: xcresult-Spark
-  #         path: xcresult-Spark.tar
-  #         retention-days: 15
+  unit_tests:
+    name: unit_tests
+    needs: [build]
+    runs-on: macos-13-xl
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v4
+      - name: Run Fastlane
+        uses: ./.github/composite-actions/fastlane
+        with:
+          lane: "unit_tests"
+          target: "Spark"
+      - name: Tar files
+        run: tar -cvf xcresult-Spark.tar out/Spark.xcresult
+        continue-on-error: true
+      - name: Archive xcresult
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult-Spark
+          path: xcresult-Spark.tar
+          retention-days: 15
