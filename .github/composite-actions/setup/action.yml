@@ -17,4 +17,5 @@ runs:
         key: ${{ runner.os }}-packages-${{ hashFiles('Spark.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
     - name: Create packages_cache directory
       if: steps.packages-cache.outputs.cache-hit != 'true'
+      shell: bash
       run: mkdir -p packages_cache
