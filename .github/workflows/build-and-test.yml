@@ -10,8 +10,8 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/composite-actions/setup
+      - name: Run Fastlane
+        uses: ./.github/composite-actions/fastlane
         with:
           lane: "build_framework"
           target: "SparkCore"
@@ -27,8 +27,8 @@ jobs:
         run: brew install sourcery
       - name: Run Sourcery
         run: sourcery
-      - name: Setup
-        uses: ./.github/composite-actions/setup
+      - name: Run Fastlane
+        uses: ./.github/composite-actions/fastlane
         with:
           lane: "unit_tests"
           target: "SparkCore"
