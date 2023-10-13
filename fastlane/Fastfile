@@ -13,6 +13,8 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
+
 default_platform(:ios)
 
 platform :ios do
@@ -33,7 +35,7 @@ platform :ios do
       skip_package_ipa: true,
       cloned_source_packages_path: packages_path,
       disable_package_automatic_updates: true,
-      # skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
+      skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
     )
   end
 
