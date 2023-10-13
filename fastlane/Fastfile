@@ -23,11 +23,11 @@ platform :ios do
     root_folder = options[:ROOT_FOLDER] || "."
     templateFile = options[:TEMPLATE_FILE] || ""
     sh("scripts/xcodeproj/generate.sh", root_folder, templateFile)
-    packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
   end
 
   desc "Lane for build framework"
   lane :build_framework do |options|
+    packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
     gym(
       clean: true,
       scheme: options[:TARGET_NAME],
@@ -41,6 +41,7 @@ platform :ios do
 
   desc "Lane for unit testing"
   lane :unit_tests do |options|
+    packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
     scan(
       clean: true,
       scheme: options[:TARGET_NAME],
