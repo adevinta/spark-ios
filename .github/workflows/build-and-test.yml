@@ -25,10 +25,8 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
-      - name: Install Sourcery
-        run: brew install sourcery
       - name: Run Sourcery
-        run: sourcery
+        uses: ./.github/composite-actions/sourcery
       - name: Run Fastlane
         uses: ./.github/composite-actions/fastlane
         with:

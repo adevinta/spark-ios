@@ -1,0 +1,11 @@
+name: "Sourcery"
+description: "Install and run Sourcery"
+runs:
+  using: composite
+  steps:
+    - name: Install Sourcery
+      shell: bash
+      run: brew install sourcery
+    - name: Run Sourcery
+      shell: bash
+      run: sourcery
