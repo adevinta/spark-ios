@@ -1,5 +1,10 @@
 name: "Setup"
 description: "Run xcodegen, restore packages cache and run fastlane"
+inputs:
+  target:
+    description: "Which project to build"
+    required: true
+    default: "SparkCore"
 runs:
   using: composite
   steps:
@@ -19,8 +24,8 @@ runs:
       if: steps.packages-cache.outputs.cache-hit != 'true'
       shell: bash
       run: mkdir -p packages_cache
-    - name: Run fastlane build_framework TARGET_NAME:SparkCore
-      run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
+    - name: "Run fastlane build_framework TARGET_NAME:${{ inputs.target }}"
+      run: bundle exec fastlane build_framework TARGET_NAME:${{ inputs.target }}
       shell: bash
       env:
         HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
