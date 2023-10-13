@@ -39,12 +39,13 @@ platform :ios do
 
   desc "Lane for unit testing"
   lane :unit_tests do |options|
+    packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
     scan(
       clean: true,
       # build_for_testing: true,
       scheme: options[:TARGET_NAME],
-      # cloned_source_packages_path: packages_path,
-      # disable_package_automatic_updates: true,
+      cloned_source_packages_path: packages_path,
+      disable_package_automatic_updates: true,
       # skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
       project: "Spark.xcodeproj",
       output_directory: "out",

@@ -15,6 +15,7 @@ jobs:
         with:
           spec: project-ci.yml
           version: "2.33.0"
+          use-cache: true
       - name: Cache packages
         uses: actions/cache@v3
         id: packages-cache
@@ -46,6 +47,7 @@ jobs:
         with:
           spec: project-ci.yml
           version: "2.33.0"
+          use-cache: true
       - name: Cache packages
         uses: actions/cache@v3
         id: packages-cache
@@ -57,6 +59,8 @@ jobs:
         run: mkdir -p packages_cache
       - name: Run fastlane unit_tests TARGET_NAME:SparkCore
         run: bundle exec fastlane unit_tests TARGET_NAME:SparkCore
+        env:
+          HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
       - name: Tar files
         run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
         continue-on-error: true
