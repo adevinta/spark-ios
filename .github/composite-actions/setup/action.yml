@@ -1,5 +1,5 @@
 name: "Setup"
-description: "Run xcodegen and restore packages cache"
+description: "Run xcodegen, restore packages cache and run fastlane"
 runs:
   using: composite
   steps:
@@ -17,10 +17,10 @@ runs:
         key: ${{ runner.os }}-packages-${{ hashFiles('Spark.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
     - name: Create packages_cache directory
       if: steps.packages-cache.outputs.cache-hit != 'true'
-      bash: shell
+      shell: bash
       run: mkdir -p packages_cache
     - name: Run fastlane build_framework TARGET_NAME:SparkCore
       run: bundle exec fastlane build_framework TARGET_NAME:SparkCore
-      bash: shell
+      shell: bash
       env:
         HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
