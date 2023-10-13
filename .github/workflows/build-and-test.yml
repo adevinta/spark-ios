@@ -41,9 +41,8 @@ jobs:
         id: sourcery-cache
         uses: actions/cache@v3
         with:
-          path: |
-            /usr/local/Cellar/sourcery/*
-          key: sourcery-${{ runner.os }}-${{ hashFiles('Brewfile.lock.json') }}
+          path: /usr/local/Cellar/sourcery/
+          key: sourcery-${{ runner.os }}-${{ hashFiles('/usr/local/Cellar/sourcery/') }}
       - name: Install sourcery
         if: steps.sourcery-cache.outputs.cache-hit != 'true'
         run: brew install sourcery
