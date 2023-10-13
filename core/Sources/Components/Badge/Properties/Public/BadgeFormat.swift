@@ -19,7 +19,7 @@ public protocol BadgeFormatting {
 /// - ``default``
 /// - ``overflowCounter(maxValue:)``
 /// - ``custom(formatter:)``
-public enum BadgeFormat {
+public enum BadgeFormat: Equatable {
 
     // MARK: - Properties
 
@@ -54,6 +54,14 @@ public enum BadgeFormat {
                 return ""
             }
             return "\(value)"
+        }
+    }
+
+    public static func == (lhs: BadgeFormat, rhs: BadgeFormat) -> Bool {
+        switch (lhs, rhs) {
+        case (`default`, `default`): return true
+        case let (overflowCounter(lhsValue), overflowCounter(rhsValue)): return lhsValue == rhsValue
+        default: return false
         }
     }
 }

@@ -53,8 +53,6 @@ public class BadgeUIView: UIView {
         self.labelTrailingConstraint == nil
     }
 
-    private var cancellables = Set<AnyCancellable>()
-
     // MARK: - Public variables
     /// The current theme of the view
     public var theme: Theme {
@@ -63,6 +61,7 @@ public class BadgeUIView: UIView {
         }
         set {
             self.viewModel.theme = newValue
+            self.themeDidUpdate()
         }
     }
 
@@ -72,7 +71,10 @@ public class BadgeUIView: UIView {
             return self.viewModel.intent
         }
         set {
+            guard self.viewModel.intent != newValue else { return }
+
             self.viewModel.intent = newValue
+            self.intentDidUpdate()
         }
     }
 
@@ -82,7 +84,10 @@ public class BadgeUIView: UIView {
             return self.viewModel.size
         }
         set {
+            guard self.viewModel.size != newValue else { return }
+
             self.viewModel.size = newValue
+            self.sizeDidUpdate()
         }
     }
 
@@ -92,7 +97,10 @@ public class BadgeUIView: UIView {
             return self.viewModel.value
         }
         set {
+            guard self.viewModel.value != newValue else { return }
+
             self.viewModel.value = newValue
+            self.valueDidUpdate()
         }
     }
 
@@ -102,7 +110,10 @@ public class BadgeUIView: UIView {
             return self.viewModel.format
         }
         set {
+            guard self.viewModel.format != newValue else { return }
+
             self.viewModel.format = newValue
+            self.formatDidUpdate()
         }
     }
 
@@ -112,7 +123,10 @@ public class BadgeUIView: UIView {
             return self.viewModel.isBorderVisible
         }
         set {
+            guard self.viewModel.isBorderVisible != newValue else { return }
+
             self.viewModel.isBorderVisible = newValue
+            self.isBorderVisibleDidUpdate()
         }
     }
 
@@ -145,14 +159,13 @@ public class BadgeUIView: UIView {
     // MARK: - Badge configuration
 
     private func setupBadge() {
-        setupScalables()
+        updateScalables()
         setupBadgeText()
         setupAppearance()
         setupLayouts()
-        subscribe()
     }
 
-    private func setupScalables() {
+    private func updateScalables() {
         self.emptyBadgeSize = BadgeConstants.emptySize.width
         self.badgeHeight = self.viewModel.badgeHeight
         self.horizontalSpacing = self.viewModel.offset.leading
@@ -270,76 +283,73 @@ public class BadgeUIView: UIView {
     }
 }
 
-// MARK: - Badge Subscribers
+// MARK: - Badge Updates
 extension BadgeUIView {
-    private func subscribe() {
-        self.subscribeToTextChanges()
-        self.subscribeToBorderChanges()
-        self.subscribeToColorChanges()
-        self.subscribeToSizeChanges()
+    private func themeDidUpdate() {
+        self.updateTextLabelColor()
+        self.updateBackgroundColor()
+        self.updateBorder()
+        self.updateScalables()
+        self.updateBadgeHeight()
     }
 
-    private func subscribeToTextChanges() {
-        self.viewModel.$text
-            .subscribe(in: &self.cancellables) { [weak self] text in
-                self?.textLabel.text = text
-                self?.reloadUISize()
-                self?.setupLayouts()
-        }
-        self.viewModel.$textFont
-            .subscribe(in: &self.cancellables) { [weak self] textFont in
-                self?.textLabel.font = textFont.uiFont
-                self?.reloadUISize()
-                self?.setupLayouts()
-            }
-        self.viewModel.$isBadgeEmpty
-            .subscribe(in: &self.cancellables) { [weak self] isBadgeOutlined in
-                self?.textLabel.text = self?.viewModel.text
-                self?.reloadUISize()
-                self?.setupLayouts()
-            }
+    private func intentDidUpdate() {
+        self.updateTextLabelColor()
+        self.updateBackgroundColor()
+        self.updateBorder()
     }
 
-    private func subscribeToBorderChanges() {
-        self.viewModel.$isBorderVisible
-            .subscribe(in: &self.cancellables) { [weak self] isBadgeOutlined in
-                guard let self else {
-                    return
-                }
-                self.updateBorder(self.viewModel.border)
-            }
-        self.viewModel.$border
-            .subscribe(in: &self.cancellables) { [weak self] badgeBorder in
-                self?.updateBorder(badgeBorder)
-            }
+    private func sizeDidUpdate() {
+        self.updateTextFont()
+        self.updateScalables()
+        self.updateBadgeHeight()
     }
 
-    private func subscribeToColorChanges() {
-        self.viewModel.$textColor
-            .subscribe(in: &self.cancellables) { [weak self] textColor in
-                self?.textLabel.textColor = textColor.uiColor
-            }
-        self.viewModel.$backgroundColor
-            .subscribe(in: &self.cancellables) { [weak self] backgroundColor in
-                self?.backgroundColor = backgroundColor.uiColor
-            }
+    private func valueDidUpdate() {
+        self.updateTextLabel()
     }
 
-    private func subscribeToSizeChanges() {
-        self.viewModel.$badgeHeight
-            .subscribe(in: &self.cancellables) { [weak self] badgeHeight in
-                self?.badgeHeight = badgeHeight
-                self?.setupLayouts()
-                self?.invalidateIntrinsicContentSize()
-            }
+    private func formatDidUpdate() {
+        self.updateTextLabel()
+    }
+
+    private func isBorderVisibleDidUpdate() {
+        self.updateBorder()
+    }
+
+    private func updateTextLabel() {
+        self.textLabel.text = self.viewModel.text
+        self.reloadUISize()
+        self.setupLayouts()
+    }
+
+    private func updateTextFont() {
+        self.textLabel.font = self.viewModel.textFont.uiFont
+        self.reloadUISize()
+        self.setupLayouts()
+    }
+
+    private func updateTextLabelColor() {
+        self.textLabel.textColor = self.viewModel.textColor.uiColor
+    }
+
+    private func updateBackgroundColor() {
+        self.backgroundColor = self.viewModel.backgroundColor.uiColor
+    }
+
+    private func updateBadgeHeight() {
+        self.badgeHeight = self.viewModel.badgeHeight
+        self.setupLayouts()
+        self.invalidateIntrinsicContentSize()
     }
 }
 
 // MARK: - Updates on Trait Collection Change
 extension BadgeUIView {
-    private func updateBorder(_ badgeBorder: BadgeBorder) {
+    private func updateBorder() {
+        let badgeBorder = self.viewModel.border
         self.layer.borderColor = badgeBorder.color.uiColor.cgColor
-        self.setupScalables()
+        self.updateScalables()
         self.reloadBorderWidth()
     }
 
@@ -400,26 +410,26 @@ public extension BadgeUIView {
 // MARK: - Badge Update Functions
 public extension BadgeUIView {
     func setIntent(_ intent: BadgeIntentType) {
-        self.viewModel.intent = intent
+        self.intent = intent
     }
 
     func setBorderVisible(_ isBorderVisible: Bool) {
-        self.viewModel.isBorderVisible = isBorderVisible
+        self.isBorderVisible = isBorderVisible
     }
 
     func setValue(_ value: Int?) {
-        self.viewModel.value = value
+        self.value = value
     }
 
     func setFormat(_ format: BadgeFormat) {
-        self.viewModel.format = format
+        self.format = format
     }
 
     func setSize(_ badgeSize: BadgeSize) {
-        self.viewModel.size = badgeSize
+        self.size = badgeSize
     }
 
     func setTheme(_ theme: Theme) {
-        self.viewModel.theme = theme
+        self.theme = theme
     }
 }
