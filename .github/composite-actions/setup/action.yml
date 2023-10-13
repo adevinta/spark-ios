@@ -1,6 +1,10 @@
 name: "Setup"
 description: "Run xcodegen, restore packages cache and run fastlane"
 inputs:
+  lane:
+    description: "Which lane to run"
+    required: true
+    default: "build_framework"
   target:
     description: "Which project to build"
     required: true
@@ -24,8 +28,8 @@ runs:
       if: steps.packages-cache.outputs.cache-hit != 'true'
       shell: bash
       run: mkdir -p packages_cache
-    - name: "Run fastlane build_framework TARGET_NAME:${{ inputs.target }}"
-      run: bundle exec fastlane build_framework TARGET_NAME:${{ inputs.target }}
+    - name: "Run fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }}"
+      run: bundle exec fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }}
       shell: bash
       env:
         HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}

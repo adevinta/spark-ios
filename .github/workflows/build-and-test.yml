@@ -13,6 +13,7 @@ jobs:
       - name: Setup
         uses: ./.github/composite-actions/setup
         with:
+          lane: "build_framework"
           target: "SparkCore"
 
   # core_unit_tests:
