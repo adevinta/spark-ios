@@ -20,6 +20,8 @@ jobs:
     name: core_unit_tests
     needs: [core_build]
     runs-on: macos-13-xl
+    env:
+      target: SparkCore
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
@@ -31,11 +33,11 @@ jobs:
         uses: ./.github/composite-actions/fastlane
         with:
           lane: "unit_tests"
-          target: "SparkCore"
+          target: ${{ env.target }}
       - name: Archive xcresult
         uses: ./.github/composite-actions/xcresult
         with:
-          target: "SparkCore"
+          target: ${{ env.target }}
 
   # core_snapshot_tests:
   #   name: core_snapshot_tests
@@ -93,6 +95,8 @@ jobs:
     name: unit_tests
     needs: [build]
     runs-on: macos-13-xl
+    env:
+      target: Spark
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
@@ -100,8 +104,8 @@ jobs:
         uses: ./.github/composite-actions/fastlane
         with:
           lane: "unit_tests"
-          target: "Spark"
+          target: ${{ env.target }}
       - name: Archive xcresult
         uses: ./.github/composite-actions/xcresult
         with:
-          target: "Spark"
+          target: ${{ env.target }}
