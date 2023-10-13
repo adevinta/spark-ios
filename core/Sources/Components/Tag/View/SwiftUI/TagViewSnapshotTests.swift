@@ -24,21 +24,21 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
         let scenarios = TagScenarioSnapshotTests.allCases
 
         for scenario in scenarios {
-            let suts = scenario.sut(isSwiftUIComponent: true)
-            for sut in suts {
+            let configurations = scenario.configuration(isSwiftUIComponent: true)
+            for configuration in configurations {
                 let view = TagView(theme: self.theme)
-                    .intent(sut.intent)
-                    .variant(sut.variant)
-                    .iconImage(sut.iconImage?.rightValue)
-                    .text(sut.text)
-                    .frame(width: sut.width)
+                    .intent(configuration.intent)
+                    .variant(configuration.variant)
+                    .iconImage(configuration.iconImage?.rightValue)
+                    .text(configuration.text)
+                    .frame(width: configuration.width)
                     .fixedSize()
 
                 self.assertSnapshot(
                     matching: view,
-                    modes: sut.modes,
-                    sizes: sut.sizes,
-                    testName: sut.testName()
+                    modes: configuration.modes,
+                    sizes: configuration.sizes,
+                    testName: configuration.testName()
                 )
             }
         }

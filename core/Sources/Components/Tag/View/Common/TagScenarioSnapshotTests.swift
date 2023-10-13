@@ -21,9 +21,9 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
 
     typealias Constants = ComponentSnapshotTestConstants
 
-    // MARK: - Stubs
+    // MARK: - Configurations
 
-    func sut(isSwiftUIComponent: Bool) -> [TagSutSnapshotTests] {
+    func configuration(isSwiftUIComponent: Bool) -> [TagConfigurationSnapshotTests] {
         switch self {
         case .test1:
             return self.test1(isSwiftUIComponent: isSwiftUIComponent)
@@ -50,7 +50,7 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
     ///  - content: icon + text
     ///  - mode: all
     ///  - size: default
-    private func test1(isSwiftUIComponent: Bool) -> [TagSutSnapshotTests] {
+    private func test1(isSwiftUIComponent: Bool) -> [TagConfigurationSnapshotTests] {
         let intents = TagIntent.allCases
 
         return intents.map {
@@ -77,7 +77,7 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
     ///  - content: text only
     ///  - mode: all
     ///  - size: default
-    private func test2(isSwiftUIComponent: Bool) -> [TagSutSnapshotTests] {
+    private func test2(isSwiftUIComponent: Bool) -> [TagConfigurationSnapshotTests] {
         let variants = TagVariant.allCases
 
         return variants.map {
@@ -104,7 +104,7 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
     ///  - content: icon + text
     ///  - mode: default
     ///  - size: default
-    private func test3(isSwiftUIComponent: Bool) -> [TagSutSnapshotTests] {
+    private func test3(isSwiftUIComponent: Bool) -> [TagConfigurationSnapshotTests] {
         let intents = TagIntent.allCases
 
         return intents.map {
@@ -131,7 +131,7 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
     ///  - content: all (icon only / long text/ long text + icon)
     ///  - mode: default
     ///  - size: default
-    private func test4(isSwiftUIComponent: Bool) -> [TagSutSnapshotTests] {
+    private func test4(isSwiftUIComponent: Bool) -> [TagConfigurationSnapshotTests] {
         let contents: [(isIconImage: Bool, isLongText: Bool)] = [
             (isIconImage: true, isLongText: false), // Only Icon
             (isIconImage: false, isLongText: true), // Only long text
@@ -162,7 +162,7 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
     ///  - content: icon + text
     ///  - mode: default
     ///  - size:  all
-    private func test5(isSwiftUIComponent: Bool) -> [TagSutSnapshotTests] {
+    private func test5(isSwiftUIComponent: Bool) -> [TagConfigurationSnapshotTests] {
         return [
             .init(
                 scenario: self,

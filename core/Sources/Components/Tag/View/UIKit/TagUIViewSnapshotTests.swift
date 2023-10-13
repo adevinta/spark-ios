@@ -9,6 +9,8 @@
 import XCTest
 import SnapshotTesting
 
+// TODO: rename SUT to Configuration
+
 @testable import SparkCore
 
 final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
@@ -23,33 +25,33 @@ final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         let scenarios = TagScenarioSnapshotTests.allCases
 
         for scenario in scenarios {
-            let suts = scenario.sut(isSwiftUIComponent: false)
-            for sut in suts {
+            let configurations = scenario.configuration(isSwiftUIComponent: false)
+            for configuration in configurations {
 
                 var view: TagUIView?
-                switch (sut.iconImage, sut.text) {
+                switch (configuration.iconImage, configuration.text) {
                 case (nil, nil):
                     XCTFail("Icon or text should be set")
 
                 case (let iconImage?, nil):
                     view = TagUIView(
                         theme: self.theme,
-                        intent: sut.intent,
-                        variant: sut.variant,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
                         iconImage: iconImage.leftValue
                     )
                 case (nil, let text?):
                     view = TagUIView(
                         theme: self.theme,
-                        intent: sut.intent,
-                        variant: sut.variant,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
                         text: text
                     )
                 case let (iconImage?, text?):
                     view = TagUIView(
                         theme: self.theme,
-                        intent: sut.intent,
-                        variant: sut.variant,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
                         iconImage: iconImage.leftValue,
                         text: text
                     )
@@ -60,15 +62,15 @@ final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 }
 
                 view.translatesAutoresizingMaskIntoConstraints = false
-                if let width = sut.width {
+                if let width = configuration.width {
                     view.widthAnchor.constraint(equalToConstant: width).isActive = true
                 }
 
                 self.assertSnapshot(
                     matching: view,
-                    modes: sut.modes,
-                    sizes: sut.sizes,
-                    testName: sut.testName()
+                    modes: configuration.modes,
+                    sizes: configuration.sizes,
+                    testName: configuration.testName()
                 )
             }
         }

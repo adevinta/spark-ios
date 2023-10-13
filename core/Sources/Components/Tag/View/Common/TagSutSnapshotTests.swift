@@ -1,5 +1,5 @@
 //
-//  TagSutSnapshotTests.swift
+//  TagConfigurationSnapshotTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 05/05/2023.
@@ -9,7 +9,7 @@
 import UIKit
 @testable import SparkCore
 
-struct TagSutSnapshotTests {
+struct TagConfigurationSnapshotTests {
 
     // MARK: - Properties
 
