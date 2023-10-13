@@ -37,9 +37,18 @@ jobs:
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
+      - name: Cache Sourcery Installation
+        id: sourcery-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /usr/local/Cellar/sourcery/*
+          key: sourcery-${{ runner.os }}-${{ hashFiles('Brewfile.lock.json') }}
       - name: Install sourcery
-        # if: steps.cache-homebrew-packages.outputs.cache-hit != 'true'
+        if: steps.sourcery-cache.outputs.cache-hit != 'true'
         run: brew install sourcery
+      - name: List Sourcery Installation Contents
+        run: ls -R /usr/local/Cellar/sourcery/
       - name: Run sourcery
         run: sourcery
       - name: Run xcodegen
