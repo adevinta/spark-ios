@@ -1,0 +1,20 @@
+name: "Xcresult"
+description: "Archive artifact"
+inputs:
+  target:
+    description: "Which project to archive"
+    required: true
+    default: "Spark"
+runs:
+  using: composite
+  steps:
+    - name: Tar files
+      shell: bash
+      run: tar -cvf xcresult-${{ inputs.target }}.tar out/${{ inputs.target }}.xcresult
+      continue-on-error: true
+    - name: Archive xcresult
+      uses: actions/upload-artifact@v3
+      with:
+        name: xcresult-${{ inputs.target }}
+        path: xcresult-${{ inputs.target }}.tar
+        retention-days: 15
