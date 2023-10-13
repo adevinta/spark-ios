@@ -30,54 +30,54 @@ jobs:
         env:
           HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
 
-  # core_unit_tests:
-  #   name: core_unit_tests
-  #   needs: [core_build]
-  #   runs-on: macos-13-xl
-  #   steps:
-  #     - name: Checkout actions
-  #       uses: actions/checkout@v4
-  #     - name: Install sourcery
-  #       # if: steps.cache-homebrew-packages.outputs.cache-hit != 'true'
-  #       run: brew install sourcery
-  #     - name: Run sourcery
-  #       run: sourcery
-  #     - name: Run xcodegen
-  #       uses: xavierLowmiller/xcodegen-action@1.1.2
-  #       with:
-  #         spec: project-ci.yml
-  #         version: "2.33.0"
-  #         use-cache: true
-  #     - name: Cache packages
-  #       uses: actions/cache@v3
-  #       id: packages-cache
-  #       with:
-  #         path: packages_cache
-  #         key: ${{ runner.os }}-packages-${{ hashFiles('Spark.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
-  #     - name: Create packages_cache directory
-  #       if: steps.packages-cache.outputs.cache-hit != 'true'
-  #       run: mkdir -p packages_cache
-  #     - name: Run fastlane unit_tests TARGET_NAME:SparkCore
-  #       run: bundle exec fastlane unit_tests TARGET_NAME:SparkCore
-  #       env:
-  #         HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
-  #     - name: Tar files
-  #       run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
-  #       continue-on-error: true
-  #     - name: Archive xcresult
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: xcresult-SparkCore
-  #         path: xcresult-SparkCore.tar
-  #         retention-days: 15
-  #     # for logging purpose only
-  #     - name: run ls
-  #       run: ls -R > project_contents.txt
-  #     - name: Save Project Contents as Artifact
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: project-contents
-  #         path: project_contents.txt
+  core_unit_tests:
+    name: core_unit_tests
+    needs: [core_build]
+    runs-on: macos-13-xl
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v4
+      - name: Install sourcery
+        # if: steps.cache-homebrew-packages.outputs.cache-hit != 'true'
+        run: brew install sourcery
+      - name: Run sourcery
+        run: sourcery
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project-ci.yml
+          version: "2.33.0"
+          use-cache: true
+      - name: Cache packages
+        uses: actions/cache@v3
+        id: packages-cache
+        with:
+          path: packages_cache
+          key: ${{ runner.os }}-packages-${{ hashFiles('Spark.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+      - name: Create packages_cache directory
+        if: steps.packages-cache.outputs.cache-hit != 'true'
+        run: mkdir -p packages_cache
+      - name: Run fastlane unit_tests TARGET_NAME:SparkCore
+        run: bundle exec fastlane unit_tests TARGET_NAME:SparkCore
+        env:
+          HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
+      - name: Tar files
+        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
+        continue-on-error: true
+      - name: Archive xcresult
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult-SparkCore
+          path: xcresult-SparkCore.tar
+          retention-days: 15
+      # for logging purpose only
+      - name: run ls
+        run: ls -R > project_contents.txt
+      - name: Save Project Contents as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: project-contents
+          path: project_contents.txt
 
   # - name: Cache Homebrew Packages
   #   id: cache-homebrew-packages
