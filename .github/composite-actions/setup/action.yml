@@ -1,0 +1,20 @@
+name: "Setup"
+description: "Run xcodegen and restore packages cache"
+runs:
+  using: composite
+  steps:
+    - name: Run xcodegen
+      uses: xavierLowmiller/xcodegen-action@1.1.2
+      with:
+        spec: project-ci.yml
+        version: "2.33.0"
+        use-cache: true
+    - name: Cache packages
+      uses: actions/cache@v3
+      id: packages-cache
+      with:
+        path: packages_cache
+        key: ${{ runner.os }}-packages-${{ hashFiles('Spark.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+    - name: Create packages_cache directory
+      if: steps.packages-cache.outputs.cache-hit != 'true'
+      run: mkdir -p packages_cache
