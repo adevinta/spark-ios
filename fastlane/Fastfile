@@ -45,10 +45,10 @@ platform :ios do
     scan(
       clean: true,
       scheme: options[:TARGET_NAME],
+      project: "Spark.xcodeproj",
       cloned_source_packages_path: packages_path,
       disable_package_automatic_updates: true,
       skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
-      project: "Spark.xcodeproj",
       output_directory: "out",
       result_bundle: true,
       device: "iPhone 14 Pro",
