@@ -16,32 +16,31 @@ jobs:
           lane: "build_framework"
           target: "SparkCore"
 
-  # core_unit_tests:
-  #   name: core_unit_tests
-  #   needs: [core_build]
-  #   runs-on: macos-13-xl
-  #   steps:
-  #     - name: Checkout actions
-  #       uses: actions/checkout@v4
-  #     - name: Install Sourcery
-  #       run: brew install sourcery
-  #     - name: Run sourcery
-  #       run: sourcery
-  #     - name: Setup
-  #       uses: ./.github/composite-actions/setup
-  #     - name: Run fastlane unit_tests TARGET_NAME:SparkCore
-  #       run: bundle exec fastlane unit_tests TARGET_NAME:SparkCore
-  #       env:
-  #         HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
-  #     - name: Tar files
-  #       run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
-  #       continue-on-error: true
-  #     - name: Archive xcresult
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: xcresult-SparkCore
-  #         path: xcresult-SparkCore.tar
-  #         retention-days: 15
+  core_unit_tests:
+    name: core_unit_tests
+    needs: [core_build]
+    runs-on: macos-13-xl
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v4
+      - name: Install Sourcery
+        run: brew install sourcery
+      - name: Run Sourcery
+        run: sourcery
+      - name: Setup
+        uses: ./.github/composite-actions/setup
+        with:
+          lane: "unit_tests"
+          target: "SparkCore"
+      - name: Tar files
+        run: tar -cvf xcresult-SparkCore.tar out/SparkCore.xcresult
+        continue-on-error: true
+      - name: Archive xcresult
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult-SparkCore
+          path: xcresult-SparkCore.tar
+          retention-days: 15
 
   # - name: List Sourcery Installation Contents
   #   run: ls -R /usr/local/Cellar/sourcery/
