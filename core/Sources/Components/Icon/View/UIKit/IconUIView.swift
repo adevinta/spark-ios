@@ -30,6 +30,7 @@ public final class IconUIView: UIView {
         }
         set {
             self.viewModel.set(theme: newValue)
+            self.themeDidUpdate()
         }
     }
 
@@ -40,6 +41,7 @@ public final class IconUIView: UIView {
         }
         set {
             self.viewModel.set(intent: newValue)
+            self.intentDidUpdate()
         }
     }
 
@@ -50,6 +52,7 @@ public final class IconUIView: UIView {
         }
         set {
             self.viewModel.set(size: newValue)
+            self.sizeDidUpdate()
         }
     }
 
@@ -59,7 +62,6 @@ public final class IconUIView: UIView {
 
     // MARK: - Private properties
 
-    private var cancellables = Set<AnyCancellable>()
     private var heightConstraint: NSLayoutConstraint?
     private var widthConstraint: NSLayoutConstraint?
 
@@ -93,7 +95,6 @@ public final class IconUIView: UIView {
 
         self.icon = iconImage
         self.setupView()
-        self.setupSubscriptions()
     }
 
     required init?(coder: NSCoder) {
@@ -128,21 +129,21 @@ public final class IconUIView: UIView {
         NSLayoutConstraint.activate(anchorConstraint)
     }
 
-    private func setupSubscriptions() {
-        self.viewModel.$color.subscribe(in: &self.cancellables) { [weak self] color in
-            self?.updateIconColor(color)
-        }
+    private func themeDidUpdate() {
+        self.updateIconColor(self.viewModel.color)
+        self.sizeDidUpdate()
+    }
 
-        self.viewModel.$size.subscribe(in: &self.cancellables) { [weak self] size in
-            self?.height = size.value
-            self?._height.update(traitCollection: self?.traitCollection)
+    private func intentDidUpdate() {
+        self.updateIconColor(self.viewModel.color)
+    }
 
-            self?.width = size.value
-            self?._width.update(traitCollection: self?.traitCollection)
+    private func sizeDidUpdate() {
+        self.height = size.value
+        self.width = size.value
 
-            self?.updateIconSize()
-            self?.invalidateIntrinsicContentSize()
-        }
+        self.updateIconSize()
+        self.invalidateIntrinsicContentSize()
     }
 
     private func updateIconColor(_ color: any ColorToken) {
