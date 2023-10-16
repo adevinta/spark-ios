@@ -48,22 +48,29 @@ jobs:
       - name: Check modified components
         run: |
           MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | grep -E 'core/Sources/Components/')
-          echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo false; else echo true; fi)" >> $GITHUB_ENV
-      # echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
-      - name: Run Sourcery
+          echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
+      - name: Get list of modified test classes
         if: env.components_modified == 'true'
-        uses: ./.github/composite-actions/sourcery
-      - name: Extract branch name
-        if: env.components_modified == 'true'
+        run: |
+          TEST_CLASSES=$(echo "$MODIFIED_FILES" | awk -F/ '/SnapshotTests.swift/ {print $NF}' | sed 's/.swift//g')
+          ONLY_TESTING_ARG="--only-testing \"GTUITests/$(echo $TEST_CLASSES | tr '\n' ',' | sed 's/,$//')\""
+          echo "Test classes to run: $TEST_CLASSES"
+          echo "Fastlane argument: $ONLY_TESTING_ARG"
         shell: bash
-        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
-      - name: Run snapshots
-        if: env.components_modified == 'true'
-        uses: actions/checkout@v4
-        with:
-          repository: adevinta/spark-ios-snapshots
-          ref: ${{ env.branch }}
-          path: spark-ios-snapshots
+      # - name: Run Sourcery
+      #   if: env.components_modified == 'true'
+      #   uses: ./.github/composite-actions/sourcery
+      # - name: Extract branch name
+      #   if: env.components_modified == 'true'
+      #   shell: bash
+      #   run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
+      # - name: Run snapshots
+      #   if: env.components_modified == 'true'
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: adevinta/spark-ios-snapshots
+      #     ref: ${{ env.branch }}
+      #     path: spark-ios-snapshots
       # - name: Run Fastlane
       #   if: env.components_modified == 'true'
       #   uses: ./.github/composite-actions/fastlane
