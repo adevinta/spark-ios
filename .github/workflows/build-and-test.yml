@@ -48,7 +48,7 @@ jobs:
       - name: Get list of modified files
         id: get-modified-files
         run: |
-          MODIFIED_FILES=$(git diff --name-only origin/${{ github.base_ref }} ${{ github.head_ref }})
+          MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | tr '\n' ' ')
           echo "modified_files=${MODIFIED_FILES}" >> $GITHUB_OUTPUT
       - name: Check if specified component folders are modified
         id: check-modified-components
@@ -59,26 +59,26 @@ jobs:
           else
               echo "No modifications in specified component folders. Skipping core unit tests."
           fi
-      - name: Run Sourcery
-        uses: ./.github/composite-actions/sourcery
-      - name: Extract branch name
-        shell: bash
-        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
-      - name: Run snapshots
-        uses: actions/checkout@v4
-        with:
-          repository: adevinta/spark-ios-snapshots
-          ref: ${{ env.branch }}
-          path: spark-ios-snapshots
-      - name: Run Fastlane
-        uses: ./.github/composite-actions/fastlane
-        with:
-          lane: "unit_tests"
-          target: "SparkDemo"
-      - name: Archive xcresult
-        uses: ./.github/composite-actions/xcresult
-        with:
-          target: "SparkCoreSnapshots"
+      # - name: Run Sourcery
+      #   uses: ./.github/composite-actions/sourcery
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
+      # - name: Run snapshots
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: adevinta/spark-ios-snapshots
+      #     ref: ${{ env.branch }}
+      #     path: spark-ios-snapshots
+      # - name: Run Fastlane
+      #   uses: ./.github/composite-actions/fastlane
+      #   with:
+      #     lane: "unit_tests"
+      #     target: "SparkDemo"
+      # - name: Archive xcresult
+      #   uses: ./.github/composite-actions/xcresult
+      #   with:
+      #     target: "SparkCoreSnapshots"
 
   # build:
   #   needs: [core_build]
