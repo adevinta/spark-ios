@@ -42,27 +42,76 @@ jobs:
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
-        uses: actions/checkout@v4
-      - name: Run Sourcery
-        uses: ./.github/composite-actions/sourcery
+        uses: actions/checkout@v3
+      - name: Run sourcery
+        run: |
+          brew install sourcery
+          sourcery
+      - name: Run xcodegen
+        uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project-ci.yml
+          version: "2.33.0"
+      # Get the current source branch name of the spark-ios-repository-PR and store it in "outputs.branch".
       - name: Extract branch name
         shell: bash
-        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
+        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >>$GITHUB_OUTPUT
+        id: extract_branch
+      # Now try to checkout the same branch (outputs.branch) in spark-ios-snapshots-repository.
       - name: Run snapshots
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+        continue-on-error: true
+        id: checkout_snapshot_branch_similar_to_main_repo
         with:
           repository: adevinta/spark-ios-snapshots
-          ref: ${{ env.branch }}
+          ref: ${{ steps.extract_branch.outputs.branch }}
           path: spark-ios-snapshots
-      - name: Run Fastlane
-        uses: ./.github/composite-actions/fastlane
+      # If checking out (outputs.branch)-branch in spark-ios-snapshots fails, fallback to main branch.
+      - name: Run snapshot on main
+        if: steps.checkout_snapshot_branch_similar_to_main_repo.outcome != 'success'
+        uses: actions/checkout@v3
         with:
-          lane: "unit_tests"
-          target: "SparkDemo"
+          repository: adevinta/spark-ios-snapshots
+          path: spark-ios-snapshots
+      - name: Run fastlane unit_tests TARGET_NAME:SparkDemo
+        run: fastlane unit_tests TARGET_NAME:SparkDemo
+      - name: Tar files
+        run: tar -cvf xcresult-SparkCoreSnapshots.tar out/SparkCoreSnapshots.xcresult
+        continue-on-error: true
       - name: Archive xcresult
-        uses: ./.github/composite-actions/xcresult
+        uses: actions/upload-artifact@v3
         with:
-          target: "SparkCoreSnapshots"
+          name: xcresult-SparkCoreSnapshots
+          path: xcresult-SparkCoreSnapshots.tar
+          retention-days: 15
+
+  # core_snapshot_tests:
+  #   name: core_snapshot_tests
+  #   needs: [core_build]
+  #   runs-on: macos-13-xl
+  #   steps:
+  #     - name: Checkout actions
+  #       uses: actions/checkout@v4
+  #     - name: Run Sourcery
+  #       uses: ./.github/composite-actions/sourcery
+  #     - name: Extract branch name
+  #       shell: bash
+  #       run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
+  #     - name: Run snapshots
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: adevinta/spark-ios-snapshots
+  #         ref: ${{ env.branch }}
+  #         path: spark-ios-snapshots
+  #     - name: Run Fastlane
+  #       uses: ./.github/composite-actions/fastlane
+  #       with:
+  #         lane: "unit_tests"
+  #         target: "SparkDemo"
+  #     - name: Archive xcresult
+  #       uses: ./.github/composite-actions/xcresult
+  #       with:
+  #         target: "SparkCoreSnapshots"
 
   build:
     needs: [core_build]
