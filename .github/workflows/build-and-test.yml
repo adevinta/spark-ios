@@ -48,12 +48,6 @@ jobs:
       - name: Extract branch name
         shell: bash
         run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
-      - name: Run xcodegen
-        uses: xavierLowmiller/xcodegen-action@1.1.2
-        with:
-          spec: project-ci.yml
-          version: "2.33.0"
-          use-cache: true
       - name: Run snapshots
         uses: actions/checkout@v4
         with:
