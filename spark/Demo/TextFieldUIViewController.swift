@@ -61,17 +61,34 @@ class TextFieldUIViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Lifecycle
-    override func loadView() {
-        super.loadView()
-        view = textFieldComponentUIView
-    }
-
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupView()
+        self.view.backgroundColor = .white
         self.navigationItem.title = "TextField"
         self.addPublisher()
+    }
+
+    private func setupView() {
+        let scrollView = UIScrollView()
+        scrollView.alwaysBounceVertical = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: scrollView.frame.size.height + 1000)
+        self.view.addSubview(scrollView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+
+        textFieldComponentUIView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(textFieldComponentUIView)
+        NSLayoutConstraint.activate([
+            textFieldComponentUIView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            textFieldComponentUIView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+        ])
     }
 
 }
