@@ -49,8 +49,12 @@ jobs:
         run: |
           MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | grep -E 'core/Sources/Components/')
           echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
-      # - name: Run Sourcery
-      #   uses: ./.github/composite-actions/sourcery
+          if [ "$components_modified" != "true" ]; then
+            echo "No modifications in components. Skipping core snapshot tests."
+            exit 0
+          fi
+      - name: Run Sourcery
+        uses: ./.github/composite-actions/sourcery
       # - name: Extract branch name
       #   shell: bash
       #   run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
