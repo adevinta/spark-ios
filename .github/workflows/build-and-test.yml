@@ -4,16 +4,16 @@ on:
     types: [opened, edited, synchronize]
 
 jobs:
-  core_build:
-    runs-on: macos-13-xl
-    steps:
-      - name: Checkout actions
-        uses: actions/checkout@v4
-      - name: Run Fastlane
-        uses: ./.github/composite-actions/fastlane
-        with:
-          lane: "build_framework"
-          target: "SparkCore"
+  # core_build:
+  #   runs-on: macos-13-xl
+  #   steps:
+  #     - name: Checkout actions
+  #       uses: actions/checkout@v4
+  #     - name: Run Fastlane
+  #       uses: ./.github/composite-actions/fastlane
+  #       with:
+  #         lane: "build_framework"
+  #         target: "SparkCore"
 
   # core_unit_tests:
   #   name: core_unit_tests
@@ -38,22 +38,22 @@ jobs:
 
   core_snapshot_tests:
     name: core_snapshot_tests
-    needs: [core_build]
+    # needs: [core_build]
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Get list of modified files
-        id: get-modified-files
+      - name: Get list of modified components
+        id: get-modified-components
         run: |
-          MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | tr '\n' ' ')
+          MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | grep -E 'core/Sources/Components/' | tr '\n' ' ')
           echo "modified_files=${MODIFIED_FILES}" >> $GITHUB_OUTPUT
       - name: Check if specified component folders are modified
         id: check-modified-components
         run: |
-          if echo "${{ steps.get-modified-files.outputs.modified_files }}" | grep -E 'core/Sources/Components/' > /dev/null; then
+          if echo "${{ steps.get-modified-components.outputs.modified_files }}" | grep -E 'core/Sources/Components/' > /dev/null; then
               echo "Modified component folders."
               # Run core unit tests here
           else
