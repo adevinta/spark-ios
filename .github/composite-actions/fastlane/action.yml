@@ -13,7 +13,7 @@ runs:
   using: composite
   steps:
     - name: Run xcodegen
-      if: env.target !== 'SparkDemo'
+      if: env.target != 'SparkDemo'
       uses: xavierLowmiller/xcodegen-action@1.1.2
       with:
         spec: project-ci.yml
