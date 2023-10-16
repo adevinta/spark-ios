@@ -13,18 +13,12 @@ runs:
   using: composite
   steps:
     - name: Run xcodegen
+      if: env.target !== 'SparkDemo'
       uses: xavierLowmiller/xcodegen-action@1.1.2
       with:
         spec: project-ci.yml
         version: "2.33.0"
         use-cache: true
-    - name: Run snapshots
-      if: env.target == 'SparkDemo'
-      uses: actions/checkout@v4
-      with:
-        repository: adevinta/spark-ios-snapshots
-        ref: ${{ env.branch }}
-        path: spark-ios-snapshots
     - name: Cache packages
       uses: actions/cache@v3
       id: packages-cache
