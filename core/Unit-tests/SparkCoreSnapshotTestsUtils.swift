@@ -15,23 +15,20 @@ public func sparkAssertSnapshot<Value, Format>(
     named name: String? = nil,
     record recording: Bool = false,
     timeout: TimeInterval = 5,
-    performanceMetrics: [XCTPerformanceMetric] = [.wallClockTime],
     file: StaticString = #file,
     testName: String = #function,
     line: UInt = #line
 ) {
-    measure(metrics: performanceMetrics) {
-        let failure = verifySnapshot(
-            matching: try value(),
-            as: snapshotting,
-            named: name,
-            record: recording,
-            snapshotDirectory: SnapshotTestCaseTracker.shared.snapshotDirectory(for: file),
-            timeout: timeout,
-            file: file,
-            testName: testName
-        )
-        guard let message = failure else { return }
-        XCTFail("\(message): \(testName)", file: file, line: line)
-    }
+    let failure = verifySnapshot(
+        matching: try value(),
+        as: snapshotting,
+        named: name,
+        record: recording,
+        snapshotDirectory: SnapshotTestCaseTracker.shared.snapshotDirectory(for: file),
+        timeout: timeout,
+        file: file,
+        testName: testName
+    )
+    guard let message = failure else { return }
+    XCTFail("\(message): \(testName)", file: file, line: line)
 }

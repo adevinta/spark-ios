@@ -26,11 +26,13 @@ final class BadgeViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     private let theme: Theme = SparkTheme()
 
     func test_badge_all_cases_no_text() throws {
-        for badgeIntent in BadgeIntentType.allCases {
-            let view = BadgeView(theme: theme, intent: badgeIntent)
-                .fixedSize()
+        measure {
+            for badgeIntent in BadgeIntentType.allCases {
+                let view = BadgeView(theme: theme, intent: badgeIntent)
+                    .fixedSize()
 
-            assertSnapshotInDarkAndLight(matching: view, named: "test_badge_\(badgeIntent)")
+                assertSnapshotInDarkAndLight(matching: view, named: "test_badge_\(badgeIntent)")
+            }
         }
     }
 
