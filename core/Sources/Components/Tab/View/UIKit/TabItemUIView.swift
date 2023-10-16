@@ -49,8 +49,12 @@ public final class TabItemUIView: UIControl {
 
     // An internal property to determine if the segment width should be aligned to the
     // content of the tab or to equally size the tabs.
-    internal var apportionsSegmentWidthsByContent: Bool = false {
-        didSet {
+    internal var apportionsSegmentWidthsByContent: Bool {
+        get {
+            return self.viewModel.apportionsSegmentWidthsByContent
+        }
+        set {
+            self.viewModel.apportionsSegmentWidthsByContent = newValue
             self.spaceConstraint?.isActive = self.apportionsSegmentWidthsByContent
             self.updateConstraintsIfNeeded()
         }
@@ -75,7 +79,7 @@ public final class TabItemUIView: UIControl {
     @ScaledUIMetric var height: CGFloat
     @ScaledUIMetric private var iconHeight: CGFloat
 
-    @ObservedObject var viewModel: TabItemViewModel
+    @ObservedObject var viewModel: TabItemViewModel<TabUIItemContent>
 
     // MARK: - Public variables
     /// The label shown in the tab item.
@@ -184,11 +188,10 @@ public final class TabItemUIView: UIControl {
     /// If the icon is nil, no label will be shown on the tab item. To change the attributes of the icon, the image view is publicly accessible.
     public var icon: UIImage? {
         get {
-            return self.viewModel.icon
+            return self.imageView.image
         }
         set {
-            guard self.viewModel.icon != newValue else { return }
-            self.viewModel.icon = newValue
+            guard self.imageView.image != newValue else { return }
             self.addOrRemoveIcon(newValue)
         }
     }
@@ -199,11 +202,10 @@ public final class TabItemUIView: UIControl {
     /// If the title is nil, no label will be added to the tab item. To change the attributes of the text, you can directly access the label of this component.
     public var title: String? {
         get {
-            return self.viewModel.title
+            return self.label.text
         }
         set {
-            guard self.viewModel.title != newValue else { return }
-            self.viewModel.title = newValue
+            guard self.label.text != newValue else { return }
             self.addOrRemoveTitle(newValue)
         }
     }
@@ -264,9 +266,7 @@ public final class TabItemUIView: UIControl {
             itemsWidth += badge.intrinsicContentSize.width == UIView.noIntrinsicMetric ? self.height: badge.intrinsicContentSize.width
         }
 
-        let numberOfSpacings = max(
-            self.stackView.arrangedSubviews.filter(\.isNotHidden).count - (Constants.numberOfSpacerViews + 1),
-            0)
+        let numberOfSpacings = max(self.stackView.arrangedSubviews.filter(\.isNotHidden).count - (Constants.numberOfSpacerViews + 1), 0)
         let spacingsWidth = CGFloat(numberOfSpacings) * self.spacing
 
         let totalWidth = self.paddingHorizontal + (itemsWidth + spacingsWidth) + self.paddingHorizontal
@@ -277,37 +277,46 @@ public final class TabItemUIView: UIControl {
     }
 
     /// An optional action which can be set. The action will be invoked when the tab is tapped.
-    public var action: UIAction?
+    public var action: UIAction? {
+        didSet {
+            if let action = action {
+                self.addAction(action, for: .touchUpInside)
+            } else if let action = oldValue {
+                self.removeAction(action, for: .touchUpInside)
+            }
+        }
+    }
 
     // MARK: - Initializers
     /// Create a tab item view.
     ///
     /// - Parameters:
     /// - theme: the current theme, which will determine the colors and spacings
-    /// - intent: the intent of the tab item. The default is `basic`.
-    /// - text: optional string, the label if the tab item if set
-    /// - icon: optional image of the tab item
+    /// - intent: the intent of the tab item, the default is basic
+    /// - content: the content of the tab item
     /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
     public convenience init(
         theme: Theme,
         intent: TabIntent = .basic,
         tabSize: TabSize = .md,
-        title: String? = nil,
-        icon: UIImage? = nil,
+        content: TabUIItemContent,
         apportionsSegmentWidthsByContent: Bool = false
     ) {
-        let viewModel = TabItemViewModel(theme: theme, intent: intent, tabSize: tabSize)
-        viewModel.title = title
-        viewModel.icon = icon
-        self.init(viewModel: viewModel, apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent)
+        let viewModel = TabItemViewModel(
+            theme: theme,
+            intent: intent,
+            tabSize: tabSize,
+            content: content)
+        viewModel.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
+
+        self.init(viewModel: viewModel)
     }
 
     internal init(
-        viewModel: TabItemViewModel,
-        apportionsSegmentWidthsByContent: Bool
+        viewModel: TabItemViewModel<TabUIItemContent>
     ) {
+
         self.viewModel = viewModel
-        self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
 
         self._spacing = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
         self._paddingVertical = ScaledUIMetric(wrappedValue: viewModel.tabStateAttributes.spacings.verticalEdge)
@@ -342,44 +351,35 @@ public final class TabItemUIView: UIControl {
         self._iconHeight.update(traitCollection: self.traitCollection)
 
         self.invalidateIntrinsicContentSize()
-        self.superview?.invalidateIntrinsicContentSize()
         self.updateLayoutConstraints()
+        self.setNeedsLayout()
     }
 
     // MARK: - Control functions
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         self.viewModel.isPressed = true
-        self.sendActions(for: .touchDown)
     }
 
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        self.pressFinised()
+        self.viewModel.isPressed = false
     }
 
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         self.viewModel.isPressed = false
-        self.sendActions(for: .touchCancel)
     }
 
     // MARK: - Private functions
-    private func pressFinised() {
-        self.viewModel.isPressed = false
-        self.sendActions(for: .touchUpInside)
-        if let action = self.action {
-            self.sendAction(action)
-        }
-    }
-
     private func setupSubscriptions() {
-        self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions, on: RunLoop.main) { [weak self] attributes in
+        self.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { [weak self] attributes in
             guard let self else { return }
             self.setupColors(attributes: attributes)
             self.updateSizes(attributes: attributes)
             self.updateLayoutConstraints()
             self.invalidateIntrinsicContentSize()
+            self.setNeedsLayout()
         }
     }
 
@@ -399,8 +399,9 @@ public final class TabItemUIView: UIControl {
         self.bringSubviewToFront(self.bottomLine)
 
         self.setupColors(attributes: self.viewModel.tabStateAttributes)
-        self.addOrRemoveIcon(viewModel.icon)
-        self.addOrRemoveTitle(viewModel.title)
+        
+        self.addOrRemoveIcon(self.viewModel.content.icon)
+        self.addOrRemoveTitle(self.viewModel.content.title)
     }
 
     private func setupColors(attributes: TabStateAttributes) {
@@ -462,15 +463,18 @@ public final class TabItemUIView: UIControl {
     }
 
     private func addOrRemoveIcon(_ icon: UIImage?) {
+        self.viewModel.content.icon = icon
         self.imageView.image = icon
         self.imageView.tintColor = self.viewModel.tabStateAttributes.colors.icon.uiColor
 
         self.imageView.isHidden = icon == nil
 
         self.invalidateIntrinsicContentSize()
+        self.setNeedsLayout()
     }
 
     private func addOrRemoveTitle(_ text: String?) {
+        self.viewModel.content.title = text
         self.label.font = self.viewModel.tabStateAttributes.font.uiFont
         self.label.textColor = self.viewModel.tabStateAttributes.colors.label.uiColor
 
@@ -478,6 +482,7 @@ public final class TabItemUIView: UIControl {
         self.label.isHidden = text == nil
 
         self.invalidateIntrinsicContentSize()
+        self.setNeedsLayout()
     }
 }
 

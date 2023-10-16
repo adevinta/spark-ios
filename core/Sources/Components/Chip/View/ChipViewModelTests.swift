@@ -12,11 +12,11 @@ import XCTest
 
 @testable import SparkCore
 
-final class ChipViewModelTests: TestCase {
+final class ChipViewModelTests: XCTestCase {
 
     // MARK: - Properties
 
-    var sut: ChipViewModel!
+    var sut: ChipViewModel<Void>!
     var useCase: GetChipColorsUseCasableGeneratedMock!
     var theme: ThemeGeneratedMock!
     var subscriptions: Set<AnyCancellable>!
@@ -38,6 +38,7 @@ final class ChipViewModelTests: TestCase {
                                  variant: .filled,
                                  intent: .main,
                                  alignment: .leadingIcon,
+                                 content: Void(),
                                  useCase: useCase)
     }
 

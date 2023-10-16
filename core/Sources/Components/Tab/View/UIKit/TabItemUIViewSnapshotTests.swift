@@ -6,11 +6,11 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-@testable import Spark
-@testable import SparkCore
 import XCTest
 
-final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
+@testable import SparkCore
+
+final class TabItemUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
     // MARK: - Properties
     let theme = SparkTheme.shared
@@ -30,7 +30,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            title: "Label")
+            content: .init(title: "Label"))
         sut.apportionsSegmentWidthsByContent = false
         sut.backgroundColor = UIColor.systemBackground
 
@@ -44,7 +44,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            title: "Label")
+            content: .init(title: "Label"))
         sut.apportionsSegmentWidthsByContent = true
         sut.backgroundColor = UIColor.systemBackground
 
@@ -59,7 +59,9 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
 
         let sut = TabItemUIView(
             theme: self.theme,
-            intent: .main)
+            intent: .main,
+            content: .init()
+        )
         sut.apportionsSegmentWidthsByContent = true
         sut.backgroundColor = UIColor.systemBackground
 
@@ -73,7 +75,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            title: "Label")
+            content: .init(title: "Label"))
         sut.apportionsSegmentWidthsByContent = true
         sut.backgroundColor = UIColor.systemBackground
 
@@ -84,7 +86,8 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            icon: UIImage(systemName: "paperplane"))
+            content: .init(icon: UIImage(systemName: "paperplane"))
+        )
         sut.apportionsSegmentWidthsByContent = true
         sut.backgroundColor = UIColor.systemBackground
 
@@ -95,7 +98,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            title: "Label")
+            content: .init(title: "Label"))
         sut.apportionsSegmentWidthsByContent = true
         sut.backgroundColor = UIColor.systemBackground
 
@@ -109,8 +112,10 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            title: "Label",
-            icon: UIImage(systemName: "paperplane")
+            content: .init(
+                icon: UIImage(systemName: "paperplane"),
+                title: "Label"
+            )
         )
         sut.apportionsSegmentWidthsByContent = true
         sut.backgroundColor = UIColor.systemBackground
@@ -122,7 +127,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            icon: UIImage(systemName: "paperplane")
+            content: .init(icon: UIImage(systemName: "paperplane"))
         )
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
         sut.apportionsSegmentWidthsByContent = true
@@ -136,8 +141,10 @@ final class TabItemUIViewSnapshotTests: UIKitComponentTestCase {
         let sut = TabItemUIView(
             theme: self.theme,
             intent: .main,
-            title: "Label",
-            icon: UIImage(systemName: "paperplane")
+            content: .init(
+                icon: UIImage(systemName: "paperplane"),
+                title: "Label"
+            )
         )
         let badge = BadgeUIView(theme: self.theme, intent: .danger, value: 99)
         sut.apportionsSegmentWidthsByContent = true

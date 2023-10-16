@@ -129,13 +129,14 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Properties
 
-    var identifier: String
     let text: String
     let iconImage: UIImage
     let attributedText: NSAttributedString
 
-    lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
-        return .init(itemsViewModel: [
+    // MARK: - Methods
+
+    override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
+        return [
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
@@ -144,8 +145,8 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             self.alignmentConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
             self.isEnabledConfigurationItemViewModel
-        ])
-    }()
+        ]
+    }
 
     // MARK: - Private Properties
 
@@ -160,7 +161,6 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     // MARK: - Initialization
 
     init(
-        identifier: String = "Button",
         text: String = "Button",
         iconImageNamed: String = "arrow",
         theme: Theme,
@@ -172,7 +172,6 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         content: ButtonContentDefault = .text,
         isEnabled: Bool = true
     ) {
-        self.identifier = identifier
         self.text = text
         self.iconImage = .init(named: iconImageNamed) ?? UIImage()
         self.attributedText = .init(
@@ -190,6 +189,8 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         self.alignment = alignment
         self.content = content
         self.isEnabled = isEnabled
+
+        super.init(identifier: "Button")
     }
 }
 

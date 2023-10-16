@@ -172,36 +172,63 @@ import {{ import }}
 {% macro mockedVariableName variable %}{{ variable.name }}{% endmacro %}
 {% for type in types.protocols where type.based.AutoMockable or type|annotated:"AutoMockable" %}{% if type.name != "AutoMockable" %}
 
-final class {{ type.name }}GeneratedMock: {{ import }}.{{ type.name }} {
+final class {{ type.name }}GeneratedMock: {{ import }}.{{ type.name }}{% if type.allMethods|!definedInExtension|count > 0 %}, ResetGeneratedMock{% endif %} {
 
+{% for key, value in type.associatedTypes %}
+    {% if value.typeName | contains:"Equatable" %}
+        {% if forloop.first %}
+    // MARK: - Type Alias
+
+         {% endif%}
+    typealias {{ key }} = {{ key }}Mock
+    {% else %}
+    #error ("The protocol with associatedtype should work only with Equatable.")
+    {% endif%}
+{% endfor %}
+{% for key, value in type.associatedTypes %}
+    {% if value.typeName | contains:"Equatable" %}
+        {% if forloop.first %}
+
+    // MARK: - Associated Type
+
+        {% endif%}
+    struct {{ key }}Mock: {{ value.typeName }} {
+        let id = UUID().uuidString
+    }
+    {% endif%}
+{% endfor %}
 {% for variable in type.allVariables|!definedInExtension %}
     {% if variable.isOptional %}{% call mockOptionalVariable variable %}{% elif variable.isArray or variable.isDictionary %}{% call mockNonOptionalArrayOrDictionaryVariable variable %}{% else %}{% call mockNonOptionalVariable variable %}{% endif %}
 {% endfor %}
+
+    // MARK: - Initialization
+
     init() {}
 
 {% for method in type.allMethods|!definedInExtension %}
     {% call mockMethod method %}
 {% endfor %}
-}
-
-extension  {{ type.name }}GeneratedMock: ResetGeneratedMock {
+{% if type.allMethods|!definedInExtension|count > 0 %}
+    // MARK: Reset 
 
     func reset() {
     {% for method in type.allMethods|!definedInExtension %}
-
         {% call swiftifyMethodNameV2 method %}CallsCount = 0
         {% if method.parameters.count == 1 %}
-            {% call swiftifyMethodNameV2 method %}Received{% for param in method.parameters %}{{ param.name|upperFirstLetter }} = nil {% endfor %}
+        {% call swiftifyMethodNameV2 method %}Received{% for param in method.parameters %}{{ param.name|upperFirstLetter }} = nil {% endfor %}
         {% elif not method.parameters.count == 0 %}
-            {% call swiftifyMethodNameV2 method %}ReceivedArguments = nil
+        {% call swiftifyMethodNameV2 method %}ReceivedArguments = nil
         {% endif %}
         {% call swiftifyMethodNameV2 method %}ReceivedInvocations = []
     {% endfor %}
     }
+{% endif %}
 }
 {% endif %}{% endfor %}
-
 {% endfor %}
+
+// MARK: - Reset
+
 protocol ResetGeneratedMock {
     func reset()
 }

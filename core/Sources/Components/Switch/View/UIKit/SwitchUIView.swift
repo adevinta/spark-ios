@@ -135,8 +135,7 @@ public final class SwitchUIView: UIView {
             return self.viewModel.isOn
         }
         set {
-            self.viewModel.isOn = newValue
-            self.viewModel.reloadToggle()
+            self.viewModel.set(isOn: newValue)
         }
     }
 
@@ -254,6 +253,60 @@ public final class SwitchUIView: UIView {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - Initialization
+
+    /// Initialize a new switch view without images and text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the switch.
+    ///   - isOn: The value of the switch.
+    ///   - alignment: The alignment of the switch.
+    ///   - intent: The intent of the switch.
+    ///   - isEnabled: The state of the switch: enabled or not.
+    public convenience init(
+        theme: Theme,
+        isOn: Bool,
+        alignment: SwitchAlignment,
+        intent: SwitchIntent,
+        isEnabled: Bool
+    ) {
+        self.init(
+            theme,
+            isOn: isOn,
+            alignment: alignment,
+            intent: intent,
+            isEnabled: isEnabled,
+            images: nil,
+            text: nil,
+            attributedText: nil
+        )
+    }
+
+    /// Initialize a new switch view with images and without text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the switch.
+    ///   - isOn: The value of the switch.
+    ///   - alignment: The alignment of the switch.
+    ///   - intent: The intent of the switch.
+    ///   - isEnabled: The state of the switch: enabled or not.
+    ///   - images: The images of the switch.
+    public convenience init(
+        theme: Theme,
+        isOn: Bool,
+        alignment: SwitchAlignment,
+        intent: SwitchIntent,
+        isEnabled: Bool,
+        images: SwitchUIImages
+    ) {
+        self.init(
+            theme,
+            isOn: isOn,
+            alignment: alignment,
+            intent: intent,
+            isEnabled: isEnabled,
+            images: images,
+            text: nil,
+            attributedText: nil
+        )
+    }
 
     /// Initialize a new switch view without images and with text.
     /// - Parameters:
@@ -382,6 +435,7 @@ public final class SwitchUIView: UIView {
         attributedText: NSAttributedString?
     ) {
         self.viewModel = .init(
+            for: .uiKit,
             theme: theme,
             isOn: isOn,
             alignment: alignment,
@@ -630,7 +684,7 @@ public final class SwitchUIView: UIView {
     private func setupSubscriptions() {
         // **
         // Is On
-        self.subscribeTo(self.viewModel.$isOnChanged) { [weak self] isOn in
+        self.viewModel.$isOnChanged.subscribe(in: &self.subscriptions) { [weak self] isOn in
             guard let self, let isOn else { return }
 
             self.delegate?.switchDidChange(self, isOn: isOn)
@@ -639,12 +693,12 @@ public final class SwitchUIView: UIView {
 
         // **
         // Interaction
-        self.subscribeTo(self.viewModel.$isToggleInteractionEnabled) { [weak self] isEnabled in
+        self.viewModel.$isToggleInteractionEnabled.subscribe(in: &self.subscriptions) { [weak self] isEnabled in
             guard let self, let isEnabled else { return }
 
             self.toggleView.isUserInteractionEnabled = isEnabled
         }
-        self.subscribeTo(self.viewModel.$toggleOpacity) { [weak self] toggleOpacity in
+        self.viewModel.$toggleOpacity.subscribe(in: &self.subscriptions) { [weak self] toggleOpacity in
             guard let self, let toggleOpacity else { return }
 
             // Animate only if new alpha is different from current alpha
@@ -662,7 +716,7 @@ public final class SwitchUIView: UIView {
 
         // **
         // Colors
-        self.subscribeTo(self.viewModel.$toggleBackgroundColorToken) { [weak self] colorToken in
+        self.viewModel.$toggleBackgroundColorToken.subscribe(in: &self.subscriptions) { [weak self] colorToken in
             guard let self, let colorToken else { return }
 
             // Animate only if there is currently an color on View and if new color is different from current color
@@ -676,12 +730,12 @@ public final class SwitchUIView: UIView {
                 self.toggleView.backgroundColor = colorToken.uiColor
             }
         }
-        self.subscribeTo(self.viewModel.$toggleDotBackgroundColorToken) { [weak self] colorToken in
+        self.viewModel.$toggleDotBackgroundColorToken.subscribe(in: &self.subscriptions) { [weak self] colorToken in
             guard let self, let colorToken else { return }
 
             self.toggleDotView.backgroundColor = colorToken.uiColor
         }
-        self.subscribeTo(self.viewModel.$toggleDotForegroundColorToken) { [weak self] colorToken in
+        self.viewModel.$toggleDotForegroundColorToken.subscribe(in: &self.subscriptions) { [weak self] colorToken in
             guard let self, let colorToken else { return }
 
             // Animate only if there is currently an color on View and if new color is different from current color
@@ -695,7 +749,7 @@ public final class SwitchUIView: UIView {
                 self.toggleDotImageView.tintColor = colorToken.uiColor
             }
         }
-        self.subscribeTo(self.viewModel.$textForegroundColorToken) { [weak self] colorToken in
+        self.viewModel.$textForegroundColorToken.subscribe(in: &self.subscriptions) { [weak self] colorToken in
             guard let self, let colorToken else { return }
 
             self.textLabel.textColor = colorToken.uiColor
@@ -703,12 +757,12 @@ public final class SwitchUIView: UIView {
         // **
 
         // Aligments
-        self.subscribeTo(self.viewModel.$isToggleOnLeft) { [weak self] isToggleOnLeft in
+        self.viewModel.$isToggleOnLeft.subscribe(in: &self.subscriptions) { [weak self] isToggleOnLeft in
             guard let self, let isToggleOnLeft else { return }
 
             self.contentStackView.semanticContentAttribute = isToggleOnLeft ? .forceLeftToRight : .forceRightToLeft
         }
-        self.subscribeTo(self.viewModel.$horizontalSpacing) { [weak self] horizontalSpacing in
+        self.viewModel.$horizontalSpacing.subscribe(in: &self.subscriptions) { [weak self] horizontalSpacing in
             guard let self, let horizontalSpacing else { return }
 
             self.contentStackViewSpacing = horizontalSpacing
@@ -718,8 +772,15 @@ public final class SwitchUIView: UIView {
 
         // **
         // Show spaces
-        self.subscribeTo(self.viewModel.$showToggleLeftSpace) { [weak self] showSpace in
+        self.viewModel.$showToggleLeftSpace.subscribe(in: &self.subscriptions) { [weak self] showSpace in
             guard let self, let showSpace else { return }
+
+            // showSpace MUST be different to continue
+            // Or if the both space have the same isHidden (default state)
+            guard self.toggleLeftSpaceView.isHidden == showSpace ||
+            self.toggleRightSpaceView.isHidden == self.toggleLeftSpaceView.isHidden else {
+                return
+            }
 
             // Lock interaction before animation
             let currentUserInteraction = self.toggleView.isUserInteractionEnabled
@@ -736,10 +797,10 @@ public final class SwitchUIView: UIView {
         // **
 
         // Show images
-        self.subscribeTo(self.viewModel.$toggleDotImage) { [weak self] toggleDotImage in
+        self.viewModel.$toggleDotImagesState.subscribe(in: &self.subscriptions) { [weak self] toggleDotImagesState in
             guard let self else { return }
 
-            let image = toggleDotImage?.leftValue
+            let image = toggleDotImagesState?.currentImage.leftValue
 
             // Animate only if there is currently an image on ImageView and new image is exists
             let animated = self.toggleDotImageView.image != nil && image != nil
@@ -759,21 +820,17 @@ public final class SwitchUIView: UIView {
             }
         }
 
+        // Displayed Text
+        self.viewModel.$displayedText.subscribe(in: &self.subscriptions) { [weak self] _ in
+            self?.invalidateIntrinsicContentSize()
+        }
+
         // Text Label Font
-        self.subscribeTo(self.viewModel.$textFontToken) { [weak self] fontToken in
+        self.viewModel.$textFontToken.subscribe(in: &self.subscriptions) { [weak self] fontToken in
             guard let self, let fontToken else { return }
 
             self.textLabel.font = fontToken.uiFont
         }
-    }
-
-    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void ) {
-        publisher
-            .receive(on: RunLoop.main)
-            .sink { value in
-                action(value)
-            }
-            .store(in: &self.subscriptions)
     }
 
     // MARK: - Trait Collection

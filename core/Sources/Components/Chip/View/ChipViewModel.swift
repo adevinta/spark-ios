@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ChipViewModel: ObservableObject {
+class ChipViewModel<Content>: ObservableObject {
 
     // MARK: - Properties Injected
     private (set) var theme: Theme
@@ -38,6 +38,7 @@ class ChipViewModel: ObservableObject {
     @Published var font: TypographyFontToken
     @Published var colors: ChipStateColors
     @Published var isIconLeading: Bool
+    @Published var content: Content
 
     // MARK: - Computed variables
     var isBorderDashed: Bool {
@@ -46,16 +47,22 @@ class ChipViewModel: ObservableObject {
     var isBordered: Bool {
         return self.variant.isBordered
     }
+    var isBorderPlain: Bool {
+        return self.isBordered && !self.isBorderDashed
+    }
 
     // MARK: - Initializers
     convenience init(theme: Theme,
                      variant: ChipVariant,
                      intent: ChipIntent,
-                     alignment: ChipAlignment) {
+                     alignment: ChipAlignment,
+                     content: Content
+    ) {
         self.init(theme: theme,
                   variant: variant,
                   intent: intent,
                   alignment: alignment,
+                  content: content,
                   useCase: GetChipColorsUseCase())
     }
 
@@ -63,12 +70,14 @@ class ChipViewModel: ObservableObject {
          variant: ChipVariant,
          intent: ChipIntent,
          alignment: ChipAlignment,
+         content: Content,
          useCase: GetChipColorsUseCasable) {
         self.theme = theme
         self.variant = variant
         self.intent = intent
         self.useCase = useCase
         self.alignment = alignment
+        self.content = content
         self.colors = useCase.execute(theme: theme, variant: variant, intent: intent, state: .default)
         self.spacing = self.theme.layout.spacing.small
         self.padding = self.theme.layout.spacing.medium

@@ -452,6 +452,7 @@ public final class ButtonUIView: UIView {
     // MARK: - View setup
 
     private func setupView() {
+        self.accessibilityTraits = [.button]
         // Add subviews
         self.addSubview(self.contentStackView)
         self.addSubview(self.clearButton)
@@ -601,7 +602,7 @@ public final class ButtonUIView: UIView {
     private func setupSubscriptions() {
         // **
         // State
-        self.subscribeTo(self.viewModel.$state) { [weak self] state in
+        self.viewModel.$state.subscribe(in: &self.subscriptions) { [weak self] state in
             guard let self, let state else { return }
 
             // Update the user interaction enabled
@@ -621,7 +622,7 @@ public final class ButtonUIView: UIView {
 
         // **
         // Colors
-        self.subscribeTo(self.viewModel.$currentColors) { [weak self] colors in
+        self.viewModel.$currentColors.subscribe(in: &self.subscriptions) { [weak self] colors in
             guard let self, let colors else { return }
 
             // Background Color
@@ -645,7 +646,7 @@ public final class ButtonUIView: UIView {
 
         // **
         // Sizes
-        self.subscribeTo(self.viewModel.$sizes) { [weak self] sizes in
+        self.viewModel.$sizes.subscribe(in: &self.subscriptions) { [weak self] sizes in
             guard let self, let sizes else { return }
 
             // Height
@@ -662,7 +663,7 @@ public final class ButtonUIView: UIView {
 
         // **
         // Border
-        self.subscribeTo(self.viewModel.$border) { [weak self] border in
+        self.viewModel.$border.subscribe(in: &self.subscriptions) { [weak self] border in
             guard let self, let border else { return }
 
             // Radius
@@ -676,7 +677,7 @@ public final class ButtonUIView: UIView {
 
         // **
         // Spacings
-        self.subscribeTo(self.viewModel.$spacings) { [weak self] spacings in
+        self.viewModel.$spacings.subscribe(in: &self.subscriptions) { [weak self] spacings in
             guard let self, let spacings else { return }
 
             self.verticalSpacing = spacings.verticalSpacing
@@ -694,7 +695,7 @@ public final class ButtonUIView: UIView {
 
         // **
         // Content
-        self.subscribeTo(self.viewModel.$content) { [weak self] content in
+        self.viewModel.$content.subscribe(in: &self.subscriptions) { [weak self] content in
             guard let self, let content else { return }
 
             // Icon ImageView
@@ -724,21 +725,12 @@ public final class ButtonUIView: UIView {
 
         // **
         // Text Font
-        self.subscribeTo(self.viewModel.$textFontToken) { [weak self] textFontToken in
+        self.viewModel.$textFontToken.subscribe(in: &self.subscriptions) { [weak self] textFontToken in
             guard let self, let textFontToken else { return }
 
             self.textLabel.font = textFontToken.uiFont
         }
         // **
-    }
-
-    private func subscribeTo<Value>(_ publisher: some Publisher<Value, Never>, action: @escaping (Value) -> Void ) {
-        publisher
-            .receive(on: RunLoop.main)
-            .sink { value in
-                action(value)
-            }
-            .store(in: &self.subscriptions)
     }
 
     // MARK: - Actions

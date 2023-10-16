@@ -7,11 +7,11 @@
 //
 
 import Combine
-@testable import Spark
-@testable import SparkCore
 import XCTest
 
-final class CheckboxUIViewActionTests: TestCase {
+@testable import SparkCore
+
+final class CheckboxUIViewActionTests: XCTestCase {
 
     private var sut: CheckboxUIView!
     private var theme: Theme!

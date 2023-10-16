@@ -9,8 +9,7 @@
 // sourcery: AutoMockable
 protocol ButtonGetIsOnlyIconUseCaseable {
     func execute(iconImage: ImageEither?,
-                 text: String?,
-                 attributedText: AttributedStringEither?) -> Bool
+                 containsText: Bool) -> Bool
 }
 
 struct ButtonGetIsOnlyIconUseCase: ButtonGetIsOnlyIconUseCaseable {
@@ -19,9 +18,8 @@ struct ButtonGetIsOnlyIconUseCase: ButtonGetIsOnlyIconUseCaseable {
 
     func execute(
         iconImage: ImageEither?,
-        text: String?,
-        attributedText: AttributedStringEither?
+        containsText: Bool
     ) -> Bool {
-        return iconImage != nil && text == nil && attributedText == nil
+        return iconImage != nil && !containsText
     }
 }

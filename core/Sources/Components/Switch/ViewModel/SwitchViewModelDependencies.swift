@@ -11,7 +11,7 @@ import Foundation
 // sourcery: AutoMockable
 protocol SwitchViewModelDependenciesProtocol {
     var getColorsUseCase: SwitchGetColorsUseCaseable { get }
-    var getImageUseCase: SwitchGetImageUseCaseable { get }
+    var getImagesStateUseCase: SwitchGetImagesStateUseCaseable { get }
     var getToggleColorUseCase: SwitchGetToggleColorUseCaseable { get }
     var getPositionUseCase: SwitchGetPositionUseCaseable { get }
     var getToggleStateUseCase: SwitchGetToggleStateUseCaseable { get }
@@ -25,7 +25,7 @@ struct SwitchViewModelDependencies: SwitchViewModelDependenciesProtocol {
     // MARK: - Properties
 
     let getColorsUseCase: SwitchGetColorsUseCaseable
-    let getImageUseCase: SwitchGetImageUseCaseable
+    var getImagesStateUseCase: SwitchGetImagesStateUseCaseable
     let getToggleColorUseCase: SwitchGetToggleColorUseCaseable
     let getPositionUseCase: SwitchGetPositionUseCaseable
     let getToggleStateUseCase: SwitchGetToggleStateUseCaseable
@@ -34,13 +34,13 @@ struct SwitchViewModelDependencies: SwitchViewModelDependenciesProtocol {
 
     init(
         getColorsUseCase: SwitchGetColorsUseCaseable = SwitchGetColorsUseCase(),
-        getImageUseCase: SwitchGetImageUseCaseable = SwitchGetImageUseCase(),
+        getImagesStateUseCase: SwitchGetImagesStateUseCaseable = SwitchGetImagesStateUseCase(),
         getToggleColorUseCase: SwitchGetToggleColorUseCaseable = SwitchGetToggleColorUseCase(),
         getPositionUseCase: SwitchGetPositionUseCaseable = SwitchGetPositionUseCase(),
         getToggleStateUseCase: SwitchGetToggleStateUseCaseable = SwitchGetToggleStateUseCase()
     ) {
         self.getColorsUseCase = getColorsUseCase
-        self.getImageUseCase = getImageUseCase
+        self.getImagesStateUseCase = getImagesStateUseCase
         self.getToggleColorUseCase = getToggleColorUseCase
         self.getPositionUseCase = getPositionUseCase
         self.getToggleStateUseCase = getToggleStateUseCase
