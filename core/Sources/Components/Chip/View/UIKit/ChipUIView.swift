@@ -342,11 +342,12 @@ public final class ChipUIView: UIControl {
         self.imageView.tintColor = chipColors.foreground.uiColor
         self.layer.opacity = Float(chipColors.opacity)
 
+        self.removeDashedBorder()
+
         if self.viewModel.isBorderDashed {
             self.removeBorder()
             self.addDashedBorder(borderColor: chipColors.border)
         } else if viewModel.isBordered {
-            self.removeDashedBorder()
             self.stackView.layer.borderWidth = self.borderWidth
             self.stackView.layer.borderColor = chipColors.border.uiColor.cgColor
         } else {
