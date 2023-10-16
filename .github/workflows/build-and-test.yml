@@ -49,28 +49,31 @@ jobs:
         run: |
           MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | grep -E 'core/Sources/Components/')
           echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
-          if [ "$components_modified" != "true" ]; then
-            echo "No modifications in components. Skipping core snapshot tests."
+          if [ "$components_modified" != "true" ]; then echo "No modifications in components. Skipping core snapshot tests."
             exit 0
           fi
       - name: Run Sourcery
         if: env.components_modified == 'true'
         uses: ./.github/composite-actions/sourcery
-      # - name: Extract branch name
-      #   shell: bash
-      #   run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
-      # - name: Run snapshots
-      #   uses: actions/checkout@v4
-      #   with:
-      #     repository: adevinta/spark-ios-snapshots
-      #     ref: ${{ env.branch }}
-      #     path: spark-ios-snapshots
+      - name: Extract branch name
+        if: env.components_modified == 'true'
+        shell: bash
+        run: echo "branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})" >> $GITHUB_ENV
+      - name: Run snapshots
+        if: env.components_modified == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: adevinta/spark-ios-snapshots
+          ref: ${{ env.branch }}
+          path: spark-ios-snapshots
       # - name: Run Fastlane
+      #   if: env.components_modified == 'true'
       #   uses: ./.github/composite-actions/fastlane
       #   with:
       #     lane: "unit_tests"
       #     target: "SparkDemo"
       # - name: Archive xcresult
+      #   if: env.components_modified == 'true'
       #   uses: ./.github/composite-actions/xcresult
       #   with:
       #     target: "SparkCoreSnapshots"
