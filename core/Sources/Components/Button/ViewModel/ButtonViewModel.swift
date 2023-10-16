@@ -41,8 +41,7 @@ final class ButtonViewModel: ObservableObject {
     private var isIconOnly: Bool {
         return self.dependencies.getIsIconOnlyUseCase.execute(
             iconImage: self.iconImage,
-            text: self.displayedTextViewModel.text,
-            attributedText: self.displayedTextViewModel.attributedText
+            containsText: self.displayedTextViewModel.containsText
         )
     }
 
@@ -278,8 +277,7 @@ final class ButtonViewModel: ObservableObject {
         self.content = self.dependencies.getContentUseCase.execute(
             alignment: self.alignment,
             iconImage: self.iconImage,
-            text: self.displayedTextViewModel.text,
-            attributedText: self.displayedTextViewModel.attributedText
+            containsText: self.displayedTextViewModel.containsText
         )
     }
 

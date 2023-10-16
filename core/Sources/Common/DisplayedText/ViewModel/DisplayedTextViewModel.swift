@@ -8,9 +8,10 @@
 
 // sourcery: AutoMockable
 protocol DisplayedTextViewModel {
-    var text: String? { get }
-    var attributedText: AttributedStringEither? { get }
     var displayedTextType: DisplayedTextType { get }
+    var displayedText: DisplayedText? { get }
+
+    var containsText: Bool { get }
 
     /// Update the text only if the value changed.
     /// Return true if value changed.
@@ -27,9 +28,12 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
 
     // MARK: - Internal Properties
 
-    private(set) var text: String?
-    private(set) var attributedText: AttributedStringEither?
     private(set) var displayedTextType: DisplayedTextType
+    private(set) var displayedText: DisplayedText?
+
+    var containsText: Bool {
+        self.displayedTextType.containsText
+    }
 
     // MARK: - Private Properties
 
@@ -44,8 +48,10 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
         getDisplayedTextTypeUseCase: GetDisplayedTextTypeUseCaseable = GetDisplayedTextTypeUseCase(),
         getDidDisplayedTextChangeUseCase: GetDidDisplayedTextChangeUseCaseable = GetDidDisplayedTextChangeUseCase()
     ) {
-        self.text = text
-        self.attributedText = attributedText
+        self.displayedText = .init(
+            text: text,
+            attributedText: attributedText
+        )
         self.displayedTextType = getDisplayedTextTypeUseCase.execute(
             text: text,
             attributedText: attributedText
@@ -60,11 +66,11 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
     func textChanged(_ text: String?) -> Bool {
         // Displayed text changed ?
         if self.getDidDisplayedTextChangeUseCase.execute(
-            currentText: self.text,
+            currentText: self.displayedText?.text,
             newText: text,
             displayedTextType: self.displayedTextType
         ) {
-            self.text = text
+            self.displayedText = text.map { .init(text: $0) }
             self.displayedTextType = self.getDisplayedTextTypeUseCase.execute(
                 text: text
             )
@@ -78,14 +84,14 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
     func attributedTextChanged(_ attributedText: AttributedStringEither?) -> Bool {
         // Displayed attributed text changed ?
         if self.getDidDisplayedTextChangeUseCase.execute(
-            currentAttributedText: self.attributedText,
+            currentAttributedText: self.displayedText?.attributedText,
             newAttributedText: attributedText,
             displayedTextType: self.displayedTextType
         ) {
-            self.attributedText = attributedText
             self.displayedTextType = self.getDisplayedTextTypeUseCase.execute(
                 attributedText: attributedText
             )
+            self.displayedText = attributedText.map { .init(attributedText: $0) }
 
             return true
         }

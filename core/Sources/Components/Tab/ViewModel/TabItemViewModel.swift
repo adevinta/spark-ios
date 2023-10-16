@@ -13,7 +13,7 @@ import UIKit
 /// `TabItemViewModel` is the view model for both the SwiftUI `TabItemView` as well as the UIKit `TabItemUIView`.
 /// The view model is responsible for returning the varying attributes to the views, i.e. colors and attributes. These are determined by the theme, intent, tabState, content and tabGetStateAttributesUseCase.
 /// When the theme, intent, states or contents change the new values are calculated and published.
-final class TabItemViewModel: ObservableObject {
+final class TabItemViewModel<Content>: ObservableObject where Content: TitleContaining {
 
     // MARK: - Private Properties
     private var tabState: TabState {
@@ -74,30 +74,14 @@ final class TabItemViewModel: ObservableObject {
         }
     }
 
-    var icon: UIImage? {
-        get {
-            return self.content.icon
-        }
-        set {
-            self.content = self.content.update(\.icon, value: newValue)
-            self.updateStateAttributes()
-        }
-    }
-
-    var title: String? {
-        get {
-            return self.content.title
-        }
-        set {
-            guard self.content.title != newValue else { return }
-            self.content = self.content.update(\.title, value: newValue)
-            self.updateStateAttributes()
-        }
-    }
-    
     // MARK: Published Properties
     @Published var tabStateAttributes: TabStateAttributes
-    @Published var content: TabUIItemContent
+    @Published var apportionsSegmentWidthsByContent: Bool
+    @Published var content: Content {
+        didSet {
+            self.updateStateAttributes()
+        }
+    }
     
     // MARK: Init
     /// Init
@@ -109,10 +93,11 @@ final class TabItemViewModel: ObservableObject {
     /// - tabGetStateAttributesUseCase: `TabGetStateAttributesUseCasable` has a default value `TabGetStateAttributesUseCase`
     init(
         theme: Theme,
-        intent: TabIntent = .main,
+        intent: TabIntent = .basic,
         tabSize: TabSize = .md,
         tabState: TabState = .init(),
-        content: TabUIItemContent = TabUIItemContent(),
+        content: Content,
+        apportionsSegmentWidthsByContent: Bool = false,
         tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable = TabGetStateAttributesUseCase()
     ) {
         self.tabState = tabState
@@ -120,6 +105,7 @@ final class TabItemViewModel: ObservableObject {
         self.intent = intent
         self.content = content
         self.tabSize = tabSize
+        self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
         self.tabGetStateAttributesUseCase = tabGetStateAttributesUseCase
 
         self.tabStateAttributes = tabGetStateAttributesUseCase.execute(
@@ -127,7 +113,7 @@ final class TabItemViewModel: ObservableObject {
             intent: intent,
             state: tabState,
             tabSize: tabSize,
-            hasTitle: false
+            hasTitle: content.hasTitle
         )
     }
 
@@ -138,7 +124,7 @@ final class TabItemViewModel: ObservableObject {
             intent: self.intent,
             state: self.tabState,
             tabSize: self.tabSize,
-            hasTitle: self.title != nil
+            hasTitle: self.content.hasTitle
         )
     }
 }

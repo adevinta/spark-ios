@@ -1,0 +1,144 @@
+// swiftlint:disable all
+
+import Foundation
+import UIKit
+import SwiftUI
+import XCTest
+
+{% for import in argument.autoMockableImports %}
+import {{ import }}
+{% endfor %}
+{% for import in argument.autoMockableTestableImports %}
+@testable import {{ import }}
+{% endfor %}
+
+{% macro removeGenericContentInMethodName name %}{% if method.shortName| hasSuffix:">" %}{% for element in name|split:"<" %}{% if forloop.first %}{{ element }}{% endif %}{% endfor %}{% else %}{{name}}{% endif %}{% endmacro %}
+{% macro swiftifyMethodNameV2 method %}{% if method.parameters.count > 0 %}{% call removeGenericContentInMethodName method.shortName %}With{% for param in method.parameters %}{{ param.name | snakeToCamelCase }}{% if not forloop.last %}And{% endif %}{% endfor %}{% else %}{{method.shortName}}{% endif %}{% endmacro %}
+{% macro mockName protocol %}{{ protocol.name }}GeneratedMock{% endmacro %}
+{% macro dynamicTypeName name %}_{{ name | upperFirstLetter }}{% endmacro %}
+{% macro givenParameter name %}given{{ param.name | snakeToCamelCase }}{% endmacro %}
+
+{% for protocol in types.protocols where protocol|annotated:"AutoMockTest" %}{% if protocol.name != "AutoMockTest" %}
+final class {{ protocol.name }}MockTest {
+
+    // MARK: - Initialization
+
+    private init(){
+    }
+
+    // MARK: - Tests
+
+    {% for method in protocol.allMethods|!definedInExtension %}
+        
+    static func XCTCallsCount(
+        _ mock: {% call mockName protocol %},
+        {% call swiftifyMethodNameV2 method %}NumberOfCalls numberOfCalls: Int
+    ) {
+        XCTAssertEqual(
+            mock.{% call swiftifyMethodNameV2 method %}CallsCount,
+            numberOfCalls,
+            "Wrong {{ method.name }} number of called on {{ protocol.name }}"
+        )
+    }
+
+    static func XCTAssert{% for key, value in method.annotations where value == "Identical" %}{% if forloop.first %}<
+    {% for param in method.parameters where method.annotations[param.name] == "Identical" %}
+        {% call dynamicTypeName param.name %}: AnyObject{% if not forloop.last or method.annotations["return"] == "Identical" %},{% endif %}
+    {% endfor %}
+    {% if method.annotations["return"] == "Identical" %}
+        {% call dynamicTypeName "return" %}: AnyObject
+    {% endif %}
+    >{% endif %}{% endfor %}(
+        _ mock: {% call mockName protocol %},
+        expectedNumberOfCalls: Int,
+    {% for param in method.parameters %}
+        {% call givenParameter param %}: {% if method.annotations[param.name] == "Identical" %}{% call dynamicTypeName param.name %}{% elif protocol.associatedTypes[param.typeName] != nil %}{% call mockName protocol %}.{{ protocol.associatedTypes[param.typeName].name }}Mock{% else %}{{ param.typeName | replace:"?","" }}{% endif %}? = nil{% if not forloop.last or not method.returnTypeName.isVoid %}, {% endif %}
+    {% endfor %}
+        {% if not method.returnTypeName.isVoid %}expectedReturnValue: {% if method.annotations["return"] == "Identical" %}{% call dynamicTypeName "return" %}{% elif protocol.associatedTypes["Return"] != nil %}{% call mockName protocol %}.ReturnMock{% if method.isOptionalReturnType %}?{% endif %}{% else %}{{ method.returnTypeName }}{% endif %}{% endif %}
+    ) {
+        // Count
+        XCTAssertEqual(
+            mock.{% call swiftifyMethodNameV2 method %}CallsCount,
+            expectedNumberOfCalls,
+            "Wrong {{ method.name }} number of called on {{ protocol.name }}"
+        )
+
+        // Parameters
+        if expectedNumberOfCalls > 0 {
+            {% if method.parameters.count > 1 %}
+            let args = mock.{% call swiftifyMethodNameV2 method %}ReceivedArguments
+
+            {% endif %}
+            {% for param in method.parameters %}
+            // {{ param.name|upperFirstLetter }}
+            if let {% call givenParameter param %} {
+        
+                {% if method.annotations[param.name] == "Identical" %}
+                    {% if method.parameters.count == 1 %}
+                XCTAssertIdentical(
+                    mock.{% call swiftifyMethodNameV2 method %}Received{{ param.name|upperFirstLetter }} as? _{{ param.name|upperFirstLetter }},
+                    given{{ param.name | snakeToCamelCase }},
+                    "Wrong {{ method.name }} {{ param.name }} parameter on {{ protocol.name }}"
+                )
+                    {% else %}
+                XCTAssertIdentical(
+                    args?.{{ param.name }} as? _{{ param.name|upperFirstLetter }},
+                    given{{ param.name | snakeToCamelCase }},
+                    "Wrong {{ method.name }} {{ param.name }} parameter on {{ protocol.name }}"
+                )
+                    {% endif %}
+                {% else %}
+                    {% if method.parameters.count == 1 %}
+                XCTAssertEqual(
+                    mock.{% call swiftifyMethodNameV2 method %}Received{{ param.name|upperFirstLetter }},
+                    given{{ param.name | snakeToCamelCase }},
+                    "Wrong {{ method.name }} {{ param.name }} parameter on {{ protocol.name }}"
+                )
+                    {% else %}
+                XCTAssertEqual(
+                    args?.{{ param.name }},
+                    given{{ param.name | snakeToCamelCase }},
+                    "Wrong {{ method.name }} {{ param.name }} parameter on {{ protocol.name }}"
+                )
+                    {% endif %}
+                {% endif %}
+            } else {
+                XCTAssertNil(
+                    {% if method.parameters.count == 1 %}mock.{% call swiftifyMethodNameV2 method %}Received{{ param.name|upperFirstLetter }}{% else %}args?.{{ param.name }}{% endif %},
+                    "Wrong {{ method.name }} {{ param.name }} parameter value on {{ protocol.name }}. Should be nil"
+                )
+            }
+
+            {% endfor %}
+        }
+
+        {% if not method.returnTypeName.isVoid %}
+        // Return
+        {% if method.isOptionalReturnType %}if let expectedReturnValue { {% endif %}
+            {% if method.annotations["return"] == "Identical" %}
+        XCTAssertIdentical(
+            mock.{% call swiftifyMethodNameV2 method %}ReturnValue as? _Return,
+            expectedReturnValue,
+            "Wrong {{ method.name }} return value on {{ protocol.name }}"
+        )
+            {% else %}
+            XCTAssertEqual(
+                mock.{% call swiftifyMethodNameV2 method %}ReturnValue,
+                expectedReturnValue,
+                "Wrong {{ method.name }} return value on {{ protocol.name }}"
+            )
+            {% endif %}
+        {% endif %}
+        {% if method.isOptionalReturnType %} } else {
+            XCTAssertNil(
+                mock.{% call swiftifyMethodNameV2 method %}ReturnValue,
+                "Wrong {{ method.name }} return value on {{ protocol.name }}. Should be nil"
+            )
+        }
+        {% endif %}
+    }
+
+    {% endfor %}
+}
+
+{% endif %}{% endfor %}

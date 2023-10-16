@@ -27,6 +27,8 @@ final class SwitchComponentUIViewController: UIViewController {
         self.viewModel = viewModel
         self.componentView = SwitchComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
+
+        self.componentView.viewController = self
     }
 
     required init?(coder: NSCoder) {
@@ -58,8 +60,8 @@ final class SwitchComponentUIViewController: UIViewController {
             }
             .store(in: &self.cancellables)
 
-        self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
-            self.presentThemeActionSheet(intents)
+        self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { theme in
+            self.presentThemeActionSheet(theme)
         }
 
         self.viewModel.showIntentSheet.subscribe(in: &self.cancellables) { intents in

@@ -11,95 +11,51 @@ import SparkCore
 import SwiftUI
 
 struct ChipComponentView: View {
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-    @State private var isThemePresented = false
+    // MARK: - Properties
 
-    let themes = ThemeCellModel.themes
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: ChipIntent = .main
+    @State private var variant: ChipVariant = .filled
+    @State private var alignment: ChipAlignment = .leadingIcon
+    @State private var showLabel = CheckboxSelectionState.selected
+    @State private var showIcon = CheckboxSelectionState.selected
+    @State private var withAction = CheckboxSelectionState.selected
+    @State private var withComponent = CheckboxSelectionState.unselected
+    @State private var isEnabled = CheckboxSelectionState.selected
 
-    @State var intent: ChipIntent = .main
-    @State var isIntentPresented = false
-    @State var variant: ChipVariant = .filled
-    @State var isVariantPresented = false
-    @State var alignment: ChipAlignment = .leadingIcon
-    @State var isAlignmentPressed = false
-
-    @State var showLabel = CheckboxSelectionState.selected
-    @State var showIcon = CheckboxSelectionState.selected
-    @State var withAction = CheckboxSelectionState.selected
-    @State var withComponent = CheckboxSelectionState.unselected
-    @State var isEnabled = CheckboxSelectionState.selected
-
-    @State var showingAlert = false
+    @State private var showingAlert = false
 
     private let label = "Label"
-    private let icon = UIImage(imageLiteralResourceName: "alert")
+    private let icon = Image("alert")
+
+    // MARK: - View
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Configuration")
-                .font(.title2)
-                .bold()
-                .padding(.bottom, 6)
-            VStack(alignment: .leading, spacing: 8) {
-                HStack() {
-                    Text("Theme: ").bold()
-                    let selectedTheme = self.theme is SparkTheme ? themes.first : themes.last
-                    Button(selectedTheme?.title ?? "") {
-                        self.isThemePresented = true
-                    }
-                    .confirmationDialog("Select a theme",
-                                        isPresented: self.$isThemePresented) {
-                        ForEach(themes, id: \.self) { theme in
-                            Button(theme.title) {
-                                themePublisher.theme = theme.theme
-                            }
-                        }
-                    }
-                    Spacer()
-                }
-                HStack() {
-                    Text("Intent: ").bold()
-                    Button(self.intent.name) {
-                        self.isIntentPresented = true
-                    }
-                    .confirmationDialog("Select an intent", isPresented: self.$isIntentPresented) {
-                        ForEach(ChipIntent.allCases, id: \.self) { intent in
-                            Button(intent.name) {
-                                self.intent = intent
-                            }
-                        }
-                    }
-                }
-                HStack() {
-                    Text("Chip Variant: ").bold()
-                    Button(self.variant.name) {
-                        self.isVariantPresented = true
-                    }
-                    .confirmationDialog("Select a variant", isPresented: self.$isVariantPresented) {
-                        ForEach(ChipVariant.allCases, id: \.self) { variant in
-                            Button(variant.name) {
-                                self.variant = variant
-                            }
-                        }
-                    }
-                }
-                HStack() {
-                    Text("Alignment: ").bold()
-                    Button(self.alignment.name) {
-                        self.isAlignmentPressed = true
-                    }
-                    .confirmationDialog("Select an alignment", isPresented: self.$isAlignmentPressed) {
-                        ForEach(ChipAlignment.allCases, id: \.self) { alignment in
-                            Button(alignment.name) {
-                                self.alignment = alignment
-                            }
-                        }
-                    }
-                }
+
+        Component(
+            name: "Chip",
+            configuration: {
+                ThemeSelector(theme: self.$theme)
+
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an Intent",
+                    values: ChipIntent.allCases,
+                    value: self.$intent)
+
+                EnumSelector(
+                    title: "Chip Variant",
+                    dialogTitle: "Select a Chip Variant",
+                    values: ChipVariant.allCases,
+                    value: self.$variant)
+
+                EnumSelector(
+                    title: "Alignment",
+                    dialogTitle: "Select an Alignment",
+                    values: ChipAlignment.allCases,
+                    value: self.$alignment)
+
                 CheckboxView(
                     text: "With Label",
                     checkedImage: DemoIconography.shared.checkmark,
@@ -139,40 +95,31 @@ struct ChipComponentView: View {
                     state: .enabled,
                     selectionState: self.$isEnabled
                 )
-            }
-
-            Divider()
-
-            Text("Integration")
-                .font(.title2)
-                .bold()
-
-            ChipComponentViewRepresentable(
-                theme: self.theme,
-                intent: self.intent,
-                variant: self.variant,
-                alignment: self.alignment,
-                label: self.showLabel == .selected ? self.label : nil,
-                icon: self.showIcon == .selected ? self.icon : nil,
-                component: self.withComponent == .selected ? badge() : nil,
-                isEnabled: self.isEnabled == .selected,
-                action: self.withAction == .selected ? { self.showingAlert = true} : nil)
+            },
+            integration: {
+                ChipView(
+                    theme: self.theme,
+                    intent: self.intent,
+                    variant: self.variant,
+                    alignment: self.alignment,
+                    icon: self.showIcon == .selected ? self.icon : nil,
+                    title: self.showLabel == .selected ? self.label : nil,
+                    action: self.withAction == .selected ? { self.showingAlert = true} : nil
+                )
+                .component(self.withComponent == .selected ? self.component() : nil)
+                .disabled(self.isEnabled == .unselected)
                 .alert("Chip Pressed", isPresented: self.$showingAlert) {
                     Button("OK", role: .cancel) { }
+                }
             }
-            .fixedSize()
-
-            Spacer()
-        }
-        .padding(.horizontal, 16)
-        .navigationBarTitle(Text("Chip"))
+        )
     }
 
-    func badge() -> UIView {
-        return BadgeUIView(theme: self.theme,
-                           intent: .danger,
-                           size: .small,
-                           value: 99
+
+    private func component() -> AnyView {
+        return AnyView(
+            Image(systemName: "checkmark.seal.fill")
+                .foregroundColor(.gray)
         )
     }
 }

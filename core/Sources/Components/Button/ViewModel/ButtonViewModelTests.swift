@@ -7,10 +7,8 @@
 //
 
 import XCTest
-import SnapshotTesting
 
 @testable import SparkCore
-@testable import Spark
 import Combine
 
 final class ButtonViewModelTests: XCTestCase {
@@ -1272,24 +1270,21 @@ private extension ButtonViewModelTests {
         givenAlignment: ButtonAlignment? = nil,
         givenIconImage: UIImage? = nil
     ) {
-        XCTAssertEqual(stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextCallsCount,
+        XCTAssertEqual(stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTextCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getContentUseCase")
 
         if numberOfCalls > 0, let givenAlignment {
-            let getContentUseCaseArgs = stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReceivedArguments
+            let getContentUseCaseArgs = stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTextReceivedArguments
             XCTAssertEqual(getContentUseCaseArgs?.alignment,
                            givenAlignment,
                            "Wrong alignment parameter on execute on getContentUseCase")
             XCTAssertEqual(getContentUseCaseArgs?.iconImage?.leftValue,
                            givenIconImage,
                            "Wrong iconImage parameter on execute on getContentUseCase")
-            XCTAssertEqual(getContentUseCaseArgs?.text,
-                           stub.displayedTextViewModelMock.text,
-                           "Wrong text parameter on execute on getContentUseCase")
-            XCTAssertEqual(getContentUseCaseArgs?.attributedText,
-                           stub.displayedTextViewModelMock.attributedText,
-                           "Wrong attributedText parameter on execute on getContentUseCase")
+            XCTAssertEqual(getContentUseCaseArgs?.containsText,
+                           stub.displayedTextViewModelMock.containsText,
+                           "Wrong containsText parameter on execute on getContentUseCase")
         }
     }
 
@@ -1319,21 +1314,18 @@ private extension ButtonViewModelTests {
         numberOfCalls: Int,
         givenIconImage: UIImage? = nil
     ) {
-        XCTAssertEqual(stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextCallsCount,
+        XCTAssertEqual(stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTextCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getIsIconOnlyUseCase")
 
         if numberOfCalls > 0 {
-            let getIsIconOnlyUseCaseArgs = stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextReceivedArguments
+            let getIsIconOnlyUseCaseArgs = stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTextReceivedArguments
             XCTAssertEqual(getIsIconOnlyUseCaseArgs?.iconImage?.leftValue,
                            givenIconImage,
                            "Wrong iconImage parameter on execute on getIsIconOnlyUseCase")
-            XCTAssertEqual(getIsIconOnlyUseCaseArgs?.text,
-                           stub.displayedTextViewModelMock.text,
-                           "Wrong text parameter on execute on getIsIconOnlyUseCase")
-            XCTAssertEqual(getIsIconOnlyUseCaseArgs?.attributedText,
-                           stub.displayedTextViewModelMock.attributedText,
-                           "Wrong attributedText parameter on execute on getIsIconOnlyUseCase")
+            XCTAssertEqual(getIsIconOnlyUseCaseArgs?.containsText,
+                           stub.displayedTextViewModelMock.containsText,
+                           "Wrong containsText parameter on execute on getIsIconOnlyUseCase")
         }
     }
 
@@ -1463,8 +1455,7 @@ private final class Stub {
         // **
         // Dependencies
         let displayedTextViewModelMock = DisplayedTextViewModelGeneratedMock()
-        displayedTextViewModelMock.text = "Text"
-        displayedTextViewModelMock.attributedText = .left(.init(string: "AText"))
+        displayedTextViewModelMock.displayedText = .mocked()
         displayedTextViewModelMock.underlyingDisplayedTextType = .text
         self.displayedTextViewModelMock = displayedTextViewModelMock
 
@@ -1477,7 +1468,7 @@ private final class Stub {
         self.getColorsUseCaseMock = getColorsUseCaseMock
 
         let getContentUseCaseMock = ButtonGetContentUseCaseableGeneratedMock()
-        getContentUseCaseMock.executeWithAlignmentAndIconImageAndTextAndAttributedTextReturnValue = self.contentMock
+        getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTextReturnValue = self.contentMock
         self.getContentUseCaseMock = getContentUseCaseMock
 
         let getCurrentColorsUseCaseMock = ButtonGetCurrentColorsUseCaseableGeneratedMock()
@@ -1485,7 +1476,7 @@ private final class Stub {
         self.getCurrentColorsUseCaseMock = getCurrentColorsUseCaseMock
 
         let getIsIconOnlyUseCaseMock = ButtonGetIsOnlyIconUseCaseableGeneratedMock()
-        getIsIconOnlyUseCaseMock.executeWithIconImageAndTextAndAttributedTextReturnValue = self.isIconOnlyMock
+        getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTextReturnValue = self.isIconOnlyMock
         self.getIsIconOnlyUseCaseMock = getIsIconOnlyUseCaseMock
 
         let getSizesUseCaseMock = ButtonGetSizesUseCaseableGeneratedMock()

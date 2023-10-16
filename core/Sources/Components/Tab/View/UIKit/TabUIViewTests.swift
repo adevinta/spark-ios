@@ -7,11 +7,11 @@
 //
 
 import Combine
-@testable import Spark
-@testable import SparkCore
 import XCTest
 
-final class TabUIViewTests: TestCase {
+@testable import SparkCore
+
+final class TabUIViewTests: XCTestCase {
     var sut: TabUIView!
     var subscriptions = Set<AnyCancellable>()
 
@@ -102,7 +102,7 @@ final class TabUIViewTests: TestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        self.sut.segments[2].touchesEnded([UITouch()], with: nil)
+        self.sut.segments[2].sendActions(for: .touchUpInside)
 
         // Then
         waitForExpectations(timeout: 1)
@@ -115,7 +115,6 @@ final class TabUIViewTests: TestCase {
         expect.isInverted = true
 
         self.sut.publisher.sink { (selectedTab: Int) in
-            print(selectedTab)
             expect.fulfill()
         }.store(in: &self.subscriptions)
 
@@ -132,7 +131,7 @@ final class TabUIViewTests: TestCase {
         self.sut.delegate = delegate
 
         // When
-        self.sut.segments[2].touchesEnded([UITouch()], with: nil)
+        self.sut.segments[2].sendActions(for: .touchUpInside)
 
         // Then
         XCTAssertEqual(
@@ -157,7 +156,7 @@ final class TabUIViewTests: TestCase {
         self.sut.addAction(action, for: .valueChanged)
 
         // When
-        self.sut.segments[2].touchesEnded([UITouch()], with: nil)
+        self.sut.segments[2].sendActions(for: .touchUpInside)
 
         // Then
         waitForExpectations(timeout: 1)
@@ -194,7 +193,7 @@ final class TabUIViewTests: TestCase {
         self.sut.setAction(action, forSegmentAt: 2)
 
         // When
-        self.sut.segments[2].touchesEnded([UITouch()], with: nil)
+        self.sut.segments[2].sendActions(for: .touchUpInside)
 
         // Then
         waitForExpectations(timeout: 1)

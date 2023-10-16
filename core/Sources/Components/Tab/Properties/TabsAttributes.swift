@@ -8,6 +8,10 @@
 
 import Foundation
 
+/// Specific attributes of the tab control.
+/// - lineHeight: The height of the bottom line.
+/// - lineColor: The color of the bottom line.
+/// - backgroundColor: The background color of the tab control.
 struct TabsAttributes: Equatable {
     let lineHeight: CGFloat
     let lineColor: any ColorToken

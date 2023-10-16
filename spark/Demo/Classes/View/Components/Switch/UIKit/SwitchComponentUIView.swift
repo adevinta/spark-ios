@@ -70,13 +70,17 @@ final class SwitchComponentUIView: ComponentUIView {
 
             switch content {
             case .text:
-                self.componentView.text = viewModel.text
+                self.componentView.text = self.viewModel.text
 
             case .attributedText:
-                self.componentView.attributedText = viewModel.attributedText
+                self.componentView.attributedText = self.viewModel.attributedText
 
             case .multilineText:
-                self.componentView.text = viewModel.multilineText
+                self.componentView.text = self.viewModel.multilineText
+
+            case .none:
+                self.componentView.text = nil
+                self.componentView.attributedText = nil
             }
         }
 

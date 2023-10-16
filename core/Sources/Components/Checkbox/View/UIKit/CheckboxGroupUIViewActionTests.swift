@@ -7,9 +7,9 @@
 //
 
 import Combine
-@testable import Spark
-@testable import SparkCore
 import XCTest
+
+@testable import SparkCore
 
 final class CheckboxGroupUIViewActionTests: TestCase {
     // MARK: Private Properties
@@ -17,11 +17,11 @@ final class CheckboxGroupUIViewActionTests: TestCase {
     private var subscriptions: Set<AnyCancellable>!
     private var delegate: CheckboxGroupUIViewDelegateGeneratedMock!
     private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItem(title: "Apple", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
-        CheckboxGroupItem(title: "Cake", id: "2", selectionState: .indeterminate),
-        CheckboxGroupItem(title: "Fish", id: "3", selectionState: .unselected),
-        CheckboxGroupItem(title: "Fruit", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
-        CheckboxGroupItem(title: "Vegetables", id: "5", selectionState: .unselected, state: .disabled)
+        CheckboxGroupItemDefault(title: "Apple", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
+        CheckboxGroupItemDefault(title: "Cake", id: "2", selectionState: .indeterminate),
+        CheckboxGroupItemDefault(title: "Fish", id: "3", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Fruit", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
+        CheckboxGroupItemDefault(title: "Vegetables", id: "5", selectionState: .unselected, state: .disabled)
     ]
 
     // MARK: - Setup
