@@ -45,20 +45,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Get list of modified components
-        id: get-modified-components
+      - name: Check modified components
         run: |
-          MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | grep -E 'core/Sources/Components/' | tr '\n' ' ')
-          echo "modified_files=${MODIFIED_FILES}" >> $GITHUB_OUTPUT
-      - name: Check if specified component folders are modified
-        id: check-modified-components
-        run: |
-          if echo "${{ steps.get-modified-components.outputs.modified_files }}" | grep -E 'core/Sources/Components/' > /dev/null; then
-              echo "Modified component folders."
-              # Run core unit tests here
-          else
-              echo "No modifications in specified component folders. Skipping core unit tests."
-          fi
+          MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | grep -E 'core/Sources/Components/')
+          echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
       # - name: Run Sourcery
       #   uses: ./.github/composite-actions/sourcery
       # - name: Extract branch name
