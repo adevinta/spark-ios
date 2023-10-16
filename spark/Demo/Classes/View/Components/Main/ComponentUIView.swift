@@ -222,7 +222,7 @@ class ComponentUIView: UIView {
     // MARK: - Subscribe
 
     private func setupSubscriptions() {
-        self.viewModel.$spaceContainerType.subscribe(in: &self.subscriptions) { [weak self] type in
+        self.viewModel.$spaceContainerType.subscribe(in: &self.subscriptions, on: RunLoop.main) { [weak self] type in
             guard let self = self else { return }
             self.viewModel.spaceContainerTypeConfigurationItemViewModel.buttonTitle = type.name
             self.updateSpaceContainerViews()
