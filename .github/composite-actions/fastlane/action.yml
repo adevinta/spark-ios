@@ -36,6 +36,5 @@ runs:
       run: bundle exec fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }}
       shell: bash
       env:
-        ONLY_TESTING: "BadgeUIViewSnapshotTests"
-        # ONLY_TESTING: "SparkCoreSnapshotTests/BadgeUIViewSnapshotTests"
+        ONLY_TESTING: ${{ inputs.only_testing }}
         HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
