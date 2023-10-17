@@ -9,6 +9,8 @@
 import XCTest
 import SnapshotTesting
 
+// TODO: rename SUT to Configuration
+
 @testable import SparkCore
 
 final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
@@ -16,67 +18,61 @@ final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
     // MARK: - Properties
 
     private let theme: Theme = SparkTheme.shared
-    private var iconImage: UIImage {
-        get throws {
-            try XCTUnwrap(
-                UIImage(systemName: "person.2.circle.fill"),
-                "IconImage shouldn't be nil"
-            )
-        }
-    }
-    private let text = "Text"
 
     // MARK: - Tests
 
-    func test_uiKit_tag_with_only_image_for_all_intent_and_variant() throws {
-        let suts = TagSutSnapshotTests.allCases
-        for sut in suts {
-            let view = try TagUIView(
-                theme: self.theme,
-                intent: sut.intent,
-                variant: sut.variant,
-                iconImage: self.iconImage
-            )
-            
-            self.assertSnapshotInDarkAndLight(
-                matching: view,
-                testName: sut.testName()
-            )
-        }
-    }
+    func test() {
+        let scenarios = TagScenarioSnapshotTests.allCases
 
-    func test_uiKit_tag_with_only_text_for_all_intent_and_variant() {
-        let suts = TagSutSnapshotTests.allCases
-        for sut in suts {
-            let view = TagUIView(
-                theme: self.theme,
-                intent: sut.intent,
-                variant: sut.variant,
-                text: self.text
-            )
+        for scenario in scenarios {
+            let configurations = scenario.configuration(isSwiftUIComponent: false)
+            for configuration in configurations {
 
-            self.assertSnapshotInDarkAndLight(
-                matching: view,
-                testName: sut.testName()
-            )
-        }
-    }
+                var view: TagUIView?
+                switch (configuration.iconImage, configuration.text) {
+                case (nil, nil):
+                    XCTFail("Icon or text should be set")
 
-    func test_uiKit_tag_with_image_and_text_for_all_intent_and_variant() throws {
-        let suts = TagSutSnapshotTests.allCases
-        for sut in suts {
-            let view = try TagUIView(
-                theme: self.theme,
-                intent: sut.intent,
-                variant: sut.variant,
-                iconImage: self.iconImage,
-                text: self.text
-            )
+                case (let iconImage?, nil):
+                    view = TagUIView(
+                        theme: self.theme,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
+                        iconImage: iconImage.leftValue
+                    )
+                case (nil, let text?):
+                    view = TagUIView(
+                        theme: self.theme,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
+                        text: text
+                    )
+                case let (iconImage?, text?):
+                    view = TagUIView(
+                        theme: self.theme,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
+                        iconImage: iconImage.leftValue,
+                        text: text
+                    )
+                }
 
-            self.assertSnapshotInDarkAndLight(
-                matching: view,
-                testName: sut.testName()
-            )
+                guard let view else {
+                    return
+                }
+
+                view.translatesAutoresizingMaskIntoConstraints = false
+                if let width = configuration.width {
+                    view.widthAnchor.constraint(equalToConstant: width).isActive = true
+                }
+
+                self.assertSnapshot(
+                    matching: view,
+                    modes: configuration.modes,
+                    sizes: configuration.sizes,
+                    testName: configuration.testName()
+                )
+            }
         }
     }
 }
