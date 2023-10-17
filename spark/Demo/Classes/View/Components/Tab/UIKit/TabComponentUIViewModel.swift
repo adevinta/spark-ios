@@ -246,7 +246,6 @@ extension TabComponentUIViewModel {
 // MARK: - Private helpers
 private extension UIImage {
     static let names = [
-        "fleuron",
         "trash",
         "folder",
         "paperplane",
@@ -259,15 +258,13 @@ private extension UIImage {
         "terminal",
         "book",
         "greetingcard",
-        "menucard",
         "magazine"
     ]
 
-    // swiftlint: disable force_unwrapping
     static func image(at index: Int) -> UIImage {
         let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
-        let imageName = allSfs[index % names.count]
-        return UIImage(systemName: imageName)!
+        let imageName = allSfs[index % allSfs.count]
+        return UIImage(systemName: imageName) ?? UIImage()
     }
 }
 
