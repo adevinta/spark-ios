@@ -48,15 +48,23 @@ jobs:
       - name: Check modified components
         run: |
           MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | grep -E 'core/Sources/Components/')
-          echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
-      - name: Get list of modified test classes
-        if: env.components_modified == 'true'
-        run: |
-          TEST_CLASSES=$(echo "$MODIFIED_FILES" | awk -F/ '/SnapshotTests.swift/ {print $NF}' | sed 's/.swift//g')
-          ONLY_TESTING_ARG="--only-testing \"GTUITests/$(echo $TEST_CLASSES | tr '\n' ',' | sed 's/,$//')\""
-          echo "Test classes to run: $TEST_CLASSES"
-          echo "Fastlane argument: $ONLY_TESTING_ARG"
-        shell: bash
+          ALL_TESTS=$(./.github/composite-actions/scope/analyze_modified_files.sh "$MODIFIED_FILES")
+          echo "ALL_TESTS=$ALL_TESTS" >> $GITHUB_ENV
+      # echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
+      # - name: Analyze modified files and generate ALL_TESTS variable
+      #   id: analyze-modified-files
+      #   run: |
+      #     # Run your script to generate ALL_TESTS variable
+      #     ALL_TESTS=$(./.github/composite-actions/scope/analyze_modified_files.sh "$MODIFIED_FILES")
+      #     echo "ALL_TESTS=$ALL_TESTS" >> $GITHUB_ENV
+      # - name: Get list of modified test classes
+      #   if: env.components_modified == 'true'
+      #   run: |
+      #     TEST_CLASSES=$(echo "$MODIFIED_FILES" | awk -F/ '/SnapshotTests.swift/ {print $NF}' | sed 's/.swift//g')
+      #     ONLY_TESTING_ARG="--only-testing \"GTUITests/$(echo $TEST_CLASSES | tr '\n' ',' | sed 's/,$//')\""
+      #     echo "Test classes to run: $TEST_CLASSES"
+      #     echo "Fastlane argument: $ONLY_TESTING_ARG"
+      #   shell: bash
       # - name: Run Sourcery
       #   if: env.components_modified == 'true'
       #   uses: ./.github/composite-actions/sourcery
