@@ -4,41 +4,41 @@ on:
     types: [opened, edited, synchronize]
 
 jobs:
-  # core_build:
-  #   runs-on: macos-13-xl
-  #   steps:
-  #     - name: Checkout actions
-  #       uses: actions/checkout@v4
-  #     - name: Run Fastlane
-  #       uses: ./.github/composite-actions/fastlane
-  #       with:
-  #         lane: "build_framework"
-  #         target: "SparkCore"
+  core_build:
+    runs-on: macos-13-xl
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v4
+      - name: Run Fastlane
+        uses: ./.github/composite-actions/fastlane
+        with:
+          lane: "build_framework"
+          target: "SparkCore"
 
-  # core_unit_tests:
-  #   name: core_unit_tests
-  #   needs: [core_build]
-  #   runs-on: macos-13-xl
-  #   env:
-  #     target: SparkCore
-  #   steps:
-  #     - name: Checkout actions
-  #       uses: actions/checkout@v4
-  # - name: Run Sourcery
-  #   uses: ./.github/composite-actions/sourcery
-  # - name: Run Fastlane
-  #   uses: ./.github/composite-actions/fastlane
-  #   with:
-  #     lane: "unit_tests"
-  #     target: ${{ env.target }}
-  # - name: Archive xcresult
-  #   uses: ./.github/composite-actions/xcresult
-  #   with:
-  #     target: ${{ env.target }}
+  core_unit_tests:
+    name: core_unit_tests
+    needs: [core_build]
+    runs-on: macos-13-xl
+    env:
+      target: SparkCore
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v4
+      - name: Run Sourcery
+        uses: ./.github/composite-actions/sourcery
+      - name: Run Fastlane
+        uses: ./.github/composite-actions/fastlane
+        with:
+          lane: "unit_tests"
+          target: ${{ env.target }}
+      - name: Archive xcresult
+        uses: ./.github/composite-actions/xcresult
+        with:
+          target: ${{ env.target }}
 
   core_snapshot_tests:
     name: core_snapshot_tests
-    # needs: [core_build]
+    needs: [core_build]
     runs-on: macos-13-xl
     steps:
       - name: Checkout actions
@@ -78,52 +78,35 @@ jobs:
         if: env.components_modified == 'true'
         uses: ./.github/composite-actions/xcresult
         with:
-          target:
-            "SparkCoreSnapshots"
+          target: "SparkCoreSnapshots"
 
-            # echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
-      # - name: Analyze modified files and generate ALL_TESTS variable
-      #   id: analyze-modified-files
-      #   run: |
-      #     # Run your script to generate ALL_TESTS variable
-      #     ALL_TESTS=$(./.github/composite-actions/scope/analyze_modified_files.sh "$MODIFIED_FILES")
-      #     echo "ALL_TESTS=$ALL_TESTS" >> $GITHUB_ENV
-      # - name: Get list of modified test classes
-      #   if: env.components_modified == 'true'
-      #   run: |
-      #     TEST_CLASSES=$(echo "$MODIFIED_FILES" | awk -F/ '/SnapshotTests.swift/ {print $NF}' | sed 's/.swift//g')
-      #     ONLY_TESTING_ARG="--only-testing \"GTUITests/$(echo $TEST_CLASSES | tr '\n' ',' | sed 's/,$//')\""
-      #     echo "Test classes to run: $TEST_CLASSES"
-      #     echo "Fastlane argument: $ONLY_TESTING_ARG"
-      #   shell: bash
+  build:
+    needs: [core_build]
+    runs-on: macos-13-xl
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v4
+      - name: Run Fastlane
+        uses: ./.github/composite-actions/fastlane
+        with:
+          lane: "build_framework"
+          target: "Spark"
 
-  # build:
-  #   needs: [core_build]
-  #   runs-on: macos-13-xl
-  #   steps:
-  #     - name: Checkout actions
-  #       uses: actions/checkout@v4
-  #     - name: Run Fastlane
-  #       uses: ./.github/composite-actions/fastlane
-  #       with:
-  #         lane: "build_framework"
-  #         target: "Spark"
-
-  # unit_tests:
-  #   name: unit_tests
-  #   needs: [build]
-  #   runs-on: macos-13-xl
-  #   env:
-  #     target: Spark
-  #   steps:
-  #     - name: Checkout actions
-  #       uses: actions/checkout@v4
-  #     - name: Run Fastlane
-  #       uses: ./.github/composite-actions/fastlane
-  #       with:
-  #         lane: "unit_tests"
-  #         target: ${{ env.target }}
-  #     - name: Archive xcresult
-  #       uses: ./.github/composite-actions/xcresult
-  #       with:
-  #         target: ${{ env.target }}
+  unit_tests:
+    name: unit_tests
+    needs: [build]
+    runs-on: macos-13-xl
+    env:
+      target: Spark
+    steps:
+      - name: Checkout actions
+        uses: actions/checkout@v4
+      - name: Run Fastlane
+        uses: ./.github/composite-actions/fastlane
+        with:
+          lane: "unit_tests"
+          target: ${{ env.target }}
+      - name: Archive xcresult
+        uses: ./.github/composite-actions/xcresult
+        with:
+          target: ${{ env.target }}
