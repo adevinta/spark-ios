@@ -35,4 +35,4 @@ done
 ALL_TESTS="$SWIFTUI_TESTS $UIKIT_TESTS"
 
 # Print the combined list of test classes
-echo "ALL_TESTS=$ALL_TESTS"
+echo "$ALL_TESTS"
