@@ -49,6 +49,8 @@ jobs:
         run: |
           MODIFIED_FILES=$(git diff --name-only --diff-filter=MAR origin/${{ github.base_ref }} | grep -E 'core/Sources/Components/')
           ALL_TESTS=$(./.github/composite-actions/scope/analyze_modified_files.sh "$MODIFIED_FILES")
+          echo "ALL_TESTS=$ALL_TESTS"
+          echo "ALL_TESTS has been printed for debugging purposes."  
           echo "ALL_TESTS=$ALL_TESTS" >> $GITHUB_ENV
       # echo "components_modified=$(if [ -n "$MODIFIED_FILES" ]; then echo true; else echo false; fi)" >> $GITHUB_ENV
       # - name: Analyze modified files and generate ALL_TESTS variable
