@@ -9,8 +9,6 @@
 import XCTest
 import SnapshotTesting
 
-// TODO: rename SUT to Configuration
-
 @testable import SparkCore
 
 final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
