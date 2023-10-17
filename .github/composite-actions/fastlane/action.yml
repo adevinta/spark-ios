@@ -33,8 +33,10 @@ runs:
       shell: bash
       run: mkdir -p packages_cache
     - name: "Run fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }}"
+      run: bundle exec fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }}
       # run: bundle exec fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }} --only-testing ${{ inputs.only_testing }}
-      run: bundle exec fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }} --only-testing "SparkCoreSnapshotTests/BadgeUIViewSnapshotTests"
+      # run: bundle exec fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }} --only-testing "SparkCoreSnapshotTests/BadgeUIViewSnapshotTests"
       shell: bash
       env:
+        ONLY_TESTING: "SparkCoreSnapshotTests/BadgeUIViewSnapshotTests"
         HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
