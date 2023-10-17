@@ -52,7 +52,7 @@ public struct SwitchView: View {
     }
 
     // MARK: - View
-    
+
     public var body: some View {
         HStack(alignment: .top) {
             ForEach(self.subviewsTypes(), id: \.self) {
@@ -100,12 +100,14 @@ public struct SwitchView: View {
 
     @ViewBuilder
     private func space() -> some View {
-        Spacer()
-            .frame(
-                width: self.viewModel.horizontalSpacing.scaledMetric(
-                    with: self.contentStackViewSpacingMultiplier
+        if self.viewModel.horizontalSpacing ?? 0 > 0 {
+            Spacer()
+                .frame(
+                    width: self.viewModel.horizontalSpacing.scaledMetric(
+                        with: self.contentStackViewSpacingMultiplier
+                    )
                 )
-            )
+        }
     }
 
     @ViewBuilder
