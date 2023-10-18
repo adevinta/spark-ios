@@ -110,12 +110,6 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-//    var identifier: String = "Checkbox"
-//
-//    lazy var configurationViewModel: ComponentsConfigurationUIViewModel = {
-//        return
-//    }()
-
     var themes = ThemeCellModel.themes
 
     // MARK: - Default Value Properties

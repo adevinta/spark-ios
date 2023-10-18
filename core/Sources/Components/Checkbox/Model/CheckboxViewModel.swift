@@ -14,7 +14,7 @@ final class CheckboxViewModel: ObservableObject {
     
     // MARK: - Internal properties
 
-    @Published var text: String
+    @Published var text: String?
     @Published var attributedText: NSAttributedString?
     @Published var checkedImage: UIImage
     @Published var colors: CheckboxColors
@@ -59,13 +59,12 @@ final class CheckboxViewModel: ObservableObject {
     ) {
         switch text {
         case .left(let attributedString):
-            self.attributedText = attributedString
             self.text = attributedString.string
+            self.attributedText = attributedString
         case .right(let string):
             self.attributedText = nil
             self.text = string
         }
-
         self.checkedImage = checkedImage
         self.theme = theme
         self.isEnabled = isEnabled
@@ -96,8 +95,10 @@ final class CheckboxViewModel: ObservableObject {
     func update(content: Either<NSAttributedString, String>) {
         switch content {
         case .left(let attributedString):
+            self.text = attributedString.string
             self.attributedText = attributedString
         case .right(let string):
+            self.attributedText = nil
             self.text = string
         }
     }
