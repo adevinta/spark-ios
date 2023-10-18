@@ -17,6 +17,6 @@ public enum ProgressBarAccessibilityIdentifier {
     public static let trackView = "spark-progressBar-trackView"
     /// The indicator view accessibility identifier.
     public static let indicatorView = "spark-progressBar-indicatorView"
-    /// The bottom indicator view accessibility identifier. Only used with progress double bar
+    /// The bottom indicator view accessibility identifier. Only used with progress bar double
     public static let bottomIndicatorView = "spark-progressBar-bottomIndicatorView"
 }

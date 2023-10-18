@@ -1,5 +1,5 @@
 //
-//  ProgressIndeterminateBarViewModel.swift
+//  ProgressBarIndeterminateViewModel.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 20/09/2023.
@@ -10,7 +10,7 @@ import SwiftUI
 
 // sourcery: AutoPublisherTest, AutoViewModelStub
 /// Indeterminate ViewModel use the IndeterminateStyle ViewModel because the style are the same
-final class ProgressIndeterminateBarViewModel: ProgressBarMainViewModel<ProgressBarGetColorsUseCase> {
+final class ProgressBarIndeterminateViewModel: ProgressBarMainViewModel<ProgressBarGetColorsUseCase> {
 
     // MARK: - Properties
 
@@ -20,8 +20,8 @@ final class ProgressIndeterminateBarViewModel: ProgressBarMainViewModel<Progress
         }
     }
     @Published private(set) var animatedData: ProgressBarAnimatedData?
-    @Published private(set) var animationType: ProgressIndeterminateBarAnimationType?
-    @Published private(set) var animationStatus: ProgressIndeterminateBarStatus?
+    @Published private(set) var animationType: ProgressBarIndeterminateAnimationType?
+    @Published private(set) var animationStatus: ProgressBarIndeterminateStatus?
     @Published private(set) var indicatorOpacity: Double?
 
     private let getAnimatedDataUseCase: ProgressBarGetAnimatedDataUseCaseable

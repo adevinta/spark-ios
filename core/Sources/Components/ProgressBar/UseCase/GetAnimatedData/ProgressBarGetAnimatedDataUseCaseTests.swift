@@ -64,7 +64,7 @@ final class ProgressBarGetAnimatedDataUseCaseTests: XCTestCase {
 private extension ProgressBarGetAnimatedDataUseCaseTests {
 
     func testExecute(
-        givenType: ProgressIndeterminateBarAnimationType?,
+        givenType: ProgressBarIndeterminateAnimationType?,
         expectedAnimatedData: ProgressBarAnimatedData
     ) {
         // GIVEN

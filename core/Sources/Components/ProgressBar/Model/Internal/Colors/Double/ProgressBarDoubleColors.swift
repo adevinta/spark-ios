@@ -1,12 +1,12 @@
 //
-//  ProgressDoubleBarColors.swift
+//  ProgressBarDoubleColors.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 20/09/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-struct ProgressDoubleBarColors: ProgressBarMainColors {
+struct ProgressBarDoubleColors: ProgressBarMainColors {
 
     // MARK: - Properties
 
@@ -17,7 +17,7 @@ struct ProgressDoubleBarColors: ProgressBarMainColors {
 
 // MARK: Hashable & Equatable
 
-extension ProgressDoubleBarColors {
+extension ProgressBarDoubleColors {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.trackBackgroundColorToken)
@@ -25,7 +25,7 @@ extension ProgressDoubleBarColors {
         hasher.combine(self.bottomIndicatorBackgroundColorToken)
     }
 
-    static func == (lhs: ProgressDoubleBarColors, rhs: ProgressDoubleBarColors) -> Bool {
+    static func == (lhs: ProgressBarDoubleColors, rhs: ProgressBarDoubleColors) -> Bool {
         return lhs.trackBackgroundColorToken.equals(rhs.trackBackgroundColorToken) &&
         lhs.indicatorBackgroundColorToken.equals(rhs.indicatorBackgroundColorToken) &&
         lhs.bottomIndicatorBackgroundColorToken.equals(rhs.bottomIndicatorBackgroundColorToken)

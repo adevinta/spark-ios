@@ -1,5 +1,5 @@
 //
-//  ProgressIndeterminateBarAnimationTypeTests.swift
+//  ProgressBarIndeterminateAnimationTypeTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 29/09/2023.
@@ -10,15 +10,15 @@ import XCTest
 import SwiftUI
 @testable import SparkCore
 
-final class ProgressIndeterminateBarAnimationTypeTests: XCTestCase {
+final class ProgressBarIndeterminateAnimationTypeTests: XCTestCase {
 
     // MARK: - Tests
     
     func test_next() throws {
         // GIVEN
         let items: [(
-            givenType: ProgressIndeterminateBarAnimationType,
-            expectedNextType: ProgressIndeterminateBarAnimationType
+            givenType: ProgressBarIndeterminateAnimationType,
+            expectedNextType: ProgressBarIndeterminateAnimationType
         )] = [
             (
                 givenType: .easeIn,

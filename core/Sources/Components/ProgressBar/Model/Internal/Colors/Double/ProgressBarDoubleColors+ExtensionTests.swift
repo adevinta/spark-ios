@@ -1,5 +1,5 @@
 //
-//  ProgressDoubleBarColors+ExtensionTests.swift
+//  ProgressBarDoubleColors+ExtensionTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 20/09/2023.
@@ -8,7 +8,7 @@
 
 @testable import SparkCore
 
-extension ProgressDoubleBarColors {
+extension ProgressBarDoubleColors {
 
     // MARK: - Properties
 

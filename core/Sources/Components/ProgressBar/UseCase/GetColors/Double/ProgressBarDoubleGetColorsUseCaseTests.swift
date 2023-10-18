@@ -1,5 +1,5 @@
 //
-//  ProgressDoubleBarGetColorsUseCaseTests.swift
+//  ProgressBarDoubleGetColorsUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 20/09/2023.
@@ -10,7 +10,7 @@ import XCTest
 import SwiftUI
 @testable import SparkCore
 
-final class ProgressDoubleBarGetColorsUseCaseTests: XCTestCase {
+final class ProgressBarDoubleGetColorsUseCaseTests: XCTestCase {
 
     // MARK: - Properties
 
@@ -63,10 +63,10 @@ final class ProgressDoubleBarGetColorsUseCaseTests: XCTestCase {
 
 // MARK: - Execute Testing
 
-private extension ProgressDoubleBarGetColorsUseCaseTests {
+private extension ProgressBarDoubleGetColorsUseCaseTests {
 
     func testExecute(
-        givenIntent: ProgressDoubleBarIntent,
+        givenIntent: ProgressBarDoubleIntent,
         expectedIndicatorBackgroundColorToken: any ColorToken
     ) throws {
         // GIVEN
@@ -75,7 +75,7 @@ private extension ProgressDoubleBarGetColorsUseCaseTests {
         let expectedTrackBackgroundColorToken = self.colorsMock.base.onBackground.opacity(dimsMock.dim4)
         let bottomIndicatorBackgroundColorToken = expectedIndicatorBackgroundColorToken.opacity(dimsMock.dim3)
 
-        let useCase = ProgressDoubleBarGetColorsUseCase()
+        let useCase = ProgressBarDoubleGetColorsUseCase()
 
         // WHEN
         let colors = useCase.execute(

@@ -1,12 +1,12 @@
 //
-//  ProgressIndeterminateBarAnimationType.swift
+//  ProgressBarIndeterminateAnimationType.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 28/09/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-enum ProgressIndeterminateBarAnimationType: Equatable {
+enum ProgressBarIndeterminateAnimationType: Equatable {
     case easeIn
     case easeOut
     case reset

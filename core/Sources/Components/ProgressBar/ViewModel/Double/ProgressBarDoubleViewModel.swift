@@ -1,19 +1,19 @@
 //
-//  ProgressDoubleBarViewModel.swift
+//  ProgressBarDoubleViewModel.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 20/09/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-final class ProgressDoubleBarViewModel: ProgressBarMainViewModel<ProgressDoubleBarGetColorsUseCase> {
+final class ProgressBarDoubleViewModel: ProgressBarMainViewModel<ProgressBarDoubleGetColorsUseCase> {
 
     // MARK: - Initialization
 
     convenience init(
         for frameworkType: FrameworkType,
         theme: Theme,
-        intent: ProgressDoubleBarIntent,
+        intent: ProgressBarDoubleIntent,
         shape: ProgressBarShape
     ) {
         self.init(
@@ -21,12 +21,12 @@ final class ProgressDoubleBarViewModel: ProgressBarMainViewModel<ProgressDoubleB
             theme: theme,
             intent: intent,
             shape: shape,
-            getColorsUseCase: ProgressDoubleBarGetColorsUseCase()
+            getColorsUseCase: ProgressBarDoubleGetColorsUseCase()
         )
     }
 }
 
 // MARK: - Extension
 
-extension ProgressDoubleBarViewModel: ProgressBarValueViewModel {
+extension ProgressBarDoubleViewModel: ProgressBarValueViewModel {
 }

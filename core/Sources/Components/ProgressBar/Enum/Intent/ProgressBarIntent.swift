@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-/// The intent of the progress bar and progress indeterminate bar.
+/// The intent of the progress bar and progress bar indeterminate.
 public enum ProgressBarIntent: CaseIterable {
     case accent
     case alert

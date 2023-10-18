@@ -11,7 +11,7 @@ import Foundation
 // sourcery: AutoMockable, AutoMockTest
 protocol ProgressBarGetAnimatedDataUseCaseable {
     func execute(
-        type: ProgressIndeterminateBarAnimationType?,
+        type: ProgressBarIndeterminateAnimationType?,
         trackWidth: CGFloat
     ) -> ProgressBarAnimatedData
 }
@@ -25,7 +25,7 @@ struct ProgressBarGetAnimatedDataUseCase: ProgressBarGetAnimatedDataUseCaseable 
     // MARK: - Methods
 
     func execute(
-        type: ProgressIndeterminateBarAnimationType?,
+        type: ProgressBarIndeterminateAnimationType?,
         trackWidth: CGFloat
     ) -> ProgressBarAnimatedData {
         switch type {

@@ -6,15 +6,15 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-struct ProgressDoubleBarGetColorsUseCase: ProgressBarMainGetColorsUseCaseable {
+struct ProgressBarDoubleGetColorsUseCase: ProgressBarMainGetColorsUseCaseable {
 
     // MARK: - Methods
 
     func execute(
-        intent: ProgressDoubleBarIntent,
+        intent: ProgressBarDoubleIntent,
         colors: Colors,
         dims: Dims
-    ) -> ProgressDoubleBarColors {
+    ) -> ProgressBarDoubleColors {
         let indicatorBackgroundColorToken: any ColorToken
         switch intent {
         case .accent:
