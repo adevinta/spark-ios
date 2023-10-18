@@ -104,7 +104,9 @@ final class BadgeViewModelTests: XCTestCase {
                                          sut.$backgroundColor,
                                          sut.$border)
 
-        publishers.sink { _ in
+        let allPublishers = Publishers.Zip(publishers, sut.$textFont)
+
+        allPublishers.sink { _ in
             updateExpectation.fulfill()
         }.store(in: &self.subscriptions)
 
