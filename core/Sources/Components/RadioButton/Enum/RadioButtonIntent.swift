@@ -10,4 +10,13 @@ import Foundation
 
 public enum RadioButtonIntent {
     case basic
+    case support
+    case success
+    case alert
+    case danger
+    case info
+    case neutral
+    case accent
+    case main
 }
+

@@ -19,6 +19,7 @@ final class RadioButtonGroupViewModel: ObservableObject {
     @Published var sublabelColor: any ColorToken
     @Published var spacing: CGFloat
     @Published var labelSpacing: CGFloat
+    @Published var isDisabled: Bool
 
     // MARK: - Internal Properties
     var theme: any Theme {
@@ -67,6 +68,7 @@ final class RadioButtonGroupViewModel: ObservableObject {
         self.theme = theme
         self.intent = intent
         self.useCase = useCase
+        self.isDisabled = false
 
         self.sublabelFont = self.theme.typography.caption
         self.titleFont = self.theme.typography.subhead

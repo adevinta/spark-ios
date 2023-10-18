@@ -19,7 +19,6 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     var theme: Theme
     var intent: RadioButtonIntent
 
-//    private (set) var groupState: RadioButtonGroupState
     var state = RadioButtonStateAttribute(isSelected: false, isEnabled: true)
 
     @Binding private (set) var selectedID: ID
@@ -31,7 +30,6 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     @Published var opacity: CGFloat
     @Published var spacing: CGFloat
     @Published var font: TypographyFontToken
-//    @Published var surfaceColor: any ColorToken
     @Published var labelPosition: RadioButtonLabelPosition
 
     // MARK: - Initialization
@@ -99,7 +97,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 //        self.colors = useCase
 //            .execute(theme: theme, state: self.groupState, isSelected: selectedID.wrappedValue == id)
 
-        let state = RadioButtonStateAttribute(isSelected: false, isEnabled: true)
+        let state = RadioButtonStateAttribute(isSelected: selectedID.wrappedValue == id, isEnabled: true)
         let attributes = useCase.execute(
             theme: theme,
             intent: intent,
@@ -158,7 +156,8 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     }
 
     func updateColors() {
-        let attributes = useCase.execute(
+        self.state = self.state.update(\.isSelected, value: self.id == self.selectedID)
+        let attributes = self.useCase.execute(
             theme: self.theme,
             intent: self.intent,
             state: self.state,

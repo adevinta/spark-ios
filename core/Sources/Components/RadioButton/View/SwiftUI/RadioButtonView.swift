@@ -133,8 +133,8 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         return self
     }
 
-    public func theme(_ theme: Theme) -> Self {
-        self.viewModel.set(theme: theme)
+    public func intent(_ intent: RadioButtonIntent) -> Self {
+        self.viewModel.set(intent: intent)
         return self
     }
 
@@ -170,7 +170,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                 .font(self.viewModel.font.font)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(self.viewModel.colors.surface.color)
+                .foregroundColor(self.viewModel.colors.label.color)
         } else {
             EmptyView()
         }

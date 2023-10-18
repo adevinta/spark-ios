@@ -40,7 +40,7 @@ struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
 
         return RadioButtonColors(
             button: buttonColor,
-            label: theme.colors.base.onSurface,
+            label: theme.colors.base.onBackground,
             halo: theme.colors.haloColor(intent: intent),
             fill: state.isSelected ? buttonColor : ColorTokenDefault.clear,
             surface: theme.colors.surfaceColor(intent: intent)
@@ -53,24 +53,52 @@ private extension SparkCore.Colors {
     func buttonColor(
         intent: RadioButtonIntent,
         state: RadioButtonStateAttribute) -> any ColorToken {
+            return  state.isSelected ? self.selectedColor(intent: intent) : self.base.outline
+    }
 
-            switch intent {
-            case .basic:
-                return state.isSelected ? self.basic.basic : self.base.outline
-            }
-        //        switch state {
-//        case .warning: return self.colors.feedback.alert
-//        case .error: return self.colors.feedback.error
-//        case .success: return self.colors.feedback.success
-//        case .enabled, .disabled: return isSelected ? self.colors.main.main : self.colors.base.outline
-//        case .accent: return isSelected ? self.colors.accent.accent : self.colors.base.outline
-//        case .basic: return isSelected ? self.colors.basic.basic : self.colors.base.outline
-//        }
+    private func selectedColor(intent: RadioButtonIntent) -> any ColorToken {
+        switch intent {
+        case .basic:
+            return self.basic.basic
+        case .support:
+            return self.support.support
+        case .alert:
+            return self.feedback.alert
+        case .danger:
+            return self.feedback.error
+        case .info:
+            return self.feedback.info
+        case .neutral:
+            return self.feedback.neutral
+        case .accent:
+            return self.accent.accent
+        case .main:
+            return self.main.main
+        case .success:
+            return self.feedback.success
+        }
     }
 
     func surfaceColor(intent: RadioButtonIntent) -> any ColorToken {
         switch intent {
-        case .basic: return self.base.onSurface
+        case .basic: 
+            return self.base.onSurface
+        case .support:
+            return self.support.onSupport
+        case .alert:
+            return self.feedback.onAlert
+        case .danger:
+            return self.feedback.onError
+        case .info:
+            return self.feedback.onInfo
+        case .neutral:
+            return self.feedback.onNeutral
+        case .accent:
+            return self.accent.onAccent
+        case .main:
+            return self.main.onMain
+        case .success:
+            return self.feedback.success
         }
     }
 
@@ -78,14 +106,22 @@ private extension SparkCore.Colors {
         switch intent {
         case .basic:
             return self.basic.basicContainer
-//        switch state {
-//        case .warning: return self.colors.feedback.alertContainer
-//        case .error: return self.colors.feedback.errorContainer
-//        case .success: return self.colors.feedback.successContainer
-//        case .disabled: return self.colors.main.mainContainer
-//        case .enabled: return self.colors.main.mainContainer
-//        case .accent: return self.colors.accent.accentContainer
-//        case .basic: return self.colors.basic.basicContainer
+        case .accent:
+            return self.accent.accentContainer
+        case .alert:
+            return self.feedback.alertContainer
+        case .info:
+            return self.feedback.infoContainer
+        case .support:
+            return self.support.supportContainer
+        case .danger:
+            return self.feedback.errorContainer
+        case .neutral:
+            return self.feedback.neutralContainer
+        case .main:
+            return self.main.mainContainer
+        case .success:
+            return self.feedback.success
         }
     }
 }

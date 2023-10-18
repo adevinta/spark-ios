@@ -176,7 +176,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     public convenience init(theme: Theme,
-                            intent: RadioButtonIntent = .basic
+                            intent: RadioButtonIntent = .basic,
                             id: ID,
                             label: NSAttributedString,
                             selectedID: Binding<ID>,
@@ -213,6 +213,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     public func toggleNeedsRedisplay() {
         self.viewModel.updateColors()
         self.updateColors(self.viewModel.colors)
+        self.updateLabel()
         self.toggleView.setNeedsDisplay()
     }
 
@@ -306,7 +307,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     private func updateColors(_ colors: RadioButtonColors) {
         self.toggleView.setColors(colors)
-        self.textLabel.textColor = colors.label.uiColor
         self.textLabel.textColor = colors.label.uiColor
     }
 
