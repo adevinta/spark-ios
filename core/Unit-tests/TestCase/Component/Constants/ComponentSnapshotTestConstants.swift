@@ -15,9 +15,13 @@ enum ComponentSnapshotTestConstants {
     static let imagePrecision: Float = 0.98
     static let imagePerceptualPrecision: Float = 0.98
 
-    static let modes: [ComponentSnapshotTestMode] = ComponentSnapshotTestMode.allCases
-    static let mode: ComponentSnapshotTestMode = .light
+    enum Modes {
+        static let all: [ComponentSnapshotTestMode] = [.light, .dark]
+        static let `default`: [ComponentSnapshotTestMode] = [.light]
+    }
 
-    static let sizes: [UIContentSizeCategory] = [.extraSmall, .medium, .accessibilityExtraExtraExtraLarge]
-    static let size: UIContentSizeCategory = .medium
+    enum Sizes {
+        static let all: [UIContentSizeCategory] = [.extraSmall, .medium, .accessibilityExtraExtraExtraLarge]
+        static let `default`: [UIContentSizeCategory] = [.medium]
+    }
 }

@@ -23,8 +23,8 @@ open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
     func assertSnapshot(
         matching view: @autoclosure () -> some View,
         named name: String? = nil,
-        modes: [ComponentSnapshotTestMode] = Constants.modes,
-        sizes: [UIContentSizeCategory] = Constants.sizes,
+        modes: [ComponentSnapshotTestMode],
+        sizes: [UIContentSizeCategory],
         record recording: Bool = Constants.record,
         timeout: TimeInterval = Constants.timeout,
         file: StaticString = #file,
@@ -37,7 +37,7 @@ open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
                     matching: view().environment(
                         \.sizeCategory,
                          ContentSizeCategory(size) ?? .extraSmall
-                    ),
+                    ).background(Color.gray),
                     as: .image(
                         precision: Constants.imagePrecision,
                         perceptualPrecision: Constants.imagePerceptualPrecision,

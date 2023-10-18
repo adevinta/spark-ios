@@ -18,14 +18,29 @@ public final class TagUIView: UIView {
     // MARK: - Components
 
     private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews:
-                                        [
-                                            self.iconImageView,
-                                            self.textLabel
-                                        ])
+        let stackView = UIStackView(
+            arrangedSubviews:
+                [
+                    self.iconStackView,
+                    self.textLabel
+                ])
         stackView.axis = .horizontal
         return stackView
     }()
+
+    private lazy var iconStackView: UIStackView = {
+        let stackView = UIStackView(
+            arrangedSubviews:
+                [
+                    self.topIconSpaceView,
+                    self.iconImageView,
+                    self.bottomIconSpaceView
+                ])
+        stackView.axis = .vertical
+        return stackView
+    }()
+
+    private let topIconSpaceView = UIView()
 
     private var iconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -37,6 +52,8 @@ public final class TagUIView: UIView {
                                                           for: .horizontal)
         return imageView
     }()
+
+    private let bottomIconSpaceView = UIView()
 
     private var textLabel: UILabel = {
         let label = UILabel()
@@ -99,13 +116,13 @@ public final class TagUIView: UIView {
     private var heightConstraint: NSLayoutConstraint?
 
     private var contentStackViewLeadingConstraint: NSLayoutConstraint?
-    private var contentStackViewTopConstraint: NSLayoutConstraint?
     private var contentStackViewTrailingConstraint: NSLayoutConstraint?
-    private var contentStackViewBottomConstraint: NSLayoutConstraint?
 
-    private var height: CGFloat = TagConstants.height
-    @ScaledUIMetric private var smallSpacing: CGFloat = 0
-    @ScaledUIMetric private var mediumSpacing: CGFloat = 0
+    private var topIconSpaceViewTopConstraint: NSLayoutConstraint?
+
+    @ScaledUIMetric private var height: CGFloat = TagConstants.height
+    @ScaledUIMetric private var iconVerticalSpacing: CGFloat = 0
+    @ScaledUIMetric private var contentHorizontalSpacing: CGFloat = 0
 
     private var _colors: TagColors? {
         didSet {
@@ -241,10 +258,10 @@ public final class TagUIView: UIView {
 
     private func reloadUIFromTheme() {
         // Spacing
-        self.smallSpacing = self.theme.layout.spacing.small
-        self._smallSpacing.update(traitCollection: self.traitCollection)
-        self.mediumSpacing = self.theme.layout.spacing.medium
-        self._mediumSpacing.update(traitCollection: self.traitCollection)
+        self.iconVerticalSpacing = self.theme.layout.spacing.small
+        self._iconVerticalSpacing.update(traitCollection: self.traitCollection)
+        self.contentHorizontalSpacing = self.theme.layout.spacing.medium
+        self._contentHorizontalSpacing.update(traitCollection: self.traitCollection)
 
         // View
         self.setBorderWidth(self.theme.border.width.small)
@@ -278,30 +295,30 @@ public final class TagUIView: UIView {
     }
 
     private func reloadUIFromSpacing() {
-        self.reloadUIFromSmallSpacing()
-        self.reloadUIFromMediumSpacing()
+        self.reloadUIFromIconVerticalSpacing()
+        self.reloadUIFromContentHorizontalSpacing()
     }
 
-    private func reloadUIFromSmallSpacing() {
+    private func reloadUIFromIconVerticalSpacing() {
         // Reload spacing only if value changed
-        let smallSpacing = self._smallSpacing.wrappedValue
-        if smallSpacing != self.contentStackViewTopConstraint?.constant {
+        let iconVerticalSpacing = self._iconVerticalSpacing.wrappedValue
+        if iconVerticalSpacing != self.topIconSpaceViewTopConstraint?.constant {
             // Subviews
-            self.contentStackView.spacing = smallSpacing
+            self.contentStackView.spacing = iconVerticalSpacing
 
             // Constraint
-            self.contentStackViewTopConstraint?.constant = smallSpacing
-            self.contentStackViewBottomConstraint?.constant = -smallSpacing
-            self.contentStackView.layoutIfNeeded()
+            self.topIconSpaceViewTopConstraint?.constant = iconVerticalSpacing
+            self.topIconSpaceViewTopConstraint?.isActive = true
+            self.updateConstraintsIfNeeded()
         }
     }
 
-    private func reloadUIFromMediumSpacing() {
+    private func reloadUIFromContentHorizontalSpacing() {
         // Reload spacing only if value changed
-        let mediumSpacing = self._mediumSpacing.wrappedValue
-        if mediumSpacing != self.contentStackViewLeadingConstraint?.constant {
-            self.contentStackViewLeadingConstraint?.constant = mediumSpacing
-            self.contentStackViewTrailingConstraint?.constant = -mediumSpacing
+        let contentHorizontalSpacing = self._contentHorizontalSpacing.wrappedValue
+        if contentHorizontalSpacing != self.contentStackViewLeadingConstraint?.constant {
+            self.contentStackViewLeadingConstraint?.constant = contentHorizontalSpacing
+            self.contentStackViewTrailingConstraint?.constant = -contentHorizontalSpacing
             self.contentStackView.layoutIfNeeded()
         }
     }
@@ -311,6 +328,7 @@ public final class TagUIView: UIView {
     private func setupConstraints() {
         self.setupViewConstraints()
         self.setupContentStackViewConstraints()
+        self.setupIconSpaceViewsContraints()
         self.setupIconImageViewConstraints()
     }
 
@@ -325,19 +343,27 @@ public final class TagUIView: UIView {
         self.contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
         self.contentStackViewLeadingConstraint = self.contentStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
-        self.contentStackViewTopConstraint = self.contentStackView.topAnchor.constraint(equalTo: self.topAnchor)
+        self.contentStackView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         self.contentStackViewTrailingConstraint = self.contentStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        self.contentStackViewBottomConstraint = self.contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        self.contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
 
         self.contentStackViewLeadingConstraint?.isActive = true
-        self.contentStackViewTopConstraint?.isActive = true
         self.contentStackViewTrailingConstraint?.isActive = true
-        self.contentStackViewBottomConstraint?.isActive = true
+    }
+
+    private func setupIconSpaceViewsContraints() {
+        self.topIconSpaceView.translatesAutoresizingMaskIntoConstraints = false
+        self.topIconSpaceViewTopConstraint = self.topIconSpaceView.heightAnchor.constraint(
+            equalToConstant: self.iconVerticalSpacing
+        )
+
+        self.bottomIconSpaceView.translatesAutoresizingMaskIntoConstraints = false
+        self.bottomIconSpaceView.heightAnchor.constraint(equalTo: self.topIconSpaceView.heightAnchor).isActive = true
     }
 
     private func setupIconImageViewConstraints() {
         self.iconImageView.translatesAutoresizingMaskIntoConstraints = false
-        self.iconImageView.widthAnchor.constraint(equalTo: self.contentStackView.heightAnchor).isActive = true
+        self.iconImageView.widthAnchor.constraint(equalTo: self.iconImageView.heightAnchor).isActive = true
     }
 
     // MARK: - Getter
@@ -361,13 +387,10 @@ public final class TagUIView: UIView {
         }
 
         // **
-        // Update content size ?
-        self.height = UIFontMetrics.default.scaledValue(
-            for: TagConstants.height,
-            compatibleWith: self.traitCollection
-        )
-        self._smallSpacing.update(traitCollection: self.traitCollection)
-        self._mediumSpacing.update(traitCollection: self.traitCollection)
+        // Update content size
+        self._height.update(traitCollection: self.traitCollection)
+        self._iconVerticalSpacing.update(traitCollection: self.traitCollection)
+        self._contentHorizontalSpacing.update(traitCollection: self.traitCollection)
         self.reloadUIFromSize()
         // **
     }

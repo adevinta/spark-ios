@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum ComponentSnapshotTestMode: String, CaseIterable {
+enum ComponentSnapshotTestMode: String {
     case dark
     case light
 

@@ -18,6 +18,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     var badge: BadgeView!
 
     // MARK: - Setup
+    
     override func setUp() {
         super.setUp()
 
