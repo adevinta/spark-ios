@@ -218,6 +218,11 @@ public struct ChipView: View {
         self.viewModel.isEnabled = !disabled
         return self
     }
+
+    public func selected(_ selected: Bool) -> Self {
+        self.viewModel.isSelected = selected
+        return self
+    }
 }
 
 // MARK: - Private Button Style

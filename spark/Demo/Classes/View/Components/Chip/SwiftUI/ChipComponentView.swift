@@ -23,6 +23,7 @@ struct ChipComponentView: View {
     @State private var withAction = CheckboxSelectionState.selected
     @State private var withComponent = CheckboxSelectionState.unselected
     @State private var isEnabled = CheckboxSelectionState.selected
+    @State private var isSelected = CheckboxSelectionState.unselected
 
     @State private var showingAlert = false
 
@@ -95,6 +96,14 @@ struct ChipComponentView: View {
                     state: .enabled,
                     selectionState: self.$isEnabled
                 )
+
+                CheckboxView(
+                    text: "Is Selected",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$isSelected
+                )
             },
             integration: {
                 ChipView(
@@ -108,6 +117,7 @@ struct ChipComponentView: View {
                 )
                 .component(self.withComponent == .selected ? self.component() : nil)
                 .disabled(self.isEnabled == .unselected)
+                .selected(self.isSelected == .selected)
                 .alert("Chip Pressed", isPresented: self.$showingAlert) {
                     Button("OK", role: .cancel) { }
                 }
