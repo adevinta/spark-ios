@@ -23,8 +23,8 @@ open class UIKitComponentSnapshotTestCase: SnapshotTestCase {
     func assertSnapshot(
         matching view: @autoclosure () -> some UIView,
         named name: String? = nil,
-        modes: [ComponentSnapshotTestMode] = Constants.modes,
-        sizes: [UIContentSizeCategory] = Constants.sizes,
+        modes: [ComponentSnapshotTestMode],
+        sizes: [UIContentSizeCategory],
         record recording: Bool = Constants.record,
         delay: TimeInterval = 0,
         timeout: TimeInterval = Constants.timeout,
@@ -47,15 +47,15 @@ open class UIKitComponentSnapshotTestCase: SnapshotTestCase {
                             )
                         )
                     ),
-                    named: Helpers.testName(
+                    named: name,
+                    record: recording,
+                    timeout: timeout,
+                    file: file,
+                    testName: Helpers.testName(
                         testName,
                         mode: mode,
                         size: size
                     ),
-                    record: recording,
-                    timeout: timeout,
-                    file: file,
-                    testName: testName,
                     line: line
                 )
             }

@@ -1,45 +1,40 @@
 //
-//  TagSutSnapshotTests.swift
+//  TagConfigurationSnapshotTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 05/05/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import UIKit
 @testable import SparkCore
 
-struct TagSutSnapshotTests {
+struct TagConfigurationSnapshotTests {
 
     // MARK: - Properties
 
+    let scenario: TagScenarioSnapshotTests
+
     let intent: TagIntent
     let variant: TagVariant
+    let iconImage: ImageEither?
+    let text: String?
+    let isLongText: Bool
+    var width: CGFloat? {
+        return self.isLongText ? 100 : nil
+    }
+    let modes: [ComponentSnapshotTestMode]
+    let sizes: [UIContentSizeCategory]
 
     // MARK: - Getter
 
-    func testName(on function: String = #function) -> String {
-        return "\(function)-\(self.intent)-\(self.variant)"
-    }
-
-    // MARK: - Cases
-
-    static var allCases: [Self] {
-        return Self.allVariantCases(for: .alert) +
-        Self.allVariantCases(for: .danger) +
-        Self.allVariantCases(for: .info) +
-        Self.allVariantCases(for: .neutral) +
-        Self.allVariantCases(for: .main) +
-        Self.allVariantCases(for: .support) +
-        Self.allVariantCases(for: .success) +
-        Self.allVariantCases(for: .accent) +
-        Self.allVariantCases(for: .basic)
-    }
-
-    private static func allVariantCases(for intent: TagIntent) -> [Self] {
+    func testName() -> String {
         return [
-            .init(intent: intent, variant: .filled),
-            .init(intent: intent, variant: .outlined),
-            .init(intent: intent, variant: .tinted)
-        ]
+            "\(self.scenario.rawValue)",
+            "\(self.intent)",
+            "\(self.variant)",
+            self.iconImage != nil ? "withImage" : "withoutImage",
+            self.text != nil ? (self.isLongText ? "longText" : "normalText") : "withoutText"
+        ].joined(separator: "-")
     }
 }

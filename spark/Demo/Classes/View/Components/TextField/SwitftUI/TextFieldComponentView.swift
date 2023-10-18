@@ -143,3 +143,15 @@ struct TextFieldComponent_Previews: PreviewProvider {
         BadgeComponentView()
     }
 }
+
+private extension BadgeFormat {
+    static var allNames: [String] = [Names.default, Names.custom, Names.overflowCounter]
+
+    static func from(name: String) -> BadgeFormat {
+        switch name {
+        case Names.custom: return .custom(formatter: BadgePreviewFormatter())
+        case Names.overflowCounter: return .overflowCounter(maxValue: 99)
+        default: return .default
+        }
+    }
+ }
