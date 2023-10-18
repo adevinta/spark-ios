@@ -84,7 +84,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             
         case .alert: return .init(
             border: colors.feedback.alert,
-            text: colors.feedback.alert,
+            text: colors.feedback.onAlertContainer,
             selectedText: colors.feedback.onAlertContainer,
             background: ColorTokenDefault.clear,
             pressedBackground: colors.feedback.alert.opacity(opacity),

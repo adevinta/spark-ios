@@ -106,26 +106,36 @@ struct ChipComponentView: View {
                 )
             },
             integration: {
-                ChipView(
-                    theme: self.theme,
-                    intent: self.intent,
-                    variant: self.variant,
-                    alignment: self.alignment,
-                    icon: self.showIcon == .selected ? self.icon : nil,
-                    title: self.showLabel == .selected ? self.label : nil,
-                    action: self.withAction == .selected ? { self.showingAlert = true} : nil
-                )
-                .component(self.withComponent == .selected ? self.component() : nil)
-                .disabled(self.isEnabled == .unselected)
-                .selected(self.isSelected == .selected)
-                .alert("Chip Pressed", isPresented: self.$showingAlert) {
-                    Button("OK", role: .cancel) { }
-                }
+                VStack {
+                    ChipView(
+                        theme: self.theme,
+                        intent: self.intent,
+                        variant: self.variant,
+                        alignment: self.alignment,
+                        icon: self.showIcon == .selected ? self.icon : nil,
+                        title: self.showLabel == .selected ? self.label : nil,
+                        action: self.withAction == .selected ? { self.showingAlert = true} : nil
+                    )
+                    .component(self.withComponent == .selected ? self.component() : nil)
+                    .disabled(self.isEnabled == .unselected)
+                    .selected(self.isSelected == .selected)
+                    .alert("Chip Pressed", isPresented: self.$showingAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
+                }.padding(20)
+                    .background(self.backgroundColor())
             }
         )
     }
 
 
+    private func backgroundColor() -> Color {
+        if self.intent == .surface {
+            Color.blue
+        } else {
+            Color.clear
+        }
+    }
     private func component() -> AnyView {
         return AnyView(
             Image(systemName: "checkmark.seal.fill")

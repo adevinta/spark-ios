@@ -224,7 +224,7 @@ final class ChipGetOutlinedIntentColorsUseCaseTests: XCTestCase {
             ].compacted().map(\.uiColor),
             [
                 colors.feedback.alert,
-                colors.feedback.alert,
+                colors.feedback.onAlertContainer,
                 colors.feedback.onAlertContainer,
                 ColorTokenDefault.clear,
                 colors.feedback.alert.opacity(theme.dims.dim5),
