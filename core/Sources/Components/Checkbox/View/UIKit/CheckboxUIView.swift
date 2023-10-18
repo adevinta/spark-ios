@@ -320,20 +320,15 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] text in
             guard let self else { return }
-            self.textLabel.isHidden = text.isEmpty
+            self.textLabel.isHidden = (text ?? "").isEmpty
             self.textLabel.text = text
             self.textLabel.font = self.theme.typography.body1.uiFont
             self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
         }
 
         self.viewModel.$attributedText.subscribe(in: &self.cancellables) { [weak self] attributedText in
-            guard let self else { return }
+            guard let self, let attributedText = attributedText else { return }
             self.textLabel.attributedText = attributedText
-
-            if let attributes = attributedText?.attributes(at: 0, effectiveRange: nil),
-               let font = attributes[NSAttributedString.Key.font] as? UIFont {
-                self.textLabel.font = self.fontMetrics.scaledFont(for: font, compatibleWith: self.traitCollection)
-            }
         }
 
         self.viewModel.$checkedImage.subscribe(in: &self.cancellables) { [weak self] icon in

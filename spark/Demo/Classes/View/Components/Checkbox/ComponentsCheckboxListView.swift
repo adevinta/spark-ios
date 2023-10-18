@@ -35,7 +35,7 @@ struct ComponentsCheckboxListView: View {
                 }
 
                 Button("Checkbox Group") {
-                    self.navigationController?.pushViewController(CheckboxGroupViewController(), animated: true)
+                    self.navigationController?.pushViewController(CheckboxGroupComponentUIViewController.build(), animated: true)
                 }
             }
         }
