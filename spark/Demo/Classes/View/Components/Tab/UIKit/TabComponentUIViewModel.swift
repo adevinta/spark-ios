@@ -106,9 +106,7 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
             name: "Number of tabs",
             type: .rangeSelector(
                 selected: self.numberOfTabs,
-                range: 1...20,
-                stepper: 1,
-                conversion: 1
+                range: 1...20
             ),
             target: (source: self, action: #selector(self.numberOfTabsChanged)))
     }()

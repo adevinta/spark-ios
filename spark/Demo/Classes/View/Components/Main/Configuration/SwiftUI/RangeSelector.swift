@@ -16,15 +16,10 @@ struct RangeSelector: View {
     private let range: CountableClosedRange<Int>
     @Binding private var selectedValue: Int
     private let stepper: Int
-    private let conversion: Double
+    private let numberFormatter: NumberFormatter
 
-    private var selectedStringValue: String {
-        let value = Double(self.selectedValue) * self.conversion
-        if floor(value) == value {
-            return "\(Int(value))"
-        } else {
-            return String(format: "%.1f", value)
-        }
+    private var selectedFormattedValueString: String {
+        return self.numberFormatter.string(from: Double(self.selectedValue) as NSNumber) ?? "Unknow"
     }
 
     // MARK: - Initialization
@@ -34,13 +29,13 @@ struct RangeSelector: View {
         range: CountableClosedRange<Int>,
         selectedValue: Binding<Int>,
         stepper: Int = 1,
-        conversion: Double = 1
+        numberFormatter: NumberFormatter = NumberFormatter()
     ) {
         self.title = title
         self.range = range
         self._selectedValue = selectedValue
         self.stepper = stepper
-        self.conversion = conversion
+        self.numberFormatter = numberFormatter
     }
 
     // MARK: - View
@@ -52,7 +47,7 @@ struct RangeSelector: View {
                 guard self.selectedValue > self.range.lowerBound else { return }
                 self.selectedValue -= self.stepper
             }
-            Text("\(self.selectedStringValue)")
+            Text("\(self.selectedFormattedValueString)")
             Button("+") {
                 guard self.selectedValue < self.range.upperBound else { return }
                 self.selectedValue += self.stepper

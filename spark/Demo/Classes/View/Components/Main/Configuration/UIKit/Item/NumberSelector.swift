@@ -15,7 +15,11 @@ final class NumberSelector: UIControl {
     private let range: CountableClosedRange<Int>
     var selectedValue: Int
     var stepper: Int
-    var conversion: Double
+    let numberFormatter: NumberFormatter
+
+    private var selectedFormattedValueString: String {
+        return self.numberFormatter.string(from: Double(self.selectedValue) as NSNumber) ?? "Unknow"
+    }
 
     // MARK: - View Properties
     private lazy var minusButton: UIButton = {
@@ -39,7 +43,7 @@ final class NumberSelector: UIControl {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = self.selectedStringValue()
+        label.text = self.selectedFormattedValueString
         return label
     }()
 
@@ -60,13 +64,13 @@ final class NumberSelector: UIControl {
     init(
         range: CountableClosedRange<Int>,
         selectedValue: Int,
-        stepper: Int,
-        conversion: Double
+        stepper: Int = 1,
+        numberFormatter: NumberFormatter = NumberFormatter()
     ) {
         self.range = range
         self.selectedValue = min(max(range.lowerBound, selectedValue), range.upperBound)
         self.stepper = stepper
-        self.conversion = conversion
+        self.numberFormatter = numberFormatter
 
         super.init(frame: .zero)
 
@@ -84,16 +88,7 @@ final class NumberSelector: UIControl {
     }
 
     private func updateLabel() {
-        self.label.text = self.selectedStringValue()
-    }
-
-    private func selectedStringValue() -> String {
-        let value = Double(self.selectedValue) * self.conversion
-        if floor(value) == value {
-            return "\(Int(value))"
-        } else {
-            return String(format: "%.1f", value)
-        }
+        self.label.text = self.selectedFormattedValueString
     }
 
     // MARK: - Button Targets

@@ -99,23 +99,36 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
     }()
 
     private lazy var numberRange: NumberSelector? = {
+        var selector: NumberSelector?
+
         switch self.viewModel.type {
-        case let .rangeSelector(selected: selectedValue, range: range, stepper: stepper, conversion: conversion):
-            let selector = NumberSelector(
+        case let .rangeSelector(selectedValue, range):
+            selector = NumberSelector(
+                range: range,
+                selectedValue: selectedValue
+            )
+
+        case let .rangeSelectorWithConfig(selectedValue, range, stepper, numberFormatter):
+            selector = NumberSelector(
                 range: range,
                 selectedValue: selectedValue,
                 stepper: stepper,
-                conversion: conversion
+                numberFormatter: numberFormatter
             )
-            selector.translatesAutoresizingMaskIntoConstraints = false
-            selector.accessibilityIdentifier = self.viewModel.identifier + "NumberSelector"
-
-            selector.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .valueChanged)
-
-            return selector
         default:
+            break
+        }
+
+        guard let selector else {
             return nil
         }
+
+        selector.translatesAutoresizingMaskIntoConstraints = false
+        selector.accessibilityIdentifier = self.viewModel.identifier + "NumberSelector"
+
+        selector.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .valueChanged)
+
+        return selector
     }()
 
     private lazy var input: UITextField? = {
