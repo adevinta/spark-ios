@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol TextFieldGetBordersUseCasable {
     func execute(theme: Theme,
                  borderStyle: TextFieldBorderStyle) -> TextFieldBorders

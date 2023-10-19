@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol TextFieldGetColorsUseCaseInterface {
     func execute(theme: Theme,
                  intent: TextFieldIntent) -> TextFieldColors

@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol TextFieldGetSpacingsUseCasable {
     func execute(theme: Theme,
                  borderStyle: TextFieldBorderStyle) -> TextFieldSpacings

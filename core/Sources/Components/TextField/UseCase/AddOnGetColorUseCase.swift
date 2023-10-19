@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol AddOnGetColorUseCasable {
     func execute(
         theme: Theme,

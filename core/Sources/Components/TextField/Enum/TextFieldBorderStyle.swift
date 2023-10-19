@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum TextFieldBorderStyle {
+enum TextFieldBorderStyle: CaseIterable {
     case roundedRect
     case none
 
