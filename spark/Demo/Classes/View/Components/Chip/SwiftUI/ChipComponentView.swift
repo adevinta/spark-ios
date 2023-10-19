@@ -16,13 +16,14 @@ struct ChipComponentView: View {
 
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: ChipIntent = .main
-    @State private var variant: ChipVariant = .filled
+    @State private var variant: ChipVariant = .outlined
     @State private var alignment: ChipAlignment = .leadingIcon
     @State private var showLabel = CheckboxSelectionState.selected
     @State private var showIcon = CheckboxSelectionState.selected
     @State private var withAction = CheckboxSelectionState.selected
     @State private var withComponent = CheckboxSelectionState.unselected
     @State private var isEnabled = CheckboxSelectionState.selected
+    @State private var isSelected = CheckboxSelectionState.unselected
 
     @State private var showingAlert = false
 
@@ -95,27 +96,46 @@ struct ChipComponentView: View {
                     state: .enabled,
                     selectionState: self.$isEnabled
                 )
+
+                CheckboxView(
+                    text: "Is Selected",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    state: .enabled,
+                    selectionState: self.$isSelected
+                )
             },
             integration: {
-                ChipView(
-                    theme: self.theme,
-                    intent: self.intent,
-                    variant: self.variant,
-                    alignment: self.alignment,
-                    icon: self.showIcon == .selected ? self.icon : nil,
-                    title: self.showLabel == .selected ? self.label : nil,
-                    action: self.withAction == .selected ? { self.showingAlert = true} : nil
-                )
-                .component(self.withComponent == .selected ? self.component() : nil)
-                .disabled(self.isEnabled == .unselected)
-                .alert("Chip Pressed", isPresented: self.$showingAlert) {
-                    Button("OK", role: .cancel) { }
-                }
+                VStack {
+                    ChipView(
+                        theme: self.theme,
+                        intent: self.intent,
+                        variant: self.variant,
+                        alignment: self.alignment,
+                        icon: self.showIcon == .selected ? self.icon : nil,
+                        title: self.showLabel == .selected ? self.label : nil,
+                        action: self.withAction == .selected ? { self.showingAlert = true} : nil
+                    )
+                    .component(self.withComponent == .selected ? self.component() : nil)
+                    .disabled(self.isEnabled == .unselected)
+                    .selected(self.isSelected == .selected)
+                    .alert("Chip Pressed", isPresented: self.$showingAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
+                }.padding(20)
+                    .background(self.backgroundColor())
             }
         )
     }
 
 
+    private func backgroundColor() -> Color {
+        if self.intent == .surface {
+            Color.blue
+        } else {
+            Color.clear
+        }
+    }
     private func component() -> AnyView {
         return AnyView(
             Image(systemName: "checkmark.seal.fill")

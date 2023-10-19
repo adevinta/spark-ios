@@ -70,7 +70,7 @@ class ComponentUIView: UIView {
         return label
     }()
 
-    private lazy var componentStackView: UIStackView = {
+    lazy var componentStackView: UIStackView = {
         let horizontalStackView = UIStackView(
             arrangedSubviews: [
                 self.componentLeftSpaceView,

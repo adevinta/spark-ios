@@ -124,15 +124,14 @@ public struct ChipView: View {
             self.content()
         }
         .frame(height: self.height)
-        .background(self.viewModel.colors.background.color
-            .opacity(self.viewModel.colors.opacity)
-        )
+        .background(self.viewModel.colors.background.color)
         .if(self.viewModel.isBordered) { view in
             view.chipBorder(width: self.borderWidth,
                             radius: self.borderRadius,
                             dashLength: self.borderDashLength(),
                             colorToken: self.viewModel.colors.border)
         }
+        .opacity(self.viewModel.colors.opacity)
         .cornerRadius(self.borderRadius)
         .disabled(!self.viewModel.isEnabled)
         .buttonStyle(ChipButtonStyle(viewModel: self.viewModel, hasAction: self.action != nil))
@@ -216,6 +215,11 @@ public struct ChipView: View {
 
     public func disabled(_ disabled: Bool) -> Self {
         self.viewModel.isEnabled = !disabled
+        return self
+    }
+
+    public func selected(_ selected: Bool) -> Self {
+        self.viewModel.isSelected = selected
         return self
     }
 }
