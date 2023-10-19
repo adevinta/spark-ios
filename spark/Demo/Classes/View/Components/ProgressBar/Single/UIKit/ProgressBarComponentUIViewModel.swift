@@ -69,25 +69,13 @@ final class ProgressBarComponentUIViewModel: ComponentUIViewModel {
     lazy var valueConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Value",
-            type: .rangeSelector(
+            type: .rangeSelectorWithConfig(
                 selected: self.value,
                 range: Constants.IndicatorValue.range,
                 stepper: Constants.IndicatorValue.stepper,
-                conversion: Constants.IndicatorValue.conversion
+                numberFormatter: Constants.IndicatorValue.numberFormatter
             ),
             target: (source: self, action: #selector(self.valueChanged)))
-    }()
-
-    lazy var cornerRadiusConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Corner Radius",
-            type: .rangeSelector(
-                selected: self.cornerRadius,
-                range: Constants.IndicatorCornerRadius.range,
-                stepper: Constants.IndicatorCornerRadius.stepper,
-                conversion: Constants.IndicatorCornerRadius.conversion
-            ),
-            target: (source: self, action: #selector(self.cornerRadiusChanged)))
     }()
 
     // MARK: - Methods
@@ -97,8 +85,7 @@ final class ProgressBarComponentUIViewModel: ComponentUIViewModel {
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.shapeConfigurationItemViewModel,
-            self.valueConfigurationItemViewModel,
-            self.cornerRadiusConfigurationItemViewModel
+            self.valueConfigurationItemViewModel
         ]
     }
 
@@ -110,7 +97,6 @@ final class ProgressBarComponentUIViewModel: ComponentUIViewModel {
     @Published var intent: ProgressBarIntent
     @Published var shape: ProgressBarShape
     @Published var value: Int
-    @Published var cornerRadius: Int
 
     // MARK: - Initialization
 
@@ -118,14 +104,12 @@ final class ProgressBarComponentUIViewModel: ComponentUIViewModel {
         theme: Theme,
         intent: ProgressBarIntent = .main,
         shape: ProgressBarShape = .square,
-        value: Int = Constants.IndicatorValue.default,
-        cornerRadius: Int = Constants.IndicatorCornerRadius.default
+        value: Int = Constants.IndicatorValue.default
     ) {
         self.theme = theme
         self.intent = intent
         self.shape = shape
         self.value = value
-        self.cornerRadius = cornerRadius
 
         super.init(identifier: "Single ProgressBar")
     }
@@ -149,9 +133,5 @@ extension ProgressBarComponentUIViewModel {
 
     @objc func valueChanged(_ control: NumberSelector) {
         self.value = control.selectedValue
-    }
-
-    @objc func cornerRadiusChanged(_ control: NumberSelector) {
-        self.cornerRadius = control.selectedValue
     }
 }

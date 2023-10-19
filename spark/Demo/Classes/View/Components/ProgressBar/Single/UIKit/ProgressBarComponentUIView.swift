@@ -15,7 +15,7 @@ final class ProgressBarComponentUIView: ComponentUIView {
 
     // MARK: - Type Alias
 
-    private typealias Constants = ProgressBarConstants
+    private typealias Constants = ProgressBarConstants.IndicatorValue
 
     // MARK: - Components
 
@@ -39,6 +39,7 @@ final class ProgressBarComponentUIView: ComponentUIView {
 
         super.init(
             viewModel: viewModel,
+            integrationStackViewAlignment: .fill,
             componentView: self.componentView
         )
 
@@ -78,7 +79,7 @@ final class ProgressBarComponentUIView: ComponentUIView {
 
         self.viewModel.$value.subscribe(in: &self.subcriptions) { [weak self] value in
             guard let self = self else { return }
-            self.componentView.value = CGFloat(value) * ProgressBarConstants.IndicatorValue.conversion
+            self.componentView.value = CGFloat(value) * Constants.multiplier
         }
     }
 }

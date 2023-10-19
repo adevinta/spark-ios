@@ -41,6 +41,7 @@ final class ProgressBarDoubleComponentUIView: ComponentUIView {
 
         super.init(
             viewModel: viewModel,
+            integrationStackViewAlignment: .fill,
             componentView: self.componentView
         )
 
@@ -80,12 +81,12 @@ final class ProgressBarDoubleComponentUIView: ComponentUIView {
 
         self.viewModel.$topValue.subscribe(in: &self.subcriptions) { [weak self] value in
             guard let self = self else { return }
-            self.componentView.topValue = CGFloat(value) * Constants.conversion
+            self.componentView.topValue = CGFloat(value) * Constants.multiplier
         }
 
         self.viewModel.$bottomValue.subscribe(in: &self.subcriptions) { [weak self] value in
             guard let self = self else { return }
-            self.componentView.bottomValue = CGFloat(value) * Constants.conversion
+            self.componentView.bottomValue = CGFloat(value) * Constants.multiplier
         }
     }
 }

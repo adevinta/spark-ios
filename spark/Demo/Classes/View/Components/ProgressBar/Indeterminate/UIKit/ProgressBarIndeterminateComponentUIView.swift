@@ -35,6 +35,7 @@ final class ProgressBarIndeterminateComponentUIView: ComponentUIView {
 
         super.init(
             viewModel: viewModel,
+            integrationStackViewAlignment: .fill,
             componentView: self.componentView
         )
 

@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Foundation
+
 enum ProgressBarConstants {
 
     enum IndicatorValue {
@@ -13,13 +15,12 @@ enum ProgressBarConstants {
         static let bottomDefault = Self.default + Self.stepper
         static let range = (1...100)
         static let stepper = 10
-        static let conversion: Double = 0.01
-    }
-
-    enum IndicatorCornerRadius {
-        static let `default` = 0
-        static let range = (0...4)
-        static let stepper = 1
-        static let conversion: Double = 1
+        static let multiplier = 0.01
+        static var numberFormatter: NumberFormatter = {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.multiplier = Self.multiplier as NSNumber
+            numberFormatter.maximumFractionDigits = 2
+            return numberFormatter
+        }()
     }
 }

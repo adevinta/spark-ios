@@ -71,11 +71,11 @@ final class ProgressBarDoubleComponentUIViewModel: ComponentUIViewModel {
     lazy var topValueConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Top Value",
-            type: .rangeSelector(
+            type: .rangeSelectorWithConfig(
                 selected: self.topValue,
                 range: Constants.IndicatorValue.range,
                 stepper: Constants.IndicatorValue.stepper,
-                conversion: Constants.IndicatorValue.conversion
+                numberFormatter: Constants.IndicatorValue.numberFormatter
             ),
             target: (source: self, action: #selector(self.topValueChanged)))
     }()
@@ -83,25 +83,13 @@ final class ProgressBarDoubleComponentUIViewModel: ComponentUIViewModel {
     lazy var bottomValueConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Bottom Value",
-            type: .rangeSelector(
+            type: .rangeSelectorWithConfig(
                 selected: self.bottomValue,
                 range: Constants.IndicatorValue.range,
                 stepper: Constants.IndicatorValue.stepper,
-                conversion: Constants.IndicatorValue.conversion
+                numberFormatter: Constants.IndicatorValue.numberFormatter
             ),
             target: (source: self, action: #selector(self.bottomValueChanged)))
-    }()
-
-    lazy var cornerRadiusConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Corner Radius",
-            type: .rangeSelector(
-                selected: self.cornerRadius,
-                range: Constants.IndicatorCornerRadius.range,
-                stepper: Constants.IndicatorCornerRadius.stepper,
-                conversion: Constants.IndicatorCornerRadius.conversion
-            ),
-            target: (source: self, action: #selector(self.cornerRadiusChanged)))
     }()
 
     // MARK: - Methods
@@ -112,8 +100,7 @@ final class ProgressBarDoubleComponentUIViewModel: ComponentUIViewModel {
             self.intentConfigurationItemViewModel,
             self.shapeConfigurationItemViewModel,
             self.topValueConfigurationItemViewModel,
-            self.bottomValueConfigurationItemViewModel,
-            self.cornerRadiusConfigurationItemViewModel
+            self.bottomValueConfigurationItemViewModel
         ]
     }
 
@@ -126,7 +113,6 @@ final class ProgressBarDoubleComponentUIViewModel: ComponentUIViewModel {
     @Published var shape: ProgressBarShape
     @Published var topValue: Int
     @Published var bottomValue: Int
-    @Published var cornerRadius: Int
 
     // MARK: - Initialization
 
@@ -135,15 +121,13 @@ final class ProgressBarDoubleComponentUIViewModel: ComponentUIViewModel {
         intent: ProgressBarDoubleIntent = .main,
         shape: ProgressBarShape = .square,
         topValue: Int = Constants.IndicatorValue.default,
-        bottomValue: Int = Constants.IndicatorValue.bottomDefault,
-        cornerRadius: Int = Constants.IndicatorCornerRadius.default
+        bottomValue: Int = Constants.IndicatorValue.bottomDefault
     ) {
         self.theme = theme
         self.intent = intent
         self.shape = shape
         self.topValue = topValue
         self.bottomValue = bottomValue
-        self.cornerRadius = cornerRadius
 
         super.init(identifier: "Double ProgressBar")
     }
@@ -171,10 +155,6 @@ extension ProgressBarDoubleComponentUIViewModel {
 
     @objc func bottomValueChanged(_ control: NumberSelector) {
         self.bottomValue = control.selectedValue
-    }
-
-    @objc func cornerRadiusChanged(_ control: NumberSelector) {
-        self.cornerRadius = control.selectedValue
     }
 }
 */

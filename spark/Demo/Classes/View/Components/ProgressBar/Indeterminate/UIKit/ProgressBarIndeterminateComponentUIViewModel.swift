@@ -74,18 +74,6 @@ final class ProgressBarIndeterminateComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var cornerRadiusConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Corner Radius",
-            type: .rangeSelector(
-                selected: self.cornerRadius,
-                range: Constants.IndicatorCornerRadius.range,
-                stepper: Constants.IndicatorCornerRadius.stepper,
-                conversion: Constants.IndicatorCornerRadius.conversion
-            ),
-            target: (source: self, action: #selector(self.cornerRadiusChanged)))
-    }()
-
     // MARK: - Methods
 
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
@@ -93,8 +81,7 @@ final class ProgressBarIndeterminateComponentUIViewModel: ComponentUIViewModel {
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.shapeConfigurationItemViewModel,
-            self.isAnimatingConfigurationItemViewModel,
-            self.cornerRadiusConfigurationItemViewModel
+            self.isAnimatingConfigurationItemViewModel
         ]
     }
 
@@ -106,7 +93,6 @@ final class ProgressBarIndeterminateComponentUIViewModel: ComponentUIViewModel {
     @Published var intent: ProgressBarIntent
     @Published var shape: ProgressBarShape
     @Published var isAnimating: Bool
-    @Published var cornerRadius: Int
 
     // MARK: - Initialization
 
@@ -114,14 +100,12 @@ final class ProgressBarIndeterminateComponentUIViewModel: ComponentUIViewModel {
         theme: Theme,
         intent: ProgressBarIntent = .main,
         shape: ProgressBarShape = .square,
-        isAnimating: Bool = false,
-        cornerRadius: Int = Constants.IndicatorCornerRadius.default
+        isAnimating: Bool = false
     ) {
         self.theme = theme
         self.intent = intent
         self.shape = shape
         self.isAnimating = isAnimating
-        self.cornerRadius = cornerRadius
 
         super.init(identifier: "Indeterminate ProgressBar")
     }
@@ -145,9 +129,5 @@ extension ProgressBarIndeterminateComponentUIViewModel {
 
     @objc func isAnimatingChanged() {
         self.isAnimating.toggle()
-    }
-
-    @objc func cornerRadiusChanged(_ control: NumberSelector) {
-        self.cornerRadius = control.selectedValue
     }
 }
