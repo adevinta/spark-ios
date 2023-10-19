@@ -8,82 +8,80 @@
 
 #warning("Keep this class commented until the design team decision about the Double Bar")
 /*
- import SwiftUI
- import Spark
- import SparkCore
+import SwiftUI
+import Spark
+import SparkCore
 
- struct ProgressBarDoubleComponentView: View {
+struct ProgressBarDoubleComponentView: View {
 
- // MARK: - Type Alias
+    // MARK: - Type Alias
 
- private typealias Constants = ProgressBarConstants
+    private typealias Constants = ProgressBarConstants
 
- // MARK: - Properties
+    // MARK: - Properties
 
- @State private var theme: Theme = SparkThemePublisher.shared.theme
- @State private var intent: ProgressBarDoubleIntent = .main
- @State private var shape: ProgressBarShape = .square
- @State var topValue = Constants.IndicatorValue.default
- @State var bottomValue = Constants.IndicatorValue.bottomDefault
- @State var cornerRadius = Constants.IndicatorCornerRadius.default
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: ProgressBarDoubleIntent = .main
+    @State private var shape: ProgressBarShape = .square
+    @State var topValue = Constants.IndicatorValue.default
+    @State var bottomValue = Constants.IndicatorValue.bottomDefault
 
- // MARK: - View
+    // MARK: - View
 
- var body: some View {
- Component(
- name: "ProgressBarDouble",
- configuration: {
- ThemeSelector(theme: self.$theme)
+    var body: some View {
+        Component(
+            name: "ProgressBarDouble",
+            configuration: {
+                ThemeSelector(theme: self.$theme)
 
- EnumSelector(
- title: "Intent",
- dialogTitle: "Select an intent",
- values: ProgressBarDoubleIntent.allCases,
- value: self.$intent
- )
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an intent",
+                    values: ProgressBarDoubleIntent.allCases,
+                    value: self.$intent
+                )
 
- EnumSelector(
- title: "Shape",
- dialogTitle: "Select an shape",
- values: ProgressBarShape.allCases,
- value: self.$shape
- )
+                EnumSelector(
+                    title: "Shape",
+                    dialogTitle: "Select an shape",
+                    values: ProgressBarShape.allCases,
+                    value: self.$shape
+                )
 
- RangeSelector(
- title: "Top value",
- range: Constants.IndicatorValue.range,
- selectedValue: self.$topValue,
- stepper: Constants.IndicatorValue.stepper,
- conversion: Constants.IndicatorValue.conversion
- )
+                RangeSelector(
+                    title: "Top value",
+                    range: Constants.IndicatorValue.range,
+                    selectedValue: self.$topValue,
+                    stepper: Constants.IndicatorValue.stepper,
+                    numberFormatter: Constants.IndicatorValue.numberFormatter
+                )
 
- RangeSelector(
- title: "Bottom value",
- range: Constants.IndicatorValue.range,
- selectedValue: self.$bottomValue,
- stepper: Constants.IndicatorValue.stepper,
- conversion: Constants.IndicatorValue.conversion
- )
- },
- integration: {
- ProgressBarDoubleView(
- theme: self.theme,
- intent: self.intent,
- shape: self.shape,
- topValue: CGFloat(self.topValue) * Constants.IndicatorValue.conversion,
- bottomValue: CGFloat(self.bottomValue) * Constants.IndicatorValue.conversion
- )
- .cornerRadius(CGFloat(self.cornerRadius))
- }
- )
- }
- }
+                RangeSelector(
+                    title: "Bottom value",
+                    range: Constants.IndicatorValue.range,
+                    selectedValue: self.$bottomValue,
+                    stepper: Constants.IndicatorValue.stepper,
+                    numberFormatter: Constants.IndicatorValue.numberFormatter
+                )
+            },
+            integration: {
+                ProgressBarDoubleView(
+                    theme: self.theme,
+                    intent: self.intent,
+                    shape: self.shape,
+                    topValue: CGFloat(self.topValue) * Constants.IndicatorValue.multiplier,
+                    bottomValue: CGFloat(self.bottomValue) * Constants.IndicatorValue.multiplier
+                )
+            }
+        )
+    }
+}
 
- // MARK: - Preview
+// MARK: - Preview
 
- struct ProgressBarDoubleComponentView_Previews: PreviewProvider {
- static var previews: some View {
- ProgressBarDoubleComponentView()
- }
- }
- */
+struct ProgressBarDoubleComponentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProgressBarDoubleComponentView()
+    }
+}
+*/

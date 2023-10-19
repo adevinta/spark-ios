@@ -149,13 +149,6 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
         default:
             return nil
         }
-
-        selector.translatesAutoresizingMaskIntoConstraints = false
-        selector.accessibilityIdentifier = self.viewModel.identifier + "NumberSelector"
-
-        selector.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .valueChanged)
-
-        return selector
     }()
 
     // MARK: - Properties

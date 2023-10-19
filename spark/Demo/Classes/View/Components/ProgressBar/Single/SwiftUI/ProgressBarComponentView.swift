@@ -22,7 +22,6 @@ struct ProgressBarComponentView: View {
     @State private var intent: ProgressBarIntent = .main
     @State private var shape: ProgressBarShape = .square
     @State var value = Constants.IndicatorValue.default
-    @State var cornerRadius = Constants.IndicatorCornerRadius.default
 
     // MARK: - View
 
@@ -51,7 +50,7 @@ struct ProgressBarComponentView: View {
                     range: Constants.IndicatorValue.range,
                     selectedValue: self.$value,
                     stepper: Constants.IndicatorValue.stepper,
-                    conversion: Constants.IndicatorValue.conversion
+                    numberFormatter: Constants.IndicatorValue.numberFormatter
                 )
             },
             integration: {
@@ -59,9 +58,8 @@ struct ProgressBarComponentView: View {
                     theme: self.theme,
                     intent: self.intent,
                     shape: self.shape,
-                    value: CGFloat(self.value) * Constants.IndicatorValue.conversion
+                    value: CGFloat(self.value) * Constants.IndicatorValue.multiplier
                 )
-                .cornerRadius(CGFloat(self.cornerRadius))
             }
         )
     }

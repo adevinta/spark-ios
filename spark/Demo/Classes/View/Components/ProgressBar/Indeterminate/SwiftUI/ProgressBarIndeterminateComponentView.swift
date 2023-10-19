@@ -22,7 +22,6 @@ struct ProgressBarIndeterminateComponentView: View {
     @State private var intent: ProgressBarIntent = .main
     @State private var shape: ProgressBarShape = .square
     @State private var isAnimating = CheckboxSelectionState.unselected
-    @State var cornerRadius = Constants.IndicatorCornerRadius.default
 
     // MARK: - View
 
@@ -61,7 +60,6 @@ struct ProgressBarIndeterminateComponentView: View {
                     shape: self.shape,
                     isAnimating: self.isAnimating == .selected
                 )
-                .cornerRadius(CGFloat(self.cornerRadius))
             }
         )
     }
