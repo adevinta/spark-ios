@@ -91,15 +91,6 @@ final class NumberSelector: UIControl {
         self.label.text = self.selectedFormattedValueString
     }
 
-    private func selectedStringValue() -> String {
-        let value = Double(self.selectedValue) * self.conversion
-        if floor(value) == value {
-            return "\(Int(value))"
-        } else {
-            return String(format: "%.1f", value)
-        }
-    }
-
     // MARK: - Button Targets
 
     @objc private func decrementCount() {
