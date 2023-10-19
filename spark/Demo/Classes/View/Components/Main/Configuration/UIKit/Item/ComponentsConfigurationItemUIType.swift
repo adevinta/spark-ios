@@ -13,4 +13,5 @@ enum ComponentsConfigurationItemUIType: Equatable {
     case toggle(isOn: Bool)
     case checkbox(title: String, isOn: Bool)
     case rangeSelector(selected: Int, range: CountableClosedRange<Int>)
+    case input(text: String?)
 }
