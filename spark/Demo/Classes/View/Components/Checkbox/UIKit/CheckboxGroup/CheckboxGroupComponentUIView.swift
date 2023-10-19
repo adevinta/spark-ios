@@ -14,7 +14,7 @@ import UIKit
 final class CheckboxGroupComponentUIView: ComponentUIView {
 
     // MARK: - Components
-    private let componentView: CheckboxGroupUIView
+    private var componentView: CheckboxGroupUIView
 
     // MARK: - Properties
 
@@ -30,6 +30,7 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             componentView: self.componentView
         )
 
+        self.componentView.delegate = self
         // Setup
         self.setupSubscriptions()
     }
@@ -77,22 +78,48 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.componentView.title = showGroupTitle ? viewModel.title : ""
         }
+
+        self.viewModel.$groupType.subscribe(in: &self.cancellables) { [weak self] type in
+            guard let self = self else { return }
+            self.viewModel.groupTypeConfigurationItemViewModel.buttonTitle = type.name
+            self.componentView.updateItems(CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: type))
+        }
+
+        self.componentView
     }
 
     static func makeCheckboxGroupView(_ viewModel: CheckboxGroupComponentUIViewModel) -> CheckboxGroupUIView {
 
-        CheckboxGroupUIView(
+        return CheckboxGroupUIView(
             checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
-            items: [
-                CheckboxGroupItem(title: viewModel.text, id: "1", selectionState: .selected),
-                CheckboxGroupItem(title: viewModel.multilineText, id: "2", selectionState: .unselected),
-                CheckboxGroupItem(attributedTitle: viewModel.attributeText, id: "3", selectionState: .indeterminate),
-                CheckboxGroupItem(title: viewModel.text, id: "4", selectionState: .indeterminate)
-            ],
+            items: CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: viewModel.groupType),
             checkboxAlignment: viewModel.isAlignmentLeft ? .left : .right,
             theme: viewModel.theme,
             intent: viewModel.intent,
-            accessibilityIdentifierPrefix: "Entry"
+            accessibilityIdentifierPrefix: "Checkbox"
         )
+    }
+}
+
+// MARK: Delegate
+extension CheckboxGroupComponentUIView: CheckboxGroupUIViewDelegate {
+
+    func checkboxGroup(_ checkboxGroup: SparkCore.CheckboxGroupUIView, didChangeSelection state: [any SparkCore.CheckboxGroupItemProtocol]) {
+        var text = ""
+        state.enumerated().forEach {
+            var selectionState = ""
+            switch $1.selectionState {
+            case .selected:
+                selectionState = "Selected"
+            case .indeterminate:
+                selectionState = "Indeterminate"
+            case .unselected:
+                selectionState = "Unselected"
+            default:
+                break
+            }
+            text += $1.id + " " + selectionState + ($0 == state.count - 1 ? "" : "\n")
+        }
+        self.viewModel.itemsSelectionStateConfigurationItemViewModel.labelText = text
     }
 }

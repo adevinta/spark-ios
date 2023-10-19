@@ -329,6 +329,10 @@ public final class CheckboxUIView: UIControl {
         self.viewModel.$attributedText.subscribe(in: &self.cancellables) { [weak self] attributedText in
             guard let self, let attributedText = attributedText else { return }
             self.textLabel.attributedText = attributedText
+            let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
+            if let font = attributes[NSAttributedString.Key.font] as? UIFont {
+                self.textLabel.font = self.fontMetrics.scaledFont(for: font, compatibleWith: self.traitCollection)
+            }
         }
 
         self.viewModel.$checkedImage.subscribe(in: &self.cancellables) { [weak self] icon in
