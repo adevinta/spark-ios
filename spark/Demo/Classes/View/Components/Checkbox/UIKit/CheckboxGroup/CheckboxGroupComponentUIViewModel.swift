@@ -29,10 +29,16 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
+    var showGroupTypeSheet: AnyPublisher<[CheckboxGroupType], Never> {
+        showGroupTypeSubject
+            .eraseToAnyPublisher()
+    }
+
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[CheckboxIntent], Never> = .init()
     private var showIconSheetSubject: PassthroughSubject<[String: UIImage], Never> = .init()
+    private var showGroupTypeSubject: PassthroughSubject<[CheckboxGroupType], Never> = .init()
 
     // MARK: - Items Properties
     lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -83,6 +89,22 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var groupTypeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Group Type",
+            type: .button,
+            target: (source: self, action: #selector(self.presentGroupTypeSheet))
+        )
+    }()
+
+    lazy var itemsSelectionStateConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Items Selection States",
+            type: .label,
+            target: (source: self, action: #selector(self.empty))
+        )
+    }()
+
     var themes = ThemeCellModel.themes
 
     // MARK: - Default Value Properties
@@ -95,10 +117,10 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         "Close": DemoIconography.shared.close
     ]
 
-    let text: String = "Hello World"
+    static let text: String = "Hello World"
 
-    let multilineText: String = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-    var attributeText: NSAttributedString {
+    static let multilineText: String = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+    static var attributeText: NSAttributedString {
         let attributeString = NSMutableAttributedString(
             string: multilineText,
             attributes: [.font: UIFont.italicSystemFont(ofSize: 18)]
@@ -121,6 +143,7 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
     @Published var isLayoutVertical: Bool
     @Published var showGroupTitle: Bool
     @Published var icon: [String: UIImage]
+    @Published var groupType: CheckboxGroupType
 
     init(
         theme: Theme,
@@ -128,7 +151,8 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         isAlignmentLeft: Bool = true,
         isLayoutVertical: Bool = false,
         showGroupTitle: Bool = false,
-        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark]
+        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark],
+        groupType: CheckboxGroupType = .doubleMix
     ) {
         self.theme = theme
         self.intent = intent
@@ -136,6 +160,7 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         self.isLayoutVertical = isLayoutVertical
         self.showGroupTitle = showGroupTitle
         self.icon = icon
+        self.groupType = groupType
         super.init(identifier: "Checkbox Group")
 
         self.configurationViewModel = .init(itemsViewModel: [
@@ -144,7 +169,9 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
             self.alignmentConfigurationItemViewModel,
             self.layoutConfigurationItemViewModel,
             self.titleConfigurationItemViewModel,
-            self.iconConfigurationItemViewModel
+            self.iconConfigurationItemViewModel,
+            self.groupTypeConfigurationItemViewModel,
+            self.itemsSelectionStateConfigurationItemViewModel
         ])
     }
 }
@@ -175,4 +202,88 @@ extension CheckboxGroupComponentUIViewModel {
     @objc func presentIconSheet() {
         self.showIconSheetSubject.send(icons)
     }
+
+    @objc func presentGroupTypeSheet() {
+        self.showGroupTypeSubject.send(CheckboxGroupType.allCases)
+    }
+
+    @objc func empty() {}
 }
+
+// MARK: - Items
+extension CheckboxGroupComponentUIViewModel {
+
+    static func makeCheckboxGroupItems(type: CheckboxGroupType) -> [CheckboxGroupItem] {
+        var items: [CheckboxGroupItem] = []
+
+        switch type {
+        case .singleNone:
+            items = [
+                CheckboxGroupItem(id: "1", selectionState: .selected)
+            ]
+        case .singleBasic:
+            items = [
+                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .selected)
+            ]
+        case .singleMultilineText:
+            items = [
+                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "1", selectionState: .unselected),
+            ]
+        case .doubleBasic:
+            items = [
+                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .selected),
+                CheckboxGroupItem(title: Self.text + " 2", id: "2", selectionState: .unselected)
+            ]
+        case .doubleMultilineText:
+            items = [
+                CheckboxGroupItem(title: Self.multilineText, id: "1", selectionState: .selected),
+                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "2", selectionState: .indeterminate)
+            ]
+        case .doubleMix:
+            items = [
+                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .unselected),
+                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "2", selectionState: .selected)
+            ]
+        case .tripleBasic:
+            items = [
+                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .unselected),
+                CheckboxGroupItem(title: Self.text + " 2", id: "2", selectionState: .unselected),
+                CheckboxGroupItem(title: Self.text + " 3", id: "3", selectionState: .unselected),
+            ]
+        case .tripleMultilineText:
+            items = [
+                CheckboxGroupItem(title: Self.multilineText, id: "1", selectionState: .selected),
+                CheckboxGroupItem(title: Self.multilineText, id: "2", selectionState: .unselected),
+                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate)
+            ]
+        case .tripleMix1:
+            items = [
+                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .selected),
+                CheckboxGroupItem(title: Self.text + " 2", id: "2", selectionState: .indeterminate),
+                CheckboxGroupItem(title: Self.multilineText, id: "3", selectionState: .unselected)
+            ]
+        case .tripleMix2:
+            items = [
+                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .selected),
+                CheckboxGroupItem(title: Self.multilineText, id: "2", selectionState: .unselected),
+                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate)
+            ]
+        }
+        return items
+    }
+}
+
+// MARK: Enum
+enum CheckboxGroupType: CaseIterable {
+    case singleNone
+    case singleBasic
+    case singleMultilineText
+    case doubleBasic
+    case doubleMultilineText
+    case doubleMix
+    case tripleBasic
+    case tripleMultilineText
+    case tripleMix1
+    case tripleMix2
+}
+

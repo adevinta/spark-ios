@@ -69,6 +69,10 @@ final class CheckboxGroupComponentUIViewController: UIViewController {
         self.viewModel.showImageSheet.subscribe(in: &self.cancellables) { icons in
             self.presentIconActionSheet(icons)
         }
+
+        self.viewModel.showGroupTypeSheet.subscribe(in: &self.cancellables) { types in
+            self.presentGroupTypeActionSheet(types)
+        }
     }
 }
 
@@ -108,6 +112,15 @@ extension CheckboxGroupComponentUIViewController {
             values: icons.map { $0.0 },
             texts: icons.map { $0.0 }) { iconKey in
                 self.viewModel.icon = icons.filter { $0.0 == iconKey }
+            }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentGroupTypeActionSheet(_ types: [CheckboxGroupType]) {
+        let actionSheet = SparkActionSheet<CheckboxGroupType>.init(
+            values: types,
+            texts: types.map { $0.name }) { type in
+                self.viewModel.groupType = type
             }
         self.present(actionSheet, animated: true)
     }

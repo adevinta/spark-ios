@@ -283,15 +283,26 @@ public final class CheckboxGroupUIView: UIView {
 }
 
 //MARK: - Updates
-private extension CheckboxGroupUIView {
+extension CheckboxGroupUIView {
 
-    func updateTheme() {
+    public func updateItems(_ items: [any CheckboxGroupItemProtocol]) {
+        self.items.removeAll()
+        self.itemsStackView.removeArrangedSubviews()
+        self.items = items
+        self.setupItemsStackView()
+        self.itemsStackView.arrangedSubviews.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor).isActive = true
+        }
+    }
+
+    private func updateTheme() {
         self.spacingXLarge = self.theme.layout.spacing.xLarge
         self.spacingSmall = self.theme.layout.spacing.small
         self.checkboxes.forEach { $0.theme = theme }
     }
 
-    func updateTitle() {
+    private func updateTitle() {
         if let title = self.title, !title.isEmpty  {
             self.titleLabel.text = title
             self.spacingViewHeightConstraint?.constant = self.spacingSmall
@@ -304,20 +315,20 @@ private extension CheckboxGroupUIView {
         }
     }
 
-    func updateImage() {
+    private func updateImage() {
         self.checkboxes.forEach { $0.checkedImage = self.checkedImage }
     }
 
-    func updateLayout() {
+    private func updateLayout() {
         self.itemsStackView.axis = self.layout == .horizontal ? .horizontal : .vertical
         self.itemsStackView.alignment = self.layout == .horizontal ? .top : .fill
     }
 
-    func updateAlignment() {
+    private func updateAlignment() {
         self.checkboxes.forEach { $0.alignment = self.checkboxAlignment }
     }
 
-    func updateIntent() {
+    private func updateIntent() {
         self.checkboxes.forEach { $0.intent = self.intent }
     }
 }
