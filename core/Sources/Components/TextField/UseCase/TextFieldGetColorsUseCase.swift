@@ -9,12 +9,12 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol TextFieldGetColorsUseCaseInterface {
+protocol TextFieldGetColorsUseCasable {
     func execute(theme: Theme,
                  intent: TextFieldIntent) -> TextFieldColors
 }
 
-struct TextFieldGetColorsUseCase: TextFieldGetColorsUseCaseInterface {
+struct TextFieldGetColorsUseCase: TextFieldGetColorsUseCasable {
     func execute(theme: Theme,
                  intent: TextFieldIntent) -> TextFieldColors {
 

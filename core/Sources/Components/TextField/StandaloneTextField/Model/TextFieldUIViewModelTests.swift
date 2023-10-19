@@ -17,7 +17,7 @@ final class TextFieldUIViewModelTests: XCTestCase {
 
     var theme: ThemeGeneratedMock!
     var getBordersUseCase: TextFieldGetBordersUseCasableGeneratedMock!
-    var getColorsUseCase: TextFieldGetColorsUseCaseInterfaceGeneratedMock!
+    var getColorsUseCase: TextFieldGetColorsUseCasableGeneratedMock!
     var getSpacingsUseCase:
     TextFieldGetSpacingsUseCasableGeneratedMock!
     var textFieldColors: TextFieldColors!
@@ -33,7 +33,7 @@ final class TextFieldUIViewModelTests: XCTestCase {
 
         self.theme = ThemeGeneratedMock.mocked()
         self.getBordersUseCase = TextFieldGetBordersUseCasableGeneratedMock()
-        self.getColorsUseCase = TextFieldGetColorsUseCaseInterfaceGeneratedMock()
+        self.getColorsUseCase = TextFieldGetColorsUseCasableGeneratedMock()
         self.getSpacingsUseCase = TextFieldGetSpacingsUseCasableGeneratedMock()
         self.textFieldColors = TextFieldColors(border: .mock(ColorTokenGeneratedMock.random().color))
         self.textFieldBorders = TextFieldBorders(radius: .zero, width: .zero)
