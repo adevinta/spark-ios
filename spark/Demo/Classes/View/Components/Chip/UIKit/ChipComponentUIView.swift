@@ -13,7 +13,6 @@ import Spark
 
 final class ChipComponentUIView: ComponentUIView {
 
-
     private var componentView: ChipUIView!
 
     // MARK: - Properties

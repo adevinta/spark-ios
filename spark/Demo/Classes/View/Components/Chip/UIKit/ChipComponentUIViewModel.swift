@@ -21,6 +21,12 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
 
     private static let alertIcon = UIImage(imageLiteralResourceName: "alert")
 
+    private var label: String? = "Label" {
+        didSet {
+            self.title = self.label
+        }
+    }
+
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         showThemeSheetSubject
             .eraseToAnyPublisher()
@@ -81,12 +87,11 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.presentIconPositonSheet)))
     }()
 
-
-    lazy var labelConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var labelContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Show Label",
-            type: .checkbox(title: "", isOn: self.showLabel),
-            target: (source: self, action: #selector(self.showLabelChanged)))
+            name: "Label",
+            type: .input(text: self.label),
+            target: (source: self, action: #selector(self.labelChanged(_:))))
     }()
 
     lazy var badgeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -116,12 +121,6 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
             type: .checkbox(title: "", isOn: self.hasAction),
             target: (source: self, action: #selector(self.hasActionChanged)))
     }()
-
-    var showLabel = true {
-        didSet {
-            self.title = self.showLabel ? "Label" : nil
-        }
-    }
 
     var showIcon = true {
         didSet {
@@ -163,7 +162,7 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
             self.intentConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
             self.iconConfigurationItemViewModel,
-            self.labelConfigurationItemViewModel,
+            self.labelContentConfigurationItemViewModel,
             self.badgeConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.selectedConfigurationItemViewModel,
@@ -218,8 +217,12 @@ extension ChipComponentUIViewModel {
         self.showIconPositionSheetSubject.send(IconPosition.allCases)
     }
 
-    @objc func showLabelChanged() {
-        self.showLabel.toggle()
+    @objc func labelChanged(_ textField: UITextField) {
+        if textField.text?.isEmpty == false {
+            self.label = textField.text
+        } else  {
+            self.label = nil
+        }
     }
 
     @objc func showBadgeChanged() {
