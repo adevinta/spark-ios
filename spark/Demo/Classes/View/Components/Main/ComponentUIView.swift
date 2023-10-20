@@ -58,7 +58,7 @@ class ComponentUIView: UIView {
             ]
         )
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = .fill
         stackView.spacing = 12
         return stackView
     }()
