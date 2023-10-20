@@ -82,8 +82,8 @@ extension ComponentsViewController {
             viewController = ChipComponentViewController.build()
         case .icon:
             viewController = IconComponentUIViewController.build()
-        case .radioButton:
-            viewController = RadioButtonUIGroupViewController()
+        case .radioButtonDeprecated:
+            viewController = RadioButtonUIGroupViewControllerDeprecated()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
         case .switchButton:
@@ -111,7 +111,7 @@ private extension ComponentsViewController {
         case checkbox
         case chip
         case icon
-        case radioButton
+        case radioButtonDeprecated
         case spinner
         case switchButton
         case tab

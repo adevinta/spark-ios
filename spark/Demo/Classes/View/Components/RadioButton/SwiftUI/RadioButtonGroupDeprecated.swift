@@ -1,5 +1,5 @@
 //
-//  RadioButtonGroupView.swift
+//  RadioButtonGroupDeprecated.swift
 //  SparkDemo
 //
 //  Created by michael.zimmermann on 17.04.23.
@@ -10,7 +10,7 @@ import Spark
 import SparkCore
 import SwiftUI
 
-struct RadioButtonGroup: View {
+struct RadioButtonGroupDeprecated: View {
     // MARK: - Properties
 
     @State var selectedID: Int = 1
@@ -105,6 +105,6 @@ struct RadioButtonGroup: View {
 
 struct RadioButtonGroupView_Previews: PreviewProvider {
     static var previews: some View {
-        RadioButtonGroup()
+        RadioButtonGroupDeprecated()
     }
 }

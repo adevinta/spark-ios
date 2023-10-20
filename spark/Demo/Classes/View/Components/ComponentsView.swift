@@ -46,8 +46,8 @@ struct ComponentsView: View {
                 self.navigateToView(IconComponentView())
             }
 
-            Button("Radio Button") {
-                self.navigateToView(RadioButtonGroup())
+            Button("Radio Button - Deprecated") {
+                self.navigateToView(RadioButtonGroupDeprecated())
             }
 
             Button("Spinner") {
