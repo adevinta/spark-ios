@@ -7,6 +7,7 @@
 //
 
 import SparkCore
+import Foundation
 
 enum ComponentsConfigurationItemUIType: Equatable {
     case button
@@ -14,5 +15,6 @@ enum ComponentsConfigurationItemUIType: Equatable {
     case toggle(isOn: Bool)
     case checkbox(title: String, isOn: Bool)
     case rangeSelector(selected: Int, range: CountableClosedRange<Int>)
+    case rangeSelectorWithConfig(selected: Int, range: CountableClosedRange<Int>, stepper: Int, numberFormatter: NumberFormatter)
     case input(text: String?)
 }
