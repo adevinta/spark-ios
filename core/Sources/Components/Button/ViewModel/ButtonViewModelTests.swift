@@ -7,10 +7,8 @@
 //
 
 import XCTest
-import SnapshotTesting
 
 @testable import SparkCore
-@testable import Spark
 import Combine
 
 final class ButtonViewModelTests: XCTestCase {

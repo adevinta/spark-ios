@@ -22,6 +22,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
             self.toggle,
             self.checkbox,
             self.numberRange,
+            self.input,
             UIView()
         ].compactMap { $0 })
         stackView.axis = .horizontal
@@ -116,6 +117,26 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
             selector.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .valueChanged)
 
             return selector
+        default:
+            return nil
+        }
+    }()
+
+    private lazy var input: UITextField? = {
+
+        switch self.viewModel.type {
+        case let .input(text):
+            let field = UITextField()
+            field.translatesAutoresizingMaskIntoConstraints = false
+            field.accessibilityIdentifier = self.viewModel.identifier + "Input"
+            field.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .editingChanged)
+            field.text = text
+            field.placeholder = "Enter text here"
+            field.borderStyle = UITextField.BorderStyle.roundedRect
+            field.autocorrectionType = UITextAutocorrectionType.no
+            field.keyboardType = UIKeyboardType.default
+            field.returnKeyType = UIReturnKeyType.done
+            return field
         default:
             return nil
         }

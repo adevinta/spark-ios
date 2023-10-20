@@ -10,7 +10,7 @@ import Foundation
 @testable import SparkCore
 import XCTest
 
-final class EitherTests: TestCase {
+final class EitherTests: XCTestCase {
 
     func test_left_value() {
         let sut: Either<Int, String> = .left(1)

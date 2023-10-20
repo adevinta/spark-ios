@@ -8,3 +8,34 @@ configurations:
     args:
       autoMockableImports: [Combine]
       autoMockableTestableImports: [SparkCore]
+  - sources:
+      include:
+        - core/Sources
+    templates:
+      - stencil/sourcery-template/SparkCoreAutoMockTest.stencil
+    output: core/Unit-tests/Sourcery/Generated/AutoMockTest.generated.swift
+    args:
+      autoMockableImports: [Combine]
+      autoMockableTestableImports: [SparkCore]
+  - sources:
+      include:
+        - core/Sources
+    templates:
+      - stencil/sourcery-template/SparkCoreAutoPublisherTest.stencil
+    output: core/Unit-tests/Sourcery/Generated/AutoPublisherTest.generated.swift
+    args:
+      autoMockableImports: [Combine]
+      autoMockableTestableImports: [SparkCore]
+  - sources:
+      include:
+        - core/Sources
+    templates:
+      - stencil/sourcery-template/SparkCoreAutoViewModelStub.stencil
+    output: core/Unit-tests/Sourcery/Generated/AutoViewModelStub.generated.swift
+    args:
+      autoMockableImports: [Combine]
+      autoMockableTestableImports: [SparkCore]
+
+
+
+      

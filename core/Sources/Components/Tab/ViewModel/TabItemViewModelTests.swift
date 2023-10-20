@@ -10,7 +10,7 @@ import Combine
 @testable import SparkCore
 import XCTest
 
-final class TabItemViewModelTests: TestCase {
+final class TabItemViewModelTests: XCTestCase {
     
     // MARK: - Private properties
     private var theme: ThemeGeneratedMock!

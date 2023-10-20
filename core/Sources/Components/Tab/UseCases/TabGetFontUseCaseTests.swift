@@ -9,7 +9,7 @@
 @testable import SparkCore
 import XCTest
 
-final class TabGetFontUseCaseTests: TestCase {
+final class TabGetFontUseCaseTests: XCTestCase {
 
     // MARK: - Properties
     var typography: TypographyGeneratedMock!

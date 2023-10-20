@@ -127,6 +127,7 @@ public struct SwitchView: View {
                     // Dot
                     Circle()
                         .fill(self.viewModel.toggleDotBackgroundColorToken?.color ?? .clear)
+                        .aspectRatio(1, contentMode: .fit)
                         .accessibilityIdentifier(AccessibilityIdentifier.toggleDotView)
 
                     ZStack {

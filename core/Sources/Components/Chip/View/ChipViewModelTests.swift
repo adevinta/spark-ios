@@ -12,12 +12,12 @@ import XCTest
 
 @testable import SparkCore
 
-final class ChipViewModelTests: TestCase {
+final class ChipViewModelTests: XCTestCase {
 
     // MARK: - Properties
 
-    var sut: ChipViewModel!
-    var useCase: GetChipColorsUseCasableGeneratedMock!
+    var sut: ChipViewModel<Void>!
+    var useCase: ChipGetColorsUseCasableGeneratedMock!
     var theme: ThemeGeneratedMock!
     var subscriptions: Set<AnyCancellable>!
 
@@ -26,7 +26,7 @@ final class ChipViewModelTests: TestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
 
-        self.useCase = GetChipColorsUseCasableGeneratedMock()
+        self.useCase = ChipGetColorsUseCasableGeneratedMock()
         self.theme = ThemeGeneratedMock.mocked()
         self.subscriptions = .init()
 
@@ -35,9 +35,10 @@ final class ChipViewModelTests: TestCase {
         self.useCase.executeWithThemeAndVariantAndIntentAndStateReturnValue = ChipStateColors(background: colorToken, border: colorToken, foreground: colorToken)
 
         self.sut = ChipViewModel(theme: theme,
-                                 variant: .filled,
+                                 variant: .outlined,
                                  intent: .main,
                                  alignment: .leadingIcon,
+                                 content: Void(),
                                  useCase: useCase)
     }
 
@@ -237,13 +238,11 @@ final class ChipViewModelTests: TestCase {
     }
 
     func test_not_bordered() throws {
-        for variant in [ChipVariant.tinted, .filled] {
-            // When
-            self.sut.set(variant: variant)
-
-            // Then
-            XCTAssertEqual(self.sut.isBordered, false)
-        }
+        // When
+        self.sut.set(variant: .tinted)
+        
+        // Then
+        XCTAssertEqual(self.sut.isBordered, false)
     }
 
     func test_is_bordered() throws {

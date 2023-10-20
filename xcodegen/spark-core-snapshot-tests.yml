@@ -1,0 +1,40 @@
+name: Spark
+include:
+  - spark-core.yml
+
+packages:
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: 1.11.0
+
+targetTemplates:
+  SparkCoreSnapshotTestsTemplate:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.core.snapshot-tests"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        PRODUCT_NAME: SparkCoreSnapshotTests
+    sources:
+      - path: ../core/Unit-tests
+      - path: ../core/Sources
+        includes:
+        - "**/*SnapshotTest*.swift"
+      - path: ../spark/Sources/Resources
+        excludes:
+        - "**/*Tests*.swift"
+      - path: ../spark/Sources/Theming
+        excludes:
+        - "**/*Tests*.swift"
+
+    dependencies:
+      - target: SparkCore
+      - package: SnapshotTesting
+
+targets:
+  SparkCoreSnapshotTests:
+    templates:
+      - SparkCoreSnapshotTestsTemplate

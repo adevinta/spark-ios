@@ -60,8 +60,8 @@ final class TabComponentUIViewController: UIViewController {
             }
             .store(in: &self.cancellables)
 
-        self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
-            self.presentThemeActionSheet(intents)
+        self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { themes in
+            self.presentThemeActionSheet(themes)
         }
 
         self.viewModel.showIntentSheet.subscribe(in: &self.cancellables) { intents in

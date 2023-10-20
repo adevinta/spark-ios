@@ -18,15 +18,17 @@ final class ChipComponentViewController: UIViewController {
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     // MARK: - Properties
-    let chipComponentView: ChipComponentUIView
+    let componentView: ChipComponentUIView
     let viewModel: ChipComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Initializer
     init(viewModel: ChipComponentUIViewModel) {
         self.viewModel = viewModel
-        self.chipComponentView = ChipComponentUIView(viewModel: viewModel)
+        self.componentView = ChipComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
+
+        self.componentView.viewController = self
     }
 
     required init?(coder: NSCoder) {
@@ -36,7 +38,7 @@ final class ChipComponentViewController: UIViewController {
     // MARK: - Lifecycle
     override func loadView() {
         super.loadView()
-        view = chipComponentView
+        view = componentView
     }
 
     // MARK: - ViewDidLoad
@@ -66,8 +68,12 @@ final class ChipComponentViewController: UIViewController {
             self.presentIntentActionSheet(intents)
         }
 
-        self.viewModel.showVariantSheet.subscribe(in: &self.cancellables) { variants in
-            self.presentVariantActionSheet(variants)
+        self.viewModel.showVariantSheet.subscribe(in: &self.cancellables) { intents in
+            self.presentVariantActionSheet(intents)
+        }
+
+        self.viewModel.showIconPosition.subscribe(in: &self.cancellables) { variants in
+            self.presentIconAlignmentActionSheet(variants)
         }
     }
 }
@@ -76,7 +82,7 @@ final class ChipComponentViewController: UIViewController {
 extension ChipComponentViewController {
 
     static func build() -> ChipComponentViewController {
-        let viewModel = ChipComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
+        let viewModel = ChipComponentUIViewModel(theme: SparkThemePublisher.shared.theme, intent: .support, variant: .outlined)
         let viewController = ChipComponentViewController(viewModel: viewModel)
         return viewController
     }
@@ -108,6 +114,21 @@ extension ChipComponentViewController {
             values: variants,
             texts: variants.map{ $0.name }) { variant in
                 self.viewModel.variant = variant
+            }
+            self.present(actionSheet, animated: true)
+    }
+
+    private func presentIconAlignmentActionSheet(_ variants: [ChipComponentUIViewModel.IconPosition]) {
+        let actionSheet = SparkActionSheet<ChipComponentUIViewModel.IconPosition>.init(
+            values: variants,
+            texts: variants.map{ $0.name }) { variant in
+                switch variant {
+                case .none: self.viewModel.showIcon = false
+                case .leading: self.viewModel.showIcon = true
+                    self.viewModel.alignment = .leadingIcon
+                case .trailing: self.viewModel.showIcon = true
+                    self.viewModel.alignment = .trailingIcon
+                }
             }
             self.present(actionSheet, animated: true)
     }
