@@ -1,5 +1,5 @@
 //
-//  RadioButtonUIKitGroup.swift
+//  RadioButtonUIGroupViewControllerDeprecated.swift
 //  SparkDemo
 //
 //  Created by michael.zimmermann on 21.04.23.
@@ -11,7 +11,7 @@ import Spark
 import SparkCore
 import SwiftUI
 
-final class RadioButtonUIGroupViewController: UIViewController {
+final class RadioButtonUIGroupViewControllerDeprecated: UIViewController {
 
     // MARK: - Constant definitions
 

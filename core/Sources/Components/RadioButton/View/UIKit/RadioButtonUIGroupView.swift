@@ -262,10 +262,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         super.traitCollectionDidChange(previousTraitCollection)
         self._spacing.update(traitCollection: self.traitCollection)
         self._labelSpacing.update(traitCollection: self.traitCollection)
-//
-//        for constraint in self.itemSpacingConstraints {
-//            constraint.constant = self.spacing
-//        }
+
         self.stackView.spacing = self.spacing
 
         for constraint in self.itemLabelSpacingConstraints {
@@ -294,20 +291,9 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     private func didUpdateItems() {
-//        NSLayoutConstraint.deactivate(self.allConstraints)
         self.createRadioButtonViews()
         self.stackView.removeArrangedSubviews()
         self.stackView.addArrangedSubviews(self.radioButtonViews)
-//        for view in self.radioButtonViews {
-//            view.removeFromSuperview()
-//        }
-//
-//        createRadioButtonViews()
-//
-//        for radioButtonView in radioButtonViews {
-//            self.addSubview(radioButtonView)
-//        }
-//        setupConstraints()
     }
 
     private func createRadioButtonViews() {
@@ -381,119 +367,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             self.setupConstraints()
         }
     }
-//    private func setupConstraints() {
-//        NSLayoutConstraint.deactivate(self.allConstraints)
-//
-//        if self.groupLayout == .vertical {
-//            setupVerticalConstraints()
-//        } else {
-//            setupHorizontalConstraints()
-//        }
-//    }
-
-//    private func setupVerticalConstraints() {
-//        var previousLayoutTopAnchor = self.safeAreaLayoutGuide.topAnchor
-//        var constraints = [NSLayoutConstraint]()
-//        var spacing: CGFloat = 0
-//
-//        if self.title != nil {
-//            constraints.append(self.titleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
-//            constraints.append(self.titleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
-//            constraints.append(self.titleLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor))
-//            previousLayoutTopAnchor = self.titleLabel.bottomAnchor
-//            spacing = self.labelSpacing
-//        }
-//
-//        for (index, radioButtonView) in radioButtonViews.enumerated() {
-//            constraints.append(radioButtonView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
-//            constraints.append(radioButtonView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
-//
-//            let itemConstraint = radioButtonView.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: spacing)
-//            constraints.append(itemConstraint)
-//            if spacing != 0 {
-//                if index == 0 {
-//                    self.itemLabelSpacingConstraints.append(itemConstraint)
-//                } else {
-//                    self.itemSpacingConstraints.append(itemConstraint)
-//                }
-//            }
-//            spacing = self.spacing
-//
-//            previousLayoutTopAnchor = radioButtonView.bottomAnchor
-//        }
-//
-//        if self.supplementaryText !=  nil {
-//            constraints.append(self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
-//            constraints.append(self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
-//            let topConstraint = self.supplementaryLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: self.labelSpacing)
-//            constraints.append(topConstraint)
-//            self.itemLabelSpacingConstraints.append(topConstraint)
-//            previousLayoutTopAnchor = self.supplementaryLabel.bottomAnchor
-//        }
-//
-//        constraints.append(previousLayoutTopAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor))
-//
-//        self.allConstraints = constraints
-//        NSLayoutConstraint.activate(constraints)
-//    }
-//
-//    private func setupHorizontalConstraints() {
-//        var previousLayoutTopAnchor = self.safeAreaLayoutGuide.topAnchor
-//        var previousLayoutLeadingAnchor = self.safeAreaLayoutGuide.leadingAnchor
-//        var constraints = [NSLayoutConstraint]()
-//        var spacing: CGFloat = 0
-//
-//        if self.title != nil {
-//            constraints.append(self.titleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
-//            constraints.append(self.titleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
-//            constraints.append(self.titleLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor))
-//            previousLayoutTopAnchor = self.titleLabel.bottomAnchor
-//            spacing = self.labelSpacing
-//        }
-//
-//        var radioButtonAnchors = [NSLayoutYAxisAnchor]()
-//
-//        for (index, radioButtonView) in radioButtonViews.enumerated() {
-//            let topConstraint = radioButtonView.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: spacing)
-//            if spacing != 0 {
-//                self.itemLabelSpacingConstraints.append(topConstraint)
-//            }
-//            constraints.append(topConstraint)
-//            radioButtonAnchors.append(radioButtonView.bottomAnchor)
-//
-//            if index == 0 {
-//                constraints.append(radioButtonView.leadingAnchor.constraint(equalTo: previousLayoutLeadingAnchor))
-//            } else {
-//                let itemConstraint = radioButtonView.leadingAnchor.constraint(equalTo: previousLayoutLeadingAnchor, constant: self.spacing)
-//                self.itemSpacingConstraints.append(itemConstraint)
-//                constraints.append(itemConstraint)
-//            }
-//            previousLayoutLeadingAnchor = radioButtonView.trailingAnchor
-//        }
-//        constraints.append(previousLayoutLeadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
-//
-//        var bottomAnchor: NSLayoutYAxisAnchor = self.safeAreaLayoutGuide.bottomAnchor
-//        var labelSpacing: CGFloat = 0
-//
-//        if self.supplementaryText !=  nil {
-//            bottomAnchor = self.supplementaryLabel.topAnchor
-//            labelSpacing = self.labelSpacing
-//            constraints.append(self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
-//            constraints.append(self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
-//            constraints.append(self.supplementaryLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor))
-//        }
-//
-//        for anchor in radioButtonAnchors {
-//            let bottomConstraint = bottomAnchor.constraint(equalTo: anchor, constant: labelSpacing)
-//            constraints.append(bottomConstraint)
-//            if labelSpacing != 0 {
-//                self.itemLabelSpacingConstraints.append(bottomConstraint)
-//            }
-//        }
-//
-//        self.allConstraints = constraints
-//        NSLayoutConstraint.activate(constraints)
-//    }
 
     private func setupSubscriptions() {
         self.viewModel.$titleFont.subscribe(in: &self.subscriptions) { [weak self] font in
