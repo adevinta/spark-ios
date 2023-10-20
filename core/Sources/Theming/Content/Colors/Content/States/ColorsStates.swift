@@ -34,7 +34,6 @@ public protocol ColorsStates {
 
     var surfacePressed: any ColorToken { get }
     var surfaceInversePressed: any ColorToken { get }
-    var outlinePressed: any ColorToken { get }
 
     // MARK: - Feedback
 
