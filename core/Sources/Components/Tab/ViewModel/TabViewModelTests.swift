@@ -10,7 +10,7 @@ import Combine
 @testable import SparkCore
 import XCTest
 
-final class TabViewModelTests: TestCase {
+final class TabViewModelTests: XCTestCase {
 
     // MARK: - Properties
     var useCase: TabsGetAttributesUseCaseableGeneratedMock!

@@ -1,0 +1,98 @@
+name: Spark
+include:
+  - spark-shared.yml
+
+targetTemplates:
+  SparkSchemeTemplate:
+    platform: iOS
+    type: framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark"
+        BUILD_LIBRARY_FOR_DISTRIBUTION: YES
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        PRODUCT_NAME: Spark
+    info:
+      path: ../spark/Sources/Info.plist
+      properties:
+        UIAppFonts:
+         - "NunitoSans-Bold.ttf"
+         - "NunitoSans-Regular.ttf"
+    sources:
+      - path: ../spark/Sources
+        excludes:
+        - "**/*Tests.swift"
+    scheme:
+      testTargets:
+        - name: SparkTests
+      gatherCoverageData: true
+    dependencies:
+      - target: SparkCore
+
+  SparkTestsTemplate:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.tests"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    info:
+      path: ../spark/Unit-tests/Info.plist
+    sources:
+      - path: ../spark/Unit-tests
+      - path: ../spark/Sources
+        includes: # includes some files from theme folder
+        - "**/*Tests.swift"
+
+    dependencies:
+      - target: Spark
+
+  SparkDemoTemplate:
+    type: application
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    info:
+      path: ../spark/Demo/Info.plist
+      properties:
+        UILaunchScreen: []
+
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+    sources:
+      - path: ../spark/Demo
+      - path: ../spark/Sources/Resources
+        excludes:
+        - "Generated/"
+      - path: ../spark/Sources/Theming
+        excludes:
+        - "**/*Tests.swift"
+      - path: ../core/Sources/Common/UIKit/GlobalExtension
+      - path: ../core/Sources/Common/Combine/Global
+    dependencies:
+      - target: Spark
+
+targets:
+  Spark:
+    templates:
+      - SparkSchemeTemplate
+
+  SparkTests:
+    templates:
+      - SparkTestsTemplate
+
+  SparkDemo:
+    templates:
+      - SparkDemoTemplate

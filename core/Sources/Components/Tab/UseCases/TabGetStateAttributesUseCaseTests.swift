@@ -9,7 +9,7 @@
 @testable import SparkCore
 import XCTest
 
-final class TabGetStateAttributesUseCaseTests: TestCase {
+final class TabGetStateAttributesUseCaseTests: XCTestCase {
     
     // MARK: - Private properties
     private var sut: TabGetStateAttributesUseCase!

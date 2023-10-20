@@ -53,6 +53,7 @@ final class BadgeViewModel: ObservableObject {
     var theme: Theme {
         didSet {
             self.updateColors()
+            self.updateFont()
             self.updateScalings()
         }
     }

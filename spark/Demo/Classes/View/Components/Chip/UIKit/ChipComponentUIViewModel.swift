@@ -11,9 +11,22 @@ import Spark
 import SparkCore
 import UIKit
 
-final class ChipComponentUIViewModel: ObservableObject {
+final class ChipComponentUIViewModel: ComponentUIViewModel {
 
-    // MARK: - Published Properties
+    enum IconPosition: CaseIterable {
+        case leading
+        case trailing
+        case none
+    }
+
+    private static let alertIcon = UIImage(imageLiteralResourceName: "alert")
+
+    private var label: String? = "Label" {
+        didSet {
+            self.title = self.label
+        }
+    }
+
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         showThemeSheetSubject
             .eraseToAnyPublisher()
@@ -29,39 +42,160 @@ final class ChipComponentUIViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
 
-    let themes = ThemeCellModel.themes
+    var showIconPosition: AnyPublisher<[IconPosition], Never> {
+        showIconPositionSheetSubject
+            .eraseToAnyPublisher()
+    }
+
+    var themes = ThemeCellModel.themes
 
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[ChipIntent], Never> = .init()
     private var showVariantSheetSubject: PassthroughSubject<[ChipVariant], Never> = .init()
+    private var showIconPositionSheetSubject: PassthroughSubject<[IconPosition], Never> = .init()
 
-    // MARK: - Initialization
+    // MARK: - Items Properties
+    lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Theme",
+            type: .button,
+            target: (source: self, action: #selector(self.presentThemeSheet))
+        )
+    }()
+
+    lazy var intentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Intent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentIntentSheet))
+        )
+    }()
+
+    lazy var variantConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Variant",
+            type: .button,
+            target: (source: self, action: #selector(self.presentVariantSheet))
+        )
+    }()
+
+    lazy var iconConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Icon Alignment",
+            type: .button,
+            target: (source: self, action: #selector(self.presentIconPositonSheet)))
+    }()
+
+    lazy var labelContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Label",
+            type: .input(text: self.label),
+            target: (source: self, action: #selector(self.labelChanged(_:))))
+    }()
+
+    lazy var badgeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Show Badge",
+            type: .checkbox(title: "", isOn: self.showBadge),
+            target: (source: self, action: #selector(self.showBadgeChanged)))
+    }()
+
+    lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Enable",
+            type: .checkbox(title: "", isOn: self.isEnabled),
+            target: (source: self, action: #selector(self.enabledChanged)))
+    }()
+
+    lazy var selectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Selected",
+            type: .checkbox(title: "", isOn: self.isSelected),
+            target: (source: self, action: #selector(self.selectedChanged)))
+    }()
+
+    lazy var hasActionConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Action",
+            type: .checkbox(title: "", isOn: self.hasAction),
+            target: (source: self, action: #selector(self.hasActionChanged)))
+    }()
+
+    var showIcon = true {
+        didSet {
+            self.icon = self.showIcon ? Self.alertIcon : nil
+        }
+    }
+
+    var showBadge = false {
+        didSet {
+            self.badge = self.showBadge ? self.createBadge() : nil
+        }
+    }
+
+    // swiftlint:disable all
+    var hasAction: Bool {
+        set {
+            self.action = newValue ? {} : nil
+        }
+        get {
+            self.action != nil
+        }
+    }
+
+    // MARK: - Published Properties
     @Published var theme: Theme
     @Published var intent: ChipIntent
     @Published var variant: ChipVariant
-    @Published var text: String?
-    @Published var icon: UIImage?
-    @Published var component: UIView?
-    @Published var action: (()->Void)?
+    @Published var alignment: ChipAlignment = .leadingIcon
+    @Published var badge: BadgeUIView?
+    @Published var isEnabled = true
+    @Published var isSelected = false
+    @Published var title: String? = "Label"
+    @Published var icon: UIImage? = alertIcon
+    @Published var action: (() -> Void)?
 
+    override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
+        return [
+            self.themeConfigurationItemViewModel,
+            self.intentConfigurationItemViewModel,
+            self.variantConfigurationItemViewModel,
+            self.iconConfigurationItemViewModel,
+            self.labelContentConfigurationItemViewModel,
+            self.badgeConfigurationItemViewModel,
+            self.disableConfigurationItemViewModel,
+            self.selectedConfigurationItemViewModel,
+            self.hasActionConfigurationItemViewModel
+        ]
+    }
+
+    // MARK: Initializer
     init(
         theme: Theme,
-        intent: ChipIntent = .main,
-        variant: ChipVariant = .filled,
-        text: String? = "Label",
-        icon: UIImage? = UIImage(imageLiteralResourceName: "alert"),
-        component: UIView? = nil,
-        action: (()->Void)? = nil
+        intent: ChipIntent = .basic,
+        variant: ChipVariant = .outlined
     ) {
         self.theme = theme
         self.intent = intent
         self.variant = variant
-        self.text = text
-        self.icon = icon
-        self.component = component
-        self.action = action
+
+        super.init(identifier: "Chip")
+        self.action = {}
     }
+
+    private func createBadge() -> BadgeUIView {
+        let badge = BadgeUIView(
+            theme: self.theme,
+            intent: .danger,
+            value: 99
+        )
+        badge.size = .small
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        badge.isBorderVisible = false
+        return badge
+    }
+
 }
 
 // MARK: - Navigation
@@ -77,5 +211,37 @@ extension ChipComponentUIViewModel {
 
     @objc func presentVariantSheet() {
         self.showVariantSheetSubject.send(ChipVariant.allCases)
+    }
+
+    @objc func presentIconPositonSheet() {
+        self.showIconPositionSheetSubject.send(IconPosition.allCases)
+    }
+
+    @objc func labelChanged(_ textField: UITextField) {
+        if textField.text?.isEmpty == false {
+            self.label = textField.text
+        } else  {
+            self.label = nil
+        }
+    }
+
+    @objc func showBadgeChanged() {
+        self.showBadge.toggle()
+    }
+
+    @objc func showIconChanged() {
+        self.showIcon.toggle()
+    }
+
+    @objc func enabledChanged() {
+        self.isEnabled.toggle()
+    }
+
+    @objc func selectedChanged() {
+        self.isSelected.toggle()
+    }
+
+    @objc func hasActionChanged() {
+        self.hasAction.toggle()
     }
 }

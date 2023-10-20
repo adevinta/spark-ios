@@ -78,6 +78,7 @@ public struct TabItemView: View {
             label: {
                 self.tabContent()
                     .background(self.viewModel.tabStateAttributes.colors.background.color)
+                    .contentShape(Rectangle())
             })
         .disabled(!self.viewModel.isEnabled)
         .opacity(self.viewModel.tabStateAttributes.colors.opacity)
@@ -169,11 +170,9 @@ private struct TabItemButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Self.Configuration) -> some View {
         if configuration.isPressed != self.viewModel.isPressed {
-            DispatchQueue.main.async {
-                self.viewModel.isPressed = configuration.isPressed
-            }
+            self.viewModel.isPressed = configuration.isPressed
         }
         return configuration.label
-            .animation(.easeOut(duration: 0.2), value: self.viewModel.isPressed)
+            .animation(.easeOut(duration: 0.1), value: self.viewModel.isPressed)
     }
 }

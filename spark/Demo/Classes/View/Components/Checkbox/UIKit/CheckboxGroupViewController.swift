@@ -80,13 +80,14 @@ final class CheckboxGroupViewController: UIViewController {
     }
 
     private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItem(title: "Entry", id: "1", selectionState: .selected, isEnabled: false),
-        CheckboxGroupItem(title: "Entry 2", id: "2", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 4", id: "4", selectionState: .unselected, isEnabled: false),
-        CheckboxGroupItem(title: "Entry 6", id: "6", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 7", id: "7", selectionState: .unselected),
-        CheckboxGroupItem(title: "Entry 8", id: "8", selectionState: .unselected)
+        CheckboxGroupItemDefault(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
+        CheckboxGroupItemDefault(title: "Entry 2", id: "2", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 3", id: "3", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
+        CheckboxGroupItemDefault(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
+        CheckboxGroupItemDefault(title: "Entry 6", id: "6", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 7", id: "7", selectionState: .unselected),
+        CheckboxGroupItemDefault(title: "Entry 8", id: "8", selectionState: .unselected)
     ] {
         didSet {
             self.updateSelection()
@@ -163,7 +164,7 @@ final class CheckboxGroupViewController: UIViewController {
             checkedImage: checkedImage,
             items: self.items,
             layout: self.checkboxGroupLayout,
-            checkboxAlignment: .left,
+            checkboxPosition: .left,
             theme: theme,
             accessibilityIdentifierPrefix: "abc"
         )
@@ -220,7 +221,7 @@ final class CheckboxGroupViewController: UIViewController {
 
     @objc private func actionAddItem(sender: UIButton) {
         let identifier = "\(self.items.count + 1)"
-        let newItem = CheckboxGroupItem(
+        let newItem = CheckboxGroupItemDefault(
             attributedTitle: self.attributedCheckboxLabel(for: identifier),
             id: identifier,
             selectionState: .unselected
@@ -231,7 +232,7 @@ final class CheckboxGroupViewController: UIViewController {
 
 
     @objc private func actionChangePosition(sender: UIButton) {
-        self.checkboxGroup?.checkboxAlignment = self.checkboxGroup?.checkboxAlignment == .right ? .left : .right
+        self.checkboxGroup?.checkboxPosition = self.checkboxGroup?.checkboxPosition == .right ? .left : .right
     }
 
     @objc private func actionChangeLayout(sender: UIButton) {
@@ -242,11 +243,11 @@ final class CheckboxGroupViewController: UIViewController {
 
     @objc private func actionShuffle(sender: UIButton) {
         let selectionStates = [CheckboxSelectionState.indeterminate, .selected, .unselected]
-        let states = [true, false]
+        let states = [SelectButtonState.enabled, .disabled, .accent, .basic, .success(message: "Success message"), .warning(message: "Warning message"), .error(message: "Error message")]
         for index in 0..<items.count {
             var item = items[index]
             if let randomState = states.randomElement() {
-                item.isEnabled = randomState
+                item.state = randomState
             }
 
             if let randomSelectionState = selectionStates.randomElement() {

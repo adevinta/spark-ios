@@ -9,7 +9,7 @@
 @testable import SparkCore
 import XCTest
 
-final class GetSpinnerIntentColorUseCaseTests: TestCase {
+final class GetSpinnerIntentColorUseCaseTests: XCTestCase {
 
     // MARK: - Private properties
     private var sut: GetSpinnerIntentColorUseCase!

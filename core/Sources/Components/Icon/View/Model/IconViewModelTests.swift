@@ -11,7 +11,7 @@ import XCTest
 
 @testable import SparkCore
 
-final class IconViewModelTests: TestCase {
+final class IconViewModelTests: XCTestCase {
 
     // MARK: - Properties
 

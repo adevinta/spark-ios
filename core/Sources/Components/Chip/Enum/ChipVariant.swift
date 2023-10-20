@@ -11,7 +11,6 @@ import Foundation
 /// The different variants of a chip
 public enum ChipVariant: CaseIterable {
     case outlined
-    case filled
     case tinted
     case dashed
 }

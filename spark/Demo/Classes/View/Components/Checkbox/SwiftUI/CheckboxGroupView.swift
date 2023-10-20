@@ -59,7 +59,7 @@ struct CheckboxGroupListView: View {
 
             Button("Add checkbox") {
                 let identifier = "\(self.items.count + 1)"
-                let newItem = CheckboxGroupItem(title: "Entry \(identifier)", id: identifier, selectionState: .unselected)
+                let newItem = CheckboxGroupItemDefault(title: "Entry \(identifier)", id: identifier, selectionState: .unselected)
                 withAnimation {
                     self.items.append(newItem)
                 }
