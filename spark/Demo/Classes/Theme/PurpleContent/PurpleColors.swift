@@ -95,7 +95,6 @@ struct PurpleColors: Colors {
         basicContainerPressed: ColorTokenDefault(named: "purple-basic-container-pressed", in: Bundle(for: ClassForBundle.self)),
         surfacePressed: ColorTokenDefault(named: "purple-surfacePressed", in: Bundle(for: ClassForBundle.self)),
         surfaceInversePressed: ColorTokenDefault(named: "purple-surfaceInversePressed", in: Bundle(for: ClassForBundle.self)),
-        outlinePressed: ColorTokenDefault(named: "purple-outlinePressed", in: Bundle(for: ClassForBundle.self)),
         successPressed: ColorTokenDefault(named: "purple-successPressed", in: Bundle(for: ClassForBundle.self)),
         successContainerPressed: ColorTokenDefault(named: "purple-successContainerPressed", in: Bundle(for: ClassForBundle.self)),
         alertPressed: ColorTokenDefault(named: "purple-alertPressed", in: Bundle(for: ClassForBundle.self)),
