@@ -392,18 +392,18 @@ final class TextFieldComponentUIView: UIView {
         self.showLeadingAddOnCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self else { return }
             if state == .selected {
-                self.addOnTextField.addLeadingAddOn(self.leadingAddOn)
+                self.addOnTextField.leadingAddOn = self.leadingAddOn
             } else if state == .unselected {
-                self.addOnTextField.removeLeadingAddOn()
+                self.addOnTextField.leadingAddOn = nil
             }
         }
 
         self.showTrailingAddOnCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self else { return }
             if state == .selected {
-                self.addOnTextField.addTrailingAddOn(self.trailingAddOn)
+                self.addOnTextField.trailingAddOn = self.trailingAddOn
             } else if state == .unselected {
-                self.addOnTextField.removeTrailingAddOn()
+                self.addOnTextField.trailingAddOn = nil
             }
         }
 

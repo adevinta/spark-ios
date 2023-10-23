@@ -33,8 +33,24 @@ public final class AddOnTextFieldUIView: UIView {
         }
     }
 
-    public private(set) var leadingAddOn: UIView?
-    public private(set) var trailingAddOn: UIView?
+    public var leadingAddOn: UIView? {
+        didSet {
+            if let addOn = leadingAddOn {
+                self.addLeadingAddOn(addOn)
+            } else {
+                self.removeLeadingAddOn()
+            }
+        }
+    }
+    public var trailingAddOn: UIView? {
+        didSet {
+            if let addOn = trailingAddOn {
+                self.addTrailingAddOn(addOn)
+            } else {
+                self.removeTrailingAddOn()
+            }
+        }
+    }
     public let textField: TextFieldUIView
     
     // MARK: - Private properties
@@ -150,35 +166,29 @@ public final class AddOnTextFieldUIView: UIView {
         return separator
     }
 
-    // MARK: - Public methods
-
-    public func addLeadingAddOn(_ addOn: UIView) {
+    private func addLeadingAddOn(_ addOn: UIView) {
         self.leadingAddOnStackView.isHidden = false
-        self.leadingAddOn = addOn
         self.leadingAddOnStackView.addArrangedSubviews([
             addOn,
             separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme)
         ])
     }
 
-    public func removeLeadingAddOn() {
+    private func removeLeadingAddOn() {
         self.leadingAddOnStackView.isHidden = true
-        self.leadingAddOn = nil
         self.leadingAddOnStackView.removeArrangedSubviews()
     }
 
-    public func addTrailingAddOn(_ addOn: UIView) {
+    private func addTrailingAddOn(_ addOn: UIView) {
         self.trailingAddOnStackView.isHidden = false
-        self.trailingAddOn = addOn
         self.trailingAddOnStackView.addArrangedSubviews([
             separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme),
             addOn
         ])
     }
 
-    public func removeTrailingAddOn() {
+    private func removeTrailingAddOn() {
         self.trailingAddOnStackView.isHidden = true
-        self.trailingAddOn = nil
         self.trailingAddOnStackView.removeArrangedSubviews()
     }
 
