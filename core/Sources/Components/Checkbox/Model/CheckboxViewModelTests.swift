@@ -6,113 +6,145 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-//import Combine
-//import SwiftUI
-//import XCTest
-//
-//final class CheckboxViewModelTests: XCTestCase {
-//
-//    var theme: ThemeGeneratedMock!
-//    var bindingValue: Int = 0
-//    var subscription: Cancellable?
-//    var checkedImage = IconographyTests.shared.checkmark
-//
-//    // MARK: - Setup
-//    override func setUpWithError() throws {
-//        try super.setUpWithError()
-//
-//        self.theme = ThemeGeneratedMock.mock
-//    }
-//
-//    // MARK: - Tests
-//    func test_init() throws {
-//        let states = [SelectButtonState.enabled, .disabled, .success(message: "success message"), .error(message: "error message"), .warning(message: "warning message")]
-//
-//        for state in states {
-//            // Given
-//            let viewModel = sut(state: state)
-//
-//            // Then
-//            XCTAssertEqual(state, viewModel.state, "wrong state")
-//            XCTAssertNotNil(viewModel.theme, "no theme set")
-//            XCTAssertNotNil(viewModel.colors, "no colors set")
-//
-//            XCTAssertIdentical(viewModel.theme as? ThemeGeneratedMock,
-//                               self.theme,
-//                               "Wrong typography value")
-//
-//            XCTAssertEqual(viewModel.text, "Text", "text does not match")
-//            XCTAssertEqual(viewModel.supplementaryMessage, state.message, "supplementary message does not match")
-//        }
-//    }
-//
-//    func test_opacity() throws {
-//        // Given
-//        let opacities = self.sutValues(for: \.opacity)
-//
-//        // Then
-//        XCTAssertEqual(opacities, [0.4, 1.0, 1.0, 1.0, 1.0])
-//    }
-//
-//    func test_interactionEnabled() {
-//        // Given
-//        let disabledStates = self.sutValues(for: \.interactionEnabled)
-//
-//        // Then
-//        XCTAssertEqual(disabledStates, [false, true, true, true, true])
-//    }
-//
-//    func test_supplementaryMessage() {
-//        // Given
-//        let supplementaryTexts = self.sutValues(for: \.supplementaryMessage)
-//
-//        // Then
-//        XCTAssertEqual(supplementaryTexts, [nil, nil, "Success", "Warning", "Error"])
-//    }
-//
-//    // MARK: - Private Helper Functions
-//    private func sutValues<T>(for keyPath: KeyPath<CheckboxViewModel, T>) -> [T] {
-//        // Given
-//        let statesToTest: [SelectButtonState] = [
-//            .disabled,
-//            .enabled,
-//            .success(message: "Success"),
-//            .warning(message: "Warning"),
-//            .error(message: "Error")
-//        ]
-//
-//        return statesToTest
-//            .map(sut(state:))
-//            .map{ $0[keyPath: keyPath] }
-//    }
-//
-//    private func sut(state: SelectButtonState) -> CheckboxViewModel {
-//        return CheckboxViewModel(text: .right("Text"), checkedImage: self.checkedImage, theme: self.theme, state: state)
-//    }
-//}
-//
-//private extension Theme where Self == ThemeGeneratedMock {
-//    static var mock: Self {
-//        let theme = ThemeGeneratedMock()
-//        let colors = ColorsGeneratedMock()
-//
-//        colors.base = ColorsBaseGeneratedMock.mocked()
-//        colors.main = ColorsMainGeneratedMock.mocked()
-//        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
-//        theme.colors = colors
-//        theme.dims = DimsGeneratedMock.mocked()
-//
-//        return theme
-//    }
-//}
-//
-//private extension SelectButtonState {
-//    var message: String? {
-//        switch self {
-//        case .success(let message), .warning(let message), .error(let message):
-//            return message
-//        default:
-//            return nil
-//        }
-//    }
-//}
+import Combine
+import SwiftUI
+import XCTest
+@testable import SparkCore
+
+final class CheckboxViewModelTests: XCTestCase {
+
+    var theme: ThemeGeneratedMock!
+    var cancellable = Set<AnyCancellable>()
+    var checkedImage = IconographyTests.shared.checkmark
+
+    // MARK: - Setup
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+
+        self.theme = ThemeGeneratedMock.mocked()
+    }
+
+    // MARK: - Tests
+    func test_init() throws {
+        let states = [true, false]
+
+        for state in states {
+            // Given
+            let viewModel = sut(isEnabled: state)
+
+            // Then
+            XCTAssertEqual(state, viewModel.isEnabled, "wrong state")
+            XCTAssertNotNil(viewModel.theme, "no theme set")
+            XCTAssertNotNil(viewModel.colors, "no colors set")
+            XCTAssertNotNil(viewModel.intent, "no intents set")
+            XCTAssertNotNil(viewModel.alignment, "no alignment set")
+
+            XCTAssertIdentical(viewModel.theme as? ThemeGeneratedMock,
+                               self.theme,
+                               "Wrong typography value")
+
+            XCTAssertEqual(viewModel.text, "Text", "text does not match")
+            XCTAssertEqual(viewModel.checkedImage, self.checkedImage, "Checked image does not match")
+            XCTAssertEqual(viewModel.alignment, .left, "Alignment does not match")
+            XCTAssertEqual(viewModel.intent, .main, "Intent does not match")
+            XCTAssertEqual(viewModel.selectionState, .unselected, "Selection state does not match")
+        }
+    }
+
+    func test_opacity() throws {
+        // Given
+        let opacities = self.sutValues(for: \.opacity)
+
+        // Then
+        XCTAssertEqual(opacities, [self.theme.dims.none, self.theme.dims.dim3])
+    }
+
+    func test_isEnabled() {
+        // Given
+        let disabledStates = self.sutValues(for: \.isEnabled)
+
+        // Then
+        XCTAssertEqual(disabledStates, [true, false])
+    }
+
+    func test_attributeText() {
+        // Given
+        let sut = self.sut(isEnabled: true)
+        let attributeText = sut.attributedText
+
+        XCTAssertNil(attributeText)
+
+        // When
+        sut.attributedText = NSAttributedString("Text")
+
+        // Then
+        XCTAssertNotNil(sut.attributedText)
+        XCTAssertNotNil(sut.text)
+    }
+
+    func test_attributeText_afterTextIsSet() {
+        // Given
+        let sut = self.sut(isEnabled: true, attributeText: NSAttributedString("Text"))
+
+        // When
+        sut.update(content: .right("Text"))
+
+        // Then
+        XCTAssertNotNil(sut.text)
+        XCTAssertNil(sut.attributedText)
+    }
+
+    func test_updateColorsMethod_afterIntentIsSet() async {
+        // Given
+        let sut = self.sut(isEnabled: true, attributeText: NSAttributedString("Text"))
+        var isColorsUpdated = false
+        // When
+        sut.intent = .basic
+
+        let expectation = expectation(description: "Colors are updates")
+
+        sut.$colors.sink { _ in
+            isColorsUpdated = true
+            expectation.fulfill()
+        }.store(in: &cancellable)
+
+        await fulfillment(of: [expectation], timeout: 2.0)
+
+        // Then
+        XCTAssertTrue(isColorsUpdated)
+    }
+
+    // MARK: - Private Helper Functions
+    private func sutValues<T>(for keyPath: KeyPath<CheckboxViewModel, T>) -> [T] {
+        // Given
+        let statesToTest: [Bool] = [true, false]
+
+        return statesToTest
+            .map{ self.sut(isEnabled: $0)}
+            .map{ $0[keyPath: keyPath] }
+    }
+
+    private func sut(isEnabled: Bool, attributeText: NSAttributedString? = nil) -> CheckboxViewModel {
+        return CheckboxViewModel(
+            text: attributeText == nil ? .right("Text") : .left(attributeText!),
+            checkedImage: self.checkedImage,
+            theme: self.theme, isEnabled: isEnabled,
+            selectionState: .unselected
+        )
+    }
+}
+
+private extension Theme where Self == ThemeGeneratedMock {
+    static var mock: Self {
+        let theme = ThemeGeneratedMock()
+        let colors = ColorsGeneratedMock()
+
+        colors.base = ColorsBaseGeneratedMock.mocked()
+        colors.main = ColorsMainGeneratedMock.mocked()
+        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
+        theme.colors = colors
+        theme.dims = DimsGeneratedMock.mocked()
+
+        return theme
+    }
+}

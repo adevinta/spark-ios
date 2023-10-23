@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+// sourcery: AutoMockable
 protocol CheckboxColorsUseCaseable {
     func execute(from color: Colors, intent: CheckboxIntent) -> CheckboxColors
 }
