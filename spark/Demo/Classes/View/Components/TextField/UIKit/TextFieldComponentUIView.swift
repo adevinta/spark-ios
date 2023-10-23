@@ -17,6 +17,15 @@ final class TextFieldComponentUIView: UIView {
     private let viewModel: TextFieldComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
+    private lazy var vStack: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = 12
+        return stackView
+    }()
+
     private lazy var configurationLabel: UILabel = {
         let label = UILabel()
         label.text = "Configuration"
@@ -255,69 +264,28 @@ final class TextFieldComponentUIView: UIView {
         self.textField.translatesAutoresizingMaskIntoConstraints = false
         self.addOnTextField.translatesAutoresizingMaskIntoConstraints = false
         self.textField.addDoneButtonOnKeyboard()
+        self.addOnTextField.textField.addDoneButtonOnKeyboard()
 
-        self.addSubview(self.textField)
-        self.addSubview(self.configurationLabel)
-        self.addSubview(self.configurationStackView)
-        self.addSubview(self.withRightViewCheckBox)
-        self.addSubview(self.withLeftViewCheckBox)
-        self.addSubview(self.showLeadingAddOnCheckBox)
-        self.addSubview(self.showTrailingAddOnCheckBox)
-        self.addSubview(self.rightViewModeStackView)
-        self.addSubview(self.leftViewModeStackView)
-        self.addSubview(self.addOnTextField)
-        self.addSubview(self.standaloneTextFieldLabel)
-        self.addSubview(self.addOnTextFieldLabel)
-
+        self.addSubview(self.vStack)
         NSLayoutConstraint.activate([
-            self.configurationLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            self.configurationLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-
-            self.configurationStackView.topAnchor.constraint(equalTo: self.configurationLabel.bottomAnchor, constant: 16),
-            self.configurationStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.configurationStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.withRightViewCheckBox.topAnchor.constraint(equalTo: self.configurationStackView.bottomAnchor, constant: 16),
-            self.withRightViewCheckBox.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.withRightViewCheckBox.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.withLeftViewCheckBox.topAnchor.constraint(equalTo: self.withRightViewCheckBox.bottomAnchor, constant: 16),
-            self.withLeftViewCheckBox.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.withLeftViewCheckBox.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.showLeadingAddOnCheckBox.topAnchor.constraint(equalTo: self.withLeftViewCheckBox.bottomAnchor, constant: 16),
-            self.showLeadingAddOnCheckBox.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.showLeadingAddOnCheckBox.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.showTrailingAddOnCheckBox.topAnchor.constraint(equalTo: self.showLeadingAddOnCheckBox.bottomAnchor, constant: 16),
-            self.showTrailingAddOnCheckBox.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.showTrailingAddOnCheckBox.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.rightViewModeStackView.topAnchor.constraint(equalTo: self.showTrailingAddOnCheckBox.bottomAnchor, constant: 16),
-            self.rightViewModeStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.rightViewModeStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.leftViewModeStackView.topAnchor.constraint(equalTo: self.rightViewModeStackView.bottomAnchor, constant: 16),
-            self.leftViewModeStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.leftViewModeStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.standaloneTextFieldLabel.topAnchor.constraint(equalTo: self.leftViewModeStackView.bottomAnchor, constant: 16),
-            self.standaloneTextFieldLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.standaloneTextFieldLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.textField.topAnchor.constraint(equalTo: self.standaloneTextFieldLabel.bottomAnchor, constant: 16),
-            self.textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            self.textField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-
-            self.addOnTextFieldLabel.topAnchor.constraint(equalTo: self.textField.bottomAnchor, constant: 16),
-            self.addOnTextFieldLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            self.addOnTextFieldLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-
-            self.addOnTextField.topAnchor.constraint(equalTo: self.addOnTextFieldLabel.bottomAnchor, constant: 16),
-            self.addOnTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            self.addOnTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20)
-
+            self.vStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 14),
+            self.vStack.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -14),
+            self.vStack.topAnchor.constraint(equalTo: self.topAnchor)
         ])
+
+        self.vStack.addArrangedSubview(self.configurationLabel)
+        self.vStack.addArrangedSubview(self.configurationStackView)
+        self.vStack.addArrangedSubview(self.withRightViewCheckBox)
+        self.vStack.addArrangedSubview(self.withLeftViewCheckBox)
+        self.vStack.addArrangedSubview(self.showLeadingAddOnCheckBox)
+        self.vStack.addArrangedSubview(self.showTrailingAddOnCheckBox)
+        self.vStack.addArrangedSubview(self.rightViewModeStackView)
+        self.vStack.addArrangedSubview(self.leftViewModeStackView)
+        self.vStack.addArrangedSubview(self.standaloneTextFieldLabel)
+        self.vStack.addArrangedSubview(self.textField)
+        self.vStack.addArrangedSubview(self.addOnTextFieldLabel)
+        self.vStack.addArrangedSubview(self.addOnTextField)
+
         self.textField.rightView = self.createRightView()
         self.textField.leftView = self.createLeftView()
 
@@ -348,7 +316,6 @@ final class TextFieldComponentUIView: UIView {
     }
 
     private func addPublishers() {
-
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in
             guard let self = self else { return }
             let color = self.viewModel.theme.colors.main.main.uiColor
