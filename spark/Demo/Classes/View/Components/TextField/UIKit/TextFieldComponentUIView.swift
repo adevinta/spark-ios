@@ -321,8 +321,8 @@ final class TextFieldComponentUIView: UIView {
         self.textField.rightView = self.createRightView()
         self.textField.leftView = self.createLeftView()
 
-        self.addOnTextField.addTextFieldRightView(self.createRightView())
-        self.addOnTextField.addTextFieldLeftView(self.createLeftView())
+        self.addOnTextField.textField.rightView = self.createRightView()
+        self.addOnTextField.textField.leftView = self.createLeftView()
     }
 
     private func createRightView() -> UIImageView {
@@ -369,14 +369,14 @@ final class TextFieldComponentUIView: UIView {
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] label in
             guard let self = self else { return }
             self.textField.placeholder = label
-            self.addOnTextField.addTextFieldPlaceholder(label)
+            self.addOnTextField.textField.placeholder = label
         }
 
         self.withRightViewCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self = self else { return }
             if state != .unselected {
                 self.textField.rightView = self.createRightView()
-                self.addOnTextField.addTextFieldRightView(self.createRightView())
+                self.addOnTextField.textField.rightView = self.createRightView()
             }
         }
 
@@ -385,7 +385,7 @@ final class TextFieldComponentUIView: UIView {
             self.textField.leftView = state == .unselected ? nil : self.createLeftView()
             if state != .unselected {
                 self.textField.leftView = self.createLeftView()
-                self.addOnTextField.addTextFieldLeftView(self.createLeftView())
+                self.addOnTextField.textField.leftView = self.createLeftView()
             }
         }
 
@@ -411,14 +411,14 @@ final class TextFieldComponentUIView: UIView {
             guard let self = self else { return }
             self.rightViewModeButton.setTitle(viewMode.name, for: .normal)
             self.textField.rightViewMode = .init(rawValue: viewMode.rawValue) ?? .never
-            self.addOnTextField.setTextFieldRightViewMode(.init(rawValue: viewMode.rawValue) ?? .never)
+            self.addOnTextField.textField.rightViewMode = .init(rawValue: viewMode.rawValue) ?? .never
         }
 
         self.viewModel.$leftViewMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
             guard let self = self else { return }
             self.leftViewModeButton.setTitle(viewMode.name, for: .normal)
             self.textField.leftViewMode = .init(rawValue: viewMode.rawValue) ?? .never
-            self.addOnTextField.setTextFieldLeftViewMode(.init(rawValue: viewMode.rawValue) ?? .never)
+            self.addOnTextField.textField.leftViewMode = .init(rawValue: viewMode.rawValue) ?? .never
         }
     }
 }

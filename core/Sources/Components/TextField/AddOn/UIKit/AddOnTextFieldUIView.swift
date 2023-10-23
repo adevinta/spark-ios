@@ -39,12 +39,13 @@ public final class AddOnTextFieldUIView: UIView {
             self.textField.intent = newValue
         }
     }
+
+    public private(set) var leadingAddOn: UIView?
+    public private(set) var trailingAddOn: UIView?
+    public let textField: TextFieldUIView
     
     // MARK: - Private properties
 
-    private var leadingAddOn: UIView?
-    private var trailingAddOn: UIView?
-    private let textField: TextFieldUIView
     private let viewModel: AddOnTextFieldViewModel
     private var cancellable = Set<AnyCancellable>()
 
@@ -59,10 +60,6 @@ public final class AddOnTextFieldUIView: UIView {
     }()
 
     private lazy var leadingAddOnContainer: UIView = {
-        return UIView()
-    }()
-
-    private lazy var textFieldContainer: UIView = {
         return UIView()
     }()
 
@@ -113,7 +110,7 @@ public final class AddOnTextFieldUIView: UIView {
         self.addSubviewSizedEqually(hStack)
         self.hStack.addArrangedSubviews([
             self.leadingAddOnContainer,
-            self.textFieldContainer,
+            self.textField,
             self.trailingAddOnContainer
         ])
 
@@ -127,8 +124,6 @@ public final class AddOnTextFieldUIView: UIView {
             )
             self.leadingAddOnContainer.addSubviewSizedEqually(leadingAddOn)
         }
-
-        self.textFieldContainer.addSubviewSizedEqually(self.textField)
 
         if let trailingAddOn {
             trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
@@ -151,26 +146,6 @@ public final class AddOnTextFieldUIView: UIView {
     }
 
     // MARK: - Public methods
-
-    public func addTextFieldLeftView(_ leftView: UIView) {
-        self.textField.leftView = leftView
-    }
-
-    public func addTextFieldRightView(_ rightView: UIView) {
-        self.textField.rightView = rightView
-    }
-
-    public func addTextFieldPlaceholder(_ placeholder: String?) {
-        self.textField.placeholder = placeholder
-    }
-
-    public func setTextFieldRightViewMode(_ viewMode: UITextField.ViewMode) {
-        self.textField.rightViewMode = viewMode
-    }
-
-    public func setTextFieldLeftViewMode(_ viewMode: UITextField.ViewMode) {
-        self.textField.leftViewMode = viewMode
-    }
 
     public func addLeadingAddOn(_ addOn: UIView) {
         self.leadingAddOnContainer.isHidden = false
