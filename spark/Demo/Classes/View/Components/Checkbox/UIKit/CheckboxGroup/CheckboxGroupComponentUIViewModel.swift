@@ -252,7 +252,7 @@ extension CheckboxGroupComponentUIViewModel {
             ]
         case .tripleMultilineText:
             items = [
-                CheckboxGroupItem(title: Self.multilineText, id: "1", selectionState: .selected),
+                CheckboxGroupItem(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: false),
                 CheckboxGroupItem(title: Self.multilineText, id: "2", selectionState: .unselected),
                 CheckboxGroupItem(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate)
             ]

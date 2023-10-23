@@ -382,7 +382,7 @@ private extension CheckboxUIView {
 }
 
 // MARK: Actions
-private extension CheckboxUIView {
+extension CheckboxUIView {
 
     @IBAction func actionTapped(sender: UIButton) {
         self.isPressed = false
