@@ -76,7 +76,7 @@ final class CheckboxViewModel: ObservableObject {
         self.intent = intent
         self.alignment = alignment
         self.selectionState = selectionState
-        self.opacity = self.theme.dims.none
+        self.opacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
     }
 
     // MARK: - Methods
