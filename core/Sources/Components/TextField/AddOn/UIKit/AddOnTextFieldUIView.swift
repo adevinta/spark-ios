@@ -11,13 +11,6 @@ import UIKit
 
 public final class AddOnTextFieldUIView: UIView {
 
-    // MARK: - Private enum
-
-    fileprivate enum Side {
-        case left
-        case right
-    }
-
     // MARK: - Public properties
 
     public var theme: Theme {
@@ -49,9 +42,6 @@ public final class AddOnTextFieldUIView: UIView {
     private let viewModel: AddOnTextFieldViewModel
     private var cancellable = Set<AnyCancellable>()
 
-    private var textFieldLeadingConstraint: NSLayoutConstraint = .init()
-    private var textFieldTrailingConstraint: NSLayoutConstraint = .init()
-
     private lazy var hStack: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -59,12 +49,18 @@ public final class AddOnTextFieldUIView: UIView {
         return stackView
     }()
 
-    private lazy var leadingAddOnContainer: UIView = {
-        return UIView()
+    private lazy var leadingAddOnStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        return stackView
     }()
 
-    private lazy var trailingAddOnContainer: UIView = {
-        return UIView()
+    private lazy var trailingAddOnStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        return stackView
     }()
 
     // MARK: - Initializers
@@ -109,30 +105,27 @@ public final class AddOnTextFieldUIView: UIView {
 
         self.addSubviewSizedEqually(hStack)
         self.hStack.addArrangedSubviews([
-            self.leadingAddOnContainer,
+            self.leadingAddOnStackView,
             self.textField,
-            self.trailingAddOnContainer
+            self.trailingAddOnStackView
         ])
 
         if let leadingAddOn {
             leadingAddOn.translatesAutoresizingMaskIntoConstraints = false
             leadingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.leadingAddOn
-            leadingAddOn.addSeparator(
-                toThe: .right,
-                color: self.viewModel.theme.colors.base.outline,
-                theme: self.theme
-            )
-            self.leadingAddOnContainer.addSubviewSizedEqually(leadingAddOn)
+            leadingAddOnStackView.addArrangedSubviews([
+                leadingAddOn,
+                separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme)
+            ])
         }
 
         if let trailingAddOn {
+            trailingAddOn.translatesAutoresizingMaskIntoConstraints = false
             trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
-            trailingAddOn.addSeparator(
-                toThe: .left,
-                color: self.viewModel.theme.colors.base.outline,
-                theme: self.theme
-            )
-            self.trailingAddOnContainer.addSubviewSizedEqually(trailingAddOn)
+            trailingAddOnStackView.addArrangedSubviews([
+                separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme),
+                trailingAddOn
+            ])
         }
     }
 
@@ -145,30 +138,48 @@ public final class AddOnTextFieldUIView: UIView {
         }
     }
 
+    private func separatorView(
+        color: any ColorToken,
+        theme: Theme
+    ) -> UIView {
+        let separator = UIView()
+        let separatorWidth = theme.border.width.small
+        separator.backgroundColor = color.uiColor
+        separator.widthAnchor.constraint(equalToConstant: separatorWidth).isActive = true
+
+        return separator
+    }
+
     // MARK: - Public methods
 
     public func addLeadingAddOn(_ addOn: UIView) {
-        self.leadingAddOnContainer.isHidden = false
+        self.leadingAddOnStackView.isHidden = false
         self.leadingAddOn = addOn
-        self.leadingAddOnContainer.addSubviewSizedEqually(addOn)
+        self.leadingAddOnStackView.addArrangedSubviews([
+            addOn,
+            separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme)
+        ])
     }
 
     public func removeLeadingAddOn() {
-        self.leadingAddOnContainer.isHidden = true
+        self.leadingAddOnStackView.isHidden = true
         self.leadingAddOn = nil
-        self.leadingAddOnContainer.subviews.forEach { $0.removeFromSuperview() }
+        self.leadingAddOnStackView.removeArrangedSubviews()
     }
 
     public func addTrailingAddOn(_ addOn: UIView) {
-        self.trailingAddOnContainer.isHidden = false
+        self.trailingAddOnStackView.isHidden = false
         self.trailingAddOn = addOn
-        self.trailingAddOnContainer.addSubviewSizedEqually(addOn)
+        self.trailingAddOnStackView.addArrangedSubviews([
+            separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme),
+            addOn
+        ])
     }
 
     public func removeTrailingAddOn() {
-        self.trailingAddOnContainer.isHidden = true
+        self.trailingAddOnStackView.isHidden = true
         self.trailingAddOn = nil
-        self.trailingAddOnContainer.subviews.forEach { $0.removeFromSuperview() }
+        self.trailingAddOnStackView.removeArrangedSubviews()
     }
 
 }
@@ -179,26 +190,5 @@ private extension UIView {
         self.setBorderWidth(theme.border.width.small)
         self.setCornerRadius(theme.border.radius.large)
         self.setMasksToBounds(true)
-    }
-
-    func addSeparator(
-        toThe side: AddOnTextFieldUIView.Side,
-        color: any ColorToken,
-        theme: Theme
-    ) {
-        let border = UIView()
-        let borderWidth = theme.border.width.small
-        border.backgroundColor = color.uiColor
-
-        switch side {
-        case .left:
-            border.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: borderWidth, height: frame.size.height)
-            border.autoresizingMask = [.flexibleHeight, .flexibleRightMargin]
-        case .right:
-            border.autoresizingMask = [.flexibleHeight, .flexibleLeftMargin]
-            border.frame = CGRect(x: self.frame.maxX - borderWidth, y: self.frame.minY, width: borderWidth, height: frame.size.height)
-        }
-
-        self.addSubview(border)
     }
 }
