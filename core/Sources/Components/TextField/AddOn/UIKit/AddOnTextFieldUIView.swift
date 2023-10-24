@@ -36,6 +36,7 @@ public final class AddOnTextFieldUIView: UIView {
     public var leadingAddOn: UIView? {
         didSet {
             if let addOn = leadingAddOn {
+                self.removeLeadingAddOn()
                 self.addLeadingAddOn(addOn)
             } else {
                 self.removeLeadingAddOn()
@@ -45,6 +46,7 @@ public final class AddOnTextFieldUIView: UIView {
     public var trailingAddOn: UIView? {
         didSet {
             if let addOn = trailingAddOn {
+                self.removeTrailingAddOn()
                 self.addTrailingAddOn(addOn)
             } else {
                 self.removeTrailingAddOn()

@@ -106,28 +106,52 @@ final class TextFieldComponentUIView: UIView {
         return view
     }()
 
-    private lazy var showLeadingAddOnCheckBox: CheckboxUIView = {
-        let checkbox = CheckboxUIView(
-            theme: viewModel.theme,
-            text: "Display leading add-on",
-            checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
-            selectionState: .selected,
-            checkboxPosition: .left
-        )
-        return checkbox
+    private lazy var showLeadingAddOnLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Leading add-on:"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
-    private lazy var showTrailingAddOnCheckBox: CheckboxUIView = {
-        let checkbox = CheckboxUIView(
-            theme: viewModel.theme,
-            text: "Display trailing add-on",
-            checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
-            selectionState: .selected,
-            checkboxPosition: .left
-        )
-        return checkbox
+    private lazy var leadingAddOnButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(self.viewModel.theme.colors.main.main.uiColor, for: .normal)
+        button.addTarget(self.viewModel, action: #selector(viewModel.presentLeadingAddOnSheet), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        return button
+    }()
+
+    private lazy var leadingAddOnStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [showLeadingAddOnLabel, leadingAddOnButton, UIView()])
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
+    private lazy var showTrailingAddOnLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Trailing add-on:"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var trailingAddOnButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(self.viewModel.theme.colors.main.main.uiColor, for: .normal)
+        button.addTarget(self.viewModel, action: #selector(viewModel.presentTrailingAddOnSheet), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        return button
+    }()
+
+    private lazy var trailingAddOnStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [showTrailingAddOnLabel, trailingAddOnButton, UIView()])
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
 
     private lazy var rightViewModeLabel: UILabel = {
@@ -138,7 +162,7 @@ final class TextFieldComponentUIView: UIView {
         return label
     }()
 
-    private lazy var  rightViewModeButton: UIButton = {
+    private lazy var rightViewModeButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(self.viewModel.theme.colors.main.main.uiColor, for: .normal)
         button.addTarget(self.viewModel, action: #selector(viewModel.presentRightViewModeSheet), for: .touchUpInside)
@@ -174,7 +198,7 @@ final class TextFieldComponentUIView: UIView {
         return label
     }()
 
-    private lazy var  leftViewModeButton: UIButton = {
+    private lazy var leftViewModeButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(self.viewModel.theme.colors.main.main.uiColor, for: .normal)
         button.addTarget(self.viewModel, action: #selector(viewModel.presentLeftViewModeSheet), for: .touchUpInside)
@@ -188,40 +212,6 @@ final class TextFieldComponentUIView: UIView {
         stackView.spacing = 10
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
-    }()
-
-    private var leadingAddOn: UIView = {
-        let container = UIView()
-        let label = UILabel()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "https://"
-        container.addSubview(label)
-        NSLayoutConstraint.activate([
-            container.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 32),
-            container.heightAnchor.constraint(equalToConstant: 44),
-            label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
-        ])
-        label.textColor = .black
-        return container
-    }()
-
-    private var trailingAddOn: UIView = {
-        let container = UIView()
-        let label = UILabel()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = ".com"
-        container.addSubview(label)
-        NSLayoutConstraint.activate([
-            container.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 32),
-            container.heightAnchor.constraint(equalToConstant: 44),
-            label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
-        ])
-        label.textColor = .black
-        return container
     }()
 
     private lazy var standaloneTextFieldLabel: UILabel = {
@@ -246,8 +236,8 @@ final class TextFieldComponentUIView: UIView {
         self.addOnTextField = AddOnTextFieldUIView(
             theme: viewModel.theme,
             intent: .neutral,
-            leadingAddOn: leadingAddOn,
-            trailingAddOn: trailingAddOn
+            leadingAddOn: nil,
+            trailingAddOn: nil
         )
         super.init(frame: .zero)
         self.setupView()
@@ -277,8 +267,8 @@ final class TextFieldComponentUIView: UIView {
         self.vStack.addArrangedSubview(self.configurationStackView)
         self.vStack.addArrangedSubview(self.withRightViewCheckBox)
         self.vStack.addArrangedSubview(self.withLeftViewCheckBox)
-        self.vStack.addArrangedSubview(self.showLeadingAddOnCheckBox)
-        self.vStack.addArrangedSubview(self.showTrailingAddOnCheckBox)
+        self.vStack.addArrangedSubview(self.leadingAddOnStackView)
+        self.vStack.addArrangedSubview(self.trailingAddOnStackView)
         self.vStack.addArrangedSubview(self.rightViewModeStackView)
         self.vStack.addArrangedSubview(self.leftViewModeStackView)
         self.vStack.addArrangedSubview(self.standaloneTextFieldLabel)
@@ -313,6 +303,55 @@ final class TextFieldComponentUIView: UIView {
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }
+
+    private func createButtonAddOn() -> UIButton {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        var buttonConfig = UIButton.Configuration.plain()
+        buttonConfig.image = UIImage(
+            systemName: "square.and.arrow.up",
+            withConfiguration: UIImage.SymbolConfiguration(scale: .small)
+        )
+        buttonConfig.imagePadding = 4
+        button.configuration = buttonConfig
+        button.addTarget(self.viewModel, action: #selector(self.viewModel.buttonTapped), for: .touchUpInside)
+        button.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        return button
+    }
+
+    private func createShortTextAddOn() -> UIView {
+        let container = UIView()
+        let label = UILabel()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "short"
+        container.addSubview(label)
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 32),
+            container.heightAnchor.constraint(equalToConstant: 44),
+            label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+        label.textColor = .black
+        return container
+    }
+
+    private func createLongTextAddOn() -> UIView {
+        let container = UIView()
+        let label = UILabel()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "a very long text"
+        container.addSubview(label)
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 32),
+            container.heightAnchor.constraint(equalToConstant: 44),
+            label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+        label.textColor = .black
+        return container
     }
 
     private func addPublishers() {
@@ -356,21 +395,33 @@ final class TextFieldComponentUIView: UIView {
             }
         }
 
-        self.showLeadingAddOnCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
+        self.viewModel.$leadingAddOnOption.subscribe(in: &self.cancellables) { [weak self] addOnOption in
             guard let self else { return }
-            if state == .selected {
-                self.addOnTextField.leadingAddOn = self.leadingAddOn
-            } else if state == .unselected {
+            self.leadingAddOnButton.setTitle(addOnOption.name, for: .normal)
+            switch addOnOption {
+            case .none:
                 self.addOnTextField.leadingAddOn = nil
+            case .button:
+                self.addOnTextField.leadingAddOn = self.createButtonAddOn()
+            case .shortText:
+                self.addOnTextField.leadingAddOn = self.createShortTextAddOn()
+            case .longText:
+                self.addOnTextField.leadingAddOn = self.createLongTextAddOn()
             }
         }
 
-        self.showTrailingAddOnCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
+        self.viewModel.$trailingAddOnOption.subscribe(in: &self.cancellables) { [weak self] addOnOption in
             guard let self else { return }
-            if state == .selected {
-                self.addOnTextField.trailingAddOn = self.trailingAddOn
-            } else if state == .unselected {
+            self.trailingAddOnButton.setTitle(addOnOption.name, for: .normal)
+            switch addOnOption {
+            case .none:
                 self.addOnTextField.trailingAddOn = nil
+            case .button:
+                self.addOnTextField.trailingAddOn = self.createButtonAddOn()
+            case .shortText:
+                self.addOnTextField.trailingAddOn = self.createShortTextAddOn()
+            case .longText:
+                self.addOnTextField.trailingAddOn = self.createLongTextAddOn()
             }
         }
 
