@@ -92,9 +92,9 @@ struct RadioButtonComponent: View {
 
     private func label(index: Int) -> String {
         if self.longLabel == .selected, index == 2 {
-            return "\(index) \(Constants.longText)"
+            return "\(index) - \(Constants.longText)"
         } else {
-            return "\(index) \(Constants.text)"
+            return "\(index) - \(Constants.text)"
         }
     }
 }
