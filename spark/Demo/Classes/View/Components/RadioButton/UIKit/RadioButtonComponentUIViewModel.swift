@@ -135,7 +135,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
     }
 
     func longTitle(at index: Int) -> String {
-        return " \(index + 1) - \(self.longText)"
+        return "\(index + 1) - \(self.longText)"
     }
 
     func title(at index: Int) -> String {
