@@ -75,7 +75,9 @@ public struct SwitchView: View {
     private func makeSubview(from type: SwitchSubviewType) -> some View {
         switch type {
         case .space:
-            self.space()
+            if self.viewModel.horizontalSpacing ?? 0 > 0 {
+                self.space()
+            }
         case .text:
             self.text()
         case .toggle:
@@ -100,14 +102,12 @@ public struct SwitchView: View {
 
     @ViewBuilder
     private func space() -> some View {
-        if self.viewModel.horizontalSpacing ?? 0 > 0 {
-            Spacer()
-                .frame(
-                    width: self.viewModel.horizontalSpacing.scaledMetric(
-                        with: self.contentStackViewSpacingMultiplier
-                    )
+        Spacer()
+            .frame(
+                width: self.viewModel.horizontalSpacing.scaledMetric(
+                    with: self.contentStackViewSpacingMultiplier
                 )
-        }
+            )
     }
 
     @ViewBuilder
