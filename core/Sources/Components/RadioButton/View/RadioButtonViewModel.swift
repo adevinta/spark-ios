@@ -14,12 +14,13 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     @Published var label: Either<NSAttributedString?, String?>
     let id: ID
 
+    private var formerSelecteID: ID
     private let useCase: RadioButtonGetAttributesUseCaseable
 
     var theme: Theme
     var intent: RadioButtonIntent
 
-    var state = RadioButtonStateAttribute(isSelected: false, isEnabled: true)
+    private(set) var state: RadioButtonStateAttribute
 
     @Binding private (set) var selectedID: ID
 
@@ -33,28 +34,6 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     @Published var alignment: RadioButtonLabelAlignment
 
     // MARK: - Initialization
-
-//    @available(*, deprecated, message: "Use init with intent instead.")
-//    convenience init(theme: Theme,
-//                     id: ID,
-//                     label: Either<NSAttributedString?, String?>,
-//                     selectedID: Binding<ID>,
-//                     groupState: RadioButtonGroupState,
-//                     alignment: RadioButtonLabelAlignment = .trailing) {
-//        let useCase = RadioButtonGetAttributesUseCase()
-//        self.init(theme: theme,
-//                  intent: .basic,
-//                  id: id,
-//                  label: label,
-//                  selectedID: selectedID,
-//                  labelPosition: labelPosition,
-//                  useCase: useCase)
-//
-//        if groupState == .disabled {
-//            self.state = self.state.update(\.isEnabled, value: false)
-//        }
-//    }
-
     convenience init(theme: Theme,
                      intent: RadioButtonIntent,
                      id: ID,
@@ -84,18 +63,8 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.label = label
         self._selectedID = selectedID
         self.useCase = useCase
-//        self.groupState = groupState
         self.alignment = alignment
-
-//        self.isDisabled = self.groupState == .disabled
-
-//        self.opacity = self.theme.opacity(state: self.groupState)
-//        self.spacing = self.theme.spacing(for: labelPosition)
-//        self.font = self.theme.typography.body1
-//        self.surfaceColor = self.theme.colors.base.onSurface
-//
-//        self.colors = useCase
-//            .execute(theme: theme, state: self.groupState, isSelected: selectedID.wrappedValue == id)
+        self.formerSelecteID = selectedID.wrappedValue
 
         let state = RadioButtonStateAttribute(isSelected: selectedID.wrappedValue == id, isEnabled: true)
         let attributes = useCase.execute(
@@ -113,15 +82,6 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     }
 
     // MARK: - Functions
-
-    func setSelected() {
-        guard self.selectedID != self.id else { return }
-
-        self.selectedID = self.id
-        self.state = self.state.update(\.isSelected, value: true)
-        self.updateViewAttributes()
-    }
-
     func set(theme: Theme) {
         self.theme = theme
         self.themeDidUpdate()
@@ -135,12 +95,23 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.updateViewAttributes()
         self.isDisabled = !enabled
     }
-//    func set(groupState: RadioButtonGroupState) {
-//        if self.groupState != groupState {
-//            self.groupState = groupState
-//            self.stateDidUpdate()
-//        }
-//    }
+
+    func set(selected: Bool) {
+        if selected, self.id == self.selectedID {
+            return
+        } else if !selected, self.id != self.selectedID {
+            return
+        }
+
+        if selected {
+            self.formerSelecteID = self.selectedID
+            self.selectedID = self.id
+        } else {
+            self.selectedID = self.formerSelecteID
+        }
+        self.state = self.state.update(\.isSelected, value: selected)
+    }
+
     func set(intent: RadioButtonIntent) {
         guard intent != self.intent else { return }
 
@@ -167,10 +138,6 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.opacity = attributes.opacity
         self.spacing = attributes.spacing
         self.font = attributes.font
-
-//        self.opacity = self.theme.opacity(state: self.groupState)
-//        self.colors = useCase
-//            .execute(theme: self.theme, state: self.groupState, isSelected: selectedID == id)
     }
 
     // MARK: - Private Functions
@@ -180,14 +147,11 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     }
 
     private func themeDidUpdate() {
-//        self.font = self.theme.typography.body1
-//        self.surfaceColor = self.theme.colors.base.onSurface
         self.updateViewAttributes()
     }
 
     private func alignmentDidUpdate() {
         self.updateViewAttributes()
-//        self.spacing = self.theme.spacing(for: self.alignment)
     }
 }
 
