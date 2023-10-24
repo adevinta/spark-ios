@@ -34,10 +34,10 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
 
     private var selectedID: Binding<ID>
     private let items: [RadioButtonItem<ID>]
-    private let title: String?
+    private var title: String?
     private let groupLayout: RadioButtonGroupLayout
-    private let alignment: RadioButtonLabelAlignment
-    private let supplementaryLabel: String?
+    private let labelAlignment: RadioButtonLabelAlignment
+    private var supplementaryLabel: String?
     private let viewModel: RadioButtonGroupViewModel
 
     // MARK: - Local properties
@@ -64,13 +64,13 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     ) {
         self.init(theme: theme,
                   intent: state.intent,
-                  title: title,
                   selectedID: selectedID,
                   items: items,
-                  alignment: radioButtonLabelPosition.alignment,
-                  groupLayout: groupLayout,
-                  supplementaryLabel: supplementaryLabel
+                  labelAlignment: radioButtonLabelPosition.alignment,
+                  groupLayout: groupLayout
         )
+        self.title = title
+        self.supplementaryLabel = supplementaryLabel
         self.viewModel.isDisabled = state == .disabled
     }
 
@@ -81,19 +81,15 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     ///   - items: A list of ``RadioButtonItem``
     public init(theme: Theme,
                 intent: RadioButtonIntent,
-                title: String? = nil,
                 selectedID: Binding<ID>,
                 items: [RadioButtonItem<ID>],
-                alignment: RadioButtonLabelAlignment = .trailing,
-                groupLayout: RadioButtonGroupLayout = .vertical,
-                supplementaryLabel: String? = nil
+                labelAlignment: RadioButtonLabelAlignment = .trailing,
+                groupLayout: RadioButtonGroupLayout = .vertical
     ) {
         self.items = items
         self.selectedID = selectedID
-        self.title = title
         self.groupLayout = groupLayout
-        self.alignment = alignment
-        self.supplementaryLabel = supplementaryLabel
+        self.labelAlignment = labelAlignment
         self.viewModel = RadioButtonGroupViewModel(theme: theme, intent: intent)
         self._spacing = ScaledMetric(wrappedValue: self.viewModel.spacing)
         self._titleSpacing = ScaledMetric(wrappedValue: self.viewModel.labelSpacing)
@@ -154,10 +150,11 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
         ForEach(self.items, id: \.id) { item in
             RadioButtonView(
                 theme: self.viewModel.theme,
-                intent: self.viewModel.intent, id: item.id,
+                intent: self.viewModel.intent, 
+                id: item.id,
                 label: item.label,
                 selectedID: self.selectedID,
-                alignment: self.alignment
+                labelAlignment: self.labelAlignment
             )
             .disabled(self.viewModel.isDisabled)
             .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: item.id))
@@ -171,5 +168,10 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
         } else {
             return self.viewModel.spacing
         }
+    }
+
+    public func disabled(_ isDisabled: Bool) -> Self {
+        self.viewModel.isDisabled = isDisabled
+        return self
     }
 }

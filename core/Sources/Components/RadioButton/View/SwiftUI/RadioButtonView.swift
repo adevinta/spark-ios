@@ -71,14 +71,14 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                 id: ID,
                 label: String,
                 selectedID: Binding<ID>,
-                alignment: RadioButtonLabelAlignment = .trailing) {
+                labelAlignment: RadioButtonLabelAlignment = .trailing) {
         let viewModel = RadioButtonViewModel(
             theme: theme,
             intent: intent,
             id: id,
             label: .right(label),
             selectedID: selectedID,
-            alignment: alignment)
+            alignment: labelAlignment)
         self.init(viewModel: viewModel)
     }
 
