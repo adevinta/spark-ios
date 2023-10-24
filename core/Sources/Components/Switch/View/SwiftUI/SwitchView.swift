@@ -68,16 +68,17 @@ public struct SwitchView: View {
     // MARK: - Subview Maker
 
     private func subviewsTypes() -> [SwitchSubviewType] {
-        return (self.viewModel.isToggleOnLeft == true) ? SwitchSubviewType.leftAlignmentCases : SwitchSubviewType.rightAlignmentCases
+        return SwitchSubviewType.allCases(
+            isLeftAlignment: self.viewModel.isToggleOnLeft == true,
+            showSpace: self.viewModel.horizontalSpacing ?? 0 > 0
+        )
     }
 
     @ViewBuilder
     private func makeSubview(from type: SwitchSubviewType) -> some View {
         switch type {
         case .space:
-            if self.viewModel.horizontalSpacing ?? 0 > 0 {
-                self.space()
-            }
+            self.space()
         case .text:
             self.text()
         case .toggle:

@@ -13,13 +13,23 @@ enum SwitchSubviewType {
     case text
     case toggle
 
-    // MARK: - Properties
+    // MARK: - Methods
 
-    static var leftAlignmentCases: [Self] {
-        return [.toggle, .space, .text]
-    }
+    static func allCases(isLeftAlignment: Bool, showSpace: Bool) -> [Self] {
+        var cases: [Self]
 
-    static var rightAlignmentCases: [Self] {
-        return [.text, .space, .toggle]
+        // Left or right alignement ?
+        if isLeftAlignment {
+            cases = [.toggle, .text]
+        } else {
+            cases = [.text, .toggle]
+        }
+
+        // Add spaces ?
+        if showSpace {
+            cases.insert(.space, at: 1)
+        }
+
+        return cases
     }
 }
