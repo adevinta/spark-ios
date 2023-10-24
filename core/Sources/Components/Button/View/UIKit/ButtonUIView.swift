@@ -607,7 +607,7 @@ public final class ButtonUIView: UIView {
 
             // Update the user interaction enabled
             self.clearButton.isUserInteractionEnabled = state.isUserInteractionEnabled
-            if state.isUserInteractionEnabled {
+            if !state.isUserInteractionEnabled {
                 self.accessibilityTraits.insert(.notEnabled)
             } else {
                 self.accessibilityTraits.remove(.notEnabled)
