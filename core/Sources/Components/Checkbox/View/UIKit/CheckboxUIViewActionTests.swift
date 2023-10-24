@@ -7,7 +7,6 @@
 //
 
 import Combine
-@testable import Spark
 @testable import SparkCore
 import XCTest
 
