@@ -12,7 +12,7 @@ protocol RadioButtonGetAttributesUseCaseable {
     func execute(theme: Theme,
                  intent: RadioButtonIntent,
                  state: RadioButtonStateAttribute,
-                 labelPosition: RadioButtonLabelPosition
+                 alignment: RadioButtonLabelAlignment
     ) -> RadioButtonAttributes
 }
 
@@ -25,7 +25,7 @@ struct RadioButtonGetAttributesUseCase: RadioButtonGetAttributesUseCaseable {
     func execute(theme: Theme,
                  intent: RadioButtonIntent,
                  state: RadioButtonStateAttribute,
-                 labelPosition: RadioButtonLabelPosition
+                 alignment: RadioButtonLabelAlignment
     ) -> RadioButtonAttributes {
         return RadioButtonAttributes(
             colors: self.colorsUseCase.execute(
@@ -33,7 +33,7 @@ struct RadioButtonGetAttributesUseCase: RadioButtonGetAttributesUseCaseable {
                 intent: intent,
                 state: state),
             opacity: theme.opacity(state: state),
-            spacing: theme.spacing(for: labelPosition),
+            spacing: theme.spacing(for: alignment),
             font: theme.typography.body1)
     }
 }
@@ -44,7 +44,7 @@ private extension Theme {
         return !state.isEnabled ? self.dims.dim3 : 1
     }
 
-    func spacing(for labelPosition: RadioButtonLabelPosition) -> CGFloat {
-        return labelPosition == .right ? self.layout.spacing.medium : self.layout.spacing.xxxLarge
+    func spacing(for alignment: RadioButtonLabelAlignment) -> CGFloat {
+        return alignment == .trailing ? self.layout.spacing.medium : self.layout.spacing.xxxLarge
     }
 }

@@ -30,45 +30,45 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     @Published var opacity: CGFloat
     @Published var spacing: CGFloat
     @Published var font: TypographyFontToken
-    @Published var labelPosition: RadioButtonLabelPosition
+    @Published var alignment: RadioButtonLabelAlignment
 
     // MARK: - Initialization
 
-    @available(*, deprecated, message: "Use init with intent instead.")
-    convenience init(theme: Theme,
-                     id: ID,
-                     label: Either<NSAttributedString?, String?>,
-                     selectedID: Binding<ID>,
-                     groupState: RadioButtonGroupState,
-                     labelPosition: RadioButtonLabelPosition = .right) {
-        let useCase = RadioButtonGetAttributesUseCase()
-        self.init(theme: theme,
-                  intent: .basic,
-                  id: id,
-                  label: label,
-                  selectedID: selectedID,
-                  labelPosition: labelPosition,
-                  useCase: useCase)
-
-        if groupState == .disabled {
-            self.state = self.state.update(\.isEnabled, value: false)
-        }
-    }
+//    @available(*, deprecated, message: "Use init with intent instead.")
+//    convenience init(theme: Theme,
+//                     id: ID,
+//                     label: Either<NSAttributedString?, String?>,
+//                     selectedID: Binding<ID>,
+//                     groupState: RadioButtonGroupState,
+//                     alignment: RadioButtonLabelAlignment = .trailing) {
+//        let useCase = RadioButtonGetAttributesUseCase()
+//        self.init(theme: theme,
+//                  intent: .basic,
+//                  id: id,
+//                  label: label,
+//                  selectedID: selectedID,
+//                  labelPosition: labelPosition,
+//                  useCase: useCase)
+//
+//        if groupState == .disabled {
+//            self.state = self.state.update(\.isEnabled, value: false)
+//        }
+//    }
 
     convenience init(theme: Theme,
                      intent: RadioButtonIntent,
                      id: ID,
                      label: Either<NSAttributedString?, String?>,
                      selectedID: Binding<ID>,
-                     labelPosition: RadioButtonLabelPosition = .right) {
+                     alignment: RadioButtonLabelAlignment = .trailing) {
 
         self.init(theme: theme,
                   intent: intent,
                   id: id,
                   label: label,
                   selectedID: selectedID,
-                  labelPosition: labelPosition,
-                  useCase: RadioButtonGetAttributesUseCase())
+                  alignment: alignment,
+                  useCase:RadioButtonGetAttributesUseCase())
     }
 
     init(theme: Theme,
@@ -76,7 +76,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
          id: ID,
          label: Either<NSAttributedString?, String?>,
          selectedID: Binding<ID>,
-         labelPosition: RadioButtonLabelPosition,
+         alignment: RadioButtonLabelAlignment,
          useCase: RadioButtonGetAttributesUseCaseable) {
         self.theme = theme
         self.intent = intent
@@ -85,7 +85,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self._selectedID = selectedID
         self.useCase = useCase
 //        self.groupState = groupState
-        self.labelPosition = labelPosition
+        self.alignment = alignment
 
 //        self.isDisabled = self.groupState == .disabled
 
@@ -102,7 +102,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
             theme: theme,
             intent: intent,
             state: state,
-            labelPosition: labelPosition)
+            alignment: alignment)
 
         self.state = state
         self.colors = attributes.colors
@@ -119,20 +119,20 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
         self.selectedID = self.id
         self.state = self.state.update(\.isSelected, value: true)
-        self.updateColors()
+        self.updateViewAttributes()
     }
 
     func set(theme: Theme) {
         self.theme = theme
         self.themeDidUpdate()
-        self.labelPositionDidUpdate()
+        self.alignmentDidUpdate()
     }
 
     func set(enabled: Bool) {
         guard enabled != self.state.isEnabled else { return }
 
         self.state = self.state.update(\.isEnabled, value: enabled)
-        self.updateColors()
+        self.updateViewAttributes()
         self.isDisabled = !enabled
     }
 //    func set(groupState: RadioButtonGroupState) {
@@ -148,20 +148,20 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         self.intentDidUpdate()
     }
 
-    func set(labelPosition: RadioButtonLabelPosition) {
-        guard self.labelPosition != labelPosition else { return }
+    func set(alignment: RadioButtonLabelAlignment) {
+        guard self.alignment != alignment else { return }
 
-        self.labelPosition = labelPosition
-        self.labelPositionDidUpdate()
+        self.alignment = alignment
+        self.alignmentDidUpdate()
     }
 
-    func updateColors() {
+    func updateViewAttributes() {
         self.state = self.state.update(\.isSelected, value: self.id == self.selectedID)
         let attributes = self.useCase.execute(
             theme: self.theme,
             intent: self.intent,
             state: self.state,
-            labelPosition: self.labelPosition)
+            alignment: self.alignment)
 
         self.colors = attributes.colors
         self.opacity = attributes.opacity
@@ -176,18 +176,18 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     // MARK: - Private Functions
 
     private func intentDidUpdate() {
-        self.updateColors()
+        self.updateViewAttributes()
     }
 
     private func themeDidUpdate() {
 //        self.font = self.theme.typography.body1
 //        self.surfaceColor = self.theme.colors.base.onSurface
-        self.updateColors()
+        self.updateViewAttributes()
     }
 
-    private func labelPositionDidUpdate() {
-        self.updateColors()
-//        self.spacing = self.theme.spacing(for: self.labelPosition)
+    private func alignmentDidUpdate() {
+        self.updateViewAttributes()
+//        self.spacing = self.theme.spacing(for: self.alignment)
     }
 }
 
