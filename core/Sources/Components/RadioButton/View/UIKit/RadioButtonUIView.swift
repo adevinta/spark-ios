@@ -82,6 +82,13 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
+    /// The ID of the radio button
+    public var id: ID {
+        get {
+            return self.viewModel.id
+        }
+    }
+
     /// The label of radio button
     public var attributedText: NSAttributedString? {
         get {
@@ -105,12 +112,23 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     /// The label position, right of left of the toggle
+    @available(*, deprecated, renamed: "labelAlignment", message: "Please use labelAlignment intead.")
     public var labelPosition: RadioButtonLabelPosition {
         get {
-            return self.viewModel.labelPosition
+            return self.viewModel.alignment.position
         }
         set {
-            self.viewModel.set(labelPosition: newValue)
+            self.viewModel.set(alignment: newValue.alignment)
+        }
+    }
+
+    /// The label position according to the toggle
+    public var labelAlignment: RadioButtonLabelAlignment {
+        get {
+            return self.viewModel.alignment
+        }
+        set {
+            self.viewModel.set(alignment: newValue)
         }
     }
 
@@ -157,30 +175,34 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     /// - id: The value of the radio button
     /// - label: The text rendered to describe the value
     /// - selectedID: A binding which is triggered when the radio button is selected
-    /// - groupState: the state of the radiobutton grup
-    public convenience init(theme: Theme,
-                            id: ID,
-                            label: NSAttributedString,
-                            selectedID: Binding<ID>,
-                            groupState: RadioButtonGroupState = .enabled,
-                            labelPosition: RadioButtonLabelPosition = .right
+    /// - groupState: the state of the radiobutton group
+    @available(*, deprecated, message: "Please use init with intent instead.")
+    public convenience init(
+        theme: Theme,
+        id: ID,
+        label: NSAttributedString,
+        selectedID: Binding<ID>,
+        groupState: RadioButtonGroupState = .enabled,
+        labelPosition: RadioButtonLabelPosition = .right
     ) {
-        let viewModel = RadioButtonViewModel(theme: theme,
-                                             id: id,
-                                             label: .left(label),
-                                             selectedID: selectedID,
-                                             groupState: groupState,
-                                             labelPosition: labelPosition)
+        let viewModel = RadioButtonViewModel(
+            theme: theme, 
+            intent: groupState.intent,
+            id: id,
+            label: .left(label),
+            selectedID: selectedID,
+            alignment: labelPosition.alignment)
 
         self.init(viewModel: viewModel)
     }
 
-    public convenience init(theme: Theme,
-                            intent: RadioButtonIntent = .basic,
-                            id: ID,
-                            label: NSAttributedString,
-                            selectedID: Binding<ID>,
-                            labelPosition: RadioButtonLabelPosition = .right
+    public convenience init(
+        theme: Theme,
+        intent: RadioButtonIntent = .basic,
+        id: ID,
+        label: NSAttributedString,
+        selectedID: Binding<ID>,
+        labelAlignment: RadioButtonLabelAlignment = .trailing
     ) {
         let viewModel = RadioButtonViewModel(
             theme: theme,
@@ -188,7 +210,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
             id: id,
             label: .left(label),
             selectedID: selectedID,
-            labelPosition: labelPosition)
+            alignment: labelAlignment)
 
         self.init(viewModel: viewModel)
     }
@@ -211,7 +233,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     // MARK: - Public Functions
     public func toggleNeedsRedisplay() {
-        self.viewModel.updateColors()
+        self.viewModel.updateViewAttributes()
         self.updateColors(self.viewModel.colors)
         self.updateLabel()
         self.toggleView.setNeedsDisplay()
@@ -261,7 +283,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
             self.updateLabel()
         }
 
-        self.viewModel.$labelPosition.subscribe(in: &self.subscriptions) { [weak self] _ in
+        self.viewModel.$alignment.subscribe(in: &self.subscriptions) { [weak self] _ in
             self?.updatePositionConstraints()
         }
 
@@ -339,7 +361,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         let toggleViewTopConstraint = self.toggleView.topAnchor.constraint(
             equalTo: self.safeAreaLayoutGuide.topAnchor, constant: -(self.haloWidth))
         let bottomViewConstraint = self.textLabel.bottomAnchor.constraint(
-            equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+            lessThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor, constant: 0)
 
         let labelPositionConstraints = calculatePositionConstraints()
 
@@ -363,7 +385,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     private func calculatePositionConstraints() -> [NSLayoutConstraint] {
-        if self.viewModel.labelPosition == .right {
+        if self.viewModel.alignment == .trailing {
 
             let toggleViewLeadingConstraint = self.toggleView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: -self.haloWidth)
             self.toggleViewLeadingConstraint = toggleViewLeadingConstraint
@@ -384,7 +406,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     private func calculateToggleViewSpacingConstraint() -> NSLayoutConstraint {
-        if self.viewModel.labelPosition == .right {
+        if self.viewModel.alignment == .trailing {
             return self.toggleView.trailingAnchor.constraint(
                 equalTo: self.textLabel.leadingAnchor, constant: -self.spacing)
         } else {

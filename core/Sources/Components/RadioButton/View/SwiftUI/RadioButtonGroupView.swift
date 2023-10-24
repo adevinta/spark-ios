@@ -36,7 +36,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     private let items: [RadioButtonItem<ID>]
     private let title: String?
     private let groupLayout: RadioButtonGroupLayout
-    private let labelPosition: RadioButtonLabelPosition
+    private let alignment: RadioButtonLabelAlignment
     private let supplementaryLabel: String?
     private let viewModel: RadioButtonGroupViewModel
 
@@ -67,7 +67,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                   title: title,
                   selectedID: selectedID,
                   items: items,
-                  labelPosition: radioButtonLabelPosition,
+                  alignment: radioButtonLabelPosition.alignment,
                   groupLayout: groupLayout,
                   supplementaryLabel: supplementaryLabel
         )
@@ -84,7 +84,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                 title: String? = nil,
                 selectedID: Binding<ID>,
                 items: [RadioButtonItem<ID>],
-                labelPosition: RadioButtonLabelPosition = .right,
+                alignment: RadioButtonLabelAlignment = .trailing,
                 groupLayout: RadioButtonGroupLayout = .vertical,
                 supplementaryLabel: String? = nil
     ) {
@@ -92,7 +92,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
         self.selectedID = selectedID
         self.title = title
         self.groupLayout = groupLayout
-        self.labelPosition = labelPosition
+        self.alignment = alignment
         self.supplementaryLabel = supplementaryLabel
         self.viewModel = RadioButtonGroupViewModel(theme: theme, intent: intent)
         self._spacing = ScaledMetric(wrappedValue: self.viewModel.spacing)
@@ -157,7 +157,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                 intent: self.viewModel.intent, id: item.id,
                 label: item.label,
                 selectedID: self.selectedID,
-                labelPosition: self.labelPosition
+                alignment: self.alignment
             )
             .disabled(self.viewModel.isDisabled)
             .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: item.id))

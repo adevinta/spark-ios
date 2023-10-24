@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum RadioButtonIntent {
+public enum RadioButtonIntent: String, CaseIterable {
     case basic
     case support
     case success
