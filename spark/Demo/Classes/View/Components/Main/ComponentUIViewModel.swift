@@ -9,14 +9,6 @@
 import Combine
 import Foundation
 
-// protocol ComponentUIViewModel {
-//
-//    // MARK: - Properties
-//
-//    var identifier: String { get }
-//    var configurationViewModel: ComponentsConfigurationUIViewModel { get }
-// }
-
 class ComponentUIViewModel {
 
     // MARK: - Properties
