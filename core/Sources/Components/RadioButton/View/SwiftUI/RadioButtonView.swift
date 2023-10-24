@@ -110,7 +110,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
     public var body: some View {
         Button(action: {
-            self.viewModel.setSelected()
+            self.viewModel.set(selected: true)
         }, label: {
             self.buttonAndLabel()
         })

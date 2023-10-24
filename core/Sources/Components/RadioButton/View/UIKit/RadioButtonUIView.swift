@@ -22,7 +22,7 @@ private enum Constants {
 /// The color of the view is determined by the state. A possible sublabel is also part of the state.
 /// The value of the radio button is represented by the generic type ID.
 /// When the radio button is selected, it will change the binding value.
-public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: UIView {
+public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: UIControl {
 
     // MARK: - Injected Properties
     private let viewModel: RadioButtonViewModel<ID>
@@ -62,13 +62,23 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
-    public var isEnabled: Bool {
+    public override var isEnabled: Bool {
         get {
             return self.viewModel.state.isEnabled
         }
         set {
             self.viewModel.set(enabled: newValue)
         }
+    }
+
+    public override var isSelected: Bool {
+        get {
+            return self.viewModel.state.isSelected
+        }
+        set {
+            self.viewModel.set(selected: newValue)
+        }
+
     }
 
     /// The label of radio button
@@ -143,6 +153,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     // MARK: - View properties
     private let toggleView: RadioButtonToggleUIView = {
         let toggleView = RadioButtonToggleUIView()
+        toggleView.isUserInteractionEnabled = false
         toggleView.translatesAutoresizingMaskIntoConstraints = false
         toggleView.backgroundColor = .clear
         toggleView.sizeToFit()
@@ -154,7 +165,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }()
 
     private let textLabel = UILabel.standard
-    private let button = UIButton(type: .custom)
+//    private let button = UIButton(type: .custom)
 
     // MARK: - Constraint properties
     private var toggleViewWidthConstraint: NSLayoutConstraint?
@@ -196,6 +207,15 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.init(viewModel: viewModel)
     }
 
+    /// The radio button component takes a theme, an id, a label and a binding
+    ///
+    /// Parameters:
+    /// - theme: The current theme
+    /// - intent: The intent defining the color
+    /// - id: The value of the radio button
+    /// - label: The text rendered to describe the value
+    /// - selectedID: A binding which is triggered when the radio button is selected
+    /// - labelAlignment: the alignment of the label according to the toggle
     public convenience init(
         theme: Theme,
         intent: RadioButtonIntent = .basic,
@@ -260,7 +280,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
 
     // MARK: - Private Functions
-
     private func setupSubscriptions() {
 
         self.viewModel.$opacity.subscribe(in: &self.subscriptions) { [weak self] opacity in
@@ -300,12 +319,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.addSubview(self.toggleView)
         self.addSubview(self.textLabel)
 
-        self.button.translatesAutoresizingMaskIntoConstraints = true
-        self.button.frame = self.bounds
-        self.button.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
-        self.addSubview(self.button)
-
         self.setupConstraints()
         self.updateLabel()
     }
@@ -333,21 +346,10 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     private func setupButtonActions(isDisabled: Bool) {
-        let actions: [(selector: Selector, event: UIControl.Event)] = [
-            (#selector(actionTapped(sender:)), .touchUpInside),
-            (#selector(actionTouchDown(sender:)), .touchDown),
-            (#selector(actionTouchUp(sender:)), .touchUpOutside),
-            (#selector(actionTouchUp(sender:)), .touchCancel)
-        ]
-
         if isDisabled {
-            for action in actions {
-                self.button.removeTarget(self, action: action.selector, for: action.event)
-            }
+            self.removeTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
         } else {
-            for action in actions {
-                self.button.addTarget(self, action: action.selector, for: action.event)
-            }
+            self.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
         }
     }
 
@@ -428,16 +430,28 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.labelPositionConstraints = positionConstraints
     }
 
-    @IBAction func actionTapped(sender: UIButton)  {
-        self.viewModel.setSelected()
-        self.toggleView.isPressed = false
-    }
+    // MARK: - Control functions
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        guard self.isEnabled else { return }
 
-    @IBAction func actionTouchDown(sender: UIButton)  {
         self.toggleView.isPressed = true
     }
 
-    @IBAction func actionTouchUp(sender: UIButton)  {
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+
+        self.toggleView.isPressed = false
+    }
+
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+
+        self.toggleView.isPressed = false
+    }
+
+    @IBAction func actionTapped(sender: Any?)  {
+        self.isSelected = true
         self.toggleView.isPressed = false
     }
 }
@@ -447,6 +461,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 private extension UILabel {
     static var standard: UILabel {
         let label = UILabel()
+        label.isUserInteractionEnabled = false
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         label.numberOfLines = 0
