@@ -12,6 +12,9 @@ public enum RadioButtonAccessibilityIdentifier {
 
     public static let radioButton = "spark-radio-button"
 
+    /// The radio group title accessibility identifier.
+    public static let radioButtonGroupTitle = "spark-radio-button-group-title"
+
     public static func radioButtonIdentifier<ID: CustomStringConvertible>(id: ID) -> String {
         return "\(radioButton)-\(id)"
     }
