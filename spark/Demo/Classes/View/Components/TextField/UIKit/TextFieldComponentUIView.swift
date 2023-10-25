@@ -178,6 +178,29 @@ final class TextFieldComponentUIView: UIView {
         return stackView
     }()
 
+    private lazy var clearButtonModeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Clear button mode:"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var clearButtonModeButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(self.viewModel.theme.colors.main.main.uiColor, for: .normal)
+        button.addTarget(self.viewModel, action: #selector(viewModel.presetClearButtonModeSheet), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        return button
+    }()
+
+    private lazy var clearButtonModeStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [clearButtonModeLabel, clearButtonModeButton, UIView()])
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
 
     private lazy var configurationStackView: UIStackView = {
         let stackView = UIStackView(
@@ -271,6 +294,7 @@ final class TextFieldComponentUIView: UIView {
         self.vStack.addArrangedSubview(self.trailingAddOnStackView)
         self.vStack.addArrangedSubview(self.rightViewModeStackView)
         self.vStack.addArrangedSubview(self.leftViewModeStackView)
+        self.vStack.addArrangedSubview(self.clearButtonModeStackView)
         self.vStack.addArrangedSubview(self.standaloneTextFieldLabel)
         self.vStack.addArrangedSubview(self.textField)
         self.vStack.addArrangedSubview(self.addOnTextFieldLabel)
@@ -437,6 +461,13 @@ final class TextFieldComponentUIView: UIView {
             self.leftViewModeButton.setTitle(viewMode.name, for: .normal)
             self.textField.leftViewMode = .init(rawValue: viewMode.rawValue) ?? .never
             self.addOnTextField.textField.leftViewMode = .init(rawValue: viewMode.rawValue) ?? .never
+        }
+
+        self.viewModel.$clearButtonMode.subscribe(in: &self.cancellables) { [weak self] viewMode in
+            guard let self else { return }
+            self.clearButtonModeButton.setTitle(viewMode.name, for: .normal)
+            self.textField.clearButtonMode = .init(rawValue: viewMode.rawValue) ?? .never
+            self.addOnTextField.textField.clearButtonMode = .init(rawValue: viewMode.rawValue) ?? .never
         }
     }
 }

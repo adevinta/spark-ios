@@ -63,6 +63,10 @@ class TextFieldUIViewController: UIViewController {
         self.viewModel.showTrailingAddOnSheet.subscribe(in: &self.cancellables) { addOnOption in
             self.presentTrailingAddOnOptionSheet(addOnOption)
         }
+
+        self.viewModel.showClearButtonModeSheet.subscribe(in: &self.cancellables) { viewMode in
+            self.presentClearButtonModeActionSheet(viewMode)
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -162,6 +166,14 @@ extension TextFieldUIViewController {
             texts: addOnOptions.map { $0.name }) { addOnOption in
                 self.viewModel.trailingAddOnOption = addOnOption
             }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentClearButtonModeActionSheet(_ viewModes: [ViewMode]) {
+        let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
+                                                          texts: viewModes.map{ $0.name }) { viewMode in
+            self.viewModel.clearButtonMode = viewMode
+        }
         self.present(actionSheet, animated: true)
     }
 

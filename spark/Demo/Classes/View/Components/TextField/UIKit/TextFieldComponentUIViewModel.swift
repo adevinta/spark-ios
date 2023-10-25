@@ -43,6 +43,11 @@ final class TextFieldComponentUIViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
 
+    var showClearButtonModeSheet: AnyPublisher<[ViewMode], Never> {
+        showClearButtonModeSheetSubject
+            .eraseToAnyPublisher()
+    }
+
     let themes = ThemeCellModel.themes
 
     // MARK: - Private Properties
@@ -52,6 +57,7 @@ final class TextFieldComponentUIViewModel: ObservableObject {
     private var showRightViewModeSheetSubject: PassthroughSubject<[ViewMode], Never> = .init()
     private var showLeadingAddOnSheetSubject: PassthroughSubject<[AddOnOption], Never> = .init()
     private var showTrailingAddOnSheetSubject: PassthroughSubject<[AddOnOption], Never> = .init()
+    private var showClearButtonModeSheetSubject: PassthroughSubject<[ViewMode], Never> = .init()
 
     // MARK: - Initialization
     @Published var theme: Theme
@@ -60,6 +66,7 @@ final class TextFieldComponentUIViewModel: ObservableObject {
     @Published var rightViewMode: ViewMode
     @Published var leadingAddOnOption: AddOnOption
     @Published var trailingAddOnOption: AddOnOption
+    @Published var clearButtonMode: ViewMode
     @Published var text: String?
     @Published var icon: UIImage?
     @Published var component: UIView?
@@ -72,6 +79,7 @@ final class TextFieldComponentUIViewModel: ObservableObject {
         rigthViewMode: ViewMode = .never,
         leadingAddOnOption: AddOnOption = .none,
         trailingAddOnOption: AddOnOption = .none,
+        clearButtonMode: ViewMode = .never,
         text: String? = "Label",
         icon: UIImage? = UIImage(imageLiteralResourceName: "alert"),
         component: UIView? = nil,
@@ -87,6 +95,7 @@ final class TextFieldComponentUIViewModel: ObservableObject {
         self.rightViewMode = rigthViewMode
         self.leadingAddOnOption = leadingAddOnOption
         self.trailingAddOnOption = trailingAddOnOption
+        self.clearButtonMode = clearButtonMode
     }
 }
 
@@ -119,6 +128,10 @@ extension TextFieldComponentUIViewModel {
 
     @objc func buttonTapped(_ sender: UIButton) {
         sender.imageView?.transform = sender.imageView?.transform.rotated(by: CGFloat(Double.pi / 2)) ?? CGAffineTransform()
+    }
+
+    @objc func presetClearButtonModeSheet() {
+        self.showClearButtonModeSheetSubject.send(ViewMode.allCases)
     }
 }
 
