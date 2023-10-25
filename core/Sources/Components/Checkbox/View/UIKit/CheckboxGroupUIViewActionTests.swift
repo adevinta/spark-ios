@@ -50,8 +50,8 @@ final class CheckboxGroupUIViewActionTests: TestCase {
         wait(for: [exp], timeout: 3.0)
         
         XCTAssertEqual(selectionState, .unselected)
-        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStateCallsCount, 1)
-        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStateReceivedArguments?.state[0].selectionState, .unselected)
+        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesCallsCount, 1)
+        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesReceivedArguments?.states[0].selectionState, .unselected)
     }
 
     func test_action_from_checbox_item_disabled_propagated() {
@@ -59,7 +59,7 @@ final class CheckboxGroupUIViewActionTests: TestCase {
 
         sut.checkboxes[4].actionTapped(sender: UIButton())
 
-        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStateCallsCount, 0, "Delegate not called")
+        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesCallsCount, 0, "Delegate not called")
     }
 
     // MARK: Private Functions
