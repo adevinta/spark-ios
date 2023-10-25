@@ -16,13 +16,13 @@ extension ButtonContent {
         shouldShowIconImage: Bool = true ,
         isIconImageTrailing: Bool = false,
         iconImage: ImageEither? = .left(IconographyTests.shared.arrow),
-        shouldShowText: Bool = true
+        shouldShowTitle: Bool = true
     ) -> Self {
         return .init(
             shouldShowIconImage: shouldShowIconImage,
             isIconImageTrailing: isIconImageTrailing,
             iconImage: iconImage,
-            shouldShowText: shouldShowText
+            shouldShowTitle: shouldShowTitle
         )
     }
 }

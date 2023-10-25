@@ -50,26 +50,26 @@ final class ButtonGetCurrentColorsUseCaseTests: XCTestCase {
         )
     }
 
-    // MARK: - DisplayedTextType Tests
+    // MARK: - DisplayedTitleType Tests
 
-    func test_execute_when_displayedTextType_is_none() throws {
+    func test_execute_when_displayedTitleType_is_none() throws {
         try self.testExecute(
-            givenDisplayedTextType: .none,
-            expectedTextColor: nil
+            givenDisplayedTitleType: .none,
+            expectedTitleColor: nil
         )
     }
 
-    func test_execute_when_displayedTextType_is_text() throws {
+    func test_execute_when_displayedTitleType_is_title() throws {
         try self.testExecute(
-            givenDisplayedTextType: .text,
-            expectedTextColor: self.foregroundColorMock
+            givenDisplayedTitleType: .text,
+            expectedTitleColor: self.foregroundColorMock
         )
     }
 
-    func test_execute_when_displayedTextType_is_attributedText() throws {
+    func test_execute_when_displayedTitleType_is_attributedTitle() throws {
         try self.testExecute(
-            givenDisplayedTextType: .attributedText,
-            expectedTextColor: nil
+            givenDisplayedTitleType: .attributedText,
+            expectedTitleColor: nil
         )
     }
 }
@@ -93,15 +93,15 @@ private extension ButtonGetCurrentColorsUseCaseTests {
         let currentColors = useCase.execute(
             colors: self.colorsMock,
             isPressed: givenIsPressed,
-            displayedTextType: .none
+            displayedTitleType: .none
         )
 
         // THEN
         XCTAssertIdentical(currentColors.iconTintColor as? ColorTokenGeneratedMock,
                            expectedIconTintColor,
                            "Wrong iconTintColor" + errorSuffixMessage)
-        XCTAssertNil(currentColors.textColor,
-                     "Wrong textColor" + errorSuffixMessage)
+        XCTAssertNil(currentColors.titleColor,
+                     "Wrong titleColor" + errorSuffixMessage)
         XCTAssertIdentical(currentColors.backgroundColor as? ColorTokenGeneratedMock,
                            expectedBackgroundColor,
                            "Wrong foregroundColor" + errorSuffixMessage)
@@ -111,11 +111,11 @@ private extension ButtonGetCurrentColorsUseCaseTests {
     }
 
     func testExecute(
-        givenDisplayedTextType: DisplayedTextType,
-        expectedTextColor: ColorTokenGeneratedMock?
+        givenDisplayedTitleType: DisplayedTextType,
+        expectedTitleColor: ColorTokenGeneratedMock?
     ) throws {
         // GIVEN
-        let errorSuffixMessage = " for \(givenDisplayedTextType) givenDisplayedTextType"
+        let errorSuffixMessage = " for \(givenDisplayedTitleType) givenDisplayedTitleType"
 
         let useCase = ButtonGetCurrentColorsUseCase()
 
@@ -123,12 +123,12 @@ private extension ButtonGetCurrentColorsUseCaseTests {
         let currentColors = useCase.execute(
             colors: self.colorsMock,
             isPressed: true,
-            displayedTextType: givenDisplayedTextType
+            displayedTitleType: givenDisplayedTitleType
         )
 
         // THEN
-        XCTAssertIdentical(currentColors.textColor as? ColorTokenGeneratedMock,
-                           expectedTextColor,
-                           "Wrong textColor" + errorSuffixMessage)
+        XCTAssertIdentical(currentColors.titleColor as? ColorTokenGeneratedMock,
+                           expectedTitleColor,
+                           "Wrong titleColor" + errorSuffixMessage)
     }
 }

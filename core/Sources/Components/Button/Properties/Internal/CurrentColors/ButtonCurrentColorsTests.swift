@@ -19,13 +19,13 @@ final class ButtonCurrentColorsTests: XCTestCase {
 
         let given1 = ButtonCurrentColors(
             iconTintColor: colors.base.onSurface,
-            textColor: colors.base.onSurfaceInverse,
+            titleColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.main.main)
 
         let given2 = ButtonCurrentColors(
             iconTintColor: colors.base.onSurface,
-            textColor: colors.base.onSurfaceInverse,
+            titleColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.main.main)
 
@@ -37,13 +37,13 @@ final class ButtonCurrentColorsTests: XCTestCase {
 
         let given1 = ButtonCurrentColors(
             iconTintColor: colors.base.surface,
-            textColor: colors.base.surfaceInverse,
+            titleColor: colors.base.surfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.main.main)
 
         let given2 = ButtonCurrentColors(
             iconTintColor: colors.base.onSurface,
-            textColor: colors.base.onSurfaceInverse,
+            titleColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.main.onMain)
 

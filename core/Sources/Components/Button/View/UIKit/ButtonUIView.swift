@@ -24,7 +24,7 @@ public final class ButtonUIView: UIView {
             arrangedSubviews:
                 [
                     self.iconView,
-                    self.textLabel
+                    self.titleLabel
                 ]
         )
         stackView.axis = .horizontal
@@ -50,7 +50,7 @@ public final class ButtonUIView: UIView {
         return imageView
     }()
 
-    private var textLabel: UILabel = {
+    private var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
@@ -169,24 +169,26 @@ public final class ButtonUIView: UIView {
     }
 
     /// The text of the button.
+    @available(*, deprecated, message: "Use setTitle(_:, for:) and title(for:) instead")
     public var text: String? {
         get {
-            return self.textLabel.text
+            return self.titleLabel.text
         }
         set {
-            self.textLabel.text = newValue
-            self.viewModel.set(text: newValue)
+            self.titleLabel.text = newValue
+            self.viewModel.set(title: newValue)
         }
     }
 
     /// The attributed text of the button.
+    @available(*, deprecated, message: "Use setAttributedTitle(_:, for:) and attributedTitle(for:) instead")
     public var attributedText: NSAttributedString? {
         get {
-            return self.textLabel.attributedText
+            return self.titleLabel.attributedText
         }
         set {
-            self.textLabel.attributedText = newValue
-            self.viewModel.set(attributedText: newValue.map { .left($0) })
+            self.titleLabel.attributedText = newValue
+            self.viewModel.set(attributedTitle: newValue.map { .left($0) })
         }
     }
 
@@ -194,10 +196,10 @@ public final class ButtonUIView: UIView {
     /// The default value is **byTruncatingTail**
     public var lineBreakMode: NSLineBreakMode {
         get {
-            return self.textLabel.lineBreakMode
+            return self.titleLabel.lineBreakMode
         }
         set {
-            self.textLabel.lineBreakMode = newValue
+            self.titleLabel.lineBreakMode = newValue
         }
     }
 
@@ -433,8 +435,8 @@ public final class ButtonUIView: UIView {
             shape: shape,
             alignment: alignment,
             iconImage: iconImage.map { .left($0) },
-            text: text,
-            attributedText: attributedText.map { .left($0) },
+            title: text,
+            attributedTitle: attributedText.map { .left($0) },
             isEnabled: isEnabled)
 
         super.init(frame: .zero)
@@ -480,9 +482,9 @@ public final class ButtonUIView: UIView {
         // Label
         // Only one of the text/attributedText can be set in the init
         if let text {
-            self.textLabel.text = text
+            self.titleLabel.text = text
         } else if let attributedText {
-            self.textLabel.attributedText = attributedText
+            self.titleLabel.attributedText = attributedText
         }
     }
 
@@ -644,8 +646,8 @@ public final class ButtonUIView: UIView {
 
             // Foreground Color
             self.iconImageView.tintColor = colors.iconTintColor.uiColor
-            if let textColor = colors.textColor {
-                self.textLabel.textColor = textColor.uiColor
+            if let titleColor = colors.titleColor {
+                self.titleLabel.textColor = titleColor.uiColor
             }
         }
 
@@ -717,8 +719,8 @@ public final class ButtonUIView: UIView {
                     self.iconView.isHidden = !content.shouldShowIconImage
                 }
 
-                if self.textLabel.isHidden == content.shouldShowText {
-                    self.textLabel.isHidden = !content.shouldShowText
+                if self.titleLabel.isHidden == content.shouldShowTitle {
+                    self.titleLabel.isHidden = !content.shouldShowTitle
                 }
                 self.contentStackView.updateConstraintsIfNeeded()
             }
@@ -729,11 +731,11 @@ public final class ButtonUIView: UIView {
         // **
 
         // **
-        // Text Font
-        self.viewModel.$textFontToken.subscribe(in: &self.subscriptions) { [weak self] textFontToken in
-            guard let self, let textFontToken else { return }
+        // Title Font
+        self.viewModel.$titleFontToken.subscribe(in: &self.subscriptions) { [weak self] titleFontToken in
+            guard let self, let titleFontToken else { return }
 
-            self.textLabel.font = textFontToken.uiFont
+            self.titleLabel.font = titleFontToken.uiFont
         }
         // **
     }

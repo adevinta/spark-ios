@@ -21,8 +21,8 @@ struct ButtonSutSnapshotTests {
     let shape: ButtonShape
     let alignment: ButtonAlignment
     let iconImage: ImageEither?
-    let text: String?
-    let attributedText: AttributedStringEither?
+    let title: String?
+    let attributedTitle: AttributedStringEither?
     let isEnabled: Bool
     let isPressed: Bool
 
@@ -37,8 +37,8 @@ struct ButtonSutSnapshotTests {
             "\(self.shape)",
             "\(self.alignment)",
             self.iconImage != nil ? "withIcon" : "withoutIcon",
-            self.text != nil ? "withText" : "withoutText",
-            self.attributedText != nil ? "withAttributedText" : "withoutAttributedText",
+            self.title != nil ? "withTitle" : "withoutTitle",
+            self.attributedTitle != nil ? "withAttributedTitle" : "withoutAttributedTitle",
             self.isEnabled ? "isEnabled" : "isDisabled",
             self.isPressed ? "isPressed" : "isUnpressed",
         ].joined(separator: "-")
@@ -63,8 +63,8 @@ struct ButtonSutSnapshotTests {
                                 shape: .rounded,
                                 alignment: .leadingIcon,
                                 iconImage: nil,
-                                text: "My Color Button",
-                                attributedText: nil,
+                                title: "My Color Button",
+                                attributedTitle: nil,
                                 isEnabled: isEnabled,
                                 isPressed: isPressed
                             )
@@ -87,8 +87,8 @@ struct ButtonSutSnapshotTests {
                         shape: shape,
                         alignment: .leadingIcon,
                         iconImage: nil,
-                        text: "My Style Button",
-                        attributedText: nil,
+                        title: "My Style Button",
+                        attributedTitle: nil,
                         isEnabled: true,
                         isPressed: false
                     )
@@ -97,17 +97,17 @@ struct ButtonSutSnapshotTests {
     }
 
     static func allContentCases(isSwiftUIComponent: Bool) -> [Self] {
-        typealias ContentCases = (image: ImageEither?, text: String?, attributedText: AttributedStringEither?)
+        typealias ContentCases = (image: ImageEither?, title: String?, attributedTitle: AttributedStringEither?)
 
         let image: ImageEither = isSwiftUIComponent ? .right(Image.mock) : .left(UIImage.mock)
-        let attributedText: AttributedStringEither = isSwiftUIComponent ? .right(AttributedString("My Attributed Button")) : .left(.init(string: "My Attributed Button"))
+        let attributedTitle: AttributedStringEither = isSwiftUIComponent ? .right(AttributedString("My Attributed Button")) : .left(.init(string: "My Attributed Button"))
 
         let items: [ContentCases] = [
-            (image: image, text: nil, attributedText: nil), // Only icon
-            (image: image, text: "My Full Content Button", attributedText: nil), // Icon + text
-            (image: nil, text: "My Content Button", attributedText: nil), // Only text
-            (image: image, text: nil, attributedText: attributedText), // Icon + attributed text
-            (image: nil, text: nil, attributedText: attributedText) // Only attributed text
+            (image: image, title: nil, attributedTitle: nil), // Only icon
+            (image: image, title: "My Full Content Button", attributedTitle: nil), // Icon + title
+            (image: nil, title: "My Content Button", attributedTitle: nil), // Only title
+            (image: image, title: nil, attributedTitle: attributedTitle), // Icon + attributed title
+            (image: nil, title: nil, attributedTitle: attributedTitle) // Only attributed title
         ]
 
         return items.map { item in
@@ -118,8 +118,8 @@ struct ButtonSutSnapshotTests {
                 shape: .rounded,
                 alignment: .leadingIcon,
                 iconImage: item.image,
-                text: item.text,
-                attributedText: item.attributedText,
+                title: item.title,
+                attributedTitle: item.attributedTitle,
                 isEnabled: true,
                 isPressed: false
             )

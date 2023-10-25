@@ -19,8 +19,8 @@ protocol ButtonViewModelDependenciesProtocol {
     var getSpacingsUseCase: ButtonGetSpacingsUseCaseable { get }
     var getStateUseCase: ButtonGetStateUseCaseable { get }
 
-    func makeDisplayedTextViewModel(text: String?,
-                                    attributedText: AttributedStringEither?) -> DisplayedTextViewModel
+    func makeDisplayedTitleViewModel(title: String?,
+                                     attributedTitle: AttributedStringEither?) -> DisplayedTextViewModel
 }
 
 struct ButtonViewModelDependencies: ButtonViewModelDependenciesProtocol {
@@ -60,13 +60,13 @@ struct ButtonViewModelDependencies: ButtonViewModelDependenciesProtocol {
 
     // MARK: - Maker
 
-    func makeDisplayedTextViewModel(
-        text: String?,
-        attributedText: AttributedStringEither?
+    func makeDisplayedTitleViewModel(
+        title: String?,
+        attributedTitle: AttributedStringEither?
     ) -> DisplayedTextViewModel {
         return DisplayedTextViewModelDefault(
-            text: text,
-            attributedText: attributedText
+            text: title,
+            attributedText: attributedTitle
         )
     }
 }
