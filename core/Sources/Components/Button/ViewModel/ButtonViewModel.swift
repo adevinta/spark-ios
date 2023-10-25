@@ -32,7 +32,7 @@ final class ButtonViewModel: ObservableObject {
     @Published private(set) var spacings: ButtonSpacings?
 
     @Published private(set) var content: ButtonContent?
-    @Published private(set) var textFontToken: TypographyFontToken?
+    @Published private(set) var titleFontToken: TypographyFontToken?
 
     // MARK: - Private Properties
 
@@ -41,11 +41,11 @@ final class ButtonViewModel: ObservableObject {
     private var isIconOnly: Bool {
         return self.dependencies.getIsIconOnlyUseCase.execute(
             iconImage: self.iconImage,
-            containsText: self.displayedTextViewModel.containsText
+            containsTitle: self.displayedTitleViewModel.containsText
         )
     }
 
-    private let displayedTextViewModel: DisplayedTextViewModel
+    private let displayedTitleViewModel: DisplayedTextViewModel
 
     private var isPressed: Bool = false
 
@@ -61,8 +61,8 @@ final class ButtonViewModel: ObservableObject {
         shape: ButtonShape,
         alignment: ButtonAlignment,
         iconImage: ImageEither?,
-        text: String? ,
-        attributedText: AttributedStringEither?,
+        title: String? ,
+        attributedTitle: AttributedStringEither?,
         isEnabled: Bool,
         dependencies: any ButtonViewModelDependenciesProtocol = ButtonViewModelDependencies()
     ) {
@@ -73,9 +73,9 @@ final class ButtonViewModel: ObservableObject {
         self.shape = shape
         self.alignment = alignment
         self.iconImage = iconImage
-        self.displayedTextViewModel = dependencies.makeDisplayedTextViewModel(
-            text: text,
-            attributedText: attributedText
+        self.displayedTitleViewModel = dependencies.makeDisplayedTitleViewModel(
+            title: title,
+            attributedTitle: attributedTitle
         )
         self.isEnabled = isEnabled
 
@@ -166,24 +166,24 @@ final class ButtonViewModel: ObservableObject {
         }
     }
 
-    func set(text: String?) {
-        // Displayed text changed ?
-        if self.displayedTextViewModel.textChanged(text) {
+    func set(title: String?) {
+        // Displayed title changed ?
+        if self.displayedTitleViewModel.textChanged(title) {
             self.contentDidUpdate()
             self.sizesDidUpdate()
             self.spacingsDidUpdate()
 
-            // Reload label properties (font and color) if consumer set a new text
-            if text != nil {
-                self.textFontDidUpdate()
+            // Reload label properties (font and color) if consumer set a new title
+            if title != nil {
+                self.titleFontDidUpdate()
                 self.colorsDidUpdate()
             }
         }
     }
 
-    func set(attributedText: AttributedStringEither?) {
-        // Displayed text changed ?
-        if self.displayedTextViewModel.attributedTextChanged(attributedText) {
+    func set(attributedTitle: AttributedStringEither?) {
+        // Displayed title changed ?
+        if self.displayedTitleViewModel.attributedTextChanged(attributedTitle) {
             self.contentDidUpdate()
             self.sizesDidUpdate()
             self.spacingsDidUpdate()
@@ -219,7 +219,7 @@ final class ButtonViewModel: ObservableObject {
         if !themeChanged {
             self.contentDidUpdate() // Not related to theme
         }
-        self.textFontDidUpdate()
+        self.titleFontDidUpdate()
     }
 
     private func stateDidUpdate() {
@@ -247,7 +247,7 @@ final class ButtonViewModel: ObservableObject {
         self.currentColors = self.dependencies.getCurrentColorsUseCase.execute(
             colors: colors,
             isPressed: self.isPressed,
-            displayedTextType: self.displayedTextViewModel.displayedTextType
+            displayedTitleType: self.displayedTitleViewModel.displayedTextType
         )
     }
 
@@ -277,11 +277,11 @@ final class ButtonViewModel: ObservableObject {
         self.content = self.dependencies.getContentUseCase.execute(
             alignment: self.alignment,
             iconImage: self.iconImage,
-            containsText: self.displayedTextViewModel.containsText
+            containsTitle: self.displayedTitleViewModel.containsText
         )
     }
 
-    private func textFontDidUpdate() {
-        self.textFontToken = self.theme.typography.callout
+    private func titleFontDidUpdate() {
+        self.titleFontToken = self.theme.typography.callout
     }
 }
