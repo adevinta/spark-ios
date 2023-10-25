@@ -209,7 +209,7 @@ public final class CheckboxGroupUIView: UIView {
     private func setupItemsStackView() {
         for item in self.items {
 
-            let content: Either<NSAttributedString, String> = .of(item.attributedTitle, or: item.title ?? "")
+            let content: Either<NSAttributedString?, String?> = .of(item.attributedTitle, or: item.title ?? "")
             let checkbox = CheckboxUIView(
                 theme: theme,
                 intent: intent,

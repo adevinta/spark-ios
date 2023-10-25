@@ -83,24 +83,20 @@ public final class CheckboxUIView: UIControl {
     /// The text displayed in the checkbox.
     public var text: String? {
         get {
-            return self.viewModel.text
+            return self.textLabel.text
         }
         set {
-            self.update(content: .right(newValue ?? ""))
+            self.viewModel.text = .right(newValue)
         }
     }
 
     /// The attributed text displayed in the checkbox.
     public var attributedText: NSAttributedString? {
         get {
-            return self.viewModel.attributedText
+            return self.textLabel.attributedText
         }
         set {
-            if let attributedText = newValue {
-                self.update(content: .left(attributedText))
-            } else {
-                self.update(content: .right(""))
-            }
+            self.viewModel.text = .left(newValue)
         }
     }
 
@@ -241,7 +237,7 @@ public final class CheckboxUIView: UIControl {
     init(
         theme: Theme,
         intent: CheckboxIntent = .main,
-        content: Either<NSAttributedString, String>,
+        content: Either<NSAttributedString?, String?>,
         checkedImage: UIImage,
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
@@ -320,18 +316,13 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] text in
             guard let self else { return }
-            self.textLabel.isHidden = (text ?? "").isEmpty
-            self.textLabel.text = text
             self.textLabel.font = self.theme.typography.body1.uiFont
             self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
-        }
-
-        self.viewModel.$attributedText.subscribe(in: &self.cancellables) { [weak self] attributedText in
-            guard let self, let attributedText = attributedText else { return }
-            self.textLabel.attributedText = attributedText
-            let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
-            if let font = attributes[NSAttributedString.Key.font] as? UIFont {
-                self.textLabel.font = self.fontMetrics.scaledFont(for: font, compatibleWith: self.traitCollection)
+            switch text {
+            case .left(let attributeText):
+                self.textLabel.attributedText = attributeText
+            case .right(let text):
+                self.textLabel.text = text
             }
         }
 
@@ -358,7 +349,7 @@ private extension CheckboxUIView {
             self.accessibilityTraits.remove(.notEnabled)
         }
 
-        self.accessibilityLabel = [self.viewModel.text].compactMap { $0 }.joined(separator: ". ")
+        self.accessibilityLabel = [self.textLabel.text].compactMap { $0 }.joined(separator: ". ")
     }
 
     private func updateTheme() {
@@ -374,10 +365,6 @@ private extension CheckboxUIView {
     private func updateAlignment() {
         self.stackView.spacing = self.stackViewSpacing
         self.stackView.insertArrangedSubview(self.alignment == .left ? self.controlView : self.textLabel, at: 0)
-    }
-
-    private func update(content: Either<NSAttributedString, String>) {
-        self.viewModel.update(content: content)
     }
 }
 
