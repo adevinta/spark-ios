@@ -129,21 +129,11 @@ public final class AddOnTextFieldUIView: UIView {
         ])
 
         if let leadingAddOn {
-            leadingAddOn.translatesAutoresizingMaskIntoConstraints = false
-            leadingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.leadingAddOn
-            leadingAddOnStackView.addArrangedSubviews([
-                leadingAddOn,
-                separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme)
-            ])
+            self.addLeadingAddOn(leadingAddOn)
         }
 
         if let trailingAddOn {
-            trailingAddOn.translatesAutoresizingMaskIntoConstraints = false
-            trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
-            trailingAddOnStackView.addArrangedSubviews([
-                separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme),
-                trailingAddOn
-            ])
+            self.addTrailingAddOn(trailingAddOn)
         }
     }
 
@@ -164,11 +154,13 @@ public final class AddOnTextFieldUIView: UIView {
         let separatorWidth = theme.border.width.small
         separator.backgroundColor = color.uiColor
         separator.widthAnchor.constraint(equalToConstant: separatorWidth).isActive = true
+        separator.translatesAutoresizingMaskIntoConstraints = false
 
         return separator
     }
 
     private func addLeadingAddOn(_ addOn: UIView) {
+        addOn.translatesAutoresizingMaskIntoConstraints = false
         self.leadingAddOnStackView.isHidden = false
         self.leadingAddOnStackView.addArrangedSubviews([
             addOn,
@@ -182,6 +174,7 @@ public final class AddOnTextFieldUIView: UIView {
     }
 
     private func addTrailingAddOn(_ addOn: UIView) {
+        addOn.translatesAutoresizingMaskIntoConstraints = false
         self.trailingAddOnStackView.isHidden = false
         self.trailingAddOnStackView.addArrangedSubviews([
             separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme),
