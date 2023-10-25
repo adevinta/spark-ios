@@ -151,7 +151,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View properties
-    private let toggleView: RadioButtonToggleUIView = {
+    private lazy var toggleView: RadioButtonToggleUIView = {
         let toggleView = RadioButtonToggleUIView()
         toggleView.isUserInteractionEnabled = false
         toggleView.translatesAutoresizingMaskIntoConstraints = false
@@ -164,7 +164,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         return toggleView
     }()
 
-    private let textLabel = UILabel.standard
+    private lazy var textLabel = UILabel.standard
 
     // MARK: - Constraint properties
     private var toggleViewWidthConstraint: NSLayoutConstraint?
@@ -334,6 +334,8 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.textLabel.font = self.viewModel.font.uiFont
         self.textLabel.textColor = self.viewModel.colors.label.uiColor
         self.textLabel.attributedText = self.viewModel.label.leftValue
+
+        self.textLabel.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonTextLabel
     }
 
     private func updateColors(_ colors: RadioButtonColors) {

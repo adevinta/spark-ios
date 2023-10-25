@@ -74,10 +74,32 @@ final class RadioButtonComponentUIView: ComponentUIView {
 
             let index = self.componentView.items.count > 1 ? 1 : 0
 
-            if showLongLabel {
-                self.componentView.setTitle(self.viewModel.longTitle(at: index), forItemAt: index)
+            self.componentView.setTitle(self.viewModel.label(at: index), forItemAt: index)
+
+            if self.viewModel.showAttributedLabel {
+                if showLongLabel {
+                    self.componentView.setTitle(self.viewModel.longTitleAttributed(at: index), forItemAt: index)
+                } else {
+                    self.componentView.setTitle(self.viewModel.shortTitleAttributed(at: index), forItemAt: index)
+                }
             } else {
-                self.componentView.setTitle(self.viewModel.title(at: index), forItemAt: index)
+                if showLongLabel {
+                    self.componentView.setTitle(self.viewModel.longTitle(at: index), forItemAt: index)
+                } else {
+                    self.componentView.setTitle(self.viewModel.shortTitle(at: index), forItemAt: index)
+                }
+            }
+        }
+
+        self.viewModel.$showAttributedLabel.subscribe(in: &self.cancellables) { [weak self] showAttributedLabel in
+            guard let self = self else { return }
+
+            let index = self.componentView.items.count > 1 ? 1 : 0
+
+            if showAttributedLabel {
+                self.componentView.setTitle(self.viewModel.attributedLabel(at: index), forItemAt: index)
+            } else {
+                self.componentView.setTitle(self.viewModel.label(at: index), forItemAt: index)
             }
         }
 

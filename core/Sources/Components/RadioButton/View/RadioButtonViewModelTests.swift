@@ -57,7 +57,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let spacings = sutValues(for: \.spacing)
 
         // Then
-        XCTAssertEqual(spacings, Array(repeating: 5.0, count: 7))
+        XCTAssertEqual(spacings, Array(repeating: 5.0, count: 9))
     }
 
     func test_fonts() {
@@ -65,7 +65,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         let fonts = sutValues(for: \.font.font)
 
         // Then
-        XCTAssertEqual(fonts, Array(repeating: Font.body, count: 7))
+        XCTAssertEqual(fonts, Array(repeating: Font.body, count: 9))
     }
 
     func test_colors_reset_when_selected_value_set() {

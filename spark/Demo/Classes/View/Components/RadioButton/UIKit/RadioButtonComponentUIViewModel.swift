@@ -69,6 +69,13 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.showLongLabelChanged)))
     }()
 
+    lazy var attributedLabelConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Attributed Label",
+            type: .checkbox(title: "", isOn: self.showAttributedLabel),
+            target: (source: self, action: #selector(self.showAttributedLabelChanged)))
+    }()
+
     lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Disable",
@@ -86,7 +93,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
 
     var content: [RadioButtonUIItem<Int>] {
         (0...self.numberOfRadioButtons).map {
-            .init(id: $0, label: self.title(at: $0))
+            .init(id: $0, label: self.label(at: $0))
         }
     }
 
@@ -101,6 +108,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
             self.alignmentConfigurationItemViewModel,
             self.axisConfigurationItemViewModel,
             self.longLabelConfigurationItemViewModel,
+            self.attributedLabelConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.numberOfRadioButtonsConfigurationItemViewModel
         ]
@@ -115,6 +123,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var theme: Theme
     @Published var intent: RadioButtonIntent
     @Published var showLongLabel = false
+    @Published var showAttributedLabel = false
     @Published var showIcon = true
     @Published var showBadge = false
     @Published var isDisabled = false
@@ -134,12 +143,47 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
         super.init(identifier: "RadioButton")
     }
 
+
+    func attributedLabel(at index: Int) -> NSAttributedString {
+        if self.showLongLabel {
+            return self.longTitleAttributed(at: index)
+        } else {
+            return self.shortTitleAttributed(at: index)
+        }
+    }
+
+    func label(at index: Int) -> String {
+        if self.showLongLabel {
+            return self.longTitle(at: index)
+        } else {
+            return self.shortTitle(at: index)
+        }
+    }
+
     func longTitle(at index: Int) -> String {
         return "\(index + 1) - \(self.longText)"
     }
 
-    func title(at index: Int) -> String {
+    func shortTitle(at index: Int) -> String {
         return "\(index + 1) - \(self.text) "
+    }
+
+    func longTitleAttributed(at index: Int) -> NSAttributedString {
+        return NSAttributedStringBuilder()
+            .text("\(index + 1)", color: .red)
+            .text(" - ")
+            .text(self.longText)
+            .superscript("TM")
+            .build()
+    }
+
+    func shortTitleAttributed(at index: Int) -> NSAttributedString {
+        return NSAttributedStringBuilder()
+            .text("\(index + 1)", color: .red)
+            .text(" - ")
+            .text(self.text)
+            .superscript("TM")
+            .build()
     }
 }
 
@@ -156,6 +200,10 @@ extension RadioButtonComponentUIViewModel {
 
     @objc func showLongLabelChanged() {
         self.showLongLabel.toggle()
+    }
+
+    @objc func showAttributedLabelChanged() {
+        self.showAttributedLabel.toggle()
     }
 
     @objc func disableChanged() {

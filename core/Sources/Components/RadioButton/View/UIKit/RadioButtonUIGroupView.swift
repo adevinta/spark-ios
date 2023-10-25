@@ -238,7 +238,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         self.supplementaryText = supplementaryText
         self.titleDidUpdate()
         self.subtitleDidUpdate()
-        self.updateConstraints()
     }
 
     /// Initializer of the radio button ui group component.
@@ -269,7 +268,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             items: items,
             labelAlignment: labelAlignment,
             groupLayout: groupLayout)
-
     }
 
     init(viewModel: RadioButtonGroupViewModel<Void>,

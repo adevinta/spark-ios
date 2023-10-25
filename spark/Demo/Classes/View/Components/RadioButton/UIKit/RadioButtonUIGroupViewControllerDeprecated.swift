@@ -314,30 +314,3 @@ private extension NSAttributedString {
         self.init(attributedString: attrStr)
     }
 }
-
-private class NSAttributedStringBuilder {
-    private var nsAttributedString = NSMutableAttributedString()
-
-    func text(_ label: String) -> Self {
-        self.nsAttributedString.append(NSAttributedString(string: label))
-        return self
-    }
-
-    func text(_ label: String, color: UIColor) -> Self {
-        let attributedStringColor = [NSAttributedString.Key.foregroundColor: color];
-        self.nsAttributedString.append(NSAttributedString(string: label, attributes: attributedStringColor))
-        return self
-    }
-
-    func symbol(_ imageName: String) -> Self {
-        guard let image = UIImage(systemName: imageName) else { return self }
-        let imageAttachment = NSTextAttachment(image: image)
-        let imageString = NSAttributedString(attachment: imageAttachment)
-        self.nsAttributedString.append(imageString)
-        return self
-    }
-
-    func build() -> NSAttributedString {
-        return nsAttributedString
-    }
-}

@@ -109,7 +109,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
         } else {
             self.selectedID = self.formerSelecteID
         }
-        self.state = self.state.update(\.isSelected, value: selected)
+        self.updateViewAttributes()
     }
 
     func set(intent: RadioButtonIntent) {
