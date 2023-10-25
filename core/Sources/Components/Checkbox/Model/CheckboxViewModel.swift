@@ -13,9 +13,7 @@ import UIKit
 final class CheckboxViewModel: ObservableObject {
     
     // MARK: - Internal properties
-
-    @Published var text: String?
-    @Published var attributedText: NSAttributedString?
+    @Published var text: Either<NSAttributedString?, String?>
     @Published var checkedImage: UIImage
     @Published var colors: CheckboxColors
     @Published var alignment: CheckboxAlignment
@@ -48,7 +46,7 @@ final class CheckboxViewModel: ObservableObject {
     // MARK: - Init
 
     init(
-        text: Either<NSAttributedString, String>,
+        text: Either<NSAttributedString?, String?>,
         checkedImage: UIImage,
         theme: Theme,
         intent: CheckboxIntent = .main,
@@ -57,14 +55,7 @@ final class CheckboxViewModel: ObservableObject {
         alignment: CheckboxAlignment = .left,
         selectionState: CheckboxSelectionState
     ) {
-        switch text {
-        case .left(let attributedString):
-            self.text = attributedString.string
-            self.attributedText = attributedString
-        case .right(let string):
-            self.attributedText = nil
-            self.text = string
-        }
+        self.text = text
         self.checkedImage = checkedImage
         self.theme = theme
         self.isEnabled = isEnabled
@@ -90,16 +81,5 @@ final class CheckboxViewModel: ObservableObject {
 
     private func updateOpacity() {
         self.opacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-    }
-
-    func update(content: Either<NSAttributedString, String>) {
-        switch content {
-        case .left(let attributedString):
-            self.text = attributedString.string
-            self.attributedText = attributedString
-        case .right(let string):
-            self.attributedText = nil
-            self.text = string
-        }
     }
 }

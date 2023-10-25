@@ -104,11 +104,11 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
 // MARK: Delegate
 extension CheckboxGroupComponentUIView: CheckboxGroupUIViewDelegate {
 
-    func checkboxGroup(_ checkboxGroup: SparkCore.CheckboxGroupUIView, didChangeSelection state: [any SparkCore.CheckboxGroupItemProtocol]) {
+    func checkboxGroup(_ checkboxGroup: SparkCore.CheckboxGroupUIView, didChangeSelection states: [any SparkCore.CheckboxGroupItemProtocol]) {
         var text = ""
-        state.enumerated().forEach {
+        states.enumerated().forEach { index, state in
             var selectionState = ""
-            switch $1.selectionState {
+            switch state.selectionState {
             case .selected:
                 selectionState = "Selected"
             case .indeterminate:
@@ -118,7 +118,7 @@ extension CheckboxGroupComponentUIView: CheckboxGroupUIViewDelegate {
             default:
                 break
             }
-            text += $1.id + " " + selectionState + ($0 == state.count - 1 ? "" : "\n")
+            text += state.id + " " + selectionState + (index == states.count - 1 ? "" : "\n")
         }
         self.viewModel.itemsSelectionStateConfigurationItemViewModel.labelText = text
     }
