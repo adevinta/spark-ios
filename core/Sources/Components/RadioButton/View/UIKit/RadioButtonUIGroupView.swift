@@ -17,7 +17,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     private var itemLabelSpacingConstraints = [NSLayoutConstraint]()
     private var allConstraints = [NSLayoutConstraint]()
     private let valueSubject: PassthroughSubject<ID, Never>
-    private let viewModel: RadioButtonGroupViewModel
+    private let viewModel: RadioButtonGroupViewModel<Void>
 
     private var subscriptions = Set<AnyCancellable>()
 
@@ -81,13 +81,18 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
+    public var isEnabled: Bool = true {
+        didSet {
+            self.radioButtonViews.forEach{ $0.isEnabled = self.isEnabled }
+        }
+    }
+
     /// The number of radio button items in the radio button group
     public var numberOfItems: Int {
         return self.radioButtonViews.count
     }
 
     /// An optional title of the radio button group
-    @available(*, deprecated, message: "This will be deprecated for a generic form field component.")
     public var title: String? {
         didSet {
             self.titleDidUpdate()
@@ -95,7 +100,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     /// An optional supplementary text of the radio button group rendered at the bottom of the group. This is NOT well defined for the states `enabled` and disabled.
-    @available(*, deprecated, message: "This will be deprecated for a generic form field component.")
     public var supplementaryText: String? {
         didSet {
             self.subtitleDidUpdate()
@@ -219,8 +223,10 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                 supplementaryText: String? = nil) {
         let viewModel = RadioButtonGroupViewModel(
             theme: theme,
-            intent: state.intent
+            intent: state.intent,
+            content: ()
         )
+
         self.init(viewModel: viewModel,
                   selectedID: selectedID,
                   items: items,
@@ -233,7 +239,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         self.titleDidUpdate()
         self.subtitleDidUpdate()
         self.updateConstraints()
-
     }
 
     /// Initializer of the radio button ui group component.
@@ -252,9 +257,10 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         labelAlignment: RadioButtonLabelAlignment = .trailing,
         groupLayout: RadioButtonGroupLayout = .vertical) {
 
-        let viewModel = RadioButtonGroupViewModel(
+        let viewModel = RadioButtonGroupViewModel<Void>(
             theme: theme,
-            intent: intent
+            intent: intent,
+            content: ()
         )
 
         self.init(
@@ -266,7 +272,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     }
 
-    init(viewModel: RadioButtonGroupViewModel,
+    init(viewModel: RadioButtonGroupViewModel<Void>,
          selectedID: ID,
          items: [RadioButtonUIItem<ID>],
          labelAlignment: RadioButtonLabelAlignment = .trailing,

@@ -28,20 +28,28 @@ final class RadioButtonViewModelTests: XCTestCase {
     }
 
     // MARK: - Tests
-    func test_opacity() throws {
+    func test_opacity_for_enabled() throws {
+        // Given
+        let sut = self.sut(intent: .basic)
+
         // When
-        let opacities = sutValues(for: \.opacity)
+        sut.set(enabled: true)
+        let opacity = sut.opacity
 
         // Then
-        XCTAssertEqual(opacities, [1.0, 0.40, 1.0, 1.0, 1.0, 1.0, 1.0])
+        XCTAssertEqual(opacity, 1.00)
     }
 
-    func test_is_disabled() {
+    func test_opacity_for_disabled() throws {
+        // Given
+        let sut = self.sut(intent: .basic)
+
         // When
-        let disabledStates = sutValues(for: \.isDisabled)
+        sut.set(enabled: false)
+        let opacity = sut.opacity
 
         // Then
-        XCTAssertEqual(disabledStates, [false, true, false, false, false, false, false])
+        XCTAssertEqual(opacity, 0.40)
     }
 
     func test_spacings() {
@@ -60,21 +68,9 @@ final class RadioButtonViewModelTests: XCTestCase {
         XCTAssertEqual(fonts, Array(repeating: Font.body, count: 7))
     }
 
-    func test_surfaceColors() {
-        // Given
-        let onSurfaceColors = self.theme.colors.base.onSurface as! ColorTokenGeneratedMock
-        onSurfaceColors.color = .red
-
-        // When
-        let surfaceColors = sutValues(for: \.surfaceColor.color)
-
-        // Then
-        XCTAssertEqual(surfaceColors, Array(repeating: Color.red, count: 7))
-    }
-
     func test_colors_reset_when_selected_value_set() {
         // Given
-        let sut = self.sut(state: .enabled)
+        let sut = self.sut(intent: .basic)
         let expectation = XCTestExpectation(description: "Colors published when selection changes.")
         expectation.expectedFulfillmentCount = 2
 
@@ -83,7 +79,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         }).store(in: &self.subscriptions)
 
         // When
-        sut.setSelected()
+        sut.set(selected: true)
 
         // Then
         wait(for: [expectation], timeout: 0.5)
@@ -92,11 +88,11 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_theme_update_publishes_changed_values() {
         // Given
-        let sut = self.sut(state: .enabled)
+        let sut = self.sut(intent: .basic)
         let expectation = XCTestExpectation(description: "Changes to theme publishes value changes.")
         expectation.expectedFulfillmentCount = 2
 
-        let publishers = Publishers.Zip4(sut.$opacity, sut.$spacing, sut.$font, sut.$surfaceColor)
+        let publishers = Publishers.Zip4(sut.$opacity, sut.$spacing, sut.$font, sut.$colors)
 
         Publishers.Zip(publishers, sut.$colors).sink { _ in
             expectation.fulfill()
@@ -111,7 +107,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_state_update_publishes_changed_values() {
         // Given
-        let sut = self.sut(state: .enabled)
+        let sut = self.sut(intent: .basic)
         let expectation = XCTestExpectation(description: "Changes to state publishes value changes.")
         expectation.expectedFulfillmentCount = 2
 
@@ -120,7 +116,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        sut.set(groupState: .disabled)
+        sut.set(enabled: false)
 
         // Then
         wait(for: [expectation], timeout: 0.5)
@@ -128,7 +124,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     func test_spacing_update_publishes_changed_values() {
         // Given
-        let sut = self.sut(state: .enabled)
+        let sut = self.sut(intent: .basic)
         let expectation = XCTestExpectation(description: "Changes to label position publishes value changes.")
         expectation.expectedFulfillmentCount = 2
 
@@ -140,7 +136,7 @@ final class RadioButtonViewModelTests: XCTestCase {
         }.store(in: &self.subscriptions)
 
         // When
-        sut.set(labelPosition: .left)
+        sut.set(alignment: .leading)
 
         // Then
         wait(for: [expectation], timeout: 0.5)
@@ -151,23 +147,23 @@ final class RadioButtonViewModelTests: XCTestCase {
     // MARK: - Private Helper Functions
 
     private func sutValues<T>(for keyPath: KeyPath<RadioButtonViewModel<Int>, T>) -> [T] {
-        return RadioButtonGroupState.allCases
-            .map(self.sut(state:))
+        return RadioButtonIntent.allCases
+            .map(self.sut(intent:))
             .map{ $0[keyPath: keyPath] }
     }
 
-    private func sut(state: RadioButtonGroupState) -> RadioButtonViewModel<Int> {
+    private func sut(intent: RadioButtonIntent) -> RadioButtonViewModel<Int> {
         let seletedId = Binding(
             get: { self.bindingValue },
             set: { self.bindingValue = $0 }
         )
 
-        return RadioButtonViewModel(theme: self.theme,
-                                    id: 1,
-                                    label: .right("Test"),
-                                    selectedID: seletedId,
-                                    groupState: state)
-
+        return RadioButtonViewModel(
+            theme: self.theme,
+            intent: intent,
+            id: 1,
+            label: .right("Test"),
+            selectedID: seletedId)
     }
 }
 

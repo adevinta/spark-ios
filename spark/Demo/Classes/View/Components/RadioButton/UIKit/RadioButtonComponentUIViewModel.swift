@@ -72,7 +72,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
     lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Disable",
-            type: .checkbox(title: "", isOn: self.disabledIndex != nil),
+            type: .checkbox(title: "", isOn: self.isDisabled),
             target: (source: self, action: #selector(self.disableChanged)))
     }()
 
@@ -117,8 +117,8 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var showLongLabel = false
     @Published var showIcon = true
     @Published var showBadge = false
-    @Published var disabledIndex: Int?
-    @Published var numberOfRadioButtons = 5
+    @Published var isDisabled = false
+    @Published var numberOfRadioButtons = 3
     @Published var selectedRadioButton = 0
     @Published var axis: RadioButtonGroupLayout = .vertical
     @Published var labelAlignment: RadioButtonLabelAlignment = .trailing
@@ -141,7 +141,6 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
     func title(at index: Int) -> String {
         return "\(index + 1) - \(self.text) "
     }
-
 }
 
 // MARK: - Navigation
@@ -160,11 +159,7 @@ extension RadioButtonComponentUIViewModel {
     }
 
     @objc func disableChanged() {
-        if self.disabledIndex != nil {
-            self.disabledIndex = nil
-        } else {
-            self.disabledIndex = Int.random(in: 0..<self.numberOfRadioButtons)
-        }
+        self.isDisabled.toggle()
     }
 
     @objc func axisChanged() {
@@ -174,8 +169,6 @@ extension RadioButtonComponentUIViewModel {
     @objc func labelAlignmentChanged() {
         self.labelAlignment = self.labelAlignment == .leading ? .trailing : .leading
     }
-
-
 
     @objc func numberOfRadioButtonsChanged(_ control: NumberSelector) {
         self.numberOfRadioButtons = control.selectedValue

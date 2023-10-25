@@ -34,11 +34,9 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
 
     private var selectedID: Binding<ID>
     private let items: [RadioButtonItem<ID>]
-    private var title: String?
     private let groupLayout: RadioButtonGroupLayout
     private let labelAlignment: RadioButtonLabelAlignment
-    private var supplementaryLabel: String?
-    private let viewModel: RadioButtonGroupViewModel
+    private let viewModel: RadioButtonGroupViewModel<RadioButtonGroupContent>
 
     // MARK: - Local properties
 
@@ -69,8 +67,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                   labelAlignment: radioButtonLabelPosition.alignment,
                   groupLayout: groupLayout
         )
-        self.title = title
-        self.supplementaryLabel = supplementaryLabel
+        self.viewModel.content = RadioButtonGroupContent(title: title, supplementaryText: supplementaryLabel)
         self.viewModel.isDisabled = state == .disabled
     }
 
@@ -90,7 +87,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
         self.selectedID = selectedID
         self.groupLayout = groupLayout
         self.labelAlignment = labelAlignment
-        self.viewModel = RadioButtonGroupViewModel(theme: theme, intent: intent)
+        self.viewModel = RadioButtonGroupViewModel(theme: theme, intent: intent, content: .init())
         self._spacing = ScaledMetric(wrappedValue: self.viewModel.spacing)
         self._titleSpacing = ScaledMetric(wrappedValue: self.viewModel.labelSpacing)
     }
@@ -100,7 +97,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     public var body: some View {
 
         VStack(alignment: .leading, spacing: 0) {
-            if let title = self.title {
+            if let title = self.viewModel.content.title {
                 radioButtonTitle(title)
                     .padding(.bottom, self.titleSpacing)
             }
@@ -111,7 +108,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                 horizontalRadioButtons
             }
 
-            if let supplementaryLabel = self.supplementaryLabel {
+            if let supplementaryLabel = self.viewModel.content.supplementaryText {
                 radioButtonSublabel(supplementaryLabel)
                     .padding(.top, self.titleSpacing)
             }
@@ -173,6 +170,18 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
 
     public func disabled(_ isDisabled: Bool) -> Self {
         self.viewModel.isDisabled = isDisabled
+        return self
+    }
+
+    public func title(_ title: String) -> Self {
+        let content = self.viewModel.content.update(\.title, value: title)
+        self.viewModel.content = content
+        return self
+    }
+
+    public func supplementaryText(_ supplementaryText: String) -> Self {
+        let content = self.viewModel.content.update(\.supplementaryText, value: supplementaryText)
+        self.viewModel.content = content
         return self
     }
 }

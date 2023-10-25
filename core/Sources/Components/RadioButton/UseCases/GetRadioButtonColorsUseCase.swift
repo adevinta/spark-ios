@@ -12,7 +12,7 @@ import Foundation
 protocol GetRadioButtonColorsUseCaseable {
     func execute(theme: Theme,
                  intent: RadioButtonIntent,
-                 state: RadioButtonStateAttribute) -> RadioButtonColors
+                 isSelected: Bool) -> RadioButtonColors
 }
 
 /// A use case to determine the colors of a radio button.
@@ -33,16 +33,16 @@ struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
     /// - Returns: ``RadioButtonColors`` which contains the various colors of the radio button.
     func execute(theme: Theme,
                  intent: RadioButtonIntent,
-                 state: RadioButtonStateAttribute) -> RadioButtonColors {
+                 isSelected: Bool) -> RadioButtonColors {
         let buttonColor = theme.colors.buttonColor(
             intent: intent,
-            state: state)
+            isSelected: isSelected)
 
         return RadioButtonColors(
             button: buttonColor,
             label: theme.colors.base.onBackground,
             halo: theme.colors.haloColor(intent: intent),
-            fill: state.isSelected ? buttonColor : ColorTokenDefault.clear,
+            fill: isSelected ? buttonColor : ColorTokenDefault.clear,
             surface: theme.colors.surfaceColor(intent: intent)
         )
     }
@@ -52,8 +52,8 @@ struct GetRadioButtonColorsUseCase: GetRadioButtonColorsUseCaseable {
 private extension SparkCore.Colors {
     func buttonColor(
         intent: RadioButtonIntent,
-        state: RadioButtonStateAttribute) -> any ColorToken {
-            return  state.isSelected ? self.selectedColor(intent: intent) : self.base.outline
+        isSelected: Bool) -> any ColorToken {
+            return  isSelected ? self.selectedColor(intent: intent) : self.base.outline
     }
 
     private func selectedColor(intent: RadioButtonIntent) -> any ColorToken {
@@ -82,7 +82,7 @@ private extension SparkCore.Colors {
     func surfaceColor(intent: RadioButtonIntent) -> any ColorToken {
         switch intent {
         case .basic: 
-            return self.base.onSurface
+            return self.basic.onBasic
         case .support:
             return self.support.onSupport
         case .alert:
@@ -98,7 +98,7 @@ private extension SparkCore.Colors {
         case .main:
             return self.main.onMain
         case .success:
-            return self.feedback.success
+            return self.feedback.onSuccess
         }
     }
 
@@ -121,7 +121,7 @@ private extension SparkCore.Colors {
         case .main:
             return self.main.mainContainer
         case .success:
-            return self.feedback.success
+            return self.feedback.successContainer
         }
     }
 }

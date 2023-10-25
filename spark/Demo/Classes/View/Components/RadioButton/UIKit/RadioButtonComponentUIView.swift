@@ -81,14 +81,8 @@ final class RadioButtonComponentUIView: ComponentUIView {
             }
         }
 
-        self.viewModel.$disabledIndex.subscribe(in: &self.cancellables) { [weak self] index in
-            self?.componentView.radioButtonViews.forEach{
-                $0.isEnabled = true
-            }
-
-            guard let index = index else { return }
-
-            self?.componentView.radioButtonViews[index].isEnabled = false
+        self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] disabled in
+            self?.componentView.isEnabled = !disabled
         }
 
         self.viewModel.$numberOfRadioButtons.subscribe(in: &self.cancellables) { [weak self] numberOfRadioButtons in
@@ -116,6 +110,9 @@ final class RadioButtonComponentUIView: ComponentUIView {
             labelAlignment: viewModel.labelAlignment,
             groupLayout: viewModel.axis
         )
+
+        component.title = "Radio Button Group (UIKit)"
+        component.supplementaryText = "Radio Button Group Supplementary Text"
 
         return component
     }

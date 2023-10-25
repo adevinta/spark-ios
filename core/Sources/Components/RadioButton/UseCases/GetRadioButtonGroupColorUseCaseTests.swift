@@ -11,30 +11,33 @@ import XCTest
 
 final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
 
+    var sut: GetRadioButtonGroupColorUseCase!
+    var colors: ColorsGeneratedMock!
+
+    override func setUp() {
+        super.setUp()
+
+        self.sut = GetRadioButtonGroupColorUseCase()
+        self.colors = ColorsGeneratedMock.mocked()
+//        self.colors.feedback = ColorsFeedbackGeneratedMock.mocked()
+//        self.colors.accent = ColorsAccentGeneratedMock.mocked()
+//        self.colors.basic = ColorsBasicGeneratedMock.mocked()
+//        self.colors.basic = ColorsBasicGeneratedMock.mocked()
+    }
     // MARK: - Tests
 
-    func test_warning() {
-        // Given
-        let sut = GetRadioButtonGroupColorUseCase()
-        let colors = ColorsGeneratedMock()
-        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
-
+    func test_alert() {
         // When
-        let colorToken = sut.execute(colors: colors, state: .warning)
+        let colorToken = sut.execute(colors: colors, intent: .alert)
 
         // Then
         XCTAssertEqual(colorToken.uiColor, colors.feedback.onAlertContainer.uiColor)
         XCTAssertEqual(colorToken.color, colors.feedback.onAlertContainer.color)
     }
 
-    func test_error() {
-        // Given
-        let sut = GetRadioButtonGroupColorUseCase()
-        let colors = ColorsGeneratedMock()
-        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
-
+    func test_danger() {
         // When
-        let colorToken = sut.execute(colors: colors, state: .error)
+        let colorToken = sut.execute(colors: colors, intent: .danger)
 
         // Then
         XCTAssertEqual(colorToken.uiColor, colors.feedback.error.uiColor)
@@ -42,41 +45,17 @@ final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
     }
 
     func test_success() {
-        // Given
-        let sut = GetRadioButtonGroupColorUseCase()
-        let colors = ColorsGeneratedMock()
-        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
-
         // When
-        let colorToken = sut.execute(colors: colors, state: .success)
+        let colorToken = sut.execute(colors: colors, intent: .success)
 
         // Then
         XCTAssertEqual(colorToken.uiColor, colors.feedback.success.uiColor)
         XCTAssertEqual(colorToken.color, colors.feedback.success.color)
     }
 
-    func test_enabled() {
-        // Given
-        let sut = GetRadioButtonGroupColorUseCase()
-        let colors = ColorsGeneratedMock()
-        colors.main = ColorsMainGeneratedMock.mocked()
-
+    func test_basic() {
         // When
-        let colorToken = sut.execute(colors: colors, state: .enabled)
-
-        // Then
-        XCTAssertEqual(colorToken.uiColor, colors.main.mainContainer.uiColor)
-        XCTAssertEqual(colorToken.color, colors.main.mainContainer.color)
-    }
-
-    func test_disabled() {
-        // Given
-        let sut = GetRadioButtonGroupColorUseCase()
-        let colors = ColorsGeneratedMock()
-        colors.main = ColorsMainGeneratedMock.mocked()
-
-        // When
-        let colorToken = sut.execute(colors: colors, state: .disabled)
+        let colorToken = sut.execute(colors: colors, intent: .basic)
 
         // Then
         XCTAssertEqual(colorToken.uiColor, colors.main.mainContainer.uiColor)
@@ -84,30 +63,48 @@ final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
     }
 
     func test_accent() {
-        // Given
-        let sut = GetRadioButtonGroupColorUseCase()
-        let colors = ColorsGeneratedMock()
-        colors.accent = ColorsAccentGeneratedMock.mocked()
-
         // When
-        let colorToken = sut.execute(colors: colors, state: .accent)
+        let colorToken = sut.execute(colors: colors, intent: .accent)
 
         // Then
         XCTAssertEqual(colorToken.uiColor, colors.accent.accent.uiColor)
         XCTAssertEqual(colorToken.color, colors.accent.accent.color)
     }
 
-    func test_basic() {
-        // Given
-        let sut = GetRadioButtonGroupColorUseCase()
-        let colors = ColorsGeneratedMock()
-        colors.basic = ColorsBasicGeneratedMock.mocked()
-
+    func test_main() {
         // When
-        let colorToken = sut.execute(colors: colors, state: .basic)
+        let colorToken = sut.execute(colors: colors, intent: .main)
 
         // Then
-        XCTAssertEqual(colorToken.uiColor, colors.basic.basic.uiColor)
-        XCTAssertEqual(colorToken.color, colors.basic.basic.color)
+        XCTAssertEqual(colorToken.uiColor, colors.main.main.uiColor)
+        XCTAssertEqual(colorToken.color, colors.main.main.color)
     }
+
+    func test_support() {
+        // When
+        let colorToken = sut.execute(colors: colors, intent: .support)
+
+        // Then
+        XCTAssertEqual(colorToken.uiColor, colors.support.support.uiColor)
+        XCTAssertEqual(colorToken.color, colors.support.support.color)
+    }
+
+    func test_info() {
+        // When
+        let colorToken = sut.execute(colors: colors, intent: .info)
+
+        // Then
+        XCTAssertEqual(colorToken.uiColor, colors.feedback.info.uiColor)
+        XCTAssertEqual(colorToken.color, colors.feedback.info.color)
+    }
+
+    func test_neutral() {
+        // When
+        let colorToken = sut.execute(colors: colors, intent: .neutral)
+
+        // Then
+        XCTAssertEqual(colorToken.uiColor, colors.feedback.neutral.uiColor)
+        XCTAssertEqual(colorToken.color, colors.feedback.neutral.color)
+    }
+
 }

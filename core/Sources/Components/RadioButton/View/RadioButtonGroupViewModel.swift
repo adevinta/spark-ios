@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 /// The RadioButtonGroupViewModel is a view model used by the ``RadioButtonView`` to handle theming logic and state changes.
-final class RadioButtonGroupViewModel: ObservableObject {
+final class RadioButtonGroupViewModel<Content>: ObservableObject {
 
     // MARK: - Published Properties
     @Published var sublabelFont: any TypographyFontToken
@@ -20,6 +20,7 @@ final class RadioButtonGroupViewModel: ObservableObject {
     @Published var spacing: CGFloat
     @Published var labelSpacing: CGFloat
     @Published var isDisabled: Bool
+    @Published var content: Content
 
     // MARK: - Internal Properties
     var theme: any Theme {
@@ -41,34 +42,33 @@ final class RadioButtonGroupViewModel: ObservableObject {
         }
     }
 
-//    var state: RadioButtonGroupState {
-//        didSet {
-//            guard self.state != oldValue else { return }
-//
-//            self.sublabelColor = useCase.execute(colors: self.theme.colors, state: self.state)
-//        }
-//    }
-
     // MARK: Private Properties
     private let useCase: any GetRadioButtonGroupColorUseCaseable
 
     // MARK: Initializers
-    convenience init(theme: any Theme, intent: RadioButtonIntent) {
+    convenience init(
+        theme: any Theme,
+        intent: RadioButtonIntent,
+        content: Content
+    ) {
         self.init(
             theme: theme,
             intent: intent,
+            content: content,
             useCase: GetRadioButtonGroupColorUseCase()
         )
     }
 
     init(theme: any Theme,
          intent: RadioButtonIntent,
+         content: Content,
          useCase: any GetRadioButtonGroupColorUseCaseable) {
 
         self.theme = theme
         self.intent = intent
         self.useCase = useCase
         self.isDisabled = false
+        self.content = content
 
         self.sublabelFont = self.theme.typography.caption
         self.titleFont = self.theme.typography.subhead

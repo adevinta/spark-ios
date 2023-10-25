@@ -26,9 +26,8 @@ struct RadioButtonComponent: View {
     @State var verticalLayout = CheckboxSelectionState.selected
     @State var isDisabled = CheckboxSelectionState.unselected
     @State var longLabel = CheckboxSelectionState.unselected
-    @State var numberOfItems = 2
+    @State var numberOfItems = 3
     @State var selectedID = 1
-    @State var disabledItem = 0
 
     var items: [RadioButtonItem<Int>] {
         return (1...self.numberOfItems).map { index in
@@ -86,6 +85,8 @@ struct RadioButtonComponent: View {
                     groupLayout: self.verticalLayout == .selected ? .vertical : .horizontal
                 )
                 .disabled(self.isDisabled == .selected)
+                .title("Radio Button Group (SwiftUI)")
+                .supplementaryText("Radio Button Group Supplementary Text")
             }
         )
     }

@@ -31,8 +31,8 @@ struct RadioButtonGetAttributesUseCase: RadioButtonGetAttributesUseCaseable {
             colors: self.colorsUseCase.execute(
                 theme: theme,
                 intent: intent,
-                state: state),
-            opacity: theme.opacity(state: state),
+                isSelected: state.isSelected),
+            opacity: theme.opacity(isEnabled: state.isEnabled),
             spacing: theme.spacing(for: alignment),
             font: theme.typography.body1)
     }
@@ -40,8 +40,8 @@ struct RadioButtonGetAttributesUseCase: RadioButtonGetAttributesUseCaseable {
 
 // MARK: - Private Helpers
 private extension Theme {
-    func opacity(state: RadioButtonStateAttribute) -> CGFloat {
-        return !state.isEnabled ? self.dims.dim3 : 1
+    func opacity(isEnabled: Bool) -> CGFloat {
+        return !isEnabled ? self.dims.dim3 : 1
     }
 
     func spacing(for alignment: RadioButtonLabelAlignment) -> CGFloat {

@@ -87,7 +87,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
             return self.textLabel.text
         }
         set {
-            self.viewModel.label = .right(newValue)
+            self.viewModel.label = .left(newValue.map(NSAttributedString.init))
             self.updateLabel()
         }
     }
@@ -165,7 +165,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }()
 
     private let textLabel = UILabel.standard
-//    private let button = UIButton(type: .custom)
 
     // MARK: - Constraint properties
     private var toggleViewWidthConstraint: NSLayoutConstraint?
@@ -333,11 +332,8 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     private func updateLabel() {
         self.textLabel.font = self.viewModel.font.uiFont
-        switch self.viewModel.label {
-        case let .left(attributedText): self.textLabel.attributedText = attributedText
-        case let .right(text): self.textLabel.text = text
-        }
-        self.textLabel.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonTextLabel
+        self.textLabel.textColor = self.viewModel.colors.label.uiColor
+        self.textLabel.attributedText = self.viewModel.label.leftValue
     }
 
     private func updateColors(_ colors: RadioButtonColors) {
