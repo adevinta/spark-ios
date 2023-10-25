@@ -42,7 +42,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
-
+        label.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonGroupTitle
         return label
     }()
 
