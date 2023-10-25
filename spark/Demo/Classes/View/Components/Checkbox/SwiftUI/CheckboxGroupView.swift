@@ -149,7 +149,6 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         isEnabled: Bool = true
     ) {
         self.title = title
-        self.attributedTitle = nil
         self.id = id
         self.selectionState = selectionState
         self.isEnabled = isEnabled
@@ -161,7 +160,6 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         selectionState: CheckboxSelectionState,
         isEnabled: Bool = true
     ) {
-        self.title = attributedTitle.string
         self.attributedTitle = attributedTitle
         self.id = id
         self.selectionState = selectionState

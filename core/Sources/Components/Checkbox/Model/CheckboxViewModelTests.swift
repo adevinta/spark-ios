@@ -43,7 +43,7 @@ final class CheckboxViewModelTests: XCTestCase {
                                self.theme,
                                "Wrong typography value")
 
-            XCTAssertEqual(viewModel.text, "Text", "text does not match")
+            XCTAssertEqual(viewModel.text.leftValue?.string, "Text", "text does not match")
             XCTAssertEqual(viewModel.checkedImage, self.checkedImage, "Checked image does not match")
             XCTAssertEqual(viewModel.alignment, .left, "Alignment does not match")
             XCTAssertEqual(viewModel.intent, .main, "Intent does not match")
@@ -67,31 +67,26 @@ final class CheckboxViewModelTests: XCTestCase {
         XCTAssertEqual(disabledStates, [true, false])
     }
 
-    func test_attributeText() {
-        // Given
-        let sut = self.sut(isEnabled: true)
-        let attributeText = sut.attributedText
-
-        XCTAssertNil(attributeText)
-
-        // When
-        sut.attributedText = NSAttributedString("Text")
-
-        // Then
-        XCTAssertNotNil(sut.attributedText)
-        XCTAssertNotNil(sut.text)
-    }
-
-    func test_attributeText_afterTextIsSet() {
+    func test_text() {
         // Given
         let sut = self.sut(isEnabled: true, attributeText: NSAttributedString("Text"))
 
         // When
-        sut.update(content: .right("Text"))
+        sut.text = .right("Text")
 
         // Then
-        XCTAssertNotNil(sut.text)
-        XCTAssertNil(sut.attributedText)
+        XCTAssertNotNil(sut.text.rightValue)
+    }
+
+    func test_attributeText() {
+        // Given
+        let sut = self.sut(isEnabled: true)
+
+        // When
+        sut.text = .left(NSAttributedString("Text"))
+
+        // Then
+        XCTAssertNotNil(sut.text.leftValue)
     }
 
     func test_updateColorsMethod_afterIntentIsSet() async {
@@ -126,7 +121,7 @@ final class CheckboxViewModelTests: XCTestCase {
 
     private func sut(isEnabled: Bool, attributeText: NSAttributedString? = nil) -> CheckboxViewModel {
         return CheckboxViewModel(
-            text: attributeText == nil ? .right("Text") : .left(attributeText!),
+            text: attributeText == nil ? .left(NSAttributedString("Text")) : .left(attributeText!),
             checkedImage: self.checkedImage,
             theme: self.theme, isEnabled: isEnabled,
             selectionState: .unselected
