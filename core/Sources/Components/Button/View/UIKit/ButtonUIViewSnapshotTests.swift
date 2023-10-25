@@ -43,8 +43,8 @@ private extension ButtonUIViewSnapshotTests {
         for sut in suts {
             var view: ButtonUIView!
 
-            // Icon + Text ?
-            if let iconImage = sut.iconImage, let text = sut.text {
+            // Icon + Title ?
+            if let iconImage = sut.iconImage, let title = sut.title {
                 view = ButtonUIView(
                     theme: self.theme,
                     intent: sut.intent,
@@ -53,11 +53,11 @@ private extension ButtonUIViewSnapshotTests {
                     shape: sut.shape,
                     alignment: sut.alignment,
                     iconImage: iconImage.leftValue,
-                    text: text,
+                    text: title,
                     isEnabled: sut.isEnabled
                 )
 
-            } else if let iconImage = sut.iconImage, let attributedText = sut.attributedText { // Icon + Attributed Text
+            } else if let iconImage = sut.iconImage, let attributedTitle = sut.attributedTitle { // Icon + Attributed Title
                 view = ButtonUIView(
                     theme: self.theme,
                     intent: sut.intent,
@@ -66,7 +66,7 @@ private extension ButtonUIViewSnapshotTests {
                     shape: sut.shape,
                     alignment: sut.alignment,
                     iconImage: iconImage.leftValue,
-                    attributedText: attributedText.leftValue,
+                    attributedText: attributedTitle.leftValue,
                     isEnabled: sut.isEnabled
                 )
 
@@ -82,7 +82,7 @@ private extension ButtonUIViewSnapshotTests {
                     isEnabled: sut.isEnabled
                 )
 
-            } else if let text = sut.text { // Only Text
+            } else if let title = sut.title { // Only Title
                 view = ButtonUIView(
                     theme: self.theme,
                     intent: sut.intent,
@@ -90,11 +90,11 @@ private extension ButtonUIViewSnapshotTests {
                     size: sut.size,
                     shape: sut.shape,
                     alignment: sut.alignment,
-                    text: text,
+                    text: title,
                     isEnabled: sut.isEnabled
                 )
 
-            } else if let attributedText = sut.attributedText { // Only Attributed Text
+            } else if let attributedTitle = sut.attributedTitle { // Only Attributed Title
                 view = ButtonUIView(
                     theme: self.theme,
                     intent: sut.intent,
@@ -102,7 +102,7 @@ private extension ButtonUIViewSnapshotTests {
                     size: sut.size,
                     shape: sut.shape,
                     alignment: sut.alignment,
-                    attributedText: attributedText.leftValue,
+                    attributedText: attributedTitle.leftValue,
                     isEnabled: sut.isEnabled
                 )
             } else {

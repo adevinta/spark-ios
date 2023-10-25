@@ -18,28 +18,28 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
     // MARK: - With IconImage Tests
 
-    func test_execute_when_iconImage_is_set_and_containsText_is_false() {
+    func test_execute_when_iconImage_is_set_and_containsTitle_is_false() {
         // GIVEN
         let useCase = ButtonGetIsOnlyIconUseCase()
 
         // WHEN
         let isIconOnly = useCase.execute(
             iconImage: .left(imageMock),
-            containsText: false
+            containsTitle: false
         )
 
         // THEN
         XCTAssertTrue(isIconOnly)
     }
 
-    func test_execute_when_iconImage_and_containsText_is_true() {
+    func test_execute_when_iconImage_and_containsTitle_is_true() {
         // GIVEN
         let useCase = ButtonGetIsOnlyIconUseCase()
 
         // WHEN
         let isIconOnly = useCase.execute(
             iconImage: .left(imageMock),
-            containsText: true
+            containsTitle: true
         )
 
         // THEN
@@ -48,28 +48,28 @@ final class ButtonGetIsOnlyIconUseCaseTests: XCTestCase {
 
     // MARK: - Without IconImage Tests
 
-    func test_execute_when_image_is_nil_and_containsText_is_true() {
+    func test_execute_when_image_is_nil_and_containsTitle_is_true() {
         // GIVEN
         let useCase = ButtonGetIsOnlyIconUseCase()
 
         // WHEN
         let isIconOnly = useCase.execute(
             iconImage: nil,
-            containsText: true
+            containsTitle: true
         )
 
         // THEN
         XCTAssertFalse(isIconOnly)
     }
 
-    func test_execute_when_image_is_nil_and_containsText_is_false() {
+    func test_execute_when_image_is_nil_and_containsTitle_is_false() {
         // GIVEN
         let useCase = ButtonGetIsOnlyIconUseCase()
 
         // WHEN
         let isIconOnly = useCase.execute(
             iconImage: nil,
-            containsText: false
+            containsTitle: false
         )
 
         // THEN

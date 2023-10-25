@@ -14,5 +14,5 @@ struct ButtonContent: Equatable {
     let isIconImageTrailing: Bool
     let iconImage: ImageEither?
 
-    let shouldShowText: Bool
+    let shouldShowTitle: Bool
 }

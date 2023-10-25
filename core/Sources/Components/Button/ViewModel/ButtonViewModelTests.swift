@@ -35,8 +35,8 @@ final class ButtonViewModelTests: XCTestCase {
         let sizeMock: ButtonSize = .large
         let shapeMock: ButtonShape = .pill
         let alignmentMock: ButtonAlignment = .leadingIcon
-        let textMock = "My Button"
-        let attributedTextMock = NSAttributedString(string: "My AT Button")
+        let titleMock = "My Button"
+        let attributedTitleMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = true
 
         let stub = Stub(
@@ -46,8 +46,8 @@ final class ButtonViewModelTests: XCTestCase {
             shape: shapeMock,
             alignment: alignmentMock,
             isIconImage: true,
-            text: textMock,
-            attributedText: attributedTextMock,
+            title: titleMock,
+            attributedTitle: attributedTitleMock,
             isEnabled: isEnabledMock
         )
 
@@ -108,7 +108,7 @@ final class ButtonViewModelTests: XCTestCase {
             1
         )
         XCTAssertPublisherSinkCountEqual(
-            on: stub.textFontTokenPublisherMock,
+            on: stub.titleFontTokenPublisherMock,
             1
         )
         // **
@@ -162,8 +162,8 @@ final class ButtonViewModelTests: XCTestCase {
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
         let alignmentMock: ButtonAlignment = .trailingIcon
-        let textMock = "My Button"
-        let attributedTextMock = NSAttributedString(string: "My AT Button")
+        let titleMock = "My Button"
+        let attributedTitleMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = false
 
         let stub = Stub(
@@ -173,8 +173,8 @@ final class ButtonViewModelTests: XCTestCase {
             shape: shapeMock,
             alignment: alignmentMock,
             isIconImage: true,
-            text: textMock,
-            attributedText: attributedTextMock,
+            title: titleMock,
+            attributedTitle: attributedTitleMock,
             isEnabled: isEnabledMock
         )
 
@@ -194,7 +194,7 @@ final class ButtonViewModelTests: XCTestCase {
         self.testBorder(on: stub)
         self.testSpacings(on: stub)
         self.testContent(on: stub)
-        self.testTextFontToken(on: stub)
+        self.testTitleFontToken(on: stub)
 
         XCTAssertPublisherSinkCountEqual(
             on: stub.statePublisherMock,
@@ -221,7 +221,7 @@ final class ButtonViewModelTests: XCTestCase {
             2
         )
         XCTAssertPublisherSinkCountEqual(
-            on: stub.textFontTokenPublisherMock,
+            on: stub.titleFontTokenPublisherMock,
             2
         )
         // **
@@ -376,8 +376,8 @@ final class ButtonViewModelTests: XCTestCase {
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
         let alignmentMock: ButtonAlignment = .trailingIcon
-        let textMock = "My Button"
-        let attributedTextMock = NSAttributedString(string: "My AT Button")
+        let titleMock = "My Button"
+        let attributedTitleMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = false
 
         let stub = Stub(
@@ -387,8 +387,8 @@ final class ButtonViewModelTests: XCTestCase {
             shape: shapeMock,
             alignment: alignmentMock,
             isIconImage: true,
-            text: textMock,
-            attributedText: attributedTextMock,
+            title: titleMock,
+            attributedTitle: attributedTitleMock,
             isEnabled: isEnabledMock
         )
         let viewModel = stub.viewModel
@@ -429,7 +429,7 @@ final class ButtonViewModelTests: XCTestCase {
             1
         )
         XCTAssertPublisherSinkCountEqual(
-            on: stub.textFontTokenPublisherMock,
+            on: stub.titleFontTokenPublisherMock,
             1
         )
         // **
@@ -798,32 +798,32 @@ final class ButtonViewModelTests: XCTestCase {
         // **
     }
 
-    func test_set_text_when_displayedTextViewModel_textChanged_return_true_and_new_value_is_NOT_nil() {
-        self.testSetText(
+    func test_set_title_when_displayedTitleViewModel_titleChanged_return_true_and_new_value_is_NOT_nil() {
+        self.testSetTitle(
             newValueIsNil: false,
             givenIsDifferentNewValue: true
         )
     }
 
-    func test_set_text_when_displayedTextViewModel_textChanged_return_true_and_new_value_is_nil() {
-        self.testSetText(
+    func test_set_title_when_displayedTitleViewModel_titleChanged_return_true_and_new_value_is_nil() {
+        self.testSetTitle(
             newValueIsNil: true,
             givenIsDifferentNewValue: true
         )
     }
 
-    func test_set_text_when_displayedTextViewModel_textChanged_return_false() {
-        self.testSetText(
+    func test_set_title_when_displayedTitleViewModel_titleChanged_return_false() {
+        self.testSetTitle(
             givenIsDifferentNewValue: false
         )
     }
 
-    private func testSetText(
+    private func testSetTitle(
         newValueIsNil: Bool = true,
         givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let newValue: String? = newValueIsNil ? nil : "My New Text"
+        let newValue: String? = newValueIsNil ? nil : "My New Title"
 
         let sizeMock: ButtonSize = .medium
         let alignmentMock: ButtonAlignment = .trailingIcon
@@ -831,7 +831,7 @@ final class ButtonViewModelTests: XCTestCase {
         let stub = Stub(
             size: sizeMock,
             alignment: alignmentMock,
-            text: "Text"
+            title: "Title"
         )
         let viewModel = stub.viewModel
 
@@ -843,8 +843,8 @@ final class ButtonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        stub.displayedTextViewModelMock.textChangedWithTextReturnValue = givenIsDifferentNewValue
-        viewModel.set(text: newValue)
+        stub.displayedTitleViewModelMock.textChangedWithTextReturnValue = givenIsDifferentNewValue
+        viewModel.set(title: newValue)
 
         // THEN
         // **
@@ -866,22 +866,22 @@ final class ButtonViewModelTests: XCTestCase {
             givenIsDifferentNewValue && !newValueIsNil ? 1 : 0
         )
         XCTAssertPublisherSinkCountEqual(
-            on: stub.textFontTokenPublisherMock,
+            on: stub.titleFontTokenPublisherMock,
             givenIsDifferentNewValue && !newValueIsNil ? 1 : 0
         )
         // **
 
         // **
-        // DisplayedText ViewModel
+        // DisplayedTitle ViewModel
         XCTAssertEqual(
-            stub.displayedTextViewModelMock.textChangedWithTextCallsCount,
+            stub.displayedTitleViewModelMock.textChangedWithTextCallsCount,
             1,
-            "Wrong call number on textChanged on displayedTextViewModel"
+            "Wrong call number on textChanged on displayedTitleViewModel"
         )
         XCTAssertEqual(
-            stub.displayedTextViewModelMock.textChangedWithTextReceivedText,
+            stub.displayedTitleViewModelMock.textChangedWithTextReceivedText,
             newValue,
-            "Wrong textChanged parameter on displayedTextViewModel"
+            "Wrong textChanged parameter on displayedTitleViewModel"
         )
         // **
 
@@ -913,19 +913,19 @@ final class ButtonViewModelTests: XCTestCase {
         // **
     }
 
-    func test_set_attributedText_when_displayedTextViewModel_attributedTextChanged_return_true() {
-        self.testSetAttributedText(
+    func test_set_attributedTitle_when_displayedTitleViewModel_attributedTitleChanged_return_true() {
+        self.testSetAttributedTitle(
             givenIsDifferentNewValue: true
         )
     }
 
-    func test_set_attributedText_when_displayedTextViewModel_attributedTextChanged_return_false() {
-        self.testSetAttributedText(
+    func test_set_attributedTitle_when_displayedTitleViewModel_attributedTitleChanged_return_false() {
+        self.testSetAttributedTitle(
             givenIsDifferentNewValue: false
         )
     }
 
-    private func testSetAttributedText(
+    private func testSetAttributedTitle(
         givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
@@ -937,7 +937,7 @@ final class ButtonViewModelTests: XCTestCase {
         let stub = Stub(
             size: sizeMock,
             alignment: alignmentMock,
-            attributedText: .init(string: "My AT Button")
+            attributedTitle: .init(string: "My AT Button")
         )
         let viewModel = stub.viewModel
 
@@ -949,8 +949,8 @@ final class ButtonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        stub.displayedTextViewModelMock.attributedTextChangedWithAttributedTextReturnValue = givenIsDifferentNewValue
-        viewModel.set(attributedText: .left(newValue))
+        stub.displayedTitleViewModelMock.attributedTextChangedWithAttributedTextReturnValue = givenIsDifferentNewValue
+        viewModel.set(attributedTitle: .left(newValue))
 
         // THEN
         // **
@@ -970,14 +970,14 @@ final class ButtonViewModelTests: XCTestCase {
         // **
 
         // **
-        // DisplayedText ViewModel
+        // DisplayedTitle ViewModel
         XCTAssertEqual(
-            stub.displayedTextViewModelMock.attributedTextChangedWithAttributedTextCallsCount,
+            stub.displayedTitleViewModelMock.attributedTextChangedWithAttributedTextCallsCount,
             1,
             "Wrong call number on attributedText on displayedTextViewModel"
         )
         XCTAssertEqual(
-            stub.displayedTextViewModelMock.attributedTextChangedWithAttributedTextReceivedAttributedText?.leftValue,
+            stub.displayedTitleViewModelMock.attributedTextChangedWithAttributedTextReceivedAttributedText?.leftValue,
             newValue,
             "Wrong attributedText parameter on displayedTextViewModel"
         )
@@ -1202,9 +1202,9 @@ private extension ButtonViewModelTests {
         )
     }
 
-    private func testTextFontToken(on stub: Stub) {
+    private func testTitleFontToken(on stub: Stub) {
         XCTAssertPublisherSinkValueIdentical(
-            on: stub.textFontTokenPublisherMock,
+            on: stub.titleFontTokenPublisherMock,
             stub.themeMock.typography.callout as? TypographyFontTokenGeneratedMock
         )
     }
@@ -1270,21 +1270,21 @@ private extension ButtonViewModelTests {
         givenAlignment: ButtonAlignment? = nil,
         givenIconImage: UIImage? = nil
     ) {
-        XCTAssertEqual(stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTextCallsCount,
+        XCTAssertEqual(stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTitleCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getContentUseCase")
 
         if numberOfCalls > 0, let givenAlignment {
-            let getContentUseCaseArgs = stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTextReceivedArguments
+            let getContentUseCaseArgs = stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTitleReceivedArguments
             XCTAssertEqual(getContentUseCaseArgs?.alignment,
                            givenAlignment,
                            "Wrong alignment parameter on execute on getContentUseCase")
             XCTAssertEqual(getContentUseCaseArgs?.iconImage?.leftValue,
                            givenIconImage,
                            "Wrong iconImage parameter on execute on getContentUseCase")
-            XCTAssertEqual(getContentUseCaseArgs?.containsText,
-                           stub.displayedTextViewModelMock.containsText,
-                           "Wrong containsText parameter on execute on getContentUseCase")
+            XCTAssertEqual(getContentUseCaseArgs?.containsTitle,
+                           stub.displayedTitleViewModelMock.containsText,
+                           "Wrong containsTitle parameter on execute on getContentUseCase")
         }
     }
 
@@ -1294,12 +1294,12 @@ private extension ButtonViewModelTests {
         givenColors: ButtonColors? = nil,
         givenIsPressed: Bool? = nil
     ) {
-        XCTAssertEqual(stub.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeCallsCount,
+        XCTAssertEqual(stub.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTitleTypeCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getCurrentColorsUseCase")
 
         if numberOfCalls > 0, let givenColors, let givenIsPressed {
-            let getCurrentColorsUseCaseArgs = stub.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReceivedArguments
+            let getCurrentColorsUseCaseArgs = stub.getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTitleTypeReceivedArguments
             XCTAssertEqual(try XCTUnwrap(getCurrentColorsUseCaseArgs?.colors),
                            givenColors,
                            "Wrong colors parameter on execute on getCurrentColorsUseCase")
@@ -1314,18 +1314,18 @@ private extension ButtonViewModelTests {
         numberOfCalls: Int,
         givenIconImage: UIImage? = nil
     ) {
-        XCTAssertEqual(stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTextCallsCount,
+        XCTAssertEqual(stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTitleCallsCount,
                        numberOfCalls,
                        "Wrong call number on execute on getIsIconOnlyUseCase")
 
         if numberOfCalls > 0 {
-            let getIsIconOnlyUseCaseArgs = stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTextReceivedArguments
+            let getIsIconOnlyUseCaseArgs = stub.getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTitleReceivedArguments
             XCTAssertEqual(getIsIconOnlyUseCaseArgs?.iconImage?.leftValue,
                            givenIconImage,
                            "Wrong iconImage parameter on execute on getIsIconOnlyUseCase")
-            XCTAssertEqual(getIsIconOnlyUseCaseArgs?.containsText,
-                           stub.displayedTextViewModelMock.containsText,
-                           "Wrong containsText parameter on execute on getIsIconOnlyUseCase")
+            XCTAssertEqual(getIsIconOnlyUseCaseArgs?.containsTitle,
+                           stub.displayedTitleViewModelMock.containsText,
+                           "Wrong containsTitle parameter on execute on getIsIconOnlyUseCase")
         }
     }
 
@@ -1417,7 +1417,7 @@ private final class Stub {
 
     // MARK: - Dependencies Properties
 
-    let displayedTextViewModelMock: DisplayedTextViewModelGeneratedMock
+    let displayedTitleViewModelMock: DisplayedTextViewModelGeneratedMock
     let getBorderUseCaseMock: ButtonGetBorderUseCaseableGeneratedMock
     let getColorsUseCaseMock: ButtonGetColorsUseCaseableGeneratedMock
     let getContentUseCaseMock: ButtonGetContentUseCaseableGeneratedMock
@@ -1437,7 +1437,7 @@ private final class Stub {
     let borderPublisherMock: PublisherMock<Published<ButtonBorder?>.Publisher>
     let spacingsPublisherMock: PublisherMock<Published<ButtonSpacings?>.Publisher>
     let contentPublisherMock: PublisherMock<Published<ButtonContent?>.Publisher>
-    let textFontTokenPublisherMock: PublisherMock<Published<(any TypographyFontToken)?>.Publisher>
+    let titleFontTokenPublisherMock: PublisherMock<Published<(any TypographyFontToken)?>.Publisher>
 
     // MARK: - Initialization
 
@@ -1448,16 +1448,16 @@ private final class Stub {
         shape: ButtonShape = .rounded,
         alignment: ButtonAlignment = .leadingIcon,
         isIconImage: Bool = false,
-        text: String? = nil,
-        attributedText: NSAttributedString? = nil,
+        title: String? = nil,
+        attributedTitle: NSAttributedString? = nil,
         isEnabled: Bool = true
     ) {
         // **
         // Dependencies
-        let displayedTextViewModelMock = DisplayedTextViewModelGeneratedMock()
-        displayedTextViewModelMock.displayedText = .mocked()
-        displayedTextViewModelMock.underlyingDisplayedTextType = .text
-        self.displayedTextViewModelMock = displayedTextViewModelMock
+        let displayedTitleViewModelMock = DisplayedTextViewModelGeneratedMock()
+        displayedTitleViewModelMock.displayedText = .mocked()
+        displayedTitleViewModelMock.underlyingDisplayedTextType = .text
+        self.displayedTitleViewModelMock = displayedTitleViewModelMock
 
         let getBorderUseCaseMock = ButtonGetBorderUseCaseableGeneratedMock()
         getBorderUseCaseMock.executeWithShapeAndBorderAndVariantReturnValue = self.borderMock
@@ -1468,15 +1468,15 @@ private final class Stub {
         self.getColorsUseCaseMock = getColorsUseCaseMock
 
         let getContentUseCaseMock = ButtonGetContentUseCaseableGeneratedMock()
-        getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTextReturnValue = self.contentMock
+        getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTitleReturnValue = self.contentMock
         self.getContentUseCaseMock = getContentUseCaseMock
 
         let getCurrentColorsUseCaseMock = ButtonGetCurrentColorsUseCaseableGeneratedMock()
-        getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTextTypeReturnValue = self.currentColorsMock
+        getCurrentColorsUseCaseMock.executeWithColorsAndIsPressedAndDisplayedTitleTypeReturnValue = self.currentColorsMock
         self.getCurrentColorsUseCaseMock = getCurrentColorsUseCaseMock
 
         let getIsIconOnlyUseCaseMock = ButtonGetIsOnlyIconUseCaseableGeneratedMock()
-        getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTextReturnValue = self.isIconOnlyMock
+        getIsIconOnlyUseCaseMock.executeWithIconImageAndContainsTitleReturnValue = self.isIconOnlyMock
         self.getIsIconOnlyUseCaseMock = getIsIconOnlyUseCaseMock
 
         let getSizesUseCaseMock = ButtonGetSizesUseCaseableGeneratedMock()
@@ -1500,7 +1500,7 @@ private final class Stub {
         dependenciesMock.underlyingGetSizesUseCase = getSizesUseCaseMock
         dependenciesMock.underlyingGetSpacingsUseCase = getSpacingsUseCaseMock
         dependenciesMock.underlyingGetStateUseCase = getStateUseCaseMock
-        dependenciesMock.makeDisplayedTextViewModelWithTextAndAttributedTextReturnValue = displayedTextViewModelMock
+        dependenciesMock.makeDisplayedTitleViewModelWithTitleAndAttributedTitleReturnValue = displayedTitleViewModelMock
         self.dependenciesMock = dependenciesMock
         // **
 
@@ -1513,11 +1513,11 @@ private final class Stub {
             iconImageEither = nil
         }
 
-        let attributedTextEither: AttributedStringEither?
-        if let attributedText {
-            attributedTextEither = .left(attributedText)
+        let attributedTitleEither: AttributedStringEither?
+        if let attributedTitle {
+            attributedTitleEither = .left(attributedTitle)
         } else {
-            attributedTextEither = nil
+            attributedTitleEither = nil
         }
 
         let viewModel = ButtonViewModel(
@@ -1528,8 +1528,8 @@ private final class Stub {
             shape: shape,
             alignment: alignment,
             iconImage: iconImageEither,
-            text: text,
-            attributedText: attributedTextEither,
+            title: title,
+            attributedTitle: attributedTitleEither,
             isEnabled: isEnabled,
             dependencies: dependenciesMock
         )
@@ -1544,7 +1544,7 @@ private final class Stub {
         self.borderPublisherMock = .init(publisher: viewModel.$border)
         self.spacingsPublisherMock = .init(publisher: viewModel.$spacings)
         self.contentPublisherMock = .init(publisher: viewModel.$content)
-        self.textFontTokenPublisherMock = .init(publisher: viewModel.$textFontToken)
+        self.titleFontTokenPublisherMock = .init(publisher: viewModel.$titleFontToken)
         //
     }
 
@@ -1557,7 +1557,7 @@ private final class Stub {
         self.borderPublisherMock.loadTesting(on: &subscriptions)
         self.spacingsPublisherMock.loadTesting(on: &subscriptions)
         self.contentPublisherMock.loadTesting(on: &subscriptions)
-        self.textFontTokenPublisherMock.loadTesting(on: &subscriptions)
+        self.titleFontTokenPublisherMock.loadTesting(on: &subscriptions)
     }
 
     func resetMockedData() {
@@ -1581,6 +1581,6 @@ private final class Stub {
         self.borderPublisherMock.reset()
         self.spacingsPublisherMock.reset()
         self.contentPublisherMock.reset()
-        self.textFontTokenPublisherMock.reset()
+        self.titleFontTokenPublisherMock.reset()
     }
 }

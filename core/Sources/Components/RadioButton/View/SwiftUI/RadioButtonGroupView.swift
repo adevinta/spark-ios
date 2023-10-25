@@ -108,6 +108,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
             .fixedSize(horizontal: false, vertical: true)
             .font(self.viewModel.titleFont.font)
             .foregroundColor(self.viewModel.titleColor.color)
+            .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonGroupTitle)
     }
 
     @ViewBuilder

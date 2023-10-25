@@ -12,7 +12,7 @@ struct ButtonCurrentColors {
     // MARK: - Properties
 
     let iconTintColor: any ColorToken
-    let textColor: (any ColorToken)?
+    let titleColor: (any ColorToken)?
     let backgroundColor: any ColorToken
     let borderColor: any ColorToken
 }
@@ -23,8 +23,8 @@ extension ButtonCurrentColors: Hashable, Equatable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.iconTintColor)
-        if let textColor = self.textColor {
-            hasher.combine(textColor)
+        if let titleColor = self.titleColor {
+            hasher.combine(titleColor)
         }
         hasher.combine(self.backgroundColor)
         hasher.combine(self.borderColor)
@@ -32,7 +32,7 @@ extension ButtonCurrentColors: Hashable, Equatable {
 
     static func == (lhs: ButtonCurrentColors, rhs: ButtonCurrentColors) -> Bool {
         return lhs.iconTintColor.equals(rhs.iconTintColor) &&
-        lhs.textColor.equals(rhs.textColor) == true &&
+        lhs.titleColor.equals(rhs.titleColor) == true &&
         lhs.backgroundColor.equals(rhs.backgroundColor) &&
         lhs.borderColor.equals(rhs.borderColor)
     }

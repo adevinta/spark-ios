@@ -18,58 +18,58 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_containsText_is_false() {
+    func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_containsTitle_is_false() {
         self.testExecute(
             givenAlignment: .leadingIcon,
             givenIconImage: self.imageMock,
-            givenContainsText: false,
+            givenContainsTitle: false,
             expectedContent: .init(
                 shouldShowIconImage: true,
                 isIconImageTrailing: false,
                 iconImage: .left(self.imageMock),
-                shouldShowText: false
+                shouldShowTitle: false
             )
         )
     }
 
-    func test_execute_when_alignment_is_trailingIcon_and_image_is_set_and_containsText_is_false() {
+    func test_execute_when_alignment_is_trailingIcon_and_image_is_set_and_containsTitle_is_false() {
         self.testExecute(
             givenAlignment: .trailingIcon,
             givenIconImage: self.imageMock,
-            givenContainsText: false,
+            givenContainsTitle: false,
             expectedContent: .init(
                 shouldShowIconImage: true,
                 isIconImageTrailing: true,
                 iconImage: .left(self.imageMock),
-                shouldShowText: false
+                shouldShowTitle: false
             )
         )
     }
 
-    func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_containsText_is_true() {
+    func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_containsTitle_is_true() {
         self.testExecute(
             givenAlignment: .leadingIcon,
             givenIconImage: self.imageMock,
-            givenContainsText: true,
+            givenContainsTitle: true,
             expectedContent: .init(
                 shouldShowIconImage: true,
                 isIconImageTrailing: false,
                 iconImage: .left(self.imageMock),
-                shouldShowText: true
+                shouldShowTitle: true
             )
         )
     }
 
-    func test_execute_when_alignment_is_leadingIcon_and_containsText_is_true() {
+    func test_execute_when_alignment_is_leadingIcon_and_containsTitle_is_true() {
         self.testExecute(
             givenAlignment: .leadingIcon,
             givenIconImage: nil,
-            givenContainsText: true,
+            givenContainsTitle: true,
             expectedContent: .init(
                 shouldShowIconImage: false,
                 isIconImageTrailing: false,
                 iconImage: nil,
-                shouldShowText: true
+                shouldShowTitle: true
             )
         )
     }
@@ -82,7 +82,7 @@ private extension ButtonGetContentUseCaseTests {
     func testExecute(
         givenAlignment: ButtonAlignment,
         givenIconImage: UIImage?,
-        givenContainsText: Bool,
+        givenContainsTitle: Bool,
         expectedContent: ButtonContent
     ) {
         // GIVEN
@@ -90,7 +90,7 @@ private extension ButtonGetContentUseCaseTests {
         if givenIconImage != nil {
             errorSuffixMessage += " - with icon image"
         }
-        if givenContainsText {
+        if givenContainsTitle {
             errorSuffixMessage += " - with displayed text"
         }
 
@@ -107,7 +107,7 @@ private extension ButtonGetContentUseCaseTests {
         let content = useCase.execute(
             alignment: givenAlignment,
             iconImage: iconImage,
-            containsText: givenContainsText
+            containsTitle: givenContainsTitle
         )
 
         // THEN
@@ -121,8 +121,8 @@ private extension ButtonGetContentUseCaseTests {
                        expectedContent.iconImage?.leftValue,
                        "Wrong iconImage" + errorSuffixMessage)
 
-        XCTAssertEqual(content.shouldShowText,
-                       expectedContent.shouldShowText,
-                       "Wrong shouldShowText" + errorSuffixMessage)
+        XCTAssertEqual(content.shouldShowTitle,
+                       expectedContent.shouldShowTitle,
+                       "Wrong shouldShowTitle" + errorSuffixMessage)
     }
 }
