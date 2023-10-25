@@ -260,6 +260,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         case let .left(attributedText): self.textLabel.attributedText = attributedText
         case let .right(text): self.textLabel.text = text
         }
+        self.textLabel.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonTextLabel
     }
 
     private func updateColors(_ colors: RadioButtonColors) {
