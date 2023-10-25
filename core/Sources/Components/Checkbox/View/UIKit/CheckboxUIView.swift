@@ -86,7 +86,7 @@ public final class CheckboxUIView: UIControl {
             return self.textLabel.text
         }
         set {
-            self.viewModel.text = .right(newValue)
+            self.viewModel.text = .left(newValue.map(NSAttributedString.init))
         }
     }
 
@@ -197,7 +197,7 @@ public final class CheckboxUIView: UIControl {
         self.init(
             theme: theme,
             intent: intent,
-            content: .right(text),
+            content: .left(NSAttributedString(string: text)),
             checkedImage: checkedImage,
             isEnabled: isEnabled,
             selectionState: selectionState,
@@ -318,12 +318,7 @@ public final class CheckboxUIView: UIControl {
             guard let self else { return }
             self.textLabel.font = self.theme.typography.body1.uiFont
             self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
-            switch text {
-            case .left(let attributeText):
-                self.textLabel.attributedText = attributeText
-            case .right(let text):
-                self.textLabel.text = text
-            }
+            self.textLabel.attributedText = text.leftValue
         }
 
         self.viewModel.$checkedImage.subscribe(in: &self.cancellables) { [weak self] icon in

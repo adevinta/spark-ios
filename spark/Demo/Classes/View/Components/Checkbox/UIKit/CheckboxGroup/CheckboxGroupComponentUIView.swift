@@ -84,8 +84,6 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             self.viewModel.groupTypeConfigurationItemViewModel.buttonTitle = type.name
             self.componentView.updateItems(CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: type))
         }
-
-        self.componentView
     }
 
     static func makeCheckboxGroupView(_ viewModel: CheckboxGroupComponentUIViewModel) -> CheckboxGroupUIView {
