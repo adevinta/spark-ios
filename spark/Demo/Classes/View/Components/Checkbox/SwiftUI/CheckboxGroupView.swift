@@ -59,7 +59,7 @@ struct CheckboxGroupListView: View {
 
             Button("Add checkbox") {
                 let identifier = "\(self.items.count + 1)"
-                let newItem = CheckboxGroupItemDefault(title: "Entry \(identifier)", id: identifier, selectionState: .unselected)
+                let newItem = CheckboxGroupItem(title: "Entry \(identifier)", id: identifier, selectionState: .unselected)
                 withAnimation {
                     self.items.append(newItem)
                 }
@@ -148,7 +148,6 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         isEnabled: Bool = true
     ) {
         self.title = title
-        self.attributedTitle = nil
         self.id = id
         self.selectionState = selectionState
         self.isEnabled = isEnabled
@@ -160,7 +159,6 @@ class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
         selectionState: CheckboxSelectionState,
         isEnabled: Bool = true
     ) {
-        self.title = attributedTitle.string
         self.attributedTitle = attributedTitle
         self.id = id
         self.selectionState = selectionState

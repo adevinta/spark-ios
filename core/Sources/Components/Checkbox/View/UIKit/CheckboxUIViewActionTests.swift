@@ -7,11 +7,10 @@
 //
 
 import Combine
+@testable import SparkCore
 import XCTest
 
-@testable import SparkCore
-
-final class CheckboxUIViewActionTests: XCTestCase {
+final class CheckboxUIViewActionTests: TestCase {
 
     private var sut: CheckboxUIView!
     private var theme: Theme!
@@ -28,61 +27,30 @@ final class CheckboxUIViewActionTests: XCTestCase {
 
     // MARK: - Tests
     func test_enabled_state_delegate_called() {
-        let sut = sut(state: .enabled, selectionState: .unselected)
+        let sut = sut(isEnabled: true, selectionState: .unselected)
         sut.delegate = self.delegate
 
         let exp = expectation(description: "Expect changed value to be published")
+        exp.expectedFulfillmentCount = 2
+
+        var selectionState: CheckboxSelectionState = .unselected
 
         sut.publisher.subscribe(in: &self.subscriptions) { state in
-            XCTAssertEqual(state, .selected)
+            selectionState = state
             exp.fulfill()
         }
 
         sut.actionTapped(sender: UIButton())
 
-        wait(for: [exp], timeout: 0.01)
-        XCTAssertEqual(self.delegate.checkboxWithCheckboxAndStateCallsCount, 1, "Delegate called")
-        XCTAssertEqual(self.delegate.checkboxWithCheckboxAndStateReceivedArguments?.state, .selected)
-    }
+        wait(for: [exp], timeout: 1.0)
 
-    func test_error_state_not_selected_delegate_called() {
-        let sut = sut(state: .error(message: "Message"), selectionState: .selected)
-        sut.delegate = self.delegate
-
-        let exp = expectation(description: "Expect changed value to be published")
-
-        sut.publisher.subscribe(in: &self.subscriptions) { state in
-            XCTAssertEqual(state, .unselected)
-            exp.fulfill()
-        }
-
-        sut.actionTapped(sender: UIButton())
-
-        wait(for: [exp], timeout: 0.01)
-        XCTAssertEqual(self.delegate.checkboxWithCheckboxAndStateCallsCount, 1, "Delegate called")
-        XCTAssertEqual(self.delegate.checkboxWithCheckboxAndStateReceivedArguments?.state, .unselected)
-    }
-
-    func test_success_state_indeterminate_delegate_called() {
-        let sut = sut(state: .success(message: "Message"), selectionState: .indeterminate)
-        sut.delegate = self.delegate
-
-        let exp = expectation(description: "Expect changed value to be published")
-
-        sut.publisher.subscribe(in: &self.subscriptions) { state in
-            XCTAssertEqual(state, .selected)
-            exp.fulfill()
-        }
-
-        sut.actionTapped(sender: UIButton())
-
-        wait(for: [exp], timeout: 0.01)
+        XCTAssertEqual(selectionState, .selected)
         XCTAssertEqual(self.delegate.checkboxWithCheckboxAndStateCallsCount, 1, "Delegate called")
         XCTAssertEqual(self.delegate.checkboxWithCheckboxAndStateReceivedArguments?.state, .selected)
     }
 
     func test_disabled_state_nothing_happens() {
-        let sut = self.sut(state: .disabled)
+        let sut = self.sut(isEnabled: false)
         sut.delegate = self.delegate
         sut.actionTapped(sender: UIButton())
 
@@ -90,14 +58,14 @@ final class CheckboxUIViewActionTests: XCTestCase {
     }
 
     // MARK: Private Helper Functions
-    private func sut(state: SelectButtonState,
+    private func sut(isEnabled: Bool,
              selectionState: CheckboxSelectionState = .unselected) -> CheckboxUIView {
         let sut = CheckboxUIView(theme: theme,
                                  text: "Checkbox",
                                  checkedImage: IconographyTests.shared.checkmark,
-                                 state: state,
+                                 isEnabled: isEnabled,
                                  selectionState: selectionState,
-                                 checkboxPosition: .left)
+                                 checkboxAlignment: .left)
         sut.frame = CGRect(x: 0, y: 0, width: 400, height: 800)
         return sut
 

@@ -17,11 +17,11 @@ final class CheckboxGroupUIViewActionTests: TestCase {
     private var subscriptions: Set<AnyCancellable>!
     private var delegate: CheckboxGroupUIViewDelegateGeneratedMock!
     private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItemDefault(title: "Apple", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
-        CheckboxGroupItemDefault(title: "Cake", id: "2", selectionState: .indeterminate),
-        CheckboxGroupItemDefault(title: "Fish", id: "3", selectionState: .unselected),
-        CheckboxGroupItemDefault(title: "Fruit", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
-        CheckboxGroupItemDefault(title: "Vegetables", id: "5", selectionState: .unselected, state: .disabled)
+        CheckboxGroupItemDefault(title: "Apple", id: "1", selectionState:  .selected, isEnabled: true),
+        CheckboxGroupItemDefault(title: "Cake", id: "2", selectionState: .indeterminate, isEnabled: true),
+        CheckboxGroupItemDefault(title: "Fish", id: "3", selectionState: .unselected, isEnabled: true),
+        CheckboxGroupItemDefault(title: "Fruit", id: "4", selectionState: .unselected, isEnabled: true),
+        CheckboxGroupItemDefault(title: "Vegetables", id: "5", selectionState: .selected, isEnabled: false)
     ]
 
     // MARK: - Setup
@@ -38,17 +38,28 @@ final class CheckboxGroupUIViewActionTests: TestCase {
 
         let exp = expectation(description: "Checkbox change should be published")
 
+        var selectionState: CheckboxSelectionState = .indeterminate
+
         sut.publisher.sink { items in
-            XCTAssertEqual(items[0].selectionState, .unselected)
+            selectionState = items[0].selectionState
             exp.fulfill()
         }.store(in: &self.subscriptions)
 
         sut.checkboxes[0].actionTapped(sender: UIButton())
 
-        wait(for: [exp], timeout: 0.001)
+        wait(for: [exp], timeout: 3.0)
+        
+        XCTAssertEqual(selectionState, .unselected)
+        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesCallsCount, 1)
+        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesReceivedArguments?.states[0].selectionState, .unselected)
+    }
 
-        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStateCallsCount, 1)
-        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStateReceivedArguments?.state[0].selectionState, .unselected)
+    func test_action_from_checbox_item_disabled_propagated() {
+        let sut = sut()
+
+        sut.checkboxes[4].actionTapped(sender: UIButton())
+
+        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesCallsCount, 0, "Delegate not called")
     }
 
     // MARK: Private Functions

@@ -24,6 +24,7 @@ final class ComponentsConfigurationItemUIViewModel {
     // MARK: - Published Properties
 
     @Published var color: UIColor = .blue
+    @Published var labelText: String = ""
     @Published var buttonTitle: String?
     @Published var isOn: Bool?
     @Published var theme: Theme {

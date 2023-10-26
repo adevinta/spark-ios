@@ -101,7 +101,7 @@ struct ChipComponentView: View {
                     text: "Is Selected",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isSelected
                 )
             },
@@ -128,14 +128,14 @@ struct ChipComponentView: View {
         )
     }
 
-
     private func backgroundColor() -> Color {
         if self.intent == .surface {
-            Color.blue
+            return Color.blue
         } else {
-            Color.clear
+            return Color.clear
         }
     }
+
     private func component() -> AnyView {
         return AnyView(
             Image(systemName: "checkmark.seal.fill")
