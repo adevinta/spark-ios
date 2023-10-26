@@ -75,19 +75,7 @@ final class ChipComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
-            guard let self = self else { return }
-            let iconAlignment: ChipComponentUIViewModel.IconPosition
-            if self.viewModel.showIcon {
-                switch alignment {
-                case .leadingIcon: iconAlignment = .leading
-                case .trailingIcon: iconAlignment = .trailing
-                @unknown default: fatalError()
-                }
-            } else {
-                iconAlignment = .none
-            }
-            self.viewModel.iconConfigurationItemViewModel.buttonTitle = iconAlignment.name
-            self.componentView.alignment = alignment
+            self?.componentView.alignment = alignment
         }
 
         self.viewModel.$title.subscribe(in: &self.cancellables) { [weak self] title in
@@ -95,7 +83,6 @@ final class ChipComponentUIView: ComponentUIView {
 
             self.componentView.text = title
         }
-
 
         self.viewModel.$icon.subscribe(in: &self.cancellables) { [weak self] icon in
             guard let self = self else { return }
@@ -106,6 +93,11 @@ final class ChipComponentUIView: ComponentUIView {
         self.viewModel.$badge.subscribe(in: &self.cancellables) { [weak self] badge in
             guard let self = self else { return }
 
+            if let _ = badge as? UIButton {
+                self.componentView.enableComponentUserInteraction(true)
+            } else {
+                self.componentView.enableComponentUserInteraction(false)
+            }
             self.componentView.component = badge
         }
 
