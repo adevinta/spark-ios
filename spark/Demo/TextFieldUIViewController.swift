@@ -55,23 +55,52 @@ class TextFieldUIViewController: UIViewController {
         self.viewModel.showLeftViewModeSheet.subscribe(in: &self.cancellables) { viewMode in
             self.presentLeftViewModeActionSheet(viewMode)
         }
+
+        self.viewModel.showLeadingAddOnSheet.subscribe(in: &self.cancellables) { addOnOption in
+            self.presentLeadingAddOnOptionSheet(addOnOption)
+        }
+
+        self.viewModel.showTrailingAddOnSheet.subscribe(in: &self.cancellables) { addOnOption in
+            self.presentTrailingAddOnOptionSheet(addOnOption)
+        }
+
+        self.viewModel.showClearButtonModeSheet.subscribe(in: &self.cancellables) { viewMode in
+            self.presentClearButtonModeActionSheet(viewMode)
+        }
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Lifecycle
-    override func loadView() {
-        super.loadView()
-        view = textFieldComponentUIView
-    }
-
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupView()
+        self.view.backgroundColor = .white
         self.navigationItem.title = "TextField"
         self.addPublisher()
+    }
+
+    private func setupView() {
+        let scrollView = UIScrollView()
+        scrollView.alwaysBounceVertical = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: scrollView.frame.size.height + 1000)
+        self.view.addSubview(scrollView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+
+        textFieldComponentUIView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(textFieldComponentUIView)
+        NSLayoutConstraint.activate([
+            textFieldComponentUIView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            textFieldComponentUIView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+        ])
     }
 
 }
@@ -118,6 +147,32 @@ extension TextFieldUIViewController {
         let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
                                                           texts: viewModes.map{ $0.name }) { viewMode in
             self.viewModel.rightViewMode = viewMode
+        }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentLeadingAddOnOptionSheet(_ addOnOptions: [AddOnOption]) {
+        let actionSheet = SparkActionSheet<AddOnOption>.init(
+            values: addOnOptions,
+            texts: addOnOptions.map { $0.name }) { addOnOption in
+                self.viewModel.leadingAddOnOption = addOnOption
+            }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentTrailingAddOnOptionSheet(_ addOnOptions: [AddOnOption]) {
+        let actionSheet = SparkActionSheet<AddOnOption>.init(
+            values: addOnOptions,
+            texts: addOnOptions.map { $0.name }) { addOnOption in
+                self.viewModel.trailingAddOnOption = addOnOption
+            }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentClearButtonModeActionSheet(_ viewModes: [ViewMode]) {
+        let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
+                                                          texts: viewModes.map{ $0.name }) { viewMode in
+            self.viewModel.clearButtonMode = viewMode
         }
         self.present(actionSheet, animated: true)
     }
