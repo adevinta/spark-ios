@@ -26,6 +26,7 @@ struct ButtonComponentView: View {
     @State private var alignment: ButtonAlignment = .leadingIcon
     @State private var content: ButtonContentDefault = .text
     @State private var isEnabled: CheckboxSelectionState = .selected
+    @State private var isAnimated: CheckboxSelectionState = .selected
 
     @State private var shouldShowReverseBackgroundColor: Bool = false
 
@@ -102,7 +103,8 @@ struct ButtonComponentView: View {
                         shape: self.$shape.wrappedValue,
                         alignment: self.$alignment.wrappedValue,
                         content: self.$content.wrappedValue,
-                        isEnabled: self.$isEnabled.wrappedValue == .selected
+                        isEnabled: self.$isEnabled.wrappedValue == .selected,
+                        isAnimated: self.$isAnimated.wrappedValue == .selected
                     )
                     .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .center)
                     .padding(.horizontal, self.shouldShowReverseBackgroundColor ? 4 : 0)

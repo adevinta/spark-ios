@@ -213,6 +213,9 @@ public final class ButtonUIView: UIView {
         }
     }
 
+    /// Button modifications should be animated or not. **True** by default.
+    public var isAnimated: Bool = true
+
     // MARK: - Internal Properties
 
     internal let viewModel: ButtonViewModel
@@ -572,11 +575,13 @@ public final class ButtonUIView: UIView {
         let horizontalSpacing = self._horizontalSpacing.wrappedValue
         let horizontalPadding = self._horizontalPadding.wrappedValue
 
-        let animationDuration = self.firstContentStackViewAnimation ? 0 : Constants.Animation.slowDuration
         if verticalSpacing != self.contentStackViewTopConstraint?.constant ||
             horizontalSpacing != self.contentStackViewLeadingConstraint?.constant ||
             horizontalPadding != self.contentStackView.spacing {
-            UIView.animate(withDuration: animationDuration) { [weak self] in
+            UIView.execute(
+                isAnimated: self.isAnimated && !self.firstContentStackViewAnimation,
+                withDuration: Constants.Animation.slowDuration
+            ) { [weak self] in
                 guard let self else { return }
 
                 self.firstContentStackViewAnimation = false
@@ -617,12 +622,11 @@ public final class ButtonUIView: UIView {
 
             // Animate only if new alpha is different from current alpha
             let alpha = state.opacity
-            if self.alpha != alpha {
-                UIView.animate(withDuration: Constants.Animation.slowDuration) { [weak self] in
+            UIView.execute(
+                isAnimated: self.isAnimated && self.alpha != alpha,
+                withDuration: Constants.Animation.slowDuration
+            ) { [weak self] in
                     self?.alpha = alpha
-                }
-            } else {
-                self.alpha = alpha
             }
         }
         // **
@@ -633,12 +637,11 @@ public final class ButtonUIView: UIView {
             guard let self, let colors else { return }
 
             // Background Color
-            if self.backgroundColor != colors.backgroundColor.uiColor {
-                UIView.animate(withDuration: Constants.Animation.fastDuration) { [weak self] in
-                    self?.backgroundColor = colors.backgroundColor.uiColor
-                }
-            } else {
-                self.backgroundColor = colors.backgroundColor.uiColor
+            UIView.execute(
+                isAnimated: self.isAnimated && self.backgroundColor != colors.backgroundColor.uiColor,
+                withDuration: Constants.Animation.fastDuration
+            ) { [weak self] in
+                self?.backgroundColor = colors.backgroundColor.uiColor
             }
 
             // Border Color
@@ -709,8 +712,10 @@ public final class ButtonUIView: UIView {
             self.iconImageView.image = content.iconImage?.leftValue
 
             // Subviews positions and visibilities
-            let animationDuration = self.firstContentStackViewSubviewAnimation ? 0 : Constants.Animation.slowDuration
-            UIView.animate(withDuration: animationDuration) { [weak self] in
+            UIView.execute(
+                isAnimated: self.isAnimated && !self.firstContentStackViewSubviewAnimation,
+                withDuration: Constants.Animation.slowDuration
+            ) { [weak self] in
                 guard let self else { return }
 
                 self.firstContentStackViewSubviewAnimation = false
