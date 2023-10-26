@@ -1,5 +1,5 @@
 //
-//  GetRadioButtonGroupColorUseCaseTests.swift
+//  RadioButtonGetGroupColorUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by michael.zimmermann on 06.07.23.
@@ -9,15 +9,15 @@
 @testable import SparkCore
 import XCTest
 
-final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
+final class RadioButtonGetGroupColorUseCaseTests: XCTestCase {
 
-    var sut: GetRadioButtonGroupColorUseCase!
+    var sut: RadioButtonGetGroupColorUseCase!
     var colors: ColorsGeneratedMock!
 
     override func setUp() {
         super.setUp()
 
-        self.sut = GetRadioButtonGroupColorUseCase()
+        self.sut = RadioButtonGetGroupColorUseCase()
         self.colors = ColorsGeneratedMock.mocked()
     }
     // MARK: - Tests

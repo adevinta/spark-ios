@@ -43,7 +43,7 @@ final class RadioButtonGroupViewModel<Content>: ObservableObject {
     }
 
     // MARK: Private Properties
-    private let useCase: any GetRadioButtonGroupColorUseCaseable
+    private let useCase: any RadioButtonGetGroupColorUseCaseable
 
     // MARK: Initializers
     convenience init(
@@ -55,14 +55,14 @@ final class RadioButtonGroupViewModel<Content>: ObservableObject {
             theme: theme,
             intent: intent,
             content: content,
-            useCase: GetRadioButtonGroupColorUseCase()
+            useCase: RadioButtonGetGroupColorUseCase()
         )
     }
 
     init(theme: any Theme,
          intent: RadioButtonIntent,
          content: Content,
-         useCase: any GetRadioButtonGroupColorUseCaseable) {
+         useCase: any RadioButtonGetGroupColorUseCaseable) {
 
         self.theme = theme
         self.intent = intent

@@ -17,9 +17,9 @@ protocol RadioButtonGetAttributesUseCaseable {
 }
 
 struct RadioButtonGetAttributesUseCase: RadioButtonGetAttributesUseCaseable {
-    let colorsUseCase: GetRadioButtonColorsUseCaseable
+    let colorsUseCase: RadioButtonGetColorsUseCaseable
 
-    init(colorsUseCase: GetRadioButtonColorsUseCaseable = GetRadioButtonColorsUseCase()) {
+    init(colorsUseCase: RadioButtonGetColorsUseCaseable = RadioButtonGetColorsUseCase()) {
         self.colorsUseCase = colorsUseCase
     }
     func execute(theme: Theme,

@@ -1,5 +1,5 @@
 //
-//  GetRadioButtonColorsUseCaseTests.swift
+//  RadioButtonGetColorsUseCaseTests.swift
 //  SparkCoreTests
 //
 //  Created by michael.zimmermann on 13.04.23.
@@ -10,11 +10,11 @@
 import SwiftUI
 import XCTest
 
-final class GetRadioButtonColorsUseCaseTests: XCTestCase {
+final class RadioButtonGetColorsUseCaseTests: XCTestCase {
 
     // MARK: - Properties
 
-    var sut: GetRadioButtonColorsUseCase!
+    var sut: RadioButtonGetColorsUseCase!
     var theme: ThemeGeneratedMock!
 
     // MARK: - Setup
@@ -24,18 +24,8 @@ final class GetRadioButtonColorsUseCaseTests: XCTestCase {
 
         // Given
         let theme = ThemeGeneratedMock.mocked()
-//        let colors = ColorsGeneratedMock.mocked()
-
-//        colors.base = ColorsBaseGeneratedMock.mocked()
-//        colors.feedback = ColorsFeedbackGeneratedMock.mocked()
-//        colors.main =  ColorsMainGeneratedMock.mocked()
-//        colors.accent = ColorsAccentGeneratedMock.mocked()
-//        colors.basic = ColorsBasicGeneratedMock.mocked()
-
-//        theme.colors = colors
-
         self.theme = theme
-        self.sut = GetRadioButtonColorsUseCase()
+        self.sut = RadioButtonGetColorsUseCase()
     }
 
     // MARK: - Tests

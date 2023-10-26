@@ -1,5 +1,5 @@
 //
-//  GetRadioButtonGroupColorUseCase.swift
+//  RadioButtonGetGroupColorUseCase.swift
 //  SparkCore
 //
 //  Created by michael.zimmermann on 28.06.23.
@@ -9,7 +9,7 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol GetRadioButtonGroupColorUseCaseable {
+protocol RadioButtonGetGroupColorUseCaseable {
     func execute(colors: Colors, intent: RadioButtonIntent) -> any ColorToken
 }
 
@@ -17,7 +17,7 @@ protocol GetRadioButtonGroupColorUseCaseable {
 /// Returns the color of the state of the radio button group
 /// Functions:
 /// - execute: takes a colors and states and returns a ``ColorToken`` defining the state.
-struct GetRadioButtonGroupColorUseCase: GetRadioButtonGroupColorUseCaseable {
+struct RadioButtonGetGroupColorUseCase: RadioButtonGetGroupColorUseCaseable {
     // MARK: - Functions
 
     /// Return the color token corresponding to the state
