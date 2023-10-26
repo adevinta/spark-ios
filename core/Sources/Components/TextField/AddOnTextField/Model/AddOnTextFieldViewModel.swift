@@ -28,14 +28,14 @@ final class AddOnTextFieldViewModel: ObservableObject {
 
     // MARK: - Private properties
 
-    private let getColorUseCase: TextFieldGetColorsUseCaseInterface
+    private let getColorUseCase: TextFieldGetColorsUseCasable
 
     // MARK: - Initialization
 
     init(
         theme: Theme,
         intent: TextFieldIntent,
-        getColorUseCase: TextFieldGetColorsUseCaseInterface = TextFieldGetColorsUseCase()
+        getColorUseCase: TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase()
     ) {
         self.theme = theme
         self.intent = intent

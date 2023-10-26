@@ -15,7 +15,7 @@ final class AddOnTextFieldViewModelTests: XCTestCase {
 
     // MARK: - Properties
     var theme: ThemeGeneratedMock!
-    var getColorUseCase: AddOnGetColorUseCasableGeneratedMock!
+    var getColorUseCase: TextFieldGetColorsUseCasableGeneratedMock!
     var borderColorToken: ColorTokenGeneratedMock!
     var cancellables: Set<AnyCancellable>!
     var sut: AddOnTextFieldViewModel!
@@ -26,10 +26,10 @@ final class AddOnTextFieldViewModelTests: XCTestCase {
         try super.setUpWithError()
 
         self.theme = ThemeGeneratedMock.mocked()
-        self.getColorUseCase = AddOnGetColorUseCasableGeneratedMock()
-        self.borderColorToken = ColorTokenGeneratedMock.random()
+        self.getColorUseCase = TextFieldGetColorsUseCasableGeneratedMock()
 
-        self.getColorUseCase.executeWithThemeAndIntentReturnValue = self.borderColorToken
+        self.borderColorToken = ColorTokenGeneratedMock.random()
+        self.getColorUseCase.executeWithThemeAndIntentReturnValue = TextFieldColors(border: borderColorToken)
 
         self.cancellables = .init()
         self.sut = .init(
@@ -65,7 +65,7 @@ final class AddOnTextFieldViewModelTests: XCTestCase {
             )
 
             XCTAssertIdentical(
-                self.sut.borderColor as? ColorTokenGeneratedMock,
+                self.sut.textFieldColors.border as? ColorTokenGeneratedMock,
                 self.borderColorToken,
                 "Add-on text field border color doesn't match given color"
             )
@@ -140,7 +140,7 @@ final class AddOnTextFieldViewModelTests: XCTestCase {
             getColorUseCase: self.getColorUseCase
         )
 
-        self.sut.$borderColor.sink { _ in
+        self.sut.$textFieldColors.sink { _ in
             expectation.fulfill()
         }.store(in: &self.cancellables)
 
