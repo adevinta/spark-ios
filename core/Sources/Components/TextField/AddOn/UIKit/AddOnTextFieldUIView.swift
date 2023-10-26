@@ -36,7 +36,6 @@ public final class AddOnTextFieldUIView: UIView {
     public var leadingAddOn: UIView? {
         didSet {
             if let addOn = leadingAddOn {
-                self.removeLeadingAddOn()
                 self.addLeadingAddOn(addOn)
             } else {
                 self.removeLeadingAddOn()
@@ -46,7 +45,6 @@ public final class AddOnTextFieldUIView: UIView {
     public var trailingAddOn: UIView? {
         didSet {
             if let addOn = trailingAddOn {
-                self.removeTrailingAddOn()
                 self.addTrailingAddOn(addOn)
             } else {
                 self.removeTrailingAddOn()
@@ -83,24 +81,42 @@ public final class AddOnTextFieldUIView: UIView {
 
     // MARK: - Initializers
 
-    public init(
+    public convenience init(
         theme: Theme,
         intent: TextFieldIntent = .neutral,
         leadingAddOn: UIView? = nil,
         trailingAddOn: UIView? = nil
+    ) {
+        self.init(
+            theme: theme,
+            intent: intent,
+            leadingAddOn: leadingAddOn,
+            trailingAddOn: trailingAddOn,
+            getColorsUseCase: TextFieldGetColorsUseCase()
+        )
+    }
+
+    internal init(
+        theme: Theme,
+        intent: TextFieldIntent = .neutral,
+        leadingAddOn: UIView? = nil,
+        trailingAddOn: UIView? = nil,
+        getColorsUseCase: TextFieldGetColorsUseCaseInterface
     ) {
         self.leadingAddOn = leadingAddOn
         self.trailingAddOn = trailingAddOn
 
         let textFieldViewModel = TextFieldUIViewModel(
             theme: theme,
-            borderStyle: .none
+            borderStyle: .none,
+            getColorsUseCase: getColorsUseCase
         )
         self.textField = TextFieldUIView(viewModel: textFieldViewModel)
         
         self.viewModel = AddOnTextFieldViewModel(
             theme: theme,
-            intent: intent
+            intent: intent,
+            getColorUseCase: getColorsUseCase
         )
 
         super.init(frame: .zero)
@@ -119,7 +135,7 @@ public final class AddOnTextFieldUIView: UIView {
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
         self.textField.translatesAutoresizingMaskIntoConstraints = false
 
-        self.hStack.addBorder(color: self.viewModel.borderColor, theme: self.theme)
+        self.hStack.addBorder(color: self.viewModel.textFieldColors.border, theme: self.theme)
 
         self.addSubviewSizedEqually(hStack)
         self.hStack.addArrangedSubviews([
@@ -138,21 +154,18 @@ public final class AddOnTextFieldUIView: UIView {
     }
 
     private func setupSubscriptions() {
-        self.viewModel.$borderColor.subscribe(in: &self.cancellable) { [weak self] color in
+        self.viewModel.$textFieldColors.subscribe(in: &self.cancellable) { [weak self] textFieldColors in
             guard let self else { return }
             UIView.animate(withDuration: 0.1) {
-                self.addBorder(color: color, theme: self.theme)
+                self.addBorder(color: textFieldColors.border, theme: self.theme)
             }
         }
     }
 
-    private func separatorView(
-        color: any ColorToken,
-        theme: Theme
-    ) -> UIView {
+    private func separatorView() -> UIView {
         let separator = UIView()
-        let separatorWidth = theme.border.width.small
-        separator.backgroundColor = color.uiColor
+        let separatorWidth = self.theme.border.width.small
+        separator.backgroundColor = self.viewModel.theme.colors.base.outline.uiColor
         separator.widthAnchor.constraint(equalToConstant: separatorWidth).isActive = true
         separator.translatesAutoresizingMaskIntoConstraints = false
 
@@ -160,11 +173,12 @@ public final class AddOnTextFieldUIView: UIView {
     }
 
     private func addLeadingAddOn(_ addOn: UIView) {
+        self.removeLeadingAddOn()
         addOn.translatesAutoresizingMaskIntoConstraints = false
         self.leadingAddOnStackView.isHidden = false
         self.leadingAddOnStackView.addArrangedSubviews([
             addOn,
-            separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme)
+            separatorView()
         ])
     }
 
@@ -174,10 +188,11 @@ public final class AddOnTextFieldUIView: UIView {
     }
 
     private func addTrailingAddOn(_ addOn: UIView) {
+        self.removeTrailingAddOn()
         addOn.translatesAutoresizingMaskIntoConstraints = false
         self.trailingAddOnStackView.isHidden = false
         self.trailingAddOnStackView.addArrangedSubviews([
-            separatorView(color: self.viewModel.theme.colors.base.outline, theme: self.theme),
+            separatorView(),
             addOn
         ])
     }

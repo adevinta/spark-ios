@@ -12,7 +12,7 @@ final class AddOnTextFieldViewModel: ObservableObject {
 
     // MARK: - Public properties
 
-    @Published var borderColor: any ColorToken
+    @Published var textFieldColors: TextFieldColors
 
     private(set) var theme: Theme {
         didSet {
@@ -28,20 +28,20 @@ final class AddOnTextFieldViewModel: ObservableObject {
 
     // MARK: - Private properties
 
-    private let getColorUseCase: AddOnGetColorUseCasable
+    private let getColorUseCase: TextFieldGetColorsUseCaseInterface
 
     // MARK: - Initialization
 
     init(
         theme: Theme,
         intent: TextFieldIntent,
-        getColorUseCase: AddOnGetColorUseCasable = AddOnGetColorUseCase()
+        getColorUseCase: TextFieldGetColorsUseCaseInterface = TextFieldGetColorsUseCase()
     ) {
         self.theme = theme
         self.intent = intent
         self.getColorUseCase = getColorUseCase
 
-        self.borderColor = getColorUseCase.execute(
+        self.textFieldColors = getColorUseCase.execute(
             theme: theme,
             intent: intent
         )
@@ -50,12 +50,12 @@ final class AddOnTextFieldViewModel: ObservableObject {
     // MARK: - Private methods
 
     private func updateColor() {
-        let newBorderColor = self.getColorUseCase.execute(
+        let newTextFieldColors = self.getColorUseCase.execute(
             theme: self.theme,
             intent: self.intent
         )
-        guard newBorderColor.uiColor != self.borderColor.uiColor else { return }
-        self.borderColor = newBorderColor
+        guard newTextFieldColors != self.textFieldColors else { return }
+        self.textFieldColors = newTextFieldColors
     }
 
     // MARK: - Public methods
