@@ -10,9 +10,11 @@ import Combine
 
 final class AddOnTextFieldViewModel: ObservableObject {
 
-    // MARK: - Public properties
+    // MARK: - Published properties
 
     @Published var textFieldColors: TextFieldColors
+
+    // MARK: - Private properties
 
     private(set) var theme: Theme {
         didSet {
@@ -25,8 +27,6 @@ final class AddOnTextFieldViewModel: ObservableObject {
             self.updateColor()
         }
     }
-
-    // MARK: - Private properties
 
     private let getColorUseCase: TextFieldGetColorsUseCasable
 
