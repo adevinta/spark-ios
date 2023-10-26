@@ -71,7 +71,7 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
 
     // MARK: - Private helpers
     private func sut(intent: RadioButtonIntent) -> RadioButtonGroupViewModel<Void> {
-        let useCase = GetRadioButtonGroupColorUseCaseableGeneratedMock()
+        let useCase = RadioButtonGetGroupColorUseCaseableGeneratedMock()
         useCase.executeWithColorsAndIntentReturnValue = ColorTokenGeneratedMock.random()
         let theme = ThemeGeneratedMock.mocked()
 

@@ -8,9 +8,16 @@
 
 import Foundation
 
-struct RadioButtonAttributes {
+struct RadioButtonAttributes: Equatable {
     let colors: RadioButtonColors
     let opacity: CGFloat
     let spacing: CGFloat
     let font: any TypographyFontToken
+
+    static func == (lhs: RadioButtonAttributes, rhs: RadioButtonAttributes) -> Bool {
+        return lhs.colors == rhs.colors &&
+        lhs.opacity == rhs.opacity &&
+        lhs.spacing == rhs.spacing &&
+        lhs.font.uiFont == rhs.font.uiFont
+    }
 }
