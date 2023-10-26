@@ -110,14 +110,14 @@ enum ChipScenarioSnapshotTests: String, CaseIterable {
     ///  - mode: default
     ///  - size: default
     private func test3(isSwiftUIComponent: Bool) -> [ChipConfigurationSnapshotTests] {
-        let intents = ChipIntent.allCases
+        let variants = ChipVariant.allCases
         let states = ChipState.all
 
-        return all(intents, states).map { intent, state in
+        return all(variants, states).map { variant, state in
                 .init(
                     scenario: self,
-                    intent: intent,
-                    variant: .outlined,
+                    intent: .main,
+                    variant: variant,
                     icon: .mock(isSwiftUIComponent: isSwiftUIComponent),
                     text: "Label", 
                     badge: nil,
