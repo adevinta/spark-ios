@@ -19,10 +19,6 @@ final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
 
         self.sut = GetRadioButtonGroupColorUseCase()
         self.colors = ColorsGeneratedMock.mocked()
-//        self.colors.feedback = ColorsFeedbackGeneratedMock.mocked()
-//        self.colors.accent = ColorsAccentGeneratedMock.mocked()
-//        self.colors.basic = ColorsBasicGeneratedMock.mocked()
-//        self.colors.basic = ColorsBasicGeneratedMock.mocked()
     }
     // MARK: - Tests
 
@@ -31,8 +27,8 @@ final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
         let colorToken = sut.execute(colors: colors, intent: .alert)
 
         // Then
-        XCTAssertEqual(colorToken.uiColor, colors.feedback.onAlertContainer.uiColor)
-        XCTAssertEqual(colorToken.color, colors.feedback.onAlertContainer.color)
+        XCTAssertEqual(colorToken.uiColor, colors.feedback.alert.uiColor)
+        XCTAssertEqual(colorToken.color, colors.feedback.alert.color)
     }
 
     func test_danger() {
@@ -58,8 +54,8 @@ final class GetRadioButtonGroupColorUseCaseTests: XCTestCase {
         let colorToken = sut.execute(colors: colors, intent: .basic)
 
         // Then
-        XCTAssertEqual(colorToken.uiColor, colors.main.mainContainer.uiColor)
-        XCTAssertEqual(colorToken.color, colors.main.mainContainer.color)
+        XCTAssertEqual(colorToken.uiColor, colors.basic.basic.uiColor)
+        XCTAssertEqual(colorToken.color, colors.basic.basic.color)
     }
 
     func test_accent() {
