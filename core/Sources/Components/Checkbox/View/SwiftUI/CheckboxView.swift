@@ -209,7 +209,7 @@ public struct CheckboxView: View {
 
     private var labelView: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(self.viewModel.text ?? "")
+            Text(self.viewModel.text.rightValue ?? "")
                 .font(self.theme.typography.body1.font)
                 .foregroundColor(self.colors.textColor.color)
         }
