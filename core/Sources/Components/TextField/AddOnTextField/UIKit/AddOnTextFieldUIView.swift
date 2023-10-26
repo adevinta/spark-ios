@@ -11,13 +11,6 @@ import UIKit
 
 public final class AddOnTextFieldUIView: UIView {
 
-    // MARK: - Private enum
-
-    fileprivate enum Side {
-        case left
-        case right
-    }
-
     // MARK: - Public properties
 
     public var theme: Theme {
@@ -39,17 +32,31 @@ public final class AddOnTextFieldUIView: UIView {
             self.textField.intent = newValue
         }
     }
+
+    public var leadingAddOn: UIView? {
+        didSet {
+            if let addOn = leadingAddOn {
+                self.addLeadingAddOn(addOn)
+            } else {
+                self.removeLeadingAddOn()
+            }
+        }
+    }
+    public var trailingAddOn: UIView? {
+        didSet {
+            if let addOn = trailingAddOn {
+                self.addTrailingAddOn(addOn)
+            } else {
+                self.removeTrailingAddOn()
+            }
+        }
+    }
+    public let textField: TextFieldUIView
     
     // MARK: - Private properties
 
-    private var leadingAddOn: UIView?
-    private var trailingAddOn: UIView?
-    private let textField: TextFieldUIView
     private let viewModel: AddOnTextFieldViewModel
     private var cancellable = Set<AnyCancellable>()
-
-    private var textFieldLeadingConstraint: NSLayoutConstraint = .init()
-    private var textFieldTrailingConstraint: NSLayoutConstraint = .init()
 
     private lazy var hStack: UIStackView = {
         let stackView = UIStackView()
@@ -58,38 +65,58 @@ public final class AddOnTextFieldUIView: UIView {
         return stackView
     }()
 
-    private lazy var leadingAddOnContainer: UIView = {
-        return UIView()
+    private lazy var leadingAddOnStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        return stackView
     }()
 
-    private lazy var textFieldContainer: UIView = {
-        return UIView()
-    }()
-
-    private lazy var trailingAddOnContainer: UIView = {
-        return UIView()
+    private lazy var trailingAddOnStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        return stackView
     }()
 
     // MARK: - Initializers
 
-    public init(
+    public convenience init(
         theme: Theme,
         intent: TextFieldIntent = .neutral,
         leadingAddOn: UIView? = nil,
         trailingAddOn: UIView? = nil
+    ) {
+        self.init(
+            theme: theme,
+            intent: intent,
+            leadingAddOn: leadingAddOn,
+            trailingAddOn: trailingAddOn,
+            getColorsUseCase: TextFieldGetColorsUseCase()
+        )
+    }
+
+    internal init(
+        theme: Theme,
+        intent: TextFieldIntent = .neutral,
+        leadingAddOn: UIView? = nil,
+        trailingAddOn: UIView? = nil,
+        getColorsUseCase: TextFieldGetColorsUseCaseInterface
     ) {
         self.leadingAddOn = leadingAddOn
         self.trailingAddOn = trailingAddOn
 
         let textFieldViewModel = TextFieldUIViewModel(
             theme: theme,
-            borderStyle: .none
+            borderStyle: .none,
+            getColorsUseCase: getColorsUseCase
         )
         self.textField = TextFieldUIView(viewModel: textFieldViewModel)
         
         self.viewModel = AddOnTextFieldViewModel(
             theme: theme,
-            intent: intent
+            intent: intent,
+            getColorUseCase: getColorsUseCase
         )
 
         super.init(frame: .zero)
@@ -108,92 +135,71 @@ public final class AddOnTextFieldUIView: UIView {
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
         self.textField.translatesAutoresizingMaskIntoConstraints = false
 
-        self.hStack.addBorder(color: self.viewModel.borderColor, theme: self.theme)
+        self.hStack.addBorder(color: self.viewModel.textFieldColors.border, theme: self.theme)
 
         self.addSubviewSizedEqually(hStack)
         self.hStack.addArrangedSubviews([
-            self.leadingAddOnContainer,
-            self.textFieldContainer,
-            self.trailingAddOnContainer
+            self.leadingAddOnStackView,
+            self.textField,
+            self.trailingAddOnStackView
         ])
 
         if let leadingAddOn {
-            leadingAddOn.translatesAutoresizingMaskIntoConstraints = false
-            leadingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.leadingAddOn
-            leadingAddOn.addSeparator(
-                toThe: .right,
-                color: self.viewModel.theme.colors.base.outline,
-                theme: self.theme
-            )
-            self.leadingAddOnContainer.addSubviewSizedEqually(leadingAddOn)
+            self.addLeadingAddOn(leadingAddOn)
         }
 
-        self.textFieldContainer.addSubviewSizedEqually(self.textField)
-
         if let trailingAddOn {
-            trailingAddOn.accessibilityIdentifier = TextFieldAccessibilityIdentifier.trailingAddOn
-            trailingAddOn.addSeparator(
-                toThe: .left,
-                color: self.viewModel.theme.colors.base.outline,
-                theme: self.theme
-            )
-            self.trailingAddOnContainer.addSubviewSizedEqually(trailingAddOn)
+            self.addTrailingAddOn(trailingAddOn)
         }
     }
 
     private func setupSubscriptions() {
-        self.viewModel.$borderColor.subscribe(in: &self.cancellable) { [weak self] color in
+        self.viewModel.$textFieldColors.subscribe(in: &self.cancellable) { [weak self] textFieldColors in
             guard let self else { return }
             UIView.animate(withDuration: 0.1) {
-                self.addBorder(color: color, theme: self.theme)
+                self.addBorder(color: textFieldColors.border, theme: self.theme)
             }
         }
     }
 
-    // MARK: - Public methods
+    private func separatorView() -> UIView {
+        let separator = UIView()
+        let separatorWidth = self.theme.border.width.small
+        separator.backgroundColor = self.viewModel.theme.colors.base.outline.uiColor
+        separator.widthAnchor.constraint(equalToConstant: separatorWidth).isActive = true
+        separator.translatesAutoresizingMaskIntoConstraints = false
 
-    public func addTextFieldLeftView(_ leftView: UIView) {
-        self.textField.leftView = leftView
+        return separator
     }
 
-    public func addTextFieldRightView(_ rightView: UIView) {
-        self.textField.rightView = rightView
+    private func addLeadingAddOn(_ addOn: UIView) {
+        self.removeLeadingAddOn()
+        addOn.translatesAutoresizingMaskIntoConstraints = false
+        self.leadingAddOnStackView.isHidden = false
+        self.leadingAddOnStackView.addArrangedSubviews([
+            addOn,
+            separatorView()
+        ])
     }
 
-    public func addTextFieldPlaceholder(_ placeholder: String?) {
-        self.textField.placeholder = placeholder
+    private func removeLeadingAddOn() {
+        self.leadingAddOnStackView.isHidden = true
+        self.leadingAddOnStackView.removeArrangedSubviews()
     }
 
-    public func setTextFieldRightViewMode(_ viewMode: UITextField.ViewMode) {
-        self.textField.rightViewMode = viewMode
+    private func addTrailingAddOn(_ addOn: UIView) {
+        self.removeTrailingAddOn()
+        addOn.translatesAutoresizingMaskIntoConstraints = false
+        self.trailingAddOnStackView.isHidden = false
+        self.trailingAddOnStackView.addArrangedSubviews([
+            separatorView(),
+            addOn
+        ])
     }
 
-    public func setTextFieldLeftViewMode(_ viewMode: UITextField.ViewMode) {
-        self.textField.leftViewMode = viewMode
-    }
-
-    public func addLeadingAddOn(_ addOn: UIView) {
-        self.leadingAddOnContainer.isHidden = false
-        self.leadingAddOn = addOn
-        self.leadingAddOnContainer.addSubviewSizedEqually(addOn)
-    }
-
-    public func removeLeadingAddOn() {
-        self.leadingAddOnContainer.isHidden = true
-        self.leadingAddOn = nil
-        self.leadingAddOnContainer.subviews.forEach { $0.removeFromSuperview() }
-    }
-
-    public func addTrailingAddOn(_ addOn: UIView) {
-        self.trailingAddOnContainer.isHidden = false
-        self.trailingAddOn = addOn
-        self.trailingAddOnContainer.addSubviewSizedEqually(addOn)
-    }
-
-    public func removeTrailingAddOn() {
-        self.trailingAddOnContainer.isHidden = true
-        self.trailingAddOn = nil
-        self.trailingAddOnContainer.subviews.forEach { $0.removeFromSuperview() }
+    private func removeTrailingAddOn() {
+        self.trailingAddOnStackView.isHidden = true
+        self.trailingAddOnStackView.removeArrangedSubviews()
     }
 
 }
@@ -204,26 +210,5 @@ private extension UIView {
         self.setBorderWidth(theme.border.width.small)
         self.setCornerRadius(theme.border.radius.large)
         self.setMasksToBounds(true)
-    }
-
-    func addSeparator(
-        toThe side: AddOnTextFieldUIView.Side,
-        color: any ColorToken,
-        theme: Theme
-    ) {
-        let border = UIView()
-        let borderWidth = theme.border.width.small
-        border.backgroundColor = color.uiColor
-
-        switch side {
-        case .left:
-            border.frame = CGRect(x: self.frame.minX, y: self.frame.minY, width: borderWidth, height: frame.size.height)
-            border.autoresizingMask = [.flexibleHeight, .flexibleRightMargin]
-        case .right:
-            border.autoresizingMask = [.flexibleHeight, .flexibleLeftMargin]
-            border.frame = CGRect(x: self.frame.maxX - borderWidth, y: self.frame.minY, width: borderWidth, height: frame.size.height)
-        }
-
-        self.addSubview(border)
     }
 }

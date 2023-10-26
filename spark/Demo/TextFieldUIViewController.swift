@@ -55,6 +55,18 @@ class TextFieldUIViewController: UIViewController {
         self.viewModel.showLeftViewModeSheet.subscribe(in: &self.cancellables) { viewMode in
             self.presentLeftViewModeActionSheet(viewMode)
         }
+
+        self.viewModel.showLeadingAddOnSheet.subscribe(in: &self.cancellables) { addOnOption in
+            self.presentLeadingAddOnOptionSheet(addOnOption)
+        }
+
+        self.viewModel.showTrailingAddOnSheet.subscribe(in: &self.cancellables) { addOnOption in
+            self.presentTrailingAddOnOptionSheet(addOnOption)
+        }
+
+        self.viewModel.showClearButtonModeSheet.subscribe(in: &self.cancellables) { viewMode in
+            self.presentClearButtonModeActionSheet(viewMode)
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -135,6 +147,32 @@ extension TextFieldUIViewController {
         let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
                                                           texts: viewModes.map{ $0.name }) { viewMode in
             self.viewModel.rightViewMode = viewMode
+        }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentLeadingAddOnOptionSheet(_ addOnOptions: [AddOnOption]) {
+        let actionSheet = SparkActionSheet<AddOnOption>.init(
+            values: addOnOptions,
+            texts: addOnOptions.map { $0.name }) { addOnOption in
+                self.viewModel.leadingAddOnOption = addOnOption
+            }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentTrailingAddOnOptionSheet(_ addOnOptions: [AddOnOption]) {
+        let actionSheet = SparkActionSheet<AddOnOption>.init(
+            values: addOnOptions,
+            texts: addOnOptions.map { $0.name }) { addOnOption in
+                self.viewModel.trailingAddOnOption = addOnOption
+            }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentClearButtonModeActionSheet(_ viewModes: [ViewMode]) {
+        let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
+                                                          texts: viewModes.map{ $0.name }) { viewMode in
+            self.viewModel.clearButtonMode = viewMode
         }
         self.present(actionSheet, animated: true)
     }
