@@ -43,7 +43,7 @@ struct ProgressBarContentView<IndicatorView: View>: View {
     public var body: some View {
         ZStack() {
             // Track
-            ProgressBarRectangle(cornerRadius: self.trackCornerRadius ?? 0)
+            RoundedRectangle(cornerRadius: self.trackCornerRadius ?? 0)
                 .fill(self.trackBackgroundColor)
                 .accessibilityIdentifier(AccessibilityIdentifier.trackView)
 

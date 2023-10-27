@@ -51,12 +51,11 @@ public struct ProgressBarView: View {
             trackCornerRadius: self.viewModel.cornerRadius,
             trackBackgroundColor: self.viewModel.colors?.trackBackgroundColorToken,
             indicatorView: {
-                ProgressBarRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
+                RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
                     .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
-                    .width(
-                        from: self.value,
-                        viewModel: self.viewModel
-                    )
+                    .if(self.viewModel.isValidIndicatorValue(self.value)) { view in
+                        view.proportionalWidth(from: self.value)
+                    }
                     .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
             }
         )

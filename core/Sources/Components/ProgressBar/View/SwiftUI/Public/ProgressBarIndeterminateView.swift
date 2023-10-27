@@ -53,7 +53,7 @@ public struct ProgressBarIndeterminateView: View {
             trackBackgroundColor: self.viewModel.colors?.trackBackgroundColorToken,
             indicatorView: {
                 GeometryReader { geometryReader in
-                    ProgressBarRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
+                    RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
                         .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
                         .frame(width: self.viewModel.animatedData?.indicatorWidth ?? 0)
                         .offset(x: self.viewModel.animatedData?.leadingSpaceWidth ?? 0)

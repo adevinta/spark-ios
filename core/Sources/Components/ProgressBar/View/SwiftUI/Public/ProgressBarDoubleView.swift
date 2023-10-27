@@ -56,21 +56,19 @@ internal struct ProgressBarDoubleView: View {
             trackBackgroundColor: self.viewModel.colors?.trackBackgroundColorToken,
             indicatorView: {
                 // Bottom Indicator
-                ProgressBarRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
+                RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
                     .fill(self.viewModel.colors?.bottomIndicatorBackgroundColorToken)
-                    .width(
-                        from: self.bottomValue,
-                        viewModel: self.viewModel
-                    )
+                    .if(self.viewModel.isValidIndicatorValue(self.bottomValue)) { view in
+                        view.proportionalWidth(from: self.bottomValue)
+                    }
                     .accessibilityIdentifier(AccessibilityIdentifier.bottomIndicatorView)
 
                 // Top Indicator
-                ProgressBarRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
+                RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
                     .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
-                    .width(
-                        from: self.topValue,
-                        viewModel: self.viewModel
-                    )
+                    .if(self.viewModel.isValidIndicatorValue(self.topValue)) { view in
+                        view.proportionalWidth(from: self.topValue)
+                    }
                     .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
             }
         )
