@@ -18,69 +18,15 @@ final class ButtonComponentUIView: ComponentUIView {
     private let buttonView: ButtonUIView
 
     private static func makeButtonView(_ viewModel: ButtonComponentUIViewModel) -> ButtonUIView {
-        switch viewModel.content {
-        case .icon:
-            return .init(
-                theme: viewModel.theme,
-                intent: viewModel.intent,
-                variant: viewModel.variant,
-                size: viewModel.size,
-                shape: viewModel.shape,
-                alignment: viewModel.alignment,
-                iconImage: viewModel.iconImage,
-                isEnabled: viewModel.isEnabled
-            )
-
-        case .text:
-            return .init(
-                theme: viewModel.theme,
-                intent: viewModel.intent,
-                variant: viewModel.variant,
-                size: viewModel.size,
-                shape: viewModel.shape,
-                alignment: viewModel.alignment,
-                text: viewModel.text,
-                isEnabled: viewModel.isEnabled
-            )
-
-        case .attributedText:
-            return .init(
-                theme: viewModel.theme,
-                intent: viewModel.intent,
-                variant: viewModel.variant,
-                size: viewModel.size,
-                shape: viewModel.shape,
-                alignment: viewModel.alignment,
-                attributedText: viewModel.attributedText,
-                isEnabled: viewModel.isEnabled
-            )
-
-        case .iconAndText:
-            return .init(
-                theme: viewModel.theme,
-                intent: viewModel.intent,
-                variant: viewModel.variant,
-                size: viewModel.size,
-                shape: viewModel.shape,
-                alignment: viewModel.alignment,
-                iconImage: viewModel.iconImage,
-                text: viewModel.text,
-                isEnabled: viewModel.isEnabled
-            )
-
-        case .iconAndAttributedText:
-            return .init(
-                theme: viewModel.theme,
-                intent: viewModel.intent,
-                variant: viewModel.variant,
-                size: viewModel.size,
-                shape: viewModel.shape,
-                alignment: viewModel.alignment,
-                iconImage: viewModel.iconImage,
-                attributedText: viewModel.attributedText,
-                isEnabled: viewModel.isEnabled
-            )
-        }
+        return .init(
+            theme: viewModel.theme,
+            intent: viewModel.intent,
+            variant: viewModel.variant,
+            size: viewModel.size,
+            shape: viewModel.shape,
+            alignment: viewModel.alignment,
+            isEnabled: viewModel.isEnabled
+        )
     }
 
     // MARK: - Properties
@@ -151,34 +97,33 @@ final class ButtonComponentUIView: ComponentUIView {
             self.buttonView.alignment = alignment
         }
 
-        self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] content in
+        self.viewModel.$contentNormal.subscribe(in: &self.cancellables) { [weak self] content in
             guard let self = self else { return }
 
-            self.viewModel.contentConfigurationItemViewModel.buttonTitle = content.name
-
+            self.viewModel.contentNormalConfigurationItemViewModel.buttonTitle = content.name
             self.showRightSpacing = content != .icon
-            switch content {
-            case .icon:
-                self.buttonView.text = nil
-                self.buttonView.attributedText = nil
-                self.buttonView.iconImage = self.viewModel.iconImage
+            self.setContent(content, for: .normal)
+        }
 
-            case .text:
-                self.buttonView.iconImage = nil
-                self.buttonView.text = self.viewModel.text
+        self.viewModel.$contentHighlighted.subscribe(in: &self.cancellables) { [weak self] content in
+            guard let self = self else { return }
 
-            case .attributedText:
-                self.buttonView.iconImage = nil
-                self.buttonView.attributedText = self.viewModel.attributedText
+            self.viewModel.contentHighlightedConfigurationItemViewModel.buttonTitle = content.name
+            self.setContent(content, for: .highlighted)
+        }
 
-            case .iconAndText:
-                self.buttonView.iconImage = self.viewModel.iconImage
-                self.buttonView.text = self.viewModel.text
+        self.viewModel.$contentDisabled.subscribe(in: &self.cancellables) { [weak self] content in
+            guard let self = self else { return }
 
-            case .iconAndAttributedText:
-                self.buttonView.iconImage = self.viewModel.iconImage
-                self.buttonView.attributedText = self.viewModel.attributedText
-            }
+            self.viewModel.contentDisabledConfigurationItemViewModel.buttonTitle = content.name
+            self.setContent(content, for: .disabled)
+        }
+
+        self.viewModel.$contentSelected.subscribe(in: &self.cancellables) { [weak self] content in
+            guard let self = self else { return }
+
+            self.viewModel.contentSelectedConfigurationItemViewModel.buttonTitle = content.name
+            self.setContent(content, for: .selected)
         }
 
         self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
@@ -186,9 +131,85 @@ final class ButtonComponentUIView: ComponentUIView {
             self.buttonView.isEnabled = isEnabled
         }
 
+        self.viewModel.$isSelected.subscribe(in: &self.cancellables) { [weak self] isSelected in
+            guard let self = self else { return }
+            self.buttonView.isSelected = isSelected
+        }
+
         self.viewModel.$isAnimated.subscribe(in: &self.cancellables) { [weak self] isAnimated in
             guard let self = self else { return }
             self.buttonView.isAnimated = isAnimated
+        }
+    }
+
+    // MARK: - Setter
+
+    private func setContent(_ content: ButtonContentDefault, for state: ControlState) {
+        switch content {
+        case .icon:
+            self.buttonView.setTitle(nil, for: state)
+            self.buttonView.setAttributedTitle(nil, for: state)
+            self.buttonView.setImage(self.image(for: state), for: state)
+
+        case .text:
+            self.buttonView.setImage(nil, for: state)
+            self.buttonView.setTitle(self.title(for: state), for: state)
+
+        case .attributedText:
+            self.buttonView.setImage(nil, for: state)
+            self.buttonView.setAttributedTitle(self.attributedTitle(for: state), for: state)
+
+        case .iconAndText:
+            self.buttonView.setImage(self.image(for: state), for: state)
+            self.buttonView.setTitle(self.title(for: state), for: state)
+
+        case .iconAndAttributedText:
+            self.buttonView.setImage(self.image(for: state), for: state)
+            self.buttonView.setAttributedTitle(self.attributedTitle(for: state), for: state)
+        }
+    }
+
+    // MARK: - Getter
+
+    private func image(for state: ControlState) -> UIImage? {
+        switch state {
+        case .normal: return UIImage(named: "arrow")
+        case .highlighted: return UIImage(named: "close")
+        case .disabled: return UIImage(named: "check")
+        case .selected: return UIImage(named: "alert")
+        @unknown default: return nil
+        }
+    }
+
+    private func title(for state: ControlState) -> String? {
+        switch state {
+        case .normal: return "My Title"
+        case .highlighted: return "My Highlighted"
+        case .disabled: return "My Disabled"
+        case .selected: return "My Selected"
+        @unknown default: return nil
+        }
+    }
+
+    private func attributedTitle(for state: ControlState) -> NSAttributedString? {
+
+        func attributedText(_ text: String) -> NSAttributedString {
+            return .init(
+                string: text,
+                attributes: [
+                    .foregroundColor: UIColor.purple,
+                    .font: UIFont.italicSystemFont(ofSize: 20),
+                    .underlineStyle: NSUnderlineStyle.single.rawValue
+                ]
+            )
+        }
+
+        switch state {
+        case .normal: return attributedText("My A_Title")
+        case .highlighted: return attributedText("My A_Highlighted")
+        case .disabled: return attributedText("My A_Disabled")
+        case .selected: return attributedText("My A_Selected")
+        @unknown default: return nil
         }
     }
 }

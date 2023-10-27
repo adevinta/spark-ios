@@ -29,6 +29,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     private let alignment: ButtonAlignment
     private let content: ButtonContentDefault
     private let isEnabled: Bool
+    private let isSelected: Bool
     private let isAnimated: Bool
 
     // MARK: - Initialization
@@ -44,6 +45,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         alignment: ButtonAlignment,
         content: ButtonContentDefault,
         isEnabled: Bool,
+        isSelected: Bool,
         isAnimated: Bool
     ) {
         self.viewModel = viewModel
@@ -64,6 +66,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         self.alignment = alignment
         self.content = content
         self.isEnabled = isEnabled
+        self.isSelected = isSelected
         self.isAnimated = isAnimated
     }
 
@@ -199,6 +202,10 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
 
         if buttonView.isEnabled != self.isEnabled {
             buttonView.isEnabled = self.isEnabled
+        }
+
+        if buttonView.isSelected != self.isSelected {
+            buttonView.isSelected = self.isSelected
         }
 
         if buttonView.isAnimated != self.isAnimated {
