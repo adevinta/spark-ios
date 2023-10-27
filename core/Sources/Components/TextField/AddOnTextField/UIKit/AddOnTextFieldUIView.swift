@@ -101,7 +101,7 @@ public final class AddOnTextFieldUIView: UIView {
         intent: TextFieldIntent = .neutral,
         leadingAddOn: UIView? = nil,
         trailingAddOn: UIView? = nil,
-        getColorsUseCase: TextFieldGetColorsUseCaseInterface
+        getColorsUseCase: TextFieldGetColorsUseCasable
     ) {
         self.leadingAddOn = leadingAddOn
         self.trailingAddOn = trailingAddOn

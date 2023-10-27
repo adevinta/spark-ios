@@ -35,7 +35,7 @@ final class TextFieldUIViewModel: ObservableObject {
         }
     }
 
-    private let getColorsUseCase: any TextFieldGetColorsUseCaseInterface
+    private let getColorsUseCase: any TextFieldGetColorsUseCasable
     private let getBordersUseCase: any TextFieldGetBordersUseCasable
     private let getSpacingsUseCase: any TextFieldGetSpacingsUseCasable
 
@@ -45,7 +45,7 @@ final class TextFieldUIViewModel: ObservableObject {
         theme: Theme,
         intent: TextFieldIntent = .neutral,
         borderStyle: TextFieldBorderStyle,
-        getColorsUseCase: any TextFieldGetColorsUseCaseInterface = TextFieldGetColorsUseCase(),
+        getColorsUseCase: any TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase(),
         getBordersUseCase: any TextFieldGetBordersUseCasable = TextFieldGetBordersUseCase(),
         getSpacingsUseCase: any TextFieldGetSpacingsUseCasable = TextFieldGetSpacingsUseCase()
     ) {

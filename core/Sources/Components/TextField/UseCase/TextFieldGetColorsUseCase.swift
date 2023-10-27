@@ -8,12 +8,13 @@
 
 import Foundation
 
-protocol TextFieldGetColorsUseCaseInterface {
+// sourcery: AutoMockable
+protocol TextFieldGetColorsUseCasable {
     func execute(theme: Theme,
                  intent: TextFieldIntent) -> TextFieldColors
 }
 
-struct TextFieldGetColorsUseCase: TextFieldGetColorsUseCaseInterface {
+struct TextFieldGetColorsUseCase: TextFieldGetColorsUseCasable {
     func execute(theme: Theme,
                  intent: TextFieldIntent) -> TextFieldColors {
 

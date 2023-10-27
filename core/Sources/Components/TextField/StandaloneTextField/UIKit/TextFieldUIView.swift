@@ -11,8 +11,12 @@ import Combine
 
 public final class TextFieldUIView: UITextField {
 
+    // MARK: - Private properties
+
     private let viewModel: TextFieldUIViewModel
     private var cancellable = Set<AnyCancellable>()
+
+    // MARK: - Public properties
 
     public var theme: Theme {
         get {
@@ -38,6 +42,8 @@ public final class TextFieldUIView: UITextField {
         get { return .init(self.viewModel.borderStyle) }
     }
 
+    // MARK: - Initializers
+
     internal init(viewModel: TextFieldUIViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
@@ -55,6 +61,8 @@ public final class TextFieldUIView: UITextField {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Private methods
 
     private func setupView() {
         NSLayoutConstraint.activate([
@@ -82,6 +90,23 @@ public final class TextFieldUIView: UITextField {
     private func setupBorders(_ borders: TextFieldBorders) {
         self.setBorderWidth(borders.width)
         self.setCornerRadius(borders.radius)
+    }
+
+    private func setInsets(forBounds bounds: CGRect) -> CGRect {
+        var totalInsets = UIEdgeInsets(
+            top: .zero,
+            left: self.viewModel.spacings.left,
+            bottom: .zero,
+            right: self.viewModel.spacings.right
+        )
+        let contentSpacing = self.viewModel.spacings.content
+        if let leftView = self.leftView, leftView.frame.origin.x > 0 { totalInsets.left += leftView.bounds.size.width + (0.5 * contentSpacing) }
+        if let rightView = self.rightView, rightView.frame.origin.x > 0 { totalInsets.right += rightView.bounds.size.width + (0.75 * contentSpacing) }
+        if let button = self.value(forKeyPath: "_clearButton") as? UIButton,
+           button.frame.origin.x > 0 && !((rightView?.frame.origin.x) ?? 0 > 0) {
+            totalInsets.right += button.bounds.size.width + (0.75 * contentSpacing)
+        }
+        return bounds.inset(by: totalInsets)
     }
 
     // MARK: - Rects
@@ -113,48 +138,5 @@ public final class TextFieldUIView: UITextField {
         var rect = super.leftViewRect(forBounds: bounds)
         rect.origin.x += self.viewModel.spacings.left
         return rect
-    }
-
-    private func setInsets(forBounds bounds: CGRect) -> CGRect {
-        var totalInsets = UIEdgeInsets(
-            top: .zero,
-            left: self.viewModel.spacings.left,
-            bottom: .zero,
-            right: self.viewModel.spacings.right
-        )
-        let contentSpacing = self.viewModel.spacings.content
-        if let leftView = self.leftView, leftView.frame.origin.x > 0 { totalInsets.left += leftView.bounds.size.width + (0.5 * contentSpacing) }
-        if let rightView = self.rightView, rightView.frame.origin.x > 0 { totalInsets.right += rightView.bounds.size.width + (0.75 * contentSpacing) }
-        if let button = self.value(forKeyPath: "_clearButton") as? UIButton,
-           button.frame.origin.x > 0 && !((rightView?.frame.origin.x) ?? 0 > 0) {
-            totalInsets.right += button.bounds.size.width + (0.75 * contentSpacing)
-        }
-        return bounds.inset(by: totalInsets)
-    }
-}
-
-enum TextFieldBorderStyle {
-    case roundedRect
-    case none
-
-    init(_ borderStyle: UITextField.BorderStyle) {
-        switch borderStyle {
-        case .roundedRect:
-            self = .roundedRect
-        default:
-            self = .none
-        }
-    }
-}
-
-extension UITextField.BorderStyle {
-    init(_ borderStyle: TextFieldBorderStyle) {
-        switch borderStyle {
-        case .roundedRect:
-            self = .roundedRect
-        case .none:
-            self = .none
-        }
-
     }
 }
