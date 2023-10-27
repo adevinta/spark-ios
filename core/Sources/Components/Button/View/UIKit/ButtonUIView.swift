@@ -15,7 +15,7 @@ public final class ButtonUIView: UIView {
     // MARK: - Type alias
 
     private typealias AccessibilityIdentifier = ButtonAccessibilityIdentifier
-    private typealias Constants = ButtonConstants
+    private typealias Animation = ButtonConstants.Animation
 
     // MARK: - Components
 
@@ -212,6 +212,9 @@ public final class ButtonUIView: UIView {
             self.viewModel.set(isEnabled: newValue)
         }
     }
+
+    /// Button modifications should be animated or not. **True** by default.
+    public var isAnimated: Bool = true
 
     // MARK: - Internal Properties
 
@@ -572,11 +575,14 @@ public final class ButtonUIView: UIView {
         let horizontalSpacing = self._horizontalSpacing.wrappedValue
         let horizontalPadding = self._horizontalPadding.wrappedValue
 
-        let animationDuration = self.firstContentStackViewAnimation ? 0 : Constants.Animation.slowDuration
         if verticalSpacing != self.contentStackViewTopConstraint?.constant ||
             horizontalSpacing != self.contentStackViewLeadingConstraint?.constant ||
             horizontalPadding != self.contentStackView.spacing {
-            UIView.animate(withDuration: animationDuration) { [weak self] in
+
+            let isAnimated = self.isAnimated && !self.firstContentStackViewAnimation
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.slowDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
                 guard let self else { return }
 
                 self.firstContentStackViewAnimation = false
@@ -617,12 +623,12 @@ public final class ButtonUIView: UIView {
 
             // Animate only if new alpha is different from current alpha
             let alpha = state.opacity
-            if self.alpha != alpha {
-                UIView.animate(withDuration: Constants.Animation.slowDuration) { [weak self] in
-                    self?.alpha = alpha
-                }
-            } else {
-                self.alpha = alpha
+
+            let isAnimated = self.isAnimated && self.alpha != alpha
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.slowDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
+                self?.alpha = alpha
             }
         }
         // **
@@ -633,12 +639,11 @@ public final class ButtonUIView: UIView {
             guard let self, let colors else { return }
 
             // Background Color
-            if self.backgroundColor != colors.backgroundColor.uiColor {
-                UIView.animate(withDuration: Constants.Animation.fastDuration) { [weak self] in
-                    self?.backgroundColor = colors.backgroundColor.uiColor
-                }
-            } else {
-                self.backgroundColor = colors.backgroundColor.uiColor
+            let isAnimated = self.isAnimated && self.backgroundColor != colors.backgroundColor.uiColor
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.fastDuration) : .unanimated
+            
+            UIView.execute(animationType: animationType) { [weak self] in
+                self?.backgroundColor = colors.backgroundColor.uiColor
             }
 
             // Border Color
@@ -709,8 +714,10 @@ public final class ButtonUIView: UIView {
             self.iconImageView.image = content.iconImage?.leftValue
 
             // Subviews positions and visibilities
-            let animationDuration = self.firstContentStackViewSubviewAnimation ? 0 : Constants.Animation.slowDuration
-            UIView.animate(withDuration: animationDuration) { [weak self] in
+            let isAnimated = self.isAnimated && !self.firstContentStackViewSubviewAnimation
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.slowDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
                 guard let self else { return }
 
                 self.firstContentStackViewSubviewAnimation = false
@@ -765,7 +772,7 @@ public final class ButtonUIView: UIView {
     }
 
     private func unpressedAction() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.Animation.fastDuration, execute: { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + Animation.fastDuration, execute: { [weak self] in
             self?.viewModel.unpressedAction()
         })
     }

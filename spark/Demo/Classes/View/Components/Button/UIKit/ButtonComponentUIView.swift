@@ -185,5 +185,10 @@ final class ButtonComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.buttonView.isEnabled = isEnabled
         }
+
+        self.viewModel.$isAnimated.subscribe(in: &self.cancellables) { [weak self] isAnimated in
+            guard let self = self else { return }
+            self.buttonView.isAnimated = isAnimated
+        }
     }
 }
