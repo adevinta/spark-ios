@@ -90,6 +90,14 @@ struct ButtonComponentView: View {
                     state: .enabled,
                     selectionState: self.$isEnabled
                 )
+
+                CheckboxView(
+                    text: "Is animated",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: self.theme,
+                    state: .enabled,
+                    selectionState: self.$isAnimated
+                )
             },
             integration: {
                 GeometryReader { geometry in
