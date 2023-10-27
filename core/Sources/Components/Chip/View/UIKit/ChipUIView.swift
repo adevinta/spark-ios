@@ -539,6 +539,10 @@ public final class ChipUIView: UIControl {
             self.viewModel.isPressed = false
         }
     }
+
+    public func enableComponentUserInteraction(_ isEnabled: Bool) {
+        self.stackView.isUserInteractionEnabled = isEnabled
+    }
 }
 
 // MARK: - Label priorities

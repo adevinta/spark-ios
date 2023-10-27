@@ -32,6 +32,9 @@ final class SwitchComponentUIView: ComponentUIView {
 
         // Setup
         self.setupSubscriptions()
+
+        // Delegate
+        self.componentView.delegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -86,12 +89,22 @@ final class SwitchComponentUIView: ComponentUIView {
 
         self.viewModel.$isOn.subscribe(in: &self.cancellables) { [weak self] isOn in
             guard let self = self else { return }
-            self.componentView.isOn = isOn
+
+            if self.viewModel.isOnAnimated {
+                self.componentView.setOn(isOn, animated: true)
+            } else {
+                self.componentView.isOn = isOn
+            }
         }
 
         self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
             guard let self = self else { return }
-            self.componentView.isEnabled = isEnabled
+
+            if self.viewModel.isEnabledAnimated {
+                self.componentView.setEnabled(isEnabled, animated: true)
+            } else {
+                self.componentView.isEnabled = isEnabled
+            }
         }
 
         self.viewModel.$hasImages.subscribe(in: &self.cancellables) { [weak self] hasImages in
@@ -172,5 +185,12 @@ private extension SwitchComponentUIView {
             )
         }
         return switchView
+    }
+}
+
+extension SwitchComponentUIView: SwitchUIViewDelegate {
+
+    func switchDidChange(_ switchView: SparkCore.SwitchUIView, isOn: Bool) {
+        self.viewModel.isOn = isOn
     }
 }
