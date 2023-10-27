@@ -721,10 +721,11 @@ public final class SwitchUIView: UIView {
             guard let self, let toggleOpacity else { return }
 
             // Animate only if new alpha is different from current alpha
-            UIView.execute(
-                isAnimated: self.isEnabledAnimated && self.toggleView.alpha != toggleOpacity,
-                withDuration: Constants.animationDuration
-            ) { [weak self] in
+
+            let isAnimated = self.isEnabledAnimated && self.toggleView.alpha != toggleOpacity
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
                 self?.toggleView.alpha = toggleOpacity
             }
         }
@@ -736,12 +737,10 @@ public final class SwitchUIView: UIView {
             guard let self, let colorToken else { return }
 
             // Animate only if there is currently an color on View and if new color is different from current color
-            let animated = self.toggleView.backgroundColor != nil && self.toggleView.backgroundColor != colorToken.uiColor
+            let isAnimated = self.isOnAnimated && self.toggleView.backgroundColor != nil && self.toggleView.backgroundColor != colorToken.uiColor
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
 
-            UIView.execute(
-                isAnimated: self.isOnAnimated && animated,
-                withDuration: Constants.animationDuration
-            ) { [weak self] in
+            UIView.execute(animationType: animationType) { [weak self] in
                 self?.toggleView.backgroundColor = colorToken.uiColor
             }
         }
@@ -754,12 +753,10 @@ public final class SwitchUIView: UIView {
             guard let self, let colorToken else { return }
 
             // Animate only if there is currently an color on View and if new color is different from current color
-            let animated = self.toggleDotImageView.tintColor != nil && self.toggleDotImageView.tintColor != colorToken.uiColor
+            let isAnimated = self.isOnAnimated && self.toggleDotImageView.tintColor != nil && self.toggleDotImageView.tintColor != colorToken.uiColor
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
 
-            UIView.execute(
-                isAnimated: self.isOnAnimated && animated,
-                withDuration: Constants.animationDuration
-            ) { [weak self] in
+            UIView.execute(animationType: animationType) { [weak self] in
                 self?.toggleDotImageView.tintColor = colorToken.uiColor
             }
         }
@@ -800,10 +797,9 @@ public final class SwitchUIView: UIView {
             let currentUserInteraction = self.viewModel.isToggleInteractionEnabled ?? true
             self.toggleView.isUserInteractionEnabled = false
 
-            UIView.execute(
-                isAnimated: self.isOnAnimated,
-                withDuration: Constants.animationDuration
-            ) { [weak self] in
+            let animationType: UIExecuteAnimationType = self.isOnAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
                 self?.toggleLeftSpaceView.isHidden = !showLeftSpace
                 self?.toggleRightSpaceView.isHidden = showLeftSpace
             } completion: { [weak self] _ in
@@ -820,13 +816,15 @@ public final class SwitchUIView: UIView {
             let image = toggleDotImagesState?.currentImage.leftValue
 
             // Animate only if there is currently an image on ImageView and new image is exists
+            let isAnimated = self.isOnAnimated && self.toggleDotImageView.image != nil && image != nil
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
+
             UIView.execute(
                 with: self.toggleDotImageView,
-                isTransitionAnimated: self.isOnAnimated && self.toggleDotImageView.image != nil && image != nil,
-                withDuration: Constants.animationDuration,
+                animationType: animationType,
                 options: .transitionCrossDissolve,
-                context: {
-                    self.toggleDotImageView.image = image
+                instructions: { [weak self] in
+                    self?.toggleDotImageView.image = image
                 },
                 completion: nil
             )

@@ -8,45 +8,52 @@
 
 import UIKit
 
+enum UIExecuteAnimationType {
+    case unanimated
+    case animated(duration: TimeInterval)
+}
+
 extension UIView {
 
     /// Execute a code with or without animation.
     static func execute(
-        isAnimated: Bool,
-        withDuration duration: TimeInterval,
-        context: @escaping () -> Void,
+        animationType: UIExecuteAnimationType,
+        instructions: @escaping () -> Void,
         completion: ((Bool) -> Void)? = nil
     ) {
-        if isAnimated {
+        switch animationType {
+        case .unanimated:
+            instructions()
+            completion?(true)
+
+        case .animated(let duration):
             UIView.animate(
                 withDuration: duration,
-                animations: context,
+                animations: instructions,
                 completion: completion)
-        } else {
-            context()
-            completion?(true)
         }
     }
 
     /// Execute a code with or without transition animation.
     static func execute(
         with view: UIView,
-        isTransitionAnimated: Bool,
-        withDuration duration: TimeInterval,
+        animationType: UIExecuteAnimationType,
         options: UIView.AnimationOptions = [],
-        context: @escaping () -> Void,
+        instructions: @escaping () -> Void,
         completion: ((Bool) -> Void)? = nil
     ) {
-        if isTransitionAnimated {
+        switch animationType {
+        case .unanimated:
+            instructions()
+            completion?(true)
+
+        case .animated(let duration):
             UIView.transition(
                 with: view,
                 duration: duration,
                 options: options,
-                animations: context,
+                animations: instructions,
                 completion: completion)
-        } else {
-            context()
-            completion?(true)
         }
     }
 }
