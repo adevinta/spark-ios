@@ -51,10 +51,9 @@ struct ComponentsView: View {
             }
 
             Group {
-#warning("Keep comments until the design team decision about the Double Bar")
-//                Button("Progress Bar - Double") {
-//                    self.navigateToView(ProgressBarDoubleComponentView())
-//                }
+                Button("Progress Bar - Double") {
+                    self.navigateToView(ProgressBarDoubleComponentView())
+                }
 
                 Button("Progress Bar - Indeterminate") {
                     self.navigateToView(ProgressBarIndeterminateComponentView())

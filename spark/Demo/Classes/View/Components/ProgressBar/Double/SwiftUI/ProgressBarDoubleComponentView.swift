@@ -6,8 +6,6 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-#warning("Keep this class commented until the design team decision about the Double Bar")
-/*
 import SwiftUI
 import Spark
 import SparkCore
@@ -84,4 +82,3 @@ struct ProgressBarDoubleComponentView_Previews: PreviewProvider {
         ProgressBarDoubleComponentView()
     }
 }
-*/

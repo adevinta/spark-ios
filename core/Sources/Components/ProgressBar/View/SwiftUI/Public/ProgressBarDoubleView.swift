@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal struct ProgressBarDoubleView: View {
+public struct ProgressBarDoubleView: View {
 
     // MARK: - Type alias
 
