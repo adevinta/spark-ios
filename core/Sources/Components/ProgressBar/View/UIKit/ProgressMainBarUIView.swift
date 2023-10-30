@@ -8,7 +8,7 @@
 
 import UIKit
 
-/// This ProgressMainBar view contains all communs subviews (track & indicator), styles, constraints, ... for all progress bar.
+/// This ProgressMainBar view contains all communs subviews (track & indicator), styles, constraints, ... for all progress bars.
 /// This view doesn't have a public init.
 public class ProgressBarMainUIView: UIView {
 
@@ -25,7 +25,7 @@ public class ProgressBarMainUIView: UIView {
     // MARK: - Private Properties
 
     private var heightConstraint: NSLayoutConstraint?
-    var indicatorWidthConstraint: NSLayoutConstraint?
+    internal var indicatorWidthConstraint: NSLayoutConstraint?
 
     @ScaledUIMetric private var height: CGFloat = Constants.height
     var cornerRadius: CGFloat = 0 {
@@ -48,7 +48,7 @@ public class ProgressBarMainUIView: UIView {
     // MARK: - View setup
 
     /// Setup the view: subviews, identifiers, constraints, UI.
-    /// This method is internal because it can be override by the view that inherits from this class.
+    /// This method is internal because it can be overriden by the view that inherits from this class.
     internal func setupView() {
         // Add subviews
         self.addSubview(self.trackView)
@@ -106,7 +106,7 @@ public class ProgressBarMainUIView: UIView {
     }
 
     /// Setup the indicator view constraints on the view (top, leading, trailing, trailing) and width (a percent of the view width).
-    /// This method is internal because it can be override by the view that inherits from this class.
+    /// This method is internal because it can be overriden by the view that inherits from this class.
     internal func setupIndicatorConstraints() {
         self.setupSpecificIndicatorConstraints(
             &self.indicatorWidthConstraint,
@@ -118,7 +118,7 @@ public class ProgressBarMainUIView: UIView {
     /// - Parameters:
     ///   - widthConstraint: width layoutConstraint to set from the width of the view
     ///   - view: view to constrain
-    /// This method is internal because it can be override by the view that inherits from this class
+    /// This method is internal because it can be overriden by the view that inherits from this class
     internal final func setupSpecificIndicatorConstraints(
         _ widthConstraint: inout NSLayoutConstraint?,
         on view: UIView
@@ -138,12 +138,12 @@ public class ProgressBarMainUIView: UIView {
         widthConstraint?.isActive = true
     }
 
-    /// Update the some width constraints multiplier.
+    /// Update the width constraints with a multiplier for a view.
     /// - Parameters:
     ///   - widthConstraint: width layoutConstraint to set from the width of the view
     ///   - multiplier: multiplier of the constraint
     ///   - view: view to constrain
-    /// This method is internal because it can be override by the view that inherits from this class
+    /// This method is internal because it can be overridenn by the view that inherits from this class
     internal func updateWidthConstraints(
         _ constraint: inout NSLayoutConstraint?,
         multiplier: CGFloat,
@@ -161,7 +161,7 @@ public class ProgressBarMainUIView: UIView {
     // MARK: - Update UI
 
     /// Update the corner radius of the track and the indicator view
-    /// This method is internal because it can be override by the view that inherits from this class
+    /// This method is internal because it can be overridenn by the view that inherits from this class
     internal func updateCornerRadius() {
         self.trackView.setCornerRadius(self.cornerRadius)
         self.indicatorView.setCornerRadius(self.cornerRadius)
@@ -176,10 +176,8 @@ public class ProgressBarMainUIView: UIView {
     }
 
     /// Update the background color of the track and the indicator view
-    /// This method is internal because it can be override by the view that inherits from this class
-    internal func updateColors(_ colors: (any ProgressBarMainColors)?) {
-        guard let colors else { return }
-        
+    /// This method is internal because it can be overriden by the view that inherits from this class
+    internal func updateColors(_ colors: any ProgressBarMainColors) {
         self.trackView.backgroundColor = colors.trackBackgroundColorToken.uiColor
         self.indicatorView.backgroundColor = colors.indicatorBackgroundColorToken.uiColor
     }

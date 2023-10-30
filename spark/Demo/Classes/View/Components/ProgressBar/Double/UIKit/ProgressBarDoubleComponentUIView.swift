@@ -6,8 +6,6 @@
 //  Copyright (c) 2023 Adevinta. All rights reserved.
 //
 
-#warning("Keep this class commented until the design team decision about the Double Bar")
-/*
 import Combine
 import SparkCore
 import Spark
@@ -90,4 +88,3 @@ final class ProgressBarDoubleComponentUIView: ComponentUIView {
         }
     }
 }
-*/

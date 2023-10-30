@@ -104,7 +104,9 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
     private func setupSubscriptions() {
         // Colors
         self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
-            self?.updateColors(colors)
+            guard let self, let colors else { return }
+
+            self.updateColors(colors)
         }
 
         // Corner Radius

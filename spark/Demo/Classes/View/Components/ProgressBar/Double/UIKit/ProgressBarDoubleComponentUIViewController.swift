@@ -12,8 +12,6 @@ import SparkCore
 import SwiftUI
 import UIKit
 
-#warning("Keep this class commented until the design team decision about the Double Bar")
-/*
 final class ProgressBarDoubleComponentUIViewController: UIViewController {
 
     // MARK: - Published Properties
@@ -123,4 +121,3 @@ extension ProgressBarDoubleComponentUIViewController {
         self.present(actionSheet, animated: true)
     }
 }
-*/

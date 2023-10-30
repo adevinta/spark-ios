@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 
 /// The UIKit version for the progress bar double.
-internal final class ProgressBarDoubleUIView: ProgressBarMainUIView {
+public final class ProgressBarDoubleUIView: ProgressBarMainUIView {
 
     // MARK: - Type alias
 
@@ -138,8 +138,10 @@ internal final class ProgressBarDoubleUIView: ProgressBarMainUIView {
     private func setupSubscriptions() {
         // Colors
         self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
-            self?.updateColors(colors)
-            self?.bottomIndicatorView.backgroundColor = colors?.bottomIndicatorBackgroundColorToken.uiColor
+            guard let self, let colors else { return }
+
+            self.updateColors(colors)
+            self.bottomIndicatorView.backgroundColor = colors.bottomIndicatorBackgroundColorToken.uiColor
         }
 
         // Corner Radius

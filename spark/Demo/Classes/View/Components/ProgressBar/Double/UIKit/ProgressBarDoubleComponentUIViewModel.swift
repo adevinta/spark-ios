@@ -11,8 +11,6 @@ import Spark
 import SparkCore
 import UIKit
 
-#warning("Keep this class commented until the design team decision about the Double Bar")
-/*
 final class ProgressBarDoubleComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Type Alias
@@ -157,4 +155,3 @@ extension ProgressBarDoubleComponentUIViewModel {
         self.bottomValue = control.selectedValue
     }
 }
-*/

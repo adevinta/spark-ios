@@ -125,13 +125,13 @@ public final class ProgressBarIndeterminateUIView: ProgressBarMainUIView {
     public func startAnimating() {
         if !self.viewModel.isAnimating {
             self.resetIndicatorConstraints()
-            self.reloadAnimation()
+            self.reloadAnimation(isFirstAnimation: true)
 
             self.viewModel.isAnimating = true
         }
     }
 
-    /// Stop the infinite  animation
+    /// Stop the infinite animation
     public func stopAnimating() {
         if self.viewModel.isAnimating {
             // Stop animation
@@ -144,9 +144,7 @@ public final class ProgressBarIndeterminateUIView: ProgressBarMainUIView {
         }
     }
 
-    private func reloadAnimation(
-        isFirstAnimation: Bool = true
-    ) {
+    private func reloadAnimation(isFirstAnimation: Bool) {
         let animationDuration = Constants.Animation.duration
         // Frames
         // **
@@ -159,10 +157,12 @@ public final class ProgressBarIndeterminateUIView: ProgressBarMainUIView {
             curve: .easeIn
         )
         self.firstAnimator?.addAnimations { [weak self] in
-            self?.indicatorLeadingConstraint?.constant = easeInAnimation.leadingSpaceWidth
-            self?.indicatorWidthConstraint?.constant = easeInAnimation.indicatorWidth
+            guard let self else { return }
 
-            self?.layoutIfNeeded()
+            self.indicatorLeadingConstraint?.constant = easeInAnimation.leadingSpaceWidth
+            self.indicatorWidthConstraint?.constant = easeInAnimation.indicatorWidth
+
+            self.layoutIfNeeded()
         }
         // **
 
@@ -176,16 +176,20 @@ public final class ProgressBarIndeterminateUIView: ProgressBarMainUIView {
             curve: .easeOut
         )
         self.lastAnimator?.addAnimations { [weak self] in
-            self?.indicatorLeadingConstraint?.constant = easeOutAnimation.leadingSpaceWidth
-            self?.indicatorWidthConstraint?.constant = easeOutAnimation.indicatorWidth
+            guard let self else { return }
 
-            self?.layoutIfNeeded()
+            self.indicatorLeadingConstraint?.constant = easeOutAnimation.leadingSpaceWidth
+            self.indicatorWidthConstraint?.constant = easeOutAnimation.indicatorWidth
+
+            self.layoutIfNeeded()
         }
         self.lastAnimator?.addCompletion { [weak self] position in
-            if position == .end {
-                self?.resetIndicatorConstraints()
+            guard let self else { return }
 
-                self?.reloadAnimation(
+            if position == .end {
+                self.resetIndicatorConstraints()
+
+                self.reloadAnimation(
                     isFirstAnimation: false
                 )
             }
@@ -206,7 +210,9 @@ public final class ProgressBarIndeterminateUIView: ProgressBarMainUIView {
     private func setupSubscriptions() {
         // Colors
         self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
-            self?.updateColors(colors)
+            guard let self, let colors else { return }
+
+            self.updateColors(colors)
         }
 
         // Corner Radius
