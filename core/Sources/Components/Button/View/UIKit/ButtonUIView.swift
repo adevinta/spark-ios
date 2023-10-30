@@ -853,6 +853,22 @@ public final class ButtonUIView: UIControl {
             self.titleLabel.font = titleFontToken.uiFont
         }
         // **
+
+        // **
+        // Is Image ?
+        self.iconImageView.$isImage.subscribe(in: &self.subscriptions) { [weak self] isImage in
+            guard let self else { return }
+
+            self.iconView.isHidden = !isImage
+        }
+
+        // **
+        // Is Text ?
+        self.titleLabel.$isText.subscribe(in: &self.subscriptions) { [weak self] isText in
+            guard let self else { return }
+
+            self.titleLabel.isHidden = !isText
+        }
     }
 
     // MARK: - Actions

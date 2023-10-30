@@ -21,7 +21,23 @@ final class UIControlStateLabel: UILabel {
     private var storedTextFont: UIFont?
     private var storedTextColor: UIColor?
 
+    // MARK: - Published
+
+    @Published var isText: Bool = false
+
     // MARK: - Override Properties
+
+    override var text: String? {
+        didSet {
+            self.isText = self.text != nil
+        }
+    }
+
+    override var attributedText: NSAttributedString? {
+        didSet {
+            self.isText = attributedText != nil
+        }
+    }
 
     override var font: UIFont! {
         get {

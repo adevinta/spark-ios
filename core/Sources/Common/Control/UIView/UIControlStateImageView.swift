@@ -16,6 +16,18 @@ final class UIControlStateImageView: UIImageView {
 
     private let imageStates = ControlPropertyStates<UIImage>()
 
+    // MARK: - Published
+
+    @Published var isImage: Bool = false
+
+    // MARK: - Override Properties
+
+    override var image: UIImage? {
+        didSet {
+            self.isImage = self.image != nil
+        }
+    }
+
     // MARK: - Setter & Getter
 
     /// The image for a state.
