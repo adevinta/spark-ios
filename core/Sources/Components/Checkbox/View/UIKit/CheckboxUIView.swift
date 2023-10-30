@@ -294,9 +294,9 @@ public final class CheckboxUIView: UIControl {
     }
 
     private func subscribe() {
-        self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] _ in
-            guard let self else { return }
-            self.updateTheme()
+        self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] colors in
+              guard let self else { return }
+              self.updateTheme(colors: colors)
         }
 
         self.viewModel.$opacity.subscribe(in: &self.cancellables) { [weak self] opacity in
@@ -347,14 +347,10 @@ private extension CheckboxUIView {
         self.accessibilityLabel = [self.textLabel.text].compactMap { $0 }.joined(separator: ". ")
     }
 
-    private func updateTheme() {
-        self.controlView.colors = self.viewModel.colors
-
-        if self.attributedText == nil {
-            self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
-        } else {
-            self.textLabel.alpha = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-        }
+    private func updateTheme(colors: CheckboxColors) {
+        self.controlView.colors = colors
+        self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
+        self.textLabel.alpha = self.viewModel.opacity
     }
 
     private func updateAlignment() {
