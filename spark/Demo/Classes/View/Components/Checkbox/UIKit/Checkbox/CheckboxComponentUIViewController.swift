@@ -120,8 +120,8 @@ extension CheckboxComponentUIViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentTextStyleActionSheet(_ textStyles: [CheckboxComponentUIViewModel.TextStyle]) {
-        let actionSheet = SparkActionSheet<CheckboxComponentUIViewModel.TextStyle>.init(
+    private func presentTextStyleActionSheet(_ textStyles: [CheckboxTextStyle]) {
+        let actionSheet = SparkActionSheet<CheckboxTextStyle>.init(
             values: textStyles,
             texts: textStyles.map { $0.name }) { textStyle in
                 self.viewModel.textStyle = textStyle

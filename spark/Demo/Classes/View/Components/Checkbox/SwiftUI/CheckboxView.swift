@@ -15,58 +15,124 @@ struct CheckboxListView: View {
 
     // MARK: - Properties
 
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-
-    @State private var selection1: CheckboxSelectionState = .selected
-    @State private var selection2: CheckboxSelectionState = .unselected
-    @State private var selection3: CheckboxSelectionState = .indeterminate
-    @State private var selection4: CheckboxSelectionState = .selected
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: CheckboxIntent = .main
+    @State private var alignment: CheckboxAlignment = .left
+    @State private var textStyle: CheckboxTextStyle = .text
+    @State private var isEnabled = CheckboxSelectionState.selected
+    @State private var isIndeterminate = CheckboxSelectionState.unselected
+    @State private var selectionState = CheckboxSelectionState.unselected
+    @State private var selectedIcon = Icons.checkedImage
 
     // MARK: - View
 
     var body: some View {
-        List([true, false], id: \.self) { isEnabled in
-            Section(header: Text("State \(self.title(for: isEnabled))")) {
-                let checkedImage = DemoIconography.shared.checkmark
-                CheckboxView(
-                    text: "Selected",
-                    checkedImage: checkedImage,
-                    theme: theme,
-                    isEnabled: isEnabled,
-                    selectionState: self.$selection1
+        Component(
+            name: "Checkbox",
+            configuration: {
+                ThemeSelector(theme: self.$theme)
+
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an Intent",
+                    values: CheckboxIntent.allCases,
+                    value: self.$intent
                 )
-                CheckboxView(
-                    text: "Unselected",
-                    checkedImage: checkedImage,
-                    theme: theme,
-                    isEnabled: isEnabled,
-                    selectionState: self.$selection2
+
+                EnumSelector(
+                    title: "Alignment",
+                    dialogTitle: "Select a Alignment",
+                    values: CheckboxAlignment.allCases,
+                    value: self.$alignment
                 )
-                CheckboxView(
-                    text: "Indeterminate",
-                    checkedImage: checkedImage,
-                    theme: theme,
-                    isEnabled: isEnabled,
-                    selectionState: self.$selection3
+
+                EnumSelector(
+                    title: "Icons",
+                    dialogTitle: "Select a Icon",
+                    values: Icons.allCases,
+                    value: self.$selectedIcon
                 )
-                CheckboxView(
-                    text: "Long text lorem ipsum dolor sit et amet abcdefghjijkl",
-                    checkedImage: checkedImage,
-                    theme: theme,
-                    isEnabled: isEnabled,
-                    selectionState: self.$selection4
+
+                EnumSelector(
+                    title: "Text Style",
+                    dialogTitle: "Select a Alignment",
+                    values: CheckboxTextStyle.allCases,
+                    value: self.$textStyle
                 )
+
+
+                CheckboxView(
+                    text: "Is Enabled:",
+                    checkedImage: Icons.checkedImage.image,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$isEnabled
+                )
+
+                CheckboxView(
+                    text: "Is Indeterminate:",
+                    checkedImage: Icons.checkedImage.image,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$isIndeterminate
+                )
+            },
+            integration: {
+                VStack {
+                    CheckboxView(
+                        text: text(self.textStyle),
+                        checkedImage: self.selectedIcon.image,
+                        checkboxAlignment: self.alignment,
+                        theme: self.theme,
+                        intent: self.intent,
+                        isEnabled: self.isEnabled == .selected ? true : false,
+                        selectionState: self.isIndeterminate == .selected ? .constant(.indeterminate) : $selectionState
+                    )
+                }
             }
-        }
-        .navigationBarTitle(Text("Checkbox"))
+        )
     }
 
-    private func title(for isEnable: Bool) -> String {
-        return isEnable ? "Enabled" : "Disabled"
+    private func text(_ style: CheckboxTextStyle) -> String {
+        var title: String = ""
+        switch self.textStyle {
+        case .text:
+            title = "Hello World"
+        case .multilineText:
+            title = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        case .attributeText:
+            title = "Attributed text is not supported for now"
+        case .none:
+            title = ""
+        }
+        return title
+    }
+}
+
+// MARK: - Enum
+extension CheckboxListView {
+
+    enum Icons: CaseIterable {
+        case checkedImage
+        case close
+
+        var image: UIImage {
+            switch self {
+            case .checkedImage:
+                return DemoIconography.shared.checkmark
+            case .close:
+                return DemoIconography.shared.close
+            }
+        }
+
+        var name: String {
+            switch self {
+            case .checkedImage:
+                return "Checked"
+            case .close:
+                return "Close"
+            }
+        }
     }
 }
 

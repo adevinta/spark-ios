@@ -13,13 +13,6 @@ import UIKit
 
 final class CheckboxComponentUIViewModel: ComponentUIViewModel {
 
-    enum TextStyle: CaseIterable {
-        case text
-        case multilineText
-        case attributeText
-        case none
-    }
-
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         showThemeSheetSubject
@@ -36,7 +29,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showTextSheet: AnyPublisher<[TextStyle], Never> {
+    var showTextSheet: AnyPublisher<[CheckboxTextStyle], Never> {
         showTextStyleSheetSubject
             .eraseToAnyPublisher()
     }
@@ -50,7 +43,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[CheckboxIntent], Never> = .init()
     private var showAlignmentSheetSubject: PassthroughSubject<[CheckboxAlignment], Never> = .init()
-    private var showTextStyleSheetSubject: PassthroughSubject<[TextStyle], Never> = .init()
+    private var showTextStyleSheetSubject: PassthroughSubject<[CheckboxTextStyle], Never> = .init()
     private var showIconSheetSubject: PassthroughSubject<[String: UIImage], Never> = .init()
 
     // MARK: - Items Properties
@@ -144,7 +137,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
     @Published var intent: CheckboxIntent
     @Published var isEnabled: Bool
     @Published var alignment: CheckboxAlignment
-    @Published var textStyle: TextStyle
+    @Published var textStyle: CheckboxTextStyle
     @Published var icon: [String: UIImage]
     @Published var isIndeterminate: Bool
 
@@ -154,7 +147,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState = .unselected,
         alignment: CheckboxAlignment = .left,
-        textStyle: TextStyle = .text,
+        textStyle: CheckboxTextStyle = .text,
         icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark],
         isIndeterminate: Bool = false
     ) {
@@ -196,7 +189,7 @@ extension CheckboxComponentUIViewModel {
     }
 
     @objc func presentTextStyleSheet() {
-        self.showTextStyleSheetSubject.send(TextStyle.allCases)
+        self.showTextStyleSheetSubject.send(CheckboxTextStyle.allCases)
     }
 
     @objc func presentIconSheet() {
@@ -210,4 +203,12 @@ extension CheckboxComponentUIViewModel {
     @objc func toggleIsIndeterminate() {
         self.isIndeterminate.toggle()
     }
+}
+
+// MARK: - Enum
+enum CheckboxTextStyle: CaseIterable {
+    case text
+    case multilineText
+    case attributeText
+    case none
 }

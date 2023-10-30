@@ -52,7 +52,7 @@ public final class CheckboxUIView: UIControl {
         let arrangedSubviews = self.alignment == .left ? [controlView, textLabel] : [textLabel, controlView]
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
         stackView.axis = .horizontal
-        stackView.spacing = self.stackViewSpacing
+        stackView.spacing = self.stackViewSpacing(alignment: self.alignment)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.alignment = .top
         return stackView
@@ -60,11 +60,6 @@ public final class CheckboxUIView: UIControl {
 
     private var cancellables = Set<AnyCancellable>()
     private var checkboxSelectionStateSubject = PassthroughSubject<CheckboxSelectionState, Never>()
-
-    private var stackViewSpacing: CGFloat {
-        let spacing = self.alignment == .left ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
-        return self.fontMetrics.scaledValue(for: spacing, compatibleWith: self.traitCollection)
-    }
     private var fontMetrics = UIFontMetrics(forTextStyle: .body)
     @ScaledUIMetric private var checkboxSize: CGFloat = CheckboxControlUIView.Constants.size
     private var checkboxSizeConstraint: NSLayoutConstraint?
@@ -290,13 +285,13 @@ public final class CheckboxUIView: UIControl {
 
         self._checkboxSize.update(traitCollection: self.traitCollection)
         self.checkboxSizeConstraint?.constant = self.checkboxSize
-        self.stackView.spacing = self.stackViewSpacing
+        self.stackView.spacing = self.stackViewSpacing(alignment: self.alignment)
     }
 
     private func subscribe() {
-        self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] _ in
-            guard let self else { return }
-            self.updateTheme()
+        self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] colors in
+              guard let self else { return }
+              self.updateTheme(colors: colors)
         }
 
         self.viewModel.$opacity.subscribe(in: &self.cancellables) { [weak self] opacity in
@@ -311,13 +306,12 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
             guard let self else { return }
-            self.updateAlignment()
+            self.updateAlignment(alignment: alignment)
         }
 
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] text in
             guard let self else { return }
             self.textLabel.font = self.theme.typography.body1.uiFont
-            self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
             self.textLabel.attributedText = text.leftValue
         }
 
@@ -347,19 +341,21 @@ private extension CheckboxUIView {
         self.accessibilityLabel = [self.textLabel.text].compactMap { $0 }.joined(separator: ". ")
     }
 
-    private func updateTheme() {
-        self.controlView.colors = self.viewModel.colors
-
-        if self.attributedText == nil {
-            self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
-        } else {
-            self.textLabel.alpha = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-        }
+    private func updateTheme(colors: CheckboxColors) {
+        self.controlView.colors = colors
+        self.textLabel.textColor = self.viewModel.colors.textColor.uiColor
+        self.textLabel.alpha = self.viewModel.opacity
+        self.textLabel.attributedText = self.viewModel.text.leftValue
     }
 
-    private func updateAlignment() {
-        self.stackView.spacing = self.stackViewSpacing
-        self.stackView.insertArrangedSubview(self.alignment == .left ? self.controlView : self.textLabel, at: 0)
+    private func updateAlignment(alignment: CheckboxAlignment) {
+        self.stackView.spacing = self.stackViewSpacing(alignment: alignment)
+        self.stackView.insertArrangedSubview(alignment == .left ? self.controlView : self.textLabel, at: 0)
+    }
+
+    private func stackViewSpacing(alignment: CheckboxAlignment) -> CGFloat {
+        let spacing = alignment == .left ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
+        return self.fontMetrics.scaledValue(for: spacing, compatibleWith: self.traitCollection)
     }
 }
 
