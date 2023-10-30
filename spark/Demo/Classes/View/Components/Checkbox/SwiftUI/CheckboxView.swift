@@ -18,7 +18,7 @@ struct CheckboxListView: View {
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: CheckboxIntent = .main
     @State private var alignment: CheckboxAlignment = .left
-    @State private var textStle: CheckboxTextStyle = .text
+    @State private var textStyle: CheckboxTextStyle = .text
     @State private var isEnabled = CheckboxSelectionState.selected
     @State private var isIndeterminate = CheckboxSelectionState.unselected
     @State private var selectionState = CheckboxSelectionState.unselected
@@ -33,25 +33,33 @@ struct CheckboxListView: View {
                 ThemeSelector(theme: self.$theme)
 
                 EnumSelector(
-                    title: "Intent:",
+                    title: "Intent",
                     dialogTitle: "Select an Intent",
                     values: CheckboxIntent.allCases,
                     value: self.$intent
                 )
 
                 EnumSelector(
-                    title: "Alignment:",
+                    title: "Alignment",
                     dialogTitle: "Select a Alignment",
                     values: CheckboxAlignment.allCases,
                     value: self.$alignment
                 )
 
                 EnumSelector(
-                    title: "Icons:",
+                    title: "Icons",
                     dialogTitle: "Select a Icon",
                     values: Icons.allCases,
                     value: self.$selectedIcon
                 )
+
+                EnumSelector(
+                    title: "Text Style",
+                    dialogTitle: "Select a Alignment",
+                    values: CheckboxTextStyle.allCases,
+                    value: self.$textStyle
+                )
+
 
                 CheckboxView(
                     text: "Is Enabled:",
@@ -72,14 +80,32 @@ struct CheckboxListView: View {
             integration: {
                 VStack {
                     CheckboxView(
-                        text: "Hello World",
-                        checkedImage: Icons.checkedImage.image,
+                        text: text(self.textStyle),
+                        checkedImage: self.selectedIcon.image,
+                        checkboxAlignment: self.alignment,
                         theme: self.theme,
-                        selectionState: $selectionState
+                        intent: self.intent,
+                        isEnabled: self.isEnabled == .selected ? true : false,
+                        selectionState: self.isIndeterminate == .selected ? .constant(.indeterminate) : $selectionState
                     )
                 }
             }
         )
+    }
+
+    private func text(_ style: CheckboxTextStyle) -> String {
+        var title: String = ""
+        switch self.textStyle {
+        case .text:
+            title = "Hello World"
+        case .multilineText:
+            title = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        case .attributeText:
+            title = "Attributed text is not supported for now"
+        case .none:
+            title = ""
+        }
+        return title
     }
 }
 
