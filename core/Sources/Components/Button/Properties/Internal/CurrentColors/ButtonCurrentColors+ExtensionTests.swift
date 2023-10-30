@@ -14,13 +14,13 @@ extension ButtonCurrentColors {
 
     static func mocked(
         iconTintColor: any ColorToken = ColorTokenGeneratedMock.random(),
-        textColor: (any ColorToken)? = ColorTokenGeneratedMock.random(),
+        titleColor: (any ColorToken)? = ColorTokenGeneratedMock.random(),
         backgroundColor: any ColorToken = ColorTokenGeneratedMock.random(),
         borderColor: any ColorToken = ColorTokenGeneratedMock.random()
     ) -> Self {
         return .init(
             iconTintColor: iconTintColor,
-            textColor: textColor,
+            titleColor: titleColor,
             backgroundColor: backgroundColor,
             borderColor: borderColor
         )

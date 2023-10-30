@@ -10,7 +10,7 @@
 protocol ButtonGetContentUseCaseable {
     func execute(alignment: ButtonAlignment,
                  iconImage: ImageEither?,
-                 containsText: Bool) -> ButtonContent
+                 containsTitle: Bool) -> ButtonContent
 }
 
 struct ButtonGetContentUseCase: ButtonGetContentUseCaseable {
@@ -20,7 +20,7 @@ struct ButtonGetContentUseCase: ButtonGetContentUseCaseable {
     func execute(
         alignment: ButtonAlignment,
         iconImage: ImageEither?,
-        containsText: Bool
+        containsTitle: Bool
     ) -> ButtonContent {
         let shouldShowIconImage = (iconImage != nil) ? true : false
         let isIconImageTrailing = (shouldShowIconImage && alignment == .trailingIcon) ? true : false
@@ -30,7 +30,7 @@ struct ButtonGetContentUseCase: ButtonGetContentUseCaseable {
             shouldShowIconImage: shouldShowIconImage,
             isIconImageTrailing: isIconImageTrailing,
             iconImage: iconImage,
-            shouldShowText: containsText
+            shouldShowTitle: containsTitle
         )
     }
 }

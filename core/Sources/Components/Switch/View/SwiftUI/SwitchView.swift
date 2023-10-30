@@ -52,7 +52,7 @@ public struct SwitchView: View {
     }
 
     // MARK: - View
-    
+
     public var body: some View {
         HStack(alignment: .top) {
             ForEach(self.subviewsTypes(), id: \.self) {
@@ -68,7 +68,10 @@ public struct SwitchView: View {
     // MARK: - Subview Maker
 
     private func subviewsTypes() -> [SwitchSubviewType] {
-        return (self.viewModel.isToggleOnLeft == true) ? SwitchSubviewType.leftAlignmentCases : SwitchSubviewType.rightAlignmentCases
+        return SwitchSubviewType.allCases(
+            isLeftAlignment: self.viewModel.isToggleOnLeft == true,
+            showSpace: self.viewModel.horizontalSpacing ?? 0 > 0
+        )
     }
 
     @ViewBuilder

@@ -10,7 +10,7 @@
 protocol ButtonGetCurrentColorsUseCaseable {
     func execute(colors: ButtonColors,
                  isPressed: Bool,
-                 displayedTextType: DisplayedTextType) -> ButtonCurrentColors
+                 displayedTitleType: DisplayedTextType) -> ButtonCurrentColors
 }
 
 struct ButtonGetCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable {
@@ -20,23 +20,23 @@ struct ButtonGetCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable {
     func execute(
         colors: ButtonColors,
         isPressed: Bool,
-        displayedTextType: DisplayedTextType
+        displayedTitleType: DisplayedTextType
     ) -> ButtonCurrentColors {
-        // Reload text foreground color only if the text is displayed and not the attributedText
-        let isTextColor = (displayedTextType == .text)
-        let textColor = isTextColor ? colors.foregroundColor : nil
+        // Reload title foreground color only if the title is displayed and not the attributedTitle
+        let isTitleColor = (displayedTitleType == .text)
+        let titleColor = isTitleColor ? colors.foregroundColor : nil
 
         if isPressed {
             return .init(
                 iconTintColor: colors.foregroundColor,
-                textColor: textColor,
+                titleColor: titleColor,
                 backgroundColor: colors.pressedBackgroundColor,
                 borderColor: colors.pressedBorderColor
             )
         } else {
             return .init(
                 iconTintColor: colors.foregroundColor,
-                textColor: textColor,
+                titleColor: titleColor,
                 backgroundColor: colors.backgroundColor,
                 borderColor: colors.borderColor
             )

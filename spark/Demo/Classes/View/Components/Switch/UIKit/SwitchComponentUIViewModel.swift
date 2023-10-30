@@ -86,11 +86,27 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var isOnAnimatedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is On Animated",
+            type: .toggle(isOn: self.isOnAnimated),
+            target: (source: self, action: #selector(self.isOnAnimatedChanged))
+        )
+    }()
+
     lazy var isEnabledConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Is Enabled",
             type: .toggle(isOn: self.isEnabled),
             target: (source: self, action: #selector(self.isEnabledChanged))
+        )
+    }()
+
+    lazy var isEnabledAnimatedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is Enabled Animated",
+            type: .toggle(isOn: self.isEnabledAnimated),
+            target: (source: self, action: #selector(self.isEnabledAnimatedChanged))
         )
     }()
 
@@ -111,8 +127,10 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
             self.alignmentConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
             self.isOnConfigurationItemViewModel,
+            self.isOnAnimatedConfigurationItemViewModel,
             self.isEnabledConfigurationItemViewModel,
-            self.hasImagesConfigurationItemViewModel
+            self.isEnabledAnimatedConfigurationItemViewModel,
+            self.hasImagesConfigurationItemViewModel,
         ]
     }
 
@@ -137,7 +155,9 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
     @Published var alignment: SwitchAlignment
     @Published var textContent: SwitchTextContentDefault
     @Published var isOn: Bool
+    @Published var isOnAnimated: Bool
     @Published var isEnabled: Bool
+    @Published var isEnabledAnimated: Bool
     @Published var hasImages: Bool
 
     init(
@@ -146,15 +166,20 @@ final class SwitchComponentUIViewModel: ComponentUIViewModel {
         alignment: SwitchAlignment = .left,
         textContent: SwitchTextContentDefault = .text,
         isOn: Bool = true,
+        isOnAnimated: Bool = true,
         isEnabled: Bool = true,
-        hasImages: Bool = false
+        isEnabledAnimated: Bool = true,
+        hasImages: Bool = false,
+        isAnimated: Bool = true
     ) {
         self.theme = theme
         self.intent = intent
         self.alignment = alignment
         self.textContent = textContent
         self.isOn = isOn
+        self.isOnAnimated = isOnAnimated
         self.isEnabled = isEnabled
+        self.isEnabledAnimated = isEnabledAnimated
         self.hasImages = hasImages
         self.attributedText = .init(
             string: self.text,
@@ -188,8 +213,16 @@ extension SwitchComponentUIViewModel {
         self.isOn.toggle()
     }
 
+    @objc func isOnAnimatedChanged() {
+        self.isOnAnimated.toggle()
+    }
+
     @objc func isEnabledChanged() {
         self.isEnabled.toggle()
+    }
+
+    @objc func isEnabledAnimatedChanged() {
+        self.isEnabledAnimated.toggle()
     }
 
     @objc func hasImagesChanged() {

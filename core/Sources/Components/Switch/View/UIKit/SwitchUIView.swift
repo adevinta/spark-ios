@@ -129,12 +129,13 @@ public final class SwitchUIView: UIView {
         }
     }
 
-    /// The value of the switch.
+    /// The value of the switch (retrieve and set without animation).
     public var isOn: Bool {
         get {
             return self.viewModel.isOn
         }
         set {
+            self.isOnAnimated = false
             self.viewModel.set(isOn: newValue)
         }
     }
@@ -159,12 +160,13 @@ public final class SwitchUIView: UIView {
         }
     }
 
-    /// The state of the switch: enabled or not.
+    /// The state of the switch: enabled or not (retrieve and set without animation). .
     public var isEnabled: Bool {
         get {
             return self.viewModel.isEnabled
         }
         set {
+            self.isEnabledAnimated = false
             self.viewModel.set(isEnabled: newValue)
         }
     }
@@ -249,6 +251,9 @@ public final class SwitchUIView: UIView {
     @ScaledUIMetric private var toggleWidth: CGFloat = Constants.ToggleSizes.width
     @ScaledUIMetric private var toggleSpacing: CGFloat = Constants.ToggleSizes.padding
     @ScaledUIMetric private var toggleDotSpacing: CGFloat = Constants.toggleDotImagePadding
+
+    private var isEnabledAnimated: Bool = false
+    private var isOnAnimated: Bool = false
 
     private var subscriptions = Set<AnyCancellable>()
 
@@ -605,6 +610,20 @@ public final class SwitchUIView: UIView {
         self.textLabel.heightAnchor.constraint(greaterThanOrEqualTo: self.toggleView.heightAnchor).isActive = true
     }
 
+    // MARK: - Setter
+
+    /// Sets the state of the switch to the on or off position, optionally animating the transition.
+    public func setOn(_ isOn: Bool, animated: Bool) {
+        self.isOnAnimated = animated
+        self.viewModel.set(isOn: isOn)
+    }
+
+    /// Sets the enable status of the switch, optionally animating the color.
+    public func setEnabled(_ isEnabled: Bool, animated: Bool) {
+        self.isEnabledAnimated = animated
+        self.viewModel.set(isEnabled: isEnabled)
+    }
+
     // MARK: - Actions
 
     @objc private func toggleTapGestureAction(_ sender: UITapGestureRecognizer) {
@@ -702,14 +721,12 @@ public final class SwitchUIView: UIView {
             guard let self, let toggleOpacity else { return }
 
             // Animate only if new alpha is different from current alpha
-            let animated = self.toggleView.alpha != toggleOpacity
 
-            if animated {
-                UIView.animate(withDuration: Constants.animationDuration) { [weak self] in
-                    self?.toggleView.alpha = toggleOpacity
-                }
-            } else {
-                self.toggleView.alpha = toggleOpacity
+            let isAnimated = self.isEnabledAnimated && self.toggleView.alpha != toggleOpacity
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
+                self?.toggleView.alpha = toggleOpacity
             }
         }
         // **
@@ -720,14 +737,11 @@ public final class SwitchUIView: UIView {
             guard let self, let colorToken else { return }
 
             // Animate only if there is currently an color on View and if new color is different from current color
-            let animated = self.toggleView.backgroundColor != nil && self.toggleView.backgroundColor != colorToken.uiColor
+            let isAnimated = self.isOnAnimated && self.toggleView.backgroundColor != nil && self.toggleView.backgroundColor != colorToken.uiColor
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
 
-            if animated {
-                UIView.animate(withDuration: Constants.animationDuration) { [weak self] in
-                    self?.toggleView.backgroundColor = colorToken.uiColor
-                }
-            } else {
-                self.toggleView.backgroundColor = colorToken.uiColor
+            UIView.execute(animationType: animationType) { [weak self] in
+                self?.toggleView.backgroundColor = colorToken.uiColor
             }
         }
         self.viewModel.$toggleDotBackgroundColorToken.subscribe(in: &self.subscriptions) { [weak self] colorToken in
@@ -739,14 +753,11 @@ public final class SwitchUIView: UIView {
             guard let self, let colorToken else { return }
 
             // Animate only if there is currently an color on View and if new color is different from current color
-            let animated = self.toggleDotImageView.tintColor != nil && self.toggleDotImageView.tintColor != colorToken.uiColor
+            let isAnimated = self.isOnAnimated && self.toggleDotImageView.tintColor != nil && self.toggleDotImageView.tintColor != colorToken.uiColor
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
 
-            if animated {
-                UIView.animate(withDuration: Constants.animationDuration) { [weak self] in
-                    self?.toggleDotImageView.tintColor = colorToken.uiColor
-                }
-            } else {
-                self.toggleDotImageView.tintColor = colorToken.uiColor
+            UIView.execute(animationType: animationType) { [weak self] in
+                self?.toggleDotImageView.tintColor = colorToken.uiColor
             }
         }
         self.viewModel.$textForegroundColorToken.subscribe(in: &self.subscriptions) { [weak self] colorToken in
@@ -772,23 +783,25 @@ public final class SwitchUIView: UIView {
 
         // **
         // Show spaces
-        self.viewModel.$showToggleLeftSpace.subscribe(in: &self.subscriptions) { [weak self] showSpace in
-            guard let self, let showSpace else { return }
+        self.viewModel.$showToggleLeftSpace.subscribe(in: &self.subscriptions) { [weak self] showLeftSpace in
+            guard let self, let showLeftSpace else { return }
 
-            // showSpace MUST be different to continue
+            // showLeftSpace MUST be different to continue
             // Or if the both space have the same isHidden (default state)
-            guard self.toggleLeftSpaceView.isHidden == showSpace ||
+            guard self.toggleLeftSpaceView.isHidden == showLeftSpace ||
             self.toggleRightSpaceView.isHidden == self.toggleLeftSpaceView.isHidden else {
                 return
             }
 
             // Lock interaction before animation
-            let currentUserInteraction = self.toggleView.isUserInteractionEnabled
+            let currentUserInteraction = self.viewModel.isToggleInteractionEnabled ?? true
             self.toggleView.isUserInteractionEnabled = false
 
-            UIView.animate(withDuration: Constants.animationDuration) { [weak self] in
-                self?.toggleLeftSpaceView.isHidden = !showSpace
-                self?.toggleRightSpaceView.isHidden = showSpace
+            let animationType: UIExecuteAnimationType = self.isOnAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
+                self?.toggleLeftSpaceView.isHidden = !showLeftSpace
+                self?.toggleRightSpaceView.isHidden = showLeftSpace
             } completion: { [weak self] _ in
                 // Unlock interaction after animation
                 self?.toggleView.isUserInteractionEnabled = currentUserInteraction
@@ -803,21 +816,18 @@ public final class SwitchUIView: UIView {
             let image = toggleDotImagesState?.currentImage.leftValue
 
             // Animate only if there is currently an image on ImageView and new image is exists
-            let animated = self.toggleDotImageView.image != nil && image != nil
+            let isAnimated = self.isOnAnimated && self.toggleDotImageView.image != nil && image != nil
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Constants.animationDuration) : .unanimated
 
-            if animated {
-                UIView.transition(
-                    with: self.toggleDotImageView,
-                    duration: Constants.animationDuration,
-                    options: .transitionCrossDissolve,
-                    animations: {
-                        self.toggleDotImageView.image = image
-                    },
-                    completion: nil
-                )
-            } else {
-                self.toggleDotImageView.image = image
-            }
+            UIView.execute(
+                with: self.toggleDotImageView,
+                animationType: animationType,
+                options: .transitionCrossDissolve,
+                instructions: { [weak self] in
+                    self?.toggleDotImageView.image = image
+                },
+                completion: nil
+            )
         }
 
         // Displayed Text

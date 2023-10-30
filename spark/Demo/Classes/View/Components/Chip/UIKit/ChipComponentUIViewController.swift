@@ -75,6 +75,10 @@ final class ChipComponentViewController: UIViewController {
         self.viewModel.showIconPosition.subscribe(in: &self.cancellables) { variants in
             self.presentIconAlignmentActionSheet(variants)
         }
+
+        self.viewModel.showExtraComponent.subscribe(in: &self.cancellables) { variants in
+            self.presentExtraComponentActionSheet(variants)
+        }
     }
 }
 
@@ -122,13 +126,16 @@ extension ChipComponentViewController {
         let actionSheet = SparkActionSheet<ChipComponentUIViewModel.IconPosition>.init(
             values: variants,
             texts: variants.map{ $0.name }) { variant in
-                switch variant {
-                case .none: self.viewModel.showIcon = false
-                case .leading: self.viewModel.showIcon = true
-                    self.viewModel.alignment = .leadingIcon
-                case .trailing: self.viewModel.showIcon = true
-                    self.viewModel.alignment = .trailingIcon
-                }
+                self.viewModel.iconAlignmentDidUpdate(variant)
+            }
+            self.present(actionSheet, animated: true)
+    }
+
+    private func presentExtraComponentActionSheet(_ variants: [ChipComponentUIViewModel.ExtraComponent]) {
+        let actionSheet = SparkActionSheet<ChipComponentUIViewModel.ExtraComponent>.init(
+            values: variants,
+            texts: variants.map{ $0.name }) { variant in
+                self.viewModel.extraComponentDidUpdate(variant)
             }
             self.present(actionSheet, animated: true)
     }

@@ -15,7 +15,7 @@ public final class ButtonUIView: UIView {
     // MARK: - Type alias
 
     private typealias AccessibilityIdentifier = ButtonAccessibilityIdentifier
-    private typealias Constants = ButtonConstants
+    private typealias Animation = ButtonConstants.Animation
 
     // MARK: - Components
 
@@ -24,7 +24,7 @@ public final class ButtonUIView: UIView {
             arrangedSubviews:
                 [
                     self.iconView,
-                    self.textLabel
+                    self.titleLabel
                 ]
         )
         stackView.axis = .horizontal
@@ -50,7 +50,7 @@ public final class ButtonUIView: UIView {
         return imageView
     }()
 
-    private var textLabel: UILabel = {
+    private var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
@@ -169,24 +169,26 @@ public final class ButtonUIView: UIView {
     }
 
     /// The text of the button.
+    @available(*, deprecated, message: "Use setTitle(_:, for:) and title(for:) instead")
     public var text: String? {
         get {
-            return self.textLabel.text
+            return self.titleLabel.text
         }
         set {
-            self.textLabel.text = newValue
-            self.viewModel.set(text: newValue)
+            self.titleLabel.text = newValue
+            self.viewModel.set(title: newValue)
         }
     }
 
     /// The attributed text of the button.
+    @available(*, deprecated, message: "Use setAttributedTitle(_:, for:) and attributedTitle(for:) instead")
     public var attributedText: NSAttributedString? {
         get {
-            return self.textLabel.attributedText
+            return self.titleLabel.attributedText
         }
         set {
-            self.textLabel.attributedText = newValue
-            self.viewModel.set(attributedText: newValue.map { .left($0) })
+            self.titleLabel.attributedText = newValue
+            self.viewModel.set(attributedTitle: newValue.map { .left($0) })
         }
     }
 
@@ -194,10 +196,10 @@ public final class ButtonUIView: UIView {
     /// The default value is **byTruncatingTail**
     public var lineBreakMode: NSLineBreakMode {
         get {
-            return self.textLabel.lineBreakMode
+            return self.titleLabel.lineBreakMode
         }
         set {
-            self.textLabel.lineBreakMode = newValue
+            self.titleLabel.lineBreakMode = newValue
         }
     }
 
@@ -210,6 +212,9 @@ public final class ButtonUIView: UIView {
             self.viewModel.set(isEnabled: newValue)
         }
     }
+
+    /// Button modifications should be animated or not. **True** by default.
+    public var isAnimated: Bool = true
 
     // MARK: - Internal Properties
 
@@ -433,8 +438,8 @@ public final class ButtonUIView: UIView {
             shape: shape,
             alignment: alignment,
             iconImage: iconImage.map { .left($0) },
-            text: text,
-            attributedText: attributedText.map { .left($0) },
+            title: text,
+            attributedTitle: attributedText.map { .left($0) },
             isEnabled: isEnabled)
 
         super.init(frame: .zero)
@@ -480,9 +485,9 @@ public final class ButtonUIView: UIView {
         // Label
         // Only one of the text/attributedText can be set in the init
         if let text {
-            self.textLabel.text = text
+            self.titleLabel.text = text
         } else if let attributedText {
-            self.textLabel.attributedText = attributedText
+            self.titleLabel.attributedText = attributedText
         }
     }
 
@@ -570,11 +575,14 @@ public final class ButtonUIView: UIView {
         let horizontalSpacing = self._horizontalSpacing.wrappedValue
         let horizontalPadding = self._horizontalPadding.wrappedValue
 
-        let animationDuration = self.firstContentStackViewAnimation ? 0 : Constants.Animation.slowDuration
         if verticalSpacing != self.contentStackViewTopConstraint?.constant ||
             horizontalSpacing != self.contentStackViewLeadingConstraint?.constant ||
             horizontalPadding != self.contentStackView.spacing {
-            UIView.animate(withDuration: animationDuration) { [weak self] in
+
+            let isAnimated = self.isAnimated && !self.firstContentStackViewAnimation
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.slowDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
                 guard let self else { return }
 
                 self.firstContentStackViewAnimation = false
@@ -607,15 +615,20 @@ public final class ButtonUIView: UIView {
 
             // Update the user interaction enabled
             self.clearButton.isUserInteractionEnabled = state.isUserInteractionEnabled
+            if !state.isUserInteractionEnabled {
+                self.accessibilityTraits.insert(.notEnabled)
+            } else {
+                self.accessibilityTraits.remove(.notEnabled)
+            }
 
             // Animate only if new alpha is different from current alpha
             let alpha = state.opacity
-            if self.alpha != alpha {
-                UIView.animate(withDuration: Constants.Animation.slowDuration) { [weak self] in
-                    self?.alpha = alpha
-                }
-            } else {
-                self.alpha = alpha
+
+            let isAnimated = self.isAnimated && self.alpha != alpha
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.slowDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
+                self?.alpha = alpha
             }
         }
         // **
@@ -626,12 +639,11 @@ public final class ButtonUIView: UIView {
             guard let self, let colors else { return }
 
             // Background Color
-            if self.backgroundColor != colors.backgroundColor.uiColor {
-                UIView.animate(withDuration: Constants.Animation.fastDuration) { [weak self] in
-                    self?.backgroundColor = colors.backgroundColor.uiColor
-                }
-            } else {
-                self.backgroundColor = colors.backgroundColor.uiColor
+            let isAnimated = self.isAnimated && self.backgroundColor != colors.backgroundColor.uiColor
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.fastDuration) : .unanimated
+            
+            UIView.execute(animationType: animationType) { [weak self] in
+                self?.backgroundColor = colors.backgroundColor.uiColor
             }
 
             // Border Color
@@ -639,8 +651,8 @@ public final class ButtonUIView: UIView {
 
             // Foreground Color
             self.iconImageView.tintColor = colors.iconTintColor.uiColor
-            if let textColor = colors.textColor {
-                self.textLabel.textColor = textColor.uiColor
+            if let titleColor = colors.titleColor {
+                self.titleLabel.textColor = titleColor.uiColor
             }
         }
 
@@ -702,8 +714,10 @@ public final class ButtonUIView: UIView {
             self.iconImageView.image = content.iconImage?.leftValue
 
             // Subviews positions and visibilities
-            let animationDuration = self.firstContentStackViewSubviewAnimation ? 0 : Constants.Animation.slowDuration
-            UIView.animate(withDuration: animationDuration) { [weak self] in
+            let isAnimated = self.isAnimated && !self.firstContentStackViewSubviewAnimation
+            let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.slowDuration) : .unanimated
+
+            UIView.execute(animationType: animationType) { [weak self] in
                 guard let self else { return }
 
                 self.firstContentStackViewSubviewAnimation = false
@@ -712,8 +726,8 @@ public final class ButtonUIView: UIView {
                     self.iconView.isHidden = !content.shouldShowIconImage
                 }
 
-                if self.textLabel.isHidden == content.shouldShowText {
-                    self.textLabel.isHidden = !content.shouldShowText
+                if self.titleLabel.isHidden == content.shouldShowTitle {
+                    self.titleLabel.isHidden = !content.shouldShowTitle
                 }
                 self.contentStackView.updateConstraintsIfNeeded()
             }
@@ -724,11 +738,11 @@ public final class ButtonUIView: UIView {
         // **
 
         // **
-        // Text Font
-        self.viewModel.$textFontToken.subscribe(in: &self.subscriptions) { [weak self] textFontToken in
-            guard let self, let textFontToken else { return }
+        // Title Font
+        self.viewModel.$titleFontToken.subscribe(in: &self.subscriptions) { [weak self] titleFontToken in
+            guard let self, let titleFontToken else { return }
 
-            self.textLabel.font = textFontToken.uiFont
+            self.titleLabel.font = titleFontToken.uiFont
         }
         // **
     }
@@ -758,7 +772,7 @@ public final class ButtonUIView: UIView {
     }
 
     private func unpressedAction() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.Animation.fastDuration, execute: { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + Animation.fastDuration, execute: { [weak self] in
             self?.viewModel.unpressedAction()
         })
     }
