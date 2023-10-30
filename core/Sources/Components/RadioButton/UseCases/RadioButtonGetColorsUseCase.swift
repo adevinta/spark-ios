@@ -53,7 +53,19 @@ private extension SparkCore.Colors {
     func buttonColor(
         intent: RadioButtonIntent,
         isSelected: Bool) -> any ColorToken {
-            return  isSelected ? self.selectedColor(intent: intent) : self.base.outline
+            return  isSelected ? self.selectedColor(intent: intent) : self.outlineColor(intent: intent)
+    }
+
+    private func outlineColor(intent: RadioButtonIntent) -> any ColorToken {
+        switch intent {
+        case .danger:
+            return self.feedback.error
+        case .alert:
+            return self.feedback.alert
+        case .success:
+            return self.feedback.success
+        default: return self.base.outline
+        }
     }
 
     private func selectedColor(intent: RadioButtonIntent) -> any ColorToken {

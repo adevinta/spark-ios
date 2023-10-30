@@ -54,7 +54,7 @@ final class RadioButtonGetColorsUseCaseTests: XCTestCase {
         // Given
         let colors = self.theme.colors
         let expectedColors = RadioButtonColors(
-            button: colors.base.outline,
+            button: colors.feedback.error,
             label: colors.base.onBackground,
             halo: colors.feedback.errorContainer,
             fill: ColorTokenDefault.clear,
@@ -92,11 +92,32 @@ final class RadioButtonGetColorsUseCaseTests: XCTestCase {
         XCTAssertEqual(givenColors, expectedColors)
     }
 
+    func test_alert_colors_when_button_is_not_selected() throws {
+        // Given
+        let colors = self.theme.colors
+        let expectedColors = RadioButtonColors(
+            button: colors.feedback.alert,
+            label: colors.base.onBackground,
+            halo: colors.feedback.alertContainer,
+            fill: ColorTokenDefault.clear,
+            surface: colors.feedback.onAlert
+        )
+
+        // When
+        let givenColors = self.sut.execute(
+            theme: self.theme,
+            intent: .alert,
+            isSelected: false)
+
+        // Then
+        XCTAssertEqual(givenColors, expectedColors)
+    }
+
     func test_success_colors_when_button_is_not_selected() throws {
         // Given
         let colors = self.theme.colors
         let expectedColors = RadioButtonColors(
-            button: colors.base.outline,
+            button: colors.feedback.success,
             label: colors.base.onBackground,
             halo: colors.feedback.successContainer,
             fill: ColorTokenDefault.clear,
