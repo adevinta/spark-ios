@@ -14,7 +14,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     @Published var label: Either<NSAttributedString?, String?>
     let id: ID
 
-    private var formerSelecteID: ID?
+    private var formerSelecteID: ID
     private let useCase: RadioButtonGetAttributesUseCaseable
 
     var theme: Theme
@@ -22,7 +22,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
 
     private(set) var state: RadioButtonStateAttribute
 
-    @Binding private (set) var selectedID: ID?
+    @Binding private (set) var selectedID: ID
 
     // MARK: - Published Properties
 
@@ -38,7 +38,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
                      intent: RadioButtonIntent,
                      id: ID,
                      label: Either<NSAttributedString?, String?>,
-                     selectedID: Binding<ID?>,
+                     selectedID: Binding<ID>,
                      alignment: RadioButtonLabelAlignment = .trailing) {
 
         self.init(theme: theme,
@@ -54,7 +54,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
          intent: RadioButtonIntent,
          id: ID,
          label: Either<NSAttributedString?, String?>,
-         selectedID: Binding<ID?>,
+         selectedID: Binding<ID>,
          alignment: RadioButtonLabelAlignment,
          useCase: RadioButtonGetAttributesUseCaseable) {
         self.theme = theme

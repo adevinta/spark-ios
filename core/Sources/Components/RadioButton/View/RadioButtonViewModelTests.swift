@@ -15,7 +15,7 @@ final class RadioButtonViewModelTests: XCTestCase {
 
     // MARK: - Properties
     var theme: ThemeGeneratedMock!
-    var bindingValue: Int? = 0
+    var bindingValue: Int = 0
     var subscriptions: Set<AnyCancellable>!
 
     // MARK: - Setup

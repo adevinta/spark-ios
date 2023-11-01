@@ -32,7 +32,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
 
     // MARK: - Injected properties
 
-    private var selectedID: Binding<ID?>
+    private var selectedID: Binding<ID>
     private let items: [RadioButtonItem<ID>]
     private let groupLayout: RadioButtonGroupLayout
     private let labelAlignment: RadioButtonLabelAlignment
@@ -53,7 +53,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     @available(*, deprecated, message: "Use init with intent instead.")
     public init(theme: Theme,
                 title: String? = nil,
-                selectedID: Binding<ID?>,
+                selectedID: Binding<ID>,
                 items: [RadioButtonItem<ID>],
                 radioButtonLabelPosition: RadioButtonLabelPosition = .right,
                 groupLayout: RadioButtonGroupLayout = .vertical,
@@ -78,7 +78,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     ///   - items: A list of ``RadioButtonItem``
     public init(theme: Theme,
                 intent: RadioButtonIntent,
-                selectedID: Binding<ID?>,
+                selectedID: Binding<ID>,
                 items: [RadioButtonItem<ID>],
                 labelAlignment: RadioButtonLabelAlignment = .trailing,
                 groupLayout: RadioButtonGroupLayout = .vertical

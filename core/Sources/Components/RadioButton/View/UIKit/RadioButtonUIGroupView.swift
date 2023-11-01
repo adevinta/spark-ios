@@ -24,12 +24,11 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var labelSpacing: CGFloat
 
-    private lazy var backingSelectedID: Binding<ID?> = Binding(
+    private lazy var backingSelectedID: Binding<ID> = Binding(
         get: {
             return self.selectedID
         },
         set: { newValue in
-            guard let newValue = newValue else { return }
             self.selectedID = newValue
             self.updateRadioButtonStates()
             self.valueSubject.send(newValue)

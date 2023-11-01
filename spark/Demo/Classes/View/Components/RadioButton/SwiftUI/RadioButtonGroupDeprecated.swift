@@ -13,9 +13,9 @@ import SwiftUI
 struct RadioButtonGroupDeprecated: View {
     // MARK: - Properties
 
-    @State var selectedID: Int? = 1
-    @State var rightTextAligment: Bool? = false
-    @State var dummyBinding: Int? = 1
+    @State var selectedID: Int = 1
+    @State var rightTextAligment: Bool = false
+    @State var dummyBinding: Int = 1
     @State var groupState: RadioButtonGroupState = .enabled
     @State var stateSheetIsPresented = false
 
@@ -64,7 +64,7 @@ struct RadioButtonGroupDeprecated: View {
             )
             .padding(.bottom, 20)
 
-            Text("Selected Value \(selectedID ?? 0)")
+            Text("Selected Value \(selectedID)")
                 .padding(.bottom, 20)
 
             Divider()
@@ -90,7 +90,7 @@ struct RadioButtonGroupDeprecated: View {
                                         RadioButtonItem(id: 2,
                                                         label: "Label 2")
                                      ],
-                                     radioButtonLabelPosition: self.rightTextAligment == true ? .right : .left,
+                                     radioButtonLabelPosition: self.rightTextAligment ? .right : .left,
                                      groupLayout: .horizontal)
                 Spacer()
             }
