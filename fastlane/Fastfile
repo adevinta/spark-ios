@@ -13,6 +13,8 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
+
 default_platform(:ios)
 
 platform :ios do
@@ -25,20 +27,29 @@ platform :ios do
 
   desc "Lane for build framework"
   lane :build_framework do |options|
+    packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
     gym(
       clean: true,
       scheme: options[:TARGET_NAME],
       project: "Spark.xcodeproj",
       skip_package_ipa: true,
+      cloned_source_packages_path: packages_path,
+      disable_package_automatic_updates: true,
+      skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
     )
   end
 
   desc "Lane for unit testing"
   lane :unit_tests do |options|
+    packages_path = "#{File.expand_path("..", Dir.pwd)}/packages_cache"
     scan(
       clean: true,
       scheme: options[:TARGET_NAME],
       project: "Spark.xcodeproj",
+      cloned_source_packages_path: packages_path,
+      disable_package_automatic_updates: true,
+      skip_package_dependencies_resolution: ENV["HAS_PACKAGES_CACHE_HIT"],
+      only_testing: ENV['ONLY_TESTING'],
       output_directory: "out",
       result_bundle: true,
       device: "iPhone 14 Pro",

@@ -11,6 +11,7 @@ import SwiftUI
 import UIKit
 
 @testable import SparkCore
+import SnapshotTesting
 
 // MARK: - Constants
 
@@ -46,6 +47,8 @@ extension SwiftUIComponentSnapshotTestCase {
         testName: String = #function,
         line: UInt = #line
     ) {
+        let layout = SwiftUISnapshotLayout.device(config: .iPhone13)
+
         // Dark mode testing
         for size in sizes {
             let traits = UITraitCollection(traitsFrom: [.darkMode])
@@ -55,6 +58,7 @@ extension SwiftUIComponentSnapshotTestCase {
                 matching: view().environment(\.sizeCategory, ContentSizeCategory(size) ?? .extraSmall),
                 as: .image(precision: Constants.imagePrecision,
                            perceptualPrecision: Constants.imagePerceptualPrecision,
+                           layout: layout,
                            traits: traits),
                 named: name,
                 record: recording,
@@ -72,7 +76,8 @@ extension SwiftUIComponentSnapshotTestCase {
             sparkAssertSnapshot(
                 matching: view().environment(\.sizeCategory, ContentSizeCategory(size) ?? .extraSmall),
                 as: .image(precision: Constants.imagePrecision,
-                           perceptualPrecision: Constants.imagePerceptualPrecision),
+                           perceptualPrecision: Constants.imagePerceptualPrecision,
+                           layout: layout),
                 named: name,
                 record: recording,
                 timeout: timeout,

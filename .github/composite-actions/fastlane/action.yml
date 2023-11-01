@@ -1,0 +1,40 @@
+name: "Fastlane"
+description: "Run xcodegen, restore packages cache and run fastlane"
+inputs:
+  lane:
+    description: "Which lane to run"
+    required: true
+    default: "build_framework"
+  only_testing:
+    description: "Which test classes to run"
+    required: false
+    default: ""
+  target:
+    description: "Which project to build"
+    required: true
+    default: "SparkCore"
+runs:
+  using: composite
+  steps:
+    - name: Run xcodegen
+      uses: xavierLowmiller/xcodegen-action@1.1.2
+      with:
+        spec: project-ci.yml
+        version: "2.33.0"
+        use-cache: true
+    - name: Cache packages
+      uses: actions/cache@v3
+      id: packages-cache
+      with:
+        path: packages_cache
+        key: ${{ runner.os }}-packages-${{ hashFiles('Spark.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+    - name: Create packages_cache directory
+      if: steps.packages-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: mkdir -p packages_cache
+    - name: "Run fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }}"
+      run: bundle exec fastlane ${{ inputs.lane }} TARGET_NAME:${{ inputs.target }}
+      shell: bash
+      env:
+        ONLY_TESTING: ${{ inputs.only_testing }}
+        HAS_PACKAGES_CACHE_HIT: ${{ steps.packages-cache.outputs.cache-hit == 'true' }}
