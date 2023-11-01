@@ -68,6 +68,7 @@ struct ComponentsView: View {
                 Button("Radio Button - Deprecated") {
                     self.navigateToView(RadioButtonGroupDeprecated())
                 }
+
                 Button("Radio Button") {
                     self.navigateToView(RadioButtonGroup())
                 }

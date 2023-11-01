@@ -24,11 +24,12 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var labelSpacing: CGFloat
 
-    private lazy var backingSelectedID: Binding<ID> = Binding(
+    private lazy var backingSelectedID: Binding<ID?> = Binding(
         get: {
             return self.selectedID
         },
         set: { newValue in
+            guard let newValue = newValue else { return }
             self.selectedID = newValue
             self.updateRadioButtonStates()
             self.valueSubject.send(newValue)
@@ -121,7 +122,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     /// The current selected ID. 
-    public var selectedID: ID {
+    public var selectedID: ID? {
         didSet {
             self.updateRadioButtonStates()
         }
@@ -251,7 +252,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     public convenience init(
         theme: Theme,
         intent: RadioButtonIntent,
-        selectedID: ID,
+        selectedID: ID?,
         items: [RadioButtonUIItem<ID>],
         labelAlignment: RadioButtonLabelAlignment = .trailing,
         groupLayout: RadioButtonGroupLayout = .vertical) {
@@ -271,7 +272,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     init(viewModel: RadioButtonGroupViewModel<Void>,
-         selectedID: ID,
+         selectedID: ID?,
          items: [RadioButtonUIItem<ID>],
          labelAlignment: RadioButtonLabelAlignment = .trailing,
          groupLayout: RadioButtonGroupLayout = .vertical) {
