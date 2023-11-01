@@ -191,7 +191,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         theme: Theme,
         id: ID,
         label: NSAttributedString,
-        selectedID: Binding<ID>,
+        selectedID: Binding<ID?>,
         groupState: RadioButtonGroupState = .enabled,
         labelPosition: RadioButtonLabelPosition = .right
     ) {
@@ -220,7 +220,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         intent: RadioButtonIntent = .basic,
         id: ID,
         label: NSAttributedString,
-        selectedID: Binding<ID>,
+        selectedID: Binding<ID?>,
         labelAlignment: RadioButtonLabelAlignment = .trailing
     ) {
         let viewModel = RadioButtonViewModel(

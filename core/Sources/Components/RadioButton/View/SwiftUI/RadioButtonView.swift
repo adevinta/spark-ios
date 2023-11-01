@@ -70,7 +70,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                 intent: RadioButtonIntent = .basic,
                 id: ID,
                 label: String,
-                selectedID: Binding<ID>,
+                selectedID: Binding<ID?>,
                 labelAlignment: RadioButtonLabelAlignment = .trailing) {
         let viewModel = RadioButtonViewModel(
             theme: theme,
@@ -86,7 +86,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     public init(theme: Theme,
                 id: ID,
                 label: String,
-                selectedID: Binding<ID>,
+                selectedID: Binding<ID?>,
                 groupState: RadioButtonGroupState = .enabled,
                 labelPosition: RadioButtonLabelPosition = .right) {
         let viewModel = RadioButtonViewModel(
