@@ -145,18 +145,18 @@ public class BadgeUIView: UIView {
     // MARK: - Badge configuration
 
     private func setupBadge() {
-        setupScalables()
+        setupScalables(isBorderVisible: self.viewModel.isBorderVisible)
         setupBadgeText()
         setupAppearance()
-        setupLayouts()
+        setupLayouts(isBadgeEmpty: self.viewModel.isBadgeEmpty)
         subscribe()
     }
 
-    private func setupScalables() {
+    private func setupScalables(isBorderVisible: Bool) {
         self.emptyBadgeSize = BadgeConstants.emptySize.width
         self.badgeHeight = self.viewModel.badgeHeight
         self.horizontalSpacing = self.viewModel.offset.leading
-        self.borderWidth = self.viewModel.isBorderVisible ? self.viewModel.border.width : .zero
+        self.borderWidth = isBorderVisible ? self.viewModel.border.width : .zero
     }
 
     private func setupBadgeText() {
@@ -184,14 +184,14 @@ public class BadgeUIView: UIView {
 
     // MARK: - Layouts setup
 
-    private func setupLayouts() {
-        self.setupSizeConstraint()
-        self.updateLeadingConstraintsIfNeeded()
+    private func setupLayouts(isBadgeEmpty: Bool) {
+        self.setupSizeConstraint(isBadgeEmpty: isBadgeEmpty)
+        self.updateLeadingConstraintsIfNeeded(isBadgeEmpty: isBadgeEmpty)
         self.setupBadgeConstraintsIfNeeded()
     }
 
-    private func setupSizeConstraint() {
-        let badgeSize = self.viewModel.isBadgeEmpty ? self.emptyBadgeSize : self.badgeHeight
+    private func setupSizeConstraint(isBadgeEmpty: Bool) {
+        let badgeSize = isBadgeEmpty ? self.emptyBadgeSize : self.badgeHeight
 
         if let heightConstraint = self.heightConstraint, let widthConstraint = self.widthConstraint {
             widthConstraint.constant = badgeSize
@@ -204,14 +204,15 @@ public class BadgeUIView: UIView {
             NSLayoutConstraint.activate([widthConstraint, heightConstraint])
             self.widthConstraint = widthConstraint
             self.heightConstraint = heightConstraint
+            heightConstraint.isActive = true
         }
     }
 
-    private func updateLeadingConstraintsIfNeeded() {
+    private func updateLeadingConstraintsIfNeeded(isBadgeEmpty: Bool) {
         guard let leadingConstraint = self.labelLeadingConstraint,
               let trailingConstraint = self.labelTrailingConstraint else { return }
 
-        let spacing: CGFloat = self.viewModel.isBadgeEmpty ? 0 : self.horizontalSpacing
+        let spacing: CGFloat = isBadgeEmpty ? 0 : self.horizontalSpacing
         leadingConstraint.constant = spacing
         trailingConstraint.constant = -spacing
     }
@@ -282,35 +283,39 @@ extension BadgeUIView {
     private func subscribeToTextChanges() {
         self.viewModel.$text
             .subscribe(in: &self.cancellables) { [weak self] text in
-                self?.textLabel.text = text
-                self?.reloadUISize()
-                self?.setupLayouts()
+                guard let self = self else { return }
+                self.textLabel.text = text
+                self.reloadUISize()
+                self.setupLayouts(isBadgeEmpty: self.viewModel.isBadgeEmpty)
+                self.invalidateIntrinsicContentSize()
         }
         self.viewModel.$textFont
             .subscribe(in: &self.cancellables) { [weak self] textFont in
-                self?.textLabel.font = textFont.uiFont
-                self?.reloadUISize()
-                self?.setupLayouts()
+                guard let self = self else { return }
+                self.textLabel.font = textFont.uiFont
+                self.reloadUISize()
+                self.setupLayouts(isBadgeEmpty: self.viewModel.isBadgeEmpty)
             }
         self.viewModel.$isBadgeEmpty
-            .subscribe(in: &self.cancellables) { [weak self] isBadgeOutlined in
+            .subscribe(in: &self.cancellables) { [weak self] isBadgeEmpty in
                 self?.textLabel.text = self?.viewModel.text
                 self?.reloadUISize()
-                self?.setupLayouts()
+                self?.setupLayouts(isBadgeEmpty: isBadgeEmpty)
             }
     }
 
     private func subscribeToBorderChanges() {
         self.viewModel.$isBorderVisible
-            .subscribe(in: &self.cancellables) { [weak self] isBadgeOutlined in
+            .subscribe(in: &self.cancellables) { [weak self] isBorderVisible in
                 guard let self else {
                     return
                 }
-                self.updateBorder(self.viewModel.border)
+                self.updateBorder(self.viewModel.border, isBorderVisible: isBorderVisible)
             }
         self.viewModel.$border
             .subscribe(in: &self.cancellables) { [weak self] badgeBorder in
-                self?.updateBorder(badgeBorder)
+                guard let self = self else { return }
+                self.updateBorder(badgeBorder, isBorderVisible: self.viewModel.isBorderVisible)
             }
     }
 
@@ -328,18 +333,19 @@ extension BadgeUIView {
     private func subscribeToSizeChanges() {
         self.viewModel.$badgeHeight
             .subscribe(in: &self.cancellables) { [weak self] badgeHeight in
-                self?.badgeHeight = badgeHeight
-                self?.setupLayouts()
-                self?.invalidateIntrinsicContentSize()
+                guard let self = self else { return }
+                self.badgeHeight = badgeHeight
+                self.setupLayouts(isBadgeEmpty: self.viewModel.isBadgeEmpty)
+                self.invalidateIntrinsicContentSize()
             }
     }
 }
 
 // MARK: - Updates on Trait Collection Change
 extension BadgeUIView {
-    private func updateBorder(_ badgeBorder: BadgeBorder) {
+    private func updateBorder(_ badgeBorder: BadgeBorder, isBorderVisible: Bool) {
         self.layer.borderColor = badgeBorder.color.uiColor.cgColor
-        self.setupScalables()
+        self.setupScalables(isBorderVisible: isBorderVisible)
         self.reloadBorderWidth()
     }
 
@@ -378,7 +384,7 @@ extension BadgeUIView {
         self.reloadBadgeFontIfNeeded()
         self.reloadUISize()
         self.reloadBorderWidth()
-        self.setupLayouts()
+        self.setupLayouts(isBadgeEmpty: self.viewModel.isBadgeEmpty)
     }
 }
 
