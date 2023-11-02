@@ -10,7 +10,8 @@
 public enum TagAccessibilityIdentifier {
 
     // MARK: - Properties
-
+    /// The tag component accessibility identifier.
+    public static let component = "spark-tag"
     /// The text label accessibility identifier.
     public static let text = "spark-tag-text"
     /// The icon image accessibility identifier.

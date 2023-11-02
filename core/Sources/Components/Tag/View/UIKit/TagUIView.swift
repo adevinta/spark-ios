@@ -211,7 +211,7 @@ public final class TagUIView: UIView {
         self.getColorsUseCase = getColorsUseCase
 
         super.init(frame: .zero)
-
+        self.accessibilityIdentifier = AccessibilityIdentifier.component
         self.setupView()
         self.loadUI()
     }
@@ -254,6 +254,7 @@ public final class TagUIView: UIView {
     private func reloadTextLabel() {
         self.textLabel.text = self.text
         self.textLabel.isHidden = (self.text == nil)
+        self.accessibilityLabel = self.text
     }
 
     private func reloadUIFromTheme() {

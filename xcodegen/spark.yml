@@ -84,6 +84,16 @@ targetTemplates:
     dependencies:
       - target: Spark
 
+  SparkDemoUITestsTemplate:
+    type: bundle.ui-testing
+    platform: iOS
+    info:
+      path: ../spark/UI-tests/Info.plist
+    sources:
+      - path: ../spark/UI-tests
+    dependencies:
+      - target: SparkDemo
+
 targets:
   Spark:
     templates:
@@ -96,3 +106,7 @@ targets:
   SparkDemo:
     templates:
       - SparkDemoTemplate
+
+  SparkDemoUITests:
+    templates:
+      - SparkDemoUITestsTemplate
