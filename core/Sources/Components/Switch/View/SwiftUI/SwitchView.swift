@@ -35,13 +35,11 @@ public struct SwitchView: View {
     ///   - theme: The spark theme of the switch.
     ///   - intent: The intent of the switch.
     ///   - alignment: The alignment of the switch.
-    ///   - isEnabled: The state of the switch: enabled or not.
     public init(
         isOn: Binding<Bool>,
         theme: any Theme,
         intent: SwitchIntent,
-        alignment: SwitchAlignment,
-        isEnabled: Bool
+        alignment: SwitchAlignment
     ) {
         self.viewModel = .init(
             for: .swiftUI,
@@ -49,7 +47,7 @@ public struct SwitchView: View {
             isOn: isOn.wrappedValue,
             alignment: alignment,
             intent: intent,
-            isEnabled: isEnabled,
+            isEnabled: true,
             images: nil,
             text: nil,
             attributedText: nil
@@ -216,6 +214,15 @@ public struct SwitchView: View {
     /// - Returns: Current Switch View.
     public func attributedText(_ attributedText: AttributedString?) -> Self {
         self.viewModel.set(attributedText: attributedText.map { .right($0) })
+        return self
+    }
+
+    /// Set the switch to disabled.
+    /// - Parameters:
+    ///   - text: The switch is disabled or not.
+    /// - Returns: Current Switch View.
+    public func disabled(_ disabled: Bool) -> Self {
+        self.viewModel.set(isEnabled:  !disabled)
         return self
     }
 }

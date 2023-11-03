@@ -85,8 +85,7 @@ struct SwitchComponentView: View {
                     isOn: self.$isOn,
                     theme: self.theme,
                     intent: self.intent,
-                    alignment: self.alignment,
-                    isEnabled: self.isEnabled == .selected
+                    alignment: self.alignment
                 )
                 .images(self.hasImages == .selected ? self.images() : nil)
                 .textContent(
@@ -94,6 +93,7 @@ struct SwitchComponentView: View {
                     textContent: self.textContent,
                     attributedText: self.attributedText()
                 )
+                .disabled(self.isEnabled == .unselected)
             }
         )
     }
