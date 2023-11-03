@@ -320,7 +320,7 @@ final class ProgressBarMainViewModelTests: XCTestCase {
     ) {
         // GIVEN
         let defaultValue: ProgressBarShape = .square
-        let newValue: ProgressBarShape = givenIsDifferentNewValue ? .pill : defaultValue
+        let newValue: ProgressBarShape = givenIsDifferentNewValue ? .rounded : defaultValue
 
         let stub = Stub(
             shape: defaultValue
