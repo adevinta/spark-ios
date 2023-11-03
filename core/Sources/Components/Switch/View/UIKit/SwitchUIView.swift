@@ -203,32 +203,6 @@ public final class SwitchUIView: UIView {
         }
     }
 
-    public override var intrinsicContentSize: CGSize {
-        // Calculate height
-        let toggleHeight = self.toggleHeight
-        let labelHeight = self.textLabel.intrinsicContentSize.height
-        let height = max(toggleHeight, labelHeight)
-
-        // Calculate width
-        let toggleWidth = self.toggleWidth
-        let contentStackViewSpacing = self.contentStackViewSpacing
-        var width = toggleWidth + contentStackViewSpacing
-
-        if let attributedText {
-            let computedSize = attributedText.boundingRect(
-                with: CGSize(
-                    width: CGFloat.greatestFiniteMagnitude,
-                    height: CGFloat.greatestFiniteMagnitude
-                ),
-                options: .usesLineFragmentOrigin,
-                context: nil)
-            width += computedSize.width
-        } else if text != nil {
-            width += self.textLabel.intrinsicContentSize.width
-        }
-        return CGSize(width: width, height: height)
-    }
-
     // MARK: - Private Properties
 
     private let viewModel: SwitchViewModel
@@ -512,6 +486,40 @@ public final class SwitchUIView: UIView {
         self.layoutIfNeeded()
         self.toggleView.setCornerRadius(self.theme.border.radius.full)
         self.toggleDotView.setCornerRadius(self.theme.border.radius.full)
+    }
+
+    // MARK: - Instrinsic Content Size
+
+    public override var intrinsicContentSize: CGSize {
+        // Calculate height
+        let toggleHeight = self.toggleHeight
+        let labelHeight = self.textLabel.intrinsicContentSize.height
+        let height = max(toggleHeight, labelHeight)
+
+        // Calculate width
+        let toggleWidth = self.toggleWidth
+        let contentStackViewSpacing = self.contentStackViewSpacing
+        var width = toggleWidth + contentStackViewSpacing
+
+        if let attributedText {
+            let computedSize = attributedText.boundingRect(
+                with: CGSize(
+                    width: CGFloat.greatestFiniteMagnitude,
+                    height: CGFloat.greatestFiniteMagnitude
+                ),
+                options: .usesLineFragmentOrigin,
+                context: nil)
+            width += computedSize.width
+        } else if text != nil {
+            width += self.textLabel.intrinsicContentSize.width
+        }
+        return CGSize(width: width, height: height)
+    }
+
+    public override func invalidateIntrinsicContentSize() {
+        self.textLabel.invalidateIntrinsicContentSize()
+
+        super.invalidateIntrinsicContentSize()
     }
 
     // MARK: - Gesture
