@@ -31,19 +31,25 @@ public struct SwitchView: View {
 
     /// Initialize a new switch view
     /// - Parameters:
-    ///   - theme: The spark theme of the switch.
     ///   - isOn: The Binding value of the switch.
+    ///   - theme: The spark theme of the switch.
+    ///   - intent: The intent of the switch.
+    ///   - alignment: The alignment of the switch.
+    ///   - isEnabled: The state of the switch: enabled or not.
     public init(
+        isOn: Binding<Bool>,
         theme: any Theme,
-        isOn: Binding<Bool>
+        intent: SwitchIntent,
+        alignment: SwitchAlignment,
+        isEnabled: Bool
     ) {
         self.viewModel = .init(
             for: .swiftUI,
             theme: theme,
             isOn: isOn.wrappedValue,
-            alignment: .left,
-            intent: .main,
-            isEnabled: false,
+            alignment: alignment,
+            intent: intent,
+            isEnabled: isEnabled,
             images: nil,
             text: nil,
             attributedText: nil
@@ -185,33 +191,6 @@ public struct SwitchView: View {
     }
 
     // MARK: - Modifier
-
-    /// Set the alignment on switch.
-    /// - Parameters:
-    ///   - alignment: The alignment of the switch.
-    /// - Returns: Current Switch View.
-    public func alignment(_ alignment: SwitchAlignment) -> Self {
-        self.viewModel.set(alignment: alignment)
-        return self
-    }
-
-    /// Set the intent on switch.
-    /// - Parameters:
-    ///   - intent: The intent of the switch.
-    /// - Returns: Current Switch View.
-    public func intent(_ intent: SwitchIntent) -> Self {
-        self.viewModel.set(intent: intent)
-        return self
-    }
-
-    /// Set the isEnabled on switch.
-    /// - Parameters:
-    ///   - isEnabled: The state of the switch: enabled or not.
-    /// - Returns: Current Switch View.
-    public func isEnabled(_ isEnabled: Bool) -> Self {
-        self.viewModel.set(isEnabled: isEnabled)
-        return self
-    }
 
     /// Set the images on switch.
     /// - Parameters:
