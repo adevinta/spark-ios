@@ -213,60 +213,60 @@ extension CheckboxGroupComponentUIViewModel {
 // MARK: - Items
 extension CheckboxGroupComponentUIViewModel {
 
-    static func makeCheckboxGroupItems(type: CheckboxGroupType) -> [CheckboxGroupItem] {
-        var items: [CheckboxGroupItem] = []
+    static func makeCheckboxGroupItems(type: CheckboxGroupType) -> [CheckboxGroupItemDefault] {
+        var items: [CheckboxGroupItemDefault] = []
 
         switch type {
         case .singleNone:
             items = [
-                CheckboxGroupItem(id: "1", selectionState: .selected)
+                CheckboxGroupItemDefault(id: "1", selectionState: .selected, isEnabled: true)
             ]
         case .singleBasic:
             items = [
-                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .selected)
+                CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true)
             ]
         case .singleMultilineText:
             items = [
-                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "1", selectionState: .unselected),
+                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "1", selectionState: .unselected, isEnabled: true),
             ]
         case .doubleBasic:
             items = [
-                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .selected),
-                CheckboxGroupItem(title: Self.text + " 2", id: "2", selectionState: .unselected)
+                CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true),
+                CheckboxGroupItemDefault(title: Self.text + " 2", id: "2", selectionState: .unselected, isEnabled: true)
             ]
         case .doubleMultilineText:
             items = [
-                CheckboxGroupItem(title: Self.multilineText, id: "1", selectionState: .selected),
-                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "2", selectionState: .indeterminate)
+                CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: true),
+                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "2", selectionState: .indeterminate, isEnabled: true)
             ]
         case .doubleMix:
             items = [
-                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .unselected),
-                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "2", selectionState: .selected)
+                CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .unselected, isEnabled: true),
+                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "2", selectionState: .selected, isEnabled: true)
             ]
         case .tripleBasic:
             items = [
-                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .unselected),
-                CheckboxGroupItem(title: Self.text + " 2", id: "2", selectionState: .unselected),
-                CheckboxGroupItem(title: Self.text + " 3", id: "3", selectionState: .unselected),
+                CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .unselected, isEnabled: true),
+                CheckboxGroupItemDefault(title: Self.text + " 2", id: "2", selectionState: .unselected, isEnabled: true),
+                CheckboxGroupItemDefault(title: Self.text + " 3", id: "3", selectionState: .unselected, isEnabled: true),
             ]
         case .tripleMultilineText:
             items = [
-                CheckboxGroupItem(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: false),
-                CheckboxGroupItem(title: Self.multilineText, id: "2", selectionState: .unselected),
-                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate)
+                CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: false),
+                CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .unselected, isEnabled: true),
+                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate, isEnabled: true)
             ]
         case .tripleMix1:
             items = [
-                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .selected),
-                CheckboxGroupItem(title: Self.text + " 2", id: "2", selectionState: .indeterminate),
-                CheckboxGroupItem(title: Self.multilineText, id: "3", selectionState: .unselected)
+                CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true),
+                CheckboxGroupItemDefault(title: Self.text + " 2", id: "2", selectionState: .indeterminate, isEnabled: true),
+                CheckboxGroupItemDefault(title: Self.multilineText, id: "3", selectionState: .unselected, isEnabled: true)
             ]
         case .tripleMix2:
             items = [
-                CheckboxGroupItem(title: Self.text, id: "1", selectionState: .selected),
-                CheckboxGroupItem(title: Self.multilineText, id: "2", selectionState: .unselected),
-                CheckboxGroupItem(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate)
+                CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true),
+                CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .unselected, isEnabled: true),
+                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate, isEnabled: true)
             ]
         }
         return items

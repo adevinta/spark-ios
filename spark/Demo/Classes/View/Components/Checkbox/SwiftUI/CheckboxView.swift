@@ -23,6 +23,7 @@ struct CheckboxListView: View {
     @State private var isIndeterminate = CheckboxSelectionState.unselected
     @State private var selectionState = CheckboxSelectionState.unselected
     @State private var selectedIcon = Icons.checkedImage
+    @State private var groupType: CheckboxGroupType = .doubleMix
 
     // MARK: - View
 
@@ -60,7 +61,6 @@ struct CheckboxListView: View {
                     value: self.$textStyle
                 )
 
-
                 CheckboxView(
                     text: "Is Enabled:",
                     checkedImage: Icons.checkedImage.image,
@@ -82,7 +82,7 @@ struct CheckboxListView: View {
                     CheckboxView(
                         text: text(self.textStyle),
                         checkedImage: self.selectedIcon.image,
-                        checkboxAlignment: self.alignment,
+                        alignment: self.alignment,
                         theme: self.theme,
                         intent: self.intent,
                         isEnabled: self.isEnabled == .selected ? true : false,

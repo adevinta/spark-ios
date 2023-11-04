@@ -49,7 +49,7 @@ public struct CheckboxView: View {
 
     @Namespace private var namespace
 
-    @ScaledMetric private var checkboxSize: CGFloat = Constants.checkboxSize
+    @ScaledMetric var checkboxSize: CGFloat = Constants.checkboxSize
     @ScaledMetric private var checkboxBorderRadius: CGFloat = Constants.checkboxBorderRadius
     @ScaledMetric private var checkboxBorderWidth: CGFloat = Constants.checkboxBorderWidth
 
@@ -66,7 +66,7 @@ public struct CheckboxView: View {
     init(
         text: String,
         checkedImage: UIImage,
-        checkboxAlignment: CheckboxAlignment = .left,
+        alignment: CheckboxAlignment = .left,
         theme: Theme,
         intent: CheckboxIntent = .main,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
@@ -82,7 +82,7 @@ public struct CheckboxView: View {
             intent: intent,
             colorsUseCase: colorsUseCase,
             isEnabled: isEnabled,
-            alignment: checkboxAlignment,
+            alignment: alignment,
             selectionState: selectionState.wrappedValue
         )
     }
@@ -91,7 +91,7 @@ public struct CheckboxView: View {
     /// - Parameters:
     ///   - text: The checkbox text.
     ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - alignment: Positions the checkbox on the leading or trailing edge of the view.
     ///   - theme: The current Spark-Theme.
     ///   - intent: The current Intent.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
@@ -99,7 +99,7 @@ public struct CheckboxView: View {
     public init(
         text: String,
         checkedImage: UIImage,
-        checkboxAlignment: CheckboxAlignment = .left,
+        alignment: CheckboxAlignment = .left,
         theme: Theme,
         intent: CheckboxIntent = .main,
         isEnabled: Bool = true,
@@ -108,7 +108,7 @@ public struct CheckboxView: View {
         self.init(
             text: text,
             checkedImage: checkedImage,
-            checkboxAlignment: checkboxAlignment,
+            alignment: alignment,
             theme: theme,
             intent: intent,
             colorsUseCase: CheckboxColorsUseCase(),
@@ -206,6 +206,7 @@ public struct CheckboxView: View {
             Text(self.viewModel.text.rightValue ?? "")
                 .font(self.theme.typography.body1.font)
                 .foregroundColor(self.viewModel.colors.textColor.color)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .id(Identifier.content.rawValue)
         .matchedGeometryEffect(id: Identifier.content.rawValue, in: self.namespace)
