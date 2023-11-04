@@ -98,7 +98,14 @@ public final class CheckboxGroupUIView: UIView {
         }
     }
     ///  The checkbox is positioned on the leading or trailing edge of the view.
+    @available(*, deprecated)
     public var checkboxAlignment: CheckboxAlignment {
+        didSet {
+            self.alignment = self.checkboxAlignment
+        }
+    }
+
+    public var alignment: CheckboxAlignment {
         didSet {
             self.updateAlignment()
         }
@@ -149,6 +156,7 @@ public final class CheckboxGroupUIView: UIView {
         self.checkedImage = checkedImage
         self.items = items
         self.layout = layout
+        self.alignment = checkboxAlignment
         self.checkboxAlignment = checkboxAlignment
         self.theme = theme
         self.intent = intent
@@ -164,7 +172,7 @@ public final class CheckboxGroupUIView: UIView {
     ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
     ///   - layout: The layout of the group can be horizontal or vertical.
-    ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - alignment: The checkbox is positioned on the leading or trailing edge of the view.
     ///   - theme: The Spark-Theme.
     ///   - intent: Current intent of checkbox group
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
@@ -172,7 +180,7 @@ public final class CheckboxGroupUIView: UIView {
         checkedImage: UIImage,
         items: [any CheckboxGroupItemProtocol],
         layout: CheckboxGroupLayout = .vertical,
-        checkboxAlignment: CheckboxAlignment = .left,
+        alignment: CheckboxAlignment = .left,
         theme: Theme,
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
@@ -180,7 +188,8 @@ public final class CheckboxGroupUIView: UIView {
         self.checkedImage = checkedImage
         self.items = items
         self.layout = layout
-        self.checkboxAlignment = checkboxAlignment
+        self.alignment = alignment
+        self.checkboxAlignment = alignment
         self.theme = theme
         self.intent = intent
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
@@ -224,7 +233,7 @@ public final class CheckboxGroupUIView: UIView {
                 checkedImage: self.checkedImage,
                 isEnabled: item.isEnabled,
                 selectionState: item.selectionState,
-                checkboxAlignment: self.checkboxAlignment
+                alignment: self.alignment
             )
             let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id)"
 
@@ -332,7 +341,7 @@ extension CheckboxGroupUIView {
     }
 
     private func updateAlignment() {
-        self.checkboxes.forEach { $0.alignment = self.checkboxAlignment }
+        self.checkboxes.forEach { $0.alignment = self.alignment }
     }
 
     private func updateIntent() {

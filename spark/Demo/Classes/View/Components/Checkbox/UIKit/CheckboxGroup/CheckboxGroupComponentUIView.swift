@@ -66,7 +66,7 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
 
         self.viewModel.$isAlignmentLeft.subscribe(in: &self.cancellables) { [weak self] isAlignmentLeft in
             guard let self = self else { return }
-            self.componentView.checkboxAlignment = isAlignmentLeft ? .left : .right
+            self.componentView.alignment = isAlignmentLeft ? .left : .right
         }
 
         self.viewModel.$isLayoutVertical.subscribe(in: &self.cancellables) { [weak self] isLayoutVertical in
@@ -91,7 +91,7 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
         return CheckboxGroupUIView(
             checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
             items: CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: viewModel.groupType),
-            checkboxAlignment: viewModel.isAlignmentLeft ? .left : .right,
+            alignment: viewModel.isAlignmentLeft ? .left : .right,
             theme: viewModel.theme,
             intent: viewModel.intent,
             accessibilityIdentifierPrefix: "Checkbox"

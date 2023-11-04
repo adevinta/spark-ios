@@ -149,7 +149,7 @@ final class BadgeComponentUIView: UIView {
             checkedImage: DemoIconography.shared.checkmark,
             isEnabled: true,
             selectionState: viewModel.isBorderVisible ? .selected : .unselected,
-            checkboxAlignment: .left
+            alignment: .left
         )
     }()
 

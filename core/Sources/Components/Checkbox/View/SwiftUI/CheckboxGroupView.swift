@@ -12,17 +12,23 @@ import SwiftUI
 public struct CheckboxGroupView: View {
 
     // MARK: - Private properties
-
+    @available(*, deprecated)
     private var title: String
+
     private var checkedImage: UIImage
     @Binding private var items: [any CheckboxGroupItemProtocol]
     private var theme: Theme
+    private var intent: CheckboxIntent
     private var layout: CheckboxGroupLayout
-    private var checkboxAlignment: CheckboxAlignment
+    private var alignment: CheckboxAlignment
     private var accessibilityIdentifierPrefix: String
-
+    
+    @available(*, deprecated)
     @ScaledMetric private var spacingSmall: CGFloat
     @ScaledMetric private var spacingXLarge: CGFloat
+
+    @State private var maxCheckboxHeight: CGFloat = .zero
+    @State private var viewWidth: CGFloat = .zero
 
     // MARK: - Initialization
 
@@ -35,6 +41,7 @@ public struct CheckboxGroupView: View {
     ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
     ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
+    @available(*, deprecated)
     public init(
         title: String? = nil,
         checkedImage: UIImage,
@@ -42,14 +49,46 @@ public struct CheckboxGroupView: View {
         layout: CheckboxGroupLayout = .vertical,
         checkboxAlignment: CheckboxAlignment,
         theme: Theme,
+        intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {
         self.title = title ?? ""
         self.checkedImage = checkedImage
         self._items = items
         self.layout = layout
-        self.checkboxAlignment = checkboxAlignment
+        self.alignment = checkboxAlignment
         self.theme = theme
+        self.intent = intent
+        self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
+
+        self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
+        self._spacingXLarge = .init(wrappedValue: theme.layout.spacing.xLarge)
+    }
+
+    /// Initialize a group of one or multiple checkboxes.
+    /// - Parameters:
+    ///   - checkedImage: The tick-checkbox image for checked-state.
+    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
+    ///   - layout: The layout of the group can be horizontal or vertical.
+    ///   - alignment: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - theme: The Spark-Theme.
+    ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
+    public init(
+        checkedImage: UIImage,
+        items: Binding<[any CheckboxGroupItemProtocol]>,
+        layout: CheckboxGroupLayout = .vertical,
+        alignment: CheckboxAlignment,
+        theme: Theme,
+        intent: CheckboxIntent = .main,
+        accessibilityIdentifierPrefix: String
+    ) {
+        self.title = ""
+        self.checkedImage = checkedImage
+        self._items = items
+        self.layout = layout
+        self.alignment = alignment
+        self.theme = theme
+        self.intent = intent
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
 
         self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
@@ -68,39 +107,71 @@ public struct CheckboxGroupView: View {
                     .padding(.bottom, self.spacingXLarge - self.spacingSmall)
             }
 
-            let spacing = self.spacingXLarge - self.spacingSmall * 2
             switch self.layout {
             case .horizontal:
-                HStack(alignment: .top, spacing: spacing) {
-                    self.contentView
+
+                // Close bounce and fix checkbox missing border 
+                ScrollView (.horizontal, showsIndicators: false) {
+                    HStack(alignment: .top, spacing: self.spacingXLarge) {
+                        self.makeContentView(maxWidth: self.viewWidth)
+                        .frame(minHeight: self.maxCheckboxHeight, alignment: .top)
+                    }
                 }
             case .vertical:
-                VStack(alignment: .leading, spacing: spacing) {
-                    self.contentView
+                VStack(alignment: .leading, spacing: self.spacingXLarge) {
+                    self.makeContentView()
                 }
             }
         }
+        .overlay(
+            GeometryReader { geo in
+                Color.clear.onAppear {
+                    self.viewWidth = geo.size.width
+                }
+            }
+        ).onAppear {
+            self.maxCheckboxHeight = 24
+        }
     }
 
-    private var contentView: some View {
-        ForEach(self.$items, id: \.id) { item in
+    private func makeContentView(maxWidth: CGFloat? = nil) -> some View {
+        var chekboxHeights: [CGFloat] = []
+        return ForEach(self.$items, id: \.id) { item in
             let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
+            let attributeTextString: String = item.attributedTitle.wrappedValue?.string ?? ""
             CheckboxView(
-                text: item.title.wrappedValue ?? "",
+                text: item.title.wrappedValue ?? attributeTextString,
                 checkedImage: self.checkedImage,
-                checkboxAlignment: self.checkboxAlignment,
+                alignment: self.alignment,
                 theme: self.theme,
+                intent: self.intent,
                 isEnabled: item.isEnabled.wrappedValue,
                 selectionState: item.selectionState
             )
-            .if(self.layout == .horizontal) {
-                $0.fixedSize()
-            }
+            .if(maxWidth != nil, content: {
+                $0.frame(maxWidth: maxWidth, alignment: .top)
+            })
+            .fixedSize(horizontal: false, vertical: true)
             .accessibilityIdentifier(identifier)
+            .if(layout == .horizontal, content: {
+                $0.overlay(
+                    GeometryReader { geo in
+                         Color.clear.preference(key: HeightPreferenceKey.self, value: geo.size.height)
+                    }
+                )
+                .onPreferenceChange(HeightPreferenceKey.self) {
+                    let checkboxHeight = $0 ?? .zero
+                    chekboxHeights.append(checkboxHeight)
+                    self.maxCheckboxHeight = chekboxHeights.max() ?? .zero
+                }
+            })
         }
     }
+}
 
-    private var spacing: LayoutSpacing {
-        return self.theme.layout.spacing
+struct HeightPreferenceKey: PreferenceKey {
+    static let defaultValue: CGFloat? = nil
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
     }
 }

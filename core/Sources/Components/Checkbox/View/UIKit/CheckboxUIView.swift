@@ -179,7 +179,7 @@ public final class CheckboxUIView: UIControl {
     ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - isEnabled: IsEnabled describes whether the checkbox is enabled or disabled.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
-    ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - alignment: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
         theme: Theme,
         intent: CheckboxIntent = .main,
@@ -187,7 +187,7 @@ public final class CheckboxUIView: UIControl {
         checkedImage: UIImage,
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
-        checkboxAlignment: CheckboxAlignment
+        alignment: CheckboxAlignment
     ) {
         self.init(
             theme: theme,
@@ -196,7 +196,7 @@ public final class CheckboxUIView: UIControl {
             checkedImage: checkedImage,
             isEnabled: isEnabled,
             selectionState: selectionState,
-            checkboxAlignment: checkboxAlignment
+            alignment: alignment
         )
     }
 
@@ -208,7 +208,7 @@ public final class CheckboxUIView: UIControl {
     ///   - checkedImage: The tick-checkbox image for checked-state.
     ///   - isEnabled: IsEnabled describes whether the checkbox is enabled or disabled.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
-    ///   - checkboxAlignment: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - alignment: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
         theme: Theme,
         intent: CheckboxIntent = .main,
@@ -216,7 +216,7 @@ public final class CheckboxUIView: UIControl {
         checkedImage: UIImage,
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
-        checkboxAlignment: CheckboxAlignment
+        alignment: CheckboxAlignment
     ) {
         self.init(
             theme: theme,
@@ -225,7 +225,7 @@ public final class CheckboxUIView: UIControl {
             checkedImage: checkedImage,
             isEnabled: isEnabled,
             selectionState: selectionState,
-            checkboxAlignment: checkboxAlignment
+            alignment: alignment
         )
     }
 
@@ -236,14 +236,14 @@ public final class CheckboxUIView: UIControl {
         checkedImage: UIImage,
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
-        checkboxAlignment: CheckboxAlignment
+        alignment: CheckboxAlignment
     ) {
         self.viewModel = .init(
             text: content,
             checkedImage: checkedImage,
             theme: theme,
             isEnabled: isEnabled,
-            alignment: checkboxAlignment,
+            alignment: alignment,
             selectionState: selectionState
         )
         super.init(frame: .zero)

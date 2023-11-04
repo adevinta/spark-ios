@@ -107,7 +107,7 @@ final class CheckboxComponentUIView: ComponentUIView {
                 checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
                 isEnabled: viewModel.isEnabled,
                 selectionState: viewModel.selectionState,
-                checkboxAlignment: viewModel.alignment
+                alignment: viewModel.alignment
             )
         case .text, .multilineText:
             return CheckboxUIView(
@@ -116,7 +116,7 @@ final class CheckboxComponentUIView: ComponentUIView {
                 checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
                 isEnabled: viewModel.isEnabled,
                 selectionState: viewModel.selectionState,
-                checkboxAlignment: viewModel.alignment
+                alignment: viewModel.alignment
             )
         case .none:
             return CheckboxUIView(
@@ -125,7 +125,7 @@ final class CheckboxComponentUIView: ComponentUIView {
                 checkedImage: viewModel.icon.map { $0.1 }.first ?? UIImage(),
                 isEnabled: viewModel.isEnabled,
                 selectionState: viewModel.selectionState,
-                checkboxAlignment: viewModel.alignment
+                alignment: viewModel.alignment
             )
         }
     }
