@@ -15,6 +15,7 @@ public final class TextFieldUIView: UITextField {
 
     private let viewModel: TextFieldUIViewModel
     private var cancellable = Set<AnyCancellable>()
+    private var heightConstraint: NSLayoutConstraint?
 
     // MARK: - Public properties
 
@@ -42,12 +43,15 @@ public final class TextFieldUIView: UITextField {
         get { return .init(self.viewModel.borderStyle) }
     }
 
+    @ScaledUIMetric private var height: CGFloat = 44
+
     // MARK: - Initializers
 
     internal init(viewModel: TextFieldUIViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
         self.setupView()
+        self.setupSubscriptions()
     }
 
     public convenience init(theme: Theme,
@@ -65,10 +69,15 @@ public final class TextFieldUIView: UITextField {
     // MARK: - Private methods
 
     private func setupView() {
-        NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: 44)
-        ])
-        self.setupSubscriptions()
+        self.adjustsFontForContentSizeCategory = true
+        self.font = .preferredFont(forTextStyle: .body)
+        self.updateHeight()
+    }
+
+    private func updateHeight() {
+        self.heightConstraint?.isActive = false
+        self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
+        self.heightConstraint?.isActive = true
     }
 
     private func setupSubscriptions() {
@@ -138,5 +147,15 @@ public final class TextFieldUIView: UITextField {
         var rect = super.leftViewRect(forBounds: bounds)
         rect.origin.x += self.viewModel.spacings.left
         return rect
+    }
+
+    // MARK: - Trait collection
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        self.invalidateIntrinsicContentSize()
+        self._height.update(traitCollection: traitCollection)
+        self.updateHeight()
     }
 }
