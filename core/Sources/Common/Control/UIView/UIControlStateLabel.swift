@@ -35,7 +35,7 @@ final class UIControlStateLabel: UILabel {
 
     override var attributedText: NSAttributedString? {
         didSet {
-            self.isText = attributedText != nil
+            self.isText = self.attributedText != nil
         }
     }
 

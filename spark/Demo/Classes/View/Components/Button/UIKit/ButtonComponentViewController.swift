@@ -99,6 +99,10 @@ final class ButtonComponentViewController: UIViewController {
         self.viewModel.showContentSelectedSheet.subscribe(in: &self.cancellables) { contents in
             self.presentContentSelectedActionSheet(contents)
         }
+
+        self.viewModel.showControlType.subscribe(in: &self.cancellables) { types in
+            self.presentControlTypeActionSheet(types)
+        }
     }
 }
 
@@ -201,6 +205,15 @@ extension ButtonComponentViewController {
             values: contents,
             texts: contents.map { $0.name }) { content in
                 self.viewModel.contentSelected = content
+            }
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentControlTypeActionSheet(_ contents: [ButtonControlType]) {
+        let actionSheet = SparkActionSheet<ButtonControlType>.init(
+            values: contents,
+            texts: contents.map { $0.name }) { content in
+                self.viewModel.controlType = content
             }
         self.present(actionSheet, animated: true)
     }

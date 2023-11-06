@@ -29,6 +29,7 @@ public final class ButtonUIView: UIControl {
         )
         stackView.axis = .horizontal
         stackView.accessibilityIdentifier = AccessibilityIdentifier.contentStackView
+        stackView.isUserInteractionEnabled = false
         return stackView
     }()
 
@@ -61,6 +62,8 @@ public final class ButtonUIView: UIControl {
         return label
     }()
 
+    /// Clear button to manage the action when the delegate is set.
+    @available(*, deprecated, message: "Remove this subview when the delegate will be removed")
     private lazy var clearButton: UIButton = {
         let button = UIButton()
         button.isAccessibilityElement = false
@@ -69,33 +72,40 @@ public final class ButtonUIView: UIControl {
         button.addTarget(self, action: #selector(self.touchUpOutsideAction), for: .touchUpOutside)
         button.addTarget(self, action: #selector(self.touchCancelAction), for: .touchCancel)
         button.accessibilityIdentifier = AccessibilityIdentifier.clearButton
+        button.isHidden = true // Show only if the delegate is set
         return button
     }()
 
     // MARK: - Public Properties
 
     /// The delegate used to notify about some changed on button.
-    public weak var delegate: ButtonUIViewDelegate?
+    @available(*, deprecated, message: "Use native **action** or **target** on UIControl or publisher instead")
+    public weak var delegate: ButtonUIViewDelegate? {
+        didSet {
+            self.clearButton.isHidden = self.delegate == nil
+            self.contentStackView.isUserInteractionEnabled = self.delegate != nil // Needed for the clearButton
+        }
+    }
 
-    /// The tap publisher. Alternatively, you can set a delegate.
+    /// The tap publisher. Alternatively, you can use the native **action** (addAction) or **target** (addTarget).
     public var tapPublisher: UIControl.EventPublisher {
-        return self.clearButton.publisher(for: .touchUpInside)
+        return self.publisher(for: .touchUpInside)
     }
 
     /// Publishes when a touch was cancelled (e.g. by the system).
     public var touchCancelPublisher: UIControl.EventPublisher {
-        return self.clearButton.publisher(for: .touchCancel)
+        return self.publisher(for: .touchCancel)
     }
 
     /// Publishes when a touch was started but the touch ended outside of the button view bounds.
     public var touchUpOutsidePublisher: UIControl.EventPublisher {
-        return self.clearButton.publisher(for: .touchUpOutside)
+        return self.publisher(for: .touchUpOutside)
     }
 
     /// Publishes instantly when the button is touched down.
     /// - warning: This should not trigger a user action and should only be used for things like tracking.
     public var touchDownPublisher: UIControl.EventPublisher {
-        return self.clearButton.publisher(for: .touchDown)
+        return self.publisher(for: .touchDown)
     }
 
     /// The spark theme of the button.
@@ -228,6 +238,12 @@ public final class ButtonUIView: UIControl {
         didSet {
             self.titleLabel.updateContent(from: self)
             self.iconImageView.updateContent(from: self)
+
+            if self.isHighlighted {
+                self.viewModel.pressedAction()
+            } else {
+                self.viewModel.unpressedAction()
+            }
         }
     }
 
@@ -722,7 +738,7 @@ public final class ButtonUIView: UIControl {
             guard let self, let state else { return }
 
             // Update the user interaction enabled
-            self.clearButton.isUserInteractionEnabled = state.isUserInteractionEnabled
+            self.isUserInteractionEnabled = state.isUserInteractionEnabled
             if !state.isUserInteractionEnabled {
                 self.accessibilityTraits.insert(.notEnabled)
             } else {
@@ -749,7 +765,7 @@ public final class ButtonUIView: UIControl {
             // Background Color
             let isAnimated = self.isAnimated && self.backgroundColor != colors.backgroundColor.uiColor
             let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.fastDuration) : .unanimated
-            
+
             UIView.execute(animationType: animationType) { [weak self] in
                 self?.backgroundColor = colors.backgroundColor.uiColor
             }
@@ -873,47 +889,33 @@ public final class ButtonUIView: UIControl {
 
     // MARK: - Actions
 
+    @available(*, deprecated, message: "Remove this action when the delegate will be removed")
     @objc private func touchUpInsideAction() {
         self.isHighlighted = false
 
-        self.unpressedAction()
-
         self.delegate?.button(self, didReceive: .touchUpInside)
         self.delegate?.buttonWasTapped(self)
-        self.sendActions(for: .touchUpInside)
     }
 
+    @available(*, deprecated, message: "Remove this action when the delegate will be removed")
     @objc private func touchDownAction() {
         self.isHighlighted = true
 
-        self.viewModel.pressedAction()
-
         self.delegate?.button(self, didReceive: .touchDown)
-        self.sendActions(for: .touchDown)
     }
 
+    @available(*, deprecated, message: "Remove this action when the delegate will be removed")
     @objc private func touchUpOutsideAction() {
         self.isHighlighted = false
 
-        self.unpressedAction()
-
         self.delegate?.button(self, didReceive: .touchUpOutside)
-        self.sendActions(for: .touchUpOutside)
     }
 
+    @available(*, deprecated, message: "Remove this action when the delegate will be removed")
     @objc private func touchCancelAction() {
         self.isHighlighted = false
 
-        self.unpressedAction()
-
         self.delegate?.button(self, didReceive: .touchCancel)
-        self.sendActions(for: .touchCancel)
-    }
-
-    private func unpressedAction() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Animation.fastDuration, execute: { [weak self] in
-            self?.viewModel.unpressedAction()
-        })
     }
 
     // MARK: - Trait Collection

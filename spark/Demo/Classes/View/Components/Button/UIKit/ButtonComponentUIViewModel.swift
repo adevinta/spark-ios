@@ -65,6 +65,11 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
+    var showControlType: AnyPublisher<[ButtonControlType], Never> {
+        showControlTypeSheetSubject
+            .eraseToAnyPublisher()
+    }
+
     let themes = ThemeCellModel.themes
 
     @Published var theme: Theme
@@ -80,6 +85,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var isEnabled: Bool
     @Published var isSelected: Bool
     @Published var isAnimated: Bool
+    @Published var controlType: ButtonControlType
 
     // MARK: - Items Properties
 
@@ -187,6 +193,14 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var controlTypeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Control Type",
+            type: .button,
+            target: (source: self, action: #selector(self.presentControlTypeSheet))
+        )
+    }()
+
     // MARK: - Properties
 
     let text: String
@@ -209,7 +223,8 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             self.contentSelectedConfigurationItemViewModel,
             self.isEnabledConfigurationItemViewModel,
             self.isSelectedConfigurationItemViewModel,
-            self.isAnimatedConfigurationItemViewModel
+            self.isAnimatedConfigurationItemViewModel,
+            self.controlTypeConfigurationItemViewModel
         ]
     }
 
@@ -225,6 +240,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     private var showContentHighlightedSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
     private var showContentDisabledSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
     private var showContentSelectedSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
+    private var showControlTypeSheetSubject: PassthroughSubject<[ButtonControlType], Never> = .init()
 
     // MARK: - Initialization
 
@@ -243,7 +259,8 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         contentSelected: ButtonContentDefault = .text,
         isEnabled: Bool = true,
         isSelected: Bool = false,
-        isAnimated: Bool = true
+        isAnimated: Bool = true,
+        controlType: ButtonControlType = .action
     ) {
         self.text = text
         self.iconImage = .init(named: iconImageNamed) ?? UIImage()
@@ -267,6 +284,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         self.isEnabled = isEnabled
         self.isSelected = isSelected
         self.isAnimated = isAnimated
+        self.controlType = controlType
 
         super.init(identifier: "Button")
     }
@@ -326,5 +344,9 @@ extension ButtonComponentUIViewModel {
 
     @objc func isAnimatedChanged() {
         self.isAnimated.toggle()
+    }
+
+    @objc func presentControlTypeSheet() {
+        self.showControlTypeSheetSubject.send(ButtonControlType.allCases)
     }
 }

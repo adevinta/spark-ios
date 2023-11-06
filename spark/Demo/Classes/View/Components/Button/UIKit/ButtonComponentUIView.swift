@@ -34,6 +34,11 @@ final class ButtonComponentUIView: ComponentUIView {
     private let viewModel: ButtonComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
+    private lazy var buttonAction: UIAction = .init { _ in
+        self.showAlert()
+    }
+    private var buttonControlCancellable: AnyCancellable?
+
     // MARK: - Initializer
 
     init(viewModel: ButtonComponentUIViewModel) {
@@ -140,6 +145,12 @@ final class ButtonComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.buttonView.isAnimated = isAnimated
         }
+
+        self.viewModel.$controlType.subscribe(in: &self.cancellables) { [weak self] controlType in
+            guard let self = self else { return }
+            self.viewModel.controlTypeConfigurationItemViewModel.buttonTitle = controlType.name
+            self.setControl(from: controlType)
+        }
     }
 
     // MARK: - Setter
@@ -166,6 +177,36 @@ final class ButtonComponentUIView: ComponentUIView {
         case .iconAndAttributedText:
             self.buttonView.setImage(self.image(for: state), for: state)
             self.buttonView.setAttributedTitle(self.attributedTitle(for: state), for: state)
+        }
+    }
+
+    private func setControl(from controlType: ButtonControlType) {
+        // Delegate ?
+        self.buttonView.delegate = controlType == .delegate ? self : nil
+
+        // Publisher ?
+        var subscription: AnyCancellable?
+        if controlType == .publisher {
+            self.buttonControlCancellable = self.buttonView.tapPublisher.sink { _ in
+                self.showAlert()
+            }
+        } else {
+            self.buttonControlCancellable?.cancel()
+            self.buttonControlCancellable = nil
+        }
+
+        // Action ?
+        if controlType == .action {
+            self.buttonView.addAction(self.buttonAction, for: .touchUpInside)
+        } else {
+            self.buttonView.removeAction(self.buttonAction, for: .touchUpInside)
+        }
+
+        // Target ?
+        if controlType == .target {
+            self.buttonView.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
+        } else {
+            self.buttonView.removeTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
         }
     }
 
@@ -211,5 +252,32 @@ final class ButtonComponentUIView: ComponentUIView {
         case .selected: return attributedText("My A_Selected")
         @unknown default: return nil
         }
+    }
+
+    // MARK: - Action
+
+    @objc func touchUpInside() {
+        self.showAlert()
+    }
+
+    // MARK: - Alert
+
+    func showAlert() {
+        let alertController = UIAlertController(
+            title: "Button tap from " + self.viewModel.controlType.name,
+            message: nil,
+            preferredStyle: .alert
+        )
+        alertController.addAction(.init(title: "Ok", style: .default))
+        self.viewController?.present(alertController, animated: true)
+    }
+}
+
+// MARK: - ButtonUIViewDelegate
+
+extension ButtonComponentUIView: ButtonUIViewDelegate {
+
+    func buttonWasTapped(_ button: ButtonUIView) {
+        self.showAlert()
     }
 }
