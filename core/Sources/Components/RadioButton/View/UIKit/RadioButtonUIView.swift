@@ -157,10 +157,13 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         toggleView.translatesAutoresizingMaskIntoConstraints = false
         toggleView.backgroundColor = .clear
         toggleView.sizeToFit()
-        toggleView.setContentCompressionResistancePriority(.required,
-                                                           for: .vertical)
-        toggleView.setContentCompressionResistancePriority(.required,
-                                                           for: .horizontal)
+        toggleView.setContentCompressionResistancePriority(
+            .required,
+            for: .vertical)
+        toggleView.setContentCompressionResistancePriority(
+            .required,
+            for: .horizontal)
+
         return toggleView
     }()
 
@@ -388,12 +391,12 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     private func calculatePositionConstraints() -> [NSLayoutConstraint] {
         if self.viewModel.alignment == .trailing {
 
-            let toggleViewLeadingConstraint = self.toggleView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: -self.haloWidth)
+            let toggleViewLeadingConstraint = self.toggleView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -self.haloWidth)
             self.toggleViewLeadingConstraint = toggleViewLeadingConstraint
 
             return [
                 toggleViewLeadingConstraint,
-                self.textLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
+                self.textLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor)
             ]
         } else {
             let toggleViewTrailingConstraint = self.toggleView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: self.haloWidth)

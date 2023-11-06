@@ -153,7 +153,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
     }
 
     func label(at index: Int) -> String {
-        if self.showLongLabel {
+        if self.showLongLabel && index == 1 {
             return self.longTitle(at: index)
         } else {
             return self.shortTitle(at: index)

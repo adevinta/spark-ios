@@ -225,6 +225,9 @@ class ComponentUIView: UIView {
         self.componentBottomSpaceView.isHidden = !SpaceContainer.bottom.showSpaceContainer(
             from: type
         )
+
+        self.componentView.setNeedsLayout()
+        self.componentView.layoutIfNeeded()
     }
 
     // MARK: - Subscribe
