@@ -137,6 +137,7 @@ public final class SwitchUIView: UIView {
         set {
             self.isOnAnimated = false
             self.viewModel.set(isOn: newValue)
+            self.updateAccessibility()
         }
     }
 
@@ -168,6 +169,7 @@ public final class SwitchUIView: UIView {
         set {
             self.isEnabledAnimated = false
             self.viewModel.set(isEnabled: newValue)
+            self.updateAccessibility()
         }
     }
 
@@ -459,6 +461,14 @@ public final class SwitchUIView: UIView {
             text: text,
             attributedText: attributedText
         )
+
+        self.isAccessibilityElement = UIAccessibility.isVoiceOverRunning
+        if #available(iOS 17.0, *) {
+            self.accessibilityTraits = .toggleButton
+        } else {
+            self.accessibilityTraits = .button
+        }
+        self.updateAccessibility()
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -616,12 +626,14 @@ public final class SwitchUIView: UIView {
     public func setOn(_ isOn: Bool, animated: Bool) {
         self.isOnAnimated = animated
         self.viewModel.set(isOn: isOn)
+        self.updateAccessibility()
     }
 
     /// Sets the enable status of the switch, optionally animating the color.
     public func setEnabled(_ isEnabled: Bool, animated: Bool) {
         self.isEnabledAnimated = animated
         self.viewModel.set(isEnabled: isEnabled)
+        self.updateAccessibility()
     }
 
     // MARK: - Actions
@@ -708,6 +720,7 @@ public final class SwitchUIView: UIView {
 
             self.delegate?.switchDidChange(self, isOn: isOn)
             self.isOnChangedSubject.send(isOn)
+            self.updateAccessibility()
         }
 
         // **
@@ -716,6 +729,7 @@ public final class SwitchUIView: UIView {
             guard let self, let isEnabled else { return }
 
             self.toggleView.isUserInteractionEnabled = isEnabled
+            self.updateAccessibility()
         }
         self.viewModel.$toggleOpacity.subscribe(in: &self.subscriptions) { [weak self] toggleOpacity in
             guard let self, let toggleOpacity else { return }
@@ -874,5 +888,23 @@ public final class SwitchUIView: UIView {
                                         for axis: NSLayoutConstraint.Axis) {
         self.textLabel.setContentHuggingPriority(priority,
                                                  for: axis)
+    }
+
+    // MARK: - Accessibility
+
+    private func updateAccessibility() {
+        self.accessibilityLabel = self.text ?? self.attributedText?.string
+        if self.viewModel.isToggleInteractionEnabled == true {
+            self.accessibilityTraits.remove(.notEnabled)
+        } else {
+            self.accessibilityTraits.insert(.notEnabled)
+        }
+
+        /// We could update the accessibilityValue here instead in the future
+        if self.viewModel.isOn {
+            self.accessibilityTraits.insert(.selected)
+        } else {
+            self.accessibilityTraits.remove(.selected)
+        }
     }
 }

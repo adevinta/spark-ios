@@ -25,6 +25,7 @@ final class SwitchComponentUIView: ComponentUIView {
     init(viewModel: SwitchComponentUIViewModel) {
         self.viewModel = viewModel
         self.componentView = Self.makeSwitchView(viewModel)
+        self.componentView.accessibilityIdentifier = "switch-tag"
         super.init(
             viewModel: viewModel,
             componentView: self.componentView
