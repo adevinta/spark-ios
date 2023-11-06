@@ -296,7 +296,7 @@ final class TextFieldComponentUIView: UIView {
         self.vStack.addArrangedSubview(self.leftViewModeStackView)
         self.vStack.addArrangedSubview(self.clearButtonModeStackView)
         self.vStack.addArrangedSubview(self.standaloneTextFieldLabel)
-//        self.vStack.addArrangedSubview(self.textField)
+        self.vStack.addArrangedSubview(self.textField)
         self.vStack.addArrangedSubview(self.addOnTextFieldLabel)
         self.vStack.addArrangedSubview(self.addOnTextField)
 

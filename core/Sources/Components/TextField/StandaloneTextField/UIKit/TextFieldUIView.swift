@@ -44,6 +44,8 @@ public final class TextFieldUIView: UITextField {
     }
 
     @ScaledUIMetric private var height: CGFloat = 44
+    @ScaledUIMetric private var leftViewSize: CGFloat = .zero
+    @ScaledUIMetric private var rightViewSize: CGFloat = .zero
 
     // MARK: - Initializers
 
@@ -139,13 +141,21 @@ public final class TextFieldUIView: UITextField {
 
     public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.rightViewRect(forBounds: bounds)
-        rect.origin.x -= self.viewModel.spacings.right
+        self.rightViewSize = rect.width
+        rect.origin.x = (rect.maxX - self.viewModel.spacings.right - self.rightViewSize)
+        rect.origin.y = bounds.size.height / 2 - self.rightViewSize / 2
+        rect.size.width = self.rightViewSize
+        rect.size.height = self.rightViewSize
         return rect
     }
 
     public override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.leftViewRect(forBounds: bounds)
+        self.leftViewSize = rect.width
         rect.origin.x += self.viewModel.spacings.left
+        rect.origin.y = bounds.size.height / 2 - self.leftViewSize / 2
+        rect.size.width = self.leftViewSize
+        rect.size.height = self.leftViewSize
         return rect
     }
 
