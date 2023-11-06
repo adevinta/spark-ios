@@ -296,7 +296,7 @@ final class TextFieldComponentUIView: UIView {
         self.vStack.addArrangedSubview(self.leftViewModeStackView)
         self.vStack.addArrangedSubview(self.clearButtonModeStackView)
         self.vStack.addArrangedSubview(self.standaloneTextFieldLabel)
-        self.vStack.addArrangedSubview(self.textField)
+//        self.vStack.addArrangedSubview(self.textField)
         self.vStack.addArrangedSubview(self.addOnTextFieldLabel)
         self.vStack.addArrangedSubview(self.addOnTextField)
 
@@ -337,10 +337,9 @@ final class TextFieldComponentUIView: UIView {
             systemName: "square.and.arrow.up",
             withConfiguration: UIImage.SymbolConfiguration(scale: .small)
         )
-        buttonConfig.imagePadding = 4
         button.configuration = buttonConfig
         button.addTarget(self.viewModel, action: #selector(self.viewModel.buttonTapped), for: .touchUpInside)
-        button.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        button.widthAnchor.constraint(equalToConstant: button.intrinsicContentSize.width).isActive = true
         return button
     }
 
@@ -353,7 +352,6 @@ final class TextFieldComponentUIView: UIView {
         container.addSubview(label)
         NSLayoutConstraint.activate([
             container.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 32),
-            container.heightAnchor.constraint(equalToConstant: 44),
             label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
@@ -370,7 +368,6 @@ final class TextFieldComponentUIView: UIView {
         container.addSubview(label)
         NSLayoutConstraint.activate([
             container.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 32),
-            container.heightAnchor.constraint(equalToConstant: 44),
             label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
