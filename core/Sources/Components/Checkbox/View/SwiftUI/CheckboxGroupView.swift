@@ -25,7 +25,7 @@ public struct CheckboxGroupView: View {
     
     @available(*, deprecated)
     @ScaledMetric private var spacingSmall: CGFloat
-    @ScaledMetric private var spacingXLarge: CGFloat
+    @ScaledMetric private var spacingLarge: CGFloat
     @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat
 
     @State private var maxCheckboxHeight: CGFloat = .zero
@@ -63,7 +63,7 @@ public struct CheckboxGroupView: View {
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
 
         self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
-        self._spacingXLarge = .init(wrappedValue: theme.layout.spacing.xLarge)
+        self._spacingLarge = .init(wrappedValue: theme.layout.spacing.large)
         self._checkboxSelectedBorderWidth = .init(wrappedValue: CheckboxView.Constants.checkboxSelectedBorderWidth)
     }
 
@@ -94,7 +94,7 @@ public struct CheckboxGroupView: View {
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
 
         self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
-        self._spacingXLarge = .init(wrappedValue: theme.layout.spacing.xLarge)
+        self._spacingLarge = .init(wrappedValue: theme.layout.spacing.large)
         self._checkboxSelectedBorderWidth = .init(wrappedValue: CheckboxView.Constants.checkboxSelectedBorderWidth)
     }
 
@@ -107,7 +107,7 @@ public struct CheckboxGroupView: View {
                 Text(self.title)
                     .foregroundColor(self.theme.colors.base.onSurface.color)
                     .font(self.theme.typography.subhead.font)
-                    .padding(.bottom, self.spacingXLarge - self.spacingSmall)
+                    .padding(.bottom, self.spacingLarge - self.spacingSmall)
             }
             switch self.layout {
             case .horizontal:
@@ -127,7 +127,7 @@ public struct CheckboxGroupView: View {
 
     private func makeHStackView() -> some View {
         ScrollView (.horizontal, showsIndicators: false) {
-            HStack(alignment: .top, spacing: self.spacingXLarge) {
+            HStack(alignment: .top, spacing: self.spacingLarge) {
                 self.makeContentView(maxWidth: self.viewWidth)
                     .frame(minHeight: self.maxCheckboxHeight, alignment: .top)
             }
@@ -137,7 +137,7 @@ public struct CheckboxGroupView: View {
     }
 
     private func makeVStackView() -> some View {
-        VStack(alignment: .leading, spacing: self.spacingXLarge) {
+        VStack(alignment: .leading, spacing: self.spacingLarge) {
             self.makeContentView()
         }
     }
