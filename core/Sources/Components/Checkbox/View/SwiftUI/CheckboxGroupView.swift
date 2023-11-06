@@ -26,6 +26,7 @@ public struct CheckboxGroupView: View {
     @available(*, deprecated)
     @ScaledMetric private var spacingSmall: CGFloat
     @ScaledMetric private var spacingXLarge: CGFloat
+    @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat
 
     @State private var maxCheckboxHeight: CGFloat = .zero
     @State private var viewWidth: CGFloat = .zero
@@ -63,6 +64,7 @@ public struct CheckboxGroupView: View {
 
         self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
         self._spacingXLarge = .init(wrappedValue: theme.layout.spacing.xLarge)
+        self._checkboxSelectedBorderWidth = .init(wrappedValue: CheckboxView.Constants.checkboxSelectedBorderWidth)
     }
 
     /// Initialize a group of one or multiple checkboxes.
@@ -93,6 +95,7 @@ public struct CheckboxGroupView: View {
 
         self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
         self._spacingXLarge = .init(wrappedValue: theme.layout.spacing.xLarge)
+        self._checkboxSelectedBorderWidth = .init(wrappedValue: CheckboxView.Constants.checkboxSelectedBorderWidth)
     }
 
     // MARK: - Body
@@ -106,21 +109,11 @@ public struct CheckboxGroupView: View {
                     .font(self.theme.typography.subhead.font)
                     .padding(.bottom, self.spacingXLarge - self.spacingSmall)
             }
-
             switch self.layout {
             case .horizontal:
-
-                // Close bounce and fix checkbox missing border 
-                ScrollView (.horizontal, showsIndicators: false) {
-                    HStack(alignment: .top, spacing: self.spacingXLarge) {
-                        self.makeContentView(maxWidth: self.viewWidth)
-                        .frame(minHeight: self.maxCheckboxHeight, alignment: .top)
-                    }
-                }
+                self.makeHStackView()
             case .vertical:
-                VStack(alignment: .leading, spacing: self.spacingXLarge) {
-                    self.makeContentView()
-                }
+                self.makeVStackView()
             }
         }
         .overlay(
@@ -129,8 +122,23 @@ public struct CheckboxGroupView: View {
                     self.viewWidth = geo.size.width
                 }
             }
-        ).onAppear {
-            self.maxCheckboxHeight = 24
+        )
+    }
+
+    private func makeHStackView() -> some View {
+        ScrollView (.horizontal, showsIndicators: false) {
+            HStack(alignment: .top, spacing: self.spacingXLarge) {
+                self.makeContentView(maxWidth: self.viewWidth)
+                    .frame(minHeight: self.maxCheckboxHeight, alignment: .top)
+            }
+            .padding(checkboxSelectedBorderWidth)
+        }
+        .padding(-checkboxSelectedBorderWidth)
+    }
+
+    private func makeVStackView() -> some View {
+        VStack(alignment: .leading, spacing: self.spacingXLarge) {
+            self.makeContentView()
         }
     }
 
@@ -156,7 +164,7 @@ public struct CheckboxGroupView: View {
             .if(layout == .horizontal, content: {
                 $0.overlay(
                     GeometryReader { geo in
-                         Color.clear.preference(key: HeightPreferenceKey.self, value: geo.size.height)
+                        Color.clear.preference(key: HeightPreferenceKey.self, value: geo.size.height)
                     }
                 )
                 .onPreferenceChange(HeightPreferenceKey.self) {

@@ -13,7 +13,7 @@ public struct CheckboxView: View {
 
     // MARK: - Constants
 
-    private enum Constants {
+    enum Constants {
         static var checkboxSize: CGFloat = 24
         static var checkboxBorderRadius: CGFloat = 4
         static var checkboxBorderWidth: CGFloat = 2
@@ -54,7 +54,7 @@ public struct CheckboxView: View {
     @ScaledMetric private var checkboxBorderWidth: CGFloat = Constants.checkboxBorderWidth
 
     @ScaledMetric private var checkboxSelectedSize: CGFloat = Constants.checkboxSelectedSize
-    @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat = Constants.checkboxSelectedBorderWidth
+    @ScaledMetric var checkboxSelectedBorderWidth: CGFloat = Constants.checkboxSelectedBorderWidth
 
     @ScaledMetric private var checkboxIndeterminateWidth: CGFloat = Constants.checkboxIndeterminateWidth
     @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = Constants.checkboxIndeterminateHeight
