@@ -65,7 +65,7 @@ final class CheckboxUIViewActionTests: TestCase {
                                  checkedImage: IconographyTests.shared.checkmark,
                                  isEnabled: isEnabled,
                                  selectionState: selectionState,
-                                 checkboxAlignment: .left)
+                                 alignment: .left)
         sut.frame = CGRect(x: 0, y: 0, width: 400, height: 800)
         return sut
 
