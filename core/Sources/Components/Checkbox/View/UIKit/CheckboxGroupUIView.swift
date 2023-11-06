@@ -35,7 +35,7 @@ public final class CheckboxGroupUIView: UIView {
 
     private lazy var itemsStackView: UIStackView = {
         let view = UIStackView()
-        view.spacing = self.spacingXLarge
+        view.spacing = self.spacingLarge
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -55,7 +55,7 @@ public final class CheckboxGroupUIView: UIView {
     private var spacingViewHeightConstraint: NSLayoutConstraint?
 
 
-    @ScaledUIMetric private var spacingXLarge: CGFloat
+    @ScaledUIMetric private var spacingLarge: CGFloat
     @ScaledUIMetric private var padding: CGFloat = CheckboxControlUIView.Constants.lineWidthPressed
     @available(*, deprecated)
     @ScaledUIMetric private var spacingSmall: CGFloat
@@ -161,7 +161,7 @@ public final class CheckboxGroupUIView: UIView {
         self.theme = theme
         self.intent = intent
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
-        self.spacingXLarge = theme.layout.spacing.xLarge
+        self.spacingLarge = theme.layout.spacing.large
         self.spacingSmall = theme.layout.spacing.small
         super.init(frame: .zero)
         self.commonInit()
@@ -193,7 +193,7 @@ public final class CheckboxGroupUIView: UIView {
         self.theme = theme
         self.intent = intent
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
-        self.spacingXLarge = theme.layout.spacing.xLarge
+        self.spacingLarge = theme.layout.spacing.large
         self.spacingSmall = theme.layout.spacing.small
         super.init(frame: .zero)
         self.commonInit()
@@ -210,7 +210,7 @@ public final class CheckboxGroupUIView: UIView {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        self._spacingXLarge.update(traitCollection: self.traitCollection)
+        self._spacingLarge.update(traitCollection: self.traitCollection)
         self._spacingSmall.update(traitCollection: self.traitCollection)
         self._padding.update(traitCollection: self.traitCollection)
     }
@@ -313,7 +313,7 @@ extension CheckboxGroupUIView {
     }
 
     private func updateTheme() {
-        self.spacingXLarge = self.theme.layout.spacing.xLarge
+        self.spacingLarge = self.theme.layout.spacing.large
         self.spacingSmall = self.theme.layout.spacing.small
         self.checkboxes.forEach { $0.theme = theme }
     }
