@@ -16,12 +16,24 @@ struct CheckboxGroupListView: View {
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: CheckboxIntent = .main
     @State private var alignment: CheckboxAlignment = .left
-    @State private var layout: CheckboxSelectionState = CheckboxSelectionState.selected
+    @State private var layout: CheckboxSelectionState = CheckboxSelectionState.unselected
     @State private var isTitleHidden: CheckboxSelectionState = CheckboxSelectionState.unselected
     @State private var textStyle: CheckboxTextStyle = .text
     @State private var selectedIcon = CheckboxListView.Icons.checkedImage
-    @State private var groupType: CheckboxGroupType = .doubleMix
-    @State private var items: [any CheckboxGroupItemProtocol] = CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: .doubleMix)
+    @State private var groupType: CheckboxGroupType = .doubleBasic
+    @State private var items: [any CheckboxGroupItemProtocol] = CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: .doubleBasic)
+    @State private var selectedItems: String = ""
+
+    var selectedItemsText: String {
+        var text: String = ""
+        let texts: [String] = self.items.enumerated()
+            .map { index, checkbox in
+                let line: String = index == (self.items.count - 1) ? "" : "\n"
+                return "\(index + 1) \(checkbox.selectionState)" + line
+            }
+        texts.forEach { text += $0 }
+        return text
+    }
 
     // MARK: - View
     var body: some View {
@@ -73,6 +85,11 @@ struct CheckboxGroupListView: View {
                     isEnabled: true,
                     selectionState: self.$isTitleHidden
                 )
+
+                HStack {
+                    Text("Items:")
+                    Text(self.selectedItemsText)
+                }
             },
             integration: {
                 CheckboxGroupView(
