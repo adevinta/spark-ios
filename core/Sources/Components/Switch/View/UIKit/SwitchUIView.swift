@@ -462,10 +462,8 @@ public final class SwitchUIView: UIView {
             attributedText: attributedText
         )
 
-        self.isAccessibilityElement = UIAccessibility.isVoiceOverRunning
-        if #available(iOS 17.0, *) {
-            self.accessibilityTraits = .toggleButton
-        } else {
+        if UIAccessibility.isVoiceOverRunning {
+            self.isAccessibilityElement = true
             self.accessibilityTraits = .button
         }
         self.updateAccessibility()

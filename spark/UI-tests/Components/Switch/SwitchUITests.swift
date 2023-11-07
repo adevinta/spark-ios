@@ -28,15 +28,8 @@ final class SwitchUITests: XCTestCase {
         XCTAssertEqual(switchButton.label, "Text", "wrong accessibility label")
         XCTAssertTrue(switchButton.isEnabled, "switch should be enabled")
         let traits = try XCTUnwrap(switchButton.traits)
-        let expectedTraits: UIAccessibilityTraits
-        let unexpectedTraits: [UIAccessibilityTraits]
-        if #available(iOS 17.0, *) {
-            expectedTraits = [.toggleButton, .selected]
-            unexpectedTraits = [.button, .notEnabled]
-        } else {
-            expectedTraits = [.button, .selected]
-            unexpectedTraits = [.notEnabled]
-        }
+        let expectedTraits: UIAccessibilityTraits = [.button, .selected]
+        let unexpectedTraits: [UIAccessibilityTraits] = [.notEnabled]
         XCTAssertTrue(traits.contains(expectedTraits), "Expected traits are absent")
         for (index, unexpectedTrait) in unexpectedTraits.enumerated() {
             XCTAssertFalse(traits.contains(unexpectedTrait), "Unexpected trait with index \(index) is present")
@@ -54,15 +47,8 @@ final class SwitchUITests: XCTestCase {
         XCTAssertTrue(switchButton.isEnabled, "switch should be enabled")
 
         let traits = try XCTUnwrap(switchButton.traits)
-        let expectedTraits: UIAccessibilityTraits
-        let unexpectedTraits: [UIAccessibilityTraits]
-        if #available(iOS 17.0, *) {
-            expectedTraits = [.toggleButton]
-            unexpectedTraits = [.button, .selected, .notEnabled]
-        } else {
-            expectedTraits = [.button]
-            unexpectedTraits = [.selected, .notEnabled]
-        }
+        let expectedTraits: UIAccessibilityTraits = [.button]
+        let unexpectedTraits: [UIAccessibilityTraits] = [.selected, .notEnabled]
         XCTAssertTrue(traits.contains(expectedTraits), "Expected traits are absent")
         for (index, unexpectedTrait) in unexpectedTraits.enumerated() {
             XCTAssertFalse(traits.contains(unexpectedTrait), "Unexpected trait with index \(index) is present")
@@ -81,15 +67,8 @@ final class SwitchUITests: XCTestCase {
         XCTAssertFalse(switchButton.isEnabled, "Switch should be disabled")
 
         let traits = try XCTUnwrap(switchButton.traits)
-        let expectedTraits: UIAccessibilityTraits
-        let unexpectedTraits: [UIAccessibilityTraits]
-        if #available(iOS 17.0, *) {
-            expectedTraits = [.toggleButton, .selected, .notEnabled]
-            unexpectedTraits = [.button]
-        } else {
-            expectedTraits = [.button, .selected, .notEnabled]
-            unexpectedTraits = []
-        }
+        let expectedTraits: UIAccessibilityTraits = [.button, .selected, .notEnabled]
+        let unexpectedTraits: [UIAccessibilityTraits] = []
         XCTAssertTrue(traits.contains(expectedTraits), "Expected traits are absent")
         for (index, unexpectedTrait) in unexpectedTraits.enumerated() {
             XCTAssertFalse(traits.contains(unexpectedTrait), "Unexpected trait with index \(index) is present")
@@ -112,24 +91,16 @@ final class SwitchUITests: XCTestCase {
         XCTAssertFalse(switchButton.isEnabled, "Switch should be disabled")
 
         let traits = try XCTUnwrap(switchButton.traits)
-        let expectedTraits: UIAccessibilityTraits
-        let unexpectedTraits: [UIAccessibilityTraits]
-        if #available(iOS 17.0, *) {
-            expectedTraits = [.toggleButton, .notEnabled]
-            unexpectedTraits = [.button, .selected]
-        } else {
-            expectedTraits = [.button, .notEnabled]
-            unexpectedTraits = [.selected]
-        }
+        let expectedTraits: UIAccessibilityTraits = [.button, .notEnabled]
+        let unexpectedTraits: [UIAccessibilityTraits] = [.selected]
         XCTAssertTrue(traits.contains(expectedTraits), "Expected traits are absent")
         for (index, unexpectedTrait) in unexpectedTraits.enumerated() {
             XCTAssertFalse(traits.contains(unexpectedTrait), "Unexpected trait with index \(index) is present")
         }
     }
 
-
     private func getSwitchButton() -> XCUIElement? {
-         return self.app.otherElements["switch-tag"].firstMatch
+         return self.app.buttons["switch-tag"].firstMatch
     }
 
     private func getToSwitchScreen() {
