@@ -13,7 +13,7 @@ public struct CheckboxGroupView: View {
 
     // MARK: - Private properties
     @available(*, deprecated)
-    private var title: String
+    private var title: String?
 
     private var checkedImage: UIImage
     @Binding private var items: [any CheckboxGroupItemProtocol]
@@ -58,7 +58,7 @@ public struct CheckboxGroupView: View {
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {
-        self.title = title ?? ""
+        self.title = title
         self.checkedImage = checkedImage
         self._items = items
         self.layout = layout
@@ -108,8 +108,8 @@ public struct CheckboxGroupView: View {
     /// Returns the rendered checkbox group view.
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if !self.title.isEmpty {
-                Text(self.title)
+            if let title = self.title, !title.isEmpty  {
+                Text(title)
                     .foregroundColor(self.theme.colors.base.onSurface.color)
                     .font(self.theme.typography.subhead.font)
                     .padding(.bottom, self.spacingLarge - self.spacingSmall)
