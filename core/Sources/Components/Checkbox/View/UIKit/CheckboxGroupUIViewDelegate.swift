@@ -13,7 +13,8 @@ import Foundation
 public protocol CheckboxGroupUIViewDelegate: AnyObject {
     /// The checkbox group selection was changed.
     /// - Parameters:
-    ///   - checkboxGroup: The updated checkbox group.
-    ///   - state: The new checkbox state.
-    func checkboxGroup(_ checkboxGroup: CheckboxGroupUIView, didChangeSelection states: [any CheckboxGroupItemProtocol])
+    ///   - _: The updated checkbox group.
+    ///   - didChangeSelection: It will return items.
+
+    func checkboxGroup(_ : CheckboxGroupUIView, didChangeSelection: [any CheckboxGroupItemProtocol])
 }

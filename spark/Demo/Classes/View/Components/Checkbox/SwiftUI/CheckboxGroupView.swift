@@ -20,8 +20,8 @@ struct CheckboxGroupListView: View {
     @State private var isTitleHidden: CheckboxSelectionState = CheckboxSelectionState.unselected
     @State private var textStyle: CheckboxTextStyle = .text
     @State private var selectedIcon = CheckboxListView.Icons.checkedImage
-    @State private var groupType: CheckboxGroupType = .doubleBasic
-    @State private var items: [any CheckboxGroupItemProtocol] = CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: .doubleBasic)
+    @State private var groupType: CheckboxGroupType = .doubleMix
+    @State private var items: [any CheckboxGroupItemProtocol] = CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: .doubleMix)
     @State private var selectedItems: String = ""
 
     var selectedItemsText: String {
