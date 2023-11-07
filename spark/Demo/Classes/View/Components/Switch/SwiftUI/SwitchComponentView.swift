@@ -83,17 +83,17 @@ struct SwitchComponentView: View {
             integration: {
                 SwitchView(
                     theme: self.theme,
+                    intent: self.intent,
+                    alignment: self.alignment,
                     isOn: self.$isOn
                 )
-                .alignment(self.alignment)
-                .intent(self.intent)
-                .isEnabled(self.isEnabled == .selected)
                 .images(self.hasImages == .selected ? self.images() : nil)
                 .textContent(
                     viewModel: self.viewModel,
                     textContent: self.textContent,
                     attributedText: self.attributedText()
                 )
+                .disabled(self.isEnabled == .unselected)
             }
         )
     }
