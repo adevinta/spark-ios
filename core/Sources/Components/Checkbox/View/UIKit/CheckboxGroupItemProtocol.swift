@@ -9,7 +9,7 @@
 import Foundation
 
 /// The protocol is used for items in checkbox groups. It describes a single item within a checkbox group.
-public protocol CheckboxGroupItemProtocol: Equatable, Hashable {
+public protocol CheckboxGroupItemProtocol: Hashable {
     /// The checkbox title.
     var title: String? { get set }
 

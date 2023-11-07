@@ -17,6 +17,7 @@ public struct CheckboxGroupView: View {
 
     private var checkedImage: UIImage
     @Binding private var items: [any CheckboxGroupItemProtocol]
+
     private var theme: Theme
     private var intent: CheckboxIntent
     private var layout: CheckboxGroupLayout
@@ -30,6 +31,10 @@ public struct CheckboxGroupView: View {
 
     @State private var maxCheckboxHeight: CGFloat = .zero
     @State private var viewWidth: CGFloat = .zero
+    @State private var isScrollableHStack: Bool = true
+    private var itemContents: [String] {
+        return self.items.map { $0.id + ($0.title ?? "") }
+    }
 
     // MARK: - Initialization
 
@@ -123,23 +128,44 @@ public struct CheckboxGroupView: View {
                 }
             }
         )
+        .onChange(of: self.itemContents) { newValue in
+            self.isScrollableHStack = true
+        }
     }
 
     private func makeHStackView() -> some View {
         ScrollView (.horizontal, showsIndicators: false) {
             HStack(alignment: .top, spacing: self.spacingLarge) {
                 self.makeContentView(maxWidth: self.viewWidth)
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(minHeight: self.maxCheckboxHeight, alignment: .top)
+            }
+            .overlay(
+                GeometryReader { geo in
+                    Color.clear.preference(key: ScrollViewWidthPreferenceKey.self, value: geo.size.width)
+                }
+            )
+            .onPreferenceChange(ScrollViewWidthPreferenceKey.self) { newValue in
+                self.isScrollableHStack = self.viewWidth < newValue ?? .zero
             }
             .padding(checkboxSelectedBorderWidth)
         }
         .padding(-checkboxSelectedBorderWidth)
+        .if(!self.isScrollableHStack) { _ in
+            HStack(alignment: .top, spacing: self.spacingLarge) {
+                self.makeContentView()
+            }
+            .fixedSize(horizontal: true, vertical: false)
+        } else: { view in
+            view
+        }
     }
 
     private func makeVStackView() -> some View {
         VStack(alignment: .leading, spacing: self.spacingLarge) {
             self.makeContentView()
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private func makeContentView(maxWidth: CGFloat? = nil) -> some View {
@@ -159,7 +185,6 @@ public struct CheckboxGroupView: View {
             .if(maxWidth != nil, content: {
                 $0.frame(maxWidth: maxWidth, alignment: .top)
             })
-            .fixedSize(horizontal: false, vertical: true)
             .accessibilityIdentifier(identifier)
             .if(layout == .horizontal, content: {
                 $0.overlay(
@@ -178,6 +203,13 @@ public struct CheckboxGroupView: View {
 }
 
 struct HeightPreferenceKey: PreferenceKey {
+    static let defaultValue: CGFloat? = nil
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
+    }
+}
+
+struct ScrollViewWidthPreferenceKey: PreferenceKey {
     static let defaultValue: CGFloat? = nil
     static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
         value = value ?? nextValue()
