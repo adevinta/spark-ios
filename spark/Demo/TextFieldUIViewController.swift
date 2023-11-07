@@ -84,9 +84,7 @@ class TextFieldUIViewController: UIViewController {
 
     private func setupView() {
         let scrollView = UIScrollView()
-        scrollView.alwaysBounceVertical = true
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: scrollView.frame.size.height + 1000)
         self.view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -98,8 +96,12 @@ class TextFieldUIViewController: UIViewController {
         textFieldComponentUIView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(textFieldComponentUIView)
         NSLayoutConstraint.activate([
+            textFieldComponentUIView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            textFieldComponentUIView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            textFieldComponentUIView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            textFieldComponentUIView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             textFieldComponentUIView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            textFieldComponentUIView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+            textFieldComponentUIView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, constant: 1000)
         ])
     }
 

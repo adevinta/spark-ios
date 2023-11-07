@@ -15,6 +15,7 @@ public final class TextFieldUIView: UITextField {
 
     private let viewModel: TextFieldUIViewModel
     private var cancellable = Set<AnyCancellable>()
+    private var heightConstraint: NSLayoutConstraint?
 
     // MARK: - Public properties
 
@@ -42,12 +43,17 @@ public final class TextFieldUIView: UITextField {
         get { return .init(self.viewModel.borderStyle) }
     }
 
+    @ScaledUIMetric private var height: CGFloat = 44
+    @ScaledUIMetric private var leftViewSize: CGFloat = .zero
+    @ScaledUIMetric private var rightViewSize: CGFloat = .zero
+
     // MARK: - Initializers
 
     internal init(viewModel: TextFieldUIViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
         self.setupView()
+        self.setupSubscriptions()
     }
 
     public convenience init(theme: Theme,
@@ -65,10 +71,15 @@ public final class TextFieldUIView: UITextField {
     // MARK: - Private methods
 
     private func setupView() {
-        NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: 44)
-        ])
-        self.setupSubscriptions()
+        self.adjustsFontForContentSizeCategory = true
+        self.font = .preferredFont(forTextStyle: .body)
+        self.updateHeight()
+    }
+
+    private func updateHeight() {
+        self.heightConstraint?.isActive = false
+        self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
+        self.heightConstraint?.isActive = true
     }
 
     private func setupSubscriptions() {
@@ -130,13 +141,31 @@ public final class TextFieldUIView: UITextField {
 
     public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.rightViewRect(forBounds: bounds)
-        rect.origin.x -= self.viewModel.spacings.right
+        self.rightViewSize = rect.width
+        rect.origin.x = (rect.maxX - self.viewModel.spacings.right - self.rightViewSize)
+        rect.origin.y = bounds.size.height / 2 - self.rightViewSize / 2
+        rect.size.width = self.rightViewSize
+        rect.size.height = self.rightViewSize
         return rect
     }
 
     public override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.leftViewRect(forBounds: bounds)
+        self.leftViewSize = rect.width
         rect.origin.x += self.viewModel.spacings.left
+        rect.origin.y = bounds.size.height / 2 - self.leftViewSize / 2
+        rect.size.width = self.leftViewSize
+        rect.size.height = self.leftViewSize
         return rect
+    }
+
+    // MARK: - Trait collection
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        self.invalidateIntrinsicContentSize()
+        self._height.update(traitCollection: traitCollection)
+        self.updateHeight()
     }
 }
