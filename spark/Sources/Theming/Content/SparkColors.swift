@@ -95,7 +95,6 @@ struct SparkColors: Colors {
         basicContainerPressed: ColorTokenDefault(named: "basic-container-pressed", in: Bundle(for: ClassForBundle.self)),
         surfacePressed: ColorTokenDefault(named: "surface-pressed", in: Bundle(for: ClassForBundle.self)),
         surfaceInversePressed: ColorTokenDefault(named: "surface-inverse-pressed", in: Bundle(for: ClassForBundle.self)),
-        outlinePressed: ColorTokenDefault(named: "outline-pressed", in: Bundle(for: ClassForBundle.self)),
         successPressed: ColorTokenDefault(named: "success-pressed", in: Bundle(for: ClassForBundle.self)),
         successContainerPressed: ColorTokenDefault(named: "success-container-pressed", in: Bundle(for: ClassForBundle.self)),
         alertPressed: ColorTokenDefault(named: "alert-pressed", in: Bundle(for: ClassForBundle.self)),

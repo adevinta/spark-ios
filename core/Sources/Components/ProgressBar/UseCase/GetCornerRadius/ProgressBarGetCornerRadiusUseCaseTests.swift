@@ -18,9 +18,9 @@ final class ProgressBarGetCornerRadiusUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_cornerRadius_when_shape_is_pill_case() {
+    func test_execute_cornerRadius_when_shape_is_rounded_case() {
         self.testExecute(
-            givenShape: .pill,
+            givenShape: .rounded,
             expectedRadius: self.borderMock.radius.full
         )
     }

@@ -14,6 +14,12 @@ final class NumberSelector: UIControl {
 
     private let range: CountableClosedRange<Int>
     var selectedValue: Int
+    var stepper: Int
+    let numberFormatter: NumberFormatter
+
+    private var selectedFormattedValueString: String {
+        return self.numberFormatter.string(from: Double(self.selectedValue) as NSNumber) ?? "Unknow"
+    }
 
     // MARK: - View Properties
     private lazy var minusButton: UIButton = {
@@ -37,7 +43,7 @@ final class NumberSelector: UIControl {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "\(self.selectedValue)"
+        label.text = self.selectedFormattedValueString
         return label
     }()
 
@@ -54,9 +60,18 @@ final class NumberSelector: UIControl {
     }()
 
     // MARK: - Initialization
-    init(range: CountableClosedRange<Int>, selectedValue: Int) {
+
+    init(
+        range: CountableClosedRange<Int>,
+        selectedValue: Int,
+        stepper: Int = 1,
+        numberFormatter: NumberFormatter = NumberFormatter()
+    ) {
         self.range = range
         self.selectedValue = min(max(range.lowerBound, selectedValue), range.upperBound)
+        self.stepper = stepper
+        self.numberFormatter = numberFormatter
+
         super.init(frame: .zero)
 
         self.setupView()
@@ -67,25 +82,27 @@ final class NumberSelector: UIControl {
     }
 
     // MARK: - Setup
+
     private func setupView() {
         self.addSubviewSizedEqually(self.stackView)
     }
 
     private func updateLabel() {
-        self.label.text = "\(self.selectedValue)"
+        self.label.text = self.selectedFormattedValueString
     }
 
     // MARK: - Button Targets
+
     @objc private func decrementCount() {
         guard self.selectedValue > self.range.lowerBound else { return }
-        self.selectedValue -= 1
+        self.selectedValue -= self.stepper
         self.updateLabel()
         self.sendActions(for: .valueChanged)
     }
 
     @objc private func incrementCount() {
         guard self.selectedValue < self.range.upperBound else { return }
-        self.selectedValue += 1
+        self.selectedValue += self.stepper
         self.updateLabel()
         self.sendActions(for: .valueChanged)
     }

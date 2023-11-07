@@ -58,7 +58,7 @@ class ComponentUIView: UIView {
             ]
         )
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = self.integrationStackViewAlignment
         stackView.spacing = 12
         return stackView
     }()
@@ -70,7 +70,7 @@ class ComponentUIView: UIView {
         return label
     }()
 
-    private lazy var componentStackView: UIStackView = {
+    lazy var componentStackView: UIStackView = {
         let horizontalStackView = UIStackView(
             arrangedSubviews: [
                 self.componentLeftSpaceView,
@@ -132,13 +132,17 @@ class ComponentUIView: UIView {
         }
     }
 
+    private let integrationStackViewAlignment: UIStackView.Alignment
+
     private var subscriptions: Set<AnyCancellable> = []
 
     // MARK: - Initialization
 
     init(viewModel: ComponentUIViewModel,
+         integrationStackViewAlignment: UIStackView.Alignment = .leading,
          componentView: UIView) {
         self.viewModel = viewModel
+        self.integrationStackViewAlignment = integrationStackViewAlignment
 
         self.componentView = componentView
 

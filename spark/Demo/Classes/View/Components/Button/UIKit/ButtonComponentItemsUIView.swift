@@ -29,6 +29,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     private let alignment: ButtonAlignment
     private let content: ButtonContentDefault
     private let isEnabled: Bool
+    private let isAnimated: Bool
 
     // MARK: - Initialization
 
@@ -42,7 +43,8 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         shape: ButtonShape,
         alignment: ButtonAlignment,
         content: ButtonContentDefault,
-        isEnabled: Bool
+        isEnabled: Bool,
+        isAnimated: Bool
     ) {
         self.viewModel = viewModel
         self.iconImage = .init(named: viewModel.imageNamed) ?? UIImage()
@@ -62,6 +64,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         self.alignment = alignment
         self.content = content
         self.isEnabled = isEnabled
+        self.isAnimated = isAnimated
     }
 
     // MARK: - Maker
@@ -196,6 +199,10 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
 
         if buttonView.isEnabled != self.isEnabled {
             buttonView.isEnabled = self.isEnabled
+        }
+
+        if buttonView.isAnimated != self.isAnimated {
+            buttonView.isAnimated = self.isAnimated
         }
 
         DispatchQueue.main.async {

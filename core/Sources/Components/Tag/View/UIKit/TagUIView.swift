@@ -248,7 +248,7 @@ public final class TagUIView: UIView {
 
     private func reloadIconImageView() {
         self.iconImageView.image = self.iconImage
-        self.iconImageView.isHidden = (self.iconImage == nil)
+        self.iconStackView.isHidden = (self.iconImage == nil)
     }
 
     private func reloadTextLabel() {

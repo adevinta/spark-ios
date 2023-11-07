@@ -10,23 +10,28 @@ import Foundation
 
 /// The colors definie a chip
 struct ChipStateColors {
-    let background: any ColorToken
+    var background: any ColorToken
     let border: any ColorToken
-    let foreground: any ColorToken
+    var foreground: any ColorToken
     var opacity: CGFloat
 
-    init(background: any ColorToken, border: any ColorToken, foreground: any ColorToken, opacity: CGFloat = 1.0) {
+    init(background: any ColorToken = ColorTokenDefault.clear,
+         border: any ColorToken,
+         foreground: any ColorToken,
+         opacity: CGFloat = 1.0) {
         self.background = background
         self.border = border
         self.foreground = foreground
         self.opacity = opacity
     }
+    
 }
 
 extension ChipStateColors: Equatable {
     static func == (lhs: ChipStateColors, rhs: ChipStateColors) -> Bool {
         return lhs.background.equals(rhs.background) &&
         lhs.border.equals(rhs.border) &&
-        lhs.foreground.equals(rhs.foreground) && lhs.opacity == rhs.opacity
+        lhs.foreground.equals(rhs.foreground) &&
+        lhs.opacity == rhs.opacity
     }
 }

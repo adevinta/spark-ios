@@ -31,7 +31,7 @@ struct ProgressBarGetCornerRadiusUseCase: ProgressBarGetCornerRadiusUseCaseable 
         border: Border
     ) -> CGFloat {
         switch shape {
-        case .pill:
+        case .rounded:
             return border.radius.full
         case .square:
             return .zero

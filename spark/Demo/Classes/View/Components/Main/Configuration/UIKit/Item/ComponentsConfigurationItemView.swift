@@ -21,6 +21,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
             self.toggle,
             self.checkbox,
             self.numberRange,
+            self.input,
             UIView()
         ].compactMap { $0 })
         stackView.axis = .horizontal
@@ -98,19 +99,58 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
     }()
 
     private lazy var numberRange: NumberSelector? = {
+        var selector: NumberSelector?
+
         switch self.viewModel.type {
-        case let .rangeSelector(selected: selectedValue, range: range):
-            let selector = NumberSelector(range: range, selectedValue: selectedValue)
-            selector.translatesAutoresizingMaskIntoConstraints = false
-            selector.accessibilityIdentifier = self.viewModel.identifier + "NumberSelector"
+        case let .rangeSelector(selectedValue, range):
+            selector = NumberSelector(
+                range: range,
+                selectedValue: selectedValue
+            )
 
-            selector.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .valueChanged)
+        case let .rangeSelectorWithConfig(selectedValue, range, stepper, numberFormatter):
+            selector = NumberSelector(
+                range: range,
+                selectedValue: selectedValue,
+                stepper: stepper,
+                numberFormatter: numberFormatter
+            )
+        default:
+            break
+        }
 
-            return selector
+        guard let selector else {
+            return nil
+        }
+
+        selector.translatesAutoresizingMaskIntoConstraints = false
+        selector.accessibilityIdentifier = self.viewModel.identifier + "NumberSelector"
+
+        selector.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .valueChanged)
+
+        return selector
+    }()
+
+    private lazy var input: UITextField? = {
+
+        switch self.viewModel.type {
+        case let .input(text):
+            let field = UITextField()
+            field.translatesAutoresizingMaskIntoConstraints = false
+            field.accessibilityIdentifier = self.viewModel.identifier + "Input"
+            field.addTarget(self.viewModel.target.source, action: self.viewModel.target.action, for: .editingChanged)
+            field.text = text
+            field.placeholder = "Enter text here"
+            field.borderStyle = UITextField.BorderStyle.roundedRect
+            field.autocorrectionType = UITextAutocorrectionType.no
+            field.keyboardType = UIKeyboardType.default
+            field.returnKeyType = UIReturnKeyType.done
+            return field
         default:
             return nil
         }
     }()
+
     // MARK: - Properties
 
     private let viewModel: ComponentsConfigurationItemUIViewModel

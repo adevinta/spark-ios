@@ -15,7 +15,7 @@ class ChipViewModel<Content>: ObservableObject {
     private (set) var variant: ChipVariant
     private (set) var intent: ChipIntent
     private (set) var alignment: ChipAlignment
-    private let useCase: GetChipColorsUseCasable
+    private let useCase: ChipGetColorsUseCasable
 
     // MARK: - State Properties
     var isEnabled: Bool = true {
@@ -24,9 +24,17 @@ class ChipViewModel<Content>: ObservableObject {
             self.updateColors()
         }
     }
+
     var isPressed: Bool = false {
         didSet {
             guard isPressed != oldValue else { return }
+            self.updateColors()
+        }
+    }
+
+    var isSelected: Bool = false {
+        didSet {
+            guard isSelected != oldValue else { return }
             self.updateColors()
         }
     }
@@ -63,7 +71,7 @@ class ChipViewModel<Content>: ObservableObject {
                   intent: intent,
                   alignment: alignment,
                   content: content,
-                  useCase: GetChipColorsUseCase())
+                  useCase: ChipGetColorsUseCase())
     }
 
     init(theme: Theme,
@@ -71,7 +79,7 @@ class ChipViewModel<Content>: ObservableObject {
          intent: ChipIntent,
          alignment: ChipAlignment,
          content: Content,
-         useCase: GetChipColorsUseCasable) {
+         useCase: ChipGetColorsUseCasable) {
         self.theme = theme
         self.variant = variant
         self.intent = intent
@@ -114,7 +122,7 @@ class ChipViewModel<Content>: ObservableObject {
 
     // MARK: - Private functions
     private func updateColors() {
-        let state = ChipState(isEnabled: self.isEnabled, isPressed: self.isPressed)
+        let state = ChipState(isEnabled: self.isEnabled, isPressed: self.isPressed, isSelected: self.isSelected)
         self.colors = self.useCase.execute(theme: self.theme, variant: self.variant, intent: self.intent, state: state)
     }
 

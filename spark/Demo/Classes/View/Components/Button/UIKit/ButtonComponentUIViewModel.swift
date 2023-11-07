@@ -60,6 +60,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var alignment: ButtonAlignment
     @Published var content: ButtonContentDefault
     @Published var isEnabled: Bool
+    @Published var isAnimated: Bool
 
     // MARK: - Items Properties
 
@@ -127,6 +128,14 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var isAnimatedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is Animated",
+            type: .toggle(isOn: self.isAnimated),
+            target: (source: self, action: #selector(self.isAnimatedChanged))
+        )
+    }()
+
     // MARK: - Properties
 
     let text: String
@@ -144,7 +153,8 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             self.shapeConfigurationItemViewModel,
             self.alignmentConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
-            self.isEnabledConfigurationItemViewModel
+            self.isEnabledConfigurationItemViewModel,
+            self.isAnimatedConfigurationItemViewModel
         ]
     }
 
@@ -170,7 +180,8 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         shape: ButtonShape = .rounded,
         alignment: ButtonAlignment = .leadingIcon,
         content: ButtonContentDefault = .text,
-        isEnabled: Bool = true
+        isEnabled: Bool = true,
+        isAnimated: Bool = true
     ) {
         self.text = text
         self.iconImage = .init(named: iconImageNamed) ?? UIImage()
@@ -189,6 +200,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         self.alignment = alignment
         self.content = content
         self.isEnabled = isEnabled
+        self.isAnimated = isAnimated
 
         super.init(identifier: "Button")
     }
@@ -228,5 +240,9 @@ extension ButtonComponentUIViewModel {
 
     @objc func isEnabledChanged() {
         self.isEnabled.toggle()
+    }
+
+    @objc func isAnimatedChanged() {
+        self.isAnimated.toggle()
     }
 }
