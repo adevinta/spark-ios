@@ -27,13 +27,10 @@ final class SwitchUITests: XCTestCase {
         // THEN
         XCTAssertEqual(switchButton.label, "Text", "wrong accessibility label")
         XCTAssertTrue(switchButton.isEnabled, "switch should be enabled")
+        XCTAssertTrue(switchButton.isSelected, "switch should be selected")
         let traits = try XCTUnwrap(switchButton.traits)
-        let expectedTraits: UIAccessibilityTraits = [.button, .selected]
-        let unexpectedTraits: [UIAccessibilityTraits] = [.notEnabled]
+        let expectedTraits: UIAccessibilityTraits = [.button]
         XCTAssertTrue(traits.contains(expectedTraits), "Expected traits are absent")
-        for (index, unexpectedTrait) in unexpectedTraits.enumerated() {
-            XCTAssertFalse(traits.contains(unexpectedTrait), "Unexpected trait with index \(index) is present")
-        }
     }
 
     func test_default_after_tap_accessibility_properties() throws {
@@ -45,14 +42,11 @@ final class SwitchUITests: XCTestCase {
         // THEN
         XCTAssertEqual(switchButton.label, "Text", "wrong accessibility label")
         XCTAssertTrue(switchButton.isEnabled, "switch should be enabled")
+        XCTAssertFalse(switchButton.isSelected, "switch should not be selected")
 
         let traits = try XCTUnwrap(switchButton.traits)
         let expectedTraits: UIAccessibilityTraits = [.button]
-        let unexpectedTraits: [UIAccessibilityTraits] = [.selected, .notEnabled]
         XCTAssertTrue(traits.contains(expectedTraits), "Expected traits are absent")
-        for (index, unexpectedTrait) in unexpectedTraits.enumerated() {
-            XCTAssertFalse(traits.contains(unexpectedTrait), "Unexpected trait with index \(index) is present")
-        }
     }
 
     func test_disabled_state_accessibility_properties() throws {
@@ -65,14 +59,12 @@ final class SwitchUITests: XCTestCase {
 
         XCTAssertEqual(switchButton.label, "Text", "wrong accessibility label")
         XCTAssertFalse(switchButton.isEnabled, "Switch should be disabled")
+        XCTAssertTrue(switchButton.isSelected, "switch should be selected")
 
         let traits = try XCTUnwrap(switchButton.traits)
-        let expectedTraits: UIAccessibilityTraits = [.button, .selected, .notEnabled]
+        let expectedTraits: UIAccessibilityTraits = [.button]
         let unexpectedTraits: [UIAccessibilityTraits] = []
         XCTAssertTrue(traits.contains(expectedTraits), "Expected traits are absent")
-        for (index, unexpectedTrait) in unexpectedTraits.enumerated() {
-            XCTAssertFalse(traits.contains(unexpectedTrait), "Unexpected trait with index \(index) is present")
-        }
     }
 
     func test_disabled_state_after_tap_accessibility_properties() throws {
@@ -89,14 +81,11 @@ final class SwitchUITests: XCTestCase {
 
         XCTAssertEqual(switchButton.label, "Text", "wrong accessibility label")
         XCTAssertFalse(switchButton.isEnabled, "Switch should be disabled")
+        XCTAssertFalse(switchButton.isSelected, "switch should not be selected")
 
         let traits = try XCTUnwrap(switchButton.traits)
-        let expectedTraits: UIAccessibilityTraits = [.button, .notEnabled]
-        let unexpectedTraits: [UIAccessibilityTraits] = [.selected]
+        let expectedTraits: UIAccessibilityTraits = [.button]
         XCTAssertTrue(traits.contains(expectedTraits), "Expected traits are absent")
-        for (index, unexpectedTrait) in unexpectedTraits.enumerated() {
-            XCTAssertFalse(traits.contains(unexpectedTrait), "Unexpected trait with index \(index) is present")
-        }
     }
 
     private func getSwitchButton() -> XCUIElement? {

@@ -462,10 +462,8 @@ public final class SwitchUIView: UIView {
             attributedText: attributedText
         )
 
-        if UIAccessibility.isVoiceOverRunning {
-            self.isAccessibilityElement = true
-            self.accessibilityTraits = .button
-        }
+        self.isAccessibilityElement = UIAccessibility.isVoiceOverRunning
+        self.accessibilityTraits = .button
         self.updateAccessibility()
     }
 
