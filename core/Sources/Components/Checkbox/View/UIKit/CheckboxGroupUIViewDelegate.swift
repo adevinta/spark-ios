@@ -16,5 +16,5 @@ public protocol CheckboxGroupUIViewDelegate: AnyObject {
     ///   - _: The updated checkbox group.
     ///   - didChangeSelection: It will return items.
 
-    func checkboxGroup(_ : CheckboxGroupUIView, didChangeSelection: [any CheckboxGroupItemProtocol])
+    func checkboxGroup(_ checkboxGroup: CheckboxGroupUIView, didChangeSelection states: [any CheckboxGroupItemProtocol])
 }
