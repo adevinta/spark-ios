@@ -16,6 +16,13 @@ final class UIControlStateImageView: UIImageView {
 
     private let imageStates = ControlPropertyStates<UIImage>()
 
+    private var storedImage: UIImage? {
+        didSet {
+            self.isImage = self.storedImage != nil
+            self.image = self.storedImage
+        }
+    }
+
     // MARK: - Published
 
     @Published var isImage: Bool = false
@@ -23,8 +30,13 @@ final class UIControlStateImageView: UIImageView {
     // MARK: - Override Properties
 
     override var image: UIImage? {
-        didSet {
-            self.isImage = self.image != nil
+        get {
+            return super.image
+        }
+        set {
+            if newValue == self.storedImage {
+                super.image = newValue
+            }
         }
     }
 
@@ -62,6 +74,6 @@ final class UIControlStateImageView: UIImageView {
         )
 
         // Set the image from states
-        self.image = self.imageStates.value(forStatus: status)
+        self.storedImage = self.imageStates.value(forStatus: status)
     }
 }

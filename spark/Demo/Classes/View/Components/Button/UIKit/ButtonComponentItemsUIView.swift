@@ -137,6 +137,17 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
                 attributedText: self.attributedText,
                 isEnabled: self.isEnabled
             )
+
+        default:
+            buttonView = ButtonUIView(
+                theme: SparkTheme.shared,
+                intent: self.intent,
+                variant: self.variant,
+                size: self.size,
+                shape: self.shape,
+                alignment: self.alignment,
+                isEnabled: self.isEnabled
+            )
         }
 
         let stackView = UIStackView(arrangedSubviews: [
@@ -198,6 +209,11 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         case .iconAndAttributedText:
             buttonView.iconImage = self.iconImage
             buttonView.attributedText = self.attributedText
+
+        default:
+            buttonView.text = nil
+            buttonView.attributedText = nil
+            buttonView.iconImage = nil
         }
 
         if buttonView.isEnabled != self.isEnabled {

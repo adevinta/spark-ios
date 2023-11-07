@@ -23,7 +23,7 @@ public final class ButtonUIView: UIControl {
         let stackView = UIStackView(
             arrangedSubviews:
                 [
-                    self.iconView,
+                    self.imageContentView,
                     self.titleLabel
                 ]
         )
@@ -33,9 +33,9 @@ public final class ButtonUIView: UIControl {
         return stackView
     }()
 
-    private lazy var iconView: UIView = {
+    private lazy var imageContentView: UIView = {
         let view = UIView()
-        view.addSubview(self.iconImageView)
+        view.addSubview(self.imageView)
         view.accessibilityIdentifier = AccessibilityIdentifier.icon
         view.setContentCompressionResistancePriority(.required,
                                                      for: .vertical)
@@ -44,14 +44,22 @@ public final class ButtonUIView: UIControl {
         return view
     }()
 
-    private var iconImageView: UIControlStateImageView = {
+    public var imageView: UIImageView {
+        return self.imageStateView
+    }
+
+    private var imageStateView: UIControlStateImageView = {
         let imageView = UIControlStateImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = AccessibilityIdentifier.iconImage
         return imageView
     }()
 
-    private var titleLabel: UIControlStateLabel = {
+    public var titleLabel: UILabel {
+        return self.titleStateLabel
+    }
+
+    private var titleStateLabel: UIControlStateLabel = {
         let label = UIControlStateLabel()
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
@@ -62,30 +70,11 @@ public final class ButtonUIView: UIControl {
         return label
     }()
 
-    /// Clear button to manage the action when the delegate is set.
-    @available(*, deprecated, message: "Remove this subview when the delegate will be removed")
-    private lazy var clearButton: UIButton = {
-        let button = UIButton()
-        button.isAccessibilityElement = false
-        button.addTarget(self, action: #selector(self.touchUpInsideAction), for: .touchUpInside)
-        button.addTarget(self, action: #selector(self.touchDownAction), for: .touchDown)
-        button.addTarget(self, action: #selector(self.touchUpOutsideAction), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(self.touchCancelAction), for: .touchCancel)
-        button.accessibilityIdentifier = AccessibilityIdentifier.clearButton
-        button.isHidden = true // Show only if the delegate is set
-        return button
-    }()
-
     // MARK: - Public Properties
 
     /// The delegate used to notify about some changed on button.
     @available(*, deprecated, message: "Use native **action** or **target** on UIControl or publisher instead")
-    public weak var delegate: ButtonUIViewDelegate? {
-        didSet {
-            self.clearButton.isHidden = self.delegate == nil
-            self.contentStackView.isUserInteractionEnabled = self.delegate != nil // Needed for the clearButton
-        }
-    }
+    public weak var delegate: ButtonUIViewDelegate?
 
     /// The tap publisher. Alternatively, you can use the native **action** (addAction) or **target** (addTarget).
     public var tapPublisher: UIControl.EventPublisher {
@@ -220,24 +209,24 @@ public final class ButtonUIView: UIControl {
         set {
             super.isEnabled = newValue
             self.viewModel.set(isEnabled: newValue)
-            self.titleLabel.updateContent(from: self)
-            self.iconImageView.updateContent(from: self)
+            self.titleStateLabel.updateContent(from: self)
+            self.imageStateView.updateContent(from: self)
         }
     }
 
     /// A Boolean value indicating whether the button is in the selected state.
     public override var isSelected: Bool {
         didSet {
-            self.titleLabel.updateContent(from: self)
-            self.iconImageView.updateContent(from: self)
+            self.titleStateLabel.updateContent(from: self)
+            self.imageStateView.updateContent(from: self)
         }
     }
 
     /// A Boolean value indicating whether the button draws a highlight.
     public override var isHighlighted: Bool {
         didSet {
-            self.titleLabel.updateContent(from: self)
-            self.iconImageView.updateContent(from: self)
+            self.titleStateLabel.updateContent(from: self)
+            self.imageStateView.updateContent(from: self)
 
             if self.isHighlighted {
                 self.viewModel.pressedAction()
@@ -262,7 +251,7 @@ public final class ButtonUIView: UIControl {
     private var contentStackViewTopConstraint: NSLayoutConstraint?
     private var contentStackViewBottomConstraint: NSLayoutConstraint?
 
-    private var iconImageViewHeightConstraint: NSLayoutConstraint?
+    private var imageViewHeightConstraint: NSLayoutConstraint?
 
     @ScaledUIMetric private var height: CGFloat = 0
     @ScaledUIMetric private var verticalSpacing: CGFloat = 0
@@ -531,7 +520,6 @@ public final class ButtonUIView: UIControl {
         self.accessibilityTraits = [.button]
         // Add subviews
         self.addSubview(self.contentStackView)
-        self.addSubview(self.clearButton)
 
         // Needed values from viewModel (important for superview)
         self.height = self.viewModel.sizes?.height ?? 0
@@ -577,7 +565,6 @@ public final class ButtonUIView: UIControl {
         self.setupContentStackViewConstraints()
         self.setupIconViewConstraints()
         self.setupIconImageViewConstraints()
-        self.setupClearButtonConstraints()
     }
 
     private func setupViewConstraints() {
@@ -606,24 +593,49 @@ public final class ButtonUIView: UIControl {
     }
 
     private func setupIconViewConstraints() {
-        self.iconView.translatesAutoresizingMaskIntoConstraints = false
-        self.iconView.widthAnchor.constraint(greaterThanOrEqualTo: self.iconImageView.widthAnchor).isActive = true
+        self.imageContentView.translatesAutoresizingMaskIntoConstraints = false
+        self.imageContentView.widthAnchor.constraint(greaterThanOrEqualTo: self.imageView.widthAnchor).isActive = true
     }
 
     private func setupIconImageViewConstraints() {
-        self.iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.imageView.translatesAutoresizingMaskIntoConstraints = false
 
-        self.iconImageViewHeightConstraint = self.iconImageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
-        self.iconImageViewHeightConstraint?.isActive = true
+        self.imageViewHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
+        self.imageViewHeightConstraint?.isActive = true
 
-        self.iconImageView.widthAnchor.constraint(equalTo: self.iconImageView.heightAnchor).isActive = true
-        self.iconImageView.centerXAnchor.constraint(equalTo: self.iconView.centerXAnchor).isActive = true
-        self.iconImageView.centerYAnchor.constraint(equalTo: self.iconView.centerYAnchor).isActive = true
+        self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor).isActive = true
+        self.imageView.centerXAnchor.constraint(equalTo: self.imageContentView.centerXAnchor).isActive = true
+        self.imageView.centerYAnchor.constraint(equalTo: self.imageContentView.centerYAnchor).isActive = true
     }
 
-    private func setupClearButtonConstraints() {
-        self.clearButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.stickEdges(from: self.clearButton, to: self)
+    // MARK: - Tracking
+
+    public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        self.delegate?.button(self, didReceive: .touchDown)
+
+        return super.beginTracking(touch, with: event)
+    }
+
+    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+        if let touch {
+            // Tap is inside the view ?
+            let point = touch.location(in: self)
+            let touchIsInside = self.hitTest(point, with: event) == self
+
+            // Send delegate actions
+            self.delegate?.button(self, didReceive: touchIsInside ? .touchUpInside : .touchUpOutside)
+            if touchIsInside {
+                self.delegate?.buttonWasTapped(self)
+            }
+        }
+
+        return super.endTracking(touch, with: event)
+    }
+
+    public override func cancelTracking(with event: UIEvent?) {
+        self.delegate?.button(self, didReceive: .touchCancel)
+
+        return super.cancelTracking(with: event)
     }
 
     // MARK: - Setter & Getter
@@ -631,7 +643,7 @@ public final class ButtonUIView: UIControl {
     /// The image of the button for a state.
     /// - parameter state: state of the image
     public func image(for state: ControlState) -> UIImage? {
-        return self.iconImageView.image(for: state)
+        return self.imageStateView.image(for: state)
     }
 
     /// Set the image of the button for a state.
@@ -642,13 +654,13 @@ public final class ButtonUIView: UIControl {
             self.viewModel.set(iconImage: image.map { .left($0) })
         }
 
-        self.iconImageView.setImage(image, for: state, on: self)
+        self.imageStateView.setImage(image, for: state, on: self)
     }
 
     /// The title of the button for a state.
     /// - parameter state: state of the title
     public func title(for state: ControlState) -> String? {
-        return self.titleLabel.text(for: state)
+        return self.titleStateLabel.text(for: state)
     }
 
     /// Set the title of the button for a state.
@@ -659,13 +671,13 @@ public final class ButtonUIView: UIControl {
             self.viewModel.set(title: title)
         }
 
-        self.titleLabel.setText(title, for: state, on: self)
+        self.titleStateLabel.setText(title, for: state, on: self)
     }
 
     /// The title of the button for a state.
     /// - parameter state: state of the title
     public func attributedTitle(for state: ControlState) -> NSAttributedString? {
-        return self.titleLabel.attributedText(for: state)
+        return self.titleStateLabel.attributedText(for: state)
     }
 
     /// Set the attributedTitle of the button for a state.
@@ -676,7 +688,7 @@ public final class ButtonUIView: UIControl {
             self.viewModel.set(attributedTitle: attributedTitle.map { .left($0) })
         }
 
-        self.titleLabel.setAttributedText(attributedTitle, for: state, on: self)
+        self.titleStateLabel.setAttributedText(attributedTitle, for: state, on: self)
     }
 
     // MARK: - Update UI
@@ -723,9 +735,9 @@ public final class ButtonUIView: UIControl {
 
     private func updateIconHeight() {
         // Reload height only if value changed
-        if self.iconImageViewHeightConstraint?.constant != self.iconHeight {
-            self.iconImageViewHeightConstraint?.constant = self.iconHeight
-            self.iconImageView.updateConstraintsIfNeeded()
+        if self.imageViewHeightConstraint?.constant != self.iconHeight {
+            self.imageViewHeightConstraint?.constant = self.iconHeight
+            self.imageView.updateConstraintsIfNeeded()
         }
     }
 
@@ -774,7 +786,7 @@ public final class ButtonUIView: UIControl {
             self.setBorderColor(from: colors.borderColor)
 
             // Foreground Color
-            self.iconImageView.tintColor = colors.iconTintColor.uiColor
+            self.imageView.tintColor = colors.iconTintColor.uiColor
             if let titleColor = colors.titleColor {
                 self.titleLabel.textColor = titleColor.uiColor
             }
@@ -835,7 +847,7 @@ public final class ButtonUIView: UIControl {
             guard let self, let content else { return }
 
             // Icon ImageView
-            self.iconImageView.image = content.iconImage?.leftValue
+            self.imageView.image = content.iconImage?.leftValue
 
             // Subviews positions and visibilities
             let isAnimated = self.isAnimated && !self.firstContentStackViewSubviewAnimation
@@ -846,8 +858,8 @@ public final class ButtonUIView: UIControl {
 
                 self.firstContentStackViewSubviewAnimation = false
 
-                if self.iconView.isHidden == content.shouldShowIconImage {
-                    self.iconView.isHidden = !content.shouldShowIconImage
+                if self.imageContentView.isHidden == content.shouldShowIconImage {
+                    self.imageContentView.isHidden = !content.shouldShowIconImage
                 }
 
                 if self.titleLabel.isHidden == content.shouldShowTitle {
@@ -872,50 +884,18 @@ public final class ButtonUIView: UIControl {
 
         // **
         // Is Image ?
-        self.iconImageView.$isImage.subscribe(in: &self.subscriptions) { [weak self] isImage in
+        self.imageStateView.$isImage.subscribe(in: &self.subscriptions) { [weak self] isImage in
             guard let self else { return }
 
-            self.iconView.isHidden = !isImage
+            self.imageContentView.isHidden = !isImage
         }
 
         // **
         // Is Text ?
-        self.titleLabel.$isText.subscribe(in: &self.subscriptions) { [weak self] isText in
+        self.titleStateLabel.$isText.subscribe(in: &self.subscriptions) { [weak self] isText in
             guard let self else { return }
-
             self.titleLabel.isHidden = !isText
         }
-    }
-
-    // MARK: - Actions
-
-    @available(*, deprecated, message: "Remove this action when the delegate will be removed")
-    @objc private func touchUpInsideAction() {
-        self.isHighlighted = false
-
-        self.delegate?.button(self, didReceive: .touchUpInside)
-        self.delegate?.buttonWasTapped(self)
-    }
-
-    @available(*, deprecated, message: "Remove this action when the delegate will be removed")
-    @objc private func touchDownAction() {
-        self.isHighlighted = true
-
-        self.delegate?.button(self, didReceive: .touchDown)
-    }
-
-    @available(*, deprecated, message: "Remove this action when the delegate will be removed")
-    @objc private func touchUpOutsideAction() {
-        self.isHighlighted = false
-
-        self.delegate?.button(self, didReceive: .touchUpOutside)
-    }
-
-    @available(*, deprecated, message: "Remove this action when the delegate will be removed")
-    @objc private func touchCancelAction() {
-        self.isHighlighted = false
-
-        self.delegate?.button(self, didReceive: .touchCancel)
     }
 
     // MARK: - Trait Collection

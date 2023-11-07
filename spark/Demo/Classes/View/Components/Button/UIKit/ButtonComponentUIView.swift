@@ -35,7 +35,7 @@ final class ButtonComponentUIView: ComponentUIView {
     private var cancellables: Set<AnyCancellable> = []
 
     private lazy var buttonAction: UIAction = .init { _ in
-        self.showAlert()
+        self.showAlert(for: .action)
     }
     private var buttonControlCancellable: AnyCancellable?
 
@@ -164,19 +164,28 @@ final class ButtonComponentUIView: ComponentUIView {
 
         case .text:
             self.buttonView.setImage(nil, for: state)
+            self.buttonView.setAttributedTitle(nil, for: state)
             self.buttonView.setTitle(self.title(for: state), for: state)
 
         case .attributedText:
             self.buttonView.setImage(nil, for: state)
+            self.buttonView.setTitle(nil, for: state)
             self.buttonView.setAttributedTitle(self.attributedTitle(for: state), for: state)
 
         case .iconAndText:
             self.buttonView.setImage(self.image(for: state), for: state)
+            self.buttonView.setAttributedTitle(nil, for: state)
             self.buttonView.setTitle(self.title(for: state), for: state)
 
         case .iconAndAttributedText:
             self.buttonView.setImage(self.image(for: state), for: state)
+            self.buttonView.setTitle(nil, for: state)
             self.buttonView.setAttributedTitle(self.attributedTitle(for: state), for: state)
+
+        case .none:
+            self.buttonView.setTitle(nil, for: state)
+            self.buttonView.setAttributedTitle(nil, for: state)
+            self.buttonView.setImage(nil, for: state)
         }
     }
 
@@ -185,10 +194,9 @@ final class ButtonComponentUIView: ComponentUIView {
         self.buttonView.delegate = controlType == .delegate ? self : nil
 
         // Publisher ?
-        var subscription: AnyCancellable?
         if controlType == .publisher {
             self.buttonControlCancellable = self.buttonView.tapPublisher.sink { _ in
-                self.showAlert()
+                self.showAlert(for: .publisher)
             }
         } else {
             self.buttonControlCancellable?.cancel()
@@ -204,9 +212,9 @@ final class ButtonComponentUIView: ComponentUIView {
 
         // Target ?
         if controlType == .target {
-            self.buttonView.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
+            self.buttonView.addTarget(self, action: #selector(self.touchUpInsideTarget), for: .touchUpInside)
         } else {
-            self.buttonView.removeTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
+            self.buttonView.removeTarget(self, action: #selector(self.touchUpInsideTarget), for: .touchUpInside)
         }
     }
 
@@ -256,15 +264,15 @@ final class ButtonComponentUIView: ComponentUIView {
 
     // MARK: - Action
 
-    @objc func touchUpInside() {
-        self.showAlert()
+    @objc func touchUpInsideTarget() {
+        self.showAlert(for: .target)
     }
 
     // MARK: - Alert
 
-    func showAlert() {
+    func showAlert(for controlType: ButtonControlType) {
         let alertController = UIAlertController(
-            title: "Button tap from " + self.viewModel.controlType.name,
+            title: "Button tap from " + controlType.name,
             message: nil,
             preferredStyle: .alert
         )
@@ -278,6 +286,6 @@ final class ButtonComponentUIView: ComponentUIView {
 extension ButtonComponentUIView: ButtonUIViewDelegate {
 
     func buttonWasTapped(_ button: ButtonUIView) {
-        self.showAlert()
+        self.showAlert(for: .delegate)
     }
 }

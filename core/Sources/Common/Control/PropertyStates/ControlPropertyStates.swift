@@ -61,7 +61,7 @@ final class ControlPropertyStates<PropertyType> {
 
     /// Get the value for the status of the control.
     /// - Parameters:
-    ///   - state: the status of the control
+    ///   - status: the status of the control
     func value(forStatus status: ControlStatus) -> PropertyType? {
         // isHighlighted has the highest priority,
         // then isDisabled,
