@@ -16,6 +16,8 @@ final class UIControlStateImageView: UIImageView {
 
     private let imageStates = ControlPropertyStates<UIImage>()
 
+    /// The image must be stored to lock the posibility to set the image directly like this **self.image = UIImage()**.
+    /// When the storedImage is set (always from **setImage** function), it set the image.
     private var storedImage: UIImage? {
         didSet {
             self.isImage = self.storedImage != nil
@@ -29,6 +31,8 @@ final class UIControlStateImageView: UIImageView {
 
     // MARK: - Override Properties
 
+    /// It's not possible to set the image outside this class.
+    /// The only possiblity to change the image is to use the **setImage(_: UIImage?, for: ControlState, on: UIControl)** function.
     override var image: UIImage? {
         get {
             return super.image
@@ -45,7 +49,7 @@ final class UIControlStateImageView: UIImageView {
     /// The image for a state.
     /// - parameter state: state of the image
     func image(for state: ControlState) -> UIImage? {
-        return self.imageStates.value(forState: state)
+        return self.imageStates.value(for: state)
     }
 
     /// Set the image for a state.
@@ -74,6 +78,6 @@ final class UIControlStateImageView: UIImageView {
         )
 
         // Set the image from states
-        self.storedImage = self.imageStates.value(forStatus: status)
+        self.storedImage = self.imageStates.value(for: status)
     }
 }

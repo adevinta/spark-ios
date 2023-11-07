@@ -18,6 +18,8 @@ final class UIControlStateLabel: UILabel {
     private let attributedTextStates = ControlPropertyStates<NSAttributedString>()
     private let textTypesStates = ControlPropertyStates<DisplayedTextType>()
 
+    /// The text must be stored to lock the posibility to set the text directly like this **self.text = "Text"**.
+    /// When the storedText is set (always from **setText** function), it set the text.
     private var storedText: String? {
         didSet {
             self.isText = self.storedText != nil
@@ -32,6 +34,9 @@ final class UIControlStateLabel: UILabel {
             }
         }
     }
+
+    /// The attributedText must be stored to lock the posibility to set the attributedText directly like this **self.attributedText = NSAttributedString()**.
+    /// When the storedAttributedText is set (always from **setAttributedText** function), it set the attributedText.
     private var storedAttributedText: NSAttributedString? {
         didSet {
             self.isText = self.storedAttributedText != nil
@@ -39,7 +44,14 @@ final class UIControlStateLabel: UILabel {
         }
     }
 
+    /// The storedTextFont is use to reset the font when a new text is set
+    /// because the previous text can be an attributedText
+    /// and attributedText has its own styles.
     private var storedTextFont: UIFont?
+
+    /// The storedTextColor is use to reset the textColor when a new text is set
+    /// because the previous text can be an attributedText
+    /// and attributedText has its own styles.
     private var storedTextColor: UIColor?
 
     // MARK: - Published
@@ -48,6 +60,8 @@ final class UIControlStateLabel: UILabel {
 
     // MARK: - Override Properties
 
+    /// It's not possible to set the text outside this class.
+    /// The only possiblity to change the text is to use the **setText(_: String?, for: ControlState, on: UIControl)** function.
     override var text: String? {
         get {
             return super.text
@@ -60,6 +74,8 @@ final class UIControlStateLabel: UILabel {
         }
     }
 
+    /// It's not possible to set the attributedText outside this class.
+    /// The only possiblity to change the attributedText is to use the **setAttributedText(_: NSAttributedString?, for: ControlState, on: UIControl)** function.
     override var attributedText: NSAttributedString? {
         get {
             return super.attributedText
@@ -107,7 +123,7 @@ final class UIControlStateLabel: UILabel {
     /// The text for a state.
     /// - parameter state: state of the text
     func text(for state: ControlState) -> String? {
-        return self.textStates.value(forState: state)
+        return self.textStates.value(for: state)
     }
 
     /// Set the text for a state.
@@ -130,7 +146,7 @@ final class UIControlStateLabel: UILabel {
     /// The attributedText for a state.
     /// - parameter state: state of the attributedText
     func attributedText(for state: ControlState) -> NSAttributedString? {
-        return self.attributedTextStates.value(forState: state)
+        return self.attributedTextStates.value(for: state)
     }
 
     /// Set the attributedText of the button for a state.
@@ -162,7 +178,7 @@ final class UIControlStateLabel: UILabel {
         )
 
         // Get the current textType from status
-        let textType = self.textTypesStates.value(forStatus: status)
+        let textType = self.textTypesStates.value(for: status)
         let textTypeContainsText = textType?.containsText ?? false
 
         // Reset attributedText & text
@@ -170,11 +186,11 @@ final class UIControlStateLabel: UILabel {
         self.storedText = nil
 
         // Set the text or the attributedText from textType and states
-        if let text = self.textStates.value(forStatus: status),
+        if let text = self.textStates.value(for: status),
            textType == .text || !textTypeContainsText {
             self.storedText = text
 
-        } else if let attributedText = self.attributedTextStates.value(forStatus: status),
+        } else if let attributedText = self.attributedTextStates.value(for: status),
                   textType == .attributedText || !textTypeContainsText {
             self.storedAttributedText = attributedText
 

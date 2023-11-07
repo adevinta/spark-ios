@@ -603,9 +603,11 @@ public final class ButtonUIView: UIControl {
         self.imageViewHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
         self.imageViewHeightConstraint?.isActive = true
 
-        self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor).isActive = true
-        self.imageView.centerXAnchor.constraint(equalTo: self.imageContentView.centerXAnchor).isActive = true
-        self.imageView.centerYAnchor.constraint(equalTo: self.imageContentView.centerYAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
+            self.imageView.centerXAnchor.constraint(equalTo: self.imageContentView.centerXAnchor),
+            self.imageView.centerYAnchor.constraint(equalTo: self.imageContentView.centerYAnchor)
+        ])
     }
 
     // MARK: - Tracking
