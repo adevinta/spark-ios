@@ -82,10 +82,10 @@ struct SwitchComponentView: View {
             },
             integration: {
                 SwitchView(
-                    isOn: self.$isOn,
                     theme: self.theme,
                     intent: self.intent,
-                    alignment: self.alignment
+                    alignment: self.alignment,
+                    isOn: self.$isOn
                 )
                 .images(self.hasImages == .selected ? self.images() : nil)
                 .textContent(

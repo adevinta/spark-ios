@@ -36,10 +36,10 @@ public struct SwitchView: View {
     ///   - intent: The intent of the switch.
     ///   - alignment: The alignment of the switch.
     public init(
-        isOn: Binding<Bool>,
         theme: any Theme,
         intent: SwitchIntent,
-        alignment: SwitchAlignment
+        alignment: SwitchAlignment,
+        isOn: Binding<Bool>
     ) {
         self.viewModel = .init(
             for: .swiftUI,
