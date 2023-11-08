@@ -41,7 +41,7 @@ final class StarComponentViewController: UIViewController {
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Star Rating Configurator"
+        self.navigationItem.title = "Star Rating"
         addPublisher()
     }
 
@@ -59,7 +59,6 @@ final class StarComponentViewController: UIViewController {
         self.viewModel.showStarFillModeSheet.subscribe(in: &self.cancellables) { modes in
             self.presentFillModeActionSheet(modes)
         }
-
     }
 }
 
