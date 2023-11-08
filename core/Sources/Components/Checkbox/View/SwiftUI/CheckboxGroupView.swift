@@ -12,9 +12,7 @@ import SwiftUI
 public struct CheckboxGroupView: View {
 
     // MARK: - Private properties
-    @available(*, deprecated)
     private var title: String?
-
     private var checkedImage: UIImage
     @Binding private var items: [any CheckboxGroupItemProtocol]
 
@@ -23,8 +21,7 @@ public struct CheckboxGroupView: View {
     private var layout: CheckboxGroupLayout
     private var alignment: CheckboxAlignment
     private var accessibilityIdentifierPrefix: String
-    
-    @available(*, deprecated)
+
     @ScaledMetric private var spacingSmall: CGFloat
     @ScaledMetric private var spacingLarge: CGFloat
     @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat
@@ -47,40 +44,8 @@ public struct CheckboxGroupView: View {
     ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
     ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    @available(*, deprecated)
     public init(
         title: String? = nil,
-        checkedImage: UIImage,
-        items: Binding<[any CheckboxGroupItemProtocol]>,
-        layout: CheckboxGroupLayout = .vertical,
-        checkboxAlignment: CheckboxAlignment,
-        theme: Theme,
-        intent: CheckboxIntent = .main,
-        accessibilityIdentifierPrefix: String
-    ) {
-        self.title = title
-        self.checkedImage = checkedImage
-        self._items = items
-        self.layout = layout
-        self.alignment = checkboxAlignment
-        self.theme = theme
-        self.intent = intent
-        self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
-
-        self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
-        self._spacingLarge = .init(wrappedValue: theme.layout.spacing.large)
-        self._checkboxSelectedBorderWidth = .init(wrappedValue: CheckboxView.Constants.checkboxSelectedBorderWidth)
-    }
-
-    /// Initialize a group of one or multiple checkboxes.
-    /// - Parameters:
-    ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
-    ///   - layout: The layout of the group can be horizontal or vertical.
-    ///   - alignment: The checkbox is positioned on the leading or trailing edge of the view.
-    ///   - theme: The Spark-Theme.
-    ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    public init(
         checkedImage: UIImage,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
@@ -89,7 +54,7 @@ public struct CheckboxGroupView: View {
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {
-        self.title = ""
+        self.title = title
         self.checkedImage = checkedImage
         self._items = items
         self.layout = layout

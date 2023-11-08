@@ -79,7 +79,7 @@ struct CheckboxGroupListView: View {
                 )
 
                 CheckboxView(
-                    text: "Show Group Title (Deprecated)",
+                    text: "Show Group Title",
                     checkedImage: CheckboxListView.Icons.checkedImage.image,
                     theme: theme,
                     isEnabled: true,
@@ -97,7 +97,7 @@ struct CheckboxGroupListView: View {
                     checkedImage: self.selectedIcon.image,
                     items: self.$items,
                     layout: self.layout == .selected ? .vertical : .horizontal,
-                    checkboxAlignment: self.alignment,
+                    alignment: self.alignment,
                     theme: self.theme,
                     intent: self.intent,
                     accessibilityIdentifierPrefix: "checkbox-group"

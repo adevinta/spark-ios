@@ -14,7 +14,6 @@ import UIKit
 public final class CheckboxGroupUIView: UIView {
     // MARK: - Private properties.
 
-    @available(*, deprecated)
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -26,9 +25,15 @@ public final class CheckboxGroupUIView: UIView {
         return label
     }()
 
-    @available(*, deprecated)
     private lazy var spacingView: UIView = {
         let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var titleStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [self.titleLabel, self.spacingView])
+        view.axis = .vertical
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -51,13 +56,9 @@ public final class CheckboxGroupUIView: UIView {
     private var items: [any CheckboxGroupItemProtocol]
     private var subject = PassthroughSubject<[any CheckboxGroupItemProtocol], Never>()
     private var accessibilityIdentifierPrefix: String
-    @available(*, deprecated)
-    private var spacingViewHeightConstraint: NSLayoutConstraint?
-
 
     @ScaledUIMetric private var spacingLarge: CGFloat
     @ScaledUIMetric private var padding: CGFloat = CheckboxControlUIView.Constants.lineWidthPressed
-    @available(*, deprecated)
     @ScaledUIMetric private var spacingSmall: CGFloat
 
     // MARK: - Public properties.
@@ -77,7 +78,6 @@ public final class CheckboxGroupUIView: UIView {
     }
 
     /// The title of the checkbox group displayed on top of the group.
-    @available(*, deprecated)
     public var title: String? {
         didSet {
             self.updateTitle()
@@ -98,7 +98,7 @@ public final class CheckboxGroupUIView: UIView {
         }
     }
     ///  The checkbox is positioned on the leading or trailing edge of the view.
-    @available(*, deprecated)
+    @available(*, deprecated, message: "alignment will be used instead of this")
     public var checkboxAlignment: CheckboxAlignment {
         didSet {
             self.alignment = self.checkboxAlignment
@@ -141,42 +141,8 @@ public final class CheckboxGroupUIView: UIView {
     ///   - theme: The Spark-Theme.
     ///   - intent: Current intent of checkbox group
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    @available(*, deprecated)
     public init(
         title: String? = nil,
-        checkedImage: UIImage,
-        items: [any CheckboxGroupItemProtocol],
-        layout: CheckboxGroupLayout = .vertical,
-        checkboxAlignment: CheckboxAlignment,
-        theme: Theme,
-        intent: CheckboxIntent = .main,
-        accessibilityIdentifierPrefix: String
-    ) {
-        self.title = title
-        self.checkedImage = checkedImage
-        self.items = items
-        self.layout = layout
-        self.alignment = checkboxAlignment
-        self.checkboxAlignment = checkboxAlignment
-        self.theme = theme
-        self.intent = intent
-        self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
-        self.spacingLarge = theme.layout.spacing.large
-        self.spacingSmall = theme.layout.spacing.small
-        super.init(frame: .zero)
-        self.commonInit()
-    }
-
-    /// Initialize a group of one or multiple checkboxes.
-    /// - Parameters:
-    ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
-    ///   - layout: The layout of the group can be horizontal or vertical.
-    ///   - alignment: The checkbox is positioned on the leading or trailing edge of the view.
-    ///   - theme: The Spark-Theme.
-    ///   - intent: Current intent of checkbox group
-    ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    public init(
         checkedImage: UIImage,
         items: [any CheckboxGroupItemProtocol],
         layout: CheckboxGroupLayout = .vertical,
@@ -185,6 +151,7 @@ public final class CheckboxGroupUIView: UIView {
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {
+        self.title = title
         self.checkedImage = checkedImage
         self.items = items
         self.layout = layout
@@ -257,8 +224,8 @@ public final class CheckboxGroupUIView: UIView {
     }
 
     private func setupView() {
-        self.addSubview(self.titleLabel)
-        self.addSubview(self.spacingView)
+
+        self.addSubview(self.titleStackView)
         self.scrollView.addSubview(self.itemsStackView)
         self.addSubview(self.scrollView)
 
@@ -273,24 +240,20 @@ public final class CheckboxGroupUIView: UIView {
             insets: UIEdgeInsets(top: self.padding, left: self.padding, bottom: self.padding, right: self.padding)
         )
 
-        self.spacingViewHeightConstraint = self.spacingView.heightAnchor.constraint(equalToConstant: self.titleLabel.isHidden ? 0 : self.padding)
         let constraint = self.itemsStackView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor)
         constraint.priority = .defaultHigh
 
         NSLayoutConstraint.activate([
-            self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            self.titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            self.titleStackView.topAnchor.constraint(equalTo: self.topAnchor),
+            self.titleStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.titleStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 
-            self.spacingView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor),
-            self.spacingView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.spacingView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.spacingViewHeightConstraint!,
+            self.spacingView.heightAnchor.constraint(equalToConstant: self.spacingSmall),
 
             self.itemsStackView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor, constant: -2*self.padding),
             constraint,
 
-            self.scrollView.topAnchor.constraint(equalTo: self.spacingView.bottomAnchor, constant: -self.padding),
+            self.scrollView.topAnchor.constraint(equalTo: self.titleStackView.bottomAnchor, constant: -self.padding),
             self.scrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -self.padding),
             self.scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: self.padding),
             self.scrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: self.padding),
@@ -321,11 +284,9 @@ extension CheckboxGroupUIView {
     private func updateTitle() {
         if let title = self.title, !title.isEmpty  {
             self.titleLabel.text = title
-            self.spacingViewHeightConstraint?.constant = self.spacingSmall
             self.spacingView.isHidden =  false
             self.titleLabel.isHidden = false
         } else {
-            self.spacingViewHeightConstraint?.constant = 0
             self.spacingView.isHidden = true
             self.titleLabel.isHidden = true
         }

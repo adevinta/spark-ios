@@ -29,6 +29,7 @@ public struct CheckboxGroupItemDefault: CheckboxGroupItemProtocol, Hashable {
     ///   - id: The checkbox identifier.
     ///   - selectionState: The current selection state of the checkbox.
     ///   - state: The current control state of the checkbox.
+    @available(*, deprecated, message: "state parameter was changed with isEnabled")
     public init(
         title: String? = nil,
         attributedTitle: NSAttributedString? = nil,
