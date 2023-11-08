@@ -64,7 +64,6 @@ public final class StarUIView: UIView {
         }
     }
 
-
     /// The vertex size determins how deep the inner angle of the star is.
     /// This value is a percentage of the radius and should be in the range [0...1].
     public var vertexSize: CGFloat {
@@ -106,7 +105,8 @@ public final class StarUIView: UIView {
     }
 
     // MARK: - Private variables
-    private static var cache = NSCache<NSString, CGLayer>()
+    private var cache: CGLayerCaching
+
     private var normalizedRating: CGFloat {
         return self.fillMode.rating(of: self.rating)
     }
@@ -122,7 +122,7 @@ public final class StarUIView: UIView {
     /// - cornerRadiusSize: this is a proportional size of the corner radius according to the radius and should be in the range [0...1].
     /// - borderColor: The color of the border of the unfilled part of the star.
     /// - fillColor: The color of the filled part of the star.
-    public init(
+    public convenience init(
         numberOfVertices: Int = Defaults.numberOfVertices,
         rating: CGFloat = Defaults.rating,
         fillMode: StarFillMode = .half,
@@ -132,6 +132,29 @@ public final class StarUIView: UIView {
         borderColor: UIColor = Defaults.borderColor,
         fillColor: UIColor = Defaults.fillColor
     ) {
+        self.init(
+            numberOfVertices: numberOfVertices,
+            rating: rating,
+            fillMode: fillMode,
+            lineWidth: lineWidth,
+            vertexSize: vertexSize,
+            cornerRadiusSize: cornerRadiusSize,
+            borderColor: borderColor,
+            fillColor: fillColor,
+            cache: CGLayerCache())
+    }
+
+    init(
+        numberOfVertices: Int,
+        rating: CGFloat,
+        fillMode: StarFillMode,
+        lineWidth: CGFloat,
+        vertexSize: CGFloat,
+        cornerRadiusSize: CGFloat,
+        borderColor: UIColor,
+        fillColor: UIColor,
+        cache: CGLayerCaching
+    ) {
         self.fillMode = fillMode
         self.rating = rating
         self.lineWidth = lineWidth
@@ -140,6 +163,7 @@ public final class StarUIView: UIView {
         self.cornerRadiusSize = cornerRadiusSize
         self.borderColor = borderColor
         self.fillColor = fillColor
+        self.cache = cache
 
         super.init(frame: .zero)
         self.backgroundColor = .clear
@@ -171,7 +195,7 @@ public final class StarUIView: UIView {
         let cacheKey = self.cacheKey(rect: rect)
 
         let starLayer: CGLayer
-        if self.isCachingEnabled, let layer = Self.cache.object(forKey: cacheKey) {
+        if self.isCachingEnabled, let layer = self.cache.object(forKey: cacheKey) {
             starLayer = layer
         } else {
             let shapeLayer = ShapeLayer(
@@ -183,7 +207,7 @@ public final class StarUIView: UIView {
 
             starLayer = shapeLayer.layer(graphicsContext: context, size: rect.size)
             if self.isCachingEnabled {
-                Self.cache.setObject(starLayer, forKey: self.cacheKey(rect: rect))
+                self.cache.setObject(starLayer, forKey: self.cacheKey(rect: rect))
             }
         }
 
@@ -191,6 +215,7 @@ public final class StarUIView: UIView {
         context.restoreGState()
     }
 
+    // MARK: Internal functions
     internal func cacheKey(rect: CGRect) -> NSString {
         let key = [Self.self, 
                    self.numberOfVertices,
@@ -207,6 +232,7 @@ public final class StarUIView: UIView {
     }
 }
 
+// MARK: Private extension
 private extension CGRect {
     var centerX: CGFloat {
         return (self.minX + self.maxX)/2
