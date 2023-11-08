@@ -87,7 +87,9 @@ extension ComponentsViewController {
         case .progressBarSingle:
             viewController = ProgressBarComponentUIViewController.build()
         case .radioButton:
-            viewController = RadioButtonComponentUIViewController.build()
+            viewController = RadioButtonUIGroupViewController()
+        case .ratingStar:
+            viewController = StarComponentViewController.build()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
         case .switchButton:
@@ -120,6 +122,7 @@ private extension ComponentsViewController {
         case progressBarIndeterminate
         case progressBarSingle
         case radioButton
+        case ratingStar
         case spinner
         case switchButton
         case tab

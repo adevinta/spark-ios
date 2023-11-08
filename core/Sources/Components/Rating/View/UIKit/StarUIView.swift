@@ -72,6 +72,12 @@ public class StarUIView: UIView {
         }
     }
 
+    public override var bounds: CGRect {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+
     public var isCachingEnabled = true
 
     // MARK: - Private variables
@@ -101,20 +107,6 @@ public class StarUIView: UIView {
         self.fillColor = fillColor
 
         super.init(frame: .zero)
-        self.backgroundColor = .clear
-    }
-
-    override init(frame: CGRect) {
-        self.fillMode = Defaults.fillMode
-        self.rating = Defaults.rating
-        self.lineWidth = Defaults.lineWidth
-        self.numberOfPoints = Defaults.numberOfPoints
-        self.vertexSize = Defaults.vertexSize
-        self.cornerRadiusSize = Defaults.cornerRadiusSize
-        self.borderColor = Defaults.borderColor
-        self.fillColor = Defaults.fillColor
-
-        super.init(frame: frame)
         self.backgroundColor = .clear
     }
 
@@ -165,13 +157,20 @@ public class StarUIView: UIView {
     }
 
     internal func cacheKey(rect: CGRect) -> NSString {
-        let key = [Self.self, self.numberOfPoints, self.rating, self.lineWidth, self.vertexSize, self.cornerRadiusSize, self.borderColor.hashValue, self.fillColor.hashValue, rect.width, rect.height
+        let key = [Self.self, 
+                   self.numberOfPoints,
+                   self.normalizedRating,
+                   self.lineWidth,
+                   self.vertexSize,
+                   self.cornerRadiusSize,
+                   self.borderColor.hashValue,
+                   self.fillColor.hashValue,
+                   min(rect.width, rect.height),
         ].map{ "\($0)" }
             .joined(separator: "_")
         return NSString(string: key)
     }
 }
-
 
 private extension CGRect {
     var centerX: CGFloat {
