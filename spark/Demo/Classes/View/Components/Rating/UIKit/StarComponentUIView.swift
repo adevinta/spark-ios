@@ -42,7 +42,7 @@ final class StarComponentUIView: ComponentUIView {
 
     private static func makeStarView(viewModel: StarComponentUIViewModel) -> StarUIView {
         let view = StarUIView(
-            numberOfPoints: viewModel.numberOfPoints,
+            numberOfVertices: viewModel.numberOfVertices,
             rating: viewModel.rating,
             fillMode: viewModel.fillMode,
             lineWidth: CGFloat(viewModel.lineWidth),
@@ -94,8 +94,8 @@ final class StarComponentUIView: ComponentUIView {
             self?.componentView.lineWidth = CGFloat(lineWidth)
         }
 
-        self.viewModel.$numberOfPoints.subscribe(in: &self.cancellables) { [weak self] points in
-            self?.componentView.numberOfPoints = points
+        self.viewModel.$numberOfVertices.subscribe(in: &self.cancellables) { [weak self] points in
+            self?.componentView.numberOfVertices = points
         }
 
         self.viewModel.$cornerRadiusSize.subscribe(in: &self.cancellables) { [weak self] cornerRadius in

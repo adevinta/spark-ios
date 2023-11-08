@@ -9,14 +9,21 @@
 import Foundation
 import UIKit
 
-class ShapeLayer {
+/// The Shape Layer draws a shape onto a layer and returns the CGLayer.
+final class ShapeLayer {
+    // MARK: - Private variables
     private let shape: CGPathShape
     private let fillColor: CGColor
     private let strokeColor: CGColor
     private let fillPercentage: CGFloat
     private let strokeWidth: CGFloat
 
-    init(shape: CGPathShape, fillColor: CGColor, strokeColor: CGColor, fillPercentage: CGFloat, strokeWidth: CGFloat) {
+    // MARK: - Initializer
+    init(shape: CGPathShape,
+         fillColor: CGColor,
+         strokeColor: CGColor,
+         fillPercentage: CGFloat,
+         strokeWidth: CGFloat) {
         self.shape = shape
         self.fillColor = fillColor
         self.strokeColor = strokeColor
@@ -24,6 +31,7 @@ class ShapeLayer {
         self.strokeWidth = strokeWidth
     }
 
+    /// Create a CGLayer and draw the shape on it.
     func layer(graphicsContext: CGContext, size: CGSize) -> CGLayer {
         guard let starLayer = CGLayer(graphicsContext, size: size, auxiliaryInfo: nil) else {
             fatalError("Couldn't create layer")
@@ -37,6 +45,7 @@ class ShapeLayer {
         return starLayer
     }
 
+    // MARK: - Private
     private func drawShape(graphicsContext: CGContext, size: CGSize) {
         let rect = CGRect(origin: .zero, size: size)
         let path = self.shape.cgPath(rect: rect)
@@ -74,6 +83,7 @@ class ShapeLayer {
     }
 }
 
+// MARK: Private extensions
 private extension UIEdgeInsets {
     func withHorizontalPadding(_ padding: CGFloat) -> UIEdgeInsets {
         return UIEdgeInsets(top: self.top, left: self.left - padding, bottom: self.bottom, right: self.right + padding)

@@ -67,19 +67,19 @@ final class StarComponentUIViewModel: ComponentUIViewModel {
         return viewModel
     }()
 
-    lazy var numberOfPointsConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var numberOfVerticesConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Number of points",
+            name: "Number of vertices",
             type: .rangeSelector(
-                selected: self.numberOfPoints,
+                selected: self.numberOfVertices,
                 range: 4...10
             ),
-            target: (source: self, action: #selector(self.numberOfPointsChanged)))
+            target: (source: self, action: #selector(self.numberOfVerticesChanged)))
     }()
 
     lazy var frameSizeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Frame Size",
+            name: "Frame size",
             type: .rangeSelectorWithConfig(
                 selected: self.frameSize,
                 range: 10...100,
@@ -147,7 +147,7 @@ final class StarComponentUIViewModel: ComponentUIViewModel {
             starStrokeColorConfigurationItemViewModel,
             starFillColorConfigurationItemViewModel,
             starFillModeConfigurationItemViewModel,
-            numberOfPointsConfigurationItemViewModel,
+            numberOfVerticesConfigurationItemViewModel,
             ratingConfigurationItemViewModel,
             lineWidthConfigurationItemViewModel,
             vertexSizeConfigurationItemViewModel,
@@ -157,7 +157,7 @@ final class StarComponentUIViewModel: ComponentUIViewModel {
     }
 
     // MARK: - Published Properties
-    @Published var numberOfPoints = 5
+    @Published var numberOfVertices = 5
     @Published var fillMode = StarFillMode.half
     @Published var rating = CGFloat(0.5)
     @Published var lineWidth = 2
@@ -189,8 +189,8 @@ extension StarComponentUIViewModel {
         self.showStarFillModeSheetSubject.send(StarFillMode.allCases)
     }
 
-    @objc func numberOfPointsChanged(_ control: NumberSelector) {
-        self.numberOfPoints = control.selectedValue
+    @objc func numberOfVerticesChanged(_ control: NumberSelector) {
+        self.numberOfVertices = control.selectedValue
     }
 
     @objc func frameSizeChanged(_ control: NumberSelector) {
