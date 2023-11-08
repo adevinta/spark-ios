@@ -8,6 +8,7 @@
 
 import Foundation
 
+@frozen
 public enum StarFillMode {
     case full
     case half
