@@ -483,7 +483,7 @@ public final class SwitchUIView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.layoutIfNeeded()
+        self.toggleView.layoutIfNeeded()
         self.toggleView.setCornerRadius(self.theme.border.radius.full)
         self.toggleDotView.setCornerRadius(self.theme.border.radius.full)
     }
@@ -659,7 +659,7 @@ public final class SwitchUIView: UIView {
             self.toggleContentTrailingConstraint?.constant = -self.toggleSpacing
             self.toggleContentBottomConstraint?.constant = -self.toggleSpacing
 
-            self.toggleContentStackView.layoutIfNeeded()
+            self.toggleContentStackView.updateConstraintsIfNeeded()
             self.invalidateIntrinsicContentSize()
         }
     }
@@ -680,7 +680,7 @@ public final class SwitchUIView: UIView {
             valueChanged = true
         }
         if valueChanged {
-            self.toggleView.layoutIfNeeded()
+            self.toggleView.updateConstraints()
             self.invalidateIntrinsicContentSize()
         }
     }
@@ -693,7 +693,7 @@ public final class SwitchUIView: UIView {
             self.toggleDotTrailingConstraint?.constant = -self.toggleDotSpacing
             self.toggleDotBottomConstraint?.constant = -self.toggleDotSpacing
 
-            self.toggleDotImageView.layoutIfNeeded()
+            self.toggleDotImageView.updateConstraintsIfNeeded()
             self.invalidateIntrinsicContentSize()
         }
     }
