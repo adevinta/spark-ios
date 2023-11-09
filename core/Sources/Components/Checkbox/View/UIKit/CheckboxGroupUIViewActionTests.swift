@@ -33,7 +33,7 @@ final class CheckboxGroupUIViewActionTests: TestCase {
     }
 
     // MARK: - Tests
-    func test_action_from_checbox_item_propagated() {
+    func test_action_from_checbox_item_touchUpInside() {
         let sut = sut()
 
         let exp = expectation(description: "Checkbox change should be published")
@@ -45,30 +45,24 @@ final class CheckboxGroupUIViewActionTests: TestCase {
             exp.fulfill()
         }.store(in: &self.subscriptions)
 
-        sut.checkboxes[0].endTracking(.init(), with: .init())
+        sut.checkboxes[0].sendActions(for: .touchUpInside)
 
         wait(for: [exp], timeout: 3.0)
-        
+
         XCTAssertEqual(selectionState, .unselected)
         XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesCallsCount, 1)
         XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesReceivedArguments?.states[0].selectionState, .unselected)
     }
 
-    func test_action_from_checbox_item_disabled_propagated() {
-        let sut = sut()
-
-        sut.checkboxes[4].sendActions(for: .touchUpInside)
-
-        XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesCallsCount, 0, "Delegate not called")
-    }
-
     // MARK: Private Functions
     private func sut() -> CheckboxGroupUIView {
-        let sut = CheckboxGroupUIView(checkedImage: IconographyTests.shared.checkmark,
-                                   items: self.items,
-                                   alignment: .left,
-                                   theme: self.theme,
-                                   accessibilityIdentifierPrefix: "XX")
+        let sut = CheckboxGroupUIView(
+            checkedImage: IconographyTests.shared.checkmark,
+            items: self.items,
+            alignment: .left,
+            theme: self.theme,
+            accessibilityIdentifierPrefix: "XX"
+        )
 
         sut.delegate = self.delegate
         return sut

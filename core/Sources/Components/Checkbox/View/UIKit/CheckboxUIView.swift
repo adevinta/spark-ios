@@ -14,7 +14,7 @@ import UIKit
 public final class CheckboxUIView: UIControl {
 
     // MARK: - Private Properties.
-    public let textLabel: UILabel = {
+    private let textLabel: UILabel = {
         let label = UILabel()
         label.isAccessibilityElement = false
         label.backgroundColor = .clear
@@ -261,11 +261,26 @@ public final class CheckboxUIView: UIControl {
         self.setupViews()
         self.subscribe()
         self.updateAccessibility()
+        self.addActions()
         self.addObservers()
     }
     
     // MARK: - Methods
-    func addObservers() {
+    private func addActions() {
+        let toggleAction = UIAction { [weak self] _ in
+            guard let self else { return }
+            if self.selectionState == .indeterminate {
+                self.isSelected = true
+            } else {
+                self.isSelected.toggle()
+            }
+            self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
+            self.checkboxSelectionStateSubject.send(self.selectionState)
+        }
+        self.addAction(toggleAction, for: .touchUpInside)
+    }
+
+    private func addObservers() {
         self.textObserver = textLabel.observe(\UILabel.text, options: [.new, .old]) { [weak self] (label, observedChange) in
             if let newText = observedChange.newValue,
                let oldText = observedChange.oldValue,
@@ -371,19 +386,5 @@ private extension CheckboxUIView {
     private func stackViewSpacing(alignment: CheckboxAlignment) -> CGFloat {
         let spacing = alignment == .left ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
         return self.fontMetrics.scaledValue(for: spacing, compatibleWith: self.traitCollection)
-    }
-}
-
-// MARK: Actions
-extension CheckboxUIView {
-
-    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        if selectionState == .indeterminate {
-            self.isSelected = true
-        } else {
-            self.isSelected.toggle()
-        }
-        self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
-        self.checkboxSelectionStateSubject.send(self.selectionState)
     }
 }
