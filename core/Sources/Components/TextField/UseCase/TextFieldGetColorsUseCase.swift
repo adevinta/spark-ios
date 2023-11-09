@@ -21,19 +21,23 @@ struct TextFieldGetColorsUseCase: TextFieldGetColorsUseCasable {
         switch intent {
         case .error:
             return .init(
-                border: theme.colors.feedback.error
+                border: theme.colors.feedback.error,
+                statusIcon: theme.colors.feedback.error
             )
         case .alert:
             return .init(
-                border: theme.colors.feedback.alert
+                border: theme.colors.feedback.alert,
+                statusIcon: theme.colors.feedback.alert
             )
         case .neutral:
             return .init(
-                border: theme.colors.base.outline
+                border: theme.colors.base.outline,
+                statusIcon: theme.colors.base.outline
             )
         case .success:
             return .init(
-                border: theme.colors.feedback.success
+                border: theme.colors.feedback.success,
+                statusIcon: theme.colors.feedback.success
             )
         }
     }

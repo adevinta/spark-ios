@@ -255,10 +255,18 @@ final class TextFieldComponentUIView: UIView {
 
     init(viewModel: TextFieldComponentUIViewModel) {
         self.viewModel = viewModel
-        self.textField = TextFieldUIView(theme: viewModel.theme)
+        self.textField = TextFieldUIView(
+            theme: viewModel.theme,
+            errorIcon: DemoIconography.shared.statusError,
+            alertIcon: DemoIconography.shared.statusAlert,
+            successIcon: DemoIconography.shared.checkmark
+        )
         self.addOnTextField = AddOnTextFieldUIView(
             theme: viewModel.theme,
             intent: .neutral,
+            errorIcon: DemoIconography.shared.statusError,
+            alertIcon: DemoIconography.shared.statusAlert,
+            successIcon: DemoIconography.shared.checkmark,
             leadingAddOn: nil,
             trailingAddOn: nil
         )

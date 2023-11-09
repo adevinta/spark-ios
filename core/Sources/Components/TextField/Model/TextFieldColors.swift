@@ -13,7 +13,7 @@ struct TextFieldColors {
     // MARK: - Properties
 
     let border: any ColorToken
-    //TODO: let statusColor: any ColorToken
+    let statusIcon: any ColorToken
 }
 
 // MARK: Equatable

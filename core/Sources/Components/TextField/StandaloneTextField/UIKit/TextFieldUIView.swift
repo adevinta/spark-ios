@@ -17,6 +17,23 @@ public final class TextFieldUIView: UITextField {
     private var cancellable = Set<AnyCancellable>()
     private var heightConstraint: NSLayoutConstraint?
 
+    private let statusIconImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFit
+        view.setContentCompressionResistancePriority(.required, for: .horizontal)
+        view.setContentCompressionResistancePriority(.required, for: .vertical)
+        NSLayoutConstraint.activate([
+            view.widthAnchor.constraint(equalToConstant: 16),
+            view.heightAnchor.constraint(equalToConstant: 16)
+        ])
+        return view
+    }()
+
+    @ScaledUIMetric private var height: CGFloat = 44
+    @ScaledUIMetric private var leftViewSize: CGFloat = .zero
+    @ScaledUIMetric private var rightViewSize: CGFloat = .zero
+
     // MARK: - Public properties
 
     public var theme: Theme {
@@ -43,10 +60,6 @@ public final class TextFieldUIView: UITextField {
         get { return .init(self.viewModel.borderStyle) }
     }
 
-    @ScaledUIMetric private var height: CGFloat = 44
-    @ScaledUIMetric private var leftViewSize: CGFloat = .zero
-    @ScaledUIMetric private var rightViewSize: CGFloat = .zero
-
     // MARK: - Initializers
 
     internal init(viewModel: TextFieldUIViewModel) {
@@ -55,12 +68,29 @@ public final class TextFieldUIView: UITextField {
         self.setupView()
         self.setupSubscriptions()
     }
-
-    public convenience init(theme: Theme,
-                            intent: TextFieldIntent = .neutral) {
-        let viewModel = TextFieldUIViewModel(theme: theme,
-                                             intent: intent,
-                                             borderStyle: .roundedRect)
+    
+    /// Initialize a text field.
+    /// - Parameters:
+    ///   - theme: The Spark theme.
+    ///   - errorIcon: Icon to be shown on error intent.
+    ///   - alertIcon: Icon to be shown on alert intent.
+    ///   - successIcon: Icon to be shown on success intent.
+    ///   - intent: The intent of the text field.
+    public convenience init(
+        theme: Theme,
+        errorIcon: UIImage,
+        alertIcon: UIImage,
+        successIcon: UIImage,
+        intent: TextFieldIntent = .neutral
+    ) {
+        let viewModel = TextFieldUIViewModel(
+            theme: theme,
+            borderStyle: .roundedRect,
+            errorIcon: errorIcon,
+            alertIcon: alertIcon,
+            successIcon: successIcon,
+            intent: intent
+        )
         self.init(viewModel: viewModel)
     }
 
@@ -85,12 +115,17 @@ public final class TextFieldUIView: UITextField {
     private func setupSubscriptions() {
         self.viewModel.$colors.subscribe(in: &self.cancellable) { [weak self] colors in
             UIView.animate(withDuration: 0.1, animations: { self?.setupColors(colors) })
+            self?.updateStatusIconColor(colors.statusIcon)
         }
         self.viewModel.$borders.subscribe(in: &self.cancellable) { [weak self] borders in
             UIView.animate(withDuration: 0.1, animations: { self?.setupBorders(borders) })
         }
         self.viewModel.$spacings.subscribe(in: &self.cancellable) { [weak self] spacings in
             UIView.animate(withDuration: 0.1, animations: { self?.setNeedsLayout() })
+        }
+        self.viewModel.$statusIcon.subscribe(in: &self.cancellable) { [weak self] statusIcon in
+            self?.statusIconImageView.image = statusIcon
+            self?.rightView = self?.statusIconImageView
         }
     }
 
@@ -118,6 +153,10 @@ public final class TextFieldUIView: UITextField {
             totalInsets.right += button.bounds.size.width + (0.75 * contentSpacing)
         }
         return bounds.inset(by: totalInsets)
+    }
+
+    private func updateStatusIconColor(_ color: any ColorToken) {
+        self.statusIconImageView.tintColor = color.uiColor
     }
 
     // MARK: - Rects

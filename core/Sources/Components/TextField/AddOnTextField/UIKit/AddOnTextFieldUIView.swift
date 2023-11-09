@@ -84,12 +84,18 @@ public final class AddOnTextFieldUIView: UIView {
     public convenience init(
         theme: Theme,
         intent: TextFieldIntent = .neutral,
+        errorIcon: UIImage,
+        alertIcon: UIImage,
+        successIcon: UIImage,
         leadingAddOn: UIView? = nil,
         trailingAddOn: UIView? = nil
     ) {
         self.init(
             theme: theme,
             intent: intent,
+            errorIcon: errorIcon,
+            alertIcon: alertIcon,
+            successIcon: successIcon,
             leadingAddOn: leadingAddOn,
             trailingAddOn: trailingAddOn,
             getColorsUseCase: TextFieldGetColorsUseCase()
@@ -99,6 +105,9 @@ public final class AddOnTextFieldUIView: UIView {
     internal init(
         theme: Theme,
         intent: TextFieldIntent = .neutral,
+        errorIcon: UIImage,
+        alertIcon: UIImage,
+        successIcon: UIImage,
         leadingAddOn: UIView? = nil,
         trailingAddOn: UIView? = nil,
         getColorsUseCase: TextFieldGetColorsUseCasable
@@ -109,6 +118,9 @@ public final class AddOnTextFieldUIView: UIView {
         let textFieldViewModel = TextFieldUIViewModel(
             theme: theme,
             borderStyle: .none,
+            errorIcon: errorIcon,
+            alertIcon: alertIcon,
+            successIcon: successIcon,
             getColorsUseCase: getColorsUseCase
         )
         self.textField = TextFieldUIView(viewModel: textFieldViewModel)

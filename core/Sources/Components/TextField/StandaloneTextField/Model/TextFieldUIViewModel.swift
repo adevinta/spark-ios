@@ -15,6 +15,7 @@ final class TextFieldUIViewModel: ObservableObject {
     @Published var colors: TextFieldColors
     @Published var borders: TextFieldBorders
     @Published var spacings: TextFieldSpacings
+    @Published var statusIcon: UIImage?
 
     // MARK: - Private properties
     
@@ -35,6 +36,10 @@ final class TextFieldUIViewModel: ObservableObject {
         }
     }
 
+    private let errorIcon: UIImage
+    private let alertIcon: UIImage
+    private let successIcon: UIImage
+
     private let getColorsUseCase: any TextFieldGetColorsUseCasable
     private let getBordersUseCase: any TextFieldGetBordersUseCasable
     private let getSpacingsUseCase: any TextFieldGetSpacingsUseCasable
@@ -43,8 +48,11 @@ final class TextFieldUIViewModel: ObservableObject {
 
     init(
         theme: Theme,
-        intent: TextFieldIntent = .neutral,
         borderStyle: TextFieldBorderStyle,
+        errorIcon: UIImage,
+        alertIcon: UIImage,
+        successIcon: UIImage,
+        intent: TextFieldIntent = .neutral,
         getColorsUseCase: any TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase(),
         getBordersUseCase: any TextFieldGetBordersUseCasable = TextFieldGetBordersUseCase(),
         getSpacingsUseCase: any TextFieldGetSpacingsUseCasable = TextFieldGetSpacingsUseCase()
@@ -53,6 +61,9 @@ final class TextFieldUIViewModel: ObservableObject {
         self.theme = theme
         self.intent = intent
         self.borderStyle = borderStyle
+        self.errorIcon = errorIcon
+        self.alertIcon = alertIcon
+        self.successIcon = successIcon
 
         // Use cases
         self.getColorsUseCase = getColorsUseCase
@@ -97,7 +108,19 @@ final class TextFieldUIViewModel: ObservableObject {
         self.reloadColors()
         self.reloadSpacings()
         self.reloadBorders()
+    }
 
+    private func updateStatusIcon(for intent: TextFieldIntent) {
+        switch intent {
+        case .error:
+            self.statusIcon = errorIcon
+        case .alert:
+            self.statusIcon = alertIcon
+        case .neutral:
+            self.statusIcon = nil
+        case .success:
+            self.statusIcon = successIcon
+        }
     }
 
     // MARK: - Public Setter
@@ -108,6 +131,7 @@ final class TextFieldUIViewModel: ObservableObject {
 
     func setIntent(_ intent: TextFieldIntent) {
         self.intent = intent
+        self.updateStatusIcon(for: intent)
     }
 
     func setBorderStyle(_ borderStyle: TextFieldBorderStyle) {

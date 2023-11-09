@@ -24,4 +24,12 @@ struct DemoIconography {
     lazy var checkmark: UIImage = {
         return UIImage(named: "checkbox-selected")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
     }()
+
+    lazy var statusAlert: UIImage = {
+        return UIImage(named: "AlertOutline")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+    }()
+
+    lazy var statusError: UIImage = {
+        return UIImage(named: "WarningOutline")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+    }()
 }
