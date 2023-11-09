@@ -11,7 +11,7 @@ import UIKit
 import SwiftUI
 
 /// RadioButtonGroupView embodies a radio button group and handles
-public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
+public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIControl {
 
     // MARK: - Private Properties
     private var itemSpacingConstraints = [NSLayoutConstraint]()
@@ -35,6 +35,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             self.updateRadioButtonStates()
             self.valueSubject.send(newValue)
             self.delegate?.radioButtonGroup(self, didChangeSelection: newValue)
+            self.sendActions(for: .valueChanged)
         }
     )
 
@@ -80,7 +81,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
-    public var isEnabled: Bool = true {
+    public override var isEnabled: Bool {
         didSet {
             self.radioButtonViews.forEach{ $0.isEnabled = self.isEnabled }
         }
@@ -103,20 +104,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         didSet {
             self.subtitleDidUpdate()
         }
-    }
-
-    /// The current state `RadioButtonGroupState` of the items within the group, e.g. `enabled`.
-    @available(*, deprecated, message: "Use RadioButtonIntent and the attribute isEnabled instead. ")
-    public var state: RadioButtonGroupState = .enabled {
-        didSet {
-            self.viewModel.intent = self.state.intent
-
-            for radioButtonView in radioButtonViews {
-                radioButtonView.intent = self.state.intent
-                radioButtonView.isEnabled = self.state != .disabled
-            }
-        }
-
     }
 
     /// The current selected ID. 
@@ -232,7 +219,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                   labelAlignment: radioButtonLabelPosition.alignment,
                   groupLayout: groupLayout)
 
-        self.state = state
         self.title = title
         self.supplementaryText = supplementaryText
         self.titleDidUpdate()
