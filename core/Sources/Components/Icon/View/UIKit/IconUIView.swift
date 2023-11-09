@@ -54,7 +54,7 @@ public final class IconUIView: UIView {
     }
 
     public override var intrinsicContentSize: CGSize {
-        CGSize(width: size.value, height: size.value)
+        return CGSize(width: self.width, height: self.height)
     }
 
     // MARK: - Private properties
@@ -152,12 +152,12 @@ public final class IconUIView: UIView {
     private func updateIconSize() {
         if self.heightConstraint?.constant != self.height {
             self.heightConstraint?.constant = self.height
-            self.layoutIfNeeded()
+            self.updateConstraintsIfNeeded()
         }
 
         if self.widthConstraint?.constant != self.width {
             self.widthConstraint?.constant = self.width
-            self.layoutIfNeeded()
+            self.updateConstraintsIfNeeded()
         }
     }
 
