@@ -73,14 +73,6 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var containerViewAlignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Extend vertical checkbox",
-            type: .toggle(isOn: self.isContainerViewAlignmentLeft),
-            target: (source: self, action: #selector(self.toggleContainerViewAlignment))
-        )
-    }()
-
     lazy var titleConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Show Group Title",
@@ -149,7 +141,6 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
     @Published var intent: CheckboxIntent
     @Published var isAlignmentLeft: Bool
     @Published var isLayoutVertical: Bool
-    @Published var isContainerViewAlignmentLeft: Bool
     @Published var showGroupTitle: Bool
     @Published var icon: [String: UIImage]
     @Published var groupType: CheckboxGroupType
@@ -159,7 +150,6 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         intent: CheckboxIntent = .main,
         isAlignmentLeft: Bool = true,
         isLayoutVertical: Bool = false,
-        isContainerViewAlignmentLeft: Bool = false,
         showGroupTitle: Bool = false,
         icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark],
         groupType: CheckboxGroupType = .doubleMix
@@ -168,7 +158,6 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         self.intent = intent
         self.isAlignmentLeft = isAlignmentLeft
         self.isLayoutVertical = isLayoutVertical
-        self.isContainerViewAlignmentLeft = isContainerViewAlignmentLeft
         self.showGroupTitle = showGroupTitle
         self.icon = icon
         self.groupType = groupType
@@ -179,7 +168,6 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
             self.intentConfigurationItemViewModel,
             self.alignmentConfigurationItemViewModel,
             self.layoutConfigurationItemViewModel,
-            self.containerViewAlignmentConfigurationItemViewModel,
             self.titleConfigurationItemViewModel,
             self.iconConfigurationItemViewModel,
             self.groupTypeConfigurationItemViewModel,
@@ -209,10 +197,6 @@ extension CheckboxGroupComponentUIViewModel {
 
     @objc func toggleShowGroupTitle() {
         self.showGroupTitle.toggle()
-    }
-
-    @objc func toggleContainerViewAlignment() {
-        self.isContainerViewAlignmentLeft.toggle()
     }
 
     @objc func presentIconSheet() {

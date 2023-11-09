@@ -74,11 +74,6 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             self.componentView.layout = isLayoutVertical ? .vertical : .horizontal
         }
 
-        self.viewModel.$isContainerViewAlignmentLeft.subscribe(in: &self.cancellables) { [weak self] isContainerViewAlignmentLeft in
-            guard let self = self else { return }
-            self.integrationStackViewAlignment = isContainerViewAlignmentLeft ? .fill : .leading
-        }
-
         self.viewModel.$showGroupTitle.subscribe(in: &self.cancellables) { [weak self] showGroupTitle in
             guard let self = self else { return }
             self.componentView.title = showGroupTitle ? viewModel.title : ""

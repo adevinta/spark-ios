@@ -95,6 +95,11 @@ final class CheckboxComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.componentView.selectionState = isIndeterminate ? .indeterminate : .selected
         }
+
+        self.viewModel.$containerViewAlignment.subscribe(in: &self.cancellables) { [weak self] containerViewAlignment in
+            guard let self = self else { return }
+            self.integrationStackViewAlignment = containerViewAlignment ? .fill : .leading
+        }
     }
 
     static func makeCheckboxView(_ viewModel: CheckboxComponentUIViewModel) -> CheckboxUIView {

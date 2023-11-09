@@ -103,6 +103,14 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var containerViewAlignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Extend right checkbox",
+            type: .toggle(isOn: self.containerViewAlignment),
+            target: (source: self, action: #selector(self.toggleContainerViewAlignment))
+        )
+    }()
+
     var themes = ThemeCellModel.themes
 
     // MARK: - Default Value Properties
@@ -137,6 +145,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
     @Published var intent: CheckboxIntent
     @Published var isEnabled: Bool
     @Published var alignment: CheckboxAlignment
+    @Published var containerViewAlignment: Bool
     @Published var textStyle: CheckboxTextStyle
     @Published var icon: [String: UIImage]
     @Published var isIndeterminate: Bool
@@ -147,6 +156,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState = .unselected,
         alignment: CheckboxAlignment = .left,
+        containerViewAlignment: Bool = false,
         textStyle: CheckboxTextStyle = .text,
         icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark],
         isIndeterminate: Bool = false
@@ -156,6 +166,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         self.isEnabled = isEnabled
         self.selectionState = selectionState
         self.alignment = alignment
+        self.containerViewAlignment = containerViewAlignment
         self.textStyle = textStyle
         self.icon = icon
         self.isIndeterminate = isIndeterminate
@@ -167,6 +178,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
             self.textStyleConfigurationItemViewModel,
             self.iconConfigurationItemViewModel,
             self.alignmentConfigurationItemViewModel,
+            self.containerViewAlignmentConfigurationItemViewModel,
             self.isEnableConfigurationItemViewModel,
             self.isIndeterminateConfigurationItemViewModel
         ])
@@ -202,6 +214,10 @@ extension CheckboxComponentUIViewModel {
 
     @objc func toggleIsIndeterminate() {
         self.isIndeterminate.toggle()
+    }
+
+    @objc func toggleContainerViewAlignment() {
+        self.containerViewAlignment.toggle()
     }
 }
 
