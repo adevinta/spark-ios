@@ -530,6 +530,9 @@ public final class ButtonUIView: UIControl {
         // Setup publisher subcriptions
         self.setupSubscriptions()
 
+        // Setup actions
+        self.setupActions()
+
         // Load view model
         self.viewModel.load()
     }
@@ -608,36 +611,6 @@ public final class ButtonUIView: UIControl {
             self.imageView.centerXAnchor.constraint(equalTo: self.imageContentView.centerXAnchor),
             self.imageView.centerYAnchor.constraint(equalTo: self.imageContentView.centerYAnchor)
         ])
-    }
-
-    // MARK: - Tracking
-
-    public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        self.delegate?.button(self, didReceive: .touchDown)
-
-        return super.beginTracking(touch, with: event)
-    }
-
-    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        if let touch {
-            // Tap is inside the view ?
-            let point = touch.location(in: self)
-            let touchIsInside = self.hitTest(point, with: event) == self
-
-            // Send delegate actions
-            self.delegate?.button(self, didReceive: touchIsInside ? .touchUpInside : .touchUpOutside)
-            if touchIsInside {
-                self.delegate?.buttonWasTapped(self)
-            }
-        }
-
-        return super.endTracking(touch, with: event)
-    }
-
-    public override func cancelTracking(with event: UIEvent?) {
-        self.delegate?.button(self, didReceive: .touchCancel)
-
-        return super.cancelTracking(with: event)
     }
 
     // MARK: - Setter & Getter
@@ -898,6 +871,35 @@ public final class ButtonUIView: UIControl {
             guard let self else { return }
             self.titleLabel.isHidden = !isText
         }
+    }
+
+    // MARK: - Actions
+
+    private func setupActions() {
+        // Touch down
+        self.addAction(.init(handler: { [weak self] _ in
+            guard let self else { return }
+            self.delegate?.button(self, didReceive: .touchDown)
+        }), for: .touchDown)
+
+        // Touch Up Inside
+        self.addAction(.init(handler: { [weak self] _ in
+            guard let self else { return }
+            self.delegate?.button(self, didReceive: .touchUpInside)
+            self.delegate?.buttonWasTapped(self)
+        }), for: .touchUpInside)
+
+        // Touch Up Outside
+        self.addAction(.init(handler: { [weak self] _ in
+            guard let self else { return }
+            self.delegate?.button(self, didReceive: .touchUpOutside)
+        }), for: .touchUpOutside)
+
+        // Touch Cancel
+        self.addAction(.init(handler: { [weak self] _ in
+            guard let self else { return }
+            self.delegate?.button(self, didReceive: .touchCancel)
+        }), for: .touchCancel)
     }
 
     // MARK: - Trait Collection
