@@ -27,15 +27,20 @@ public struct TagView: View {
     /// Initialize a new tag with default values.
     /// - Parameters:
     ///   - theme: The spark theme.
-    /// - Default values are:
-    ///   - intent is .main case.
-    ///   - variant is .filled case.
-    ///   - iconImage is nil.
-    ///   - text is nil.
+    ///   - intent: The intent of the tag.
+    ///   - variant: The variant of the tag.
     ///
     /// - Note: You must use the Modifier to add at least iconImage or/and text.
-    public init(theme: Theme) {
-        let viewModel = TagViewModel(theme: theme)
+    public init(
+        theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant
+    ) {
+        let viewModel = TagViewModel(
+            theme: theme,
+            intent: intent,
+            variant: variant
+        )
         self.viewModel = viewModel
 
         self._smallSpacing = .init(wrappedValue: viewModel.spacing.small)
@@ -89,6 +94,7 @@ public struct TagView: View {
     /// - Parameters:
     ///   - intent: The intent of the tag.
     /// - Returns: Current Tag View.
+    @available(*, deprecated, message: "Intent is now directly on the init")
     public func intent(_ intent: TagIntent) -> Self {
         self.viewModel.setIntent(intent)
         return self
@@ -98,6 +104,7 @@ public struct TagView: View {
     /// - Parameters:
     ///   - variant: The variant of the tag.
     /// - Returns: Current Tag View.
+    @available(*, deprecated, message: "Variant is now directly on the init")
     public func variant(_ variant: TagVariant) -> Self {
         self.viewModel.setVariant(variant)
         return self
