@@ -45,7 +45,7 @@ final class CheckboxGroupUIViewActionTests: TestCase {
             exp.fulfill()
         }.store(in: &self.subscriptions)
 
-        sut.checkboxes[0].actionTapped(sender: UIButton())
+        sut.checkboxes[0].endTracking(.init(), with: .init())
 
         wait(for: [exp], timeout: 3.0)
         
@@ -57,7 +57,7 @@ final class CheckboxGroupUIViewActionTests: TestCase {
     func test_action_from_checbox_item_disabled_propagated() {
         let sut = sut()
 
-        sut.checkboxes[4].actionTapped(sender: UIButton())
+        sut.checkboxes[4].sendActions(for: .touchUpInside)
 
         XCTAssertEqual(self.delegate.checkboxGroupWithCheckboxGroupAndStatesCallsCount, 0, "Delegate not called")
     }
@@ -66,7 +66,7 @@ final class CheckboxGroupUIViewActionTests: TestCase {
     private func sut() -> CheckboxGroupUIView {
         let sut = CheckboxGroupUIView(checkedImage: IconographyTests.shared.checkmark,
                                    items: self.items,
-                                   checkboxAlignment: .left,
+                                   alignment: .left,
                                    theme: self.theme,
                                    accessibilityIdentifierPrefix: "XX")
 
