@@ -34,6 +34,9 @@ public final class TextFieldUIView: UITextField {
     @ScaledUIMetric private var leftViewSize: CGFloat = .zero
     @ScaledUIMetric private var rightViewSize: CGFloat = .zero
 
+    private var userDefinedRightView = UIView()
+    private var rightViewContainer = UIView()
+
     // MARK: - Public properties
 
     public var theme: Theme {
@@ -58,6 +61,19 @@ public final class TextFieldUIView: UITextField {
         @available(*, unavailable)
         set {}
         get { return .init(self.viewModel.borderStyle) }
+    }
+
+    public override var rightView: UIView? {
+        get {
+            return self.rightViewContainer
+        }
+        set {
+            if let newValue {
+                self.userDefinedRightView.subviews.forEach { $0.removeFromSuperview() }
+                self.userDefinedRightView.addSubview(newValue)
+            }
+            super.rightView = self.rightViewContainer
+        }
     }
 
     // MARK: - Initializers
@@ -104,6 +120,8 @@ public final class TextFieldUIView: UITextField {
         self.adjustsFontForContentSizeCategory = true
         self.font = .preferredFont(forTextStyle: .body)
         self.updateHeight()
+        self.rightViewContainer.addSubviewSizedEqually(self.userDefinedRightView)
+        self.rightViewContainer.addSubviewSizedEqually(self.statusIconImageView)
     }
 
     private func updateHeight() {
@@ -125,7 +143,7 @@ public final class TextFieldUIView: UITextField {
         }
         self.viewModel.$statusIcon.subscribe(in: &self.cancellable) { [weak self] statusIcon in
             self?.statusIconImageView.image = statusIcon
-            self?.rightView = self?.statusIconImageView
+            self?.updateRightView()
         }
     }
 
@@ -157,6 +175,16 @@ public final class TextFieldUIView: UITextField {
 
     private func updateStatusIconColor(_ color: any ColorToken) {
         self.statusIconImageView.tintColor = color.uiColor
+    }
+
+    private func updateRightView() {
+        if self.statusIconImageView.image == nil {
+            self.rightViewContainer.subviews.first { $0 == self.statusIconImageView }?.isHidden = true
+            self.rightViewContainer.subviews.first { $0 == self.userDefinedRightView }?.isHidden = false
+        } else {
+            self.rightViewContainer.subviews.first { $0 == self.statusIconImageView }?.isHidden = false
+            self.rightViewContainer.subviews.first { $0 == self.userDefinedRightView }?.isHidden = true
+        }
     }
 
     // MARK: - Rects

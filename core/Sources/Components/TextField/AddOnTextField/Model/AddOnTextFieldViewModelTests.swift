@@ -17,6 +17,7 @@ final class AddOnTextFieldViewModelTests: XCTestCase {
     var theme: ThemeGeneratedMock!
     var getColorUseCase: TextFieldGetColorsUseCasableGeneratedMock!
     var borderColorToken: ColorTokenGeneratedMock!
+    var statusIconColorToken: ColorTokenGeneratedMock!
     var cancellables: Set<AnyCancellable>!
     var sut: AddOnTextFieldViewModel!
 
@@ -29,7 +30,8 @@ final class AddOnTextFieldViewModelTests: XCTestCase {
         self.getColorUseCase = TextFieldGetColorsUseCasableGeneratedMock()
 
         self.borderColorToken = ColorTokenGeneratedMock.random()
-        self.getColorUseCase.executeWithThemeAndIntentReturnValue = TextFieldColors(border: borderColorToken)
+        self.statusIconColorToken = ColorTokenGeneratedMock.random()
+        self.getColorUseCase.executeWithThemeAndIntentReturnValue = TextFieldColors(border: borderColorToken, statusIcon: statusIconColorToken)
 
         self.cancellables = .init()
         self.sut = .init(
