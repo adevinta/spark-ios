@@ -80,32 +80,6 @@ final class TextFieldComponentUIView: UIView {
         return stackView
     }()
 
-    private lazy var withRightViewCheckBox: CheckboxUIView = {
-        let view = CheckboxUIView(
-            theme: viewModel.theme,
-            text: "Display right view",
-            checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
-            selectionState: .selected,
-            checkboxPosition: .left
-        )
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private lazy var withLeftViewCheckBox: CheckboxUIView = {
-        let view = CheckboxUIView(
-            theme: viewModel.theme,
-            text: "Display left view",
-            checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
-            selectionState: .selected,
-            checkboxPosition: .left
-        )
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     private lazy var showLeadingAddOnLabel: UILabel = {
         let label = UILabel()
         label.text = "Leading add-on:"
@@ -296,8 +270,6 @@ final class TextFieldComponentUIView: UIView {
 
         self.vStack.addArrangedSubview(self.configurationLabel)
         self.vStack.addArrangedSubview(self.configurationStackView)
-        self.vStack.addArrangedSubview(self.withRightViewCheckBox)
-        self.vStack.addArrangedSubview(self.withLeftViewCheckBox)
         self.vStack.addArrangedSubview(self.leadingAddOnStackView)
         self.vStack.addArrangedSubview(self.trailingAddOnStackView)
         self.vStack.addArrangedSubview(self.rightViewModeStackView)
@@ -405,23 +377,6 @@ final class TextFieldComponentUIView: UIView {
             guard let self = self else { return }
             self.textField.placeholder = label
             self.addOnTextField.textField.placeholder = label
-        }
-
-        self.withRightViewCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
-            guard let self = self else { return }
-            if state != .unselected {
-                self.textField.rightView = self.createRightView()
-                self.addOnTextField.textField.rightView = self.createRightView()
-            }
-        }
-
-        self.withLeftViewCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
-            guard let self = self else { return }
-            self.textField.leftView = state == .unselected ? nil : self.createLeftView()
-            if state != .unselected {
-                self.textField.leftView = self.createLeftView()
-                self.addOnTextField.textField.leftView = self.createLeftView()
-            }
         }
 
         self.viewModel.$leadingAddOnOption.subscribe(in: &self.cancellables) { [weak self] addOnOption in
