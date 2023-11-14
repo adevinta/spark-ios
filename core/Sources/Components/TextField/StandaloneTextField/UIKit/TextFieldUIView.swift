@@ -81,7 +81,6 @@ public final class TextFieldUIView: UITextField {
                 self.userDefinedRightView.subviews.forEach { $0.removeFromSuperview() }
                 self.userDefinedRightView.addSubview(newValue)
             }
-            super.rightView = self.rightViewContainer
         }
     }
 
@@ -129,14 +128,19 @@ public final class TextFieldUIView: UITextField {
         self.adjustsFontForContentSizeCategory = true
         self.font = .preferredFont(forTextStyle: .body)
         self.updateHeight()
-        self.rightViewContainer.addSubviewSizedEqually(self.userDefinedRightView)
-        self.rightViewContainer.addSubviewSizedEqually(self.statusIconImageView)
+        self.setupRightView()
     }
 
     private func updateHeight() {
         self.heightConstraint?.isActive = false
         self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
         self.heightConstraint?.isActive = true
+    }
+
+    private func setupRightView() {
+        super.rightView = self.rightViewContainer
+        self.rightViewContainer.addSubviewSizedEqually(self.userDefinedRightView)
+        self.rightViewContainer.addSubviewSizedEqually(self.statusIconImageView)
     }
 
     private func setupSubscriptions() {
@@ -160,9 +164,23 @@ public final class TextFieldUIView: UITextField {
         self.setBorderColor(from: colors.border)
     }
 
+    private func updateStatusIconColor(_ color: any ColorToken) {
+        self.statusIconImageView.tintColor = color.uiColor
+    }
+
     private func setupBorders(_ borders: TextFieldBorders) {
         self.setBorderWidth(borders.width)
         self.setCornerRadius(borders.radius)
+    }
+
+    private func updateRightView() {
+        if self.statusIconImageView.image == nil {
+            self.rightViewContainer.subviews.first { $0 == self.statusIconImageView }?.isHidden = true
+            self.rightViewContainer.subviews.first { $0 == self.userDefinedRightView }?.isHidden = false
+        } else {
+            self.rightViewContainer.subviews.first { $0 == self.statusIconImageView }?.isHidden = false
+            self.rightViewContainer.subviews.first { $0 == self.userDefinedRightView }?.isHidden = true
+        }
     }
 
     private func setInsets(forBounds bounds: CGRect) -> CGRect {
@@ -180,20 +198,6 @@ public final class TextFieldUIView: UITextField {
             totalInsets.right += button.bounds.size.width + (0.75 * contentSpacing)
         }
         return bounds.inset(by: totalInsets)
-    }
-
-    private func updateStatusIconColor(_ color: any ColorToken) {
-        self.statusIconImageView.tintColor = color.uiColor
-    }
-
-    private func updateRightView() {
-        if self.statusIconImageView.image == nil {
-            self.rightViewContainer.subviews.first { $0 == self.statusIconImageView }?.isHidden = true
-            self.rightViewContainer.subviews.first { $0 == self.userDefinedRightView }?.isHidden = false
-        } else {
-            self.rightViewContainer.subviews.first { $0 == self.statusIconImageView }?.isHidden = false
-            self.rightViewContainer.subviews.first { $0 == self.userDefinedRightView }?.isHidden = true
-        }
     }
 
     // MARK: - Rects
