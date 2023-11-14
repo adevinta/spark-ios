@@ -17,6 +17,22 @@ public final class TextFieldUIView: UITextField {
     private var cancellable = Set<AnyCancellable>()
     private var heightConstraint: NSLayoutConstraint?
 
+    @ScaledUIMetric private var height: CGFloat = 44
+    @ScaledUIMetric private var leftViewSize: CGFloat = .zero
+    @ScaledUIMetric private var rightViewSize: CGFloat = .zero
+
+    private let rightViewContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let userDefinedRightView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private let statusIconImageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -29,13 +45,6 @@ public final class TextFieldUIView: UITextField {
         ])
         return view
     }()
-
-    @ScaledUIMetric private var height: CGFloat = 44
-    @ScaledUIMetric private var leftViewSize: CGFloat = .zero
-    @ScaledUIMetric private var rightViewSize: CGFloat = .zero
-
-    private var userDefinedRightView = UIView()
-    private var rightViewContainer = UIView()
 
     // MARK: - Public properties
 
