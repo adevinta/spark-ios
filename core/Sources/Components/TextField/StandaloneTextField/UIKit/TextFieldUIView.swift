@@ -15,11 +15,13 @@ public final class TextFieldUIView: UITextField {
 
     private let viewModel: TextFieldUIViewModel
     private var cancellable = Set<AnyCancellable>()
-    private var heightConstraint: NSLayoutConstraint?
+    private var heightConstraint = NSLayoutConstraint()
+    private var rightViewHeightConstraint = NSLayoutConstraint()
+    private var rightViewWidthConstraint = NSLayoutConstraint()
 
     @ScaledUIMetric private var height: CGFloat = 44
-    @ScaledUIMetric private var leftViewSize: CGFloat = .zero
-    @ScaledUIMetric private var rightViewSize: CGFloat = .zero
+    @ScaledUIMetric private var leftViewSize: CGFloat = 16
+    @ScaledUIMetric private var rightViewSize: CGFloat = 16
 
     private let rightViewContainer: UIView = {
         let view = UIView()
@@ -39,10 +41,6 @@ public final class TextFieldUIView: UITextField {
         view.contentMode = .scaleAspectFit
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .vertical)
-        NSLayoutConstraint.activate([
-            view.widthAnchor.constraint(equalToConstant: 16),
-            view.heightAnchor.constraint(equalToConstant: 16)
-        ])
         return view
     }()
 
@@ -79,7 +77,7 @@ public final class TextFieldUIView: UITextField {
         set {
             if let newValue {
                 self.userDefinedRightView.subviews.forEach { $0.removeFromSuperview() }
-                self.userDefinedRightView.addSubview(newValue)
+                self.userDefinedRightView.addSubviewSizedEqually(newValue)
             }
         }
     }
@@ -127,20 +125,32 @@ public final class TextFieldUIView: UITextField {
     private func setupView() {
         self.adjustsFontForContentSizeCategory = true
         self.font = .preferredFont(forTextStyle: .body)
-        self.updateHeight()
         self.setupRightView()
-    }
-
-    private func updateHeight() {
-        self.heightConstraint?.isActive = false
-        self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
-        self.heightConstraint?.isActive = true
+        self.updateSizes()
     }
 
     private func setupRightView() {
         super.rightView = self.rightViewContainer
         self.rightViewContainer.addSubviewSizedEqually(self.userDefinedRightView)
         self.rightViewContainer.addSubviewSizedEqually(self.statusIconImageView)
+    }
+
+    private func updateSizes() {
+        NSLayoutConstraint.deactivate([
+            self.heightConstraint,
+            self.rightViewWidthConstraint,
+            self.rightViewHeightConstraint
+        ])
+
+        self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
+        self.rightViewWidthConstraint = self.rightViewContainer.widthAnchor.constraint(equalToConstant: self.rightViewSize)
+        self.rightViewHeightConstraint = self.rightViewContainer.heightAnchor.constraint(equalToConstant: self.rightViewSize)
+
+        NSLayoutConstraint.activate([
+            self.heightConstraint,
+            self.rightViewWidthConstraint,
+            self.rightViewHeightConstraint
+        ])
     }
 
     private func setupSubscriptions() {
@@ -221,7 +231,6 @@ public final class TextFieldUIView: UITextField {
 
     public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.rightViewRect(forBounds: bounds)
-        self.rightViewSize = rect.width
         rect.origin.x = (rect.maxX - self.viewModel.spacings.right - self.rightViewSize)
         rect.origin.y = bounds.size.height / 2 - self.rightViewSize / 2
         rect.size.width = self.rightViewSize
@@ -231,7 +240,6 @@ public final class TextFieldUIView: UITextField {
 
     public override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.leftViewRect(forBounds: bounds)
-        self.leftViewSize = rect.width
         rect.origin.x += self.viewModel.spacings.left
         rect.origin.y = bounds.size.height / 2 - self.leftViewSize / 2
         rect.size.width = self.leftViewSize
@@ -246,6 +254,8 @@ public final class TextFieldUIView: UITextField {
 
         self.invalidateIntrinsicContentSize()
         self._height.update(traitCollection: traitCollection)
-        self.updateHeight()
+        self._rightViewSize.update(traitCollection: traitCollection)
+        self._leftViewSize.update(traitCollection: traitCollection)
+        self.updateSizes()
     }
 }

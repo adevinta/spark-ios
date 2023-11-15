@@ -288,22 +288,18 @@ final class TextFieldComponentUIView: UIView {
     }
 
     private func createRightView() -> UIImageView {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+        let imageView = UIImageView()
         imageView.image = UIImage(systemName: "square.and.pencil.circle.fill")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 20).isActive = true
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }
 
     private func createLeftView() -> UIImageView {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+        let imageView = UIImageView()
         imageView.image = UIImage(systemName: "square.and.pencil.circle.fill")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
