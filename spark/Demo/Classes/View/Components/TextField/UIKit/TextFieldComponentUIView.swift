@@ -227,6 +227,20 @@ final class TextFieldComponentUIView: UIView {
         return label
     }()
 
+    private lazy var isEnabledCheckBox: CheckboxUIView = {
+        let view = CheckboxUIView(
+            theme: viewModel.theme,
+            text: "Text field enabled",
+            checkedImage: DemoIconography.shared.checkmark,
+            state: .enabled,
+            selectionState: .selected,
+            checkboxPosition: .left
+        )
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+
     init(viewModel: TextFieldComponentUIViewModel) {
         self.viewModel = viewModel
         self.textField = TextFieldUIView(
@@ -275,12 +289,12 @@ final class TextFieldComponentUIView: UIView {
         self.vStack.addArrangedSubview(self.rightViewModeStackView)
         self.vStack.addArrangedSubview(self.leftViewModeStackView)
         self.vStack.addArrangedSubview(self.clearButtonModeStackView)
+        self.vStack.addArrangedSubview(self.isEnabledCheckBox)
         self.vStack.addArrangedSubview(self.standaloneTextFieldLabel)
         self.vStack.addArrangedSubview(self.textField)
         self.vStack.addArrangedSubview(self.addOnTextFieldLabel)
         self.vStack.addArrangedSubview(self.addOnTextField)
 
-        self.textField.isEnabled = false
         self.textField.rightView = self.createRightView()
         self.textField.leftView = self.createLeftView()
 
@@ -426,5 +440,12 @@ final class TextFieldComponentUIView: UIView {
             self.textField.clearButtonMode = .init(rawValue: viewMode.rawValue) ?? .never
             self.addOnTextField.textField.clearButtonMode = .init(rawValue: viewMode.rawValue) ?? .never
         }
+
+        self.isEnabledCheckBox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
+            guard let self = self else { return }
+            self.textField.isEnabled = state == .selected
+            self.addOnTextField.textField.isEnabled = state == .selected
+        }
+
     }
 }

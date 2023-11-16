@@ -242,7 +242,7 @@ public final class TextFieldUIView: UITextField {
         let opacity: CGFloat = isEnabled ? 0 : self.theme.dims.dim5
         return self.theme.colors.base.onSurface.opacity(opacity)
     }
-    
+
     private func getTextColor() -> any ColorToken {
         let opacity: CGFloat = self.isEnabled ? self.theme.dims.dim1 : self.theme.dims.dim3
         return self.theme.colors.base.onSurface.opacity(opacity)
