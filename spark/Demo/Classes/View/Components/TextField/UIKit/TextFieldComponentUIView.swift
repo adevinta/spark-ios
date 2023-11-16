@@ -280,6 +280,7 @@ final class TextFieldComponentUIView: UIView {
         self.vStack.addArrangedSubview(self.addOnTextFieldLabel)
         self.vStack.addArrangedSubview(self.addOnTextField)
 
+        self.textField.isEnabled = false
         self.textField.rightView = self.createRightView()
         self.textField.leftView = self.createLeftView()
 

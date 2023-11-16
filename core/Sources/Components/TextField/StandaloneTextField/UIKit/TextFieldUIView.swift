@@ -64,6 +64,8 @@ public final class TextFieldUIView: UITextField {
         }
     }
 
+    // MARK: - Overridden properties
+
     public override var borderStyle: UITextField.BorderStyle {
         @available(*, unavailable)
         set {}
@@ -79,6 +81,26 @@ public final class TextFieldUIView: UITextField {
                 self.userDefinedRightView.subviews.forEach { $0.removeFromSuperview() }
                 self.userDefinedRightView.addSubviewSizedEqually(newValue)
             }
+        }
+    }
+
+    public override var isEnabled: Bool {
+        didSet {
+            self.updateStateColors()
+        }
+    }
+
+    public override var placeholder: String? {
+        get {
+            super.placeholder
+        } 
+        set {
+            self.attributedPlaceholder = NSAttributedString(
+                string: newValue ?? "",
+                attributes: [
+                    NSAttributedString.Key.foregroundColor : self.getTextColor().uiColor
+                ]
+            )
         }
     }
 
@@ -124,9 +146,15 @@ public final class TextFieldUIView: UITextField {
 
     private func setupView() {
         self.adjustsFontForContentSizeCategory = true
-        self.font = .preferredFont(forTextStyle: .body)
+        self.font = self.theme.typography.body1.uiFont
+        self.updateStateColors()
         self.setupRightView()
         self.updateSizes()
+    }
+
+    private func updateStateColors() {
+        self.backgroundColor = self.getBackgroundColor().uiColor
+        self.textColor = self.getTextColor().uiColor
     }
 
     private func setupRightView() {
@@ -208,6 +236,16 @@ public final class TextFieldUIView: UITextField {
             totalInsets.right += button.bounds.size.width + (0.75 * contentSpacing)
         }
         return bounds.inset(by: totalInsets)
+    }
+
+    private func getBackgroundColor() -> any ColorToken {
+        let opacity: CGFloat = isEnabled ? 0 : self.theme.dims.dim5
+        return self.theme.colors.base.onSurface.opacity(opacity)
+    }
+    
+    private func getTextColor() -> any ColorToken {
+        let opacity: CGFloat = self.isEnabled ? self.theme.dims.dim1 : self.theme.dims.dim3
+        return self.theme.colors.base.onSurface.opacity(opacity)
     }
 
     // MARK: - Rects
