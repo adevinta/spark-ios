@@ -8,6 +8,6 @@
 
 import Foundation
 
-public enum RatingIntent {
+public enum RatingIntent: CaseIterable {
     case main
 }
