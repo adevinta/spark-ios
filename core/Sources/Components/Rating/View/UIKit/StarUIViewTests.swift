@@ -19,14 +19,12 @@ final class StarUIViewTests: XCTestCase {
         super.setUp()
         self.cache = CGLayerCachingGeneratedMock()
         self.sut = StarUIView(
-            numberOfVertices: 6,
             rating: 0.4,
             fillMode: .full,
             lineWidth: 2,
-            vertexSize: 0.5,
-            cornerRadiusSize: 0.12,
             borderColor: .red,
             fillColor: .blue,
+            configuration: .init(numberOfVertices: 6, vertexSize: 0.5, cornerRadiusSize: 0.12),
             cache: self.cache)
     }
 
