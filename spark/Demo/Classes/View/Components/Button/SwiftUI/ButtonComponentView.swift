@@ -87,7 +87,7 @@ struct ButtonComponentView: View {
                     text: "Is enabled",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: self.theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isEnabled
                 )
 
@@ -95,7 +95,7 @@ struct ButtonComponentView: View {
                     text: "Is animated",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: self.theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isAnimated
                 )
             },

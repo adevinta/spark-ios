@@ -11,6 +11,7 @@ import Foundation
 
 enum ComponentsConfigurationItemUIType: Equatable {
     case button
+    case label
     case toggle(isOn: Bool)
     case checkbox(title: String, isOn: Bool)
     case rangeSelector(selected: Int, range: CountableClosedRange<Int>)

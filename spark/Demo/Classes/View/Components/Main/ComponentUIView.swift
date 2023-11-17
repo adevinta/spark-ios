@@ -132,7 +132,11 @@ class ComponentUIView: UIView {
         }
     }
 
-    private let integrationStackViewAlignment: UIStackView.Alignment
+    var integrationStackViewAlignment: UIStackView.Alignment {
+        didSet {
+            self.integrationStackView.alignment = self.integrationStackViewAlignment
+        }
+    }
 
     private var subscriptions: Set<AnyCancellable> = []
 
