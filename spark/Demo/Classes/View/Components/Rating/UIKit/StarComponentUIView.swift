@@ -41,15 +41,19 @@ final class StarComponentUIView: ComponentUIView {
     }
 
     private static func makeStarView(viewModel: StarComponentUIViewModel) -> StarUIView {
-        let view = StarUIView(
+        let configuration = StarConfiguration(
             numberOfVertices: viewModel.numberOfVertices,
+            vertexSize: viewModel.vertexSize,
+            cornerRadiusSize: viewModel.cornerRadiusSize)
+
+        let view = StarUIView(
             rating: viewModel.rating,
             fillMode: viewModel.fillMode,
             lineWidth: CGFloat(viewModel.lineWidth),
-            vertexSize: viewModel.vertexSize,
-            cornerRadiusSize: viewModel.cornerRadiusSize,
             borderColor: viewModel.strokeColor.uiColor,
-            fillColor: viewModel.fillColor.uiColor)
+            fillColor: viewModel.fillColor.uiColor,
+            configuration: configuration
+        )
 
         return view
     }

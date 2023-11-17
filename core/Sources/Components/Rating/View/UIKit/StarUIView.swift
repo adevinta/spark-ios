@@ -22,12 +22,9 @@ public final class StarUIView: UIView {
 
     // MARK: - Default values
     public enum Defaults {
-        public static let numberOfVertices = 5
         public static let fillMode = StarFillMode.half
         public static let rating = CGFloat(0.0)
         public static let lineWidth = CGFloat(2.0)
-        public static let vertexSize = CGFloat(0.65)
-        public static let cornerRadiusSize = CGFloat(0.15)
         public static let fillColor = UIColor.yellow
         public static let borderColor = UIColor.lightGray
     }
@@ -35,10 +32,36 @@ public final class StarUIView: UIView {
     // MARK: - Public variables
     /// The number of vertices the star has
     public var numberOfVertices: Int {
-        didSet {
-            self.setNeedsDisplay()
+        get {
+            return self.configuration.numberOfVertices
+        }
+        set {
+            self.configuration.numberOfVertices = newValue
         }
     }
+    
+    /// The vertex size determins how deep the inner angle of the star is.
+    /// This value is a percentage of the radius and should be in the range [0...1].
+    public var vertexSize: CGFloat {
+        get {
+            return self.configuration.vertexSize
+        }
+        set {
+            self.configuration.vertexSize = newValue
+        }
+    }
+
+    /// The cornerRadiusSize is a proportional value
+    /// This value is a percentage of the radius and should be in the range [0...1].
+    public var cornerRadiusSize: CGFloat {
+        get {
+            return self.configuration.cornerRadiusSize
+        }
+        set {
+            self.configuration.cornerRadiusSize = newValue
+        }
+    }
+
 
     /// The fill mode.
     /// The fill mode determines how to round the rating value to fill the star.
@@ -64,22 +87,6 @@ public final class StarUIView: UIView {
         }
     }
 
-    /// The vertex size determins how deep the inner angle of the star is.
-    /// This value is a percentage of the radius and should be in the range [0...1].
-    public var vertexSize: CGFloat {
-        didSet {
-            self.setNeedsDisplay()
-        }
-    }
-
-    /// The cornerRadiusSize is a proportional value
-    /// This value is a percentage of the radius and should be in the range [0...1].
-    public var cornerRadiusSize: CGFloat {
-        didSet {
-            self.setNeedsDisplay()
-        }
-    }
-
     /// The borderColor defines the color of the unfilled portion of the star.
     public var borderColor: UIColor {
         didSet {
@@ -90,6 +97,13 @@ public final class StarUIView: UIView {
     /// The fillColor defines the color of the filled portion of the star.
     public var fillColor: UIColor {
         didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    public var configuration: StarConfiguration {
+        didSet {
+            guard self.configuration != oldValue else { return }
             self.setNeedsDisplay()
         }
     }
@@ -123,44 +137,36 @@ public final class StarUIView: UIView {
     /// - borderColor: The color of the border of the unfilled part of the star.
     /// - fillColor: The color of the filled part of the star.
     public convenience init(
-        numberOfVertices: Int = Defaults.numberOfVertices,
         rating: CGFloat = Defaults.rating,
         fillMode: StarFillMode = .half,
         lineWidth: CGFloat = Defaults.lineWidth,
-        vertexSize: CGFloat = Defaults.vertexSize,
-        cornerRadiusSize: CGFloat = Defaults.cornerRadiusSize,
         borderColor: UIColor = Defaults.borderColor,
-        fillColor: UIColor = Defaults.fillColor
+        fillColor: UIColor = Defaults.fillColor,
+        configuration: StarConfiguration = .default
     ) {
         self.init(
-            numberOfVertices: numberOfVertices,
             rating: rating,
             fillMode: fillMode,
             lineWidth: lineWidth,
-            vertexSize: vertexSize,
-            cornerRadiusSize: cornerRadiusSize,
             borderColor: borderColor,
             fillColor: fillColor,
+            configuration: configuration,
             cache: CGLayerCache())
     }
 
     init(
-        numberOfVertices: Int,
         rating: CGFloat,
         fillMode: StarFillMode,
         lineWidth: CGFloat,
-        vertexSize: CGFloat,
-        cornerRadiusSize: CGFloat,
         borderColor: UIColor,
         fillColor: UIColor,
+        configuration: StarConfiguration,
         cache: CGLayerCaching
     ) {
         self.fillMode = fillMode
         self.rating = rating
         self.lineWidth = lineWidth
-        self.numberOfVertices = numberOfVertices
-        self.vertexSize = vertexSize
-        self.cornerRadiusSize = cornerRadiusSize
+        self.configuration = configuration
         self.borderColor = borderColor
         self.fillColor = fillColor
         self.cache = cache
