@@ -101,7 +101,6 @@ struct ChipComponentView: View {
                     text: "Is Selected",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
                     selectionState: self.$isSelected
                 )
             },

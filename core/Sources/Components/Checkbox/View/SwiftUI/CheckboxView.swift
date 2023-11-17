@@ -43,10 +43,6 @@ public struct CheckboxView: View {
 
     // MARK: - Private Properties
     
-//    private var spacing: LayoutSpacing {
-//        return self.theme.layout.spacing
-//    }
-
     @Namespace private var namespace
 
     @ScaledMetric var checkboxSize: CGFloat = Constants.checkboxSize
@@ -184,7 +180,7 @@ public struct CheckboxView: View {
     private var labelView: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(self.viewModel.text.rightValue ?? "")
-                .font(self.theme.typography.body1.font)
+                .font(self.viewModel.font.font)
                 .foregroundColor(self.viewModel.colors.textColor.color)
                 .fixedSize(horizontal: false, vertical: true)
         }

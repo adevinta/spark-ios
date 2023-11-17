@@ -20,21 +20,3 @@ struct CheckboxGetSpacingUseCase: CheckboxGetSpacingUseCaseable {
         }
     }
 }
-
-//switch self.viewModel.alignment {
-//case .left:
-//    VStack {
-//        self.checkboxView.padding(.trailing, self.horizontalSpacing)
-//        Spacer(minLength: 0)
-//    }
-//    self.labelView
-//    Spacer(minLength: 0)
-//case .right:
-//    self.labelView.padding(.trailing, self.horizontalSpacing * 3)
-//    Spacer(minLength: 0)
-//    VStack {
-//        self.checkboxView
-//        Spacer(minLength: 0)
-//    }
-//}
-//}

@@ -25,6 +25,7 @@ final class CheckboxViewModel: ObservableObject {
     @Published var selectionState: CheckboxSelectionState
     @Published var opacity: CGFloat
     @Published var spacing: CGFloat
+    @Published var font: TypographyFontToken
 
     @Published var intent: CheckboxIntent {
         didSet {
@@ -41,6 +42,7 @@ final class CheckboxViewModel: ObservableObject {
 
     var theme: Theme {
         didSet {
+            self.font = self.theme.typography.body1
             self.updateColors()
             self.updateOpacity()
             self.updateSpacing()
@@ -79,6 +81,7 @@ final class CheckboxViewModel: ObservableObject {
         self.opacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
         self.spacing = spacingUseCase.execute(layoutSpacing: theme.layout.spacing, alignment: alignment)
         self.spacingUseCase = spacingUseCase
+        self.font = self.theme.typography.body1
     }
 
     // MARK: - Methods

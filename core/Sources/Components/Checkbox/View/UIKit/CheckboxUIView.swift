@@ -352,7 +352,7 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$text.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] text in
             guard let self else { return }
-            self.textLabel.font = self.theme.typography.body1.uiFont
+            self.textLabel.font = self.viewModel.font.uiFont
             self.textLabel.attributedText = text.leftValue
         }
 

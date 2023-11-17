@@ -8,7 +8,7 @@
 
 import Foundation
 
-@available(*, deprecated, message: "isEnabled: Bool parameter will be used instead od this.")
+@available(*, deprecated, message: "isEnabled: Bool parameter will be used instead of this.")
 /// "isEnabled" Bool parameter is used instead of this enum.
 public enum SelectButtonState: CaseIterable {
     case enabled
