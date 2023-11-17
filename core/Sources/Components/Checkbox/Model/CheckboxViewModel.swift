@@ -16,9 +16,15 @@ final class CheckboxViewModel: ObservableObject {
     @Published var text: Either<NSAttributedString?, String?>
     @Published var checkedImage: UIImage
     @Published var colors: CheckboxColors
-    @Published var alignment: CheckboxAlignment
+    @Published var alignment: CheckboxAlignment {
+        didSet {
+            self.updateSpacing()
+        }
+    }
+    
     @Published var selectionState: CheckboxSelectionState
     @Published var opacity: CGFloat
+    @Published var spacing: CGFloat
 
     @Published var intent: CheckboxIntent {
         didSet {
@@ -37,11 +43,13 @@ final class CheckboxViewModel: ObservableObject {
         didSet {
             self.updateColors()
             self.updateOpacity()
+            self.updateSpacing()
         }
     }
 
     // MARK: - Private properties
     private let colorsUseCase: CheckboxColorsUseCaseable
+    private let spacingUseCase: CheckboxGetSpacingUseCaseable
 
     // MARK: - Init
 
@@ -51,6 +59,7 @@ final class CheckboxViewModel: ObservableObject {
         theme: Theme,
         intent: CheckboxIntent = .main,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
+        spacingUseCase: CheckboxGetSpacingUseCaseable = CheckboxGetSpacingUseCase(),
         isEnabled: Bool = true,
         alignment: CheckboxAlignment = .left,
         selectionState: CheckboxSelectionState
@@ -68,6 +77,8 @@ final class CheckboxViewModel: ObservableObject {
         self.alignment = alignment
         self.selectionState = selectionState
         self.opacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
+        self.spacing = spacingUseCase.execute(layoutSpacing: theme.layout.spacing, alignment: alignment)
+        self.spacingUseCase = spacingUseCase
     }
 
     // MARK: - Methods
@@ -81,5 +92,9 @@ final class CheckboxViewModel: ObservableObject {
 
     private func updateOpacity() {
         self.opacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
+    }
+    
+    private func updateSpacing() {
+        self.spacing = spacingUseCase.execute(layoutSpacing: self.theme.layout.spacing, alignment: self.alignment)
     }
 }

@@ -40,7 +40,7 @@ public final class CheckboxUIView: UIControl {
         let arrangedSubviews = self.alignment == .left ? [controlView, textLabel] : [textLabel, controlView]
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
         stackView.axis = .horizontal
-        stackView.spacing = self.stackViewSpacing(alignment: self.alignment)
+        stackView.spacing = self.spacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.alignment = .top
         stackView.isUserInteractionEnabled = false
@@ -49,12 +49,13 @@ public final class CheckboxUIView: UIControl {
 
     private var cancellables = Set<AnyCancellable>()
     private var checkboxSelectionStateSubject = PassthroughSubject<CheckboxSelectionState, Never>()
-    private var fontMetrics = UIFontMetrics(forTextStyle: .body)
     @ScaledUIMetric private var checkboxSize: CGFloat = CheckboxControlUIView.Constants.size
+    @ScaledUIMetric private var spacing: CGFloat
+    
     private var checkboxSizeConstraint: NSLayoutConstraint?
     private var textObserver: NSKeyValueObservation?
     private var attributedTextObserver: NSKeyValueObservation?
-
+    
     // MARK: - Public properties.
 
     /// Changes to the checbox state are published to the publisher.
@@ -243,7 +244,7 @@ public final class CheckboxUIView: UIControl {
         selectionState: CheckboxSelectionState,
         alignment: CheckboxAlignment
     ) {
-        self.viewModel = .init(
+        let viewModel = CheckboxViewModel(
             text: content,
             checkedImage: checkedImage,
             theme: theme,
@@ -251,13 +252,15 @@ public final class CheckboxUIView: UIControl {
             alignment: alignment,
             selectionState: selectionState
         )
+        self.spacing = viewModel.spacing
+        self.viewModel = viewModel
         super.init(frame: .zero)
         self.commonInit()
     }
 
     private func commonInit() {
         self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkbox
-
+        
         self.setupViews()
         self.subscribe()
         self.updateAccessibility()
@@ -322,7 +325,8 @@ public final class CheckboxUIView: UIControl {
 
         self._checkboxSize.update(traitCollection: self.traitCollection)
         self.checkboxSizeConstraint?.constant = self.checkboxSize
-        self.stackView.spacing = self.stackViewSpacing(alignment: self.alignment)
+        self._spacing.update(traitCollection: traitCollection)
+        self.stackView.spacing = self.spacing
     }
 
     private func subscribe() {
@@ -356,6 +360,12 @@ public final class CheckboxUIView: UIControl {
             guard let self else { return }
             self.controlView.selectionIcon = icon
         }
+        
+        self.viewModel.$spacing.subscribe(in: &self.cancellables) { [weak self] spacing in
+            guard let self = self else { return }
+            self._spacing.wrappedValue = spacing
+            self.stackView.spacing = self.spacing
+        }
     }
 
     deinit {
@@ -379,12 +389,7 @@ private extension CheckboxUIView {
     }
 
     private func updateAlignment(alignment: CheckboxAlignment) {
-        self.stackView.spacing = self.stackViewSpacing(alignment: alignment)
+        self.stackView.spacing = self.spacing
         self.stackView.insertArrangedSubview(alignment == .left ? self.controlView : self.textLabel, at: 0)
-    }
-
-    private func stackViewSpacing(alignment: CheckboxAlignment) -> CGFloat {
-        let spacing = alignment == .left ? self.theme.layout.spacing.medium : (self.theme.layout.spacing.medium * 3)
-        return self.fontMetrics.scaledValue(for: spacing, compatibleWith: self.traitCollection)
     }
 }

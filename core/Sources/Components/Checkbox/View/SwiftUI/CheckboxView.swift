@@ -43,9 +43,9 @@ public struct CheckboxView: View {
 
     // MARK: - Private Properties
     
-    private var spacing: LayoutSpacing {
-        return self.theme.layout.spacing
-    }
+//    private var spacing: LayoutSpacing {
+//        return self.theme.layout.spacing
+//    }
 
     @Namespace private var namespace
 
@@ -63,30 +63,6 @@ public struct CheckboxView: View {
 
     // MARK: - Initialization
 
-    init(
-        text: String,
-        checkedImage: UIImage,
-        alignment: CheckboxAlignment = .left,
-        theme: Theme,
-        intent: CheckboxIntent = .main,
-        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
-        isEnabled: Bool = true,
-        selectionState: Binding<CheckboxSelectionState>
-    ) {
-        self._horizontalSpacing = .init(wrappedValue: theme.layout.spacing.medium)
-        self._selectionState = selectionState
-        self.viewModel = .init(
-            text: .right(text),
-            checkedImage: checkedImage,
-            theme: theme,
-            intent: intent,
-            colorsUseCase: colorsUseCase,
-            isEnabled: isEnabled,
-            alignment: alignment,
-            selectionState: selectionState.wrappedValue
-        )
-    }
-
     /// Initialize a new checkbox.
     /// - Parameters:
     ///   - text: The checkbox text.
@@ -97,7 +73,7 @@ public struct CheckboxView: View {
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     public init(
-        text: String,
+        text: String?,
         checkedImage: UIImage,
         alignment: CheckboxAlignment = .left,
         theme: Theme,
@@ -105,16 +81,18 @@ public struct CheckboxView: View {
         isEnabled: Bool = true,
         selectionState: Binding<CheckboxSelectionState>
     ) {
-        self.init(
-            text: text,
+        self._selectionState = selectionState
+        let viewModel = CheckboxViewModel(
+            text: .right(text),
             checkedImage: checkedImage,
-            alignment: alignment,
             theme: theme,
             intent: intent,
-            colorsUseCase: CheckboxColorsUseCase(),
             isEnabled: isEnabled,
-            selectionState: selectionState
+            alignment: alignment,
+            selectionState: selectionState.wrappedValue
         )
+        self.viewModel = viewModel
+        self._horizontalSpacing = .init(wrappedValue: viewModel.spacing)
     }
 
     // MARK: - Body
@@ -133,7 +111,8 @@ public struct CheckboxView: View {
         .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
     }
 
-    @ViewBuilder private var checkboxView: some View {
+    @ViewBuilder 
+    private var checkboxView: some View {
         let tintColor = self.viewModel.colors.tintColor.color
         let iconColor = self.viewModel.colors.iconColor.color
         let borderColor = self.viewModel.colors.borderColor.color
@@ -177,7 +156,8 @@ public struct CheckboxView: View {
         .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: self.namespace)
     }
 
-    @ViewBuilder private var contentView: some View {
+    @ViewBuilder 
+    private var contentView: some View {
         HStack(spacing: 0) {
             switch self.viewModel.alignment {
             case .left:
@@ -188,7 +168,7 @@ public struct CheckboxView: View {
                 self.labelView
                 Spacer(minLength: 0)
             case .right:
-                self.labelView.padding(.trailing, self.horizontalSpacing * 3)
+                self.labelView.padding(.trailing, self.horizontalSpacing)
                 Spacer(minLength: 0)
                 VStack {
                     self.checkboxView

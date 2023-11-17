@@ -137,9 +137,8 @@ public struct CheckboxGroupView: View {
         var chekboxHeights: [CGFloat] = []
         return ForEach(self.$items, id: \.id) { item in
             let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
-            let attributeTextString: String = item.attributedTitle.wrappedValue?.string ?? ""
             CheckboxView(
-                text: item.title.wrappedValue ?? attributeTextString,
+                text: item.title.wrappedValue,
                 checkedImage: self.checkedImage,
                 alignment: self.alignment,
                 theme: self.theme,
