@@ -27,7 +27,7 @@ struct RatingGetColorsUseCase: RatingGetColorsUseCaseable {
     ///   - state: the current state
     func execute(theme: Theme,
                  intent: RatingIntent,
-                 state: RatingState
+                 state: RatingState = .standard
     ) -> RatingColors {
         
         var colors: RatingColors

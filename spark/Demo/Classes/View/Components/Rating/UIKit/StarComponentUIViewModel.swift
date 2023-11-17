@@ -257,15 +257,3 @@ extension StarFillMode: CaseIterable {
         }
     }
 }
-
-private extension NumberFormatter {
-    func multipling(_ value: NSNumber) -> Self {
-        self.multiplier = value
-        return self
-    }
-
-    func maximizingFractionDigits(_ value: Int) -> Self {
-        self.maximumFractionDigits = value
-        return self
-    }
-}
