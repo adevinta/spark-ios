@@ -58,7 +58,7 @@ final class RatingDisplayComponentUIViewModel: ComponentUIViewModel {
             name: "Rating",
             type: .rangeSelectorWithConfig(
                 selected: Int(self.rating),
-                range: 0...10,
+                range: 2...10,
                 stepper: 1,
                 numberFormatter: NumberFormatter()
                     .multipling(0.5)
@@ -90,7 +90,7 @@ final class RatingDisplayComponentUIViewModel: ComponentUIViewModel {
     @Published var theme: Theme
     @Published var intent: RatingIntent
     @Published var size: RatingDisplaySize
-    @Published var rating: CGFloat = 0.0
+    @Published var rating: CGFloat = 1.0
     @Published var count: RatingStarsCount = .five
 
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
