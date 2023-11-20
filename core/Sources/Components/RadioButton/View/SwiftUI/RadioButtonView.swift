@@ -67,18 +67,37 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     ///   - state: The current state, default value is `.enabled`
     ///   - labelPostion: The position of the label according to the radio button toggle. Default is `right`
     public init(theme: Theme,
+                intent: RadioButtonIntent = .basic,
                 id: ID,
                 label: String,
-                selectedID: Binding<ID>,
+                selectedID: Binding<ID?>,
+                labelAlignment: RadioButtonLabelAlignment = .trailing) {
+        let viewModel = RadioButtonViewModel(
+            theme: theme,
+            intent: intent,
+            id: id,
+            label: .right(label),
+            selectedID: selectedID,
+            alignment: labelAlignment)
+        self.init(viewModel: viewModel)
+    }
+
+    @available(*, deprecated, message: "Use init with intent instead.")
+    public init(theme: Theme,
+                id: ID,
+                label: String,
+                selectedID: Binding<ID?>,
                 groupState: RadioButtonGroupState = .enabled,
                 labelPosition: RadioButtonLabelPosition = .right) {
         let viewModel = RadioButtonViewModel(
             theme: theme,
+            intent: .basic,
             id: id,
             label: .right(label),
             selectedID: selectedID,
-            groupState: groupState,
-            labelPosition: labelPosition)
+            alignment: labelPosition.alignment)
+
+        viewModel.set(enabled: groupState != .disabled)
         self.init(viewModel: viewModel)
     }
 
@@ -91,7 +110,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
     public var body: some View {
         Button(action: {
-            self.viewModel.setSelected()
+            self.viewModel.set(selected: true)
         }, label: {
             self.buttonAndLabel()
         })
@@ -103,26 +122,37 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
     }
 
     // MARK: - View modifier
-
+    @available(*, deprecated, message: "Use intent and disabled instead")
     public func groupState(_ groupState: RadioButtonGroupState) -> Self {
-        self.viewModel.set(groupState: groupState)
+        self.viewModel.set(enabled: groupState != .disabled)
         return self
     }
 
-    public func theme(_ theme: Theme) -> Self {
-        self.viewModel.set(theme: theme)
+    public func disabled(_ isDisabled: Bool) -> Self {
+        self.viewModel.set(enabled: !isDisabled)
         return self
     }
 
+    public func intent(_ intent: RadioButtonIntent) -> Self {
+        self.viewModel.set(intent: intent)
+        return self
+    }
+
+    @available(*, deprecated, renamed: "alignment", message: "Please use func alignment() instead.")
     public func labelPosition(_ labelPosition: RadioButtonLabelPosition) -> Self {
-        self.viewModel.set(labelPosition: labelPosition)
+        self.viewModel.set(alignment: labelPosition.alignment)
+        return self
+    }
+
+    public func alignment(_ alignment: RadioButtonLabelAlignment) -> Self {
+        self.viewModel.set(alignment: alignment)
         return self
     }
 
     // MARK: - Private Functions
     @ViewBuilder
     private func buttonAndLabel() -> some View {
-        if self.viewModel.labelPosition == .right {
+        if self.viewModel.alignment == .trailing {
             HStack(alignment: .top, spacing: self.spacing) {
                 self.radioButton()
                 self.label()
@@ -146,7 +176,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                 .font(self.viewModel.font.font)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(self.viewModel.surfaceColor.color)
+                .foregroundColor(self.viewModel.colors.label.color)
         } else {
             EmptyView()
         }

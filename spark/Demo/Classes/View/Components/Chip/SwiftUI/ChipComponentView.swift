@@ -127,14 +127,10 @@ struct ChipComponentView: View {
         )
     }
 
-
     private func backgroundColor() -> Color {
-        if self.intent == .surface {
-            Color.blue
-        } else {
-            Color.clear
-        }
+        return self.intent == .surface ? .blue : .clear
     }
+
     private func component() -> AnyView {
         return AnyView(
             Image(systemName: "checkmark.seal.fill")
