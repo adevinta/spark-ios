@@ -229,8 +229,8 @@ public final class StarUIView: UIView {
                    self.lineWidth,
                    self.vertexSize,
                    self.cornerRadiusSize,
-                   self.borderColor.hashValue,
-                   self.fillColor.hashValue,
+                   self.borderColor.rgb,
+                   self.fillColor.rgb,
                    min(rect.width, rect.height),
         ].map{ "\($0)" }
             .joined(separator: "_")
@@ -239,6 +239,17 @@ public final class StarUIView: UIView {
 }
 
 // MARK: Private extension
+private extension UIColor {
+    var rgb: String {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        return "\(red)-\(green)-\(blue)-\(alpha)"
+    }
+}
+
 private extension CGRect {
     var centerX: CGFloat {
         return (self.minX + self.maxX)/2

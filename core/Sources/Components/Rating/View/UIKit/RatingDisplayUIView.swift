@@ -122,6 +122,7 @@ public class RatingDisplayUIView: UIView {
         self._ratingSize.update(traitCollection: traitCollection)
 
         self.didUpdate(borderWidth: self.borderWidth)
+        self.stackView.spacing = self.spacing
 
         self.sizeConstraints.forEach { constraint in
             constraint.constant = self.ratingSize
