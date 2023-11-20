@@ -17,7 +17,7 @@ final class RatingDisplayComponentUIViewModel: ComponentUIViewModel {
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[RatingIntent], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[RatingDisplaySize], Never> = .init()
-    
+    private var showCountSheetSubject: PassthroughSubject<[RatingStarsCount], Never> = .init()
     var themes = ThemeCellModel.themes
     
     // MARK: - Items Properties
@@ -44,7 +44,15 @@ final class RatingDisplayComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.presentSizeSheet))
         )
     }()
-    
+
+    lazy var countConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Count",
+            type: .button,
+            target: (source: self, action: #selector(self.presentCountSheet))
+        )
+    }()
+
     lazy var ratingConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Rating",
@@ -74,17 +82,23 @@ final class RatingDisplayComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
+    var showCountSheet: AnyPublisher<[RatingStarsCount], Never> {
+        showCountSheetSubject
+            .eraseToAnyPublisher()
+    }
     // MARK: - Published Properties
     @Published var theme: Theme
     @Published var intent: RatingIntent
     @Published var size: RatingDisplaySize
     @Published var rating: CGFloat = 0.0
+    @Published var count: RatingStarsCount = .five
 
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
         return [
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
+            self.countConfigurationItemViewModel,
             self.ratingConfigurationItemViewModel
         ]
     }
@@ -117,7 +131,11 @@ extension RatingDisplayComponentUIViewModel {
     @objc func presentSizeSheet() {
         self.showSizeSheetSubject.send(RatingDisplaySize.allCases)
     }
-    
+
+    @objc func presentCountSheet() {
+        self.showCountSheetSubject.send(RatingStarsCount.allCases)
+    }
+
     @objc func ratingChanged(_ control: NumberSelector) {
         self.rating = CGFloat(control.selectedValue) / 2.0
     }

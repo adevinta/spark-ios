@@ -16,6 +16,14 @@ protocol RatingGetColorsUseCaseable {
     ) -> RatingColors
 }
 
+extension RatingGetColorsUseCaseable {
+    func execute(theme: Theme,
+                 intent: RatingIntent
+    ) -> RatingColors {
+        return self.execute(theme: theme, intent: intent, state: .standard)
+    }
+}
+
 /// Get the colors of the rating
 struct RatingGetColorsUseCase: RatingGetColorsUseCaseable {
 
@@ -27,7 +35,7 @@ struct RatingGetColorsUseCase: RatingGetColorsUseCaseable {
     ///   - state: the current state
     func execute(theme: Theme,
                  intent: RatingIntent,
-                 state: RatingState = .standard
+                 state: RatingState
     ) -> RatingColors {
         
         var colors: RatingColors

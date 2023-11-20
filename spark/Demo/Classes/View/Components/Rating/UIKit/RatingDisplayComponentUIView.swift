@@ -41,6 +41,7 @@ final class RatingDisplayComponentUIView: ComponentUIView {
         let view = RatingDisplayUIView(
             theme: viewModel.theme, 
             intent: viewModel.intent,
+            count: viewModel.count,
             size: viewModel.size
         )
 
@@ -59,13 +60,18 @@ final class RatingDisplayComponentUIView: ComponentUIView {
             self.componentView.theme = theme
         }
         
-        
         self.viewModel.$size.subscribe(in: &self.cancellables) { [weak self] size in
             guard let self = self else { return }
             self.viewModel.sizeConfigurationItemViewModel.buttonTitle = size.name
             self.componentView.size = size
         }
-        
+
+        self.viewModel.$count.subscribe(in: &self.cancellables) { [weak self] count in
+            guard let self = self else { return }
+            self.viewModel.countConfigurationItemViewModel.buttonTitle = count.name
+            self.componentView.count = count
+        }
+
         self.viewModel.$intent.subscribe(in: &self.cancellables) { [weak self] intent in
             guard let self = self else { return }
             self.viewModel.intentConfigurationItemViewModel.buttonTitle = intent.name

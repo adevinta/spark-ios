@@ -18,10 +18,34 @@ public class RatingDisplayUIView: UIView {
     }()
     
     private let viewModel: RatingDisplayViewModel
-    private let count: RatingStarsCount
     private let fillMode: StarFillMode
     private var sizeConstraints = [NSLayoutConstraint]()
     private var cancellable = Set<AnyCancellable>()
+
+    private var ratingStarViews : [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
+            return view as? StarUIView
+        }
+    }
+
+    public var count: RatingStarsCount {
+        get {
+            return self.viewModel.count
+        }
+        set {
+            guard self.viewModel.count != newValue else { return }
+            self.viewModel.count = newValue
+            self.updateView()
+        }
+    }
+
+    public var rating: CGFloat {
+        get {
+            return self.viewModel.rating
+        }
+        set {
+            self.viewModel.rating = newValue
+        }
+    }
 
     public var theme: Theme {
         get {
@@ -50,12 +74,6 @@ public class RatingDisplayUIView: UIView {
         }
     }
     
-    public var rating: CGFloat {
-        didSet {
-            self.didUpdate(rating: self.rating)
-        }
-    }
-    
     public var lineWidth: CGFloat {
         get {
             return self.borderWidth
@@ -79,14 +97,15 @@ public class RatingDisplayUIView: UIView {
         fillMode: StarFillMode = .half,
         configuration: StarConfiguration = .default
     ) {
-        self.count = count
-        self.rating = rating
         self.fillMode = fillMode
         self.viewModel = RatingDisplayViewModel(
             theme: theme,
             intent: intent,
-            size: size)
-        self.spacing = self.viewModel.spacing
+            size: size,
+            count: count,
+            rating: rating
+        )
+        self.spacing = self.viewModel.ratingSize.spacing
         self.ratingSize = self.viewModel.ratingSize.height
         self.borderWidth = self.viewModel.ratingSize.borderWidth
 
@@ -110,7 +129,7 @@ public class RatingDisplayUIView: UIView {
     }
 
     private func setupView() {
-        var currentRating = self.rating
+        var currentRating = self.viewModel.ratingValue
         for _ in 0..<count.rawValue {
             let star = StarUIView(
                 rating: currentRating,
@@ -131,51 +150,49 @@ public class RatingDisplayUIView: UIView {
         NSLayoutConstraint.activate(self.sizeConstraints)
     }
 
+    private func updateView() {
+        self.stackView.removeArrangedSubviews()
+        NSLayoutConstraint.deactivate(self.sizeConstraints)
+        self.sizeConstraints = []
+        self.setupView()
+    }
+
     private func setupSubscriptions() {
         self.viewModel.$colors.subscribe(in: &self.cancellable) { [weak self] colors in
             self?.didUpdate(colors: colors)
         }
 
-        self.viewModel.$spacing.subscribe(in: &self.cancellable) { [weak self] spacing in
-            self?.didUpdate(spacing: spacing)
-        }
-
         self.viewModel.$ratingSize.subscribe(in: &self.cancellable) { [weak self] size in
             self?.didUpdate(borderWidth: size.borderWidth)
             self?.didUpdate(size: size.height)
+            self?.didUpdate(spacing: size.spacing)
+        }
+
+        self.viewModel.$ratingValue.subscribe(in: &self.cancellable) {
+            [weak self] ratingValue in
+            self?.didUpdate(rating: ratingValue)
         }
 
     }
 
     private func didUpdate(rating: CGFloat) {
-        let ratingStarViews = self.stackView.arrangedSubviews.compactMap { view in
-            return view as? StarUIView
-        }
-
         var currentRating = rating
-        for view in ratingStarViews {
+        for view in self.ratingStarViews {
             view.rating = currentRating
             currentRating -= 1
         }
     }
 
     private func didUpdate(colors: RatingColors) {
-        let ratingStarViews = self.stackView.arrangedSubviews.compactMap { view in
-            return view as? StarUIView
-        }
-
-        for view in ratingStarViews {
+        for view in self.ratingStarViews {
             view.borderColor = colors.strokeColor.uiColor
             view.fillColor = colors.fillColor.uiColor
         }
     }
 
     private func didUpdate(borderWidth: CGFloat) {
-        let ratingStarViews = self.stackView.arrangedSubviews.compactMap { view in
-            return view as? StarUIView
-        }
-
-        for view in ratingStarViews {
+        self.borderWidth = borderWidth
+        for view in self.ratingStarViews {
             view.lineWidth = borderWidth
         }
     }
