@@ -6,10 +6,13 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import Combine
 import Foundation
 
+/// A view model for the rating display.
 final class RatingDisplayViewModel: ObservableObject {
     
+    /// The current theme of which colors and sizes are dependent.
     var theme: Theme {
         didSet {
             self.colors = self.colorsUseCase.execute(theme: self.theme, intent: self.intent)
@@ -17,6 +20,7 @@ final class RatingDisplayViewModel: ObservableObject {
         }
     }
 
+    /// The current intent which describes colors.
     var intent: RatingIntent {
         didSet {
             guard self.intent != oldValue else { return }
@@ -24,6 +28,7 @@ final class RatingDisplayViewModel: ObservableObject {
         }
     }
 
+    /// The display size of the rating
     var size: RatingDisplaySize {
         didSet {
             guard self.size != oldValue else { return }
@@ -31,6 +36,7 @@ final class RatingDisplayViewModel: ObservableObject {
         }
     }
 
+    /// The number of stars in the rating display
     var count: RatingStarsCount {
         didSet {
             guard self.count != oldValue else { return }
@@ -38,6 +44,7 @@ final class RatingDisplayViewModel: ObservableObject {
         }
     }
 
+    /// The current rating value
     var rating: CGFloat {
         didSet {
             guard self.rating != oldValue else { return }
@@ -45,14 +52,20 @@ final class RatingDisplayViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Published variables
+    /// The current defined colors
     @Published var colors: RatingColors
+    /// Current size attributes
     @Published var ratingSize: RatingSizeAttributes
+    /// The normalized rating value
     @Published var ratingValue: CGFloat
 
+    // MARK: - Private variables
     private let colorsUseCase: RatingGetColorsUseCaseable
     private let sizeUseCase: RatingSizeAttributesUseCaseable
 
-    init(theme: Theme, 
+    // MARK: Initializer
+    init(theme: Theme,
          intent: RatingIntent,
          size: RatingDisplaySize,
          count: RatingStarsCount,
@@ -72,11 +85,13 @@ final class RatingDisplayViewModel: ObservableObject {
         self.count = count
     }
 
+    // MARK: - Private functions
     private func updateRatingValue() {
         self.ratingValue = self.count.ratingValue(self.rating)
     }
 }
 
+// MARK: - Private helpers
 private extension RatingStarsCount {
     func ratingValue(_ rating: CGFloat) -> CGFloat {
         switch self {

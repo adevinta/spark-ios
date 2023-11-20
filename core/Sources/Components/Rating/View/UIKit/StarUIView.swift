@@ -126,8 +126,9 @@ public final class StarUIView: UIView {
     }
 
     // MARK: - Initializer
-    /// Initializer
-    /// Parameters:
+    /// Create a StarUIView with the following parameters
+    /// 
+    /// - Parameters:
     /// - numberOfVertices: number of vertex elements, the default is 5
     /// - rating: the value of the rating. This should be a number in the range [0...1]
     /// - fillMode: the fill mode of the start. The star will be filled according to the rating and the fillMode.

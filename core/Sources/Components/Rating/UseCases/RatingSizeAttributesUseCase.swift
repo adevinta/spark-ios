@@ -13,7 +13,14 @@ protocol RatingSizeAttributesUseCaseable {
     func execute(spacing: LayoutSpacing, size: RatingDisplaySize) -> RatingSizeAttributes
 }
 
+/// Calculates size attributes of the rating display according to the spacing and the size.
 struct RatingSizeAttributesUseCase: RatingSizeAttributesUseCaseable {
+
+    /// Returns: rating size attributes
+    ///
+    /// - Parameters:
+    ///   - spacing: the spacing defined by the theme
+    ///   - size: the size of the rating display
     func execute(spacing: LayoutSpacing, size: RatingDisplaySize) -> RatingSizeAttributes {
         switch size {
         case .small: return size.sizeAttributes(spacing: spacing.small)
@@ -23,6 +30,7 @@ struct RatingSizeAttributesUseCase: RatingSizeAttributesUseCaseable {
     }
 }
 
+// MARK: - Private helpers
 private extension RatingDisplaySize {
     func sizeAttributes(spacing: CGFloat) -> RatingSizeAttributes {
         switch self {
