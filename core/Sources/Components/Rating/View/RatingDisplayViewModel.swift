@@ -13,7 +13,7 @@ final class RatingDisplayViewModel: ObservableObject {
     var theme: Theme {
         didSet {
             self.colors = self.colorsUseCase.execute(theme: self.theme, intent: self.intent)
-            self.ratingSize = self.spacingUseCase.execute(spacing: theme.layout.spacing, size: size)
+            self.ratingSize = self.sizeUseCase.execute(spacing: theme.layout.spacing, size: size)
         }
     }
 
@@ -27,7 +27,7 @@ final class RatingDisplayViewModel: ObservableObject {
     var size: RatingDisplaySize {
         didSet {
             guard self.size != oldValue else { return }
-            self.ratingSize = self.spacingUseCase.execute(spacing: theme.layout.spacing, size: size)
+            self.ratingSize = self.sizeUseCase.execute(spacing: theme.layout.spacing, size: size)
         }
     }
 
@@ -50,7 +50,7 @@ final class RatingDisplayViewModel: ObservableObject {
     @Published var ratingValue: CGFloat
 
     private let colorsUseCase: RatingGetColorsUseCaseable
-    private let spacingUseCase: RatingSizeAttributesUseCaseable
+    private let sizeUseCase: RatingSizeAttributesUseCaseable
 
     init(theme: Theme, 
          intent: RatingIntent,
@@ -58,15 +58,15 @@ final class RatingDisplayViewModel: ObservableObject {
          count: RatingStarsCount,
          rating: CGFloat,
          colorsUseCase: RatingGetColorsUseCaseable = RatingGetColorsUseCase(),
-         spacingUseCase: RatingSizeAttributesUseCaseable = RatingSizeAttributesUseCase()
+         sizeUseCase: RatingSizeAttributesUseCaseable = RatingSizeAttributesUseCase()
     ) {
         self.theme = theme
         self.intent = intent
         self.size = size
         self.colorsUseCase = colorsUseCase
         self.colors = colorsUseCase.execute(theme: theme, intent: intent, state: .standard)
-        self.spacingUseCase = spacingUseCase
-        self.ratingSize = spacingUseCase.execute(spacing: theme.layout.spacing, size: size)
+        self.sizeUseCase = sizeUseCase
+        self.ratingSize = sizeUseCase.execute(spacing: theme.layout.spacing, size: size)
         self.ratingValue = count.ratingValue(rating)
         self.rating = rating
         self.count = count
