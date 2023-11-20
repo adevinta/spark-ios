@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct RatingSizeAttributes {
+struct RatingSizeAttributes: Equatable {
     let borderWidth: CGFloat
     let height: CGFloat
     let spacing: CGFloat
