@@ -227,12 +227,13 @@ public final class ChipUIView: UIControl {
     //MARK: - Initializers
 
     /// Initializer of a chip containing only an icon.
-    ///
-    /// Parameters:
-    /// - theme: The theme.
-    /// - intent: The intent of the chip, e.g. main, support
-    /// - variant: The chip variant, e.g. outlined, filled
-    /// - iconImage: An icon
+    /// 
+    /// - Parameters:
+    ///   - theme: The theme.
+    ///   - intent: The intent of the chip, e.g. main, support
+    ///   - variant: The chip variant, e.g. outlined, filled
+    ///   - alignment: Leading or Trailing Icon
+    ///   - iconImage: An icon
     public convenience init(theme: Theme,
                             intent: ChipIntent,
                             variant: ChipVariant,

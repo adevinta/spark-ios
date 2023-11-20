@@ -9,7 +9,12 @@
 import Combine
 import UIKit
 
+/// RatingDisplayUIView is a view with which a 5 star rating can be shown.
+/// The rating value is expected to be within the range [0...5]. Values outside of this range will be ignored. Anything less than zero will be shown as zero. Anything greater than 5 will be shown as five.
+/// The rating display may be shown with 5 stars (the standard version) or just one star for a shortened version. For the shortened version, the expected value range is still [0...5]
 public class RatingDisplayUIView: UIView {
+
+    // MARK: - Private variables
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -27,6 +32,9 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
+    // MARK: - Public accessors
+    /// Count: the number of stars to show in the rating.
+    /// Only values five and one are allowed, five is the default.
     public var count: RatingStarsCount {
         get {
             return self.viewModel.count
@@ -38,6 +46,8 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
+    /// The current rating. This should be a value in the range [0...5].
+    /// Anything small than 0 will be treated as a 0, and anything greater than 5 will be treated as a five.
     public var rating: CGFloat {
         get {
             return self.viewModel.rating
@@ -47,6 +57,7 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
+    /// The current theme.
     public var theme: Theme {
         get {
             return self.viewModel.theme
@@ -56,6 +67,7 @@ public class RatingDisplayUIView: UIView {
         }
     }
     
+    /// The intent for defining the color.
     public var intent: RatingIntent {
         get {
             return self.viewModel.intent
@@ -65,6 +77,8 @@ public class RatingDisplayUIView: UIView {
         }
     }
     
+    /// The size of the rating stars.
+    /// Possible sizes `small`, `medium` and `input`.
     public var size: RatingDisplaySize {
         get {
             return self.viewModel.size
@@ -74,20 +88,23 @@ public class RatingDisplayUIView: UIView {
         }
     }
     
-    public var lineWidth: CGFloat {
-        get {
-            return self.borderWidth
-        }
-        set {
-            self.borderWidth = newValue
-            self.didUpdate(borderWidth: self.borderWidth)
-        }
-    }
-    
+    // MARK: - Scaled metrics
     @ScaledUIMetric private var borderWidth: CGFloat
     @ScaledUIMetric private var ratingSize: CGFloat
     @ScaledUIMetric private var spacing: CGFloat
 
+    // MARK: - Initialization
+
+
+    /// Create a rating display view with the following parameters
+    /// - Parameters:
+    ///   - theme: The current theme
+    ///   - intent: The intent to define the colors
+    ///   - count: The number of stars in the rating view. The default is `five`.
+    ///   - size: The size of the rating view. The default is `medium`
+    ///   - rating: The rating value. This should be a value within the range 0...5
+    ///   - fillMode: Define incomplete stars are to be filled. The default is `.half`
+    ///   - configuration: A configuration of the star. A default value is defined.
     public init(
         theme: Theme,
         intent: RatingIntent,
@@ -114,6 +131,10 @@ public class RatingDisplayUIView: UIView {
         self.setupSubscriptions()
     }
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -129,6 +150,7 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
+    // MARK: - Private functions
     private func setupView() {
         var currentRating = self.viewModel.ratingValue
         for _ in 0..<count.rawValue {
@@ -209,9 +231,5 @@ public class RatingDisplayUIView: UIView {
         self.sizeConstraints.forEach { constraint in
             constraint.constant = size
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
