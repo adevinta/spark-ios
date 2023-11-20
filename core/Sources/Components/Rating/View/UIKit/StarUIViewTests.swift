@@ -32,6 +32,6 @@ final class StarUIViewTests: XCTestCase {
         // When
         let key = sut.cacheKey(rect: CGRect(x: 0, y: 0, width: 100, height: 100))
 
-        XCTAssertEqual(key, "StarUIView_6_0.0_2.0_0.5_0.12_144048128_917504_100.0")
+        XCTAssertEqual(key, "StarUIView_6_0.0_2.0_0.5_0.12_1.0-0.0-0.0-1.0_0.0-0.0-1.0-1.0_100.0")
     }
 }

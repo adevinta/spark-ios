@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 @testable import SparkCore
 
@@ -31,6 +31,8 @@ final class RatingDisplayUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     size: configuration.size,
                     rating: configuration.rating
                 )
+
+                view.backgroundColor = UIColor.lightGray
 
                 self.assertSnapshot(
                     matching: view,

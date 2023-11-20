@@ -14,10 +14,8 @@ import SwiftUI
 
 enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
     case test1
-//    case test2
-//    case test3
-//    case test4
-//    case test5
+    case test2
+    case test3
 
     // MARK: - Type Alias
 
@@ -29,14 +27,10 @@ enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
         switch self {
         case .test1:
             return self.test1(isSwiftUIComponent: isSwiftUIComponent)
-//        case .test2:
-//            return self.test2(isSwiftUIComponent: isSwiftUIComponent)
-//        case .test3:
-//            return self.test3(isSwiftUIComponent: isSwiftUIComponent)
-//        case .test4:
-//            return self.test4(isSwiftUIComponent: isSwiftUIComponent)
-//        case .test5:
-//            return self.test5(isSwiftUIComponent: isSwiftUIComponent)
+        case .test2:
+            return self.test2(isSwiftUIComponent: isSwiftUIComponent)
+        case .test3:
+            return self.test3(isSwiftUIComponent: isSwiftUIComponent)
         }
     }
 
@@ -44,17 +38,16 @@ enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
 
     /// Test 1
     ///
-    /// Description: To test all intents
+    /// Description: To various rating values
     ///
     /// Content:
-    ///  - intents: all
-    ///  - variant: outlined
-    ///  - content: icon + text
-    ///  - state: default
-    ///  - mode: all
-    ///  - size: default
+    ///  - ratings: [0.0, 1.0, 2.5, 5.5]
+    ///  - size: medium
+    ///  - count: five (number of stars)
+    ///  - modes: all
+    ///  - accessibility sizes: default
     private func test1(isSwiftUIComponent: Bool) -> [RatingDisplayConfigurationSnapshotTests] {
-        let ratings: [CGFloat] = [0.0, 1.0, 2.5, 5.5]
+        let ratings: [CGFloat] = [1.0, 2.5, 5.5]
 
         return ratings.map { rating in
             return .init(
@@ -63,6 +56,52 @@ enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
                 size: .medium,
                 count: .five,
                 modes: Constants.Modes.all,
+                sizes: Constants.Sizes.default
+            )
+        }
+    }
+
+    /// Test 2
+    ///
+    ///
+    /// Description: To various accessibility sizes
+    ///
+    /// Content:
+    ///  - ratings: [ 2.5]
+    ///  - size: small
+    ///  - count: five (number of stars)
+    ///  - modes: default
+    ///  - sizes: all
+    private func test2(isSwiftUIComponent: Bool) -> [RatingDisplayConfigurationSnapshotTests] {
+            return [.init(
+                scenario: self,
+                rating: 2.5,
+                size: .small,
+                count: .five,
+                modes: Constants.Modes.default,
+                sizes: Constants.Sizes.all
+            )]
+    }
+
+    /// Test 3
+    ///
+    /// Description: To various rating sizes
+    ///
+    /// Content:
+    ///  - ratings: [2.5]
+    ///  - size: [small, medium, input]
+    ///  - count: one (number of stars)
+    ///  - modes: default
+    ///  - accessibility sizes: default
+    private func test3(isSwiftUIComponent: Bool) -> [RatingDisplayConfigurationSnapshotTests] {
+
+        return RatingDisplaySize.allCases.map { size in
+            return .init(
+                scenario: self,
+                rating: 2.5,
+                size: size,
+                count: .five,
+                modes: Constants.Modes.default,
                 sizes: Constants.Sizes.default
             )
         }
