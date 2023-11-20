@@ -83,7 +83,7 @@ extension ComponentsViewController {
         case .icon:
             viewController = IconComponentUIViewController.build()
         case .radioButton:
-            viewController = RadioButtonUIGroupViewController()
+            viewController = RadioButtonComponentUIViewController.build()
         case .ratingStar:
             viewController = StarComponentViewController.build()
         case .spinner:

@@ -1,0 +1,3 @@
+[submodule "spark-ios-snapshots"]
+	path = spark-ios-snapshots
+	url = git@github.com:adevinta/spark-ios-snapshots.git
