@@ -13,6 +13,7 @@ final class RatingDisplayViewModel: ObservableObject {
     var theme: Theme {
         didSet {
             self.colors = self.colorsUseCase.execute(theme: self.theme, intent: self.intent)
+            self.ratingSize = self.spacingUseCase.execute(spacing: theme.layout.spacing, size: size)
         }
     }
 
@@ -26,41 +27,61 @@ final class RatingDisplayViewModel: ObservableObject {
     var size: RatingDisplaySize {
         didSet {
             guard self.size != oldValue else { return }
-            self.ratingSize = self.size.sizeAttributes
+            self.ratingSize = self.spacingUseCase.execute(spacing: theme.layout.spacing, size: size)
+        }
+    }
+
+    var count: RatingStarsCount {
+        didSet {
+            guard self.count != oldValue else { return }
+            self.updateRatingValue()
+        }
+    }
+
+    var rating: CGFloat {
+        didSet {
+            guard self.rating != oldValue else { return }
+            self.updateRatingValue()
         }
     }
 
     @Published var colors: RatingColors
-    @Published var spacing: CGFloat
     @Published var ratingSize: RatingSizeAttributes
+    @Published var ratingValue: CGFloat
 
-    private let colorsUseCase: RatingGetColorsUseCase
+    private let colorsUseCase: RatingGetColorsUseCaseable
+    private let spacingUseCase: RatingSizeAttributesUseCaseable
 
     init(theme: Theme, 
          intent: RatingIntent,
          size: RatingDisplaySize,
-         colorsUseCase: RatingGetColorsUseCase = RatingGetColorsUseCase()
+         count: RatingStarsCount,
+         rating: CGFloat,
+         colorsUseCase: RatingGetColorsUseCaseable = RatingGetColorsUseCase(),
+         spacingUseCase: RatingSizeAttributesUseCaseable = RatingSizeAttributesUseCase()
     ) {
         self.theme = theme
         self.intent = intent
         self.size = size
         self.colorsUseCase = colorsUseCase
-        self.colors = colorsUseCase.execute(theme: theme, intent: intent)
-        self.spacing = theme.layout.spacing.small
-        self.ratingSize = size.sizeAttributes
+        self.colors = colorsUseCase.execute(theme: theme, intent: intent, state: .standard)
+        self.spacingUseCase = spacingUseCase
+        self.ratingSize = spacingUseCase.execute(spacing: theme.layout.spacing, size: size)
+        self.ratingValue = count.ratingValue(rating)
+        self.rating = rating
+        self.count = count
+    }
+
+    private func updateRatingValue() {
+        self.ratingValue = self.count.ratingValue(self.rating)
     }
 }
 
-private extension RatingDisplaySize {
-    var sizeAttributes: RatingSizeAttributes {
+private extension RatingStarsCount {
+    func ratingValue(_ rating: CGFloat) -> CGFloat {
         switch self {
-        case .small: return .init(borderWidth: 1.0, height: self.height)
-        case .medium: return .init(borderWidth: 1.33, height: self.height)
-        case .input: return .init(borderWidth: 3.33, height: self.height)
+        case .five: return rating
+        case .one: return rating / 5.0
         }
-    }
-
-    var height: CGFloat {
-        return CGFloat(self.rawValue)
     }
 }

@@ -11,4 +11,5 @@ import Foundation
 struct RatingSizeAttributes {
     let borderWidth: CGFloat
     let height: CGFloat
+    let spacing: CGFloat
 }

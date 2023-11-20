@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum RatingStarsCount: Int {
+public enum RatingStarsCount: Int, CaseIterable {
     case one = 1
     case five = 5
 }

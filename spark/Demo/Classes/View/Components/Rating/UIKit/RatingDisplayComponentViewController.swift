@@ -71,6 +71,10 @@ final class RatingDisplayComponentViewController: UIViewController {
         self.viewModel.showSizeSheet.subscribe(in: &self.cancellables) { sizes in
             self.presentSizeActionSheet(sizes)
         }
+
+        self.viewModel.showCountSheet.subscribe(in: &self.cancellables) { counts in
+            self.presentCountActionSheet(counts)
+        }
     }
 }
 
@@ -110,6 +114,15 @@ extension RatingDisplayComponentViewController {
             values: sizes,
             texts: sizes.map{ $0.name }) { size in
                 self.viewModel.size = size
+            }
+            self.present(actionSheet, animated: true)
+    }
+
+    private func presentCountActionSheet(_ counts: [RatingStarsCount]) {
+        let actionSheet = SparkActionSheet<RatingStarsCount>.init(
+            values: counts,
+            texts: counts.map{ $0.name }) { count in
+                self.viewModel.count = count
             }
             self.present(actionSheet, animated: true)
     }
