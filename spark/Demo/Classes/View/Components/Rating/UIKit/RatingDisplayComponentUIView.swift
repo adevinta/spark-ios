@@ -30,7 +30,6 @@ final class RatingDisplayComponentUIView: ComponentUIView {
         super.init(viewModel: viewModel, componentView: componentView)
 
         self.setupSubscriptions()
-
     }
 
     required init?(coder: NSCoder) {
@@ -39,12 +38,11 @@ final class RatingDisplayComponentUIView: ComponentUIView {
 
     private static func makeRatingDisplayView(viewModel: RatingDisplayComponentUIViewModel) -> RatingDisplayUIView {
         let view = RatingDisplayUIView(
-            theme: viewModel.theme, 
+            theme: viewModel.theme,
             intent: viewModel.intent,
             count: viewModel.count,
             size: viewModel.size
         )
-
         return view
     }
 
@@ -53,13 +51,13 @@ final class RatingDisplayComponentUIView: ComponentUIView {
             guard let self = self else { return }
             let themes = self.viewModel.themes
             let themeTitle: String? = theme is SparkTheme ? themes.first?.title : themes.last?.title
-            
+
             self.viewModel.themeConfigurationItemViewModel.buttonTitle = themeTitle
             self.viewModel.configurationViewModel.update(theme: theme)
-            
+
             self.componentView.theme = theme
         }
-        
+
         self.viewModel.$size.subscribe(in: &self.cancellables) { [weak self] size in
             guard let self = self else { return }
             self.viewModel.sizeConfigurationItemViewModel.buttonTitle = size.name
@@ -77,11 +75,10 @@ final class RatingDisplayComponentUIView: ComponentUIView {
             self.viewModel.intentConfigurationItemViewModel.buttonTitle = intent.name
             self.componentView.intent = intent
         }
-        
+
         self.viewModel.$rating.subscribe(in: &self.cancellables) { [weak self] rating in
             guard let self = self else { return }
             self.componentView.rating = rating
         }
-
     }
 }
