@@ -152,8 +152,9 @@ public class RatingDisplayUIView: UIView {
 
     // MARK: - Private functions
     private func setupView() {
+        self.accessibilityIdentifier = RatingDisplayAccessibilityIdentifier.identifier
         var currentRating = self.viewModel.ratingValue
-        for _ in 0..<count.rawValue {
+        for i in 0..<count.rawValue {
             let star = StarUIView(
                 rating: currentRating,
                 fillMode: self.fillMode,
@@ -162,6 +163,8 @@ public class RatingDisplayUIView: UIView {
                 fillColor: self.viewModel.colors.fillColor.uiColor
             )
             currentRating -= 1
+
+            star.accessibilityIdentifier = "\(RatingDisplayAccessibilityIdentifier.identifier)-\(i+1)"
 
             self.sizeConstraints.append(star.widthAnchor.constraint(equalToConstant: self.ratingSize))
             self.sizeConstraints.append(star.heightAnchor.constraint(equalToConstant: self.ratingSize))
@@ -186,16 +189,13 @@ public class RatingDisplayUIView: UIView {
         }
 
         self.viewModel.$ratingSize.subscribe(in: &self.cancellable) { [weak self] size in
-            self?.didUpdate(borderWidth: size.borderWidth)
-            self?.didUpdate(size: size.height)
-            self?.didUpdate(spacing: size.spacing)
+            self?.didUpdate(size: size)
         }
 
         self.viewModel.$ratingValue.subscribe(in: &self.cancellable) {
             [weak self] ratingValue in
             self?.didUpdate(rating: ratingValue)
         }
-
     }
 
     private func didUpdate(rating: CGFloat) {
@@ -213,10 +213,15 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
+    private func didUpdate(size: RatingSizeAttributes) {
+        self.didUpdate(borderWidth: size.borderWidth)
+        self.didUpdate(size: size.height)
+        self.didUpdate(spacing: size.spacing)
+    }
     private func didUpdate(borderWidth: CGFloat) {
         self.borderWidth = borderWidth
         for view in self.ratingStarViews {
-            view.lineWidth = borderWidth
+            view.lineWidth = self.borderWidth
         }
     }
 
@@ -229,7 +234,7 @@ public class RatingDisplayUIView: UIView {
         self.ratingSize = size
 
         self.sizeConstraints.forEach { constraint in
-            constraint.constant = size
+            constraint.constant = self.ratingSize
         }
     }
 }

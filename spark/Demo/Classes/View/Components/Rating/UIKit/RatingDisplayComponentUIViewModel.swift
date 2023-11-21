@@ -12,14 +12,14 @@ import SparkCore
 import UIKit
 
 final class RatingDisplayComponentUIViewModel: ComponentUIViewModel {
-    
+
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[RatingIntent], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[RatingDisplaySize], Never> = .init()
     private var showCountSheetSubject: PassthroughSubject<[RatingStarsCount], Never> = .init()
     var themes = ThemeCellModel.themes
-    
+
     // MARK: - Items Properties
     lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
@@ -119,15 +119,15 @@ final class RatingDisplayComponentUIViewModel: ComponentUIViewModel {
 
 // MARK: - Navigation
 extension RatingDisplayComponentUIViewModel {
-    
+
     @objc func presentThemeSheet() {
         self.showThemeSheetSubject.send(themes)
     }
-    
+
     @objc func presentIntentSheet() {
         self.showIntentSheetSubject.send(RatingIntent.allCases)
     }
-    
+
     @objc func presentSizeSheet() {
         self.showSizeSheetSubject.send(RatingDisplaySize.allCases)
     }
