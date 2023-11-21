@@ -296,4 +296,20 @@ public final class TextFieldUIView: UITextField {
         self._leftViewSize.update(traitCollection: traitCollection)
         self.updateSizes()
     }
+
+    // MARK: - Instance methods
+
+    public override func becomeFirstResponder() -> Bool {
+        let result = super.becomeFirstResponder()
+        self.setBorderColor(from: self.theme.colors.base.outlineHigh)
+        return result
+    }
+
+    public override func resignFirstResponder() -> Bool {
+        let result = super.resignFirstResponder()
+        self.setBorderColor(from: self.viewModel.colors.border)
+        return result
+    }
+
+
 }
