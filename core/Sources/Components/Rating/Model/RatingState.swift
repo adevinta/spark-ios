@@ -9,10 +9,10 @@
 import Foundation
 
 struct RatingState: Updateable, Equatable {
-    var isDisabled: Bool
+    var isEnabled: Bool
     var isPressed: Bool
 
-    static var standard = RatingState(isDisabled: false, isPressed: false)
-    static var disabled = RatingState(isDisabled: true, isPressed: false)
-    static var pressed = RatingState(isDisabled: false, isPressed: true)
+    static var standard = RatingState(isEnabled: true, isPressed: false)
+    static var disabled = RatingState(isEnabled: false, isPressed: false)
+    static var pressed = RatingState(isEnabled: true, isPressed: true)
 }
