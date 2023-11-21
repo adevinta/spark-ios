@@ -73,6 +73,7 @@ public final class TextFieldUIView: UITextField {
     private func setupView() {
         self.adjustsFontForContentSizeCategory = true
         self.font = .preferredFont(forTextStyle: .body)
+        self.tintColor = self.theme.colors.base.outlineHigh.uiColor
         self.updateHeight()
     }
 
