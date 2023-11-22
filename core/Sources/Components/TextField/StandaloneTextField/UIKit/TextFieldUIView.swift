@@ -16,6 +16,8 @@ public final class TextFieldUIView: UITextField {
     private let viewModel: TextFieldUIViewModel
     private var cancellable = Set<AnyCancellable>()
     private var heightConstraint: NSLayoutConstraint?
+    private var leftViewColor: UIColor?
+    private var rightViewColor: UIColor?
 
     // MARK: - Public properties
 
@@ -41,6 +43,26 @@ public final class TextFieldUIView: UITextField {
         @available(*, unavailable)
         set {}
         get { return .init(self.viewModel.borderStyle) }
+    }
+
+    public override var leftView: UIView? {
+        get {
+            super.leftView
+        }
+        set {
+            self.leftViewColor = newValue?.tintColor
+            super.leftView = newValue
+        }
+    }
+
+    public override var rightView: UIView? {
+        get {
+            super.rightView
+        }
+        set {
+            self.rightViewColor = newValue?.tintColor
+            super.rightView = newValue
+        }
     }
 
     @ScaledUIMetric private var height: CGFloat = 44
@@ -184,5 +206,10 @@ public final class TextFieldUIView: UITextField {
         return result
     }
 
-
+    // This is a workaround to make sure that leftView and rightView retain their original color
+    public override func tintColorDidChange() {
+        super.tintColorDidChange()
+        self.leftView?.tintColor = self.leftViewColor
+        self.rightView?.tintColor = self.rightViewColor
+    }
 }
