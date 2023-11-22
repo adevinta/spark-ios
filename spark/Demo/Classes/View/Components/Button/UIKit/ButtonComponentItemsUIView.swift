@@ -29,6 +29,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     private let alignment: ButtonAlignment
     private let content: ButtonContentDefault
     private let isEnabled: Bool
+    private let isSelected: Bool
     private let isAnimated: Bool
 
     // MARK: - Initialization
@@ -44,6 +45,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         alignment: ButtonAlignment,
         content: ButtonContentDefault,
         isEnabled: Bool,
+        isSelected: Bool,
         isAnimated: Bool
     ) {
         self.viewModel = viewModel
@@ -64,6 +66,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         self.alignment = alignment
         self.content = content
         self.isEnabled = isEnabled
+        self.isSelected = isSelected
         self.isAnimated = isAnimated
     }
 
@@ -134,6 +137,17 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
                 attributedText: self.attributedText,
                 isEnabled: self.isEnabled
             )
+
+        default:
+            buttonView = ButtonUIView(
+                theme: SparkTheme.shared,
+                intent: self.intent,
+                variant: self.variant,
+                size: self.size,
+                shape: self.shape,
+                alignment: self.alignment,
+                isEnabled: self.isEnabled
+            )
         }
 
         let stackView = UIStackView(arrangedSubviews: [
@@ -195,10 +209,19 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         case .iconAndAttributedText:
             buttonView.iconImage = self.iconImage
             buttonView.attributedText = self.attributedText
+
+        default:
+            buttonView.text = nil
+            buttonView.attributedText = nil
+            buttonView.iconImage = nil
         }
 
         if buttonView.isEnabled != self.isEnabled {
             buttonView.isEnabled = self.isEnabled
+        }
+
+        if buttonView.isSelected != self.isSelected {
+            buttonView.isSelected = self.isSelected
         }
 
         if buttonView.isAnimated != self.isAnimated {

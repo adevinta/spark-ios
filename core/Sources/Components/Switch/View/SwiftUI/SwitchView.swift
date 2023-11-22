@@ -31,10 +31,10 @@ public struct SwitchView: View {
 
     /// Initialize a new switch view
     /// - Parameters:
-    ///   - isOn: The Binding value of the switch.
     ///   - theme: The spark theme of the switch.
     ///   - intent: The intent of the switch.
     ///   - alignment: The alignment of the switch.
+    ///   - isOn: The Binding value of the switch.   
     public init(
         theme: any Theme,
         intent: SwitchIntent,
