@@ -96,7 +96,7 @@ struct ButtonComponentView: View {
                     text: "Is selected",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: self.theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isSelected
                 )
 
