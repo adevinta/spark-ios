@@ -17,7 +17,7 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
     // MARK: - Tests
     public func test_expect_all_values_published_on_setup() {
         // Given
-        let sut = sut(state: .enabled)
+        let sut = sut(intent: .basic)
         let expectation = expectation(description: "Wait for subscriptions to be published")
         expectation.expectedFulfillmentCount = 1
 
@@ -35,7 +35,7 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
 
     public func test_theme_change() {
         // Given
-        let sut = sut(state: .enabled)
+        let sut = sut(intent: .basic)
         let expectation = expectation(description: "Wait for subscriptions to be published")
         expectation.expectedFulfillmentCount = 2
 
@@ -53,9 +53,9 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 0.1)
     }
 
-    public func test_state_change() {
+    public func test_intent_change() {
         // Given
-        let sut = sut(state: .enabled)
+        let sut = sut(intent: .basic)
         let expectation = expectation(description: "Wait for sublabel color to be published")
         expectation.expectedFulfillmentCount = 2
 
@@ -64,20 +64,23 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
             expectation.fulfill()
         }.store(in: &self.subscriptions)
 
-        sut.state = .error
+        sut.intent = .alert
 
         wait(for: [expectation], timeout: 0.1)
     }
 
     // MARK: - Private helpers
-    private func sut(state: RadioButtonGroupState) -> RadioButtonGroupViewModel {
-        let useCase = GetRadioButtonGroupColorUseCaseableGeneratedMock()
-        useCase.executeWithColorsAndStateReturnValue = ColorTokenGeneratedMock.random()
+    private func sut(intent: RadioButtonIntent) -> RadioButtonGroupViewModel<Void> {
+        let useCase = RadioButtonGetGroupColorUseCaseableGeneratedMock()
+        useCase.executeWithColorsAndIntentReturnValue = ColorTokenGeneratedMock.random()
         let theme = ThemeGeneratedMock.mocked()
 
-        let sut = RadioButtonGroupViewModel(theme: theme,
-                                            state: state,
-                                            useCase: useCase)
+        let sut = RadioButtonGroupViewModel(
+            theme: theme,
+            intent: intent,
+            content: (),
+            useCase: useCase
+        )
 
         return sut
     }

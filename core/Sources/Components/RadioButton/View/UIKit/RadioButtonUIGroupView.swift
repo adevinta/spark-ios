@@ -11,45 +11,55 @@ import UIKit
 import SwiftUI
 
 /// RadioButtonGroupView embodies a radio button group and handles
-public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIView {
+public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIControl {
 
     // MARK: - Private Properties
     private var itemSpacingConstraints = [NSLayoutConstraint]()
     private var itemLabelSpacingConstraints = [NSLayoutConstraint]()
     private var allConstraints = [NSLayoutConstraint]()
     private let valueSubject: PassthroughSubject<ID, Never>
-    private let viewModel: RadioButtonGroupViewModel
+    private let viewModel: RadioButtonGroupViewModel<Void>
 
     private var subscriptions = Set<AnyCancellable>()
 
     @ScaledUIMetric private var spacing: CGFloat
     @ScaledUIMetric private var labelSpacing: CGFloat
 
-    private lazy var backingSelectedID: Binding<ID> = Binding(
+    private lazy var backingSelectedID: Binding<ID?> = Binding(
         get: {
             return self.selectedID
         },
         set: { newValue in
+            guard let newValue = newValue else { return }
             self.selectedID = newValue
+            self.updateRadioButtonStates()
             self.valueSubject.send(newValue)
             self.delegate?.radioButtonGroup(self, didChangeSelection: newValue)
+            self.sendActions(for: .valueChanged)
         }
     )
 
-    private var radioButtonViews: [RadioButtonUIView<ID>] = []
+    public private(set) var radioButtonViews: [RadioButtonUIView<ID>] = []
 
-    private var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonGroupTitle
+        label.setContentCompressionResistancePriority(
+            .required,
+            for: .horizontal)
         return label
     }()
 
-    private var supplementaryLabel: UILabel = {
+    private lazy var supplementaryLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
+
+        label.setContentCompressionResistancePriority(
+            .required,
+            for: .horizontal)
 
         return label
     }()
@@ -57,51 +67,47 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     // MARK: - Public Properties
     /// All the items `RadioButtonUIItem` of the radio button group
     public var items: [RadioButtonUIItem<ID>] {
-        didSet {
-            self.didUpdateItems()
+        set {
+            self.updateLayout(items: newValue)
         }
+        get {
+            self.radioButtonViews.map{
+                if let attributedText = $0.attributedText {
+                    return .init(id: $0.id, label: attributedText)
+                } else {
+                    return .init(id: $0.id, label: $0.text ?? "")
+                }
+            }
+        }
+    }
+
+    public override var isEnabled: Bool {
+        didSet {
+            self.radioButtonViews.forEach{ $0.isEnabled = self.isEnabled }
+        }
+    }
+
+    /// The number of radio button items in the radio button group
+    public var numberOfItems: Int {
+        return self.radioButtonViews.count
     }
 
     /// An optional title of the radio button group
     public var title: String? {
         didSet {
-            if self.setTextOf(label: self.titleLabel,
-                              title: self.title,
-                              font: self.viewModel.titleFont.uiFont,
-                              color: self.viewModel.titleColor.uiColor) {
-                self.setupConstraints()
-            }
+            self.titleDidUpdate()
         }
     }
 
     /// An optional supplementary text of the radio button group rendered at the bottom of the group. This is NOT well defined for the states `enabled` and disabled.
     public var supplementaryText: String? {
         didSet {
-            if self.setTextOf(label: self.supplementaryLabel,
-                              title: self.supplementaryText,
-                              font: self.viewModel.sublabelFont.uiFont,
-                              color: self.viewModel.sublabelColor.uiColor) {
-                self.setupConstraints()
-            }
+            self.subtitleDidUpdate()
         }
-    }
-
-    /// The current state `RadioButtonGroupState` of the items within the group, e.g. `enabled`.
-    public var state: RadioButtonGroupState {
-        get {
-            return self.viewModel.state
-        }
-        set {
-            self.viewModel.state = newValue
-            for radioButtonView in radioButtonViews {
-                radioButtonView.groupState = newValue
-            }
-        }
-
     }
 
     /// The current selected ID. 
-    public var selectedID: ID {
+    public var selectedID: ID? {
         didSet {
             self.updateRadioButtonStates()
         }
@@ -121,22 +127,46 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     /// The label position `RadioButtonLabelPosition` according to the toggle, either `left` or `right`. The default value is `.left`
+    @available(*, deprecated, renamed: "alignment", message: "Please use alignment instead.")
     public var radioButtonLabelPosition: RadioButtonLabelPosition {
+        get {
+            return self.labelAlignment.position
+        }
+        set {
+            self.labelAlignment = newValue.alignment
+        }
+    }
+
+    /// The label position `RadioButtonLabelAlignment` according to the toggle, either `leading` or `trailing`. The default value is `.leading`
+    public var labelAlignment: RadioButtonLabelAlignment {
         didSet {
-            guard radioButtonLabelPosition != oldValue else { return }
+            guard self.labelAlignment != oldValue else { return }
 
             for radioButtonView in radioButtonViews {
-                radioButtonView.labelPosition = radioButtonLabelPosition
+                radioButtonView.labelAlignment = labelAlignment
             }
-
         }
     }
 
     /// The group layout `RadioButtonGroupLayout` of the radio buttons, either `horizontal` or `vertical`. The default is `vertical`.
     public var groupLayout: RadioButtonGroupLayout {
         didSet {
-            guard groupLayout != oldValue else { return }
-            self.setupConstraints()
+            guard self.groupLayout != oldValue else { return }
+
+            self.updateLayout(items: self.items)
+        }
+    }
+
+    /// The intent `RadioButtonIntent` defining the colors of the radio button.
+    public var intent: RadioButtonIntent {
+        get {
+            return self.viewModel.intent
+        }
+        set {
+            self.viewModel.intent = newValue
+            for radioButtonView in radioButtonViews {
+                radioButtonView.intent = newValue
+            }
         }
     }
 
@@ -168,6 +198,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     /// - radioButtonLabelPosition: The position of the label in each radio button item according to the toggle. The default value is, that the label is to the `right` of the toggle.
     /// - groupLayout: The layout of the items within the group. These can be `horizontal` or `vertical`. The defalt is `vertical`.
     /// - state: The state of the radiobutton group, see `RadioButtonGroupState`
+    @available(*, deprecated, message: "Use initializer with intent instead. Title and subtitle are also deprececated.")
     public convenience init(theme: Theme,
                 title: String? = nil,
                 selectedID: ID,
@@ -176,38 +207,73 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                 groupLayout: RadioButtonGroupLayout = .vertical,
                 state: RadioButtonGroupState = .enabled,
                 supplementaryText: String? = nil) {
-        let viewModel = RadioButtonGroupViewModel(theme: theme, state: state)
+        let viewModel = RadioButtonGroupViewModel(
+            theme: theme,
+            intent: state.intent,
+            content: ()
+        )
+
         self.init(viewModel: viewModel,
-                  title: title,
                   selectedID: selectedID,
                   items: items,
-                  radioButtonLabelPosition: radioButtonLabelPosition,
-                  groupLayout: groupLayout,
-                  supplementaryText: supplementaryText)
-    }
+                  labelAlignment: radioButtonLabelPosition.alignment,
+                  groupLayout: groupLayout)
 
-    init(viewModel: RadioButtonGroupViewModel,
-         title: String? = nil,
-         selectedID: ID,
-         items: [RadioButtonUIItem<ID>],
-         radioButtonLabelPosition: RadioButtonLabelPosition = .right,
-         groupLayout: RadioButtonGroupLayout = .vertical,
-         supplementaryText: String? = nil) {
-        self.viewModel = viewModel
-        self.items = items
-        self.selectedID = selectedID
         self.title = title
         self.supplementaryText = supplementaryText
-        self.radioButtonLabelPosition = radioButtonLabelPosition
+        self.titleDidUpdate()
+        self.subtitleDidUpdate()
+    }
+
+    /// Initializer of the radio button ui group component.
+    /// Parameters:
+    /// - theme: The current theme.
+    /// - intent: The default intent is `basic`
+    /// - selectedID: The current selected value of the radio button group.
+    /// - items: A list of `RadioButtonUIItem` which represent each item in the radio button group.
+    /// - radioButtonLabelPosition: The position of the label in each radio button item according to the toggle. The default value is, that the label is to the `right` of the toggle.
+    /// - groupLayout: The layout of the items within the group. These can be `horizontal` or `vertical`. The defalt is `vertical`.
+    public convenience init(
+        theme: Theme,
+        intent: RadioButtonIntent,
+        selectedID: ID?,
+        items: [RadioButtonUIItem<ID>],
+        labelAlignment: RadioButtonLabelAlignment = .trailing,
+        groupLayout: RadioButtonGroupLayout = .vertical) {
+
+        let viewModel = RadioButtonGroupViewModel<Void>(
+            theme: theme,
+            intent: intent,
+            content: ()
+        )
+
+        self.init(
+            viewModel: viewModel,
+            selectedID: selectedID,
+            items: items,
+            labelAlignment: labelAlignment,
+            groupLayout: groupLayout)
+    }
+
+    init(viewModel: RadioButtonGroupViewModel<Void>,
+         selectedID: ID?,
+         items: [RadioButtonUIItem<ID>],
+         labelAlignment: RadioButtonLabelAlignment = .trailing,
+         groupLayout: RadioButtonGroupLayout = .vertical) {
+        self.viewModel = viewModel
+        self.selectedID = selectedID
+        self.labelAlignment = labelAlignment
         self.groupLayout = groupLayout
         self._spacing = ScaledUIMetric(wrappedValue: viewModel.spacing)
         self._labelSpacing = ScaledUIMetric(wrappedValue: viewModel.labelSpacing)
         self.valueSubject = PassthroughSubject()
-        super.init(frame: .zero)
 
-        arrangeView()
-        setupConstraints()
-        setupSubscriptions()
+        super.init(frame: .zero)
+        self.items = items
+
+        self.setupView()
+        self.setupConstraints()
+        self.setupSubscriptions()
     }
 
     required init?(coder: NSCoder) {
@@ -228,61 +294,102 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
+    // MARK: Item Control
+    public func setTitle(_ title: String, forItemAt index: Int) {
+        guard index < self.radioButtonViews.count else { return }
+
+        self.radioButtonViews[safe: index]?.text = title
+    }
+
+    public func setTitle(_ title: NSAttributedString, forItemAt index: Int) {
+        guard index < self.radioButtonViews.count else { return }
+
+        self.radioButtonViews[safe: index]?.attributedText = title
+    }
+
+    public func addRadioButton(_ item: RadioButtonUIItem<ID>,  atIndex index: Int = Int.max) {
+
+        var items = self.items
+        if index < items.count {
+            items[index] = item
+        } else {
+            items.append(item)
+        }
+
+        self.items = items
+    }
+
+    public func removeRadioButton(at index: Int, animated: Bool = false) {
+        guard index < self.radioButtonViews.count else { return }
+        var items = self.items
+        items.remove(at: index)
+
+        self.items = items
+    }
+
     // MARK: Private Methods
 
-    private func arrangeView() {
-        self.createRadioButtonViews()
+    private func setupView() {
 
+        self.addSubview(self.titleLabel)
         self.setTextOf(label: self.titleLabel,
                        title: self.title,
                        font: self.viewModel.titleFont.uiFont,
                        color: self.viewModel.titleColor.uiColor)
 
-        for radioButtonView in radioButtonViews {
+        for radioButtonView in self.radioButtonViews {
             self.addSubview(radioButtonView)
         }
 
+        self.addSubview(self.supplementaryLabel)
         self.setTextOf(label: self.supplementaryLabel,
                        title: self.supplementaryText,
                        font: self.viewModel.sublabelFont.uiFont,
                        color: self.viewModel.sublabelColor.uiColor)
     }
 
-    private func didUpdateItems() {
+
+    private func updateLayout(items: [RadioButtonUIItem<ID>]) {
         NSLayoutConstraint.deactivate(self.allConstraints)
         for view in self.radioButtonViews {
             view.removeFromSuperview()
         }
-        createRadioButtonViews()
+
+        self.radioButtonViews = self.createRadioButtonViews(items: items)
+
         for radioButtonView in radioButtonViews {
             self.addSubview(radioButtonView)
         }
+
         setupConstraints()
     }
 
-    private func createRadioButtonViews() {
-        self.radioButtonViews = items.map {
-            let radioButtonView = RadioButtonUIView(theme: theme,
-                                                    id: $0.id,
-                                                    label: $0.label,
-                                                    selectedID: self.backingSelectedID,
-                                                    groupState: self.viewModel.state,
-                                                    labelPosition: self.radioButtonLabelPosition
+    private func createRadioButtonViews(
+        items: [RadioButtonUIItem<ID>]) -> [RadioButtonUIView<ID>] {
+         let radioButtonViews = items.map {
+            let radioButtonView = RadioButtonUIView(
+                theme: self.theme,
+                intent: self.viewModel.intent,
+                id: $0.id,
+                label: $0.label,
+                selectedID: self.backingSelectedID,
+                labelAlignment: self.labelAlignment
             )
             radioButtonView.translatesAutoresizingMaskIntoConstraints = false
             return radioButtonView
         }
+        return radioButtonViews
     }
 
     private func setupConstraints() {
-        NSLayoutConstraint.deactivate(self.allConstraints)
+         NSLayoutConstraint.deactivate(self.allConstraints)
 
-        if self.groupLayout == .vertical {
-            setupVerticalConstraints()
-        } else {
-            setupHorizontalConstraints()
-        }
-    }
+         if self.groupLayout == .vertical {
+             setupVerticalConstraints()
+         } else {
+             setupHorizontalConstraints()
+         }
+     }
 
     private func setupVerticalConstraints() {
         var previousLayoutTopAnchor = self.safeAreaLayoutGuide.topAnchor
@@ -317,7 +424,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
         if self.supplementaryText !=  nil {
             constraints.append(self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
-            constraints.append(self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
+            constraints.append(self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor))
             let topConstraint = self.supplementaryLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: self.labelSpacing)
             constraints.append(topConstraint)
             self.itemLabelSpacingConstraints.append(topConstraint)
@@ -357,13 +464,13 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             if index == 0 {
                 constraints.append(radioButtonView.leadingAnchor.constraint(equalTo: previousLayoutLeadingAnchor))
             } else {
-                let itemConstraint = radioButtonView.leadingAnchor.constraint(equalTo: previousLayoutLeadingAnchor, constant: self.spacing)
+                let itemConstraint = radioButtonView.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: previousLayoutLeadingAnchor, constant: self.spacing)
                 self.itemSpacingConstraints.append(itemConstraint)
                 constraints.append(itemConstraint)
             }
             previousLayoutLeadingAnchor = radioButtonView.trailingAnchor
         }
-        constraints.append(previousLayoutLeadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(previousLayoutLeadingAnchor.constraint(equalTo: self.trailingAnchor))
 
         var bottomAnchor: NSLayoutYAxisAnchor = self.safeAreaLayoutGuide.bottomAnchor
         var labelSpacing: CGFloat = 0
@@ -373,7 +480,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             labelSpacing = self.labelSpacing
             constraints.append(self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor))
             constraints.append(self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor))
-            constraints.append(self.supplementaryLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor))
+            constraints.append(self.supplementaryLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
         }
 
         for anchor in radioButtonAnchors {
@@ -386,6 +493,25 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
         self.allConstraints = constraints
         NSLayoutConstraint.activate(constraints)
+    }
+
+    private func titleDidUpdate() {
+        if self.setTextOf(label: self.titleLabel,
+                          title: self.title,
+                          font: self.viewModel.titleFont.uiFont,
+                          color: self.viewModel.titleColor.uiColor) {
+            self.setupConstraints()
+        }
+    }
+
+    private func subtitleDidUpdate() {
+        if self.setTextOf(
+            label: self.supplementaryLabel,
+            title: self.supplementaryText,
+            font: self.viewModel.sublabelFont.uiFont,
+            color: self.viewModel.sublabelColor.uiColor) {
+            self.setupConstraints()
+        }
     }
 
     private func setupSubscriptions() {
@@ -406,13 +532,15 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
 
         self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
-            self?._spacing = ScaledUIMetric(wrappedValue: spacing)
-            self?.updateConstraints()
+            guard let self = self else { return }
+            self._spacing = ScaledUIMetric(wrappedValue: spacing)
+            self.updateConstraints()
         }
 
         self.viewModel.$labelSpacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
-            self?._labelSpacing = ScaledUIMetric(wrappedValue: spacing)
-            self?.updateConstraints()
+            guard let self = self else { return }
+            self._labelSpacing = ScaledUIMetric(wrappedValue: spacing)
+            self.updateConstraints()
         }
     }
     
@@ -433,12 +561,12 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         guard label.text != title else { return false }
 
         if label.text == nil {
-            self.addSubview(label)
+            label.isHidden = false
             label.text = title
             return true
         } else if title == nil {
             label.text = nil
-            label.removeFromSuperview()
+            label.isHidden = true
             return true
         } else {
             label.text = title

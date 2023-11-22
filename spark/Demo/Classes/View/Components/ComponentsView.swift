@@ -65,7 +65,7 @@ struct ComponentsView: View {
             }
 
             Button("Radio Button") {
-                self.navigateToView(RadioButtonGroup())
+                self.navigateToView(RadioButtonComponent())
             }
 
             Button("Spinner") {
