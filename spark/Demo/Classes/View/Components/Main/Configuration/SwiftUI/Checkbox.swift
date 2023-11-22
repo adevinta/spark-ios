@@ -23,7 +23,7 @@ struct Checkbox: View {
             text: self.title,
             checkedImage: DemoIconography.shared.checkmark,
             theme: self.theme,
-            state: .enabled,
+            isEnabled: true,
             selectionState: self.selectionState
         )
     }
