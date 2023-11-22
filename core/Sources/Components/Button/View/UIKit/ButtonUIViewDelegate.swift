@@ -9,7 +9,6 @@
 import Foundation
 
 /// Implement the delegate to receive tap and touch events.
-@available(*, deprecated, message: "Use native **action** or **target** on UIControl or publisher instead")
 public protocol ButtonUIViewDelegate: AnyObject {
     /// Optionally implement this method to receive tap events and perform actions.
     /// - Parameter button: the button that was tapped

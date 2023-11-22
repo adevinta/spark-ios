@@ -18,75 +18,10 @@ final class UIControlStateLabel: UILabel {
     private let attributedTextStates = ControlPropertyStates<NSAttributedString>()
     private let textTypesStates = ControlPropertyStates<DisplayedTextType>()
 
-    /// The text must be stored to lock the posibility to set the text directly like this **self.text = "Text"**.
-    /// When the storedText is set (always from **setText** function), it set the text.
-    private var storedText: String? {
-        didSet {
-            self.isText = self.storedText != nil
-            self.text = self.storedText
-
-            // Reset styles
-            if let storedTextFont = self.storedTextFont {
-                self.font = storedTextFont
-            }
-            if let storedTextColor = self.storedTextColor {
-                self.textColor = storedTextColor
-            }
-        }
-    }
-
-    /// The attributedText must be stored to lock the posibility to set the attributedText directly like this **self.attributedText = NSAttributedString()**.
-    /// When the storedAttributedText is set (always from **setAttributedText** function), it set the attributedText.
-    private var storedAttributedText: NSAttributedString? {
-        didSet {
-            self.isText = self.storedAttributedText != nil
-            self.attributedText = self.storedAttributedText
-        }
-    }
-
-    /// The storedTextFont is use to reset the font when a new text is set
-    /// because the previous text can be an attributedText
-    /// and attributedText has its own styles.
     private var storedTextFont: UIFont?
-
-    /// The storedTextColor is use to reset the textColor when a new text is set
-    /// because the previous text can be an attributedText
-    /// and attributedText has its own styles.
     private var storedTextColor: UIColor?
 
-    // MARK: - Published
-
-    @Published var isText: Bool = false
-
     // MARK: - Override Properties
-
-    /// It's not possible to set the text outside this class.
-    /// The only possiblity to change the text is to use the **setText(_: String?, for: ControlState, on: UIControl)** function.
-    override var text: String? {
-        get {
-            return super.text
-        }
-        set {
-            // Set the attributedText only if the current come from setText
-            if newValue == self.storedText {
-                super.text = newValue
-            }
-        }
-    }
-
-    /// It's not possible to set the attributedText outside this class.
-    /// The only possiblity to change the attributedText is to use the **setAttributedText(_: NSAttributedString?, for: ControlState, on: UIControl)** function.
-    override var attributedText: NSAttributedString? {
-        get {
-            return super.attributedText
-        }
-        set {
-            // Set the attributedText only if the current come from setAttributedText
-            if newValue == self.storedAttributedText {
-                super.attributedText = newValue
-            }
-        }
-    }
 
     override var font: UIFont! {
         get {
@@ -123,7 +58,7 @@ final class UIControlStateLabel: UILabel {
     /// The text for a state.
     /// - parameter state: state of the text
     func text(for state: ControlState) -> String? {
-        return self.textStates.value(for: state)
+        return self.textStates.value(forState: state)
     }
 
     /// Set the text for a state.
@@ -146,7 +81,7 @@ final class UIControlStateLabel: UILabel {
     /// The attributedText for a state.
     /// - parameter state: state of the attributedText
     func attributedText(for state: ControlState) -> NSAttributedString? {
-        return self.attributedTextStates.value(for: state)
+        return self.attributedTextStates.value(forState: state)
     }
 
     /// Set the attributedText of the button for a state.
@@ -178,24 +113,26 @@ final class UIControlStateLabel: UILabel {
         )
 
         // Get the current textType from status
-        let textType = self.textTypesStates.value(for: status)
-        let textTypeContainsText = textType?.containsText ?? false
+        let textType = textTypesStates.value(forStatus: status)
 
         // Reset attributedText & text
-        self.storedAttributedText = nil
-        self.storedText = nil
+        self.attributedText = nil
+        self.text = nil
 
         // Set the text or the attributedText from textType and states
-        if let text = self.textStates.value(for: status),
-           textType == .text || !textTypeContainsText {
-            self.storedText = text
-
-        } else if let attributedText = self.attributedTextStates.value(for: status),
-                  textType == .attributedText || !textTypeContainsText {
-            self.storedAttributedText = attributedText
-
-        } else { // No text to displayed
-            self.text = nil
+        switch textType {
+        case .text:
+            self.text = self.textStates.value(forStatus: status)
+            if let storedTextFont = self.storedTextFont {
+                self.font = storedTextFont
+            }
+            if let storedTextColor = self.storedTextColor {
+                self.textColor = storedTextColor
+            }
+        case .attributedText:
+            self.attributedText = self.attributedTextStates.value(forStatus: status)
+        default:
+            break
         }
     }
 
@@ -207,7 +144,7 @@ final class UIControlStateLabel: UILabel {
         guard let attributedText = self.attributedText else {
             return false
         }
-
+        
         // The attributedText contains attributes ?
         return !attributedText.attributes(at: 0, effectiveRange: nil).isEmpty
     }
