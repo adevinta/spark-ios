@@ -169,6 +169,12 @@ public final class TextFieldUIView: UITextField {
     private func updateStateColors() {
         self.backgroundColor = self.getBackgroundColor().uiColor
         self.textColor = self.getTextColor().uiColor
+        self.attributedPlaceholder = NSAttributedString(
+            string: self.placeholder ?? "",
+            attributes: [
+                NSAttributedString.Key.foregroundColor : self.getTextColor().uiColor
+            ]
+        )
     }
 
     private func setupRightView() {
@@ -258,7 +264,7 @@ public final class TextFieldUIView: UITextField {
     }
 
     private func getTextColor() -> any ColorToken {
-        let opacity: CGFloat = self.isEnabled ? self.theme.dims.dim1 : self.theme.dims.dim3
+        let opacity: CGFloat = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
         return self.theme.colors.base.onSurface.opacity(opacity)
     }
 
