@@ -50,7 +50,7 @@ final class ControlPropertyStates<PropertyType> {
     /// Get the value for a state.
     /// - Parameters:
     ///   - state: the state of the value
-    func value(for state: ControlState) -> PropertyType? {
+    func value(forState state: ControlState) -> PropertyType? {
         switch state {
         case .normal: return self.normalState.value
         case .highlighted: return self.highlightedState.value
@@ -61,8 +61,8 @@ final class ControlPropertyStates<PropertyType> {
 
     /// Get the value for the status of the control.
     /// - Parameters:
-    ///   - status: the status of the control
-    func value(for status: ControlStatus) -> PropertyType? {
+    ///   - state: the status of the control
+    func value(forStatus status: ControlStatus) -> PropertyType? {
         // isHighlighted has the highest priority,
         // then isDisabled,
         // then isSelected,

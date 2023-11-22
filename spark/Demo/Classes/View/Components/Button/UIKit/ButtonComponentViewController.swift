@@ -84,24 +84,8 @@ final class ButtonComponentViewController: UIViewController {
             self.presentAlignmentActionSheet(alignments)
         }
 
-        self.viewModel.showContentNormalSheet.subscribe(in: &self.cancellables) { contents in
-            self.presentContentNormalActionSheet(contents)
-        }
-
-        self.viewModel.showContentHighlightedSheet.subscribe(in: &self.cancellables) { contents in
-            self.presentContentHighlightedActionSheet(contents)
-        }
-
-        self.viewModel.showContentDisabledSheet.subscribe(in: &self.cancellables) { contents in
-            self.presentContentDisabledActionSheet(contents)
-        }
-
-        self.viewModel.showContentSelectedSheet.subscribe(in: &self.cancellables) { contents in
-            self.presentContentSelectedActionSheet(contents)
-        }
-
-        self.viewModel.showControlType.subscribe(in: &self.cancellables) { types in
-            self.presentControlTypeActionSheet(types)
+        self.viewModel.showContentSheet.subscribe(in: &self.cancellables) { contents in
+            self.presentContentActionSheet(contents)
         }
     }
 }
@@ -173,48 +157,13 @@ extension ButtonComponentViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentContentNormalActionSheet(_ contents: [ButtonContentDefault]) {
+    private func presentContentActionSheet(_ contents: [ButtonContentDefault]) {
         let actionSheet = SparkActionSheet<ButtonContentDefault>.init(
             values: contents,
             texts: contents.map { $0.name }) { content in
-                self.viewModel.contentNormal = content
+                self.viewModel.content = content
             }
         self.present(actionSheet, animated: true)
     }
 
-    private func presentContentHighlightedActionSheet(_ contents: [ButtonContentDefault]) {
-        let actionSheet = SparkActionSheet<ButtonContentDefault>.init(
-            values: contents,
-            texts: contents.map { $0.name }) { content in
-                self.viewModel.contentHighlighted = content
-            }
-        self.present(actionSheet, animated: true)
-    }
-
-    private func presentContentDisabledActionSheet(_ contents: [ButtonContentDefault]) {
-        let actionSheet = SparkActionSheet<ButtonContentDefault>.init(
-            values: contents,
-            texts: contents.map { $0.name }) { content in
-                self.viewModel.contentDisabled = content
-            }
-        self.present(actionSheet, animated: true)
-    }
-
-    private func presentContentSelectedActionSheet(_ contents: [ButtonContentDefault]) {
-        let actionSheet = SparkActionSheet<ButtonContentDefault>.init(
-            values: contents,
-            texts: contents.map { $0.name }) { content in
-                self.viewModel.contentSelected = content
-            }
-        self.present(actionSheet, animated: true)
-    }
-
-    private func presentControlTypeActionSheet(_ contents: [ButtonControlType]) {
-        let actionSheet = SparkActionSheet<ButtonControlType>.init(
-            values: contents,
-            texts: contents.map { $0.name }) { content in
-                self.viewModel.controlType = content
-            }
-        self.present(actionSheet, animated: true)
-    }
 }
