@@ -63,42 +63,42 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
         return .init(
             name: "Show Label",
             type: .checkbox(title: "", isOn: self.showLabel),
-            target: (source: self, action: #selector(self.showLabelChanged)))
+            target: (source: self, action: #selector(self.showLabelChanged(_:))))
     }()
 
     lazy var longLabelConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Long Label",
             type: .checkbox(title: "", isOn: self.showLongLabel),
-            target: (source: self, action: #selector(self.showLongLabelChanged)))
+            target: (source: self, action: #selector(self.showLongLabelChanged(_:))))
     }()
 
     lazy var iconConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Show Icon",
             type: .checkbox(title: "", isOn: self.showIcon),
-            target: (source: self, action: #selector(self.showIconChanged)))
+            target: (source: self, action: #selector(self.showIconChanged(_:))))
     }()
 
     lazy var badgeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Show Badge",
             type: .checkbox(title: "", isOn: self.showBadge),
-            target: (source: self, action: #selector(self.showBadgeChanged)))
+            target: (source: self, action: #selector(self.showBadgeChanged(_:))))
     }()
 
     lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Disable",
             type: .checkbox(title: "", isOn: self.disabledIndex != nil),
-            target: (source: self, action: #selector(self.disableChanged)))
+            target: (source: self, action: #selector(self.disableChanged(_:))))
     }()
 
     lazy var equalWidthConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Equal width",
             type: .checkbox(title: "", isOn: self.isEqualWidth),
-            target: (source: self, action: #selector(self.equalWidthChanged)))
+            target: (source: self, action: #selector(self.equalWidthChanged(_:))))
     }()
 
     lazy var numberOfTabsConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -187,9 +187,6 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
     }
 
     func title(at index: Int) -> String {
-        if self.showLongLabel && index == 1 {
-            return longTitle(at: index)
-        }
         return "\(self.text) \(index + 1)"
     }
 
@@ -213,32 +210,32 @@ extension TabComponentUIViewModel {
         self.showSizeSheetSubject.send(TabSize.allCases)
     }
 
-    @objc func showLabelChanged() {
-        self.showLabel.toggle()
+    @objc func showLabelChanged(_ isSelected: Any?) {
+        self.showLabel = isTrue(isSelected)
     }
 
-    @objc func showLongLabelChanged() {
-        self.showLongLabel.toggle()
+    @objc func showLongLabelChanged(_ isSelected: Any?) {
+        self.showLongLabel = isTrue(isSelected)
     }
 
-    @objc func showIconChanged() {
-        self.showIcon.toggle()
+    @objc func showIconChanged(_ isSelected: Any?) {
+        self.showIcon = isTrue(isSelected)
     }
 
-    @objc func showBadgeChanged() {
-        self.showBadge.toggle()
+    @objc func showBadgeChanged(_ isSelected: Any?) {
+        self.showBadge = isTrue(isSelected)
     }
 
-    @objc func disableChanged() {
-        if self.disabledIndex != nil {
+    @objc func disableChanged(_ isSelected: Any?) {
+        if !isTrue(isSelected) {
             self.disabledIndex = nil
         } else {
             self.disabledIndex = Int.random(in: 0..<self.numberOfTabs)
         }
     }
 
-    @objc func equalWidthChanged() {
-        self.isEqualWidth.toggle()
+    @objc func equalWidthChanged(_ isSelected: Any?) {
+        self.isEqualWidth = isTrue(isSelected)
     }
 
     @objc func numberOfTabsChanged(_ control: NumberSelector) {
