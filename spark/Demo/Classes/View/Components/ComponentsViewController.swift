@@ -89,7 +89,7 @@ extension ComponentsViewController {
         case .progressBarSingle:
             viewController = ProgressBarComponentUIViewController.build()
         case .radioButton:
-            viewController = RadioButtonUIGroupViewController()
+            viewController = RadioButtonComponentUIViewController.build()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
         case .switchButton:

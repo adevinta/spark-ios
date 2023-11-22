@@ -44,11 +44,11 @@ private extension SwitchViewSnapshotTests {
         for sut in suts {
             var view = SwitchView(
                 theme: self.theme,
+                intent: sut.intent,
+                alignment: sut.alignment,
                 isOn: .constant(sut.isOn)
             )
-                .alignment(sut.alignment)
-                .intent(sut.intent)
-                .isEnabled(sut.isEnabled)
+                .disabled(!sut.isEnabled)
 
             // Images + Text
             if let images = sut.images, let text = sut.text {

@@ -18,7 +18,7 @@ struct BadgeComponentView: View {
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: BadgeIntentType = .danger
     @State private var size: BadgeSize = .medium
-    @State private var value: Int = 99
+    @State private var value: String = "99"
     @State private var format: BadgeFormat = .default
     @State private var isBorderVisible: CheckboxSelectionState = .unselected
 
@@ -58,8 +58,7 @@ struct BadgeComponentView: View {
                     Text("Value ").bold()
                     TextField(
                         "Value",
-                        value: self.$value,
-                        formatter: self.numberFormatter
+                        text: self.$value
                     )
                 }
 
@@ -67,7 +66,7 @@ struct BadgeComponentView: View {
                     text: "With Border",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isBorderVisible
                 )
             },
@@ -75,7 +74,7 @@ struct BadgeComponentView: View {
                 BadgeView(
                     theme: self.theme,
                     intent: self.intent,
-                    value: self.value
+                    value: Int(self.value)
                 )
                 .size(self.size)
                 .format(self.format)

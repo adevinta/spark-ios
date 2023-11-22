@@ -22,32 +22,50 @@ struct ComponentsView: View {
 
     var body: some View {
         List {
-            Button("Badge") {
-                self.navigateToView(BadgeComponentView())
+            Group {
+                Button("Badge") {
+                    self.navigateToView(BadgeComponentView())
+                }
+                Button("Button") {
+                    self.navigateToView(ButtonComponentView())
+                }
+
             }
 
-            Button("Button") {
-                self.navigateToView(ButtonComponentView())
-            }
+            Group {
+                Button("Checkbox") {
+                    self.navigateToView(
+                        ComponentsCheckboxListView(
+                            isSwiftUI: true
+                        ).environment(\.navigationController, self.navigationController)
+                    )
+                }
 
-            Button("Checkbox") {
-                self.navigateToView(
-                    ComponentsCheckboxListView(
-                        isSwiftUI: true
-                    ).environment(\.navigationController, self.navigationController)
-                )
-            }
-
-            Button("Chip") {
-                self.navigateToView(ChipComponentView())
+                Button("Chip") {
+                    self.navigateToView(ChipComponentView())
+                }
             }
 
             Button("Icon") {
                 self.navigateToView(IconComponentView())
             }
 
+            Group {
+                Button("Progress Bar - Double") {
+                    self.navigateToView(ProgressBarDoubleComponentView())
+                }
+
+                Button("Progress Bar - Indeterminate") {
+                    self.navigateToView(ProgressBarIndeterminateComponentView())
+                }
+
+                Button("Progress Bar - Single") {
+                    self.navigateToView(ProgressBarComponentView())
+                }
+            }
+
             Button("Radio Button") {
-                self.navigateToView(RadioButtonGroup())
+                self.navigateToView(RadioButtonComponent())
             }
 
             Button("Spinner") {
@@ -58,12 +76,14 @@ struct ComponentsView: View {
                 self.navigateToView(SwitchComponentView())
             }
 
-            Button("Tab") {
-                self.navigateToView(TabComponent())
-            }
+            Group {
+                Button("Tab") {
+                    self.navigateToView(TabComponent())
+                }
 
-            Button("Tag") {
-                self.navigateToView(TagComponentView())
+                Button("Tag") {
+                    self.navigateToView(TagComponentView())
+                }
             }
         }
         .foregroundColor(.primary)

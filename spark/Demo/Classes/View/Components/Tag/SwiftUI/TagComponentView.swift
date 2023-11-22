@@ -48,13 +48,15 @@ struct TagComponentView: View {
                     value: self.$content)
             },
             integration: {
-                TagView(theme: self.theme )
-                    .intent(self.intent)
-                    .variant(self.variant)
-                    .iconImage(self.content.shouldShowIcon ? Image(self.viewModel.imageNamed) : nil)
-                    .text(self.content.shouldShowText ? self.viewModel.text : nil)
-                    .accessibility(identifier: "MyTag1",
-                                   label: "It's my first tag")
+                TagView(
+                    theme: self.theme,
+                    intent: self.intent,
+                    variant: self.variant
+                )
+                .iconImage(self.content.shouldShowIcon ? Image(self.viewModel.imageNamed) : nil)
+                .text(self.content.shouldShowText ? self.viewModel.text : nil)
+                .accessibility(identifier: "MyTag1",
+                               label: "It's my first tag")
             }
         )
     }

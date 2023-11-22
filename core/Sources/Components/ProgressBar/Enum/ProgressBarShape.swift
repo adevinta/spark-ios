@@ -8,8 +8,8 @@
 
 /// All ProgressBar variants can have different shapes.
 public enum ProgressBarShape: CaseIterable, Equatable {
-    /// ProgressBar with pill-like shape.
-    case pill
+    /// ProgressBar with rounded corners.
+    case rounded
     /// Square button with no rounded corners.
     case square
 }

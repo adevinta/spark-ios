@@ -17,9 +17,9 @@ final class BadgeComponentUIViewModel: ObservableObject {
     @Published var theme: Theme
     @Published var intent: BadgeIntentType = .main
     @Published var size: BadgeSize = .medium
-    @Published var value: Int = 99
+    @Published var value: Int? = 99
     @Published var format: BadgeFormat = .default
-    @Published var isBorderVisible: Bool = true
+    @Published var isBorderVisible: Bool = false
 
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         showThemeSheetSubject

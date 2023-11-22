@@ -203,32 +203,6 @@ public final class SwitchUIView: UIView {
         }
     }
 
-    public override var intrinsicContentSize: CGSize {
-        // Calculate height
-        let toggleHeight = self.toggleHeight
-        let labelHeight = self.textLabel.intrinsicContentSize.height
-        let height = max(toggleHeight, labelHeight)
-
-        // Calculate width
-        let toggleWidth = self.toggleWidth
-        let contentStackViewSpacing = self.contentStackViewSpacing
-        var width = toggleWidth + contentStackViewSpacing
-
-        if let attributedText {
-            let computedSize = attributedText.boundingRect(
-                with: CGSize(
-                    width: CGFloat.greatestFiniteMagnitude,
-                    height: CGFloat.greatestFiniteMagnitude
-                ),
-                options: .usesLineFragmentOrigin,
-                context: nil)
-            width += computedSize.width
-        } else if text != nil {
-            width += self.textLabel.intrinsicContentSize.width
-        }
-        return CGSize(width: width, height: height)
-    }
-
     // MARK: - Private Properties
 
     private let viewModel: SwitchViewModel
@@ -509,9 +483,43 @@ public final class SwitchUIView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.layoutIfNeeded()
+        self.toggleView.layoutIfNeeded()
         self.toggleView.setCornerRadius(self.theme.border.radius.full)
         self.toggleDotView.setCornerRadius(self.theme.border.radius.full)
+    }
+
+    // MARK: - Instrinsic Content Size
+
+    public override var intrinsicContentSize: CGSize {
+        // Calculate height
+        let toggleHeight = self.toggleHeight
+        let labelHeight = self.textLabel.intrinsicContentSize.height
+        let height = max(toggleHeight, labelHeight)
+
+        // Calculate width
+        let toggleWidth = self.toggleWidth
+        let contentStackViewSpacing = self.contentStackViewSpacing
+        var width = toggleWidth + contentStackViewSpacing
+
+        if let attributedText {
+            let computedSize = attributedText.boundingRect(
+                with: CGSize(
+                    width: CGFloat.greatestFiniteMagnitude,
+                    height: CGFloat.greatestFiniteMagnitude
+                ),
+                options: .usesLineFragmentOrigin,
+                context: nil)
+            width += computedSize.width
+        } else if text != nil {
+            width += self.textLabel.intrinsicContentSize.width
+        }
+        return CGSize(width: width, height: height)
+    }
+
+    public override func invalidateIntrinsicContentSize() {
+        self.textLabel.invalidateIntrinsicContentSize()
+
+        super.invalidateIntrinsicContentSize()
     }
 
     // MARK: - Gesture
@@ -651,7 +659,7 @@ public final class SwitchUIView: UIView {
             self.toggleContentTrailingConstraint?.constant = -self.toggleSpacing
             self.toggleContentBottomConstraint?.constant = -self.toggleSpacing
 
-            self.toggleContentStackView.layoutIfNeeded()
+            self.toggleContentStackView.updateConstraintsIfNeeded()
             self.invalidateIntrinsicContentSize()
         }
     }
@@ -672,7 +680,7 @@ public final class SwitchUIView: UIView {
             valueChanged = true
         }
         if valueChanged {
-            self.toggleView.layoutIfNeeded()
+            self.toggleView.updateConstraints()
             self.invalidateIntrinsicContentSize()
         }
     }
@@ -685,7 +693,7 @@ public final class SwitchUIView: UIView {
             self.toggleDotTrailingConstraint?.constant = -self.toggleDotSpacing
             self.toggleDotBottomConstraint?.constant = -self.toggleDotSpacing
 
-            self.toggleDotImageView.layoutIfNeeded()
+            self.toggleDotImageView.updateConstraintsIfNeeded()
             self.invalidateIntrinsicContentSize()
         }
     }

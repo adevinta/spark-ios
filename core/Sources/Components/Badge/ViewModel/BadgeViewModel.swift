@@ -125,7 +125,7 @@ final class BadgeViewModel: ObservableObject {
 
     private func updateText() {
         self.text = self.format.text(self.value)
-        self.isBadgeEmpty = self.format.text(value).isEmpty
+        self.isBadgeEmpty = self.text.isEmpty
     }
 
     private func updateFont() {

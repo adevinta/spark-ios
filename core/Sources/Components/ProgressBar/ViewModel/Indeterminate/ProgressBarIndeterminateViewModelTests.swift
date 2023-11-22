@@ -326,7 +326,7 @@ private final class Stub: ProgressBarIndeterminateViewModelStub {
             for: frameworkType,
             theme: ThemeGeneratedMock.mocked(),
             intent: .main,
-            shape: .pill,
+            shape: .rounded,
             isAnimating: isAnimating,
             getColorsUseCase: .init(),
             getAnimatedDataUseCase: getAnimatedDataUseCaseMock

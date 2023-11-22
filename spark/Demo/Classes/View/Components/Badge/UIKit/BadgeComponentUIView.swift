@@ -126,7 +126,7 @@ final class BadgeComponentUIView: UIView {
         let textField = UITextField()
         textField.bounds.size.width = 100
         textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        textField.text = String(viewModel.value)
+        textField.text = viewModel.value.flatMap(String.init)
         textField.keyboardType = .numberPad
         textField.tintColor = viewModel.theme.colors.main.main.uiColor
         textField.addDoneButtonOnKeyboard()
@@ -147,9 +147,9 @@ final class BadgeComponentUIView: UIView {
             theme: viewModel.theme,
             text: "With Border",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
+            isEnabled: true,
             selectionState: viewModel.isBorderVisible ? .selected : .unselected,
-            checkboxPosition: .left
+            alignment: .left
         )
     }()
 
@@ -293,7 +293,11 @@ final class BadgeComponentUIView: UIView {
 extension BadgeComponentUIView: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        guard let number = Int(textField.text ?? "") else { return }
-        self.badgeView.value = number
+        self.badgeView.value = textField.text.flatMap(Int.init)
     }
+
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        self.badgeView.value = textField.text.flatMap(Int.init)
+    }
+
 }
