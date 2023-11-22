@@ -18,6 +18,8 @@ public final class TextFieldUIView: UITextField {
     private var heightConstraint = NSLayoutConstraint()
     private var rightViewHeightConstraint = NSLayoutConstraint()
     private var rightViewWidthConstraint = NSLayoutConstraint()
+    private var leftViewColor: UIColor?
+    private var rightViewColor: UIColor?
 
     @ScaledUIMetric private var height: CGFloat = 44
     @ScaledUIMetric private var leftViewSize: CGFloat = 16
@@ -72,11 +74,22 @@ public final class TextFieldUIView: UITextField {
         get { return .init(self.viewModel.borderStyle) }
     }
 
+    public override var leftView: UIView? {
+        get {
+            super.leftView
+        }
+        set {
+            self.leftViewColor = newValue?.tintColor
+            super.leftView = newValue
+        }
+    }
+
     public override var rightView: UIView? {
         get {
             return self.rightViewContainer
         }
         set {
+            self.rightViewColor = newValue?.tintColor
             if let newValue {
                 self.userDefinedRightView.subviews.forEach { $0.removeFromSuperview() }
                 self.userDefinedRightView.addSubviewSizedEqually(newValue)
@@ -147,6 +160,7 @@ public final class TextFieldUIView: UITextField {
     private func setupView() {
         self.adjustsFontForContentSizeCategory = true
         self.font = self.theme.typography.body1.uiFont
+        self.tintColor = self.theme.colors.base.outlineHigh.uiColor
         self.updateStateColors()
         self.setupRightView()
         self.updateSizes()
@@ -311,5 +325,10 @@ public final class TextFieldUIView: UITextField {
         return result
     }
 
-
+    // This is a workaround to make sure that leftView and rightView retain their original color
+    public override func tintColorDidChange() {
+        super.tintColorDidChange()
+        self.leftView?.tintColor = self.leftViewColor
+        self.rightView?.tintColor = self.rightViewColor
+    }
 }

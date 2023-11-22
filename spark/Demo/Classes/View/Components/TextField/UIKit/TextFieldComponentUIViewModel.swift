@@ -75,8 +75,8 @@ final class TextFieldComponentUIViewModel: ObservableObject {
     init(
         theme: Theme,
         intent: TextFieldIntent = .neutral,
-        leftViewMode: ViewMode = .always,
-        rigthViewMode: ViewMode = .unlessEditing,
+        leftViewMode: ViewMode = .never,
+        rigthViewMode: ViewMode = .never,
         leadingAddOnOption: AddOnOption = .none,
         trailingAddOnOption: AddOnOption = .none,
         clearButtonMode: ViewMode = .whileEditing,
