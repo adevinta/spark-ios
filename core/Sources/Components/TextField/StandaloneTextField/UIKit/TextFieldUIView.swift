@@ -197,12 +197,14 @@ public final class TextFieldUIView: UITextField {
     public override func becomeFirstResponder() -> Bool {
         let result = super.becomeFirstResponder()
         self.setBorderColor(from: self.theme.colors.base.outlineHigh)
+        self.setBorderWidth(self.viewModel.borders.widthWhenActive)
         return result
     }
 
     public override func resignFirstResponder() -> Bool {
         let result = super.resignFirstResponder()
         self.setBorderColor(from: self.viewModel.colors.border)
+        self.setBorderWidth(self.viewModel.borders.width)
         return result
     }
 

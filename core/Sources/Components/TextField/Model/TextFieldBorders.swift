@@ -11,4 +11,5 @@ import Foundation
 struct TextFieldBorders: Equatable {
     let radius: CGFloat
     let width: CGFloat
+    let widthWhenActive: CGFloat
 }
