@@ -12,5 +12,4 @@ enum ButtonContentDefault: CaseIterable {
     case attributedText
     case iconAndText
     case iconAndAttributedText
-    case none
 }

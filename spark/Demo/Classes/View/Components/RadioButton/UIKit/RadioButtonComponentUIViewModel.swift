@@ -50,7 +50,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
         return .init(
             name: "Trailing Label",
             type: .checkbox(title: "", isOn: self.labelAlignment == .trailing),
-            target: (source: self, action: #selector(self.labelAlignmentChanged))
+            target: (source: self, action: #selector(self.labelAlignmentChanged(_:)))
         )
     }()
 
@@ -58,7 +58,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
         return .init(
             name: "Vertical layout",
             type: .checkbox(title: "", isOn: self.axis == .vertical),
-            target: (source: self, action: #selector(self.axisChanged))
+            target: (source: self, action: #selector(self.axisChanged(_:)))
         )
     }()
 
@@ -66,21 +66,21 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
         return .init(
             name: "Long Label",
             type: .checkbox(title: "", isOn: self.showLongLabel),
-            target: (source: self, action: #selector(self.showLongLabelChanged)))
+            target: (source: self, action: #selector(self.showLongLabelChanged(_:))))
     }()
 
     lazy var attributedLabelConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Attributed Label",
             type: .checkbox(title: "", isOn: self.showAttributedLabel),
-            target: (source: self, action: #selector(self.showAttributedLabelChanged)))
+            target: (source: self, action: #selector(self.showAttributedLabelChanged(_:))))
     }()
 
     lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Disable",
             type: .checkbox(title: "", isOn: self.isDisabled),
-            target: (source: self, action: #selector(self.disableChanged)))
+            target: (source: self, action: #selector(self.disableChanged(_:))))
     }()
 
     lazy var numberOfRadioButtonsConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -198,24 +198,24 @@ extension RadioButtonComponentUIViewModel {
         self.showIntentSheetSubject.send(RadioButtonIntent.allCases)
     }
 
-    @objc func showLongLabelChanged() {
-        self.showLongLabel.toggle()
+    @objc func showLongLabelChanged(_ selected: Any?) {
+        self.showLongLabel = isTrue(selected)
     }
 
-    @objc func showAttributedLabelChanged() {
-        self.showAttributedLabel.toggle()
+    @objc func showAttributedLabelChanged(_ selected: Any?) {
+        self.showAttributedLabel = isTrue(selected)
     }
 
-    @objc func disableChanged() {
-        self.isDisabled.toggle()
+    @objc func disableChanged(_ selected: Any?) {
+        self.isDisabled = isTrue(selected)
     }
 
-    @objc func axisChanged() {
-        self.axis = self.axis == .vertical ? .horizontal : .vertical
+    @objc func axisChanged(_ selected: Any?) {
+        self.axis = isTrue(selected) ? .vertical : .horizontal
     }
 
-    @objc func labelAlignmentChanged() {
-        self.labelAlignment = self.labelAlignment == .leading ? .trailing : .leading
+    @objc func labelAlignmentChanged(_ selected: Any?) {
+        self.labelAlignment = isTrue(selected) ? .trailing : .leading
     }
 
     @objc func numberOfRadioButtonsChanged(_ control: NumberSelector) {

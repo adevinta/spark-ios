@@ -91,7 +91,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
                 RunLoop.main.perform(
                     self.viewModel.target.action,
                     target: self.viewModel.target.source,
-                    argument: isChecked,
+                    argument: isChecked == .selected,
                     order: 0,
                     modes: [.default]
                 )
