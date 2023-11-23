@@ -26,6 +26,7 @@ struct ButtonComponentView: View {
     @State private var alignment: ButtonAlignment = .leadingIcon
     @State private var content: ButtonContentDefault = .text
     @State private var isEnabled: CheckboxSelectionState = .selected
+    @State private var isSelected: CheckboxSelectionState = .selected
     @State private var isAnimated: CheckboxSelectionState = .selected
 
     @State private var shouldShowReverseBackgroundColor: Bool = false
@@ -92,6 +93,14 @@ struct ButtonComponentView: View {
                 )
 
                 CheckboxView(
+                    text: "Is selected",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: self.theme,
+                    isEnabled: true,
+                    selectionState: self.$isSelected
+                )
+
+                CheckboxView(
                     text: "Is animated",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: self.theme,
@@ -112,6 +121,7 @@ struct ButtonComponentView: View {
                         alignment: self.$alignment.wrappedValue,
                         content: self.$content.wrappedValue,
                         isEnabled: self.$isEnabled.wrappedValue == .selected,
+                        isSelected: self.$isSelected.wrappedValue == .selected,
                         isAnimated: self.$isAnimated.wrappedValue == .selected
                     )
                     .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .center)
