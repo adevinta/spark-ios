@@ -100,6 +100,7 @@ public final class TextFieldUIView: UITextField {
     public override var isEnabled: Bool {
         didSet {
             self.updateStateColors()
+            self.viewModel.textFieldIsEnabled = isEnabled
         }
     }
 

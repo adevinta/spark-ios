@@ -37,6 +37,7 @@ public final class AddOnTextFieldUIView: UIView {
         didSet {
             if let addOn = leadingAddOn {
                 self.addLeadingAddOn(addOn)
+                self.storeAddOnColors(addOn: addOn, position: .leading)
             } else {
                 self.removeLeadingAddOn()
             }
@@ -46,6 +47,7 @@ public final class AddOnTextFieldUIView: UIView {
         didSet {
             if let addOn = trailingAddOn {
                 self.addTrailingAddOn(addOn)
+                self.storeAddOnColors(addOn: addOn, position: .trailing)
             } else {
                 self.removeTrailingAddOn()
             }
@@ -56,7 +58,14 @@ public final class AddOnTextFieldUIView: UIView {
     // MARK: - Private properties
 
     private let viewModel: AddOnTextFieldViewModel
+    private let textFieldViewModel: TextFieldUIViewModel
     private var cancellable = Set<AnyCancellable>()
+    private var leadingAddOnBackgroundColor: UIColor?
+    private var trailingAddOnBackgroundColor: UIColor?
+    private var leadingAddOnForegroundColor: UIColor?
+    private var trailingAddOnForegroundColor: UIColor?
+    private var leadingAddOnLabelColor: UIColor?
+    private var trailingAddOnLabelColor: UIColor?
 
     private lazy var hStack: UIStackView = {
         let stackView = UIStackView()
@@ -78,6 +87,13 @@ public final class AddOnTextFieldUIView: UIView {
         stackView.distribution = .fillProportionally
         return stackView
     }()
+
+    // MARK: - Private enum
+
+    private enum AddOnPosition {
+        case leading
+        case trailing
+    }
 
     // MARK: - Initializers
 
@@ -115,7 +131,7 @@ public final class AddOnTextFieldUIView: UIView {
         self.leadingAddOn = leadingAddOn
         self.trailingAddOn = trailingAddOn
 
-        let textFieldViewModel = TextFieldUIViewModel(
+        self.textFieldViewModel = TextFieldUIViewModel(
             theme: theme,
             borderStyle: .none,
             errorIcon: errorIcon,
@@ -123,8 +139,8 @@ public final class AddOnTextFieldUIView: UIView {
             successIcon: successIcon,
             getColorsUseCase: getColorsUseCase
         )
-        self.textField = TextFieldUIView(viewModel: textFieldViewModel)
-        
+        self.textField = TextFieldUIView(viewModel: self.textFieldViewModel)
+
         self.viewModel = AddOnTextFieldViewModel(
             theme: theme,
             intent: intent,
@@ -171,6 +187,74 @@ public final class AddOnTextFieldUIView: UIView {
             UIView.animate(withDuration: 0.1) {
                 self.addBorder(color: textFieldColors.border, theme: self.theme)
             }
+        }
+
+        self.textFieldViewModel.$textFieldIsEnabled.subscribe(in: &self.cancellable) { [weak self] isEnabled in
+            guard let self else { return }
+            if let leadingAddOn {
+                self.update(addOn: leadingAddOn, position: .leading, state: isEnabled)
+            }
+            if let trailingAddOn {
+                self.update(addOn: trailingAddOn, position: .trailing, state: isEnabled)
+            }
+        }
+    }
+
+    private func update(addOn: UIView, position: AddOnTextFieldUIView.AddOnPosition, state isEnabled: Bool?) {
+        let isEnabled = isEnabled ?? false
+        let backgroundOpacity: CGFloat = isEnabled ? 0 : self.theme.dims.dim5
+        let foregroundOpacity: CGFloat = isEnabled ? self.theme.dims.none : self.theme.dims.dim3
+        let addOnLabel = addOn.subviews.first(where: { $0 is UILabel }) as? UILabel
+
+        addOn.isUserInteractionEnabled = isEnabled
+
+        switch position {
+        case .leading:
+            if isBackgroundClearOrWhite(for: addOn, position: .leading) {
+                addOn.backgroundColor = self.theme.colors.base.onSurface.opacity(backgroundOpacity).uiColor
+            } else {
+                addOn.backgroundColor = self.leadingAddOnBackgroundColor?.withAlphaComponent(foregroundOpacity)
+            }
+            addOn.tintColor = self.leadingAddOnForegroundColor?.withAlphaComponent(foregroundOpacity)
+            addOnLabel?.textColor = self.leadingAddOnLabelColor?.withAlphaComponent(foregroundOpacity)
+        case .trailing:
+            if isBackgroundClearOrWhite(for: addOn, position: .trailing) {
+                addOn.backgroundColor = self.theme.colors.base.onSurface.opacity(backgroundOpacity).uiColor
+            } else {
+                addOn.backgroundColor = self.trailingAddOnBackgroundColor?.withAlphaComponent(foregroundOpacity)
+            }
+            addOn.tintColor = self.trailingAddOnForegroundColor?.withAlphaComponent(foregroundOpacity)
+            addOnLabel?.textColor = self.trailingAddOnLabelColor?.withAlphaComponent(foregroundOpacity)
+        }
+    }
+
+    private func isBackgroundClearOrWhite(for addOn: UIView, position: AddOnTextFieldUIView.AddOnPosition) -> Bool {
+        switch position {
+        case .leading:
+            return self.leadingAddOnBackgroundColor == nil || 
+            self.leadingAddOnBackgroundColor == self.theme.colors.base.surface.uiColor ||
+            self.leadingAddOnBackgroundColor == .white ||
+            self.leadingAddOnBackgroundColor == .clear
+        case .trailing:
+            return self.trailingAddOnBackgroundColor == nil ||
+            self.trailingAddOnBackgroundColor == self.theme.colors.base.surface.uiColor ||
+            self.trailingAddOnBackgroundColor == .white ||
+            self.leadingAddOnBackgroundColor == .clear
+        }
+    }
+
+    private func storeAddOnColors(addOn: UIView, position: AddOnTextFieldUIView.AddOnPosition) {
+        switch position {
+        case .leading:
+            self.leadingAddOnBackgroundColor = addOn.backgroundColor
+            self.leadingAddOnForegroundColor = addOn.tintColor
+            let addOnLabel = addOn.subviews.first(where: { $0 is UILabel }) as? UILabel
+            self.leadingAddOnLabelColor = addOnLabel?.textColor
+        case .trailing:
+            self.trailingAddOnBackgroundColor = addOn.backgroundColor
+            self.trailingAddOnForegroundColor = addOn.tintColor
+            let addOnLabel = addOn.subviews.first(where: { $0 is UILabel }) as? UILabel
+            self.trailingAddOnLabelColor = addOnLabel?.textColor
         }
     }
 

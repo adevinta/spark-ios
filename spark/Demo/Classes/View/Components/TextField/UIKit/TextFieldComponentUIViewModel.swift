@@ -148,6 +148,7 @@ public enum ViewMode: Int, CaseIterable {
 public enum AddOnOption: CaseIterable {
     case none
     case button
+    case filledButton
     case shortText
     case longText
 }

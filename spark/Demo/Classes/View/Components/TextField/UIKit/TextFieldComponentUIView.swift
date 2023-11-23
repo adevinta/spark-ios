@@ -334,6 +334,22 @@ final class TextFieldComponentUIView: UIView {
         return button
     }
 
+    private func createFilledButtonAddOn() -> UIButton {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        var buttonConfig = UIButton.Configuration.plain()
+        buttonConfig.image = UIImage(
+            systemName: "square.and.arrow.up",
+            withConfiguration: UIImage.SymbolConfiguration(scale: .small)
+        )
+        button.tintColor = .white
+        button.backgroundColor = .systemBlue
+        button.configuration = buttonConfig
+        button.addTarget(self.viewModel, action: #selector(self.viewModel.buttonTapped), for: .touchUpInside)
+        button.widthAnchor.constraint(equalToConstant: button.intrinsicContentSize.width).isActive = true
+        return button
+    }
+
     private func createShortTextAddOn() -> UIView {
         let container = UIView()
         let label = UILabel()
@@ -398,6 +414,8 @@ final class TextFieldComponentUIView: UIView {
                 self.addOnTextField.leadingAddOn = nil
             case .button:
                 self.addOnTextField.leadingAddOn = self.createButtonAddOn()
+            case .filledButton:
+                self.addOnTextField.leadingAddOn = self.createFilledButtonAddOn()
             case .shortText:
                 self.addOnTextField.leadingAddOn = self.createShortTextAddOn()
             case .longText:
@@ -413,6 +431,8 @@ final class TextFieldComponentUIView: UIView {
                 self.addOnTextField.trailingAddOn = nil
             case .button:
                 self.addOnTextField.trailingAddOn = self.createButtonAddOn()
+            case .filledButton:
+                self.addOnTextField.trailingAddOn = self.createFilledButtonAddOn()
             case .shortText:
                 self.addOnTextField.trailingAddOn = self.createShortTextAddOn()
             case .longText:
