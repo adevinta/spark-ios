@@ -29,7 +29,7 @@ public final class AddOnTextFieldUIView: UIView {
         }
         set {
             self.viewModel.setIntent(newValue)
-            self.textField.intent = newValue
+            self.textFieldViewModel.setIntent(newValue)
         }
     }
 
@@ -56,6 +56,7 @@ public final class AddOnTextFieldUIView: UIView {
     // MARK: - Private properties
 
     private let viewModel: AddOnTextFieldViewModel
+    private let textFieldViewModel: TextFieldUIViewModel
     private var cancellable = Set<AnyCancellable>()
 
     private lazy var hStack: UIStackView = {
@@ -106,7 +107,7 @@ public final class AddOnTextFieldUIView: UIView {
         self.leadingAddOn = leadingAddOn
         self.trailingAddOn = trailingAddOn
 
-        let textFieldViewModel = TextFieldUIViewModel(
+        self.textFieldViewModel = TextFieldUIViewModel(
             theme: theme,
             borderStyle: .none,
             getColorsUseCase: getColorsUseCase
@@ -135,7 +136,9 @@ public final class AddOnTextFieldUIView: UIView {
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
         self.textField.translatesAutoresizingMaskIntoConstraints = false
 
-        self.hStack.addBorder(color: self.viewModel.textFieldColors.border, theme: self.theme)
+        self.hStack.setBorderColor(from: self.textFieldViewModel.colors.border)
+        self.hStack.setBorderWidth(self.theme.border.width.small)
+        self.hStack.setCornerRadius(self.theme.border.radius.large)
 
         self.addSubviewSizedEqually(hStack)
         self.hStack.addArrangedSubviews([
@@ -157,8 +160,21 @@ public final class AddOnTextFieldUIView: UIView {
         self.viewModel.$textFieldColors.subscribe(in: &self.cancellable) { [weak self] textFieldColors in
             guard let self else { return }
             UIView.animate(withDuration: 0.1) {
-                self.addBorder(color: textFieldColors.border, theme: self.theme)
+                var showThickBorder = self.textField.isFirstResponder || self.intent != .neutral
+                self.setBorderColor(from: textFieldColors.border)
+                self.setBorderWidth(showThickBorder ? self.theme.border.width.medium : self.theme.border.width.small)
+                self.setCornerRadius(self.theme.border.radius.large)
             }
+        }
+
+        self.textFieldViewModel.$textFieldIsActive.subscribe(in: &self.cancellable) { [weak self] isActive in
+            guard let self else { return }
+            let isActive = isActive ?? false
+            var showThickBorder = isActive || self.intent != .neutral
+
+            self.setBorderColor(from: isActive ? self.theme.colors.base.outlineHigh : self.textFieldViewModel.colors.border)
+            self.setBorderWidth(showThickBorder ? self.theme.border.width.medium : self.theme.border.width.small)
+            self.setCornerRadius(self.theme.border.radius.large)
         }
     }
 
@@ -202,13 +218,4 @@ public final class AddOnTextFieldUIView: UIView {
         self.trailingAddOnStackView.removeArrangedSubviews()
     }
 
-}
-
-private extension UIView {
-    func addBorder(color: any ColorToken, theme: Theme) {
-        self.setBorderColor(from: color)
-        self.setBorderWidth(theme.border.width.small)
-        self.setCornerRadius(theme.border.radius.large)
-        self.setMasksToBounds(true)
-    }
 }

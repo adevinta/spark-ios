@@ -15,6 +15,7 @@ final class TextFieldUIViewModel: ObservableObject {
     @Published var colors: TextFieldColors
     @Published var borders: TextFieldBorders
     @Published var spacings: TextFieldSpacings
+    @Published var textFieldIsActive: Bool?
 
     // MARK: - Private properties
     
