@@ -142,6 +142,12 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
+
+    /// Changes of the selection state is posted to the publisher.
+    public var publisher: some Publisher<Bool, Never> {
+        return self.publisherBinding.publisher.eraseToAnyPublisher()
+    }
+
     // MARK: - Private Properties
     @ScaledUIMetric private var toggleSize = Constants.toggleViewHeight
     @ScaledUIMetric private var spacing: CGFloat
@@ -149,6 +155,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     @ScaledUIMetric private var haloWidth = Constants.haloWidth
 
     private var subscriptions = Set<AnyCancellable>()
+    private var publisherBinding: PublishingBinding
 
     // MARK: - View properties
     private lazy var toggleView: RadioButtonToggleUIView = {
@@ -198,15 +205,54 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         groupState: RadioButtonGroupState = .enabled,
         labelPosition: RadioButtonLabelPosition = .right
     ) {
+        let publisherBinding = PublishedBinding(binding: selectedID, id: id)
+
         let viewModel = RadioButtonViewModel(
             theme: theme, 
             intent: groupState.intent,
             id: id,
             label: .left(label),
-            selectedID: selectedID,
+            selectedID: publisherBinding.wrappedBinding,
             alignment: labelPosition.alignment)
 
-        self.init(viewModel: viewModel)
+        self.init(
+            viewModel: viewModel,
+            publisherBinding: publisherBinding
+        )
+    }
+
+    /// A radio button component which can be used as a standalone component.
+    /// This convenience init, avoids needing to use a binding. Changes to the selection state are published to the publisher.
+    ///
+    /// Parameters:
+    /// - theme: The current theme
+    /// - intent: The intent defining the color
+    /// - id: The value of the radio button
+    /// - label: The text rendered to describe the value
+    /// - isSelected: Bool, defining whether the radiobutton is selected or not.
+    /// - labelAlignment: the alignment of the label according to the toggle
+    public convenience init(
+        theme: Theme,
+        intent: RadioButtonIntent,
+        id: ID,
+        label: NSAttributedString,
+        isSelected: Bool,
+        labelAlignment: RadioButtonLabelAlignment = .trailing
+    ) {
+        let publisherBinding = PublisherBinding(id: id, selectedID: isSelected ? id : nil)
+
+        let viewModel = RadioButtonViewModel(
+            theme: theme,
+            intent: intent,
+            id: id,
+            label: .left(label),
+            selectedID: publisherBinding.wrappedBinding,
+            alignment: labelAlignment)
+
+        self.init(
+            viewModel: viewModel,
+            publisherBinding: publisherBinding
+        )
     }
 
     /// The radio button component takes a theme, an id, a label and a binding
@@ -226,19 +272,25 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         selectedID: Binding<ID?>,
         labelAlignment: RadioButtonLabelAlignment = .trailing
     ) {
+        let publisherBinding = PublishedBinding(binding: selectedID, id: id)
         let viewModel = RadioButtonViewModel(
             theme: theme,
             intent: intent,
             id: id,
             label: .left(label),
-            selectedID: selectedID,
+            selectedID: publisherBinding.wrappedBinding,
             alignment: labelAlignment)
 
-        self.init(viewModel: viewModel)
+        self.init(
+            viewModel: viewModel,
+            publisherBinding: publisherBinding
+        )
     }
 
-    init(viewModel: RadioButtonViewModel<ID>) {
+    init(viewModel: RadioButtonViewModel<ID>,
+         publisherBinding: PublishingBinding) {
         self.viewModel = viewModel
+        self.publisherBinding = publisherBinding
         self._spacing = ScaledUIMetric(wrappedValue: viewModel.spacing)
 
         super.init(frame: CGRect.zero)
@@ -486,5 +538,57 @@ public extension RadioButtonUIView {
                                         for axis: NSLayoutConstraint.Axis) {
         self.textLabel.setContentHuggingPriority(priority,
                                                  for: axis)
+    }
+}
+
+// MARK: - Private Helpers
+protocol PublishingBinding {
+    var publisher: any Publisher<Bool, Never> { get }
+}
+
+final class PublisherBinding<ID: Equatable & CustomStringConvertible>: PublishingBinding {
+    let id: ID
+    var selectedID: ID?
+
+    lazy var wrappedBinding = Binding<ID?>(
+        get: { self.selectedID },
+        set: { newValue in
+            self.selectedID = newValue
+            self.subject.send(self.selectedID == self.id)
+        }
+    )
+
+    var publisher: any Publisher<Bool, Never> {
+        return self.subject
+    }
+    private var subject = PassthroughSubject<Bool, Never>()
+
+    init(id: ID, selectedID: ID?) {
+        self.id = id
+        self.selectedID = selectedID
+        self.subject = PassthroughSubject()
+    }
+}
+
+final class PublishedBinding<ID: Equatable & CustomStringConvertible>: PublishingBinding {
+    let binding: Binding<ID?>
+    let id: ID
+
+    lazy var wrappedBinding = Binding<ID?>(
+        get: { self.binding.wrappedValue },
+        set: { newValue in
+            self.binding.wrappedValue = newValue
+            self.subject.send(self.binding.wrappedValue == self.id)
+        }
+    )
+
+    var publisher: any Publisher<Bool, Never> {
+        return self.subject
+    }
+    private var subject = PassthroughSubject<Bool, Never>()
+
+    init(binding: Binding<ID?>, id: ID) {
+        self.binding = binding
+        self.id = id
     }
 }
