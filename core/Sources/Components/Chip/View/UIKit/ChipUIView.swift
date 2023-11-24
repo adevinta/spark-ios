@@ -58,7 +58,18 @@ public final class ChipUIView: UIControl {
             return self.viewModel.isSelected
         }
     }
-    
+
+    public override var isHighlighted: Bool {
+        set {
+            if self.hasAction {
+                self.viewModel.isPressed = newValue
+            }
+        }
+        get {
+            return self.hasAction && self.viewModel.isPressed
+        }
+    }
+
     /// An optional action. If the action is given, the Chip will act like a button and have a pressed state.
     /// As an alternative, a .touchUpInside action can be set
     public var action: (() -> ())? {
@@ -516,30 +527,6 @@ public final class ChipUIView: UIControl {
     }
 
     // MARK: - Control functions
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-
-        if self.hasAction {
-            self.viewModel.isPressed = true
-        }
-    }
-
-    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-
-        if self.hasAction {
-            self.viewModel.isPressed = false
-        }
-    }
-
-    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-
-        if self.hasAction {
-            self.viewModel.isPressed = false
-        }
-    }
-
     public func enableComponentUserInteraction(_ isEnabled: Bool) {
         self.stackView.isUserInteractionEnabled = isEnabled
     }
