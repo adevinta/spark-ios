@@ -204,8 +204,12 @@ public final class TextFieldUIView: UITextField {
 
     private func setupSubscriptions() {
         self.viewModel.$colors.subscribe(in: &self.cancellable) { [weak self] colors in
-            UIView.animate(withDuration: 0.1, animations: { self?.setupColors(colors) })
-            self?.updateStatusIconColor(colors.statusIcon)
+            guard let self else { return }
+            UIView.animate(withDuration: 0.1, animations: {
+                self.setupColors(colors)
+                self.setupBorders(self.viewModel.borders)
+                self.updateStatusIconColor(colors.statusIcon)
+            })
         }
         self.viewModel.$borders.subscribe(in: &self.cancellable) { [weak self] borders in
             UIView.animate(withDuration: 0.1, animations: { self?.setupBorders(borders) })
@@ -228,7 +232,8 @@ public final class TextFieldUIView: UITextField {
     }
 
     private func setupBorders(_ borders: TextFieldBorders) {
-        self.setBorderWidth(borders.width)
+        let borderWidth = self.isFirstResponder ? borders.widthWhenActive : borders.width
+        self.setBorderWidth(borderWidth)
         self.setCornerRadius(borders.radius)
     }
 
@@ -322,13 +327,15 @@ public final class TextFieldUIView: UITextField {
 
     public override func becomeFirstResponder() -> Bool {
         let result = super.becomeFirstResponder()
-        self.setBorderColor(from: self.theme.colors.base.outlineHigh)
+        self.setupBorders(self.viewModel.borders)
+        self.viewModel.textFieldIsActive = true
         return result
     }
 
     public override func resignFirstResponder() -> Bool {
         let result = super.resignFirstResponder()
-        self.setBorderColor(from: self.viewModel.colors.border)
+        self.setupBorders(self.viewModel.borders)
+        self.viewModel.textFieldIsActive = false
         return result
     }
 

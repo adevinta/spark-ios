@@ -23,7 +23,8 @@ final class TextFieldGetBordersUseCaseTests: XCTestCase {
             givenBorderStyle: .none,
             expectedBorder: .init(
                 radius: .zero,
-                width: .zero
+                width: .zero, 
+                widthWhenActive: .zero
             ))
     }
 
@@ -32,7 +33,8 @@ final class TextFieldGetBordersUseCaseTests: XCTestCase {
             givenBorderStyle: .roundedRect,
             expectedBorder: .init(
                 radius: themeMock.border.radius.large,
-                width: themeMock.border.width.small
+                width: themeMock.border.width.small,
+                widthWhenActive: themeMock.border.width.medium
             ))
     }
 }

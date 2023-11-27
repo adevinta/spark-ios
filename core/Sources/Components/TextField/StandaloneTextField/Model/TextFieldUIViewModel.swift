@@ -17,6 +17,7 @@ final class TextFieldUIViewModel: ObservableObject {
     @Published var spacings: TextFieldSpacings
     @Published var statusIcon: UIImage?
     @Published var textFieldIsEnabled: Bool?
+    @Published var textFieldIsActive: Bool?
 
     // MARK: - Private properties
     

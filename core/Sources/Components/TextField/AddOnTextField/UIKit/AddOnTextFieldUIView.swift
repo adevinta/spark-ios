@@ -29,7 +29,7 @@ public final class AddOnTextFieldUIView: UIView {
         }
         set {
             self.viewModel.setIntent(newValue)
-            self.textField.intent = newValue
+            self.textFieldViewModel.setIntent(newValue)
         }
     }
 
@@ -163,7 +163,9 @@ public final class AddOnTextFieldUIView: UIView {
         self.hStack.translatesAutoresizingMaskIntoConstraints = false
         self.textField.translatesAutoresizingMaskIntoConstraints = false
 
-        self.hStack.addBorder(color: self.viewModel.textFieldColors.border, theme: self.theme)
+        self.hStack.setBorderColor(from: self.textFieldViewModel.colors.border)
+        self.hStack.setBorderWidth(self.theme.border.width.small)
+        self.hStack.setCornerRadius(self.theme.border.radius.large)
 
         self.addSubviewSizedEqually(hStack)
         self.hStack.addArrangedSubviews([
@@ -185,8 +187,17 @@ public final class AddOnTextFieldUIView: UIView {
         self.viewModel.$textFieldColors.subscribe(in: &self.cancellable) { [weak self] textFieldColors in
             guard let self else { return }
             UIView.animate(withDuration: 0.1) {
-                self.addBorder(color: textFieldColors.border, theme: self.theme)
+                self.setBorderColor(from: textFieldColors.border)
+                self.setCornerRadius(self.theme.border.radius.large)
             }
+        }
+
+        self.textFieldViewModel.$textFieldIsActive.subscribe(in: &self.cancellable) { [weak self] isActive in
+            guard let self else { return }
+            let isActive = isActive ?? false
+
+            self.setBorderWidth(isActive ? self.theme.border.width.medium : self.theme.border.width.small)
+            self.setCornerRadius(self.theme.border.radius.large)
         }
 
         self.textFieldViewModel.$textFieldIsEnabled.subscribe(in: &self.cancellable) { [weak self] isEnabled in
@@ -298,13 +309,4 @@ public final class AddOnTextFieldUIView: UIView {
         self.trailingAddOnStackView.removeArrangedSubviews()
     }
 
-}
-
-private extension UIView {
-    func addBorder(color: any ColorToken, theme: Theme) {
-        self.setBorderColor(from: color)
-        self.setBorderWidth(theme.border.width.small)
-        self.setCornerRadius(theme.border.radius.large)
-        self.setMasksToBounds(true)
-    }
 }
