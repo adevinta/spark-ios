@@ -96,6 +96,8 @@ extension ComponentsViewController {
             viewController = TabComponentUIViewController.build()
         case .tag:
             viewController = TagComponentUIViewController.build()
+        case .textField:
+            viewController = TextFieldUIViewController.build()
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -122,5 +124,6 @@ private extension ComponentsViewController {
         case switchButton
         case tab
         case tag
+        case textField
     }
 }
