@@ -21,6 +21,8 @@ public struct CheckboxGroupItemDefault: CheckboxGroupItemProtocol, Hashable {
     public var selectionState: CheckboxSelectionState
     /// The current control state of the checkbox.
     public var state: SelectButtonState
+    /// The current control state of the checkbox.
+    public var isEnabled: Bool
 
     /// CheckboxGroupItemDefault initializer
     /// - Parameters:
@@ -29,6 +31,7 @@ public struct CheckboxGroupItemDefault: CheckboxGroupItemProtocol, Hashable {
     ///   - id: The checkbox identifier.
     ///   - selectionState: The current selection state of the checkbox.
     ///   - state: The current control state of the checkbox.
+    @available(*, deprecated, message: "state parameter was changed with isEnabled")
     public init(
         title: String? = nil,
         attributedTitle: NSAttributedString? = nil,
@@ -41,8 +44,31 @@ public struct CheckboxGroupItemDefault: CheckboxGroupItemProtocol, Hashable {
         self.id = id
         self.selectionState = selectionState
         self.state = state
+        self.isEnabled = state == .enabled
     }
 
+    /// CheckboxGroupItemDefault initializer
+    /// - Parameters:
+    ///   - title: The checkbox title. Default value is `nil`
+    ///   - attributedTitle: The attributed checkbox title. Default value is `nil`
+    ///   - id: The checkbox identifier.
+    ///   - selectionState: The current selection state of the checkbox.
+    ///   - isEnabled: The current control state of the checkbox.
+    public init(
+        title: String? = nil,
+        attributedTitle: NSAttributedString? = nil,
+        id: String,
+        selectionState: CheckboxSelectionState,
+        isEnabled: Bool = true
+    ) {
+        self.title = title
+        self.attributedTitle = attributedTitle
+        self.id = id
+        self.selectionState = selectionState
+        self.isEnabled = isEnabled
+        self.state = isEnabled ? .enabled : .disabled
+    }
+    
     public static func == (lhs: CheckboxGroupItemDefault, rhs: CheckboxGroupItemDefault) -> Bool {
         lhs.id == rhs.id
     }

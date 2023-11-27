@@ -121,21 +121,21 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
         return .init(
             name: "Enable",
             type: .checkbox(title: "", isOn: self.isEnabled),
-            target: (source: self, action: #selector(self.enabledChanged)))
+            target: (source: self, action: #selector(self.enabledChanged(_:))))
     }()
 
     lazy var selectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Selected",
             type: .checkbox(title: "", isOn: self.isSelected),
-            target: (source: self, action: #selector(self.selectedChanged)))
+            target: (source: self, action: #selector(self.selectedChanged(_:))))
     }()
 
     lazy var hasActionConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Action",
             type: .checkbox(title: "", isOn: self.hasAction),
-            target: (source: self, action: #selector(self.hasActionChanged)))
+            target: (source: self, action: #selector(self.hasActionChanged(_:))))
     }()
 
     var showIcon = true {
@@ -284,19 +284,19 @@ extension ChipComponentUIViewModel {
         }
     }
 
-    @objc func showIconChanged() {
-        self.showIcon.toggle()
+    @objc func showIconChanged(_ isSelected: Any?) {
+        self.showIcon = isTrue(isSelected)
     }
 
-    @objc func enabledChanged() {
-        self.isEnabled.toggle()
+    @objc func enabledChanged(_ isSelected: Any?) {
+        self.isEnabled = isTrue(isSelected)
     }
 
-    @objc func selectedChanged() {
-        self.isSelected.toggle()
+    @objc func selectedChanged(_ isSelected: Any?) {
+        self.isSelected = isTrue(isSelected)
     }
 
-    @objc func hasActionChanged() {
-        self.hasAction.toggle()
+    @objc func hasActionChanged(_ isSelected: Any?) {
+        self.hasAction = isTrue(isSelected)
     }
 }

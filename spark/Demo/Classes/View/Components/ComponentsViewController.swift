@@ -82,8 +82,12 @@ extension ComponentsViewController {
             viewController = ChipComponentViewController.build()
         case .icon:
             viewController = IconComponentUIViewController.build()
+        case .progressBarIndeterminate:
+            viewController = ProgressBarIndeterminateComponentUIViewController.build()
+        case .progressBarSingle:
+            viewController = ProgressBarComponentUIViewController.build()
         case .radioButton:
-            viewController = RadioButtonUIGroupViewController()
+            viewController = RadioButtonComponentUIViewController.build()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
         case .switchButton:
@@ -113,6 +117,8 @@ private extension ComponentsViewController {
         case checkbox
         case chip
         case icon
+        case progressBarIndeterminate
+        case progressBarSingle
         case radioButton
         case spinner
         case switchButton

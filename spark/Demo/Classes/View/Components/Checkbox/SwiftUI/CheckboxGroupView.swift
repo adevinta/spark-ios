@@ -13,161 +13,109 @@ import SwiftUI
 struct CheckboxGroupListView: View {
 
     // MARK: - Properties
-
-    private let viewModel = CheckboxViewModel()
-
-    // MARK: - View
-
-    @State private var layout: CheckboxGroupLayout = .vertical
-
-    @State private var checkboxPosition: CheckboxPosition = .left
-
-    @State private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItemDefault(title: "Entry", id: "1", selectionState: .selected, state: .error(message: "An unknown error occured.")),
-        CheckboxGroupItemDefault(title: "Entry 2", id: "2", selectionState: .unselected),
-        CheckboxGroupItemDefault(title: "Entry 3", id: "3", selectionState: .unselected),
-        CheckboxGroupItemDefault(title: "Entry 4", id: "4", selectionState: .unselected, state: .success(message: "Great!")),
-        CheckboxGroupItemDefault(title: "Entry 5", id: "5", selectionState: .unselected, state: .disabled),
-        CheckboxGroupItemDefault(title: "Entry 6", id: "6", selectionState: .unselected),
-        CheckboxGroupItemDefault(title: "Entry 7", id: "7", selectionState: .unselected),
-        CheckboxGroupItemDefault(title: "Entry 8", id: "8", selectionState: .unselected)
-    ]
-
-    @ObservedObject private var themePublisher = SparkThemePublisher.shared
-
-    var theme: Theme {
-        self.themePublisher.theme
-    }
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text("Selection:\n\(self.selectedItemsText)")
-                Spacer()
-            }
-
-            Button("Shuffle states") {
-                self.shuffleAction()
-            }
-
-            Button("Change layout") {
-                withAnimation {
-                    self.layout = layout == .horizontal ? .vertical : .horizontal
-                }
-            }
-
-            Button("Change position") {
-                withAnimation {
-                    self.checkboxPosition = self.checkboxPosition == .left ? .right : .left
-                }
-            }
-
-            Button("Add checkbox") {
-                let identifier = "\(self.items.count + 1)"
-                let newItem = CheckboxGroupItemDefault(title: "Entry \(identifier)", id: identifier, selectionState: .unselected)
-                withAnimation {
-                    self.items.append(newItem)
-                }
-            }
-        }
-        .padding(.horizontal, 16)
-
-        ScrollView(self.layout == .horizontal ? .horizontal : .vertical) {
-            HStack {
-                let checkedImage = DemoIconography.shared.checkmark
-
-                CheckboxGroupView(
-                    title: "Checkbox-group title (SwiftUI)",
-                    checkedImage: checkedImage,
-                    items: $items,
-                    layout: layout,
-                    checkboxPosition: checkboxPosition,
-                    theme: self.theme,
-                    accessibilityIdentifierPrefix: "checkbox-group"
-                )
-                Spacer()
-            }
-            .padding(.horizontal)
-        }
-        .navigationBarTitle(Text("Checkbox"))
-
-        Spacer()
-    }
-
-    func shuffleAction() {
-        let states = [SelectButtonState.enabled, .disabled, .accent, .basic, .success(message: "Success"), .warning(message: "Warning"), .error(message: "Error")]
-        let selectionStates = [CheckboxSelectionState.selected, .unselected, .indeterminate]
-
-        withAnimation {
-            for index in 0..<items.count {
-                var item = self.items[index]
-                if let randomState = states.randomElement() {
-                    item.state = randomState
-                }
-
-                if let randomSelectionState = selectionStates.randomElement() {
-                    item.selectionState = randomSelectionState
-                }
-                self.items[index] = item
-            }
-        }
-    }
-
-    var selectedItems: [any CheckboxGroupItemProtocol] {
-        self.items.filter { $0.selectionState == .selected }
-    }
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: CheckboxIntent = .main
+    @State private var alignment: CheckboxAlignment = .left
+    @State private var layout: CheckboxSelectionState = CheckboxSelectionState.unselected
+    @State private var isTitleHidden: CheckboxSelectionState = CheckboxSelectionState.unselected
+    @State private var textStyle: CheckboxTextStyle = .text
+    @State private var selectedIcon = CheckboxListView.Icons.checkedImage
+    @State private var groupType: CheckboxGroupType = .doubleMix
+    @State private var items: [any CheckboxGroupItemProtocol] = CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: .doubleMix)
+    @State private var selectedItems: String = ""
 
     var selectedItemsText: String {
-        self.selectedItems.map { $0.title ?? "" }.joined(separator: ", ")
+        var text: String = ""
+        let texts: [String] = self.items.enumerated()
+            .map { index, checkbox in
+                let line: String = index == (self.items.count - 1) ? "" : "\n"
+                return "\(index + 1) \(checkbox.selectionState)" + line
+            }
+        texts.forEach { text += $0 }
+        return text
+    }
+
+    // MARK: - View
+    var body: some View {
+        Component(
+            name: "Checkbox Group",
+            configuration: {
+                ThemeSelector(theme: self.$theme)
+
+                EnumSelector(
+                    title: "Intent",
+                    dialogTitle: "Select an Intent",
+                    values: CheckboxIntent.allCases,
+                    value: self.$intent
+                )
+
+                EnumSelector(
+                    title: "Alignment",
+                    dialogTitle: "Select a Alignment",
+                    values: CheckboxAlignment.allCases,
+                    value: self.$alignment
+                )
+
+                EnumSelector(
+                    title: "Icons",
+                    dialogTitle: "Select a Icon",
+                    values: CheckboxListView.Icons.allCases,
+                    value: self.$selectedIcon
+                )
+
+                EnumSelector(
+                    title: "Group Type",
+                    dialogTitle: "Select a type",
+                    values: CheckboxGroupType.allCases,
+                    value: self.$groupType
+                )
+
+                CheckboxView(
+                    text: "Is Layout vertical",
+                    checkedImage: CheckboxListView.Icons.checkedImage.image,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$layout
+                )
+
+                CheckboxView(
+                    text: "Show Group Title",
+                    checkedImage: CheckboxListView.Icons.checkedImage.image,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$isTitleHidden
+                )
+
+                HStack {
+                    Text("Items:")
+                    Text(self.selectedItemsText)
+                }
+            },
+            integration: {
+                CheckboxGroupView(
+                    title: self.isTitleHidden == .selected ? "This title was deprecated" : "",
+                    checkedImage: self.selectedIcon.image,
+                    items: self.$items,
+                    layout: self.layout == .selected ? .vertical : .horizontal,
+                    alignment: self.alignment,
+                    theme: self.theme,
+                    intent: self.intent,
+                    accessibilityIdentifierPrefix: "checkbox-group"
+                )
+                .onChange(of: self.groupType) { newValue in
+                    self.items = self.setItems(groupType: newValue)
+                }
+            }
+        )
+    }
+
+    private func setItems(groupType: CheckboxGroupType) -> [any CheckboxGroupItemProtocol] {
+        CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: self.groupType)
     }
 }
 
 struct CheckboxGroupView_Previews: PreviewProvider {
     static var previews: some View {
         CheckboxListView()
-    }
-}
-
-// MARK: - Demo item
-
-class CheckboxGroupItem: CheckboxGroupItemProtocol, Hashable {
-    static func == (lhs: CheckboxGroupItem, rhs: CheckboxGroupItem) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    var title: String?
-    var attributedTitle: NSAttributedString?
-    var id: String
-    var selectionState: CheckboxSelectionState
-    var state: SelectButtonState
-
-    init(
-        title: String? = nil,
-        id: String,
-        selectionState: CheckboxSelectionState,
-        state: SelectButtonState = .enabled
-    ) {
-        self.title = title
-        self.attributedTitle = nil
-        self.id = id
-        self.selectionState = selectionState
-        self.state = state
-    }
-
-    init(
-        attributedTitle: NSAttributedString,
-        id: String,
-        selectionState: CheckboxSelectionState,
-        state: SelectButtonState = .enabled
-    ) {
-        self.title = attributedTitle.string
-        self.attributedTitle = attributedTitle
-        self.id = id
-        self.selectionState = selectionState
-        self.state = state
     }
 }

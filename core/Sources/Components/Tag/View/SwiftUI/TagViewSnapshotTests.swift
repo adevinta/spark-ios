@@ -26,9 +26,11 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
         for scenario in scenarios {
             let configurations = scenario.configuration(isSwiftUIComponent: true)
             for configuration in configurations {
-                let view = TagView(theme: self.theme)
-                    .intent(configuration.intent)
-                    .variant(configuration.variant)
+                let view = TagView(
+                    theme: self.theme,
+                    intent: configuration.intent,
+                    variant: configuration.variant
+                )
                     .iconImage(configuration.iconImage?.rightValue)
                     .text(configuration.text)
                     .frame(width: configuration.width)
