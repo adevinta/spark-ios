@@ -203,10 +203,10 @@ public final class AddOnTextFieldUIView: UIView {
 
         self.textFieldViewModel.$textFieldIsEnabled.subscribe(in: &self.cancellable) { [weak self] isEnabled in
             guard let self else { return }
-            if let leadingAddOn {
+            if let leadingAddOn = self.leadingAddOn {
                 self.update(addOn: leadingAddOn, position: .leading, state: isEnabled)
             }
-            if let trailingAddOn {
+            if let trailingAddOn = self.trailingAddOn {
                 self.update(addOn: trailingAddOn, position: .trailing, state: isEnabled)
             }
         }
