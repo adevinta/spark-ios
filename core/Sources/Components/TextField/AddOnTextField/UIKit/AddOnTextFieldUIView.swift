@@ -166,6 +166,7 @@ public final class AddOnTextFieldUIView: UIView {
         self.hStack.setBorderColor(from: self.textFieldViewModel.colors.border)
         self.hStack.setBorderWidth(self.theme.border.width.small)
         self.hStack.setCornerRadius(self.theme.border.radius.large)
+        self.setMasksToBounds(true)
 
         self.addSubviewSizedEqually(hStack)
         self.hStack.addArrangedSubviews([
