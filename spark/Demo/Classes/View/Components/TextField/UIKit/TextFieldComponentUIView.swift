@@ -232,9 +232,8 @@ final class TextFieldComponentUIView: UIView {
             theme: viewModel.theme,
             text: "Text field enabled",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
             selectionState: .selected,
-            checkboxPosition: .left
+            alignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
