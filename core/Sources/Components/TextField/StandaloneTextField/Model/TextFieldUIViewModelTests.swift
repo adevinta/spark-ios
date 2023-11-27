@@ -34,7 +34,7 @@ final class TextFieldUIViewModelTests: XCTestCase {
         self.getBordersUseCase = TextFieldGetBordersUseCasableGeneratedMock()
         self.getColorsUseCase = TextFieldGetColorsUseCasableGeneratedMock()
         self.getSpacingsUseCase = TextFieldGetSpacingsUseCasableGeneratedMock()
-        self.textFieldColors = TextFieldColors(border: .mock(ColorTokenGeneratedMock.random().color))
+        self.textFieldColors = TextFieldColors(border: .mock(ColorTokenGeneratedMock.random().color), statusIcon: ColorTokenGeneratedMock.random())
         self.textFieldBorders = TextFieldBorders(radius: .zero, width: .zero, widthWhenActive: .zero)
         self.textFieldSpacings = TextFieldSpacings(left: .zero, content: .zero, right: .zero)
 
@@ -46,6 +46,9 @@ final class TextFieldUIViewModelTests: XCTestCase {
         self.sut = .init(
             theme: self.theme,
             borderStyle: .none,
+            errorIcon: IconographyTests.shared.warningOutline,
+            alertIcon: IconographyTests.shared.alertOutline,
+            successIcon: IconographyTests.shared.checkmark,
             getColorsUseCase: self.getColorsUseCase,
             getBordersUseCase: self.getBordersUseCase,
             getSpacingsUseCase: self.getSpacingsUseCase
@@ -61,8 +64,11 @@ final class TextFieldUIViewModelTests: XCTestCase {
                 self.getColorsUseCase.executeWithThemeAndIntentCallsCount = 0
                 self.sut = TextFieldUIViewModel(
                     theme: self.theme,
-                    intent: intent,
                     borderStyle: borderStyle,
+                    errorIcon: IconographyTests.shared.warningOutline,
+                    alertIcon: IconographyTests.shared.alertOutline,
+                    successIcon: IconographyTests.shared.checkmark,
+                    intent: intent,
                     getColorsUseCase: self.getColorsUseCase,
                     getBordersUseCase: self.getBordersUseCase,
                     getSpacingsUseCase: self.getSpacingsUseCase
@@ -118,8 +124,12 @@ final class TextFieldUIViewModelTests: XCTestCase {
             // GIVEN
             self.sut = TextFieldUIViewModel(
                 theme: self.theme,
-                intent: intent,
                 borderStyle: .roundedRect,
+                errorIcon: IconographyTests.shared.warningOutline,
+                alertIcon: IconographyTests.shared.alertOutline,
+                successIcon: IconographyTests.shared.checkmark,
+                intent: intent,
+
                 getColorsUseCase: self.getColorsUseCase
             )
 
@@ -167,8 +177,11 @@ final class TextFieldUIViewModelTests: XCTestCase {
         expectation.expectedFulfillmentCount = 1
         self.sut = TextFieldUIViewModel(
             theme: self.theme,
-            intent: .neutral,
             borderStyle: .none,
+            errorIcon: IconographyTests.shared.warningOutline,
+            alertIcon: IconographyTests.shared.alertOutline,
+            successIcon: IconographyTests.shared.checkmark,
+            intent: .neutral,
             getColorsUseCase: self.getColorsUseCase
         )
 
@@ -190,6 +203,9 @@ final class TextFieldUIViewModelTests: XCTestCase {
         self.sut = TextFieldUIViewModel(
             theme: self.theme,
             borderStyle: .none,
+            errorIcon: IconographyTests.shared.warningOutline,
+            alertIcon: IconographyTests.shared.alertOutline,
+            successIcon: IconographyTests.shared.checkmark,
             getBordersUseCase: self.getBordersUseCase
         )
 
@@ -211,6 +227,9 @@ final class TextFieldUIViewModelTests: XCTestCase {
         self.sut = TextFieldUIViewModel(
             theme: self.theme,
             borderStyle: .none,
+            errorIcon: IconographyTests.shared.warningOutline,
+            alertIcon: IconographyTests.shared.alertOutline,
+            successIcon: IconographyTests.shared.checkmark,
             getSpacingsUseCase: self.getSpacingsUseCase
         )
 

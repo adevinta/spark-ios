@@ -21,28 +21,28 @@ final class TextFieldGetColorsUseCaseTests: XCTestCase {
     func test_execute_for_alert_case() {
         self.testExecute(
             givenIntent: .alert,
-            expectedTextFieldColors: .init(border: self.themeMock.colors.feedback.alert)
+            expectedTextFieldColors: .init(border: self.themeMock.colors.feedback.alert, statusIcon:  self.themeMock.colors.feedback.alert)
         )
     }
 
     func test_execute_for_error_case() {
         self.testExecute(
             givenIntent: .error,
-            expectedTextFieldColors: .init(border: self.themeMock.colors.feedback.error)
+            expectedTextFieldColors: .init(border: self.themeMock.colors.feedback.error, statusIcon: self.themeMock.colors.feedback.error)
         )
     }
 
     func test_execute_for_neutral_case() {
         self.testExecute(
             givenIntent: .neutral,
-            expectedTextFieldColors: .init(border: self.themeMock.colors.base.outline)
+            expectedTextFieldColors: .init(border: self.themeMock.colors.base.outline, statusIcon: self.themeMock.colors.base.outline)
         )
     }
 
     func test_execute_for_success_case() {
         self.testExecute(
             givenIntent: .success,
-            expectedTextFieldColors: .init(border: self.themeMock.colors.feedback.success)
+            expectedTextFieldColors: .init(border: self.themeMock.colors.feedback.success, statusIcon: self.themeMock.colors.feedback.success)
         )
     }
 

@@ -38,6 +38,14 @@ struct IconographyTests {
         return self.getImage(name: "switchOn")
     }()
 
+    lazy var alertOutline: UIImage = {
+        return self.getImage(name: "AlertOutline")
+    }()
+
+    lazy var warningOutline: UIImage = {
+        return self.getImage(name: "WarningOutline")
+    }()
+
     // MARK: - Helper
 
     private func getImage(name: String) -> UIImage {
