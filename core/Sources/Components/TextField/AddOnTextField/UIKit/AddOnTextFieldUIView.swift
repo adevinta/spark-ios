@@ -160,9 +160,7 @@ public final class AddOnTextFieldUIView: UIView {
         self.viewModel.$textFieldColors.subscribe(in: &self.cancellable) { [weak self] textFieldColors in
             guard let self else { return }
             UIView.animate(withDuration: 0.1) {
-                var showThickBorder = self.textField.isFirstResponder || self.intent != .neutral
                 self.setBorderColor(from: textFieldColors.border)
-                self.setBorderWidth(showThickBorder ? self.theme.border.width.medium : self.theme.border.width.small)
                 self.setCornerRadius(self.theme.border.radius.large)
             }
         }
@@ -170,10 +168,8 @@ public final class AddOnTextFieldUIView: UIView {
         self.textFieldViewModel.$textFieldIsActive.subscribe(in: &self.cancellable) { [weak self] isActive in
             guard let self else { return }
             let isActive = isActive ?? false
-            var showThickBorder = isActive || self.intent != .neutral
 
-            self.setBorderColor(from: isActive ? self.theme.colors.base.outlineHigh : self.textFieldViewModel.colors.border)
-            self.setBorderWidth(showThickBorder ? self.theme.border.width.medium : self.theme.border.width.small)
+            self.setBorderWidth(isActive ? self.theme.border.width.medium : self.theme.border.width.small)
             self.setCornerRadius(self.theme.border.radius.large)
         }
     }

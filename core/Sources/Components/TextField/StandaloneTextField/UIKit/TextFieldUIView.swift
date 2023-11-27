@@ -19,10 +19,6 @@ public final class TextFieldUIView: UITextField {
     private var leftViewColor: UIColor?
     private var rightViewColor: UIColor?
 
-    private var shouldShowThickBorder: Bool {
-        return self.isFirstResponder || self.intent != .neutral
-    }
-
     // MARK: - Public properties
 
     public var theme: Theme {
@@ -130,7 +126,7 @@ public final class TextFieldUIView: UITextField {
     }
 
     private func setupBorders(_ borders: TextFieldBorders) {
-        let borderWidth = self.shouldShowThickBorder ? borders.widthWhenActive : borders.width
+        let borderWidth = self.isFirstResponder ? borders.widthWhenActive : borders.width
         self.setBorderWidth(borderWidth)
         self.setCornerRadius(borders.radius)
     }
@@ -205,7 +201,6 @@ public final class TextFieldUIView: UITextField {
 
     public override func becomeFirstResponder() -> Bool {
         let result = super.becomeFirstResponder()
-        self.setBorderColor(from: self.theme.colors.base.outlineHigh)
         self.setupBorders(self.viewModel.borders)
         self.viewModel.textFieldIsActive = true
         return result
@@ -213,7 +208,6 @@ public final class TextFieldUIView: UITextField {
 
     public override func resignFirstResponder() -> Bool {
         let result = super.resignFirstResponder()
-        self.setBorderColor(from: self.viewModel.colors.border)
         self.setupBorders(self.viewModel.borders)
         self.viewModel.textFieldIsActive = false
         return result

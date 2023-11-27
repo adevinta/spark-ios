@@ -35,7 +35,7 @@ final class TextFieldUIViewModelTests: XCTestCase {
         self.getColorsUseCase = TextFieldGetColorsUseCasableGeneratedMock()
         self.getSpacingsUseCase = TextFieldGetSpacingsUseCasableGeneratedMock()
         self.textFieldColors = TextFieldColors(border: .mock(ColorTokenGeneratedMock.random().color))
-        self.textFieldBorders = TextFieldBorders(radius: .zero, width: .zero)
+        self.textFieldBorders = TextFieldBorders(radius: .zero, width: .zero, widthWhenActive: .zero)
         self.textFieldSpacings = TextFieldSpacings(left: .zero, content: .zero, right: .zero)
 
         self.getColorsUseCase.executeWithThemeAndIntentReturnValue = self.textFieldColors
