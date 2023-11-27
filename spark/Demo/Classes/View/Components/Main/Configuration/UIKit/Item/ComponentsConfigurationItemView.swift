@@ -17,6 +17,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
     private lazy var contentStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
             self.label,
+            self.valueLabel,
             self.button,
             self.toggle,
             self.checkbox,
@@ -35,6 +36,14 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
         label.text = "\(self.viewModel.name):"
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.accessibilityIdentifier = self.viewModel.identifier + "Label"
+        return label
+    }()
+
+    private lazy var valueLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 17)
+        label.accessibilityIdentifier = self.viewModel.identifier + "ValueLabel"
+        label.numberOfLines = 0
         return label
     }()
 
@@ -74,7 +83,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
                 text: title,
                 checkedImage: DemoIconography.shared.checkmark,
                 selectionState: isOn ? .selected : .unselected,
-                checkboxPosition: .left)
+                alignment: .left)
             checkbox.accessibilityIdentifier = self.viewModel.identifier + "Checkbox"
 
             checkbox.publisher.subscribe(in: &self.subscriptions) { [weak self] isChecked in
@@ -82,7 +91,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
                 RunLoop.main.perform(
                     self.viewModel.target.action,
                     target: self.viewModel.target.source,
-                    argument: isChecked,
+                    argument: isChecked == .selected,
                     order: 0,
                     modes: [.default]
                 )
@@ -223,6 +232,14 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
             .sink { [weak self] isOn in
                 guard let isOn = isOn else { return }
                 self?.toggle?.isOn = isOn
+            }
+            .store(in: &self.subscriptions)
+
+        // Label Text
+        self.viewModel.$labelText
+            .receive(on: RunLoop.main)
+            .sink { [weak self] text in
+                self?.valueLabel.text = text
             }
             .store(in: &self.subscriptions)
     }

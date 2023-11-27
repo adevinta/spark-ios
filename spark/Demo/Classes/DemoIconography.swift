@@ -25,6 +25,10 @@ struct DemoIconography {
         return UIImage(named: "checkbox-selected")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
     }()
 
+    lazy var close: UIImage = {
+        return UIImage(named: "close")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+    }()
+
     lazy var statusAlert: UIImage = {
         return UIImage(named: "AlertOutline")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
     }()

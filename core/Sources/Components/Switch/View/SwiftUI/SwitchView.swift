@@ -31,19 +31,23 @@ public struct SwitchView: View {
 
     /// Initialize a new switch view
     /// - Parameters:
-    ///   - theme: The spark theme of the switch.
     ///   - isOn: The Binding value of the switch.
+    ///   - theme: The spark theme of the switch.
+    ///   - intent: The intent of the switch.
+    ///   - alignment: The alignment of the switch.
     public init(
         theme: any Theme,
+        intent: SwitchIntent,
+        alignment: SwitchAlignment,
         isOn: Binding<Bool>
     ) {
         self.viewModel = .init(
             for: .swiftUI,
             theme: theme,
             isOn: isOn.wrappedValue,
-            alignment: .left,
-            intent: .main,
-            isEnabled: false,
+            alignment: alignment,
+            intent: intent,
+            isEnabled: true,
             images: nil,
             text: nil,
             attributedText: nil
@@ -186,33 +190,6 @@ public struct SwitchView: View {
 
     // MARK: - Modifier
 
-    /// Set the alignment on switch.
-    /// - Parameters:
-    ///   - alignment: The alignment of the switch.
-    /// - Returns: Current Switch View.
-    public func alignment(_ alignment: SwitchAlignment) -> Self {
-        self.viewModel.set(alignment: alignment)
-        return self
-    }
-
-    /// Set the intent on switch.
-    /// - Parameters:
-    ///   - intent: The intent of the switch.
-    /// - Returns: Current Switch View.
-    public func intent(_ intent: SwitchIntent) -> Self {
-        self.viewModel.set(intent: intent)
-        return self
-    }
-
-    /// Set the isEnabled on switch.
-    /// - Parameters:
-    ///   - isEnabled: The state of the switch: enabled or not.
-    /// - Returns: Current Switch View.
-    public func isEnabled(_ isEnabled: Bool) -> Self {
-        self.viewModel.set(isEnabled: isEnabled)
-        return self
-    }
-
     /// Set the images on switch.
     /// - Parameters:
     ///   - images: The optional images of the switch.
@@ -237,6 +214,15 @@ public struct SwitchView: View {
     /// - Returns: Current Switch View.
     public func attributedText(_ attributedText: AttributedString?) -> Self {
         self.viewModel.set(attributedText: attributedText.map { .right($0) })
+        return self
+    }
+
+    /// Set the switch to disabled.
+    /// - Parameters:
+    ///   - text: The switch is disabled or not.
+    /// - Returns: Current Switch View.
+    public func disabled(_ disabled: Bool) -> Self {
+        self.viewModel.set(isEnabled:  !disabled)
         return self
     }
 }

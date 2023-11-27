@@ -290,7 +290,7 @@ public final class TagUIView: UIView {
         // Reload height only if value changed
         if self.height != self.heightConstraint?.constant {
             self.heightConstraint?.constant = self.height
-            self.layoutIfNeeded()
+            self.updateConstraintsIfNeeded()
         }
     }
 
@@ -319,7 +319,7 @@ public final class TagUIView: UIView {
         if contentHorizontalSpacing != self.contentStackViewLeadingConstraint?.constant {
             self.contentStackViewLeadingConstraint?.constant = contentHorizontalSpacing
             self.contentStackViewTrailingConstraint?.constant = -contentHorizontalSpacing
-            self.contentStackView.layoutIfNeeded()
+            self.contentStackView.updateConstraintsIfNeeded()
         }
     }
 
