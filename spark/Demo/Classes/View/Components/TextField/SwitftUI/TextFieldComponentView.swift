@@ -115,7 +115,6 @@ struct TextFieldComponentView: View {
                     text: "With Border",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
-                    state: .enabled,
                     selectionState: self.$isBorderVisible
                 )
             }
