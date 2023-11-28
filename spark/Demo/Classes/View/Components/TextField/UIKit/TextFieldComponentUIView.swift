@@ -85,9 +85,8 @@ final class TextFieldComponentUIView: UIView {
             theme: viewModel.theme,
             text: "Display right view",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
             selectionState: .selected,
-            checkboxPosition: .left
+            alignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -98,9 +97,8 @@ final class TextFieldComponentUIView: UIView {
             theme: viewModel.theme,
             text: "Display left view",
             checkedImage: DemoIconography.shared.checkmark,
-            state: .enabled,
             selectionState: .selected,
-            checkboxPosition: .left
+            alignment: .left
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
