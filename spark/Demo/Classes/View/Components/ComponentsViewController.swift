@@ -82,8 +82,6 @@ extension ComponentsViewController {
             viewController = ChipComponentViewController.build()
         case .icon:
             viewController = IconComponentUIViewController.build()
-        case .progressBarDouble:
-            viewController = ProgressBarDoubleComponentUIViewController.build()
         case .progressBarIndeterminate:
             viewController = ProgressBarIndeterminateComponentUIViewController.build()
         case .progressBarSingle:
@@ -98,6 +96,8 @@ extension ComponentsViewController {
             viewController = TabComponentUIViewController.build()
         case .tag:
             viewController = TagComponentUIViewController.build()
+        case .textField:
+            viewController = TextFieldUIViewController.build()
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -117,7 +117,6 @@ private extension ComponentsViewController {
         case checkbox
         case chip
         case icon
-        case progressBarDouble
         case progressBarIndeterminate
         case progressBarSingle
         case radioButton
@@ -125,5 +124,6 @@ private extension ComponentsViewController {
         case switchButton
         case tab
         case tag
+        case textField
     }
 }
