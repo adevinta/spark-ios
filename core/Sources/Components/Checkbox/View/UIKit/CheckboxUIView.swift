@@ -60,9 +60,7 @@ public final class CheckboxUIView: UIControl {
 
     /// Changes to the checbox state are published to the publisher.
     public var publisher: some Publisher<CheckboxSelectionState, Never> {
-        return self.viewModel.$selectionState
-            .dropFirst()
-            .eraseToAnyPublisher()
+        return self.checkboxSelectionStateSubject
     }
 
     /// Set a delegate to receive selection state change callbacks. Alternatively, you can use bindings.
