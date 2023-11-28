@@ -135,6 +135,7 @@ class CheckboxControlUIView: UIView {
         super.draw(rect)
 
         self.pressedBorderView.isHidden = !self.isHighlighted
+        self.pressedBorderView.layer.borderColor = self.colors.pressedBorderColor.uiColor.cgColor
 
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
 
