@@ -64,6 +64,7 @@ public final class RatingInputUIView: UIControl {
         stackView.axis = .horizontal
         stackView.spacing = self.spacing
         stackView.distribution = .fillEqually
+        stackView.isUserInteractionEnabled = false
         return stackView
     }()
 
@@ -74,6 +75,7 @@ public final class RatingInputUIView: UIControl {
                 intent: viewModel.intent,
                 configuration: self.starConfiguration
             )
+            rating.isUserInteractionEnabled = false
             rating.accessibilityIdentifier = "\(RatingInputAccessibilityIdentifier.identifier)-\(i+1)"
             return rating
         }
@@ -115,6 +117,50 @@ public final class RatingInputUIView: UIControl {
         self.stackView.spacing = self.spacing
     }
 
+
+    public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        return self.handleTouch(touch, with: event)
+    }
+
+    public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        print("CONTINUE TRACKING")
+        return self.handleTouch(touch, with: event)
+    }
+
+    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+
+        print("END TRACKING")
+        guard let location = touch?.location(in: self) else {
+            self.ratingStarHighlightCancelled()
+            return
+        }
+
+        if let index = self.ratingInputs.firstIndex(where: { ratingInput in
+            ratingInput.frame.contains(location)
+        }) {
+            self.ratingStarSelected(index)
+        } else {
+            self.ratingStarHighlightCancelled()
+        }
+    }
+
+    private func handleTouch(_ touch: UITouch, with event: UIEvent?) -> Bool {
+
+        let location = touch.location(in: self)
+
+        guard let index = self.ratingInputs.firstIndex(where: { ratingInput in
+            ratingInput.frame.contains(location)
+        }) else {
+            print("NO VIEW DETECTED")
+            return true
+        }
+
+        print("SET HIGHLIGHTED INDEX \(index)")
+        self.ratingStarHighlighted(index)
+
+        return true
+
+    }
     private func setupSubscriptions() {
         self.viewModel.$ratingSize.subscribe(in: &self.cancellables) { [weak self] size in
             self?.didUpdate(spacing: size.spacing)
@@ -138,21 +184,21 @@ public final class RatingInputUIView: UIControl {
     }
 
     private func setupActions() {
-        for (i, ratingInput) in self.ratingInputs.enumerated() {
-            let selectedAction = UIAction { [weak self] _ in
-                self?.ratingStarSelected(i)
-            }
-            let highlightedAction = UIAction { [weak self] _ in
-                self?.ratingStarHighlighted(i)
-            }
-            let highlightCancelAction = UIAction { [weak self] _ in
-                self?.ratingStarHighlightCancelled(i)
-            }
-            ratingInput.addAction(selectedAction, for: .touchUpInside)
-            ratingInput.addAction(highlightedAction, for: .touchDown)
-            ratingInput.addAction(highlightCancelAction, for: .touchUpOutside)
-            ratingInput.addAction(highlightCancelAction, for: .touchCancel)
-        }
+//        for (i, ratingInput) in self.ratingInputs.enumerated() {
+//            let selectedAction = UIAction { [weak self] _ in
+//                self?.ratingStarSelected(i)
+//            }
+//            let highlightedAction = UIAction { [weak self] _ in
+//                self?.ratingStarHighlighted(i)
+//            }
+//            let highlightCancelAction = UIAction { [weak self] _ in
+//                self?.ratingStarHighlightCancelled(i)
+//            }
+//            ratingInput.addAction(selectedAction, for: .touchUpInside)
+//            ratingInput.addAction(highlightedAction, for: .touchDown)
+//            ratingInput.addAction(highlightCancelAction, for: .touchUpOutside)
+//            ratingInput.addAction(highlightCancelAction, for: .touchCancel)
+//        }
     }
 
 
@@ -192,7 +238,7 @@ public final class RatingInputUIView: UIControl {
         }
     }
 
-    private func ratingStarHighlightCancelled(_ index: Int) {
+    private func ratingStarHighlightCancelled() {
         self.didUpdate(rating: self.viewModel.rating)
         for i in 0..<self.ratingInputs.count {
             self.ratingInputs[i].isPressed = false

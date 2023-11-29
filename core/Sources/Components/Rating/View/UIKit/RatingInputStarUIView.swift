@@ -10,7 +10,7 @@ import Combine
 import Foundation
 import UIKit
 
-final class RatingInputStarUIView: UIControl {
+final class RatingInputStarUIView: UIView {
 
     private var sizeConstraints = [NSLayoutConstraint]()
     private var cancellables = Set<AnyCancellable>()
@@ -32,7 +32,7 @@ final class RatingInputStarUIView: UIControl {
     @ScaledUIMetric private var borderWidth: CGFloat
     @ScaledUIMetric private var ratingSize: CGFloat
 
-    override var isSelected: Bool {
+    var isSelected: Bool {
         get {
             return self.viewModel.rating == 1.0
         }
@@ -42,19 +42,19 @@ final class RatingInputStarUIView: UIControl {
         }
     }
 
-    override var isHighlighted: Bool {
-        get {
-            return self.isPressed
-        }
-        set {
-            self.isPressed = newValue
-            if !newValue {
-                self.sendActions(for: .touchCancel)
-            } else {
-                self.sendActions(for: .touchDown)
-            }
-        }
-    }
+//    override var isHighlighted: Bool {
+//        get {
+//            return self.isPressed
+//        }
+//        set {
+//            self.isPressed = newValue
+//            if !newValue {
+//                self.sendActions(for: .touchCancel)
+//            } else {
+//                self.sendActions(for: .touchDown)
+//            }
+//        }
+//    }
 
     var isPressed: Bool {
         get {
@@ -65,7 +65,7 @@ final class RatingInputStarUIView: UIControl {
         }
     }
 
-    override var isEnabled: Bool {
+    var isEnabled: Bool {
         get {
             return self.viewModel.ratingState.isEnabled
         }
