@@ -9,7 +9,6 @@
 import Foundation
 
 enum ButtonControlType: CaseIterable {
-    case delegate
     case publisher
     case action
     case target

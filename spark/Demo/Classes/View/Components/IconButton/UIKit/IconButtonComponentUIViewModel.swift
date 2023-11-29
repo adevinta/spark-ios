@@ -1,8 +1,8 @@
 //
-//  ButtonComponentUIViewModel.swift
+//  IconButtonComponentUIViewModel.swift
 //  SparkDemo
 //
-//  Created by alican.aycil on 21.08.23.
+//  Created by robin.lemaire on 16/11/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ import Spark
 import SparkCore
 import UIKit
 
-final class ButtonComponentUIViewModel: ComponentUIViewModel {
+final class IconButtonComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Published Properties
 
@@ -40,27 +40,22 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showAlignmentSheet: AnyPublisher<[ButtonAlignment], Never> {
-        showAlignmentSheetSubject
-            .eraseToAnyPublisher()
-    }
-
-    var showContentNormalSheet: AnyPublisher<[ButtonContentDefault], Never> {
+    var showContentNormalSheet: AnyPublisher<[IconButtonContentDefault], Never> {
         showContentNormalSheetSubject
             .eraseToAnyPublisher()
     }
 
-    var showContentHighlightedSheet: AnyPublisher<[ButtonContentDefault], Never> {
+    var showContentHighlightedSheet: AnyPublisher<[IconButtonContentDefault], Never> {
         showContentHighlightedSheetSubject
             .eraseToAnyPublisher()
     }
 
-    var showContentDisabledSheet: AnyPublisher<[ButtonContentDefault], Never> {
+    var showContentDisabledSheet: AnyPublisher<[IconButtonContentDefault], Never> {
         showContentDisabledSheetSubject
             .eraseToAnyPublisher()
     }
 
-    var showContentSelectedSheet: AnyPublisher<[ButtonContentDefault], Never> {
+    var showContentSelectedSheet: AnyPublisher<[IconButtonContentDefault], Never> {
         showContentSelectedSheetSubject
             .eraseToAnyPublisher()
     }
@@ -77,11 +72,10 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var variant: ButtonVariant
     @Published var size: ButtonSize
     @Published var shape: ButtonShape
-    @Published var alignment: ButtonAlignment
-    @Published var contentNormal: ButtonContentDefault
-    @Published var contentHighlighted: ButtonContentDefault
-    @Published var contentDisabled: ButtonContentDefault
-    @Published var contentSelected: ButtonContentDefault
+    @Published var contentNormal: IconButtonContentDefault
+    @Published var contentHighlighted: IconButtonContentDefault
+    @Published var contentDisabled: IconButtonContentDefault
+    @Published var contentSelected: IconButtonContentDefault
     @Published var isEnabled: Bool
     @Published var isSelected: Bool
     @Published var isAnimated: Bool
@@ -126,14 +120,6 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             name: "Shape",
             type: .button,
             target: (source: self, action: #selector(self.presentShapeSheet))
-        )
-    }()
-
-    lazy var alignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Alignment",
-            type: .button,
-            target: (source: self, action: #selector(self.presentAlignmentSheet))
         )
     }()
 
@@ -216,7 +202,6 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             self.variantConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
             self.shapeConfigurationItemViewModel,
-            self.alignmentConfigurationItemViewModel,
             self.contentNormalConfigurationItemViewModel,
             self.contentHighlightedConfigurationItemViewModel,
             self.contentDisabledConfigurationItemViewModel,
@@ -235,28 +220,26 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     private var showVariantSheetSubject: PassthroughSubject<[ButtonVariant], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[ButtonSize], Never> = .init()
     private var showShapeSheetSubject: PassthroughSubject<[ButtonShape], Never> = .init()
-    private var showAlignmentSheetSubject: PassthroughSubject<[ButtonAlignment], Never> = .init()
-    private var showContentNormalSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
-    private var showContentHighlightedSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
-    private var showContentDisabledSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
-    private var showContentSelectedSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
+    private var showContentNormalSheetSubject: PassthroughSubject<[IconButtonContentDefault], Never> = .init()
+    private var showContentHighlightedSheetSubject: PassthroughSubject<[IconButtonContentDefault], Never> = .init()
+    private var showContentDisabledSheetSubject: PassthroughSubject<[IconButtonContentDefault], Never> = .init()
+    private var showContentSelectedSheetSubject: PassthroughSubject<[IconButtonContentDefault], Never> = .init()
     private var showControlTypeSheetSubject: PassthroughSubject<[ButtonControlType], Never> = .init()
 
     // MARK: - Initialization
 
     init(
-        text: String = "Button",
+        text: String = "Icon Button",
         iconImageNamed: String = "arrow",
         theme: Theme,
         intent: ButtonIntent = .main,
         variant: ButtonVariant = .filled,
         size: ButtonSize = .medium,
         shape: ButtonShape = .rounded,
-        alignment: ButtonAlignment = .leadingImage,
-        contentNormal: ButtonContentDefault = .text,
-        contentHighlighted: ButtonContentDefault = .text,
-        contentDisabled: ButtonContentDefault = .text,
-        contentSelected: ButtonContentDefault = .text,
+        contentNormal: IconButtonContentDefault = .image,
+        contentHighlighted: IconButtonContentDefault = .image,
+        contentDisabled: IconButtonContentDefault = .image,
+        contentSelected: IconButtonContentDefault = .image,
         isEnabled: Bool = true,
         isSelected: Bool = false,
         isAnimated: Bool = true,
@@ -276,7 +259,6 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         self.variant = variant
         self.size = size
         self.shape = shape
-        self.alignment = alignment
         self.contentNormal = contentNormal
         self.contentHighlighted = contentHighlighted
         self.contentDisabled = contentDisabled
@@ -292,7 +274,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
 
 // MARK: - Navigation
 
-extension ButtonComponentUIViewModel {
+extension IconButtonComponentUIViewModel {
 
     @objc func presentThemeSheet() {
         self.showThemeSheetSubject.send(themes)
@@ -314,24 +296,20 @@ extension ButtonComponentUIViewModel {
         self.showShapeSheetSubject.send(ButtonShape.allCases)
     }
 
-    @objc func presentAlignmentSheet() {
-        self.showAlignmentSheetSubject.send(ButtonAlignment.allCases)
-    }
-
     @objc func presentContentNormalSheet() {
-        self.showContentNormalSheetSubject.send(ButtonContentDefault.allCases)
+        self.showContentNormalSheetSubject.send(IconButtonContentDefault.allCases)
     }
 
     @objc func presentContentHighlightedCSheet() {
-        self.showContentHighlightedSheetSubject.send(ButtonContentDefault.allCases)
+        self.showContentHighlightedSheetSubject.send(IconButtonContentDefault.allCases)
     }
 
     @objc func presentContentDisabledSheet() {
-        self.showContentDisabledSheetSubject.send(ButtonContentDefault.allCases)
+        self.showContentDisabledSheetSubject.send(IconButtonContentDefault.allCases)
     }
 
     @objc func presentContentSelectedSheet() {
-        self.showContentSelectedSheetSubject.send(ButtonContentDefault.allCases)
+        self.showContentSelectedSheetSubject.send(IconButtonContentDefault.allCases)
     }
 
     @objc func isEnabledChanged() {

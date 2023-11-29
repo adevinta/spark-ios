@@ -1,8 +1,8 @@
 //
-//  ButtonComponentUIView.swift
+//  IconButtonComponentUIView.swift
 //  SparkDemo
 //
-//  Created by alican.aycil on 21.08.23.
+//  Created by robin.lemaire on 16/11/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
@@ -11,15 +11,15 @@ import Combine
 import SparkCore
 import Spark
 
-final class ButtonComponentUIView: ComponentUIView {
+final class IconButtonComponentUIView: ComponentUIView {
 
     // MARK: - Components
 
-    private let buttonView: ButtonUIView
+    private let buttonView: IconButtonUIView
 
     // MARK: - Properties
 
-    private let viewModel: ButtonComponentUIViewModel
+    private let viewModel: IconButtonComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
     private lazy var buttonAction: UIAction = .init { _ in
@@ -29,15 +29,14 @@ final class ButtonComponentUIView: ComponentUIView {
 
     // MARK: - Initializer
 
-    init(viewModel: ButtonComponentUIViewModel) {
+    init(viewModel: IconButtonComponentUIViewModel) {
         self.viewModel = viewModel
         self.buttonView = .init(
             theme: viewModel.theme,
             intent: viewModel.intent,
             variant: viewModel.variant,
             size: viewModel.size,
-            shape: viewModel.shape,
-            alignment: viewModel.alignment
+            shape: viewModel.shape
         )
 
         super.init(
@@ -89,12 +88,6 @@ final class ButtonComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.viewModel.shapeConfigurationItemViewModel.buttonTitle = shape.name
             self.buttonView.shape = shape
-        }
-
-        self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
-            guard let self = self else { return }
-            self.viewModel.alignmentConfigurationItemViewModel.buttonTitle = alignment.name
-            self.buttonView.alignment = alignment
         }
 
         self.viewModel.$contentNormal.subscribe(in: &self.cancellables) { [weak self] content in
@@ -150,36 +143,12 @@ final class ButtonComponentUIView: ComponentUIView {
 
     // MARK: - Setter
 
-    private func setContent(_ content: ButtonContentDefault, for state: ControlState) {
+    private func setContent(_ content: IconButtonContentDefault, for state: ControlState) {
         switch content {
         case .image:
-            self.buttonView.setTitle(nil, for: state)
-            self.buttonView.setAttributedTitle(nil, for: state)
             self.buttonView.setImage(self.image(for: state), for: state)
-
-        case .text:
-            self.buttonView.setImage(nil, for: state)
-            self.buttonView.setAttributedTitle(nil, for: state)
-            self.buttonView.setTitle(self.title(for: state), for: state)
-
-        case .attributedText:
-            self.buttonView.setImage(nil, for: state)
-            self.buttonView.setTitle(nil, for: state)
-            self.buttonView.setAttributedTitle(self.attributedTitle(for: state), for: state)
-
-        case .imageAndText:
-            self.buttonView.setImage(self.image(for: state), for: state)
-            self.buttonView.setAttributedTitle(nil, for: state)
-            self.buttonView.setTitle(self.title(for: state), for: state)
-
-        case .imageAndAttributedText:
-            self.buttonView.setImage(self.image(for: state), for: state)
-            self.buttonView.setTitle(nil, for: state)
-            self.buttonView.setAttributedTitle(self.attributedTitle(for: state), for: state)
 
         case .none:
-            self.buttonView.setTitle(nil, for: state)
-            self.buttonView.setAttributedTitle(nil, for: state)
             self.buttonView.setImage(nil, for: state)
         }
     }
@@ -219,36 +188,6 @@ final class ButtonComponentUIView: ComponentUIView {
         case .disabled: return UIImage(named: "check")
         case .selected: return UIImage(named: "alert")
         @unknown default: return nil
-        }
-    }
-
-    private func title(for state: ControlState) -> String? {
-        switch state {
-        case .normal: return "My Title"
-        case .highlighted: return "My Highlighted"
-        case .disabled: return "My Disabled"
-        case .selected: return "My Selected"
-        @unknown default: return nil
-        }
-    }
-
-    private func attributedTitle(for state: ControlState) -> NSAttributedString? {
-
-        func attributedText(_ text: String) -> NSAttributedString {
-            return .init(
-                string: text,
-                attributes: [
-                    .foregroundColor: UIColor.purple,
-                    .font: UIFont.italicSystemFont(ofSize: 20),
-                    .underlineStyle: NSUnderlineStyle.single.rawValue
-                ]
-            )
-        }
-
-        if let title = self.title(for: state) {
-            return attributedText(title)
-        } else {
-            return nil
         }
     }
 
