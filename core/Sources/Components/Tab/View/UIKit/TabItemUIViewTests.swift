@@ -11,7 +11,7 @@ import XCTest
 
 @testable import SparkCore
 
-final class TabItemUIViewTests: XCTestCase {
+final class TabItemUIViewTests: TestCase {
 
     let theme = SparkTheme.shared
     var sut: TabItemUIView!
@@ -141,7 +141,7 @@ final class TabItemUIViewTests: XCTestCase {
         }
 
         // When
-        self.sut.touchesBegan([UITouch()], with: nil)
+        self.sut.isHighlighted = true
 
         // Then
         waitForExpectations(timeout: 1)
@@ -174,7 +174,7 @@ final class TabItemUIViewTests: XCTestCase {
         }
 
         // When
-        self.sut.touchesEnded([UITouch()], with: nil)
+        self.sut.isHighlighted = false
 
         // Then
         waitForExpectations(timeout: 1)
@@ -196,23 +196,6 @@ final class TabItemUIViewTests: XCTestCase {
 
         // When
         self.sut.sendActions(for: .touchUpInside)
-
-        // Then
-        waitForExpectations(timeout: 1)
-    }
-
-    func test_when_touch_cancelled_attributes_change() {
-        // Given
-        self.sut.viewModel.isPressed = true
-        let expect = expectation(description: "Attributes should be changed")
-        expect.expectedFulfillmentCount = 2
-
-        self.sut.viewModel.$tabStateAttributes.subscribe(in: &self.subscriptions) { _ in
-            expect.fulfill()
-        }
-
-        // When
-        self.sut.touchesCancelled([UITouch()], with: nil)
 
         // Then
         waitForExpectations(timeout: 1)

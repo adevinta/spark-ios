@@ -237,6 +237,15 @@ public final class TabItemUIView: UIControl {
         }
     }
 
+    public override var isHighlighted: Bool {
+        get {
+            return self.viewModel.isPressed
+        }
+        set {
+            self.viewModel.isPressed = newValue
+        }
+    }
+
     /// A Boolean value indicating whether the control is in the enabled state.
     ///
     /// Set the value of this property to true to enable the control or false to disable it. An enabled control is capable of responding to user interactions, whereas a disabled control ignores touch events and may draw itself differently.
@@ -353,22 +362,6 @@ public final class TabItemUIView: UIControl {
         self.invalidateIntrinsicContentSize()
         self.updateLayoutConstraints()
         self.setNeedsLayout()
-    }
-
-    // MARK: - Control functions
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        self.viewModel.isPressed = true
-    }
-
-    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        self.viewModel.isPressed = false
-    }
-
-    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        self.viewModel.isPressed = false
     }
 
     // MARK: - Private functions
