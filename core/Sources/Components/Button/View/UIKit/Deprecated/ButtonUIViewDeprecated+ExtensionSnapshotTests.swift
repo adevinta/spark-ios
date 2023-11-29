@@ -1,5 +1,5 @@
 //
-//  ButtonUIView+ExtensionSnapshotTests.swift
+//  ButtonUIViewDeprecated+ExtensionSnapshotTests.swift
 //  SparkCoreTests
 //
 //  Created by robin.lemaire on 04/07/2023.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import SparkCore
 
-extension ButtonUIView {
+extension ButtonUIViewDeprecated {
 
     func testPressedAction() {
         self.viewModel.pressedAction()

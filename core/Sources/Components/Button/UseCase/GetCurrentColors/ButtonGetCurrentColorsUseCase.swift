@@ -8,6 +8,7 @@
 
 // sourcery: AutoMockable
 protocol ButtonGetCurrentColorsUseCaseable {
+    @available(*, deprecated, message: "Use the execute function without the displayedTitleType parameter instead. Must be removed when ButtonViewModelDeprecated is deleted")
     func execute(colors: ButtonColors,
                  isPressed: Bool,
                  displayedTitleType: DisplayedTextType) -> ButtonCurrentColors

@@ -40,7 +40,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showAlignmentSheet: AnyPublisher<[ButtonAlignment], Never> {
+    var showAlignmentSheet: AnyPublisher<[ButtonAlignmentDeprecated], Never> {
         showAlignmentSheetSubject
             .eraseToAnyPublisher()
     }
@@ -77,7 +77,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var variant: ButtonVariant
     @Published var size: ButtonSize
     @Published var shape: ButtonShape
-    @Published var alignment: ButtonAlignment
+    @Published var alignment: ButtonAlignmentDeprecated
     @Published var contentNormal: ButtonContentDefault
     @Published var contentHighlighted: ButtonContentDefault
     @Published var contentDisabled: ButtonContentDefault
@@ -235,7 +235,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     private var showVariantSheetSubject: PassthroughSubject<[ButtonVariant], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[ButtonSize], Never> = .init()
     private var showShapeSheetSubject: PassthroughSubject<[ButtonShape], Never> = .init()
-    private var showAlignmentSheetSubject: PassthroughSubject<[ButtonAlignment], Never> = .init()
+    private var showAlignmentSheetSubject: PassthroughSubject<[ButtonAlignmentDeprecated], Never> = .init()
     private var showContentNormalSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
     private var showContentHighlightedSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
     private var showContentDisabledSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
@@ -252,7 +252,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         variant: ButtonVariant = .filled,
         size: ButtonSize = .medium,
         shape: ButtonShape = .rounded,
-        alignment: ButtonAlignment = .leadingIcon,
+        alignment: ButtonAlignmentDeprecated = .leadingIcon,
         contentNormal: ButtonContentDefault = .text,
         contentHighlighted: ButtonContentDefault = .text,
         contentDisabled: ButtonContentDefault = .text,
@@ -315,7 +315,7 @@ extension ButtonComponentUIViewModel {
     }
 
     @objc func presentAlignmentSheet() {
-        self.showAlignmentSheetSubject.send(ButtonAlignment.allCases)
+        self.showAlignmentSheetSubject.send(ButtonAlignmentDeprecated.allCases)
     }
 
     @objc func presentContentNormalSheet() {

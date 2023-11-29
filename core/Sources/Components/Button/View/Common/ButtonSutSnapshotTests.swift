@@ -19,7 +19,7 @@ struct ButtonSutSnapshotTests {
     let variant: ButtonVariant
     let size: ButtonSize
     let shape: ButtonShape
-    let alignment: ButtonAlignment
+    let alignment: ButtonAlignmentDeprecated
     let iconImage: ImageEither?
     let title: String?
     let attributedTitle: AttributedStringEither?
