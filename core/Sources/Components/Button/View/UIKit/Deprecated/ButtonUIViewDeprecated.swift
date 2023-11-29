@@ -764,7 +764,7 @@ public final class ButtonUIViewDeprecated: UIControl {
             self.setBorderColor(from: colors.borderColor)
 
             // Foreground Color
-            self.imageView.tintColor = colors.iconTintColor.uiColor
+            self.imageView.tintColor = colors.imageTintColor.uiColor
             if let titleColor = colors.titleColor {
                 self.titleLabel.textColor = titleColor.uiColor
             }
@@ -781,7 +781,7 @@ public final class ButtonUIViewDeprecated: UIControl {
             self.updateHeight()
 
             // Icon size
-            self.iconHeight = sizes.iconSize
+            self.iconHeight = sizes.imageSize
             self._iconHeight.update(traitCollection: self.traitCollection)
             self.updateIconHeight()
         }

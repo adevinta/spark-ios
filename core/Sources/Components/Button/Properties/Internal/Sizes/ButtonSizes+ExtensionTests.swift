@@ -15,11 +15,11 @@ extension ButtonSizes {
 
     static func mocked(
         height: CGFloat = 30,
-        iconSize: CGFloat = 20
+        imageSize: CGFloat = 20
     ) -> Self {
         return .init(
             height: height,
-            iconSize: iconSize
+            imageSize: imageSize
         )
     }
 }

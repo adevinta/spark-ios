@@ -18,13 +18,13 @@ final class ButtonCurrentColorsTests: XCTestCase {
         let colors = SparkTheme.shared.colors
 
         let given1 = ButtonCurrentColors(
-            iconTintColor: colors.base.onSurface,
+            imageTintColor: colors.base.onSurface,
             titleColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.main.main)
 
         let given2 = ButtonCurrentColors(
-            iconTintColor: colors.base.onSurface,
+            imageTintColor: colors.base.onSurface,
             titleColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.main.main)
@@ -36,13 +36,13 @@ final class ButtonCurrentColorsTests: XCTestCase {
         let colors = SparkTheme.shared.colors
 
         let given1 = ButtonCurrentColors(
-            iconTintColor: colors.base.surface,
+            imageTintColor: colors.base.surface,
             titleColor: colors.base.surfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.main.main)
 
         let given2 = ButtonCurrentColors(
-            iconTintColor: colors.base.onSurface,
+            imageTintColor: colors.base.onSurface,
             titleColor: colors.base.onSurfaceInverse,
             backgroundColor: colors.base.backgroundVariant,
             borderColor: colors.main.onMain)

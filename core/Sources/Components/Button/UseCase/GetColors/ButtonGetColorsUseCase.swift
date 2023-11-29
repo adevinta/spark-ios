@@ -6,8 +6,9 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-// sourcery: AutoMockable
+// sourcery: AutoMockable, AutoMockTest
 protocol ButtonGetColorsUseCaseable {
+    // sourcery: theme = "Identical"
     func execute(theme: Theme,
                  intent: ButtonIntent,
                  variant: ButtonVariant) -> ButtonColors
