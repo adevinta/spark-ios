@@ -23,7 +23,7 @@ struct ButtonComponentView: View {
     @State private var variant: ButtonVariant = .filled
     @State private var size: ButtonSize = .medium
     @State private var shape: ButtonShape = .rounded
-    @State private var alignment: ButtonAlignment = .leadingIcon
+    @State private var alignment: ButtonAlignmentDeprecated = .leadingIcon
     @State private var content: ButtonContentDefault = .text
     @State private var isEnabled: CheckboxSelectionState = .selected
     @State private var isSelected: CheckboxSelectionState = .selected
@@ -73,7 +73,7 @@ struct ButtonComponentView: View {
                 EnumSelector(
                     title: "Alignment",
                     dialogTitle: "Select an alignment",
-                    values: ButtonAlignment.allCases,
+                    values: ButtonAlignmentDeprecated.allCases,
                     value: self.$alignment
                 )
 

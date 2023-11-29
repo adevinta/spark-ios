@@ -1,5 +1,5 @@
 //
-//  ButtonUIView.swift
+//  ButtonUIViewDeprecated.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 02.05.23.
@@ -10,7 +10,8 @@ import Combine
 import UIKit
 
 /// The UIKit version for the button.
-public final class ButtonUIView: UIControl {
+@available(*, deprecated, message: "Use ButtonUIView or IconButtonUIView instead")
+public final class ButtonUIViewDeprecated: UIControl {
 
     // MARK: - Type alias
 
@@ -41,6 +42,7 @@ public final class ButtonUIView: UIControl {
                                                      for: .vertical)
         view.setContentCompressionResistancePriority(.required,
                                                      for: .horizontal)
+        view.backgroundColor = .yellow
         return view
     }()
 
@@ -52,6 +54,7 @@ public final class ButtonUIView: UIControl {
         let imageView = UIControlStateImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = AccessibilityIdentifier.iconImage
+        imageView.backgroundColor = .orange
         return imageView
     }()
 
@@ -148,7 +151,7 @@ public final class ButtonUIView: UIControl {
     }
 
     /// The alignment of the button.
-    public var alignment: ButtonAlignment {
+    public var alignment: ButtonAlignmentDeprecated {
         get {
             return self.viewModel.alignment
         }
@@ -241,7 +244,7 @@ public final class ButtonUIView: UIControl {
 
     // MARK: - Internal Properties
 
-    internal let viewModel: ButtonViewModel
+    internal let viewModel: ButtonViewModelDeprecated
 
     // MARK: - Private Properties
 
@@ -282,7 +285,7 @@ public final class ButtonUIView: UIControl {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         isEnabled: Bool
     ) {
         self.init(
@@ -316,7 +319,7 @@ public final class ButtonUIView: UIControl {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         text: String,
         isEnabled: Bool
     ) {
@@ -351,7 +354,7 @@ public final class ButtonUIView: UIControl {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         attributedText: NSAttributedString,
         isEnabled: Bool
     ) {
@@ -386,7 +389,7 @@ public final class ButtonUIView: UIControl {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: UIImage,
         isEnabled: Bool
     ) {
@@ -422,7 +425,7 @@ public final class ButtonUIView: UIControl {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: UIImage,
         text: String,
         isEnabled: Bool
@@ -459,7 +462,7 @@ public final class ButtonUIView: UIControl {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: UIImage,
         attributedText: NSAttributedString,
         isEnabled: Bool
@@ -484,7 +487,7 @@ public final class ButtonUIView: UIControl {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: UIImage?,
         text: String?,
         attributedText: NSAttributedString?,

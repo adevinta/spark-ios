@@ -164,8 +164,8 @@ extension ButtonComponentViewController {
         self.present(actionSheet, isAnimated: true)
     }
 
-    private func presentAlignmentActionSheet(_ alignments: [ButtonAlignment]) {
-        let actionSheet = SparkActionSheet<ButtonAlignment>.init(
+    private func presentAlignmentActionSheet(_ alignments: [ButtonAlignmentDeprecated]) {
+        let actionSheet = SparkActionSheet<ButtonAlignmentDeprecated>.init(
             values: alignments,
             texts: alignments.map { $0.name }) { alignment in
                 self.viewModel.alignment = alignment
