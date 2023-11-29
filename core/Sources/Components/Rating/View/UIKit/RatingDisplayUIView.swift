@@ -19,6 +19,7 @@ public class RatingDisplayUIView: UIView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = self.spacing
+        stackView.distribution = .fillEqually
         return stackView
     }()
     
@@ -142,7 +143,7 @@ public class RatingDisplayUIView: UIView {
         self._borderWidth.update(traitCollection: traitCollection)
         self._ratingSize.update(traitCollection: traitCollection)
 
-        self.didUpdate(borderWidth: self.borderWidth)
+        self.updateStarsViewsBorderWidths()
         self.stackView.spacing = self.spacing
 
         self.sizeConstraints.forEach { constraint in
@@ -218,8 +219,14 @@ public class RatingDisplayUIView: UIView {
         self.didUpdate(size: size.height)
         self.didUpdate(spacing: size.spacing)
     }
+
     private func didUpdate(borderWidth: CGFloat) {
         self.borderWidth = borderWidth
+
+        self.updateStarsViewsBorderWidths()
+    }
+
+    private func updateStarsViewsBorderWidths() {
         for view in self.ratingStarViews {
             view.lineWidth = self.borderWidth
         }
