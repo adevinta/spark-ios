@@ -79,6 +79,7 @@ targetTemplates:
       - path: ../spark/Sources/Theming
         excludes:
         - "**/*Tests.swift"
+      - path: ../core/Sources/Common/SwiftUI/GlobalExtension
       - path: ../core/Sources/Common/UIKit/GlobalExtension
       - path: ../core/Sources/Common/Combine/Global
     dependencies:

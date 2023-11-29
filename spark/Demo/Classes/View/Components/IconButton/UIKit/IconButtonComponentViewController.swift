@@ -1,8 +1,8 @@
 //
-//  ButtonComponentViewController.swift
+//  IconButtonComponentViewController.swift
 //  SparkDemo
 //
-//  Created by alican.aycil on 21.08.23.
+//  Created by robin.lemaire on 16/11/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
@@ -12,20 +12,22 @@ import SwiftUI
 import UIKit
 import SparkCore
 
-final class ButtonComponentViewController: UIViewController {
+final class IconButtonComponentViewController: UIViewController {
 
     // MARK: - Published Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     // MARK: - Properties
-    let buttonComponentView: ButtonComponentUIView
-    let viewModel: ButtonComponentUIViewModel
+
+    let buttonComponentView: IconButtonComponentUIView
+    let viewModel: IconButtonComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Initializer
-    init(viewModel: ButtonComponentUIViewModel) {
+
+    init(viewModel: IconButtonComponentUIViewModel) {
         self.viewModel = viewModel
-        self.buttonComponentView = ButtonComponentUIView(viewModel: viewModel)
+        self.buttonComponentView = IconButtonComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
 
         self.buttonComponentView.viewController = self
@@ -36,12 +38,14 @@ final class ButtonComponentViewController: UIViewController {
     }
 
     // MARK: - Lifecycle
+
     override func loadView() {
         super.loadView()
         view = buttonComponentView
     }
 
     // MARK: - ViewDidLoad
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Button"
@@ -49,9 +53,9 @@ final class ButtonComponentViewController: UIViewController {
     }
 
     // MARK: - Add Publishers
-    private func addPublisher() {
 
-        themePublisher
+    private func addPublisher() {
+        self.themePublisher
             .$theme
             .sink { [weak self] theme in
                 guard let self = self else { return }
@@ -80,10 +84,6 @@ final class ButtonComponentViewController: UIViewController {
             self.presentShapeActionSheet(shapes)
         }
 
-        self.viewModel.showAlignmentSheet.subscribe(in: &self.cancellables) { alignments in
-            self.presentAlignmentActionSheet(alignments)
-        }
-
         self.viewModel.showContentNormalSheet.subscribe(in: &self.cancellables) { contents in
             self.presentContentNormalActionSheet(contents)
         }
@@ -107,17 +107,19 @@ final class ButtonComponentViewController: UIViewController {
 }
 
 // MARK: - Builder
-extension ButtonComponentViewController {
 
-    static func build() -> ButtonComponentViewController {
-        let viewModel = ButtonComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = ButtonComponentViewController(viewModel: viewModel)
+extension IconButtonComponentViewController {
+
+    static func build() -> IconButtonComponentViewController {
+        let viewModel = IconButtonComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
+        let viewController = IconButtonComponentViewController(viewModel: viewModel)
         return viewController
     }
 }
 
 // MARK: - Navigation
-extension ButtonComponentViewController {
+
+extension IconButtonComponentViewController {
 
     private func presentThemeActionSheet(_ themes: [ThemeCellModel]) {
         let actionSheet = SparkActionSheet<Theme>.init(
@@ -164,17 +166,8 @@ extension ButtonComponentViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentAlignmentActionSheet(_ alignments: [ButtonAlignment]) {
-        let actionSheet = SparkActionSheet<ButtonAlignment>.init(
-            values: alignments,
-            texts: alignments.map { $0.name }) { alignment in
-                self.viewModel.alignment = alignment
-            }
-        self.present(actionSheet, animated: true)
-    }
-
-    private func presentContentNormalActionSheet(_ contents: [ButtonContentDefault]) {
-        let actionSheet = SparkActionSheet<ButtonContentDefault>.init(
+    private func presentContentNormalActionSheet(_ contents: [IconButtonContentDefault]) {
+        let actionSheet = SparkActionSheet<IconButtonContentDefault>.init(
             values: contents,
             texts: contents.map { $0.name }) { content in
                 self.viewModel.contentNormal = content
@@ -182,8 +175,8 @@ extension ButtonComponentViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentContentHighlightedActionSheet(_ contents: [ButtonContentDefault]) {
-        let actionSheet = SparkActionSheet<ButtonContentDefault>.init(
+    private func presentContentHighlightedActionSheet(_ contents: [IconButtonContentDefault]) {
+        let actionSheet = SparkActionSheet<IconButtonContentDefault>.init(
             values: contents,
             texts: contents.map { $0.name }) { content in
                 self.viewModel.contentHighlighted = content
@@ -191,8 +184,8 @@ extension ButtonComponentViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentContentDisabledActionSheet(_ contents: [ButtonContentDefault]) {
-        let actionSheet = SparkActionSheet<ButtonContentDefault>.init(
+    private func presentContentDisabledActionSheet(_ contents: [IconButtonContentDefault]) {
+        let actionSheet = SparkActionSheet<IconButtonContentDefault>.init(
             values: contents,
             texts: contents.map { $0.name }) { content in
                 self.viewModel.contentDisabled = content
@@ -200,8 +193,8 @@ extension ButtonComponentViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentContentSelectedActionSheet(_ contents: [ButtonContentDefault]) {
-        let actionSheet = SparkActionSheet<ButtonContentDefault>.init(
+    private func presentContentSelectedActionSheet(_ contents: [IconButtonContentDefault]) {
+        let actionSheet = SparkActionSheet<IconButtonContentDefault>.init(
             values: contents,
             texts: contents.map { $0.name }) { content in
                 self.viewModel.contentSelected = content

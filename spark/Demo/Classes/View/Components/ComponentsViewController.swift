@@ -72,6 +72,8 @@ extension ComponentsViewController {
             viewController = BadgeComponentViewController.build()
         case .button:
             viewController = ButtonComponentViewController.build()
+        case .iconButton:
+            viewController = IconButtonComponentViewController.build()
         case .checkbox:
             viewController = UIHostingController(
                 rootView: ComponentsCheckboxListView(
@@ -108,6 +110,7 @@ private extension ComponentsViewController {
     enum Row: CaseIterable {
         case badge
         case button
+        case iconButton
         case checkbox
         case chip
         case icon

@@ -29,7 +29,9 @@ struct ComponentsView: View {
                 Button("Button") {
                     self.navigateToView(ButtonComponentView())
                 }
-
+                Button("Icon Button") {
+                    self.navigateToView(IconButtonComponentView())
+                }
             }
 
             Group {
