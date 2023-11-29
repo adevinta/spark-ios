@@ -90,9 +90,14 @@ final class RatingDisplayViewModel: ObservableObject {
         self.ratingState = ratingState
     }
 
-
-    func setState(isPressed: Bool) {
+    func updateState(isPressed: Bool) {
         self.ratingState.isPressed = isPressed
+        self.colors = self.colorsUseCase.execute(theme: theme, intent: intent, state: self.ratingState)
+    }
+
+    func updateState(isEnabled: Bool) {
+        self.ratingState.isEnabled = isEnabled
+        self.colors = self.colorsUseCase.execute(theme: theme, intent: intent, state: self.ratingState)
     }
 
     // MARK: - Private functions

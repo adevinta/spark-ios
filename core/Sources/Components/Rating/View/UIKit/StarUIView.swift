@@ -110,7 +110,7 @@ public final class StarUIView: UIView {
 
     /// IsCachingEnabled.
     /// Calculated stars will be cached for performance reasons. This may be disabled and the star will be calculated everytime when a redraw is required.
-    public var isCachingEnabled = true
+    public var isCachingEnabled = false
 
     public override var bounds: CGRect {
         didSet {
