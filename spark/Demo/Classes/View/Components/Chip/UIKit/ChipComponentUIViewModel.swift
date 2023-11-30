@@ -144,7 +144,6 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
         }
     }
 
-    // swiftlint:disable all
     var hasAction: Bool {
         set {
             self.action = newValue ? {} : nil
@@ -253,7 +252,6 @@ final class ChipComponentUIViewModel: ComponentUIViewModel {
 extension ChipComponentUIViewModel {
 
     @objc func deleteItem() {
-        
     }
 
     @objc func presentThemeSheet() {

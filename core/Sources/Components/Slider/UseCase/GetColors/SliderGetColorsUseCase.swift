@@ -11,18 +11,16 @@ import UIKit
 // sourcery: AutoMockable
 protocol SliderGetColorsUseCasable {
     func execute(theme: Theme,
-                 intent: SliderIntent,
-                 isEnabled: Bool) -> SliderColors
+                 intent: SliderIntent) -> SliderColors
 }
 
 final class SliderGetColorsUseCase: SliderGetColorsUseCasable {
     func execute(theme: Theme, 
-                 intent: SliderIntent,
-                 isEnabled: Bool) -> SliderColors {
+                 intent: SliderIntent) -> SliderColors {
         let colors = theme.colors
         let dims = theme.dims
 
-        var sliderColors: SliderColors
+        let sliderColors: SliderColors
         let trackColor = colors.base.onBackground.opacity(dims.dim4)
         switch intent {
         case .basic:
@@ -88,9 +86,6 @@ final class SliderGetColorsUseCase: SliderGetColorsUseCasable {
                 handle: colors.feedback.info,
                 handleActiveIndicator: colors.feedback.infoContainer
             )
-        }
-        if isEnabled == false {
-            sliderColors = sliderColors.withOpacity(dims.dim3)
         }
         return sliderColors
     }

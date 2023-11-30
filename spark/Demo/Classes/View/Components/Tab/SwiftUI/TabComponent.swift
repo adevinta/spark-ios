@@ -210,7 +210,6 @@ private extension Image {
         "magazine"
     ]
 
-    // swiftlint: disable force_unwrapping
     static func image(at index: Int) -> Image {
         let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
         let imageName = allSfs[index % names.count]
