@@ -48,7 +48,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.accent.accent,
                     iconColor: theme.colors.accent.onAccent,
-                    pressedBorderColor: theme.colors.basic.basicContainer
+                    pressedBorderColor: theme.colors.accent.accentContainer
                 )
             case .error:
                 expectedColors = CheckboxColors(
@@ -56,7 +56,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.error,
                     iconColor: theme.colors.main.onMain,
-                    pressedBorderColor: theme.colors.basic.basicContainer
+                    pressedBorderColor: theme.colors.feedback.errorContainer
                 )
             case .success:
                 expectedColors = CheckboxColors(
@@ -64,7 +64,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.success,
                     iconColor: theme.colors.main.onMain,
-                    pressedBorderColor: theme.colors.basic.basicContainer
+                    pressedBorderColor: theme.colors.feedback.successContainer
                 )
             case .alert:
                 expectedColors = CheckboxColors(
@@ -72,7 +72,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.alert,
                     iconColor: theme.colors.main.onMain,
-                    pressedBorderColor: theme.colors.basic.basicContainer
+                    pressedBorderColor: theme.colors.feedback.alertContainer
                 )
             case .info:
                 expectedColors = CheckboxColors(
@@ -80,7 +80,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.info,
                     iconColor: theme.colors.main.onMain,
-                    pressedBorderColor: theme.colors.basic.basicContainer
+                    pressedBorderColor: theme.colors.feedback.infoContainer
                 )
             case .neutral:
                 expectedColors = CheckboxColors(
@@ -88,7 +88,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.neutral,
                     iconColor: theme.colors.main.onMain,
-                    pressedBorderColor: theme.colors.basic.basicContainer
+                    pressedBorderColor: theme.colors.feedback.neutralContainer
                 )
             case .support:
                 expectedColors = CheckboxColors(
@@ -96,7 +96,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.support.support,
                     iconColor: theme.colors.support.onSupport,
-                    pressedBorderColor: theme.colors.basic.basicContainer
+                    pressedBorderColor: theme.colors.support.supportContainer
                 )
             case .main:
                 expectedColors = CheckboxColors(
@@ -104,7 +104,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.main.main,
                     iconColor: theme.colors.main.onMain,
-                    pressedBorderColor: theme.colors.basic.basicContainer
+                    pressedBorderColor: theme.colors.main.mainContainer
                 )
             }
 
