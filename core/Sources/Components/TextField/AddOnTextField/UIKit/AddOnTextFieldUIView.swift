@@ -212,10 +212,10 @@ public final class AddOnTextFieldUIView: UIView {
 
         self.textFieldViewModel.$textFieldBackgroundColor.subscribe(in: &self.cancellable) { [weak self] backgroundColor in
             guard let self else { return }
-            if leadingAddOn != nil {
+            if self.leadingAddOn != nil {
                 self.leadingAddOnStackView.backgroundColor = backgroundColor
             }
-            if trailingAddOn != nil {
+            if self.trailingAddOn != nil {
                 self.trailingAddOnStackView.backgroundColor = backgroundColor
             }
         }
