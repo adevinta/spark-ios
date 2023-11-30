@@ -2,246 +2,179 @@
 //  RatingInputUIView.swift
 //  SparkCore
 //
-//  Created by Michael Zimmermann on 28.11.23.
+//  Created by Michael Zimmermann on 30.11.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import Combine
-import SwiftUI
+import Foundation
+import UIKit
 
+/// A rating input for setting a rating value.
+/// There are three possibilities to receive the changed value:
+/// 1. Subscribing to the publisher
+/// 2. Adding a value changed target action
+/// 3. Setting the delegate
 public final class RatingInputUIView: UIControl {
 
+    // MARK: - Properties
+    /// The current theme
     public var theme: Theme {
         get {
-            return self.viewModel.theme
+            return self.ratingDisplay.theme
         }
         set {
-            self.viewModel.theme = newValue
+            self.ratingDisplay.theme = newValue
         }
     }
 
+    /// The current intent
     public var intent: RatingIntent {
         get {
-            return self.viewModel.intent
+            return self.ratingDisplay.intent
         }
         set {
-            self.viewModel.intent = newValue
+            self.ratingDisplay.intent = newValue
         }
     }
 
+    /// A Boolean value indicating whether the control is in the enabled state.
+    public override var isEnabled: Bool {
+        didSet {
+            self.ratingDisplay.isEnabled = self.isEnabled
+        }
+    }
+
+    /// The current rating value.
+    /// It is expected, that this value is in a range between 0 and 5
+    public var rating: CGFloat {
+        didSet {
+            guard ratingDisplay.rating != self.rating else { return }
+            ratingDisplay.rating = self.rating
+        }
+    }
+
+    /// Changes to the rating by user interactions will be published. Only changed values will be published
     public var publisher: any Publisher<CGFloat, Never> {
         return self.subject
     }
 
-    public var rating: CGFloat {
-        get {
-            return self.ratingInputs.map(\.rating).reduce(0.0, +)
-        }
-        set {
-            self.viewModel.ratingValue = newValue
-        }
-    }
-
-    public override var isEnabled: Bool {
-        didSet {
-            self.ratingInputs.forEach { inputView in
-                inputView.isEnabled = self.isEnabled
-            }
-        }
-    }
-
+    /// A delegate which is called on rating changes by user interaction
     public weak var delegate: RatingInputUIViewDelegate?
 
-    private let starConfiguration: StarConfiguration
-
-    private let viewModel: RatingDisplayViewModel
-    private var cancellables = Set<AnyCancellable>()
+    // MARK: - Private properties
+    private let ratingDisplay: RatingDisplayUIView
     private var subject = PassthroughSubject<CGFloat, Never>()
-
-    // MARK: - Private variables
-    private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: self.ratingInputs)
-        stackView.axis = .horizontal
-        stackView.spacing = self.spacing
-        stackView.distribution = .fillEqually
-        stackView.isUserInteractionEnabled = false
-        return stackView
-    }()
-
-    private lazy var ratingInputs: [RatingInputStarUIView] = {
-        return (0..<RatingStarsCount.five.rawValue).map { i in
-            let rating = RatingInputStarUIView(
-                theme: viewModel.theme,
-                intent: viewModel.intent,
-                configuration: self.starConfiguration
-            )
-            rating.isUserInteractionEnabled = false
-            rating.accessibilityIdentifier = "\(RatingInputAccessibilityIdentifier.identifier)-\(i+1)"
-            return rating
-        }
-    }()
-
-    @ScaledUIMetric private var spacing: CGFloat
+    private var lastSelectedIndex: Int?
 
     public init(
         theme: Theme,
         intent: RatingIntent,
         rating: CGFloat = 0.0,
-        configuration: StarConfiguration = .default) {
+        configuration: StarConfiguration = .default
+    ) {
+        self.ratingDisplay = RatingDisplayUIView(
+            theme: theme,
+            intent: intent,
+            count: .five,
+            size: .input,
+            rating: rating,
+            fillMode: .full,
+            configuration: configuration
+        )
 
-            self.viewModel = RatingDisplayViewModel(
-                theme: theme,
-                intent: intent,
-                size: .input,
-                count: .five,
-                rating: rating
-            )
-            self.spacing = self.viewModel.ratingSize.spacing
-            self.starConfiguration = configuration
-            super.init(frame: .zero)
-
-            self.setupView()
-            self.setupSubscriptions()
-            self.setupActions()
+        self.rating = rating
+        super.init(frame: .zero)
+        self.setupView()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        self._spacing.update(traitCollection: traitCollection)
-
-        self.stackView.spacing = self.spacing
-    }
-
-
+    //MARK: - Handle touch events
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         return self.handleTouch(touch, with: event)
     }
 
     public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        print("CONTINUE TRACKING")
         return self.handleTouch(touch, with: event)
     }
 
     public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
 
-        print("END TRACKING")
         guard let location = touch?.location(in: self) else {
             self.ratingStarHighlightCancelled()
             return
         }
 
-        if let index = self.ratingInputs.firstIndex(where: { ratingInput in
-            ratingInput.frame.contains(location)
-        }) {
+        if !self.frame.contains(location) {
+            self.ratingStarHighlightCancelled()
+        } else if let index = self.ratingDisplay.index(closestTo: location) {
+            self.ratingStarSelected(index)
+        } else if let index = self.lastSelectedIndex {
             self.ratingStarSelected(index)
         } else {
             self.ratingStarHighlightCancelled()
         }
+
+        self.lastSelectedIndex = nil
     }
 
+    // MARK: - Private functions
+
+    // MARK: - View setup
+    private func setupView() {
+        self.ratingDisplay.isUserInteractionEnabled = false
+        self.addSubviewSizedEqually(self.ratingDisplay)
+    }
+
+    // MARK: - Handling touch actions
     private func handleTouch(_ touch: UITouch, with event: UIEvent?) -> Bool {
 
         let location = touch.location(in: self)
 
-        guard let index = self.ratingInputs.firstIndex(where: { ratingInput in
-            ratingInput.frame.contains(location)
-        }) else {
-            print("NO VIEW DETECTED")
+        if !self.frame.contains(location) {
+            if !self.isHighlighted {
+                self.ratingStarHighlightCancelled()
+            }
             return true
         }
 
-        print("SET HIGHLIGHTED INDEX \(index)")
+        guard let index = self.ratingDisplay.index(closestTo: location) else {
+            if !self.isHighlighted {
+                self.ratingStarHighlightCancelled()
+            }
+            return true
+        }
+
+        self.lastSelectedIndex = index
         self.ratingStarHighlighted(index)
 
         return true
-
-    }
-    private func setupSubscriptions() {
-        self.viewModel.$ratingSize.subscribe(in: &self.cancellables) { [weak self] size in
-            self?.didUpdate(spacing: size.spacing)
-        }
-
-        self.viewModel.$ratingValue.subscribe(in: &self.cancellables) { [weak self] ratingValue in
-            self?.didUpdate(rating: ratingValue)
-        }
-    }
-
-    private func setupView() {
-        self.accessibilityIdentifier = RatingInputAccessibilityIdentifier.identifier
-
-        self.didUpdate(rating: self.viewModel.ratingValue)
-        self.addSubviewSizedEqually(self.stackView)
-    }
-
-    private func didUpdate(spacing: CGFloat) {
-        self.spacing = spacing
-        self.stackView.spacing = self.spacing
-    }
-
-    private func setupActions() {
-//        for (i, ratingInput) in self.ratingInputs.enumerated() {
-//            let selectedAction = UIAction { [weak self] _ in
-//                self?.ratingStarSelected(i)
-//            }
-//            let highlightedAction = UIAction { [weak self] _ in
-//                self?.ratingStarHighlighted(i)
-//            }
-//            let highlightCancelAction = UIAction { [weak self] _ in
-//                self?.ratingStarHighlightCancelled(i)
-//            }
-//            ratingInput.addAction(selectedAction, for: .touchUpInside)
-//            ratingInput.addAction(highlightedAction, for: .touchDown)
-//            ratingInput.addAction(highlightCancelAction, for: .touchUpOutside)
-//            ratingInput.addAction(highlightCancelAction, for: .touchCancel)
-//        }
-    }
-
-
-    private func didUpdate(rating: CGFloat) {
-        var currentRating = rating
-        for ratingInput in self.ratingInputs {
-            ratingInput.rating = min(1.0, currentRating)
-            currentRating -= 1
-        }
     }
 
     private func ratingStarSelected(_ index: Int) {
         let rating = CGFloat(index + 1)
-        self.didUpdate(rating: rating)
 
-//        for i in index+1..<self.ratingInputs.count {
-//            self.ratingInputs[i].isSelected = false
-//        }
-//        for i in 0...index {
-//            self.ratingInputs[i].isSelected = true
-//        }
+        guard rating != self.rating else { return }
 
-        self.viewModel.rating = rating
+        self.rating = rating
+        self.ratingDisplay.isPressed = false
+
         self.subject.send(rating)
         self.sendActions(for: .valueChanged)
         self.delegate?.rating(self, didChangeRating: rating)
     }
 
     private func ratingStarHighlighted(_ index: Int) {
-        self.didUpdate(rating: CGFloat(index + 1))
-
-        for i in index+1..<self.ratingInputs.count {
-            self.ratingInputs[i].isPressed = false
-        }
-        for i in 0...index {
-            self.ratingInputs[i].isPressed = true
-        }
+        let rating = CGFloat(index + 1)
+        self.ratingDisplay.isPressed = true
+        self.ratingDisplay.rating = rating
     }
 
     private func ratingStarHighlightCancelled() {
-        self.didUpdate(rating: self.viewModel.rating)
-        for i in 0..<self.ratingInputs.count {
-            self.ratingInputs[i].isPressed = false
-        }
+        self.ratingDisplay.rating = self.rating
+        self.ratingDisplay.isPressed = false
     }
 }

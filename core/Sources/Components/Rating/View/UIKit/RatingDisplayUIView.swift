@@ -88,7 +88,25 @@ public class RatingDisplayUIView: UIView {
             self.viewModel.size = newValue
         }
     }
-    
+
+    var isPressed: Bool {
+        get {
+            self.viewModel.ratingState.isPressed
+        }
+        set {
+            self.viewModel.updateState(isPressed: newValue)
+        }
+    }
+
+    var isEnabled: Bool {
+        get {
+            self.viewModel.ratingState.isEnabled
+        }
+        set {
+            self.viewModel.updateState(isEnabled: newValue)
+        }
+    }
+
     // MARK: - Scaled metrics
     @ScaledUIMetric private var borderWidth: CGFloat
     @ScaledUIMetric private var ratingSize: CGFloat
@@ -149,6 +167,17 @@ public class RatingDisplayUIView: UIView {
         self.sizeConstraints.forEach { constraint in
             constraint.constant = self.ratingSize
         }
+    }
+
+    /// Returns the index of the star closest to the given location
+    func index(closestTo location: CGPoint) -> Int? {
+        let distances = self.ratingStarViews.map{ view in
+            view.frame.center.distance(to: location)
+        }
+        let nearest = distances.enumerated().min { (left, right) in
+            return left.element < right.element
+        }
+        return nearest?.offset
     }
 
     // MARK: - Private functions
@@ -212,6 +241,7 @@ public class RatingDisplayUIView: UIView {
             view.borderColor = colors.strokeColor.uiColor
             view.fillColor = colors.fillColor.uiColor
         }
+        self.layer.opacity = Float(colors.opacity)
     }
 
     private func didUpdate(size: RatingSizeAttributes) {

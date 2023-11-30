@@ -250,17 +250,3 @@ private extension UIColor {
         return "\(red)-\(green)-\(blue)-\(alpha)"
     }
 }
-
-private extension CGRect {
-    var centerX: CGFloat {
-        return (self.minX + self.maxX)/2
-    }
-
-    var centerY: CGFloat {
-        return (self.minY + self.maxY)/2
-    }
-
-    var center: CGPoint {
-        return CGPoint(x: self.centerX, y: self.centerY)
-    }
-}
