@@ -458,7 +458,7 @@ public final class ChipUIView: UIControl {
 
     private func setupSubscriptions() {
         self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
-            UIView.animate(withDuration: 0.1, animations: { self?.setChipColors(colors) }) 
+            self?.setChipColors(colors)
         }
 
         self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
