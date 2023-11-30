@@ -28,7 +28,7 @@ public class RatingDisplayUIView: UIView {
     private var sizeConstraints = [NSLayoutConstraint]()
     private var cancellable = Set<AnyCancellable>()
 
-    private var ratingStarViews : [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
+    var ratingStarViews : [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
             return view as? StarUIView
         }
     }
@@ -167,17 +167,6 @@ public class RatingDisplayUIView: UIView {
         self.sizeConstraints.forEach { constraint in
             constraint.constant = self.ratingSize
         }
-    }
-
-    /// Returns the index of the star closest to the given location
-    func index(closestTo location: CGPoint) -> Int? {
-        let distances = self.ratingStarViews.map{ view in
-            view.frame.center.distance(to: location)
-        }
-        let nearest = distances.enumerated().min { (left, right) in
-            return left.element < right.element
-        }
-        return nearest?.offset
     }
 
     // MARK: - Private functions

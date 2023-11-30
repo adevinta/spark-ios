@@ -110,7 +110,7 @@ public final class RatingInputUIView: UIControl {
 
         if !self.frame.contains(location) {
             self.ratingStarHighlightCancelled()
-        } else if let index = self.ratingDisplay.index(closestTo: location) {
+        } else if let index = self.ratingDisplay.ratingStarViews.index(closestTo: location) {
             self.ratingStarSelected(index)
         } else if let index = self.lastSelectedIndex {
             self.ratingStarSelected(index)
@@ -141,7 +141,7 @@ public final class RatingInputUIView: UIControl {
             return true
         }
 
-        guard let index = self.ratingDisplay.index(closestTo: location) else {
+        guard let index = self.ratingDisplay.ratingStarViews.index(closestTo: location) else {
             if !self.isHighlighted {
                 self.ratingStarHighlightCancelled()
             }
@@ -156,11 +156,11 @@ public final class RatingInputUIView: UIControl {
 
     private func ratingStarSelected(_ index: Int) {
         let rating = CGFloat(index + 1)
+        self.ratingDisplay.isPressed = false
 
         guard rating != self.rating else { return }
 
         self.rating = rating
-        self.ratingDisplay.isPressed = false
 
         self.subject.send(rating)
         self.sendActions(for: .valueChanged)
