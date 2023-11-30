@@ -14,7 +14,7 @@ final class SliderGetClosestValueUseCaseTests: XCTestCase {
     func test_execute_createValuesFromStep_receivedValues() throws {
         // GIVEN
         let createValuesFromStepUseCaseMock = SliderCreateValuesFromStepsUseCasableGeneratedMock()
-        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [CGFloat] in
+        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [Float] in
             return [1, 2, 3]
         }
         let sut = SliderGetClosestValueUseCase(createValuesFromStepsUseCase: createValuesFromStepUseCaseMock)
@@ -35,7 +35,7 @@ final class SliderGetClosestValueUseCaseTests: XCTestCase {
     func test_execute_createValuesFromStep_throws_invalidRange() {
         // GIVEN
         let createValuesFromStepUseCaseMock = SliderCreateValuesFromStepsUseCasableGeneratedMock()
-        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [CGFloat] in
+        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [Float] in
             throw SliderCreateValuesFromStepsUseCasableError.invalidRange
         }
         let sut = SliderGetClosestValueUseCase(createValuesFromStepsUseCase: createValuesFromStepUseCaseMock)
@@ -50,7 +50,7 @@ final class SliderGetClosestValueUseCaseTests: XCTestCase {
     func test_execute_createValuesFromStep_throws_invalid() {
         // GIVEN
         let createValuesFromStepUseCaseMock = SliderCreateValuesFromStepsUseCasableGeneratedMock()
-        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [CGFloat] in
+        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [Float] in
             throw SliderCreateValuesFromStepsUseCasableError.invalidStep
         }
         let sut = SliderGetClosestValueUseCase(createValuesFromStepsUseCase: createValuesFromStepUseCaseMock)
@@ -65,7 +65,7 @@ final class SliderGetClosestValueUseCaseTests: XCTestCase {
     func test_execute_createValuesFromStep_empty_values() {
         // GIVEN
         let createValuesFromStepUseCaseMock = SliderCreateValuesFromStepsUseCasableGeneratedMock()
-        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [CGFloat] in
+        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [Float] in
             return []
         }
         let sut = SliderGetClosestValueUseCase(createValuesFromStepsUseCase: createValuesFromStepUseCaseMock)
@@ -80,29 +80,29 @@ final class SliderGetClosestValueUseCaseTests: XCTestCase {
     func test_execute_inbetween() {
         // GIVEN
         let createValuesFromStepUseCaseMock = SliderCreateValuesFromStepsUseCasableGeneratedMock()
-        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [CGFloat] in
+        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [Float] in
             return [
-                0.0,
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5
+                0,
+                10,
+                20,
+                30,
+                40,
+                50
             ]
         }
         let sut = SliderGetClosestValueUseCase(createValuesFromStepsUseCase: createValuesFromStepUseCaseMock)
 
         // WHEN
-        let value = sut.execute(from: 0, to: 0.5, withSteps: 0.1, fromValue: 0.25)
+        let value = sut.execute(from: 0, to: 50, withSteps: 0.1, fromValue: 25)
 
         // THEN
-        XCTAssertEqual(value, 0.3)
+        XCTAssertEqual(value, 30)
     }
 
     func test_execute_lower() {
         // GIVEN
         let createValuesFromStepUseCaseMock = SliderCreateValuesFromStepsUseCasableGeneratedMock()
-        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [CGFloat] in
+        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [Float] in
             return [
                 0.0,
                 0.5
@@ -120,7 +120,7 @@ final class SliderGetClosestValueUseCaseTests: XCTestCase {
     func test_execute_upper() {
         // GIVEN
         let createValuesFromStepUseCaseMock = SliderCreateValuesFromStepsUseCasableGeneratedMock()
-        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [CGFloat] in
+        createValuesFromStepUseCaseMock._executeWithFromAndToAndSteps = { _, _ , _ throws -> [Float] in
             return [
                 0.0,
                 0.1,

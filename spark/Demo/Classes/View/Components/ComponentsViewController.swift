@@ -92,6 +92,8 @@ extension ComponentsViewController {
             viewController = RatingDisplayComponentViewController.build()
         case .ratingInput:
             viewController = RatingInputComponentViewController.build()
+        case .slider:
+            viewController = SliderComponentUIViewController.build()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
         case .star:
@@ -128,6 +130,7 @@ private extension ComponentsViewController {
         case radioButton
         case ratingDisplay
         case ratingInput
+        case slider
         case spinner
         case star
         case switchButton

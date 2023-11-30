@@ -32,27 +32,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .basic,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_basic_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.basic.basic.opacity(self.dims.dim3),
-            handle: self.colors.basic.basic.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.basic.basicContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .basic,
-                                     isEnabled: false)
+                                     intent: .basic)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
@@ -71,27 +51,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .success,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_success_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.feedback.success.opacity(self.dims.dim3),
-            handle: self.colors.feedback.success.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.feedback.successContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .success,
-                                     isEnabled: false)
+                                     intent: .success)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
@@ -110,27 +70,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .error,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_error_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.feedback.error.opacity(self.dims.dim3),
-            handle: self.colors.feedback.error.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.feedback.errorContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .error,
-                                     isEnabled: false)
+                                     intent: .error)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
@@ -149,27 +89,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .alert,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_alert_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.feedback.alert.opacity(self.dims.dim3),
-            handle: self.colors.feedback.alert.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.feedback.alertContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .alert,
-                                     isEnabled: false)
+                                     intent: .alert)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
@@ -188,27 +108,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .accent,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_accent_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.accent.accent.opacity(self.dims.dim3),
-            handle: self.colors.accent.accent.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.accent.accentContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .accent,
-                                     isEnabled: false)
+                                     intent: .accent)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
@@ -227,27 +127,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .main,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_main_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.main.main.opacity(self.dims.dim3),
-            handle: self.colors.main.main.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.main.mainContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .main,
-                                     isEnabled: false)
+                                     intent: .main)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
@@ -266,27 +146,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .neutral,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_neutral_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.feedback.neutral.opacity(self.dims.dim3),
-            handle: self.colors.feedback.neutral.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.feedback.neutralContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .neutral,
-                                     isEnabled: false)
+                                     intent: .neutral)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
@@ -305,27 +165,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .support,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_support_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.support.support.opacity(self.dims.dim3),
-            handle: self.colors.support.support.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.support.supportContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .support,
-                                     isEnabled: false)
+                                     intent: .support)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
@@ -344,27 +184,7 @@ final class SliderGetColorsUseCaseTests: XCTestCase {
 
         // WHEN
         let colors = useCase.execute(theme: self.theme,
-                                     intent: .info,
-                                     isEnabled: true)
-
-        // THEN
-        XCTAssertEqual(colors, expectedColors)
-    }
-
-    func test_execute_intent_info_disabled() {
-        // GIVEN
-        let useCase = SliderGetColorsUseCase()
-        let expectedColors = SliderColors(
-            track: self.colors.base.onBackground.opacity(self.dims.dim4).opacity(self.dims.dim3),
-            indicator: self.colors.feedback.info.opacity(self.dims.dim3),
-            handle: self.colors.feedback.info.opacity(self.dims.dim3),
-            handleActiveIndicator: self.colors.feedback.infoContainer.opacity(self.dims.dim3)
-        )
-
-        // WHEN
-        let colors = useCase.execute(theme: self.theme,
-                                     intent: .info,
-                                     isEnabled: false)
+                                     intent: .info)
 
         // THEN
         XCTAssertEqual(colors, expectedColors)
