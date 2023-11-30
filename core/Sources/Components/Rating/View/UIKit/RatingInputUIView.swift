@@ -76,6 +76,13 @@ public final class RatingInputUIView: UIControl {
     private var subject = PassthroughSubject<CGFloat, Never>()
     private var lastSelectedIndex: Int?
 
+    // MARK: - Initializer
+    /// Init
+    /// - Parameters
+    ///   - theme: the current theme
+    ///   - intent: the current intent defining the color
+    ///   - rating: the current rating. This should be a value in the range between 0...5. The default value is 0
+    ///   - configuration: The star configuration, the default is `default`
     public init(
         theme: Theme,
         intent: RatingIntent,

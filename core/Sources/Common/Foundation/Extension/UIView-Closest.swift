@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 extension Array where Element: UIView {
+
+    /// Returns the index of the array of views which is closest to the point.
     func index(closestTo location: CGPoint) -> Int? {
         let distances = self.map{ view in
             view.frame.center.distance(to: location)
