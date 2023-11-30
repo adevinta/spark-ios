@@ -7,10 +7,10 @@
 //
 
 import Foundation
-
-@testable import SparkCore
 import UIKit
 import SwiftUI
+
+@testable import SparkCore
 
 enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
     case test1
@@ -41,7 +41,7 @@ enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
     /// Description: To various rating values
     ///
     /// Content:
-    ///  - ratings: [0.0, 1.0, 2.5, 5.5]
+    ///  - ratings: [1.0, 2.5, 5.5]
     ///  - size: medium
     ///  - count: five (number of stars)
     ///  - modes: all
@@ -90,7 +90,7 @@ enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
     /// Content:
     ///  - ratings: [2.5]
     ///  - size: [small, medium, input]
-    ///  - count: one (number of stars)
+    ///  - count: five (number of stars)
     ///  - modes: default
     ///  - accessibility sizes: default
     private func test3(isSwiftUIComponent: Bool) -> [RatingDisplayConfigurationSnapshotTests] {

@@ -45,6 +45,15 @@ public final class RatingInputUIView: UIControl {
         }
     }
 
+    internal var isPressed: Bool {
+        set {
+            self.ratingDisplay.isPressed = true
+        }
+        get {
+            return self.ratingDisplay.isPressed
+        }
+    }
+
     /// The current rating value.
     /// It is expected, that this value is in a range between 0 and 5
     public var rating: CGFloat {

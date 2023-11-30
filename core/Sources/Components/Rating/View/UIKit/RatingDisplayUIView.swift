@@ -28,11 +28,6 @@ public class RatingDisplayUIView: UIView {
     private var sizeConstraints = [NSLayoutConstraint]()
     private var cancellable = Set<AnyCancellable>()
 
-    var ratingStarViews : [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
-            return view as? StarUIView
-        }
-    }
-
     // MARK: - Public accessors
     /// Count: the number of stars to show in the rating.
     /// Only values five and one are allowed, five is the default.
@@ -89,7 +84,8 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
-    var isPressed: Bool {
+    // MARK: - Internal accessors
+    internal var isPressed: Bool {
         get {
             self.viewModel.ratingState.isPressed
         }
@@ -98,12 +94,17 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
-    var isEnabled: Bool {
+    internal var isEnabled: Bool {
         get {
             self.viewModel.ratingState.isEnabled
         }
         set {
             self.viewModel.updateState(isEnabled: newValue)
+        }
+    }
+
+    internal var ratingStarViews : [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
+            return view as? StarUIView
         }
     }
 
