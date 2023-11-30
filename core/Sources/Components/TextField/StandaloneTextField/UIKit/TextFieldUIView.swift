@@ -118,6 +118,16 @@ public final class TextFieldUIView: UITextField {
         }
     }
 
+    public override var backgroundColor: UIColor? {
+        get {
+            super.backgroundColor
+        }
+        set {
+            super.backgroundColor = newValue
+            self.viewModel.textFieldBackgroundColor = newValue
+        }
+    }
+
     // MARK: - Initializers
 
     internal init(viewModel: TextFieldUIViewModel) {

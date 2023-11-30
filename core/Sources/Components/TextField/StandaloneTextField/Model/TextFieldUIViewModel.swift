@@ -16,8 +16,9 @@ final class TextFieldUIViewModel: ObservableObject {
     @Published var borders: TextFieldBorders
     @Published var spacings: TextFieldSpacings
     @Published var statusIcon: UIImage?
-    @Published var textFieldIsEnabled: Bool?
-    @Published var textFieldIsActive: Bool?
+    @Published var textFieldIsEnabled: Bool
+    @Published var textFieldIsActive: Bool
+    @Published var textFieldBackgroundColor: UIColor?
 
     // MARK: - Private properties
     
@@ -66,6 +67,8 @@ final class TextFieldUIViewModel: ObservableObject {
         self.errorIcon = errorIcon
         self.alertIcon = alertIcon
         self.successIcon = successIcon
+        self.textFieldIsEnabled = true
+        self.textFieldIsActive = false
 
         // Use cases
         self.getColorsUseCase = getColorsUseCase
