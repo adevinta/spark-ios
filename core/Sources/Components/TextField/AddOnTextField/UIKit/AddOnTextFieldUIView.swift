@@ -203,10 +203,10 @@ public final class AddOnTextFieldUIView: UIView {
         self.textFieldViewModel.$textFieldIsEnabled.subscribe(in: &self.cancellable) { [weak self] isEnabled in
             guard let self else { return }
             if let leadingAddOn = self.leadingAddOn {
-                self.update(addOn: leadingAddOn, position: .leading, state: isEnabled)
+                self.update(addOn: leadingAddOn, state: isEnabled)
             }
             if let trailingAddOn = self.trailingAddOn {
-                self.update(addOn: trailingAddOn, position: .trailing, state: isEnabled)
+                self.update(addOn: trailingAddOn, state: isEnabled)
             }
         }
 
@@ -221,19 +221,10 @@ public final class AddOnTextFieldUIView: UIView {
         }
     }
 
-    private func update(addOn: UIView, position: AddOnTextFieldUIView.AddOnPosition, state isEnabled: Bool) {
+    private func update(addOn: UIView, state isEnabled: Bool) {
         let foregroundOpacity: CGFloat = isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-        let addOnLabel = self.getAddOnLabel(in: addOn)
         addOn.isUserInteractionEnabled = isEnabled
-
-        switch position {
-        case .leading:
-            addOn.tintColor = self.leadingAddOnForegroundColor?.withAlphaComponent(foregroundOpacity)
-            addOnLabel?.textColor = self.leadingAddOnLabelColor?.withAlphaComponent(foregroundOpacity)
-        case .trailing:
-            addOn.tintColor = self.trailingAddOnForegroundColor?.withAlphaComponent(foregroundOpacity)
-            addOnLabel?.textColor = self.trailingAddOnLabelColor?.withAlphaComponent(foregroundOpacity)
-        }
+        addOn.layer.opacity = Float(foregroundOpacity)
     }
 
     private func storeAddOnColors(addOn: UIView, position: AddOnTextFieldUIView.AddOnPosition) {
