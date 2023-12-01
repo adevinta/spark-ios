@@ -51,10 +51,6 @@ struct ComponentsView: View {
             }
 
             Group {
-                Button("Progress Bar - Double") {
-                    self.navigateToView(ProgressBarDoubleComponentView())
-                }
-
                 Button("Progress Bar - Indeterminate") {
                     self.navigateToView(ProgressBarIndeterminateComponentView())
                 }
