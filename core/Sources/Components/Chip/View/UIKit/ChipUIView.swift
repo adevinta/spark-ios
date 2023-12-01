@@ -227,12 +227,13 @@ public final class ChipUIView: UIControl {
     //MARK: - Initializers
 
     /// Initializer of a chip containing only an icon.
-    ///
-    /// Parameters:
-    /// - theme: The theme.
-    /// - intent: The intent of the chip, e.g. main, support
-    /// - variant: The chip variant, e.g. outlined, filled
-    /// - iconImage: An icon
+    /// 
+    /// - Parameters:
+    ///   - theme: The theme.
+    ///   - intent: The intent of the chip, e.g. main, support
+    ///   - variant: The chip variant, e.g. outlined, filled
+    ///   - alignment: Leading or Trailing Icon
+    ///   - iconImage: An icon
     public convenience init(theme: Theme,
                             intent: ChipIntent,
                             variant: ChipVariant,
@@ -469,7 +470,7 @@ public final class ChipUIView: UIControl {
 
     private func setupSubscriptions() {
         self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
-            UIView.animate(withDuration: 0.1, animations: { self?.setChipColors(colors) }) 
+            self?.setChipColors(colors)
         }
 
         self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
