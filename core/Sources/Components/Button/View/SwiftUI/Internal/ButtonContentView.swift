@@ -20,6 +20,8 @@ struct ButtonContentView<ContentView: View, ViewModel: ButtonMainViewModel>: Vie
     }
 
     @ScaledMetric private var height: CGFloat
+    @ScaledMetric private var borderWidth: CGFloat
+    @ScaledMetric private var borderRadius: CGFloat
     private let padding: EdgeInsets?
 
     private let action: () -> Void
@@ -37,8 +39,13 @@ struct ButtonContentView<ContentView: View, ViewModel: ButtonMainViewModel>: Vie
         contentView: @escaping () -> ContentView
     ) {
         self.manager = manager
-        self._height = .init(wrappedValue: manager.viewModel.sizes?.height ?? .zero)
+
+        let viewModel = manager.viewModel
+        self._height = .init(wrappedValue: viewModel.sizes?.height ?? .zero)
+        self._borderWidth = .init(wrappedValue: viewModel.border?.width ?? .zero)
+        self._borderRadius = .init(wrappedValue: viewModel.border?.radius ?? .zero)
         self.padding = padding
+
         self.action = action
         self.contentView = contentView
     }
@@ -57,8 +64,8 @@ struct ButtonContentView<ContentView: View, ViewModel: ButtonMainViewModel>: Vie
         .frame(minWidth: self.height)
         .background(self.viewModel.currentColors?.backgroundColor.color ?? .clear)
         .border(
-            width: self.viewModel.border?.width ?? .zero,
-            radius: self.viewModel.border?.radius ?? .zero,
+            width: self.borderWidth,
+            radius: self.borderRadius,
             colorToken: self.viewModel.currentColors?.borderColor ?? ColorTokenDefault.clear
         )
         .compositingGroup()
