@@ -170,7 +170,9 @@ private struct TabItemButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Self.Configuration) -> some View {
         if configuration.isPressed != self.viewModel.isPressed {
-            self.viewModel.isPressed = configuration.isPressed
+            DispatchQueue.main.async {
+                self.viewModel.isPressed = configuration.isPressed
+            }
         }
         return configuration.label
             .animation(.easeOut(duration: 0.1), value: self.viewModel.isPressed)
