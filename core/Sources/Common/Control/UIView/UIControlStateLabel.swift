@@ -204,11 +204,10 @@ final class UIControlStateLabel: UILabel {
     /// The attributedText is displayed or not.
     private var isAttributedDisplayed: Bool {
         // There is an attributedText ?
-        guard let attributedText = self.attributedText else {
+        guard let attributedText = self.attributedText, attributedText.length > 0 else {
             return false
         }
 
-        // The attributedText contains attributes ?
-        return !attributedText.attributes(at: 0, effectiveRange: nil).isEmpty
+        return self.storedAttributedText == attributedText
     }
 }
