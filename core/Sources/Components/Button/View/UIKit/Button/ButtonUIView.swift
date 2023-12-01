@@ -116,10 +116,7 @@ public final class ButtonUIView: ButtonMainUIView {
     @ScaledUIMetric private var horizontalSpacing: CGFloat = 0
     @ScaledUIMetric private var horizontalPadding: CGFloat = 0
 
-    private var cornerRadius: CGFloat = 0
-
     private var firstContentStackViewAnimation: Bool = true
-    private var firstContentStackViewSubviewAnimation: Bool = true
 
     private var subscriptions = Set<AnyCancellable>()
 

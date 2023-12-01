@@ -147,7 +147,8 @@ public class ButtonMainUIView: UIControl {
     @ScaledUIMetric private var height: CGFloat = 0
     @ScaledUIMetric private var imageHeight: CGFloat = 0
 
-    private var cornerRadius: CGFloat = 0
+    @ScaledUIMetric private var cornerRadius: CGFloat = 0
+    @ScaledUIMetric private var borderWidth: CGFloat = 0
 
     private var subscriptions = Set<AnyCancellable>()
 
@@ -243,6 +244,10 @@ public class ButtonMainUIView: UIControl {
         self.setCornerRadius(self.cornerRadius)
     }
 
+    private func updateBorderWidth() {
+        self.setBorderWidth(self.borderWidth)
+    }
+
     private func updateHeight() {
         // Reload height only if value changed
         if self.heightConstraint?.constant != self.height {
@@ -319,10 +324,13 @@ public class ButtonMainUIView: UIControl {
     private func borderDidUpdate(_ border: ButtonBorder) {
         // Radius
         self.cornerRadius = border.radius
+        self._cornerRadius.update(traitCollection: self.traitCollection)
         self.updateBorderRadius()
 
         // Width
-        self.setBorderWidth(border.width)
+        self.borderWidth = border.width
+        self._borderWidth.update(traitCollection: self.traitCollection)
+        self.updateBorderWidth()
     }
 
     // MARK: - Subscribe
@@ -382,5 +390,11 @@ public class ButtonMainUIView: UIControl {
         self.updateHeight()
         self._imageHeight.update(traitCollection: self.traitCollection)
         self.updateImageViewHeight()
+
+        // Corner
+        self._cornerRadius.update(traitCollection: self.traitCollection)
+        self.updateBorderRadius()
+        self._borderWidth.update(traitCollection: self.traitCollection)
+        self.updateBorderWidth()
     }
 }

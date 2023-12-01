@@ -10,8 +10,6 @@
 import SwiftUI
 import Foundation
 
-// TODO: snapshot
-
 public struct IconButtonView: View {
 
     // MARK: - Type alias

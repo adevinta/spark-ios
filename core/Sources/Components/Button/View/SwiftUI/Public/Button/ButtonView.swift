@@ -9,9 +9,6 @@
 import SwiftUI
 import Foundation
 
-// TODO: snapshot
-// TODO: scalability
-
 public struct ButtonView: View {
 
     // MARK: - Type alias
