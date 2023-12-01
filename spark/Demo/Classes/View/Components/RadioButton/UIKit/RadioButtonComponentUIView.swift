@@ -142,20 +142,15 @@ final class RadioButtonComponentUIView: ComponentUIView {
             }
         }
 
-        self.componentView.radioButtonViews[0].publisher.subscribe(in: &self.cancellables) { selected in
-            print("GROUP VALUE PUBLISHED \(selected)")
-        }
         self.singleComponentView.publisher
             .subscribe(in: &self.cancellables) {
                 [weak self] selected in
                 guard let self = self else { return }
-                print("VALUE PUBLISHED \(selected)")
                 self.singleRadioButtonValuePublished = selected
             }
 
         let action = UIAction { [weak self] action in
             guard let self = self else { return }
-            print("ACTION HANDLE")
             if !self.singleRadioButtonValuePublished {
                 self.singleComponentView.isSelected = false
             }
