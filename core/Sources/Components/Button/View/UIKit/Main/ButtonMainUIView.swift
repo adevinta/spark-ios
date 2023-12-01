@@ -298,10 +298,19 @@ public class ButtonMainUIView: UIControl {
         }
 
         // Border Color
-        self.setBorderColor(from: colors.borderColor)
+        self.borderColorDidUpdate(from: colors)
 
         // Foreground Color
         self.imageView.tintColor = colors.imageTintColor.uiColor
+    }
+
+    private func borderColorDidUpdate(from colors: ButtonCurrentColors? = nil) {
+        guard let colors = colors ?? self.viewModel.currentColors else {
+            return
+        }
+
+        // Border Color
+        self.setBorderColor(from: colors.borderColor)
     }
 
     /// UI must be update when image change on imageStateView.
@@ -384,6 +393,11 @@ public class ButtonMainUIView: UIControl {
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+
+        // Reload colors ?
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.borderColorDidUpdate()
+        }
 
         // Update heights
         self._height.update(traitCollection: self.traitCollection)
