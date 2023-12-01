@@ -51,10 +51,6 @@ struct ComponentsView: View {
             }
 
             Group {
-                Button("Progress Bar - Double") {
-                    self.navigateToView(ProgressBarDoubleComponentView())
-                }
-
                 Button("Progress Bar - Indeterminate") {
                     self.navigateToView(ProgressBarIndeterminateComponentView())
                 }
@@ -65,7 +61,7 @@ struct ComponentsView: View {
             }
 
             Button("Radio Button") {
-                self.navigateToView(RadioButtonGroup())
+                self.navigateToView(RadioButtonComponent())
             }
 
             Button("Spinner") {

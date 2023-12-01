@@ -57,7 +57,7 @@ struct SwitchComponentView: View {
                     text: "Is on",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: self.theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: Binding(
                         get: { self.isOn ? .selected : .unselected },
                         set: { self.isOn = ($0 == .selected) }
@@ -68,7 +68,7 @@ struct SwitchComponentView: View {
                     text: "Is enabled",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: self.theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$isEnabled
                 )
 
@@ -76,7 +76,7 @@ struct SwitchComponentView: View {
                     text: "Has images",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: self.theme,
-                    state: .enabled,
+                    isEnabled: true,
                     selectionState: self.$hasImages
                 )
             },

@@ -132,7 +132,11 @@ class ComponentUIView: UIView {
         }
     }
 
-    private let integrationStackViewAlignment: UIStackView.Alignment
+    var integrationStackViewAlignment: UIStackView.Alignment {
+        didSet {
+            self.integrationStackView.alignment = self.integrationStackViewAlignment
+        }
+    }
 
     private var subscriptions: Set<AnyCancellable> = []
 
@@ -221,6 +225,9 @@ class ComponentUIView: UIView {
         self.componentBottomSpaceView.isHidden = !SpaceContainer.bottom.showSpaceContainer(
             from: type
         )
+
+        self.componentView.setNeedsLayout()
+        self.componentView.layoutIfNeeded()
     }
 
     // MARK: - Subscribe

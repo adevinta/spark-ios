@@ -13,18 +13,15 @@ public struct CheckboxView: View {
 
     // MARK: - Constants
 
-    private enum Constants {
-        static var checkboxSize: CGFloat = 20
-        static var checkboxWidth: CGFloat = 20
-        static var checkboxHeight: CGFloat = 20
+    enum Constants {
+        static var checkboxSize: CGFloat = 24
         static var checkboxBorderRadius: CGFloat = 4
         static var checkboxBorderWidth: CGFloat = 2
 
-        static var checkboxSelectedWidth: CGFloat = 14
-        static var checkboxSelectedHeight: CGFloat = 14
+        static var checkboxSelectedSize: CGFloat = 17
         static var checkboxSelectedBorderWidth: CGFloat = 4
 
-        static var checkboxIndeterminateWidth: CGFloat = 12
+        static var checkboxIndeterminateWidth: CGFloat = 14
         static var checkboxIndeterminateHeight: CGFloat = 2
     }
 
@@ -44,80 +41,54 @@ public struct CheckboxView: View {
 
     @ObservedObject var viewModel: CheckboxViewModel
 
-    var colors: CheckboxColorables {
-        return self.viewModel.colors
-    }
-
     // MARK: - Private Properties
-
+    
     @Namespace private var namespace
 
-    private let checkboxPosition: CheckboxPosition
-
-    @ScaledMetric private var checkboxWidth: CGFloat = Constants.checkboxWidth
-    @ScaledMetric private var checkboxHeight: CGFloat = Constants.checkboxHeight
+    @ScaledMetric var checkboxSize: CGFloat = Constants.checkboxSize
     @ScaledMetric private var checkboxBorderRadius: CGFloat = Constants.checkboxBorderRadius
     @ScaledMetric private var checkboxBorderWidth: CGFloat = Constants.checkboxBorderWidth
 
-    @ScaledMetric private var checkboxSelectedWidth: CGFloat = Constants.checkboxSelectedWidth
-    @ScaledMetric private var checkboxSelectedHeight: CGFloat = Constants.checkboxSelectedHeight
-    @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat = Constants.checkboxSelectedBorderWidth
+    @ScaledMetric private var checkboxSelectedSize: CGFloat = Constants.checkboxSelectedSize
+    @ScaledMetric var checkboxSelectedBorderWidth: CGFloat = Constants.checkboxSelectedBorderWidth
 
     @ScaledMetric private var checkboxIndeterminateWidth: CGFloat = Constants.checkboxIndeterminateWidth
     @ScaledMetric private var checkboxIndeterminateHeight: CGFloat = Constants.checkboxIndeterminateHeight
 
     @ScaledMetric private var horizontalSpacing: CGFloat
-    @ScaledMetric private var smallSpacing: CGFloat
 
     // MARK: - Initialization
-
-    init(
-        text: String,
-        checkedImage: UIImage,
-        checkboxPosition: CheckboxPosition = .left,
-        theme: Theme,
-        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
-        state: SelectButtonState = .enabled,
-        selectionState: Binding<CheckboxSelectionState>
-    ) {
-        self._horizontalSpacing = .init(wrappedValue: theme.layout.spacing.medium)
-        self._smallSpacing = .init(wrappedValue: theme.layout.spacing.small)
-        self._selectionState = selectionState
-        self.checkboxPosition = checkboxPosition
-        self.viewModel = .init(
-            text: .right(text),
-            checkedImage: checkedImage,
-            theme: theme,
-            colorsUseCase: colorsUseCase,
-            state: state
-        )
-    }
 
     /// Initialize a new checkbox.
     /// - Parameters:
     ///   - text: The checkbox text.
     ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - checkboxPosition: Positions the checkbox on the leading or trailing edge of the view.
+    ///   - alignment: Positions the checkbox on the leading or trailing edge of the view.
     ///   - theme: The current Spark-Theme.
+    ///   - intent: The current Intent.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     public init(
-        text: String,
+        text: String?,
         checkedImage: UIImage,
-        checkboxPosition: CheckboxPosition = .left,
+        alignment: CheckboxAlignment = .left,
         theme: Theme,
-        state: SelectButtonState = .enabled,
+        intent: CheckboxIntent = .main,
+        isEnabled: Bool = true,
         selectionState: Binding<CheckboxSelectionState>
     ) {
-        self.init(
-            text: text,
+        self._selectionState = selectionState
+        let viewModel = CheckboxViewModel(
+            text: .right(text),
             checkedImage: checkedImage,
-            checkboxPosition: checkboxPosition,
             theme: theme,
-            colorsUseCase: CheckboxColorsUseCase(),
-            state: state,
-            selectionState: selectionState
+            intent: intent,
+            isEnabled: isEnabled,
+            alignment: alignment,
+            selectionState: selectionState.wrappedValue
         )
+        self.viewModel = viewModel
+        self._horizontalSpacing = .init(wrappedValue: viewModel.spacing)
     }
 
     // MARK: - Body
@@ -136,23 +107,25 @@ public struct CheckboxView: View {
         .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
     }
 
-    @ViewBuilder private var checkboxView: some View {
-        let tintColor = self.colors.checkboxTintColor.color
-        let iconColor = self.colors.checkboxIconColor.color
+    @ViewBuilder 
+    private var checkboxView: some View {
+        let tintColor = self.viewModel.colors.tintColor.color
+        let iconColor = self.viewModel.colors.iconColor.color
+        let borderColor = self.viewModel.colors.borderColor.color
         ZStack {
             RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
                 .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
                     $0.fill(tintColor)
                 } else: {
-                    $0.strokeBorder(tintColor, lineWidth: self.checkboxBorderWidth)
+                    $0.strokeBorder(borderColor, lineWidth: self.checkboxBorderWidth)
                 }
-                .frame(width: self.checkboxWidth, height: self.checkboxHeight)
-                .if(self.isPressed && self.viewModel.interactionEnabled) {
+                .frame(width: self.checkboxSize, height: self.checkboxSize)
+                .if(self.isPressed && self.viewModel.isEnabled) {
                     $0.overlay(
-                        RoundedRectangle(cornerRadius: checkboxBorderRadius)
-                            .inset(by: -checkboxSelectedBorderWidth / 2)
-                            .stroke(colors.pressedBorderColor.color, lineWidth: checkboxSelectedBorderWidth)
-                            .animation(.easeInOut(duration: 0.1), value: isPressed)
+                        RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
+                            .inset(by: -self.checkboxSelectedBorderWidth / 2)
+                            .stroke(self.viewModel.colors.pressedBorderColor.color, lineWidth: self.checkboxSelectedBorderWidth)
+                            .animation(.easeInOut(duration: 0.1), value: self.isPressed)
                     )
                 }
 
@@ -162,7 +135,7 @@ public struct CheckboxView: View {
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)
-                    .frame(width: self.checkboxSelectedWidth, height: self.checkboxSelectedHeight)
+                    .frame(width: self.checkboxSelectedSize, height: self.checkboxSelectedSize)
 
             case .unselected:
                 EmptyView()
@@ -179,44 +152,37 @@ public struct CheckboxView: View {
         .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: self.namespace)
     }
 
-    @ViewBuilder private var contentView: some View {
-        HStack(alignment: .top, spacing: 0) {
-            switch checkboxPosition {
+    @ViewBuilder 
+    private var contentView: some View {
+        HStack(spacing: 0) {
+            switch self.viewModel.alignment {
             case .left:
-                self.checkboxView.padding(.trailing, self.horizontalSpacing)
-
+                VStack {
+                    self.checkboxView.padding(.trailing, self.horizontalSpacing)
+                    Spacer(minLength: 0)
+                }
                 self.labelView
-
-                Spacer()
+                Spacer(minLength: 0)
             case .right:
-                self.labelView
-
-                Spacer()
-
-                self.checkboxView.padding(.leading, self.horizontalSpacing)
+                self.labelView.padding(.trailing, self.horizontalSpacing)
+                Spacer(minLength: 0)
+                VStack {
+                    self.checkboxView
+                    Spacer(minLength: 0)
+                }
             }
         }
-        .padding(.vertical, self.smallSpacing)
         .opacity(self.viewModel.opacity)
-        .allowsHitTesting(self.viewModel.interactionEnabled)
+        .allowsHitTesting(self.viewModel.isEnabled)
         .contentShape(Rectangle())
-    }
-
-    private var spacing: LayoutSpacing {
-        return self.theme.layout.spacing
     }
 
     private var labelView: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(self.viewModel.text ?? "")
-                .font(self.theme.typography.body1.font)
-                .foregroundColor(self.colors.textColor.color)
-
-            if let message = self.viewModel.supplementaryMessage {
-                Text(message)
-                    .font(self.theme.typography.caption.font)
-                    .foregroundColor(self.colors.checkboxTintColor.color)
-            }
+            Text(self.viewModel.text.rightValue ?? "")
+                .font(self.viewModel.font.font)
+                .foregroundColor(self.viewModel.colors.textColor.color)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .id(Identifier.content.rawValue)
         .matchedGeometryEffect(id: Identifier.content.rawValue, in: self.namespace)
@@ -225,7 +191,7 @@ public struct CheckboxView: View {
     // MARK: - Action
 
     func tapped() {
-        guard self.viewModel.interactionEnabled else { return }
+        guard self.viewModel.isEnabled else { return }
 
         switch self.selectionState {
         case .selected:

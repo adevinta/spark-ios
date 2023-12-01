@@ -12,142 +12,107 @@ import SwiftUI
 
 final class CheckboxColorsUseCaseTests: XCTestCase {
 
+    var sut: CheckboxColorsUseCase!
+    var theme: ThemeGeneratedMock!
+
+    override func setUp() {
+        super.setUp()
+
+        self.sut = .init()
+        self.theme = .mocked()
+    }
+
     // MARK: - Tests
 
-    func test_execute_for_all_variant_cases() throws {
-        // GIVEN
-        let intentColorsMock = CheckboxStateColorablesGeneratedMock()
-        intentColorsMock.underlyingTextColor = ColorTokenGeneratedMock()
-        intentColorsMock.underlyingPressedBorderColor = ColorTokenGeneratedMock()
-        intentColorsMock.underlyingCheckboxColor = ColorTokenGeneratedMock()
-        intentColorsMock.underlyingCheckboxIconColor = ColorTokenGeneratedMock()
+    func test_execute_for_all_intent_cases() {
+        let intents = CheckboxIntent.allCases
 
-        let items: [GetColors] = [
-            .init(
-                givenState: .enabled,
-                expectedTextColorToken: intentColorsMock.textColor,
-                expectedPressedBorderToken: intentColorsMock.pressedBorderColor,
-                expectedCheckboxTintToken: intentColorsMock.checkboxColor,
-                expectedCheckboxIconToken: intentColorsMock.checkboxIconColor
-            )
-        ]
+        intents.forEach {
 
-        for item in items {
-            let themeColorsMock = ColorsGeneratedMock()
+            let checkboxColors = sut.execute(from: theme.colors, intent: $0)
 
-            let themeMock = ThemeGeneratedMock()
-            themeMock.underlyingColors = themeColorsMock
+            let expectedColors: CheckboxColors
 
-            let getIntentColorsUseCaseMock = CheckboxGetStateColorsUseCaseableGeneratedMock()
-            getIntentColorsUseCaseMock.executeWithStateAndColorsReturnValue = intentColorsMock
+            switch $0 {
+            case .basic:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.basic.basic,
+                    iconColor: theme.colors.basic.onBasic,
+                    pressedBorderColor: theme.colors.basic.basicContainer
+                )
+            case .accent:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.accent.accent,
+                    iconColor: theme.colors.accent.onAccent,
+                    pressedBorderColor: theme.colors.accent.accentContainer
+                )
+            case .error:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.feedback.error,
+                    iconColor: theme.colors.main.onMain,
+                    pressedBorderColor: theme.colors.feedback.errorContainer
+                )
+            case .success:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.feedback.success,
+                    iconColor: theme.colors.main.onMain,
+                    pressedBorderColor: theme.colors.feedback.successContainer
+                )
+            case .alert:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.feedback.alert,
+                    iconColor: theme.colors.main.onMain,
+                    pressedBorderColor: theme.colors.feedback.alertContainer
+                )
+            case .info:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.feedback.info,
+                    iconColor: theme.colors.main.onMain,
+                    pressedBorderColor: theme.colors.feedback.infoContainer
+                )
+            case .neutral:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.feedback.neutral,
+                    iconColor: theme.colors.main.onMain,
+                    pressedBorderColor: theme.colors.feedback.neutralContainer
+                )
+            case .support:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.support.support,
+                    iconColor: theme.colors.support.onSupport,
+                    pressedBorderColor: theme.colors.support.supportContainer
+                )
+            case .main:
+                expectedColors = CheckboxColors(
+                    textColor: theme.colors.base.onSurface,
+                    borderColor: theme.colors.base.outline,
+                    tintColor: theme.colors.main.main,
+                    iconColor: theme.colors.main.onMain,
+                    pressedBorderColor: theme.colors.main.mainContainer
+                )
+            }
 
-            let useCase = CheckboxColorsUseCase(stateColorsUseCase: getIntentColorsUseCaseMock)
-
-            // WHEN
-            let colors = useCase.execute(from: themeMock,
-                                         state: item.givenState)
-
-            // Other UseCase
-            Tester.testGetIntentColorsUseCaseExecuteCalling(
-                givenGetIntentColorsUseCase: getIntentColorsUseCaseMock,
-                givenState: item.givenState,
-                givenThemeColors: themeColorsMock
-            )
-
-            // Colors Properties
-            try Tester.testColorsProperties(givenColors: colors,
-                                            getColors: item)
+            XCTAssertEqual(checkboxColors.textColor.uiColor, expectedColors.textColor.uiColor)
+            XCTAssertEqual(checkboxColors.borderColor.uiColor, expectedColors.borderColor.uiColor)
+            XCTAssertEqual(checkboxColors.tintColor.uiColor, expectedColors.tintColor.uiColor)
+            XCTAssertEqual(checkboxColors.iconColor.uiColor, expectedColors.iconColor.uiColor)
+            XCTAssertEqual(checkboxColors.pressedBorderColor.uiColor, expectedColors.pressedBorderColor.uiColor)
         }
     }
-}
-
-// MARK: - Tester
-
-private struct Tester {
-
-    static func testGetIntentColorsUseCaseExecuteCalling(
-        givenGetIntentColorsUseCase: CheckboxGetStateColorsUseCaseableGeneratedMock,
-        givenState: SelectButtonState,
-        givenThemeColors: ColorsGeneratedMock
-    ) {
-        let getIntentColorsUseCaseArgs = givenGetIntentColorsUseCase.executeWithStateAndColorsReceivedArguments
-        XCTAssertEqual(givenGetIntentColorsUseCase.executeWithStateAndColorsCallsCount,
-                       1,
-                       "Wrong call number on execute on getIntentColorsUseCase")
-        XCTAssertEqual(getIntentColorsUseCaseArgs?.state,
-                       givenState,
-                       "Wrong intent parameter on execute on getIntentColorsUseCase")
-        XCTAssertIdentical(getIntentColorsUseCaseArgs?.colors as? ColorsGeneratedMock,
-                           givenThemeColors,
-                           "Wrong colors parameter on execute on getIntentColorsUseCase")
-    }
-
-    static func testColorsProperties(
-        givenColors: CheckboxColorables,
-        getColors: GetColors
-    ) throws {
-        // Text Color
-        try self.testColor(
-            givenColorProperty: givenColors.textColor,
-            givenPropertyName: "textColor",
-            givenState: getColors.givenState,
-            expectedColorToken: getColors.expectedTextColorToken
-        )
-
-        // Checkbox Icon Color
-        try self.testColor(
-            givenColorProperty: givenColors.checkboxIconColor,
-            givenPropertyName: "checkboxIconColor",
-            givenState: getColors.givenState,
-            expectedColorToken: getColors.expectedCheckboxIconToken
-        )
-
-        // Checkbox Tint Color
-        try self.testColor(
-            givenColorProperty: givenColors.checkboxTintColor,
-            givenPropertyName: "checkboxTintColor",
-            givenState: getColors.givenState,
-            expectedColorToken: getColors.expectedCheckboxTintToken
-        )
-
-        // Pressed Border Color
-        try self.testColor(
-            givenColorProperty: givenColors.pressedBorderColor,
-            givenPropertyName: "pressedBorderColor",
-            givenState: getColors.givenState,
-            expectedColorToken: getColors.expectedPressedBorderToken
-        )
-    }
-
-    private static func testColor(
-        givenColorProperty: (any ColorToken)?,
-        givenPropertyName: String,
-        givenState: SelectButtonState,
-        expectedColorToken: (any ColorToken)?
-    ) throws {
-        let errorPrefixMessage = " \(givenPropertyName) for .\(givenState) case"
-
-        if let givenColorProperty {
-            let color = try XCTUnwrap(givenColorProperty as? ColorTokenGeneratedMock,
-                                      "Wrong" + errorPrefixMessage)
-            XCTAssertIdentical(color,
-                               expectedColorToken as? ColorTokenGeneratedMock,
-                               "Wrong value" + errorPrefixMessage)
-
-        } else {
-            XCTAssertNil(givenColorProperty,
-                         "Should be nil" + errorPrefixMessage)
-        }
-    }
-}
-
-// MARK: - Others Strucs
-
-private struct GetColors {
-    let givenState: SelectButtonState
-
-    let expectedTextColorToken: any ColorToken
-    let expectedPressedBorderToken: (any ColorToken)?
-    let expectedCheckboxTintToken: any ColorToken
-    let expectedCheckboxIconToken: any ColorToken
 }

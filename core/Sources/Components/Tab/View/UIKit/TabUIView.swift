@@ -457,6 +457,9 @@ public final class TabUIView: UIControl {
 
     // MARK: - Private Functions
     private func setupViews(items: [TabUIItemContent]) {
+
+        self.accessibilityIdentifier = TabAccessibilityIdentifier.tab
+
         let tabItemViews = items.map{ item in
             return TabItemUIView(
                 theme: theme,

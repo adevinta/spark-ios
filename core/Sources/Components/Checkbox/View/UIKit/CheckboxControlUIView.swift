@@ -13,77 +13,61 @@ class CheckboxControlUIView: UIView {
 
     // MARK: - Constants
 
-    private enum Constants {
+    enum Constants {
         static var cornerRadius: CGFloat = 4
         static var cornerRadiusPressed: CGFloat = 7
         static var lineWidth: CGFloat = 2
         static var lineWidthPressed: CGFloat = 4
-        static var controlSize: CGFloat = 20
+        static var size: CGFloat = 24
+        static var selectedIconSize: CGSize = CGSize(width: 17, height: 17)
+        static var indeterminateIconSize: CGSize = CGSize(width: 14, height: 2)
     }
 
     // MARK: - Properties.
 
-    var selectionIcon: UIImage
-
-    var isPressed: Bool = false {
+    var selectionIcon: UIImage {
         didSet {
             self.setNeedsDisplay()
         }
     }
 
-    var selectionState: CheckboxSelectionState = .unselected {
+    var isHighlighted: Bool {
         didSet {
             self.setNeedsDisplay()
         }
     }
 
-    var colors: CheckboxColorables? {
+    var selectionState: CheckboxSelectionState {
         didSet {
             self.setNeedsDisplay()
         }
     }
 
-    var theme: Theme
+    var colors: CheckboxColors {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
 
+    var isEnabled: Bool {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+
+
+    // MARK: - Private Properties.
     @ScaledUIMetric private var cornerRadius: CGFloat = Constants.cornerRadius
     @ScaledUIMetric private var cornerRadiusPressed: CGFloat = Constants.cornerRadiusPressed
     @ScaledUIMetric private var lineWidth: CGFloat = Constants.lineWidth
     @ScaledUIMetric private var lineWidthPressed: CGFloat = Constants.lineWidthPressed
-    @ScaledUIMetric private var controlSize: CGFloat = Constants.controlSize
+    @ScaledUIMetric private var controlSize: CGFloat = Constants.size
 
-    // MARK: - Initialization
-
-    init(selectionIcon: UIImage, theme: Theme) {
-        self.selectionIcon = selectionIcon
-        self.theme = theme
-        super.init(frame: .zero)
-        self.commonInit()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("not implemented")
-    }
-
-    private func commonInit() {
-        self.backgroundColor = .clear
-        self.clipsToBounds = false
-        self.setNeedsDisplay()
-    }
-
-    // MARK: - Methods
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        let traitCollection = self.traitCollection
-        _cornerRadius.update(traitCollection: traitCollection)
-        _cornerRadiusPressed.update(traitCollection: traitCollection)
-        _lineWidth.update(traitCollection: traitCollection)
-        _lineWidthPressed.update(traitCollection: traitCollection)
-        _controlSize.update(traitCollection: traitCollection)
-
-        self.setNeedsDisplay()
-    }
+    private lazy var pressedBorderView: UIView = {
+        let view = UIView()
+        self.addBorderToView(for: view)
+        return view
+    }()
 
     private var iconSize: CGSize {
         let iconSize: CGSize
@@ -91,82 +75,125 @@ class CheckboxControlUIView: UIView {
         case .unselected:
             return .zero
         case .selected:
-            iconSize = CGSize(width: 14, height: 14)
+            iconSize = Constants.selectedIconSize
         case .indeterminate:
-            iconSize = CGSize(width: 12, height: 2)
+            iconSize = Constants.indeterminateIconSize
         }
         return iconSize.scaled(for: self.traitCollection)
+    }
+
+    // MARK: - Initialization
+    init(
+        selectionIcon: UIImage,
+        colors: CheckboxColors,
+        isEnabled: Bool,
+        selectionState: CheckboxSelectionState,
+        isHighlighted: Bool
+    ) {
+        self.selectionIcon = selectionIcon
+        self.isEnabled = isEnabled
+        self.selectionState = selectionState
+        self.isHighlighted = isHighlighted
+        self.colors = colors
+        super.init(frame: .zero)
+
+        self.backgroundColor = .clear
+        self.addSubview(pressedBorderView)
+    }
+
+    private func addBorderToView(for view: UIView) {
+        view.frame = CGRect(
+            x: -self.lineWidthPressed,
+            y: -self.lineWidthPressed,
+            width: self.controlSize + 2*self.lineWidthPressed,
+            height: self.controlSize + 2*self.lineWidthPressed
+        )
+        view.layer.borderWidth = self.lineWidthPressed
+        view.layer.borderColor = self.colors.pressedBorderColor.uiColor.cgColor
+        view.layer.cornerRadius = self.cornerRadiusPressed
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else { return }
+
+        let traitCollection = self.traitCollection
+        self._cornerRadius.update(traitCollection: traitCollection)
+        self._cornerRadiusPressed.update(traitCollection: traitCollection)
+        self._lineWidth.update(traitCollection: traitCollection)
+        self._lineWidthPressed.update(traitCollection: traitCollection)
+        self._controlSize.update(traitCollection: traitCollection)
+
+        self.addBorderToView(for: self.pressedBorderView)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("not implemented")
     }
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
-        guard
-            let colors = self.colors,
-            let ctx = UIGraphicsGetCurrentContext()
-        else { return }
+        self.pressedBorderView.isHidden = !self.isHighlighted
+        self.pressedBorderView.layer.borderColor = self.colors.pressedBorderColor.uiColor.cgColor
 
-        let traitCollection = self.traitCollection
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
 
         let bodyFontMetrics = UIFontMetrics(forTextStyle: .body)
+        let rect = CGRect(x: 0, y: 0, width: self.controlSize, height: self.controlSize)
 
-        let lineWidthPressed = self.lineWidthPressed
-        let controlSize = self.controlSize
-        let scaledSpacing = controlSize + 2 * lineWidthPressed
+        let fillPath = UIBezierPath(roundedRect: rect, cornerRadius: self.cornerRadius)
+        let fillColor = self.colors.tintColor.uiColor
+        fillColor.setFill()
+        ctx.setFillColor(fillColor.cgColor)
 
-        let controlRect = CGRect(x: 0, y: 0, width: scaledSpacing, height: scaledSpacing)
-
-        let controlInnerRect = controlRect.insetBy(dx: lineWidthPressed, dy: lineWidthPressed)
-
-        if self.isPressed {
-            let lineWidth = lineWidthPressed
-            let pressedBorderRectangle = controlRect.insetBy(dx: lineWidth / 2, dy: lineWidth / 2)
-            let borderPath = UIBezierPath(roundedRect: pressedBorderRectangle, cornerRadius: cornerRadiusPressed)
-            borderPath.lineWidth = lineWidth
-            colors.pressedBorderColor.uiColor.setStroke()
-            ctx.setStrokeColor(colors.pressedBorderColor.uiColor.cgColor)
-            borderPath.stroke()
+        if self.isHighlighted {
+            let path = UIBezierPath(roundedRect: rect, cornerRadius: self.cornerRadius)
+            let color = self.colors.pressedBorderColor.uiColor
+            path.lineWidth = self.lineWidth/2
+            color.setStroke()
+            ctx.setStrokeColor(color.cgColor)
+            path.stroke()
         }
 
-        let color = colors.checkboxTintColor.uiColor
-        ctx.setStrokeColor(color.cgColor)
-        ctx.setFillColor(color.cgColor)
-
-        let scaledOffset = lineWidth
-        let rectangle = controlInnerRect.insetBy(dx: scaledOffset/2, dy: scaledOffset/2)
-
-        let path = UIBezierPath(roundedRect: rectangle, cornerRadius: cornerRadius)
-        path.lineWidth = scaledOffset
-        color.setStroke()
-        color.setFill()
-
-        let iconSize = self.iconSize
         switch self.selectionState {
         case .unselected:
-            path.stroke()
+            let strokeRectangle = rect.insetBy(dx: self.lineWidth/2, dy: self.lineWidth/2)
+            let strokePath = UIBezierPath(roundedRect: strokeRectangle, cornerRadius: self.cornerRadius)
+            let strokeColor = self.colors.borderColor.uiColor
+            strokePath.lineWidth = self.lineWidth
+            strokeColor.setStroke()
+            ctx.setStrokeColor(strokeColor.cgColor)
+            strokePath.stroke()
 
         case .indeterminate:
-            path.stroke()
-            path.fill()
+            fillPath.fill()
 
-            let iconPath = UIBezierPath(roundedRect: self.iconRect(for: controlInnerRect), cornerRadius: bodyFontMetrics.scaledValue(for: iconSize.height / 2, compatibleWith: traitCollection))
-            colors.checkboxIconColor.uiColor.setFill()
+            let iconPath = UIBezierPath(
+                roundedRect: self.iconRect(for: rect),
+                cornerRadius: bodyFontMetrics.scaledValue(
+                    for: self.iconSize.height / 2,
+                    compatibleWith: self.traitCollection
+                )
+            )
+            let iconColor = self.colors.iconColor.uiColor
+            iconColor.setFill()
             iconPath.fill()
 
         case .selected:
-            path.stroke()
-            path.fill()
+            fillPath.fill()
 
-            colors.checkboxIconColor.uiColor.set()
-            self.selectionIcon.draw(in: self.iconRect(for: controlInnerRect))
+            let iconColor = self.colors.iconColor.uiColor
+            iconColor.set()
+            self.selectionIcon.draw(in: self.iconRect(for: rect))
         }
     }
 
     private func iconRect(for rectangle: CGRect) -> CGRect {
         let origin = CGPoint(
-            x: rectangle.origin.x + rectangle.width / 2 - iconSize.width / 2,
-            y: rectangle.origin.y + rectangle.height / 2 - iconSize.height / 2
+            x: rectangle.origin.x + rectangle.width / 2 - self.iconSize.width / 2,
+            y: rectangle.origin.y + rectangle.height / 2 - self.iconSize.height / 2
         )
-        return CGRect(origin: origin, size: iconSize)
+        return CGRect(origin: origin, size: self.iconSize)
     }
 }

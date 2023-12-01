@@ -82,8 +82,16 @@ extension ComponentsViewController {
             viewController = ChipComponentViewController.build()
         case .icon:
             viewController = IconComponentUIViewController.build()
+        case .progressBarIndeterminate:
+            viewController = ProgressBarIndeterminateComponentUIViewController.build()
+        case .progressBarSingle:
+            viewController = ProgressBarComponentUIViewController.build()
         case .radioButton:
-            viewController = RadioButtonUIGroupViewController()
+            viewController = RadioButtonComponentUIViewController.build()
+        case .ratingStar:
+            viewController = StarComponentViewController.build()
+        case .ratingDisplay:
+            viewController = RatingDisplayComponentViewController.build()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
         case .switchButton:
@@ -92,6 +100,8 @@ extension ComponentsViewController {
             viewController = TabComponentUIViewController.build()
         case .tag:
             viewController = TagComponentUIViewController.build()
+        case .textField:
+            viewController = TextFieldUIViewController.build()
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -111,10 +121,15 @@ private extension ComponentsViewController {
         case checkbox
         case chip
         case icon
+        case progressBarIndeterminate
+        case progressBarSingle
         case radioButton
+        case ratingStar
+        case ratingDisplay
         case spinner
         case switchButton
         case tab
         case tag
+        case textField
     }
 }
