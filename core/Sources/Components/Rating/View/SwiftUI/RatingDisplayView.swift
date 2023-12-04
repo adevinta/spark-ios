@@ -11,12 +11,11 @@ import SwiftUI
 public struct RatingDisplayView: View {
 
     private let fillMode: StarFillMode
+    private let configuration: StarConfiguration
     @ObservedObject private var viewModel: RatingDisplayViewModel
 
     // MARK: - Scaled metrics
-    @ScaledMetric private var borderWidth: CGFloat
-    @ScaledMetric private var ratingSize: CGFloat
-    @ScaledMetric private var spacing: CGFloat
+    @ScaledMetric private var scalingFactor: CGFloat = 1
 
     // MARK: - Initialization
 
@@ -47,14 +46,41 @@ public struct RatingDisplayView: View {
             rating: rating
         )
         self.fillMode = fillMode
-        self._spacing = .init(wrappedValue: viewModel.ratingSize.spacing)
-        self._ratingSize = .init(wrappedValue: viewModel.ratingSize.height)
-        self._borderWidth = .init(wrappedValue: viewModel.ratingSize.borderWidth)
-
         self.viewModel = viewModel
+        self.configuration = configuration
     }
 
     public var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        if self.viewModel.count == .one {
+            self.oneStar(rating: self.viewModel.ratingValue)
+        } else {
+            self.fiveStar()
+        }
+    }
+
+    @ViewBuilder
+    private func oneStar(rating: CGFloat) -> some View {
+        StarView(
+            rating: rating,
+            fillMode: self.fillMode,
+            lineWidth: self.viewModel.ratingSize.borderWidth * self.scalingFactor,
+            borderColor: self.viewModel.colors.strokeColor.color,
+            fillColor: self.viewModel.colors.fillColor.color,
+            configuration: self.configuration
+        ).frame(
+            width: self.viewModel.ratingSize.height * scalingFactor,
+            height: self.viewModel.ratingSize.height * scalingFactor
+        )
+    }
+
+    @ViewBuilder
+    private func fiveStar() -> some View {
+        HStack(spacing: self.viewModel.ratingSize.spacing) {
+            self.oneStar(rating: self.viewModel.ratingValue)
+            self.oneStar(rating: self.viewModel.ratingValue - 1.0)
+            self.oneStar(rating: self.viewModel.ratingValue - 2.0)
+            self.oneStar(rating: self.viewModel.ratingValue - 3.0)
+            self.oneStar(rating: self.viewModel.ratingValue - 4.0)
+        }
     }
 }
