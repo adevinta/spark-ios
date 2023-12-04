@@ -20,15 +20,6 @@ import UIKit
 ///
 public final class StarUIView: UIView {
 
-    // MARK: - Default values
-    public enum Defaults {
-        public static let fillMode = StarFillMode.half
-        public static let rating = CGFloat(0.0)
-        public static let lineWidth = CGFloat(2.0)
-        public static let fillColor = UIColor.yellow
-        public static let borderColor = UIColor.lightGray
-    }
-
     // MARK: - Public variables
     /// The number of vertices the star has
     public var numberOfVertices: Int {
@@ -138,11 +129,11 @@ public final class StarUIView: UIView {
     /// - borderColor: The color of the border of the unfilled part of the star.
     /// - fillColor: The color of the filled part of the star.
     public convenience init(
-        rating: CGFloat = Defaults.rating,
+        rating: CGFloat = StarDefaults.rating,
         fillMode: StarFillMode = .half,
-        lineWidth: CGFloat = Defaults.lineWidth,
-        borderColor: UIColor = Defaults.borderColor,
-        fillColor: UIColor = Defaults.fillColor,
+        lineWidth: CGFloat = StarDefaults.lineWidth,
+        borderColor: UIColor,
+        fillColor: UIColor,
         configuration: StarConfiguration = .default
     ) {
         self.init(
