@@ -54,16 +54,25 @@ public struct RatingDisplayView: View {
 
     // MARK: - View
     public var body: some View {
+        self.stars()
+            .accessibilityIdentifier(RatingDisplayAccessibilityIdentifier.identifier)
+    }
+
+    @ViewBuilder
+    private func stars() -> some View {
         if self.viewModel.count == .one {
-            self.oneStar(rating: self.viewModel.ratingValue)
+            self.oneStar(
+                rating: self.viewModel.ratingValue,
+                index: 0
+            )
         } else {
-            self.fiveStar()
+            self.fiveStars()
         }
     }
 
     // MARK: - Private functions
     @ViewBuilder
-    private func oneStar(rating: CGFloat) -> some View {
+    private func oneStar(rating: CGFloat, index: Int) -> some View {
         let size = self.viewModel.ratingSize.height * self.scalingFactor
         StarView(
             rating: rating,
@@ -72,20 +81,23 @@ public struct RatingDisplayView: View {
             borderColor: self.viewModel.colors.strokeColor.color,
             fillColor: self.viewModel.colors.fillColor.color,
             configuration: self.configuration
-        ).frame(
+        )
+        .frame(
             width: size,
             height: size
         )
+        .accessibilityIdentifier("\(RatingDisplayAccessibilityIdentifier.identifier)-\(index)")
     }
 
     @ViewBuilder
-    private func fiveStar() -> some View {
+    private func fiveStars() -> some View {
         HStack(spacing: self.viewModel.ratingSize.spacing * self.scalingFactor) {
-            self.oneStar(rating: self.viewModel.ratingValue)
-            self.oneStar(rating: self.viewModel.ratingValue - 1.0)
-            self.oneStar(rating: self.viewModel.ratingValue - 2.0)
-            self.oneStar(rating: self.viewModel.ratingValue - 3.0)
-            self.oneStar(rating: self.viewModel.ratingValue - 4.0)
+            ForEach((0...4), id: \.self) { index in
+                self.oneStar(
+                    rating: self.viewModel.ratingValue - CGFloat(index),
+                    index: index
+                )
+            }
         }
     }
 }

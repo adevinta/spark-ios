@@ -58,7 +58,7 @@ struct RatingComponent: View {
                     intent: .main,
                     count: self.numberOfStars,
                     size: self.ratingSize,
-                    rating: CGFloat(self.rating)/2
+                    rating: CGFloat(self.rating) / 2
                 )
             }
         )
