@@ -65,6 +65,8 @@ struct RatingComponent: View {
     }
 }
 
-#Preview {
-    RatingComponent()
+struct RatingComponent_Previews: PreviewProvider {
+    static var previews: some View {
+        RatingComponent()
+    }
 }
