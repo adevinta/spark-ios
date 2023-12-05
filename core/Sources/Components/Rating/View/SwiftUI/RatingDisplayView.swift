@@ -8,8 +8,12 @@
 
 import SwiftUI
 
+/// RatingDisplayView is a view with which a 5 star rating can be shown.
+/// The rating value is expected to be within the range [0...5]. Values outside of this range will be ignored. Anything less than zero will be shown as zero. Anything greater than 5 will be shown as five.
+/// The rating display may be shown with 5 stars (the standard version) or just one star for a shortened version. For the shortened version, the expected value range is still [0...5]
 public struct RatingDisplayView: View {
 
+    // MARK: - Private properties
     private let fillMode: StarFillMode
     private let configuration: StarConfiguration
     @ObservedObject private var viewModel: RatingDisplayViewModel
@@ -18,8 +22,6 @@ public struct RatingDisplayView: View {
     @ScaledMetric private var scalingFactor: CGFloat = 1
 
     // MARK: - Initialization
-
-
     /// Create a rating display view with the following parameters
     /// - Parameters:
     ///   - theme: The current theme
@@ -50,6 +52,7 @@ public struct RatingDisplayView: View {
         self.configuration = configuration
     }
 
+    // MARK: - View
     public var body: some View {
         if self.viewModel.count == .one {
             self.oneStar(rating: self.viewModel.ratingValue)
@@ -58,6 +61,7 @@ public struct RatingDisplayView: View {
         }
     }
 
+    // MARK: - Private functions
     @ViewBuilder
     private func oneStar(rating: CGFloat) -> some View {
         let size = self.viewModel.ratingSize.height * self.scalingFactor

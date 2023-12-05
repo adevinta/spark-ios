@@ -8,7 +8,10 @@
 
 import SwiftUI
 
+/// StarView is a single SwiftUI Star.
+/// The star may have a rating value which should be in the range [0...1]
 struct StarView: View {
+    // MARK: Private variables
     private let rating: CGFloat
     private let lineWidth: CGFloat
     private let borderColor: Color
@@ -19,14 +22,11 @@ struct StarView: View {
     /// Create a StarUIView with the following parameters
     ///
     /// - Parameters:
-    /// - numberOfVertices: number of vertex elements, the default is 5
     /// - rating: the value of the rating. This should be a number in the range [0...1]
     /// - fillMode: the fill mode of the start. The star will be filled according to the rating and the fillMode.
-    /// - lineWidth: the width of the outer border.
-    /// - vertexSize: this is the proportional length of the vertex according to the radius and should be in the range [0..1].
-    /// - cornerRadiusSize: this is a proportional size of the corner radius according to the radius and should be in the range [0...1].
     /// - borderColor: The color of the border of the unfilled part of the star.
     /// - fillColor: The color of the filled part of the star.
+    /// - configuration: StarConfiguration. The default = `default`.
     public init(
         rating: CGFloat = StarDefaults.rating,
         fillMode: StarFillMode = .half,
@@ -42,6 +42,7 @@ struct StarView: View {
         self.star = StarShape(configuration: configuration)
     }
 
+    // MARK: - View
     var body: some View {
         if #available(iOS 17.0, *) {
             self.newVersion()
@@ -50,9 +51,10 @@ struct StarView: View {
         }
     }
 
+    // MARK: - Private functions
     @available(iOS 17.0, *)
     @ViewBuilder
-    func newVersion() -> some View {
+    private func newVersion() -> some View {
         star.stroke(self.borderColor, lineWidth: self.lineWidth)
             .overlay {
                 self.background()
@@ -66,7 +68,7 @@ struct StarView: View {
 
 
     @ViewBuilder
-    func oldVersion() -> some View {
+    private func oldVersion() -> some View {
         star.stroke(self.borderColor, lineWidth: self.lineWidth)
             .overlay {
                 self.background()

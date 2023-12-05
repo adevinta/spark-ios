@@ -120,14 +120,12 @@ public final class StarUIView: UIView {
     /// Create a StarUIView with the following parameters
     /// 
     /// - Parameters:
-    /// - numberOfVertices: number of vertex elements, the default is 5
     /// - rating: the value of the rating. This should be a number in the range [0...1]
     /// - fillMode: the fill mode of the start. The star will be filled according to the rating and the fillMode.
     /// - lineWidth: the width of the outer border.
-    /// - vertexSize: this is the proportional length of the vertex according to the radius and should be in the range [0..1].
-    /// - cornerRadiusSize: this is a proportional size of the corner radius according to the radius and should be in the range [0...1].
     /// - borderColor: The color of the border of the unfilled part of the star.
     /// - fillColor: The color of the filled part of the star.
+    /// - configuration: StarConfiguration, a configuration of the star appearance. The default is `default`.
     public convenience init(
         rating: CGFloat = StarDefaults.rating,
         fillMode: StarFillMode = .half,
