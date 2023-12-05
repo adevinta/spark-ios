@@ -33,7 +33,7 @@ final class RatingInputUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 if configuration.state == .disabled {
                     view.isEnabled = false
                 } else if configuration.state == .pressed {
-                    view.isPressed = true
+                    view.isHighlighted = true
                 }
 
                 view.backgroundColor = UIColor.lightGray

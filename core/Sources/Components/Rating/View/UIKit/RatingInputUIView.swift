@@ -45,9 +45,9 @@ public final class RatingInputUIView: UIControl {
         }
     }
 
-    internal var isPressed: Bool {
+    public override var isHighlighted: Bool {
         set {
-            self.ratingDisplay.isPressed = true
+            self.ratingDisplay.isPressed = newValue
         }
         get {
             return self.ratingDisplay.isPressed
@@ -173,7 +173,6 @@ public final class RatingInputUIView: UIControl {
 
     private func ratingStarSelected(_ index: Int) {
         let rating = CGFloat(index + 1)
-        self.ratingDisplay.isPressed = false
 
         guard rating != self.rating else { return }
 
@@ -186,12 +185,10 @@ public final class RatingInputUIView: UIControl {
 
     private func ratingStarHighlighted(_ index: Int) {
         let rating = CGFloat(index + 1)
-        self.ratingDisplay.isPressed = true
         self.ratingDisplay.rating = rating
     }
 
     private func ratingStarHighlightCancelled() {
         self.ratingDisplay.rating = self.rating
-        self.ratingDisplay.isPressed = false
     }
 }
