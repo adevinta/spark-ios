@@ -143,6 +143,7 @@ public final class RatingInputUIView: UIControl {
     private func setupView() {
         self.ratingDisplay.isUserInteractionEnabled = false
         self.addSubviewSizedEqually(self.ratingDisplay)
+        self.accessibilityIdentifier = RatingInputAccessibilityIdentifier.identifier
     }
 
     // MARK: - Handling touch actions
