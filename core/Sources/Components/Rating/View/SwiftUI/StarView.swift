@@ -102,13 +102,14 @@ struct StarView: View {
     }
 }
 
-#Preview {
-    StarView(rating: 0.4,
-             fillMode: .half,
-             lineWidth: 2.0,
-             borderColor: .gray,
-             fillColor: .purple,
-             configuration: .default)
-    .frame(width: 100, height: 100)
-
+struct StarView_Previews: PreviewProvider {
+    static var previews: some View {
+        StarView(rating: 0.4,
+                 fillMode: .half,
+                 lineWidth: 2.0,
+                 borderColor: .gray,
+                 fillColor: .purple,
+                 configuration: .default)
+        .frame(width: 100, height: 100)
+    }
 }
