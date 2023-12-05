@@ -60,6 +60,7 @@ public struct RatingDisplayView: View {
 
     @ViewBuilder
     private func oneStar(rating: CGFloat) -> some View {
+        let size = self.viewModel.ratingSize.height * self.scalingFactor
         StarView(
             rating: rating,
             fillMode: self.fillMode,
@@ -68,14 +69,14 @@ public struct RatingDisplayView: View {
             fillColor: self.viewModel.colors.fillColor.color,
             configuration: self.configuration
         ).frame(
-            width: self.viewModel.ratingSize.height * scalingFactor,
-            height: self.viewModel.ratingSize.height * scalingFactor
+            width: size,
+            height: size
         )
     }
 
     @ViewBuilder
     private func fiveStar() -> some View {
-        HStack(spacing: self.viewModel.ratingSize.spacing) {
+        HStack(spacing: self.viewModel.ratingSize.spacing * self.scalingFactor) {
             self.oneStar(rating: self.viewModel.ratingValue)
             self.oneStar(rating: self.viewModel.ratingValue - 1.0)
             self.oneStar(rating: self.viewModel.ratingValue - 2.0)
