@@ -83,6 +83,13 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.disableChanged(_:))))
     }()
 
+    lazy var selectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Selected (for single radio button)",
+            type: .checkbox(title: "", isOn: self.isSelected),
+            target: (source: self, action: #selector(self.selectedChanged(_:))))
+    }()
+
     lazy var numberOfRadioButtonsConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Number of Items",
@@ -110,7 +117,8 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
             self.longLabelConfigurationItemViewModel,
             self.attributedLabelConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
-            self.numberOfRadioButtonsConfigurationItemViewModel
+            self.numberOfRadioButtonsConfigurationItemViewModel,
+            self.selectedConfigurationItemViewModel
         ]
     }
 
@@ -127,6 +135,7 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var showIcon = true
     @Published var showBadge = false
     @Published var isDisabled = false
+    @Published var isSelected = false // only for single radio button
     @Published var numberOfRadioButtons = 3
     @Published var selectedRadioButton = 0
     @Published var axis: RadioButtonGroupLayout = .vertical
@@ -208,6 +217,10 @@ extension RadioButtonComponentUIViewModel {
 
     @objc func disableChanged(_ selected: Any?) {
         self.isDisabled = isTrue(selected)
+    }
+
+    @objc func selectedChanged(_ selected: Any?) {
+        self.isSelected = isTrue(selected)
     }
 
     @objc func axisChanged(_ selected: Any?) {

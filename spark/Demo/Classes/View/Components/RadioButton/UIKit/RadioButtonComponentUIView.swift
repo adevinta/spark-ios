@@ -14,21 +14,33 @@ import UIKit
 final class RadioButtonComponentUIView: ComponentUIView {
     // MARK: - Components
     private let componentView: RadioButtonUIGroupView<Int>
+    private let singleComponentView: RadioButtonUIView<Int>
+    private let stackView: UIStackView
 
     // MARK: - Properties
 
     private let viewModel: RadioButtonComponentUIViewModel
     private var cancellables = Set<AnyCancellable>()
+    private var singleRadioButtonValuePublished = false
 
     // MARK: - Initializer
     init(viewModel: RadioButtonComponentUIViewModel) {
         self.viewModel = viewModel
         let componentView = Self.makeRadioButtonView(viewModel)
         self.componentView = componentView
+        let singleComponentView = Self.makeSingleRadioButtonView(viewModel)
+        self.singleComponentView = singleComponentView
+
+        let stackView = UIStackView(arrangedSubviews: [componentView, singleComponentView])
+        stackView.axis = NSLayoutConstraint.Axis.vertical
+        stackView.spacing = 20
+
+        self.stackView = stackView
+
 
         super.init(
             viewModel: viewModel,
-            componentView: componentView
+            componentView: stackView
         )
 
         self.setupSubscriptions()
@@ -50,18 +62,21 @@ final class RadioButtonComponentUIView: ComponentUIView {
             self.viewModel.configurationViewModel.update(theme: theme)
 
             self.componentView.theme = theme
+            self.singleComponentView.theme = theme
         }
 
         self.viewModel.$intent.subscribe(in: &self.cancellables) { [weak self] intent in
             guard let self = self else { return }
             self.viewModel.intentConfigurationItemViewModel.buttonTitle = intent.name
             self.componentView.intent = intent
+            self.singleComponentView.intent = intent
         }
 
         self.viewModel.$labelAlignment.subscribe(in: &self.cancellables) { [weak self] alignment in
             guard let self = self else { return }
             self.viewModel.alignmentConfigurationItemViewModel.buttonTitle = alignment.name
             self.componentView.labelAlignment = alignment
+            self.singleComponentView.labelAlignment = alignment
         }
 
         self.viewModel.$axis.subscribe(in: &self.cancellables) { [weak self] axis in
@@ -105,6 +120,12 @@ final class RadioButtonComponentUIView: ComponentUIView {
 
         self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] disabled in
             self?.componentView.isEnabled = !disabled
+
+            self?.singleComponentView.isEnabled = !disabled
+        }
+
+        self.viewModel.$isSelected.subscribe(in: &self.cancellables) { [weak self] selected in
+            self?.singleComponentView.isSelected = selected
         }
 
         self.viewModel.$numberOfRadioButtons.subscribe(in: &self.cancellables) { [weak self] numberOfRadioButtons in
@@ -120,10 +141,27 @@ final class RadioButtonComponentUIView: ComponentUIView {
                 self.componentView.addRadioButton(content)
             }
         }
+
+        self.singleComponentView.publisher
+            .subscribe(in: &self.cancellables) {
+                [weak self] selected in
+                guard let self = self else { return }
+                self.singleRadioButtonValuePublished = selected
+            }
+
+        let action = UIAction { [weak self] action in
+            guard let self = self else { return }
+            if !self.singleRadioButtonValuePublished {
+                self.singleComponentView.isSelected = false
+            }
+            self.singleRadioButtonValuePublished = false
+        }
+        self.singleComponentView.addAction(action, for: .touchUpInside)
     }
 
     // MARK: - Private construction helper
     static private func makeRadioButtonView(_ viewModel: RadioButtonComponentUIViewModel) -> RadioButtonUIGroupView<Int> {
+
         let component = RadioButtonUIGroupView(
             theme: viewModel.theme,
             intent: viewModel.intent,
@@ -135,7 +173,15 @@ final class RadioButtonComponentUIView: ComponentUIView {
 
         component.title = "Radio Button Group (UIKit)"
         component.supplementaryText = "Radio Button Group Supplementary Text"
-
         return component
+    }
+
+    static private func makeSingleRadioButtonView(_ viewModel: RadioButtonComponentUIViewModel) -> RadioButtonUIView<Int> {
+        return RadioButtonUIView(
+            theme: viewModel.theme,
+            intent: viewModel.intent,
+            id: 99,
+            label: NSAttributedString(string: "Sample of toggle on radio button"),
+            isSelected: false)
     }
 }
