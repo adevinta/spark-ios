@@ -5,8 +5,12 @@ on:
 
 jobs:
   core_build:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: '15.0.1'
       - name: Checkout actions
         uses: actions/checkout@v3
       - name: Run xcodegen
@@ -21,6 +25,10 @@ jobs:
     needs: [ core_build ]
     runs-on: macos-13
     steps:
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: '15.0.1'
       - name: Checkout actions
         uses: actions/checkout@v3
       - name: Run sourcery
@@ -94,8 +102,12 @@ jobs:
 
   build:
     needs: [ core_build ]
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: '15.0.1'
       - name: Checkout actions
         uses: actions/checkout@v3
       - name: Run xcodegen
@@ -108,8 +120,12 @@ jobs:
   unit_tests:
     name: unit_tests
     needs: [ build ]
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: '15.0.1'
       - name: Checkout actions
         uses: actions/checkout@v3
       - name: Run xcodegen
