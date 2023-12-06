@@ -44,27 +44,6 @@ struct StarView: View {
 
     // MARK: - View
     var body: some View {
-        self.oldVersion()
-    }
-
-    // MARK: - Private functions
-    // The following more optimize version of drawing the star will not compile under xcode 14.x. It is available in xcode 15.0
-//    @available(iOS 17.0, *)
-//    @ViewBuilder
-//    private func newVersion() -> some View {
-//        star.stroke(self.borderColor, lineWidth: self.lineWidth)
-//            .overlay {
-//                self.background()
-//                    .mask {
-//                        star
-//                            .stroke(self.fillColor, lineWidth: self.lineWidth)
-//                            .fill(self.fillColor)
-//                    }
-//            }
-//    }
-
-    @ViewBuilder
-    private func oldVersion() -> some View {
         if self.rating <= 0 {
             star.stroke(self.borderColor, lineWidth: self.lineWidth)
         } else if self.rating >= 5 {
@@ -73,20 +52,44 @@ struct StarView: View {
                     star.fill(self.fillColor)
                 }
         } else {
-            star.stroke(self.borderColor, lineWidth: self.lineWidth)
-                .overlay {
-                    self.background()
-                        .mask {
-                            star.stroke(self.fillColor, lineWidth: self.lineWidth)
-                        }
-                }
-                .overlay {
-                    self.background()
-                        .mask {
-                            star.fill(self.fillColor)
-                        }
-                }
+            if #available(iOS 17.0, *) {
+                self.newVersion()
+            } else {
+                self.oldVersion()
+            }
         }
+    }
+
+    // MARK: - Private functions
+    @available(iOS 17.0, *)
+    @ViewBuilder
+    private func newVersion() -> some View {
+        self.star.stroke(self.borderColor, lineWidth: self.lineWidth)
+            .overlay {
+                self.background()
+                    .mask {
+                        self.star
+                            .stroke(self.fillColor, lineWidth: self.lineWidth)
+                            .fill(self.fillColor)
+                    }
+            }
+    }
+
+    @ViewBuilder
+    private func oldVersion() -> some View {
+        self.star.stroke(self.borderColor, lineWidth: self.lineWidth)
+            .overlay {
+                self.background()
+                    .mask {
+                        self.star.stroke(self.fillColor, lineWidth: self.lineWidth)
+                    }
+            }
+            .overlay {
+                self.background()
+                    .mask {
+                        self.star.fill(self.fillColor)
+                    }
+            }
     }
 
     @ViewBuilder
