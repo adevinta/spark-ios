@@ -8,11 +8,12 @@
 
 import SwiftUI
 
+/// A SwiftUI native rating input component.
 public struct RatingInputView: View {
 
-    @Environment(\.isEnabled) var isEnabled: Bool
+    // MARK: - Private variables
+    @Environment(\.isEnabled) private var isEnabled: Bool
     @ObservedObject private var viewModel: RatingDisplayViewModel
-
     @State private var displayRating: CGFloat
     @Binding private var rating: CGFloat
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
@@ -23,7 +24,7 @@ public struct RatingInputView: View {
     /// - Parameters:
     ///   - theme: The current theme
     ///   - intent: The intent to define the colors
-    ///   - rating: The rating value. This should be a value within the range 0...5
+    ///   - rating: A binding containg the rating value. This should be a value within the range 0...5
     ///   - configuration: A configuration of the star. A default value is defined.
     public init(
         theme: Theme,
@@ -41,19 +42,21 @@ public struct RatingInputView: View {
             count: .five)
     }
 
+    // MARK: - View
     public var body: some View {
         let size = self.viewModel.ratingSize.height * self.scaleFactor
+        let lineWidth = self.viewModel.ratingSize.borderWidth * self.scaleFactor
         let spacing = self.viewModel.ratingSize.spacing * self.scaleFactor
         let width = size * 5 + spacing * 4
         let viewRect = CGRect(x: 0, y: 0, width: width, height: size)
-        let colors = self.viewModel.colors(isEnabled: self.isEnabled)
+        let colors = self.viewModel.colors
 
         HStack(spacing: spacing) {
             ForEach((0...4), id: \.self) { index in
                 StarView(
                     rating: self.displayRating - CGFloat(index),
                     fillMode: .full,
-                    lineWidth: self.viewModel.ratingSize.borderWidth * self.scaleFactor,
+                    lineWidth: lineWidth,
                     borderColor: colors.strokeColor.color,
                     fillColor: colors.fillColor.color,
                     configuration: self.configuration
@@ -63,6 +66,9 @@ public struct RatingInputView: View {
                     height: size
                 )
             }
+        }
+        .doAction {
+            self.viewModel.updateState(isEnabled: self.isEnabled)
         }
         .compositingGroup()
         .opacity(colors.opacity)
@@ -88,9 +94,12 @@ public struct RatingInputView: View {
                 })
         )
         .frame(width: width, height: size)
-        .onAppear{
-            self.viewModel.updateState(isEnabled: self.isEnabled)
-        }
     }
 
+    // MARK: - Internal functions
+    /// This function is just exposed for testing
+    internal func highlighted(isHiglighed: Bool) -> Self {
+        self.viewModel.updateState(isPressed: isHiglighed)
+        return self
+    }
 }

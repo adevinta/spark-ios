@@ -106,13 +106,6 @@ final class RatingDisplayViewModel: ObservableObject {
             state: self.ratingState)
     }
 
-    func colors(isEnabled: Bool) -> RatingColors {
-        return self.colorsUseCase.execute(
-            theme: self.theme,
-            intent: self.intent,
-            state: isEnabled ? .standard : .disabled)
-    }
-
     // MARK: - Private functions
     private func updateRatingValue() {
         self.ratingValue = self.count.ratingValue(self.rating)

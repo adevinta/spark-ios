@@ -20,7 +20,7 @@ struct RatingInputComponent: View {
 
     var body: some View {
         Component(
-            name: "Rating Display Item",
+            name: "Rating Input (SwiftUI)",
             configuration: {
                 ThemeSelector(theme: self.$theme)
 
@@ -31,7 +31,6 @@ struct RatingInputComponent: View {
                     isEnabled: true,
                     selectionState: self.$isEnabled
                 )
-
             },
             integration: {
                 VStack {
