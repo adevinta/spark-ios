@@ -10,6 +10,7 @@ import SwiftUI
 
 public struct RatingInputView: View {
 
+    @Environment(\.isEnabled) var isEnabled: Bool
     @ObservedObject private var viewModel: RatingDisplayViewModel
 
     @State private var displayRating: CGFloat
@@ -45,6 +46,7 @@ public struct RatingInputView: View {
         let spacing = self.viewModel.ratingSize.spacing * self.scaleFactor
         let width = size * 5 + spacing * 4
         let viewRect = CGRect(x: 0, y: 0, width: width, height: size)
+        let colors = self.viewModel.colors(isEnabled: self.isEnabled)
 
         HStack(spacing: spacing) {
             ForEach((0...4), id: \.self) { index in
@@ -52,8 +54,8 @@ public struct RatingInputView: View {
                     rating: self.displayRating - CGFloat(index),
                     fillMode: .full,
                     lineWidth: self.viewModel.ratingSize.borderWidth * self.scaleFactor,
-                    borderColor: self.viewModel.colors.strokeColor.color,
-                    fillColor: self.viewModel.colors.fillColor.color,
+                    borderColor: colors.strokeColor.color,
+                    fillColor: colors.fillColor.color,
                     configuration: self.configuration
                 )
                 .frame(
@@ -62,10 +64,12 @@ public struct RatingInputView: View {
                 )
             }
         }
+        .compositingGroup()
+        .opacity(colors.opacity)
         .gesture(
             DragGesture(minimumDistance: 0.0)
                 .onChanged({ value in
-                    if let index = viewRect.index(of: value.location, with: 5) {
+                    if let index = viewRect.pointIndex(of: value.location, with: 5) {
                         self.displayRating = CGFloat(index + 1)
                         self.viewModel.updateState(isPressed: true)
                     } else {
@@ -74,7 +78,7 @@ public struct RatingInputView: View {
                     }
                 })
                 .onEnded({ value in
-                    if let index = viewRect.index(of: value.location, with: 5) {
+                    if let index = viewRect.pointIndex(of: value.location, with: 5) {
                         self.rating = CGFloat(index + 1)
                         self.displayRating = CGFloat(index + 1)
                     } else {
@@ -84,16 +88,9 @@ public struct RatingInputView: View {
                 })
         )
         .frame(width: width, height: size)
-    }
-}
-
-private extension CGRect {
-    func index(of point: CGPoint, with items: Int) -> Int? {
-        guard self.contains(point) else {
-            return nil
+        .onAppear{
+            self.viewModel.updateState(isEnabled: self.isEnabled)
         }
-
-        let pos = self.width / CGFloat(items)
-        return Int(ceil(point.x / pos)) - 1
     }
+
 }

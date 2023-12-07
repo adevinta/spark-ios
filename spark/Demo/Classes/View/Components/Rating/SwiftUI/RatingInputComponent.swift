@@ -16,12 +16,22 @@ struct RatingInputComponent: View {
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var ratingSize: RatingDisplaySize = .medium
     @State private var rating: CGFloat = 2.0
+    @State private var isEnabled = CheckboxSelectionState.selected
 
     var body: some View {
         Component(
             name: "Rating Display Item",
             configuration: {
                 ThemeSelector(theme: self.$theme)
+
+                CheckboxView(
+                    text: "Is Enabled",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$isEnabled
+                )
+
             },
             integration: {
                 VStack {
@@ -30,6 +40,7 @@ struct RatingInputComponent: View {
                         intent: .main,
                         rating: self.$rating
                     )
+                    .disabled(self.isEnabled != .selected)
 
                     Text("Current Rating \(self.rating)")
                 }

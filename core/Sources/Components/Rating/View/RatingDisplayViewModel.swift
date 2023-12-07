@@ -52,9 +52,9 @@ final class RatingDisplayViewModel: ObservableObject {
         }
     }
 
-    var ratingState: RatingState
-
     // MARK: - Published variables
+    /// The current selection / enabled state
+    @Published var ratingState: RatingState
     /// The current defined colors
     @Published var colors: RatingColors
     /// Current size attributes
@@ -92,12 +92,25 @@ final class RatingDisplayViewModel: ObservableObject {
 
     func updateState(isPressed: Bool) {
         self.ratingState.isPressed = isPressed
-        self.colors = self.colorsUseCase.execute(theme: theme, intent: intent, state: self.ratingState)
+        self.colors = self.colorsUseCase.execute(
+            theme: self.theme,
+            intent: self.intent,
+            state: self.ratingState)
     }
 
     func updateState(isEnabled: Bool) {
         self.ratingState.isEnabled = isEnabled
-        self.colors = self.colorsUseCase.execute(theme: theme, intent: intent, state: self.ratingState)
+        self.colors = self.colorsUseCase.execute(
+            theme: self.theme,
+            intent: self.intent,
+            state: self.ratingState)
+    }
+
+    func colors(isEnabled: Bool) -> RatingColors {
+        return self.colorsUseCase.execute(
+            theme: self.theme,
+            intent: self.intent,
+            state: isEnabled ? .standard : .disabled)
     }
 
     // MARK: - Private functions
