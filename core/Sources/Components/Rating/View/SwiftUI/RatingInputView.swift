@@ -12,12 +12,9 @@ public struct RatingInputView: View {
 
     @ObservedObject private var viewModel: RatingDisplayViewModel
 
-    @State private var starFrames: [CGRect] = .init(repeating: .zero, count: 5)
-    @State private var viewRect: CGRect = .zero
     @State private var displayRating: CGFloat
     @Binding private var rating: CGFloat
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
-    @GestureState private var starPressed = false
     private let configuration: StarConfiguration
 
     // MARK: - Initialization
@@ -47,55 +44,56 @@ public struct RatingInputView: View {
         let size = self.viewModel.ratingSize.height * self.scaleFactor
         let spacing = self.viewModel.ratingSize.spacing * self.scaleFactor
         let width = size * 5 + spacing * 4
-        
-        GeometryReader { viewGeometry in
-            HStack(spacing: spacing) {
-                ForEach((0...4), id: \.self) { index in
-                    GeometryReader { geometry in
-                            StarView(
-                                rating: self.displayRating - CGFloat(index),
-                                fillMode: .full,
-                                lineWidth: self.viewModel.ratingSize.borderWidth * self.scaleFactor,
-                                borderColor: self.viewModel.colors.strokeColor.color,
-                                fillColor: self.viewModel.colors.fillColor.color,
-                                configuration: self.configuration
-                            )
-                            .frame(
-                                width: size,
-                                height: size
-                            )
-                            .onAppear {
-                                self.starFrames[index] = geometry.frame(in: .named("RatingInput"))
-                            }
-                    }
-                }
-            }
-            .onAppear {
-                self.viewRect = viewGeometry.frame(in: .local)
+        let viewRect = CGRect(x: 0, y: 0, width: width, height: size)
+
+        HStack(spacing: spacing) {
+            ForEach((0...4), id: \.self) { index in
+                StarView(
+                    rating: self.displayRating - CGFloat(index),
+                    fillMode: .full,
+                    lineWidth: self.viewModel.ratingSize.borderWidth * self.scaleFactor,
+                    borderColor: self.viewModel.colors.strokeColor.color,
+                    fillColor: self.viewModel.colors.fillColor.color,
+                    configuration: self.configuration
+                )
+                .frame(
+                    width: size,
+                    height: size
+                )
             }
         }
         .gesture(
             DragGesture(minimumDistance: 0.0)
                 .onChanged({ value in
-                    if !self.viewRect.contains(value.location) {
-                        self.displayRating = self._rating.wrappedValue
-                        self.viewModel.updateState(isPressed: false)
-                    } else if let index = self.starFrames.index(closestTo: value.location) {
+                    if let index = viewRect.index(of: value.location, with: 5) {
                         self.displayRating = CGFloat(index + 1)
                         self.viewModel.updateState(isPressed: true)
+                    } else {
+                        self.displayRating = self._rating.wrappedValue
+                        self.viewModel.updateState(isPressed: false)
                     }
                 })
                 .onEnded({ value in
-                    if !self.viewRect.contains(value.location) {
-                        self.displayRating = self._rating.wrappedValue
-                    } else if let index = self.starFrames.index(closestTo: value.location) {
+                    if let index = viewRect.index(of: value.location, with: 5) {
                         self.rating = CGFloat(index + 1)
                         self.displayRating = CGFloat(index + 1)
+                    } else {
+                        self.displayRating = self._rating.wrappedValue
                     }
                     self.viewModel.updateState(isPressed: false)
                 })
         )
         .frame(width: width, height: size)
-        .coordinateSpace(name: "RatingInput")
+    }
+}
+
+private extension CGRect {
+    func index(of point: CGPoint, with items: Int) -> Int? {
+        guard self.contains(point) else {
+            return nil
+        }
+
+        let pos = self.width / CGFloat(items)
+        return Int(ceil(point.x / pos)) - 1
     }
 }
