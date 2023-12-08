@@ -10,12 +10,12 @@ import Foundation
 
 
 extension CGRect {
-    func pointIndex(of point: CGPoint, with items: Int) -> Int? {
-        guard self.contains(point) else {
+    func pointIndex(of point: CGPoint, horizontalSlices items: Int) -> Int? {
+        guard items > 0, self.contains(point) else {
             return nil
         }
 
         let itemWidth = self.width / CGFloat(items)
-        return Int(ceil(point.x / itemWidth)) - 1
+        return max(Int(ceil(point.x / itemWidth)) - 1, 0)
     }
 }

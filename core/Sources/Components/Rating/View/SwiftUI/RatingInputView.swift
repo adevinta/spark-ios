@@ -72,34 +72,38 @@ public struct RatingInputView: View {
         }
         .compositingGroup()
         .opacity(colors.opacity)
-        .gesture(
-            DragGesture(minimumDistance: 0.0)
-                .onChanged({ value in
-                    if let index = viewRect.pointIndex(of: value.location, with: 5) {
-                        self.displayRating = CGFloat(index + 1)
-                        self.viewModel.updateState(isPressed: true)
-                    } else {
-                        self.displayRating = self._rating.wrappedValue
-                        self.viewModel.updateState(isPressed: false)
-                    }
-                })
-                .onEnded({ value in
-                    if let index = viewRect.pointIndex(of: value.location, with: 5) {
-                        self.rating = CGFloat(index + 1)
-                        self.displayRating = CGFloat(index + 1)
-                    } else {
-                        self.displayRating = self._rating.wrappedValue
-                    }
-                    self.viewModel.updateState(isPressed: false)
-                })
-        )
+        .gesture(self.dragGesture(viewRect: viewRect))
         .frame(width: width, height: size)
     }
 
     // MARK: - Internal functions
     /// This function is just exposed for testing
-    internal func highlighted(isHiglighed: Bool) -> Self {
+    internal func highlighted(_ isHiglighed: Bool) -> Self {
         self.viewModel.updateState(isPressed: isHiglighed)
         return self
+    }
+
+    // MARK: - Private functions
+    private func dragGesture(viewRect: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0.0)
+            .onChanged({ value in
+                if let index = viewRect.pointIndex(of: value.location, horizontalSlices: 5) {
+                    self.displayRating = CGFloat(index + 1)
+                    self.viewModel.updateState(isPressed: true)
+                } else {
+                    self.displayRating = self._rating.wrappedValue
+                    self.viewModel.updateState(isPressed: false)
+                }
+            })
+            .onEnded({ value in
+                if let index = viewRect.pointIndex(of: value.location, horizontalSlices: 5) {
+                    self.rating = CGFloat(index + 1)
+                    self.displayRating = CGFloat(index + 1)
+                } else {
+                    self.displayRating = self._rating.wrappedValue
+                }
+                self.viewModel.updateState(isPressed: false)
+            })
+
     }
 }
