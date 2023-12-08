@@ -67,7 +67,6 @@ public struct CheckboxView: View {
     ///   - theme: The current Spark-Theme.
     ///   - intent: The current Intent.
     ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
-    ///   - state: The control state describes whether the checkbox is enabled or disabled as well as options for displaying success and error messages.
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     public init(
         text: String?,

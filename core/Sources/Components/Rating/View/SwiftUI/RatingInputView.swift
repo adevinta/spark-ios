@@ -65,6 +65,7 @@ public struct RatingInputView: View {
                     width: size,
                     height: size
                 )
+                .accessibilityIdentifier("\(RatingInputAccessibilityIdentifier.identifier)-\(index)")
             }
         }
         .doAction {
@@ -74,6 +75,7 @@ public struct RatingInputView: View {
         .opacity(colors.opacity)
         .gesture(self.dragGesture(viewRect: viewRect))
         .frame(width: width, height: size)
+        .accessibilityIdentifier(RatingInputAccessibilityIdentifier.identifier)
     }
 
     // MARK: - Internal functions
