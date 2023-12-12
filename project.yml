@@ -3,7 +3,7 @@ include:
   - xcodegen/spark-shared.yml
   - xcodegen/spark-core.yml
   - xcodegen/spark-core-snapshot-tests.yml
-  - xcodegen/spark-core-ui-tests.yml
+  - xcodegen/spark-demo-ui-tests.yml
   - xcodegen/spark-core-unit-tests.yml
   - xcodegen/spark.yml
 
@@ -15,7 +15,6 @@ targetTemplates:
       testTargets:
         - name: SparkCoreUnitTests
         - name: SparkCoreSnapshotTests
-        - name: SparkCoreUITests
       environmentVariables:
         - variable: SNAPSHOT_REFERENCE_DIR
           value: "$(SRCROOT)/spark-ios-snapshots"

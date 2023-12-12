@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 
 //typealias UITestPredicate = (ScenarioConfigurtion) -> Bool
-typealias UITestClosure = (ScenarioConfigurtion) -> Void
+typealias UITestClosure = (XCUIApplication) -> Void
 
 struct ScenarioConfigurtion {
     let app: XCUIApplication
@@ -70,7 +70,9 @@ struct Scenario {
     }
 
     func validate() {
-        givenWhenThen.validate(.init(app: self.appLauncher.app, message: self.message))
+        XCTContext.runActivity(named: self.message) {_ in
+            givenWhenThen.validate(XCUIApplication())
+        }
     }
 }
 
@@ -108,24 +110,28 @@ struct GivenWhenThen {
     let when: When
     let then: Then
 
-    func validate(_ configuration: ScenarioConfigurtion) {
-        given.validate(configuration)
-        when.validate(configuration)
-        then.validate(configuration)
+    func validate(_ app: XCUIApplication) {
+        self.given.validate(app)
+        self.when.validate(app)
+        self.then.validate(app)
     }
 }
 
 open class UIPredicate {
     let predicates: [UITestClosure]
+    let name: String?
     init(
         _ name: String? = nil,
         @GivenBuilder builder: () -> [UITestClosure]
     ) {
         self.predicates = builder()
+        self.name = name
     }
 
-    func validate(_ configuration: ScenarioConfigurtion) {
-        predicates.forEach{ $0(configuration) }
+    func validate(_ app: XCUIApplication) {
+        XCTContext.runActivity(named: self.name ?? "Missing") { _ in
+            predicates.forEach{ $0(app) }
+        }
     }
 }
 
