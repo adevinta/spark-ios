@@ -126,6 +126,7 @@ public final class SliderUIControl: UIControl {
             guard let self else { return }
             self.valueSubject.send(self.value)
         }), for: .valueChanged)
+        self.accessibilityIdentifier = SliderAccessibilityIdentifier.slider
     }
 
     required init?(coder: NSCoder) {
