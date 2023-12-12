@@ -124,7 +124,7 @@ public final class RatingInputUIView: UIControl {
             return
         }
 
-        if !self.frame.contains(location) {
+        if !self.bounds.contains(location) {
             self.ratingStarHighlightCancelled()
         } else if let index = self.ratingDisplay.ratingStarViews.index(closestTo: location) {
             self.ratingStarSelected(index)
