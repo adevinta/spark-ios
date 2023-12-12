@@ -17,62 +17,52 @@ public final class SliderUIControl: UIControl {
     private var beginTrackingValue: Float = .zero
 
     // MARK: - Public properties
+    /// The slider's current theme.
     public var theme: Theme {
-        get {
-            return self.viewModel.theme
-        } set {
-            self.viewModel.theme = newValue
-        }
+        get { return self.viewModel.theme } 
+        set { self.viewModel.theme = newValue }
     }
-
+    
+    /// The slider's current intent.
     public var intent: SliderIntent {
-        get {
-            return self.viewModel.intent
-        } set {
-            self.viewModel.intent = newValue
-        }
+        get { return self.viewModel.intent }
+        set { self.viewModel.intent = newValue }
     }
-
+    
+    /// The slider's current shape (`square` or `rounded`).
     public var shape: SliderShape {
-        get {
-            return self.viewModel.shape
-        } set {
-            self.viewModel.shape = newValue
-        }
+        get { return self.viewModel.shape }
+        set { self.viewModel.shape = newValue }
     }
-
+    
+    /// A Boolean value indicating whether changes in the slider’s value generate continuous update events.
     public var isContinuous: Bool {
-        get {
-            return self.viewModel.isContinuous
-        } set {
-            self.viewModel.isContinuous = newValue
-        }
+        get { return self.viewModel.isContinuous }
+        set { self.viewModel.isContinuous = newValue }
     }
 
+    /// The minimum value of the slider.
     public var minimumValue: Float {
-        get {
-            return self.viewModel.minimumValue
-        } set {
+        get { return self.viewModel.minimumValue }
+        set {
             self.viewModel.minimumValue = newValue
             self.setValue(self.value)
         }
     }
-
+    
+    /// The maximum value of the slider.
     public var maximumValue: Float {
-        get {
-            return self.viewModel.maximumValue
-        } set {
+        get { return self.viewModel.maximumValue }
+        set {
             self.viewModel.maximumValue = newValue
             self.setValue(self.value)
         }
     }
-
+    
+    /// The distance between each valid value.
     public var steps: Float {
-        get {
-            return self.viewModel.steps
-        } set {
-            self.viewModel.steps = newValue
-        }
+        get { return self.viewModel.steps }
+        set { self.viewModel.steps = newValue }
     }
 
     public override var isEnabled: Bool {
@@ -82,6 +72,7 @@ public final class SliderUIControl: UIControl {
         }
     }
 
+    /// The slider’s current value.
     public private(set) var value: Float = .zero {
         didSet {
             switch (self._isTracking, self.isContinuous) {
@@ -103,6 +94,8 @@ public final class SliderUIControl: UIControl {
     }
 
     private var valueSubject = PassthroughSubject<Float, Never>()
+    /// Value changes are sent to the publisher.
+    /// Alternative: use addAction(UIAction, for: .valueChanged).
     public var valuePublisher: some Publisher<Float, Never> {
         return self.valueSubject
     }
@@ -138,7 +131,12 @@ public final class SliderUIControl: UIControl {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    /// SliderUIControler initializer
+    /// - Parameters:
+    ///   - theme: The slider's current theme
+    ///   - shape: The slider's current shape (`square` or `rounded`)
+    ///   - intent: The slider's current intent
     public convenience init(
         theme: Theme,
         shape: SliderShape,
@@ -162,7 +160,11 @@ public final class SliderUIControl: UIControl {
         self.trackView.frame.origin.x = self.handle.center.x
         self.trackView.frame.size.width = self.frame.width - self.trackView.frame.origin.x
     }
-
+    
+    /// Sets the slider’s current value, allowing you to animate the change visually.
+    /// - Parameters:
+    ///   - value: The new value to assign to the value property
+    ///   - animated: Specify `true` to animate the change in value; otherwise, specify `false` to update the slider’s appearance immediately. Animations are performed asynchronously and do not block the calling thread.
     public func setValue(_ value: Float, animated: Bool = false) {
         if animated {
             UIView.animate(withDuration: 0.3) { [weak self] in
