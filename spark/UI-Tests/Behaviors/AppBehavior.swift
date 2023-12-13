@@ -56,9 +56,4 @@ extension AppBehavior {
     func the_radiobutton_screen(app: XCUIApplication) -> XCUIElement {
         return app.navigationBars["RadioButton"]
     }
-
-    func print_debug_description(app: XCUIApplication) {
-        print(app.debugDescription)
-        print("HELLO")
-    }
 }

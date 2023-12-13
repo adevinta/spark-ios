@@ -12,7 +12,6 @@ import XCTest
 typealias UITestClosure = (XCUIApplication) -> Void
 
 final class AppLauncher {
-
     static var shared = AppLauncher()
     let app = XCUIApplication()
     private var isLaunched: Bool = false
@@ -26,7 +25,6 @@ final class AppLauncher {
 
         app.launch()
     }
-
 }
 
 func Scenario(_ message: String, @GivenWhenThenBuilder builder: () -> GivenWhenThen) {
@@ -44,7 +42,7 @@ enum GivenWhenThenBuilder {
 }
 
 @resultBuilder
-enum GivenBuilder {
+enum ClosureBuilder {
     static func buildBlock(_ components: UITestClosure...) -> [UITestClosure] {
         components
     }
@@ -53,17 +51,6 @@ enum GivenBuilder {
         component ?? []
     }
 }
-
-//@resultBuilder
-//enum ThenBuilder {
-//    static func buildBlock(_ components: UITestPredicate...) -> [UITestPredicate] {
-//        components
-//    }
-//
-//    static func buildOptional(_ component: [UITestPredicate]?) -> [UITestPredicate] {
-//        component ?? []
-//    }
-//}
 
 struct GivenWhenThen {
     let given: Given
@@ -77,47 +64,47 @@ struct GivenWhenThen {
     }
 }
 
-open class UIPredicate {
+open class UIScenarioElement {
     let predicates: [UITestClosure]
-    let name: String?
+    let name: String
     init(
-        _ name: String? = nil,
-        @GivenBuilder builder: () -> [UITestClosure]
+        _ name: String,
+        @ClosureBuilder builder: () -> [UITestClosure]
     ) {
         self.predicates = builder()
         self.name = name
     }
 
     func validate(_ app: XCUIApplication) {
-        XCTContext.runActivity(named: self.name ?? "Missing") { _ in
+        XCTContext.runActivity(named: self.name) { _ in
             predicates.forEach{ $0(app) }
         }
     }
 }
 
-final class Given: UIPredicate {
+final class Given: UIScenarioElement {
     override init(
         _ name: String? = nil,
-        @GivenBuilder builder: () -> [UITestClosure]
+        @ClosureBuilder builder: () -> [UITestClosure]
     ) {
-        super.init(name, builder: builder)
+        super.init(name ?? "Given", builder: builder)
     }
 }
 
-final class When: UIPredicate {
+final class When: UIScenarioElement {
     override init(
         _ name: String? = nil,
-        @GivenBuilder builder: () -> [UITestClosure]
+        @ClosureBuilder builder: () -> [UITestClosure]
     ) {
-        super.init(name, builder: builder)
+        super.init(name ?? "When", builder: builder)
     }
 }
 
-final class Then: UIPredicate {
+final class Then: UIScenarioElement {
     override init(
         _ name: String? = nil,
-        @GivenBuilder builder: () -> [UITestClosure]
+        @ClosureBuilder builder: () -> [UITestClosure]
     ) {
-        super.init(name, builder: builder)
+        super.init(name ?? "Then", builder: builder)
     }
 }
