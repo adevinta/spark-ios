@@ -45,7 +45,7 @@ public final class SliderUIControl: UIControl {
         get { return self.viewModel.minimumValue }
         set {
             self.viewModel.minimumValue = min(self.maximumValue, newValue)
-            self.setValue(self.value)
+            self.resetValue()
         }
     }
     
@@ -54,7 +54,7 @@ public final class SliderUIControl: UIControl {
         get { return self.viewModel.maximumValue }
         set {
             self.viewModel.maximumValue = max(self.minimumValue, newValue)
-            self.setValue(self.value)
+            self.resetValue()
         }
     }
     
@@ -179,6 +179,10 @@ public final class SliderUIControl: UIControl {
         } else {
             self.viewModel.setAbsoluteValue(value)
         }
+    }
+
+    private func resetValue() {
+        self.viewModel.setAbsoluteValue(self.value)
     }
 
     private func setupBar() {
