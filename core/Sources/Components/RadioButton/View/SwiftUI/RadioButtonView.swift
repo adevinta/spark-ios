@@ -45,7 +45,6 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
     // MARK: - Local Properties
 
-    @Environment(\.isEnabled) private var isEnabled: Bool
     @ScaledMetric private var pressedLineWidth: CGFloat = Constants.pressedLineWidth
     @ScaledMetric private var lineWidth: CGFloat = Constants.lineWidth
     @ScaledMetric private var size: CGFloat = Constants.size
@@ -117,7 +116,6 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         })
         .opacity(self.viewModel.opacity)
         .buttonStyle(PressedButtonStyle(isPressed: self.$isPressed))
-        .accessibilityLabel(self.viewModel.label.rightValue ?? RadioButtonAccessibilityIdentifier.radioButton)
         .accessibilityValue(self.viewModel.id.description)
         .isEnabledChanged { isEnabled in
             self.viewModel.set(enabled: isEnabled)

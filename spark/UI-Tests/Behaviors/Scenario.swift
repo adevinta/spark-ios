@@ -9,33 +9,7 @@
 import Foundation
 import XCTest
 
-//typealias UITestPredicate = (ScenarioConfigurtion) -> Bool
 typealias UITestClosure = (XCUIApplication) -> Void
-
-struct ScenarioConfigurtion {
-    let app: XCUIApplication
-    let message: String
-
-    func assertTrue(
-        _ expression: @autoclosure () throws -> Bool,
-        message: @autoclosure () -> String = "",
-        function: StaticString = #function,
-        file: StaticString = #filePath,
-        line: UInt = #line) {
-            do {
-                let expression = try expression()
-                XCTAssertTrue(
-                    expression,
-                    "\(message()): \(function)",
-                    file: file,
-                    line: line
-                )
-            }
-            catch {
-                XCTFail("\(message()): \(function) \(error)", file: file, line: line)
-            }
-        }
-}
 
 final class AppLauncher {
 
@@ -48,31 +22,17 @@ final class AppLauncher {
     func launch() {
         guard !self.isLaunched else { return }
         self.isLaunched = true
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+
         app.launch()
     }
 
 }
 
-struct Scenario {
-
-    let message: String
-    let appLauncher = AppLauncher.shared
-    let givenWhenThen: GivenWhenThen
-
-    init(
-        _ message: String,
-        @GivenWhenThenBuilder builder: () -> GivenWhenThen
-    ) {
-        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        self.message = message
-        self.givenWhenThen = builder()
-        self.appLauncher.launch()
-    }
-
-    func validate() {
-        XCTContext.runActivity(named: self.message) {_ in
-            givenWhenThen.validate(XCUIApplication())
-        }
+func Scenario(_ message: String, @GivenWhenThenBuilder builder: () -> GivenWhenThen) {
+    AppLauncher.shared.launch()
+    XCTContext.runActivity(named: message) {_ in
+        builder().validate(AppLauncher.shared.app)
     }
 }
 

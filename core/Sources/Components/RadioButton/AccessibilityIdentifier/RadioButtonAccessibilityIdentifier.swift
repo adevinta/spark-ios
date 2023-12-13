@@ -18,7 +18,7 @@ public enum RadioButtonAccessibilityIdentifier {
     /// The radio button text label accessibility identifier.
     public static let radioButtonTextLabel = "spark-radio-button-text-label"
 
-    public static func radioButtonIdentifier<ID: CustomStringConvertible>(id: ID) -> String {
-        return "\(radioButton)-\(id)"
+    public static func radioButtonIdentifier(index: Int) -> String {
+        return "\(radioButton)-\(index)"
     }
 }

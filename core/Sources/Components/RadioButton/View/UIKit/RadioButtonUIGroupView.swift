@@ -331,6 +331,8 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
     private func setupView() {
 
+        self.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButton
+
         self.addSubview(self.titleLabel)
         self.setTextOf(label: self.titleLabel,
                        title: self.title,
@@ -365,27 +367,26 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     private func createRadioButtonViews(
-        items: [RadioButtonUIItem<ID>]) -> [RadioButtonUIView<ID>] 
-    {
-        let radioButtonViews = items.map {
-            let radioButtonView = RadioButtonUIView(
-                theme: self.theme,
-                intent: self.viewModel.intent,
-                id: $0.id,
-                label: $0.label,
-                selectedID: self.backingSelectedID,
-                labelAlignment: self.labelAlignment
-            )
-            radioButtonView.translatesAutoresizingMaskIntoConstraints = false
+        items: [RadioButtonUIItem<ID>]) -> [RadioButtonUIView<ID>] {
+            let radioButtonViews = items.enumerated().map { (index, item) in
+                let radioButtonView = RadioButtonUIView(
+                    theme: self.theme,
+                    intent: self.viewModel.intent,
+                    id: item.id,
+                    label: item.label,
+                    selectedID: self.backingSelectedID,
+                    labelAlignment: self.labelAlignment
+                )
+                radioButtonView.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonIdentifier(index: index)
+                radioButtonView.translatesAutoresizingMaskIntoConstraints = false
+                let action = UIAction { [weak self] _ in
+                    self?.sendActions(for: .touchUpInside)
+                }
+                radioButtonView.addAction(action, for: .touchUpInside)
 
-            let action = UIAction { [weak self] _ in
-                self?.sendActions(for: .touchUpInside)
+                return radioButtonView
             }
-            radioButtonView.addAction(action, for: .touchUpInside)
-
-            return radioButtonView
-        }
-        return radioButtonViews
+            return radioButtonViews
     }
 
     private func setupConstraints() {

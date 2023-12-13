@@ -145,7 +145,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
 
     @ViewBuilder
     private var radioButtonItems: some View {
-        ForEach(self.items, id: \.id) { item in
+        ForEach(Array(self.items.enumerated()), id: \.offset) { (offset, item) in
             RadioButtonView(
                 theme: self.viewModel.theme,
                 intent: self.viewModel.intent, 
@@ -154,7 +154,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                 selectedID: self.selectedID,
                 labelAlignment: self.labelAlignment
             )
-            .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: item.id))
+            .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(index: offset))
             .padding(.bottom, self.bottomPadding(of: item))
         }
     }

@@ -97,6 +97,10 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
                 )
             }
 
+            self.viewModel.$isOn.subscribe(in: &self.subscriptions) { isOn in
+                checkbox.selectionState = isOn == true ? .selected : .unselected
+            }
+
             self.viewModel.$theme.subscribe(in: &self.subscriptions) { theme in
                 checkbox.theme = theme
             }

@@ -220,7 +220,9 @@ extension RadioButtonComponentUIViewModel {
     }
 
     @objc func selectedChanged(_ selected: Any?) {
-        self.isSelected = isTrue(selected)
+        let isSelected = isTrue(selected)
+        self.isSelected = isSelected
+        self.selectedConfigurationItemViewModel.isOn = isSelected
     }
 
     @objc func axisChanged(_ selected: Any?) {

@@ -242,6 +242,7 @@ class ComponentUIView: UIView {
         self.viewModel.showSpaceContainerTypeSheet.subscribe(in: &self.subscriptions) { types in
             self.presentIntentActionSheet(types)
         }
+
     }
 
     // MARK: - Navigation
