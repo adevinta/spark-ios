@@ -14,7 +14,6 @@ public final class SliderUIControl: UIControl {
     private let viewModel: SingleSliderViewModel
     private var cancellables = Set<AnyCancellable>()
     private var _isTracking: Bool = false
-    private var beginTrackingValue: Float = .zero
 
     // MARK: - Public properties
     /// The slider's current theme.
@@ -45,7 +44,7 @@ public final class SliderUIControl: UIControl {
     public var minimumValue: Float {
         get { return self.viewModel.minimumValue }
         set {
-            self.viewModel.minimumValue = newValue
+            self.viewModel.minimumValue = min(self.maximumValue, newValue)
             self.setValue(self.value)
         }
     }
@@ -54,7 +53,7 @@ public final class SliderUIControl: UIControl {
     public var maximumValue: Float {
         get { return self.viewModel.maximumValue }
         set {
-            self.viewModel.maximumValue = newValue
+            self.viewModel.maximumValue = max(self.minimumValue, newValue)
             self.setValue(self.value)
         }
     }
@@ -153,8 +152,12 @@ public final class SliderUIControl: UIControl {
         self.handle.center.y = self.frame.height / 2
         self.trackView.center.y = self.frame.height / 2
 
-        let value = (max(self.minimumValue, self.value) - self.minimumValue) / (self.maximumValue - self.minimumValue)
-        self.handle.center.x = (self.frame.width - SliderConstants.handleSize.width) * CGFloat(value) + SliderConstants.handleSize.width / 2
+        if self.minimumValue != self.maximumValue {
+            let value = (max(self.minimumValue, self.value) - self.minimumValue) / (self.maximumValue - self.minimumValue)
+            self.handle.center.x = (self.frame.width - SliderConstants.handleSize.width) * CGFloat(value) + SliderConstants.handleSize.width / 2
+        } else {
+            self.handle.center.x = SliderConstants.handleSize.width / 2
+        }
 
         self.indicatorView.frame.size.width = self.handle.center.x
 
@@ -230,7 +233,6 @@ public final class SliderUIControl: UIControl {
         super.beginTracking(touch, with: event)
         self._isTracking = true
         let location = touch.location(in: self)
-        self.beginTrackingValue = self.value
         self.isHighlighted = true
         self.moveHandle(to: location.x)
         return true
@@ -249,8 +251,7 @@ public final class SliderUIControl: UIControl {
     public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         super.endTracking(touch, with: event)
         if self._isTracking,
-           self.isContinuous == false,
-           self.value != self.beginTrackingValue {
+           self.isContinuous == false {
             self.sendActions(for: .valueChanged)
         }
         self._isTracking = false
