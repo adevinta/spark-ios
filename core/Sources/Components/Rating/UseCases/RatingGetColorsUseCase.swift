@@ -42,7 +42,7 @@ struct RatingGetColorsUseCase: RatingGetColorsUseCaseable {
 
         switch intent {
             case .main: colors = RatingColors(
-                fillColor: state.isPressed ? theme.colors.main.onMain : theme.colors.main.mainVariant,
+                fillColor: state.isPressed ? theme.colors.states.mainVariantPressed : theme.colors.main.mainVariant,
                 strokeColor: theme.colors.base.onSurface.opacity(theme.dims.dim3), opacity: theme.dims.none
             )
         }

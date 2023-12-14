@@ -67,7 +67,7 @@ final class RatingGetColorsUseCaseUnitTests: XCTestCase {
 
         // Then
         let expectedColors = RatingColors(
-            fillColor: theme.colors.main.onMain,
+            fillColor: theme.colors.states.mainVariantPressed,
             strokeColor: theme.colors.base.onSurface.opacity(theme.dims.dim3),
             opacity: theme.dims.none)
 

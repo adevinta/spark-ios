@@ -1,8 +1,8 @@
 //
-//  RatingDisplayConfigurationSnapshotTests.swift
-//  SparkCoreSnapshotTests
+//  RatingInputConfigurationSnapshotTests.swift
+//  SparkCoreUnitTests
 //
-//  Created by Michael Zimmermann on 20.11.23.
+//  Created by Michael Zimmermann on 30.11.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
@@ -11,29 +11,33 @@ import UIKit
 
 @testable import SparkCore
 
-struct RatingDisplayConfigurationSnapshotTests {
+struct RatingInputConfigurationSnapshotTests {
 
     // MARK: - Properties
 
-    let scenario: RatingDisplayScenarioSnapshotTests
+    let scenario: RatingInputScenarioSnapshotTests
 
     let rating: CGFloat
-    let size: RatingDisplaySize
-    let count: RatingStarsCount
     let intent = RatingIntent.main
 
     let modes: [ComponentSnapshotTestMode]
     let sizes: [UIContentSizeCategory]
-    
+    let state: RatingInputState
+
     // MARK: - Getter
 
     func testName() -> String {
         return [
             "\(self.scenario.rawValue)",
             "\(self.intent)",
-            "\(self.size)",
-            "\(self.count)",
-            "\(self.rating)"
+            "\(self.rating)",
+            "\(self.state)"
         ].joined(separator: "-")
     }
+}
+
+enum RatingInputState: CaseIterable {
+    case enabled
+    case disabled
+    case pressed
 }
