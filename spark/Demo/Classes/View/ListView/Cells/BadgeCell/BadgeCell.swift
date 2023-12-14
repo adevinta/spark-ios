@@ -9,7 +9,7 @@
 import UIKit
 import SparkCore
 
-final class BadgeTableViewCell: UITableViewCell, Configurable {
+final class BadgeCell: UITableViewCell, Configurable {
 
     typealias CellConfigartion = BadgeConfiguration
     typealias Component = BadgeUIView
@@ -23,6 +23,7 @@ final class BadgeTableViewCell: UITableViewCell, Configurable {
             format: .default,
             isBorderVisible: false
         )
+        view.constraints.forEach { $0.priority = .defaultHigh }
         return view
     }()
 

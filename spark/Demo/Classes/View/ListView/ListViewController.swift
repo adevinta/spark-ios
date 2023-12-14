@@ -9,30 +9,42 @@
 import UIKit
 import Combine
 
-final class ListViewController: UITableViewController {
+final class ListViewController<Cell: Configurable, Configuration: ComponentConfiguration>: UITableViewController {
 
-    private var cancellables: Set<AnyCancellable> = []
-    private var dataSource: ListViewDataSource {
-        ListViewDataSource.shared
-    }
+    private var dataSource = ListViewDataSource<Configuration>()
     private var listProtocol = ListViewDelegate()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = Cell.reuseIdentifier
 
-        self.tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.reuseIdentifier)
+        self.setupTableView()
+    }
+
+    private func setupTableView() {
         self.tableView.dataSource = self.dataSource
-        self.tableView.allowsSelection = false
         self.tableView.delegate = self.listProtocol
-        self.tableView.estimatedRowHeight = 44
+        self.tableView.allowsSelection = false
 
-        self.dataSource.$components.subscribe(in: &self.cancellables) { [weak self] components in
-            guard let self = self else { return }
+        switch Cell.self {
 
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+        case is BadgeCell.Type:
+            self.tableView.register(BadgeCell.self, forCellReuseIdentifier: BadgeCell.reuseIdentifier)
 
+        case is ButtonCell.Type:
+            self.tableView.register(ButtonCell.self, forCellReuseIdentifier: ButtonCell.reuseIdentifier)
+
+        case is CheckboxCell.Type:
+            self.tableView.register(CheckboxCell.self, forCellReuseIdentifier: CheckboxCell.reuseIdentifier)
+
+        case is ChipCell.Type:
+            self.tableView.register(ChipCell.self, forCellReuseIdentifier: ChipCell.reuseIdentifier)
+
+        case is IconCell.Type:
+            self.tableView.register(IconCell.self, forCellReuseIdentifier: IconCell.reuseIdentifier)
+
+        default:
+            break
         }
     }
 }

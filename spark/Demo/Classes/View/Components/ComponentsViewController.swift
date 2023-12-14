@@ -47,7 +47,7 @@ final class ComponentsViewController: UICollectionViewController {
         /// CollectionView append sections and items
         var snapShot = SnapShot()
         snapShot.appendSections([.all])
-        snapShot.appendItems(Row.allCases.map{ $0.name }, toSection: .all)
+        snapShot.appendItems(UIComponent.allCases.map{ $0.name }, toSection: .all)
         collectionViewDataSource.apply(snapShot)
     }
 }
@@ -65,7 +65,7 @@ extension ComponentsViewController {
 extension ComponentsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let section = Row.allCases[indexPath.row]
+        let section = UIComponent.allCases[indexPath.row]
         var viewController: UIViewController!
         switch section {
         case .badge:
@@ -113,23 +113,5 @@ private extension ComponentsViewController {
 
     enum Section {
         case all
-    }
-
-    enum Row: CaseIterable {
-        case badge
-        case button
-        case checkbox
-        case chip
-        case icon
-        case progressBarIndeterminate
-        case progressBarSingle
-        case radioButton
-        case ratingStar
-        case ratingDisplay
-        case spinner
-        case switchButton
-        case tab
-        case tag
-        case textField
     }
 }

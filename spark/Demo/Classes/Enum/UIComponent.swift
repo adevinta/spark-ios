@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Component: CaseIterable {
+enum UIComponent: CaseIterable {
     case badge
     case button
     case checkbox

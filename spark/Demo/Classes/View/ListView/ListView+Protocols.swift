@@ -9,15 +9,19 @@
 import SparkCore
 import UIKit
 
-protocol Configuration {
+protocol ComponentConfiguration {
     var theme: Theme {  get set }
 }
 
 protocol Configurable: AnyObject {
-    associatedtype CellConfigartion: Configuration
+    associatedtype CellConfigartion: ComponentConfiguration
     associatedtype Component: UIView
+
+    static var reuseIdentifier: String { get }
     var component: Component { get set }
+
     func configureCell(configuration: CellConfigartion)
+    func setupView()
 }
 
 extension Configurable where Self: UITableViewCell {
@@ -26,26 +30,18 @@ extension Configurable where Self: UITableViewCell {
         return String(describing: Self.self)
     }
 
-    private var stackView: UIStackView {
+    func setupView() {
         let stackView = UIStackView(arrangedSubviews: [self.component])
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }
 
-    init() {
-        self.setupView()
-    }
-
-    private func setupView() {
         self.contentView.addSubview(stackView)
 
-        NSLayoutConstraint.activate([
-            self.stackView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 16),
-            self.stackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 16),
-            self.stackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -16),
-            self.stackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -16)
-        ])
+        NSLayoutConstraint.stickEdges(
+            from: stackView,
+            to: self.contentView,
+            insets: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        )
     }
 }

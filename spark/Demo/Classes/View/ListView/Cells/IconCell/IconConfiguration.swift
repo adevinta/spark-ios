@@ -6,4 +6,10 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import SparkCore
+
+struct IconConfiguration: ComponentConfiguration {
+    var theme: Theme
+    var intent: IconIntent
+}

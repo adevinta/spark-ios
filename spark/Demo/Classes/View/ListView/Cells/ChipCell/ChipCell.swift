@@ -1,5 +1,5 @@
 //
-//  ChipTableViewCell.swift
+//  ChipCell.swift
 //  Spark
 //
 //  Created by alican.aycil on 13.12.23.
@@ -9,7 +9,7 @@
 import UIKit
 import SparkCore
 
-final class ChipTableViewCell: UITableViewCell, Configurable {
+final class ChipCell: UITableViewCell, Configurable {
 
     typealias CellConfigartion = ChipConfiguration
     typealias Component = ChipUIView
@@ -21,6 +21,7 @@ final class ChipTableViewCell: UITableViewCell, Configurable {
             variant: .outlined,
             label: "No Title"
         )
+        view.constraints.forEach { $0.priority = .defaultHigh }
         return view
     }()
 
