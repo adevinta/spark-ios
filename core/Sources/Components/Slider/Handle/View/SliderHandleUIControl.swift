@@ -102,4 +102,12 @@ final class SliderHandleUIControl: UIControl {
             supercontrol.endTracking(touch, with: event)
         }
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // CGColors need to be refreshed on trait changes
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.activeIndicatorView.setBorderColor(from: self.viewModel.color)
+        }
+    }
 }
