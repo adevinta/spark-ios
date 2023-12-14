@@ -15,13 +15,13 @@ enum SliderCreateValuesFromStepsUseCasableError: Error {
 
 // sourcery: AutoMockable
 protocol SliderCreateValuesFromStepsUseCasable {
-    func execute(from: CGFloat,
-                 to: CGFloat,
-                 steps: CGFloat) throws -> [CGFloat]
+    func execute(from: Float,
+                 to: Float,
+                 steps: Float) throws -> [Float]
 }
 
 final class SliderCreateValuesFromStepsUseCase: SliderCreateValuesFromStepsUseCasable {
-    func execute(from: CGFloat, to: CGFloat, steps: CGFloat) throws -> [CGFloat] {
+    func execute(from: Float, to: Float, steps: Float) throws -> [Float] {
         guard from < to else { throw SliderCreateValuesFromStepsUseCasableError.invalidRange }
         guard steps > .zero,
               steps <= (to - from) else { throw SliderCreateValuesFromStepsUseCasableError.invalidStep }

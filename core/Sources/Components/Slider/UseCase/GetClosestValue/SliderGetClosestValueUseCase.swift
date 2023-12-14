@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol SliderGetClosestValueUseCasable {
-    func execute(from: CGFloat, to: CGFloat, withSteps steps: CGFloat, fromValue value: CGFloat) -> CGFloat
+    func execute(from: Float, to: Float, withSteps steps: Float, fromValue value: Float) -> Float
 }
 
 final class SliderGetClosestValueUseCase: SliderGetClosestValueUseCasable {
@@ -21,7 +21,7 @@ final class SliderGetClosestValueUseCase: SliderGetClosestValueUseCasable {
     }
 
 
-    func execute(from: CGFloat, to: CGFloat, withSteps steps: CGFloat, fromValue value: CGFloat) -> CGFloat {
+    func execute(from: Float, to: Float, withSteps steps: Float, fromValue value: Float) -> Float {
         do {
             let values = try self.createValuesFromStepsUseCase.execute(
                 from: from,
