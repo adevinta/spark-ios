@@ -88,12 +88,14 @@ extension ComponentsViewController {
             viewController = ProgressBarComponentUIViewController.build()
         case .radioButton:
             viewController = RadioButtonComponentUIViewController.build()
-        case .ratingStar:
-            viewController = StarComponentViewController.build()
         case .ratingDisplay:
             viewController = RatingDisplayComponentViewController.build()
+        case .ratingInput:
+            viewController = RatingInputComponentViewController.build()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
+        case .star:
+            viewController = StarComponentViewController.build()
         case .switchButton:
             viewController = SwitchComponentUIViewController.build()
         case .tab:

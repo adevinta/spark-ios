@@ -17,9 +17,10 @@ enum UIComponent: CaseIterable {
     case progressBarIndeterminate
     case progressBarSingle
     case radioButton
-    case ratingStar
     case ratingDisplay
+    case ratingInput
     case spinner
+    case star
     case switchButton
     case tab
     case tag

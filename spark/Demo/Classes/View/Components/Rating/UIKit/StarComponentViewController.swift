@@ -41,7 +41,7 @@ final class StarComponentViewController: UIViewController {
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Star Rating"
+        self.navigationItem.title = "Star (Not a component)"
         addPublisher()
     }
 

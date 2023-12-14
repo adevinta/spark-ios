@@ -52,6 +52,8 @@ final class RatingDisplayViewModel: ObservableObject {
         }
     }
 
+    var ratingState: RatingState
+
     // MARK: - Published variables
     /// The current defined colors
     @Published var colors: RatingColors
@@ -64,12 +66,14 @@ final class RatingDisplayViewModel: ObservableObject {
     private let colorsUseCase: RatingGetColorsUseCaseable
     private let sizeUseCase: RatingSizeAttributesUseCaseable
 
+
     // MARK: Initializer
     init(theme: Theme,
          intent: RatingIntent,
          size: RatingDisplaySize,
          count: RatingStarsCount,
-         rating: CGFloat,
+         rating: CGFloat = 0.0,
+         ratingState: RatingState = .standard,
          colorsUseCase: RatingGetColorsUseCaseable = RatingGetColorsUseCase(),
          sizeUseCase: RatingSizeAttributesUseCaseable = RatingSizeAttributesUseCase()
     ) {
@@ -77,12 +81,23 @@ final class RatingDisplayViewModel: ObservableObject {
         self.intent = intent
         self.size = size
         self.colorsUseCase = colorsUseCase
-        self.colors = colorsUseCase.execute(theme: theme, intent: intent, state: .standard)
+        self.colors = colorsUseCase.execute(theme: theme, intent: intent, state: ratingState)
         self.sizeUseCase = sizeUseCase
         self.ratingSize = sizeUseCase.execute(spacing: theme.layout.spacing, size: size)
         self.ratingValue = count.ratingValue(rating)
         self.rating = rating
         self.count = count
+        self.ratingState = ratingState
+    }
+
+    func updateState(isPressed: Bool) {
+        self.ratingState.isPressed = isPressed
+        self.colors = self.colorsUseCase.execute(theme: theme, intent: intent, state: self.ratingState)
+    }
+
+    func updateState(isEnabled: Bool) {
+        self.ratingState.isEnabled = isEnabled
+        self.colors = self.colorsUseCase.execute(theme: theme, intent: intent, state: self.ratingState)
     }
 
     // MARK: - Private functions

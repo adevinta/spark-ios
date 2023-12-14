@@ -28,11 +28,6 @@ public class RatingDisplayUIView: UIView {
     private var sizeConstraints = [NSLayoutConstraint]()
     private var cancellable = Set<AnyCancellable>()
 
-    private var ratingStarViews : [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
-            return view as? StarUIView
-        }
-    }
-
     // MARK: - Public accessors
     /// Count: the number of stars to show in the rating.
     /// Only values five and one are allowed, five is the default.
@@ -88,7 +83,31 @@ public class RatingDisplayUIView: UIView {
             self.viewModel.size = newValue
         }
     }
-    
+
+    // MARK: - Internal accessors
+    internal var isPressed: Bool {
+        get {
+            self.viewModel.ratingState.isPressed
+        }
+        set {
+            self.viewModel.updateState(isPressed: newValue)
+        }
+    }
+
+    internal var isEnabled: Bool {
+        get {
+            self.viewModel.ratingState.isEnabled
+        }
+        set {
+            self.viewModel.updateState(isEnabled: newValue)
+        }
+    }
+
+    internal var ratingStarViews : [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
+            return view as? StarUIView
+        }
+    }
+
     // MARK: - Scaled metrics
     @ScaledUIMetric private var borderWidth: CGFloat
     @ScaledUIMetric private var ratingSize: CGFloat
@@ -212,6 +231,7 @@ public class RatingDisplayUIView: UIView {
             view.borderColor = colors.strokeColor.uiColor
             view.fillColor = colors.fillColor.uiColor
         }
+        self.layer.opacity = Float(colors.opacity)
     }
 
     private func didUpdate(size: RatingSizeAttributes) {
