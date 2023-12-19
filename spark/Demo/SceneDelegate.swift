@@ -21,5 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = SparkTabbarController()
         self.window = window
         window.makeKeyAndVisible()
+
+        ConsoleView.shared.show()
     }
 }

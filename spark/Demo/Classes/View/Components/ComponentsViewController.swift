@@ -40,6 +40,7 @@ final class ComponentsViewController: UICollectionViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "UIComponents"
+
         setupData()
     }
 
