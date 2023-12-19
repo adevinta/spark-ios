@@ -8,10 +8,14 @@
 
 import Foundation
 
-public struct StarConfiguration: Equatable {
+public struct StarConfiguration: Equatable, Sendable {
     public var numberOfVertices: Int
     public var vertexSize: CGFloat
     public var cornerRadiusSize: CGFloat
+
+    public var description: String {
+        return "\(self.numberOfVertices)-\(self.vertexSize)-\(self.cornerRadiusSize)"
+    }
 
     // MARK: - Default values
     public enum Defaults {
@@ -32,5 +36,5 @@ public struct StarConfiguration: Equatable {
         self.vertexSize = vertexSize
         self.cornerRadiusSize = cornerRadiusSize
     }
-    
+
 }

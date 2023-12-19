@@ -64,6 +64,10 @@ struct ComponentsView: View {
                 self.navigateToView(RadioButtonComponent())
             }
 
+            Button("Rating Display") {
+                self.navigateToView(RatingComponent())
+            }
+
             Button("Spinner") {
                 self.navigateToView(SpinnerComponent())
             }
