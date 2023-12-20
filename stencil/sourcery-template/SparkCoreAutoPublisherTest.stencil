@@ -13,6 +13,7 @@ import {{ import }}
 {% endfor %}
 
 {% macro expectedSinkCount variable %}expected{{ variable.name | upperFirstLetter }}SinkCount{% endmacro %}
+{% macro existentialVariableTypeName typeName %}{% if typeName|contains:"any" and typeName|contains:"!" %}{{ typeName | replace:"any","(any" | replace:"!",")!" }}{% elif typeName|contains:"any" and typeName.isOptional %}{{ typeName | replace:"any","(any" | replace:"?",")?" }}{% elif typeName|contains:"any" and typeName.isClosure %}({{ typeName | replace:"any","(any" | replace:"?",")?" }}){%else%}{{ typeName }}{%endif%}{% endmacro %}
 
 {% for class in types.classes where class|annotated:"AutoPublisherTest" %}{% if class.name != "AutoPublisherTest" %}
 final class {{ class.name }}PublisherTest {
@@ -33,7 +34,7 @@ final class {{ class.name }}PublisherTest {
     {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}
         
     static func XCTSinksCount(
-        {{ variable.name }} mock: PublisherMock<Published<{{ variable.typeName }}>.Publisher>,
+        {{ variable.name }} mock: PublisherMock<Published<{% call existentialVariableTypeName variable.typeName %}>.Publisher>,
         expectedNumberOfSinks: Int
     ) {
         XCTAssertPublisherSinkCountEqual(
@@ -45,7 +46,7 @@ final class {{ class.name }}PublisherTest {
     static func XCTAssert{% if class.annotations[variable.name] == "Identical" %}<
         Value: AnyObject
     >{% endif %}(
-        {{ variable.name }} mock: PublisherMock<Published<{{ variable.typeName }}>.Publisher>,
+        {{ variable.name }} mock: PublisherMock<Published<{% call existentialVariableTypeName variable.typeName %}>.Publisher>,
         expectedNumberOfSinks: Int,
         expectedValue: {% if class.annotations[variable.name] == "Identical" %}Value{% if variable.isOptional %}?{% endif %}{% else %}{{ variable.typeName }}{% endif %}{% if variable.isOptional %} = nil{% endif %}
     ) {
