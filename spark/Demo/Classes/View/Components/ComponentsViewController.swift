@@ -103,7 +103,9 @@ extension ComponentsViewController {
         case .tag:
             viewController = TagComponentUIViewController.build()
         case .textField:
-            viewController = TextFieldComponentUIViewController.build()
+            viewController = TextFieldUIViewController.build()
+        case .textLink:
+            viewController = TextLinkComponentUIViewController.build()
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -134,5 +136,6 @@ private extension ComponentsViewController {
         case tab
         case tag
         case textField
+        case textLink
     }
 }
