@@ -163,6 +163,7 @@ public final class StarUIView: UIView {
 
         super.init(frame: .zero)
         self.backgroundColor = .clear
+        self.accessibilityValue = "\(normalizedRating)"
     }
 
     required init?(coder: NSCoder) {

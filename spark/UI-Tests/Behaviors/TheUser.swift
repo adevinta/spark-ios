@@ -9,32 +9,68 @@
 import Foundation
 import XCTest
 
-typealias UIElementClosure = (XCUIApplication) -> XCUIElement
+typealias UIApplicationClosure = (XCUIApplication) -> XCUIElement
+typealias UIElementClosure = (XCUIElement) -> Void
 
-func theUser(isOn elementIn: @escaping UIElementClosure, file: StaticString = #file, line: UInt = #line) -> UITestClosure {
+func theUser(isOn elementIn: @escaping UIApplicationClosure, file: StaticString = #file, line: UInt = #line) -> UITestClosure {
     return theUser(sees: elementIn, \.exists, file: file, line: line)
 }
 
-func theUser(sees elementIn: @escaping UIElementClosure, file: StaticString = #file, line: UInt = #line) -> UITestClosure {
+func theUser(sees elementIn: @escaping UIApplicationClosure, file: StaticString = #file, line: UInt = #line) -> UITestClosure {
     return theUser(sees: elementIn, \.exists, file: file, line: line)
+}
+
+func theUser(sees element: @escaping UIApplicationClosure, _ value: CGFloat,  file: StaticString = #file, line: UInt = #line) -> UITestClosure {
+
+    return userAction(
+        element: element,
+        closure: {
+            let givenValue = $0.value as! String
+            XCTAssertEqual("\(value)", givenValue, "❌ The element value \(givenValue) is not equal to \(value)", file: file, line: line)
+        })
 }
 
 func theUser(
-    sees elementIn: @escaping UIElementClosure,
+    sees element: @escaping UIApplicationClosure,
     _ elementKeyPath: KeyPath<XCUIElement, Bool>,
     file: StaticString = #file,
     line: UInt = #line) -> UITestClosure {
-    return { app in
-        let element = elementIn(app)
-        let value = element[keyPath: elementKeyPath]
-        XCTAssertTrue(value, "❌ The element state \(elementKeyPath) is false", file: file, line: line)
-    }
+        return userAction(
+            element: element,
+            closure: {
+                let value = $0[keyPath: elementKeyPath]
+                XCTAssertTrue(value, "❌ The element state \(elementKeyPath) is false", file: file, line: line)
+            },
+            file: file,
+            line: line
+        )
 }
 
-func theUser(taps element: @escaping UIElementClosure, file: StaticString = #file, line: UInt = #line) -> UITestClosure {
+func theUser(taps element: @escaping UIApplicationClosure, file: StaticString = #file, line: UInt = #line) -> UITestClosure {
+    return userAction(
+        element: element,
+        closure: { $0.tap() },
+        file: file,
+        line: line
+    )
+}
+
+func theUser(goes element: @escaping UIApplicationClosure, file: StaticString = #file, line: UInt = #line) -> UITestClosure {
+    return userAction(element: element, file: file, line: line)
+}
+
+func debug_print(app: XCUIApplication) {
+    print(app.debugDescription)
+}
+
+private func userAction(
+    element: @escaping UIApplicationClosure,
+    closure: UIElementClosure? = nil,
+    file: StaticString = #file,
+    line: UInt = #line) -> UITestClosure {
     return { app in
         let element = element(app)
         XCTAssertTrue(element.exists, "❌ The element does not exist", file: file, line: line)
-        element.tap()
+        closure?(element)
     }
 }

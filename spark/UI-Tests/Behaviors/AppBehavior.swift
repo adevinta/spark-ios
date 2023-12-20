@@ -16,7 +16,7 @@ extension AppBehavior {
         return app.tabBars["Tab Bar"].firstMatch
     }
 
-    func the_tab_bar_button(_ name: String) -> (XCUIApplication) -> XCUIElement {
+    func the_tab_bar_button(_ name: String) -> UIApplicationClosure {
         return { app in
             the_tab_bar(app: app).buttons[name]
         }
@@ -34,7 +34,7 @@ extension AppBehavior {
             return app.collectionViews.firstMatch
     }
 
-    func the_collection_view_cell(_ name: String) -> (XCUIApplication) -> XCUIElement {
+    func the_collection_view_cell(_ name: String) -> UIApplicationClosure {
         return { app in
             return the_collection_view(app: app).cells[name]
         }
@@ -48,6 +48,10 @@ extension AppBehavior {
         return the_collection_view_cell("Radio Button")(app)
     }
 
+    func the_rating_input_cell(app: XCUIApplication) -> XCUIElement {
+        return the_collection_view_cell("Rating Input")(app)
+    }
+
     func the_uicomponents_screen(
         app: XCUIApplication) -> XCUIElement {
             return app.navigationBars["UIComponents"]
@@ -55,5 +59,19 @@ extension AppBehavior {
 
     func the_radiobutton_screen(app: XCUIApplication) -> XCUIElement {
         return app.navigationBars["RadioButton"]
+    }
+
+    func to_the_radiobutton_screen(app: XCUIApplication) -> XCUIElement {
+        the_components_button(app: app).tap()
+        the_uikit_button(app: app).tap()
+        the_radio_button_cell(app: app).tap()
+        return app
+    }
+
+    func to_the_rating_input_screen(app: XCUIApplication) -> XCUIElement {
+        the_components_button(app: app).tap()
+        the_uikit_button(app: app).tap()
+        the_rating_input_cell(app: app).tap()
+        return app
     }
 }

@@ -11,23 +11,9 @@ import XCTest
 final class RadioButtonUITests: XCTestCase, AppBehavior, RadioButtonBehavior {
 
     func test_radio_button_toggle() {
-        Scenario("The user opens the radio buttons") {
-            Given("The user is on the home screen") {
-                theUser(sees: the_tab_bar)
-                theUser(taps: the_theme_button)
-            }
-            When("The user navigates to the radio buttons") {
-                theUser(taps: the_components_button)
-                theUser(taps: the_uikit_button)
-                theUser(taps: the_radio_button_cell)
-            }
-            Then("The user sees the radio buttons") {
-                theUser(isOn: the_radiobutton_screen)
-            }
-        }
-
         Scenario("The user changes the selected radio button value") {
             Given("The user is on the radio button screen") {
+                theUser(goes: to_the_radiobutton_screen)
                 theUser(sees: the_radio_button_group)
                 theUser(sees: the_radiobutton(0), \.isSelected)
             }

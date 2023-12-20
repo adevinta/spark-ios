@@ -16,7 +16,7 @@ extension RadioButtonBehavior {
         return app.otherElements["spark-radio-button"]
     }
 
-    func the_radiobutton(_ value: Int) -> (XCUIApplication) -> XCUIElement {
+    func the_radiobutton(_ value: Int) -> UIApplicationClosure {
         return { app in
             return the_radio_button_group(app: app).otherElements["spark-radio-button-\(value)"]
         }
