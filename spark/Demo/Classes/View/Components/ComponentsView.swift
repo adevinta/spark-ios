@@ -94,6 +94,10 @@ struct ComponentsView: View {
                 Button("Tag") {
                     self.navigateToView(TagComponentView())
                 }
+
+                Button("TextLink") {
+                    self.navigateToView(TextLinkComponentView())
+                }
             }
         }
         .foregroundColor(.primary)
