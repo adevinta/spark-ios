@@ -27,6 +27,7 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
         let configuration = configurations[indexPath.row]
         switch configuration {
 
+        /// Badge
         case let badgeConfiguration as BadgeConfiguration:
             if let cell = tableView.dequeueReusableCell(withIdentifier: BadgeCell.reuseIdentifier, for: indexPath) as? BadgeCell {
                 cell.configureCell(configuration: badgeConfiguration)
@@ -34,6 +35,7 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             }
             return UITableViewCell()
 
+        /// Button
         case let buttonConfiguration as ButtonConfiguration:
             if let cell = tableView.dequeueReusableCell(withIdentifier: ButtonCell.reuseIdentifier, for: indexPath) as? ButtonCell {
                 cell.configureCell(configuration: buttonConfiguration)
@@ -41,6 +43,7 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             }
             return UITableViewCell()
 
+        /// Checkbox
         case let checkboxConfiguration as CheckboxConfiguration:
             if let cell = tableView.dequeueReusableCell(withIdentifier: CheckboxCell.reuseIdentifier, for: indexPath) as? CheckboxCell {
                 cell.configureCell(configuration: checkboxConfiguration)
@@ -48,6 +51,7 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             }
             return UITableViewCell()
 
+        /// Chip
         case let chipConfiguration as ChipConfiguration:
             if let cell = tableView.dequeueReusableCell(withIdentifier: ChipCell.reuseIdentifier, for: indexPath) as? ChipCell {
                 cell.configureCell(configuration: chipConfiguration)
@@ -55,9 +59,99 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             }
             return UITableViewCell()
 
+
+        /// Icon
         case let iconConfiguration as IconConfiguration:
             if let cell = tableView.dequeueReusableCell(withIdentifier: IconCell.reuseIdentifier, for: indexPath) as? IconCell {
                 cell.configureCell(configuration: iconConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Progress Bar Indeterminate
+        case let progressBarIndeterminateConfiguration as ProgressBarIndeterminateConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: ProgressBarIndeterminateCell.reuseIdentifier, for: indexPath) as? ProgressBarIndeterminateCell {
+                cell.configureCell(configuration: progressBarIndeterminateConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Progress Bar Single
+        case let progressBarSingleConfiguration as ProgressBarSingleConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: ProgressBarSingleCell.reuseIdentifier, for: indexPath) as? ProgressBarSingleCell {
+                cell.configureCell(configuration: progressBarSingleConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Radio Button
+        case let radioButtonConfiguration as RadioButtonConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: RadioButtonCell.reuseIdentifier, for: indexPath) as? RadioButtonCell {
+                cell.configureCell(configuration: radioButtonConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Rating Display
+        case let ratingDisplayConfiguration as RatingDisplayConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: RatingDisplayCell.reuseIdentifier, for: indexPath) as? RatingDisplayCell {
+                cell.configureCell(configuration: ratingDisplayConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Rating Input
+        case let ratingInputConfiguration as RatingInputConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: RatingInputCell.reuseIdentifier, for: indexPath) as? RatingInputCell {
+                cell.configureCell(configuration: ratingInputConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Spinner
+        case let spinnerConfiguration as SpinnerConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: SpinnerCell.reuseIdentifier, for: indexPath) as? SpinnerCell {
+                cell.configureCell(configuration: spinnerConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Star
+        case let starConfiguration as StarCellConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: StarCell.reuseIdentifier, for: indexPath) as? StarCell {
+                cell.configureCell(configuration: starConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Switch Button
+        case let switchButtonConfiguration as SwitchButtonConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: SwitchButtonCell.reuseIdentifier, for: indexPath) as? SwitchButtonCell {
+                cell.configureCell(configuration: switchButtonConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Tab
+        case let tabConfiguration as TabConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: TabCell.reuseIdentifier, for: indexPath) as? TabCell {
+                cell.configureCell(configuration: tabConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Tag
+        case let tagConfiguration as TagConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: TagCell.reuseIdentifier, for: indexPath) as? TagCell {
+                cell.configureCell(configuration: tagConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Text Field
+        case let textFieldConfiguration as TextFieldConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as? TextFieldCell {
+                cell.configureCell(configuration: textFieldConfiguration)
                 return cell
             }
             return UITableViewCell()
@@ -72,16 +166,55 @@ extension ListViewDataSource {
 
     func setupData() {
         switch Configuration.self {
+
         case is BadgeConfiguration.Type:
             configurations = self.createBadgeConfigurations()
+
         case is ButtonConfiguration.Type:
             configurations = self.createButtonConfigurations()
+
         case is CheckboxConfiguration.Type:
             configurations = self.createCheckboxConfigurations()
+
         case is ChipConfiguration.Type:
             configurations = self.createChipConfigurations()
+
         case is IconConfiguration.Type:
             configurations = self.createIconConfigurations()
+
+        case is ProgressBarIndeterminateConfiguration.Type:
+            configurations = self.createProgressBarIndeterminateConfigurations()
+
+        case is ProgressBarSingleConfiguration.Type:
+            configurations = self.createProgressBarSingleConfigurations()
+
+        case is RadioButtonConfiguration.Type:
+            configurations = self.createRadioButtonConfigurations()
+
+        case is RatingDisplayConfiguration.Type:
+            configurations = self.createRatingDisplayConfigurations()
+
+        case is RatingInputConfiguration.Type:
+            configurations = self.createRatingInputConfigurations()
+
+        case is SpinnerConfiguration.Type:
+            configurations = self.createSpinnerConfigurations()
+
+        case is StarCellConfiguration.Type:
+            configurations = self.createStarConfigurations()
+
+        case is SwitchButtonConfiguration.Type:
+            configurations = self.createSwitchButtonConfigurations()
+
+        case is TabConfiguration.Type:
+            configurations = self.createTabConfigurations()
+
+        case is TagConfiguration.Type:
+            configurations = self.createTagConfigurations()
+
+        case is TextFieldConfiguration.Type:
+            configurations = self.createTextFieldConfigurations()
+
         default:
             configurations = []
         }
@@ -120,5 +253,82 @@ extension ListViewDataSource {
         [IconConfiguration(theme: SparkTheme.shared, intent: .main),
          IconConfiguration(theme: SparkTheme.shared, intent: .basic),
          IconConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Progress Bar Indeterminate
+    func createProgressBarIndeterminateConfigurations() -> [ProgressBarIndeterminateConfiguration] {
+        [ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .main),
+         ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .basic),
+         ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Progress Bar Single
+    func createProgressBarSingleConfigurations() -> [ProgressBarSingleConfiguration] {
+        [ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .main),
+         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .basic),
+         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Radio Button
+    func createRadioButtonConfigurations() -> [RadioButtonConfiguration] {
+        [RadioButtonConfiguration(theme: SparkTheme.shared, intent: .main),
+         RadioButtonConfiguration(theme: SparkTheme.shared, intent: .basic),
+         RadioButtonConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Rating Display
+    func createRatingDisplayConfigurations() -> [RatingDisplayConfiguration] {
+        [RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main),
+         RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main),
+         RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main)]
+    }
+
+    /// Rating Input
+    func createRatingInputConfigurations() -> [RatingInputConfiguration] {
+        [RatingInputConfiguration(theme: SparkTheme.shared, intent: .main),
+         RatingInputConfiguration(theme: SparkTheme.shared, intent: .main),
+         RatingInputConfiguration(theme: SparkTheme.shared, intent: .main)]
+    }
+
+    /// Spinner
+    func createSpinnerConfigurations() -> [SpinnerConfiguration] {
+        [SpinnerConfiguration(theme: SparkTheme.shared, intent: .main),
+         SpinnerConfiguration(theme: SparkTheme.shared, intent: .basic),
+         SpinnerConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Star
+    func createStarConfigurations() -> [StarCellConfiguration] {
+        [StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.blue),
+         StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.yellow),
+         StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.red)]
+    }
+
+    /// Switch Button
+    func createSwitchButtonConfigurations() -> [SwitchButtonConfiguration] {
+        [SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .main),
+         SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .basic),
+         SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Tab
+    func createTabConfigurations() -> [TabConfiguration] {
+        [TabConfiguration(theme: SparkTheme.shared, intent: .main),
+         TabConfiguration(theme: SparkTheme.shared, intent: .basic),
+         TabConfiguration(theme: SparkTheme.shared, intent: .support)]
+    }
+
+    /// Tag
+    func createTagConfigurations() -> [TagConfiguration] {
+        [TagConfiguration(theme: SparkTheme.shared, intent: .main),
+         TagConfiguration(theme: SparkTheme.shared, intent: .basic),
+         TagConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Text Field
+    func createTextFieldConfigurations() -> [TextFieldConfiguration] {
+        [TextFieldConfiguration(theme: SparkTheme.shared, intent: .alert),
+         TextFieldConfiguration(theme: SparkTheme.shared, intent: .error),
+         TextFieldConfiguration(theme: SparkTheme.shared, intent: .success)]
     }
 }

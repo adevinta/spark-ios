@@ -14,5 +14,3 @@ final class ListViewDelegate: NSObject, UITableViewDelegate {
         UITableView.automaticDimension
     }
 }
-
-

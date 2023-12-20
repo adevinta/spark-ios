@@ -1,25 +1,25 @@
 //
-//  IconCell.swift
+//  TagCell.swift
 //  SparkDemo
 //
-//  Created by alican.aycil on 14.12.23.
+//  Created by alican.aycil on 19.12.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import UIKit
 import SparkCore
 
-final class IconCell: UITableViewCell, Configurable {
+final class TagCell: UITableViewCell, Configurable {
 
-    typealias CellConfigartion = IconConfiguration
-    typealias Component = IconUIView
+    typealias CellConfigartion = TagConfiguration
+    typealias Component = TagUIView
 
-    lazy var component: IconUIView = {
-        let view = IconUIView(
-            iconImage: UIImage(systemName: "lock.circle") ?? UIImage(),
+    lazy var component: TagUIView = {
+        let view = TagUIView(
             theme: SparkTheme.shared,
             intent: .main,
-            size: .medium
+            variant: .filled,
+            text: "Tag"
         )
         return view
     }()

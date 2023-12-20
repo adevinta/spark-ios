@@ -23,7 +23,6 @@ final class BadgeCell: UITableViewCell, Configurable {
             format: .default,
             isBorderVisible: false
         )
-        view.constraints.forEach { $0.priority = .defaultHigh }
         return view
     }()
 

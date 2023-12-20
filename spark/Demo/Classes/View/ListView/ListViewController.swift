@@ -25,7 +25,10 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.listProtocol
         self.tableView.allowsSelection = false
+        self.registerCells()
+    }
 
+    private func registerCells() {
         switch Cell.self {
 
         case is BadgeCell.Type:
@@ -42,6 +45,39 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
 
         case is IconCell.Type:
             self.tableView.register(IconCell.self, forCellReuseIdentifier: IconCell.reuseIdentifier)
+
+        case is ProgressBarIndeterminateCell.Type:
+            self.tableView.register(ProgressBarIndeterminateCell.self, forCellReuseIdentifier: ProgressBarIndeterminateCell.reuseIdentifier)
+
+        case is ProgressBarSingleCell.Type:
+            self.tableView.register(IconCell.self, forCellReuseIdentifier: IconCell.reuseIdentifier)
+
+        case is RadioButtonCell.Type:
+            self.tableView.register(RadioButtonCell.self, forCellReuseIdentifier: RadioButtonCell.reuseIdentifier)
+
+        case is RatingDisplayCell.Type:
+            self.tableView.register(RatingDisplayCell.self, forCellReuseIdentifier: RatingDisplayCell.reuseIdentifier)
+
+        case is RatingInputCell.Type:
+            self.tableView.register(RatingInputCell.self, forCellReuseIdentifier: RatingInputCell.reuseIdentifier)
+
+        case is SpinnerCell.Type:
+            self.tableView.register(SpinnerCell.self, forCellReuseIdentifier: SpinnerCell.reuseIdentifier)
+
+        case is StarCell.Type:
+            self.tableView.register(StarCell.self, forCellReuseIdentifier: StarCell.reuseIdentifier)
+
+        case is SwitchButtonCell.Type:
+            self.tableView.register(SwitchButtonCell.self, forCellReuseIdentifier: SwitchButtonCell.reuseIdentifier)
+
+        case is TabCell.Type:
+            self.tableView.register(TabCell.self, forCellReuseIdentifier: TabCell.reuseIdentifier)
+
+        case is TagCell.Type:
+            self.tableView.register(TagCell.self, forCellReuseIdentifier: TagCell.reuseIdentifier)
+
+        case is TextFieldCell.Type:
+            self.tableView.register(TextFieldCell.self, forCellReuseIdentifier: TextFieldCell.reuseIdentifier)
 
         default:
             break

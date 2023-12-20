@@ -25,7 +25,6 @@ final class ButtonCell: UITableViewCell, Configurable {
             text: "Button",
             isEnabled: true
         )
-        view.constraints.forEach { $0.priority = .defaultHigh }
         return view
     }()
 

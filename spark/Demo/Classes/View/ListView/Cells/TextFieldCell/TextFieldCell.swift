@@ -1,26 +1,21 @@
 //
-//  IconCell.swift
+//  TextFieldCell.swift
 //  SparkDemo
 //
-//  Created by alican.aycil on 14.12.23.
+//  Created by alican.aycil on 19.12.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import UIKit
 import SparkCore
 
-final class IconCell: UITableViewCell, Configurable {
+final class TextFieldCell: UITableViewCell, Configurable {
 
-    typealias CellConfigartion = IconConfiguration
-    typealias Component = IconUIView
+    typealias CellConfigartion = TextFieldConfiguration
+    typealias Component = TextFieldUIView
 
-    lazy var component: IconUIView = {
-        let view = IconUIView(
-            iconImage: UIImage(systemName: "lock.circle") ?? UIImage(),
-            theme: SparkTheme.shared,
-            intent: .main,
-            size: .medium
-        )
+    lazy var component: TextFieldUIView = {
+        let view = TextFieldUIView(theme: SparkTheme.shared)
         return view
     }()
 

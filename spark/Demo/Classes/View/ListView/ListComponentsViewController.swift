@@ -78,8 +78,28 @@ extension ListComponentsViewController {
             viewController = ListViewController<ChipCell, ChipConfiguration>()
         case .icon:
             viewController = ListViewController<IconCell, IconConfiguration>()
-        default:
-            break
+        case .progressBarIndeterminate:
+            viewController = ListViewController<ProgressBarIndeterminateCell, ProgressBarIndeterminateConfiguration>()
+        case .progressBarSingle:
+            viewController = ListViewController<ProgressBarSingleCell, ProgressBarSingleConfiguration>()
+        case .radioButton:
+            viewController = ListViewController<RadioButtonCell, RadioButtonConfiguration>()
+        case .ratingDisplay:
+            viewController = ListViewController<RatingDisplayCell, RatingDisplayConfiguration>()
+        case .ratingInput:
+            viewController = ListViewController<RatingInputCell, RatingInputConfiguration>()
+        case .spinner:
+            viewController = ListViewController<SpinnerCell, SpinnerConfiguration>()
+        case .star:
+            viewController = ListViewController<StarCell, StarCellConfiguration>()
+        case .switchButton:
+            viewController = ListViewController<SwitchButtonCell, SwitchButtonConfiguration>()
+        case .tab:
+            viewController = ListViewController<TabCell, TabConfiguration>()
+        case .tag:
+            viewController = ListViewController<TagCell, TagConfiguration>()
+        case .textField:
+            viewController = ListViewController<TextFieldCell, TextFieldConfiguration>()
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)

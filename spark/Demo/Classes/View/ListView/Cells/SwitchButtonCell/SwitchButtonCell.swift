@@ -1,25 +1,31 @@
 //
-//  IconCell.swift
+//  SwitchButtonCell.swift
 //  SparkDemo
 //
-//  Created by alican.aycil on 14.12.23.
+//  Created by alican.aycil on 19.12.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import UIKit
 import SparkCore
 
-final class IconCell: UITableViewCell, Configurable {
+final class SwitchButtonCell: UITableViewCell, Configurable {
 
-    typealias CellConfigartion = IconConfiguration
-    typealias Component = IconUIView
+    typealias CellConfigartion = SwitchButtonConfiguration
+    typealias Component = SwitchUIView
 
-    lazy var component: IconUIView = {
-        let view = IconUIView(
-            iconImage: UIImage(systemName: "lock.circle") ?? UIImage(),
+    lazy var component: SwitchUIView = {
+        let view = SwitchUIView(
             theme: SparkTheme.shared,
+            isOn: true,
+            alignment: .left,
             intent: .main,
-            size: .medium
+            isEnabled: true,
+            images: .init(
+                on: UIImage(named: "check") ?? UIImage(),
+                off: UIImage(named: "close") ?? UIImage()
+            ),
+            text: "Text"
         )
         return view
     }()

@@ -21,7 +21,6 @@ final class ChipCell: UITableViewCell, Configurable {
             variant: .outlined,
             label: "No Title"
         )
-        view.constraints.forEach { $0.priority = .defaultHigh }
         return view
     }()
 

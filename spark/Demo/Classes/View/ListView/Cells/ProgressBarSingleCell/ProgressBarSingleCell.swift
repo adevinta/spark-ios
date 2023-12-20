@@ -1,26 +1,24 @@
 //
-//  IconCell.swift
+//  ProgressBarSingleCell.swift
 //  SparkDemo
 //
-//  Created by alican.aycil on 14.12.23.
+//  Created by alican.aycil on 19.12.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import UIKit
 import SparkCore
 
-final class IconCell: UITableViewCell, Configurable {
+final class ProgressBarSingleCell: UITableViewCell, Configurable {
 
-    typealias CellConfigartion = IconConfiguration
-    typealias Component = IconUIView
+    typealias CellConfigartion = ProgressBarSingleConfiguration
+    typealias Component = ProgressBarUIView
 
-    lazy var component: IconUIView = {
-        let view = IconUIView(
-            iconImage: UIImage(systemName: "lock.circle") ?? UIImage(),
+    lazy var component: ProgressBarUIView = {
+        let view = ProgressBarUIView(
             theme: SparkTheme.shared,
             intent: .main,
-            size: .medium
-        )
+            shape: .square)
         return view
     }()
 

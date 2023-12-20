@@ -38,10 +38,14 @@ extension Configurable where Self: UITableViewCell {
 
         self.contentView.addSubview(stackView)
 
-        NSLayoutConstraint.stickEdges(
-            from: stackView,
-            to: self.contentView,
-            insets: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        )
+        let bottomAnchor: NSLayoutConstraint = stackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -16)
+        bottomAnchor.priority = .init(999)
+
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 16),
+            stackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -16),
+            bottomAnchor
+        ])
     }
 }
