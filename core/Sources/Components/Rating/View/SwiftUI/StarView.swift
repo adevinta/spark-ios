@@ -27,7 +27,7 @@ struct StarView: View {
     /// - borderColor: The color of the border of the unfilled part of the star.
     /// - fillColor: The color of the filled part of the star.
     /// - configuration: StarConfiguration. The default = `default`.
-    public init(
+    init(
         rating: CGFloat = StarDefaults.rating,
         fillMode: StarFillMode = .half,
         lineWidth: CGFloat = StarDefaults.lineWidth,
@@ -46,16 +46,20 @@ struct StarView: View {
     var body: some View {
         if self.rating <= 0 {
             star.stroke(self.borderColor, lineWidth: self.lineWidth)
-        } else if self.rating >= 5 {
+                .accessibilityValue("0.0")
+        } else if self.rating >= 1 {
             star.stroke(self.fillColor, lineWidth: self.lineWidth)
                 .overlay{
                     star.fill(self.fillColor)
                 }
+                .accessibilityValue("1.0")
         } else {
             if #available(iOS 17.0, *) {
                 self.newVersion()
+                    .accessibilityValue("\(self.rating)")
             } else {
                 self.oldVersion()
+                    .accessibilityValue("\(self.rating)")
             }
         }
     }

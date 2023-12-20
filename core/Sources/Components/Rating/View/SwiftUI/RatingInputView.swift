@@ -76,6 +76,7 @@ public struct RatingInputView: View {
         .gesture(self.dragGesture(viewRect: viewRect))
         .frame(width: width, height: size)
         .accessibilityIdentifier(RatingInputAccessibilityIdentifier.identifier)
+        .accessibilityValue("\(self.displayRating)")
     }
 
     // MARK: - Internal functions
