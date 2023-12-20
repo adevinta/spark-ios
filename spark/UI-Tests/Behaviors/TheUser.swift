@@ -20,12 +20,15 @@ func theUser(sees elementIn: @escaping UIApplicationClosure, file: StaticString 
     return theUser(sees: elementIn, \.exists, file: file, line: line)
 }
 
-func theUser(sees element: @escaping UIApplicationClosure, _ value: CGFloat,  file: StaticString = #file, line: UInt = #line) -> UITestClosure {
+func theUser(sees element: @escaping UIApplicationClosure,
+             _ value: CGFloat,
+             file: StaticString = #file,
+             line: UInt = #line) -> UITestClosure {
 
     return userAction(
         element: element,
         closure: {
-            let givenValue = $0.value as! String
+            let givenValue = $0.value as? String ?? "NOT_FOUND"
             XCTAssertEqual("\(value)", givenValue, "❌ The element value \(givenValue) is not equal to \(value)", file: file, line: line)
         })
 }
@@ -59,7 +62,8 @@ func theUser(goes element: @escaping UIApplicationClosure, file: StaticString = 
     return userAction(element: element, file: file, line: line)
 }
 
-func debug_print(app: XCUIApplication) {
+func debug_description(app: XCUIApplication) {
+    // swiftlint: disable no_debugging_method
     print(app.debugDescription)
 }
 

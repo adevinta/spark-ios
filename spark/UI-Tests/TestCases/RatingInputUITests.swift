@@ -12,7 +12,7 @@ final class RatingInputUITests: XCTestCase, AppBehavior, RatingInputBehavior {
 
     func test_rating_input() {
         Scenario("Half star not selected") {
-            Given() {
+            Given {
                 theUser(goes: to_the_rating_input_screen)
                 theUser(sees: the_rating_has_value, 1.0)
             }
