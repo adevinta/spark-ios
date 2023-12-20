@@ -10,7 +10,7 @@ import Foundation
 
 
 struct UIComponent: RawRepresentable, CaseIterable, Equatable {
-    static var allCases: [UIComponent] = [.badge, .button, .checkbox, .chip, .icon, .progressBarIndeterminate, .progressBarSingle, .radioButton, .ratingDisplay, .ratingInput, .spinner, .star, .switchButton, .tab, .tag, .textField]
+    static var allCases: [UIComponent] = [.badge, .button, .checkbox, .chip, .icon, .progressBarIndeterminate, .progressBarSingle, .radioButton, .ratingDisplay, .ratingInput, .spinner, .star, .switchButton, .tab, .tag, .textField, .textLink]
 
     var rawValue: String
 
@@ -30,4 +30,5 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static let tab = UIComponent(rawValue: "Tab")
     static let tag = UIComponent(rawValue: "Tag")
     static let textField = UIComponent(rawValue: "TextField")
+    static let textLink = UIComponent(rawValue: "TextLink")
 }

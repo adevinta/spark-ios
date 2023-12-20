@@ -103,9 +103,9 @@ extension ComponentsViewController {
         case .tag:
             viewController = TagComponentUIViewController.build()
         case .textField:
-            viewController = TextFieldComponentUIViewController.build()
-        default:
-            break
+            viewController = TextFieldUIViewController.build()
+        case .textLink:
+            viewController = TextLinkComponentUIViewController.build()
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
