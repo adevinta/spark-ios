@@ -41,7 +41,7 @@ struct RatingInputComponent: View {
                     )
                     .disabled(self.isEnabled != .selected)
 
-                    Text("Current Rating \(self.rating)")
+                    Text("Current Rating \(String(format: "%.1f", self.rating))")
                 }
             }
         )

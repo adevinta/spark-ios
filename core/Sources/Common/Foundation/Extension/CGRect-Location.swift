@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 extension CGRect {
     func pointIndex(of point: CGPoint, horizontalSlices items: Int) -> Int? {
         guard items > 0, self.contains(point) else {

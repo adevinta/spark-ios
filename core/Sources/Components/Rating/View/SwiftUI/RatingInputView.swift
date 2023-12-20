@@ -47,12 +47,12 @@ public struct RatingInputView: View {
         let size = self.viewModel.ratingSize.height * self.scaleFactor
         let lineWidth = self.viewModel.ratingSize.borderWidth * self.scaleFactor
         let spacing = self.viewModel.ratingSize.spacing * self.scaleFactor
-        let width = size * 5 + spacing * 4
+        let width = size * CGFloat(self.viewModel.count.rawValue) + spacing * CGFloat(self.viewModel.count.maxIndex)
         let viewRect = CGRect(x: 0, y: 0, width: width, height: size)
         let colors = self.viewModel.colors
 
         HStack(spacing: spacing) {
-            ForEach((0...4), id: \.self) { index in
+            ForEach((0...self.viewModel.count.maxIndex), id: \.self) { index in
                 StarView(
                     rating: self.displayRating - CGFloat(index),
                     fillMode: .full,
@@ -89,7 +89,7 @@ public struct RatingInputView: View {
     private func dragGesture(viewRect: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0.0)
             .onChanged({ value in
-                if let index = viewRect.pointIndex(of: value.location, horizontalSlices: 5) {
+                if let index = viewRect.pointIndex(of: value.location, horizontalSlices: self.viewModel.count.rawValue) {
                     self.displayRating = CGFloat(index + 1)
                     self.viewModel.updateState(isPressed: true)
                 } else {
@@ -98,7 +98,7 @@ public struct RatingInputView: View {
                 }
             })
             .onEnded({ value in
-                if let index = viewRect.pointIndex(of: value.location, horizontalSlices: 5) {
+                if let index = viewRect.pointIndex(of: value.location, horizontalSlices: self.viewModel.count.rawValue) {
                     self.rating = CGFloat(index + 1)
                     self.displayRating = CGFloat(index + 1)
                 } else {
@@ -106,6 +106,11 @@ public struct RatingInputView: View {
                 }
                 self.viewModel.updateState(isPressed: false)
             })
+    }
+}
 
+private extension RatingStarsCount {
+    var maxIndex: Int {
+        return rawValue - 1
     }
 }

@@ -16,11 +16,8 @@ final class CGRectLocationTests: XCTestCase {
         let sut = CGRect(x: 0, y: 0, width: 100, height: 20)
 
         XCTAssertEqual(sut.pointIndex(of: CGPoint(x: 0, y: 0), horizontalSlices: 5), 0, "Expected to be index 0")
-
         XCTAssertEqual(sut.pointIndex(of: CGPoint(x: 80, y: 0), horizontalSlices: 5), 3, "Expected to be index 3")
-
         XCTAssertEqual(sut.pointIndex(of: CGPoint(x: 81, y: 0), horizontalSlices: 5), 4, "Expected to be index 4")
-
         XCTAssertEqual(sut.pointIndex(of: CGPoint(x: 99, y: 0), horizontalSlices: 5), 4, "Expected to be index 4")
 
     }
@@ -29,7 +26,6 @@ final class CGRectLocationTests: XCTestCase {
         let sut = CGRect(x: 0, y: 0, width: 100, height: 20)
 
         XCTAssertNil(sut.pointIndex(of: CGPoint(x: 99, y: 0), horizontalSlices: 0), "Expected not to have an index")
-
         XCTAssertNil(sut.pointIndex(of: CGPoint(x: 101, y: 10), horizontalSlices: 5), "Expected point outside of frame to have no index")
     }
 }
