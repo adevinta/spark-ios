@@ -150,7 +150,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         }
     }
 
-
     /// Changes of the selection state is posted to the publisher.
     public var publisher: some Publisher<Bool, Never> {
         return self.publisherBinding.publisher.eraseToAnyPublisher()
