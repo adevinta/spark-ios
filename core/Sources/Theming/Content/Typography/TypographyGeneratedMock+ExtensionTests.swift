@@ -52,4 +52,11 @@ extension TypographyFontTokenGeneratedMock {
         fontToken.font = font
         return fontToken
     }
+
+    static func mocked(uiFont: UIFont, font: Font) -> TypographyFontTokenGeneratedMock {
+        let fontToken = TypographyFontTokenGeneratedMock()
+        fontToken.uiFont = uiFont
+        fontToken.font = font
+        return fontToken
+    }
 }

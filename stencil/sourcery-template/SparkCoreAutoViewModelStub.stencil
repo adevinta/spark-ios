@@ -18,6 +18,7 @@ import {{ import }}
 {% macro useCaseMock class variable %}{{ variable.typeName }}GeneratedMock{% endmacro %}
 {% macro genericTypeName class variable %}{% if class.annotations[variable.name] %}{{ class.annotations[variable.name] }}{% else %}{% call useCaseMock class variable %}{% endif %}{% endmacro %}
 {% macro genericTypeFromAnnotation key %}{{ key|replace:"<", ""|replace:">", "" }}{% endmacro %}
+{% macro existentialVariableTypeName typeName %}{% if typeName|contains:"any" and typeName|contains:"!" %}{{ typeName | replace:"any","(any" | replace:"!",")!" }}{% elif typeName|contains:"any" and typeName.isOptional %}{{ typeName | replace:"any","(any" | replace:"?",")?" }}{% elif typeName|contains:"any" and typeName.isClosure %}({{ typeName | replace:"any","(any" | replace:"?",")?" }}){%else%}{{ typeName }}{%endif%}{% endmacro %}
 
 {% for class in types.classes where class|annotated:"AutoViewModelStub" %}{% if class.name != "AutoViewModelStub" %}
 class {{ class.name }}Stub {
@@ -36,7 +37,7 @@ class {{ class.name }}Stub {
     // MARK: - Published Properties
 
     {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}
-    let {% call publisherName variable %}: PublisherMock<Published<{{ variable.typeName }}>.Publisher>
+    let {% call publisherName variable %}: PublisherMock<Published<{% call existentialVariableTypeName variable.typeName %}>.Publisher>
     {% endfor %}
 
     // MARK: Dependencies
