@@ -15,9 +15,9 @@ final class ButtonComponentUIView: ComponentUIView {
 
     // MARK: - Components
 
-    private let buttonView: ButtonUIView
+    private let buttonView: ButtonUIViewDeprecated
 
-    private static func makeButtonView(_ viewModel: ButtonComponentUIViewModel) -> ButtonUIView {
+    private static func makeButtonView(_ viewModel: ButtonComponentUIViewModel) -> ButtonUIViewDeprecated {
         return .init(
             theme: viewModel.theme,
             intent: viewModel.intent,
@@ -281,11 +281,11 @@ final class ButtonComponentUIView: ComponentUIView {
     }
 }
 
-// MARK: - ButtonUIViewDelegate
+// MARK: - ButtonUIViewDeprecatedDelegate
 
 extension ButtonComponentUIView: ButtonUIViewDelegate {
 
-    func buttonWasTapped(_ button: ButtonUIView) {
+    func buttonWasTapped(_ button: ButtonUIViewDeprecated) {
         self.showAlert(for: .delegate)
     }
 }

@@ -10,6 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ButtonGetSizesUseCaseable {
+    @available(*, deprecated, message: "Use the execute function with the type parameter instead. Must be removed when ButtonViewModelDeprecated is deleted")
     func execute(size: ButtonSize,
                  isOnlyIcon: Bool) -> ButtonSizes
 }

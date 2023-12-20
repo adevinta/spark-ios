@@ -41,11 +41,11 @@ private extension ButtonUIViewSnapshotTests {
 
     func test(suts: [ButtonSutSnapshotTests], function: String = #function) {
         for sut in suts {
-            var view: ButtonUIView!
+            var view: ButtonUIViewDeprecated!
 
             // Icon + Title ?
             if let iconImage = sut.iconImage, let title = sut.title {
-                view = ButtonUIView(
+                view = ButtonUIViewDeprecated(
                     theme: self.theme,
                     intent: sut.intent,
                     variant: sut.variant,
@@ -58,7 +58,7 @@ private extension ButtonUIViewSnapshotTests {
                 )
 
             } else if let iconImage = sut.iconImage, let attributedTitle = sut.attributedTitle { // Icon + Attributed Title
-                view = ButtonUIView(
+                view = ButtonUIViewDeprecated(
                     theme: self.theme,
                     intent: sut.intent,
                     variant: sut.variant,
@@ -71,7 +71,7 @@ private extension ButtonUIViewSnapshotTests {
                 )
 
             } else if let iconImage = sut.iconImage { // Only Icon
-                view = ButtonUIView(
+                view = ButtonUIViewDeprecated(
                     theme: self.theme,
                     intent: sut.intent,
                     variant: sut.variant,
@@ -83,7 +83,7 @@ private extension ButtonUIViewSnapshotTests {
                 )
 
             } else if let title = sut.title { // Only Title
-                view = ButtonUIView(
+                view = ButtonUIViewDeprecated(
                     theme: self.theme,
                     intent: sut.intent,
                     variant: sut.variant,
@@ -95,7 +95,7 @@ private extension ButtonUIViewSnapshotTests {
                 )
 
             } else if let attributedTitle = sut.attributedTitle { // Only Attributed Title
-                view = ButtonUIView(
+                view = ButtonUIViewDeprecated(
                     theme: self.theme,
                     intent: sut.intent,
                     variant: sut.variant,

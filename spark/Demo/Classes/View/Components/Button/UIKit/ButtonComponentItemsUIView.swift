@@ -26,7 +26,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     private let variant: ButtonVariant
     private let size: ButtonSize
     private let shape: ButtonShape
-    private let alignment: ButtonAlignment
+    private let alignment: ButtonAlignmentDeprecated
     private let content: ButtonContentDefault
     private let isEnabled: Bool
     private let isSelected: Bool
@@ -42,7 +42,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         content: ButtonContentDefault,
         isEnabled: Bool,
         isSelected: Bool,
@@ -73,11 +73,11 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     // MARK: - Maker
 
     func makeUIView(context: Context) -> UIStackView {
-        let buttonView: ButtonUIView
+        let buttonView: ButtonUIViewDeprecated
 
         switch self.content {
         case .icon:
-            buttonView = ButtonUIView(
+            buttonView = ButtonUIViewDeprecated(
                 theme: SparkTheme.shared,
                 intent: self.intent,
                 variant: self.variant,
@@ -89,7 +89,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
             )
 
         case .text:
-            buttonView = ButtonUIView(
+            buttonView = ButtonUIViewDeprecated(
                 theme: SparkTheme.shared,
                 intent: self.intent,
                 variant: self.variant,
@@ -101,7 +101,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
             )
 
         case .attributedText:
-            buttonView = ButtonUIView(
+            buttonView = ButtonUIViewDeprecated(
                 theme: SparkTheme.shared,
                 intent: self.intent,
                 variant: self.variant,
@@ -113,7 +113,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
             )
 
         case .iconAndText:
-            buttonView = ButtonUIView(
+            buttonView = ButtonUIViewDeprecated(
                 theme: SparkTheme.shared,
                 intent: self.intent,
                 variant: self.variant,
@@ -126,7 +126,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
             )
 
         case .iconAndAttributedText:
-            buttonView = ButtonUIView(
+            buttonView = ButtonUIViewDeprecated(
                 theme: SparkTheme.shared,
                 intent: self.intent,
                 variant: self.variant,
@@ -139,7 +139,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
             )
 
         default:
-            buttonView = ButtonUIView(
+            buttonView = ButtonUIViewDeprecated(
                 theme: SparkTheme.shared,
                 intent: self.intent,
                 variant: self.variant,
@@ -164,7 +164,7 @@ struct ButtonComponentItemsUIView: UIViewRepresentable {
     }
 
     func updateUIView(_ stackView: UIStackView, context: Context) {
-        guard let buttonView = stackView.arrangedSubviews.compactMap({ $0 as? ButtonUIView }).first else {
+        guard let buttonView = stackView.arrangedSubviews.compactMap({ $0 as? ButtonUIViewDeprecated }).first else {
             return
         }
 

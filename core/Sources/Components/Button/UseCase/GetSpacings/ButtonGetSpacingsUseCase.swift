@@ -10,6 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ButtonGetSpacingsUseCaseable {
+    @available(*, deprecated, message: "Use the execute function without isOnlyIcon parameter instead. Must be removed when ButtonViewModelDeprecated is deleted")
     func execute(spacing: LayoutSpacing,
                  isOnlyIcon: Bool) -> ButtonSpacings
 }

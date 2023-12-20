@@ -1,5 +1,5 @@
 //
-//  ButtonViewModelTests.swift
+//  ButtonViewModelDeprecatedTests.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 25.05.23.
@@ -11,7 +11,7 @@ import XCTest
 @testable import SparkCore
 import Combine
 
-final class ButtonViewModelTests: XCTestCase {
+final class ButtonViewModelDeprecatedTests: XCTestCase {
 
     // MARK: - Properties
 
@@ -34,7 +34,7 @@ final class ButtonViewModelTests: XCTestCase {
         let variantMock: ButtonVariant = .filled
         let sizeMock: ButtonSize = .large
         let shapeMock: ButtonShape = .pill
-        let alignmentMock: ButtonAlignment = .leadingIcon
+        let alignmentMock: ButtonAlignmentDeprecated = .leadingIcon
         let titleMock = "My Button"
         let attributedTitleMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = true
@@ -161,7 +161,7 @@ final class ButtonViewModelTests: XCTestCase {
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
-        let alignmentMock: ButtonAlignment = .trailingIcon
+        let alignmentMock: ButtonAlignmentDeprecated = .trailingIcon
         let titleMock = "My Button"
         let attributedTitleMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = false
@@ -375,7 +375,7 @@ final class ButtonViewModelTests: XCTestCase {
         let variantMock: ButtonVariant = .outlined
         let sizeMock: ButtonSize = .medium
         let shapeMock: ButtonShape = .rounded
-        let alignmentMock: ButtonAlignment = .trailingIcon
+        let alignmentMock: ButtonAlignmentDeprecated = .trailingIcon
         let titleMock = "My Button"
         let attributedTitleMock = NSAttributedString(string: "My AT Button")
         let isEnabledMock = false
@@ -756,8 +756,8 @@ final class ButtonViewModelTests: XCTestCase {
         givenIsDifferentNewValue: Bool
     ) {
         // GIVEN
-        let defaultValue: ButtonAlignment = .leadingIcon
-        let newValue: ButtonAlignment = givenIsDifferentNewValue ? .trailingIcon : defaultValue
+        let defaultValue: ButtonAlignmentDeprecated = .leadingIcon
+        let newValue: ButtonAlignmentDeprecated = givenIsDifferentNewValue ? .trailingIcon : defaultValue
 
         let sizeMock: ButtonSize = .medium
 
@@ -826,7 +826,7 @@ final class ButtonViewModelTests: XCTestCase {
         let newValue: String? = newValueIsNil ? nil : "My New Title"
 
         let sizeMock: ButtonSize = .medium
-        let alignmentMock: ButtonAlignment = .trailingIcon
+        let alignmentMock: ButtonAlignmentDeprecated = .trailingIcon
 
         let stub = Stub(
             size: sizeMock,
@@ -932,7 +932,7 @@ final class ButtonViewModelTests: XCTestCase {
         let newValue = NSAttributedString(string: "My new AT Button")
 
         let sizeMock: ButtonSize = .medium
-        let alignmentMock: ButtonAlignment = .trailingIcon
+        let alignmentMock: ButtonAlignmentDeprecated = .trailingIcon
 
         let stub = Stub(
             size: sizeMock,
@@ -1029,7 +1029,7 @@ final class ButtonViewModelTests: XCTestCase {
     ) {
         // GIVEN
         let sizeMock: ButtonSize = .medium
-        let alignmentMock: ButtonAlignment = .trailingIcon
+        let alignmentMock: ButtonAlignmentDeprecated = .trailingIcon
 
         let stub = Stub(
             size: sizeMock,
@@ -1158,7 +1158,7 @@ final class ButtonViewModelTests: XCTestCase {
 
 // MARK: - Testing Published Data
 
-private extension ButtonViewModelTests {
+private extension ButtonViewModelDeprecatedTests {
 
     private func testState(on stub: Stub) {
         XCTAssertPublisherSinkValueEqual(
@@ -1212,7 +1212,7 @@ private extension ButtonViewModelTests {
 
 // MARK: - Testing Dependencies
 
-private extension ButtonViewModelTests {
+private extension ButtonViewModelDeprecatedTests {
 
     private func testGetBorderUseCaseMock(
         on stub: Stub,
@@ -1267,7 +1267,7 @@ private extension ButtonViewModelTests {
     private func testGetContentUseCaseMock(
         on stub: Stub,
         numberOfCalls: Int,
-        givenAlignment: ButtonAlignment? = nil,
+        givenAlignment: ButtonAlignmentDeprecated? = nil,
         givenIconImage: UIImage? = nil
     ) {
         XCTAssertEqual(stub.getContentUseCaseMock.executeWithAlignmentAndIconImageAndContainsTitleCallsCount,
@@ -1399,7 +1399,7 @@ private final class Stub {
 
     // MARK: - Properties
 
-    let viewModel: ButtonViewModel
+    let viewModel: ButtonViewModelDeprecated
 
     // MARK: - Data Properties
 
@@ -1427,7 +1427,7 @@ private final class Stub {
     let getSpacingsUseCaseMock: ButtonGetSpacingsUseCaseableGeneratedMock
     let getStateUseCaseMock: ButtonGetStateUseCaseableGeneratedMock
 
-    private let dependenciesMock: ButtonViewModelDependenciesProtocolGeneratedMock
+    private let dependenciesMock: ButtonViewModelDeprecatedDependenciesProtocolGeneratedMock
 
     // MARK: - Publisher Properties
 
@@ -1446,7 +1446,7 @@ private final class Stub {
         variant: ButtonVariant = .tinted,
         size: ButtonSize = .medium,
         shape: ButtonShape = .rounded,
-        alignment: ButtonAlignment = .leadingIcon,
+        alignment: ButtonAlignmentDeprecated = .leadingIcon,
         isIconImage: Bool = false,
         title: String? = nil,
         attributedTitle: NSAttributedString? = nil,
@@ -1491,7 +1491,7 @@ private final class Stub {
         getStateUseCaseMock.executeWithIsEnabledAndDimsReturnValue = self.stateMock
         self.getStateUseCaseMock = getStateUseCaseMock
 
-        let dependenciesMock = ButtonViewModelDependenciesProtocolGeneratedMock()
+        let dependenciesMock = ButtonViewModelDeprecatedDependenciesProtocolGeneratedMock()
         dependenciesMock.underlyingGetBorderUseCase = getBorderUseCaseMock
         dependenciesMock.underlyingGetColorsUseCase = getColorsUseCaseMock
         dependenciesMock.underlyingGetContentUseCase = getContentUseCaseMock
@@ -1520,7 +1520,7 @@ private final class Stub {
             attributedTitleEither = nil
         }
 
-        let viewModel = ButtonViewModel(
+        let viewModel = ButtonViewModelDeprecated(
             theme: self.themeMock,
             intent: intent,
             variant: variant,

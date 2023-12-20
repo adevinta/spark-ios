@@ -6,6 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+@available(*, deprecated, message: "Must be removed when ButtonViewModelDeprecated is deleted")
 // sourcery: AutoMockable
 protocol ButtonGetIsOnlyIconUseCaseable {
     func execute(iconImage: ImageEither?,
