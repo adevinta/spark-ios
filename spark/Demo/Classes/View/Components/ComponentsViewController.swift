@@ -47,7 +47,7 @@ final class ComponentsViewController: UICollectionViewController {
         /// CollectionView append sections and items
         var snapShot = SnapShot()
         snapShot.appendSections([.all])
-        snapShot.appendItems(UIComponent.allCases.map{ $0.name }, toSection: .all)
+        snapShot.appendItems(UIComponent.allCases.map{ $0.rawValue }, toSection: .all)
         collectionViewDataSource.apply(snapShot)
     }
 }
@@ -104,6 +104,8 @@ extension ComponentsViewController {
             viewController = TagComponentUIViewController.build()
         case .textField:
             viewController = TextFieldUIViewController.build()
+        default:
+            break
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)

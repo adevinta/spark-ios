@@ -18,6 +18,14 @@ final class ListComponentsViewController: UICollectionViewController {
     // MARK: - Properties
     private let reuseIdentifier = "defaultCell"
 
+    var uiComponentAllCases: [UIComponent] {
+        var all = UIComponent.allCases
+        all.insert(.checkboxGroup, at: 3)
+        all.insert(.radioButtonGroup, at: 9)
+        all.append(.addOnTextField)
+        return all
+    }
+
     private lazy var collectionViewDataSource: DataSource = {
         /// CollectionView cell registration
         let cellRegistration = UICollectionView.CellRegistration {
@@ -47,7 +55,7 @@ final class ListComponentsViewController: UICollectionViewController {
         /// CollectionView append sections and items
         var snapShot = SnapShot()
         snapShot.appendSections([.all])
-        snapShot.appendItems(UIComponent.allCases.map{ $0.name }, toSection: .all)
+        snapShot.appendItems(uiComponentAllCases.map{ $0.rawValue }, toSection: .all)
         collectionViewDataSource.apply(snapShot)
     }
 }
@@ -65,14 +73,17 @@ extension ListComponentsViewController {
 extension ListComponentsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let section = UIComponent.allCases[indexPath.row]
+
         var viewController: UIViewController!
-        switch section {
+
+        switch uiComponentAllCases[indexPath.row] {
         case .badge:
             viewController = ListViewController<BadgeCell, BadgeConfiguration>()
         case .button:
             viewController = ListViewController<ButtonCell, ButtonConfiguration>()
         case .checkbox:
+            viewController = ListViewController<CheckboxCell, CheckboxConfiguration>()
+        case .checkboxGroup:
             viewController = ListViewController<CheckboxCell, CheckboxConfiguration>()
         case .chip:
             viewController = ListViewController<ChipCell, ChipConfiguration>()
@@ -83,6 +94,8 @@ extension ListComponentsViewController {
         case .progressBarSingle:
             viewController = ListViewController<ProgressBarSingleCell, ProgressBarSingleConfiguration>()
         case .radioButton:
+            viewController = ListViewController<RadioButtonCell, RadioButtonConfiguration>()
+        case .radioButtonGroup:
             viewController = ListViewController<RadioButtonCell, RadioButtonConfiguration>()
         case .ratingDisplay:
             viewController = ListViewController<RatingDisplayCell, RatingDisplayConfiguration>()
@@ -100,6 +113,10 @@ extension ListComponentsViewController {
             viewController = ListViewController<TagCell, TagConfiguration>()
         case .textField:
             viewController = ListViewController<TextFieldCell, TextFieldConfiguration>()
+        case .addOnTextField:
+            viewController = ListViewController<TextFieldCell, TextFieldConfiguration>()
+        default:
+            break
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -112,4 +129,10 @@ private extension ListComponentsViewController {
     enum Section {
         case all
     }
+}
+
+private extension UIComponent {
+    static let checkboxGroup = UIComponent(rawValue: "Checkbox Group")
+    static let radioButtonGroup = UIComponent(rawValue: "Radio Button Group")
+    static let addOnTextField = UIComponent(rawValue: "Add-on Text Field")
 }
