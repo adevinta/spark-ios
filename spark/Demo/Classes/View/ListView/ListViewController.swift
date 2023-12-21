@@ -41,6 +41,9 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
         case is CheckboxCell.Type:
             self.tableView.register(CheckboxCell.self, forCellReuseIdentifier: CheckboxCell.reuseIdentifier)
 
+        case is CheckboxGroupCell.Type:
+            self.tableView.register(CheckboxGroupCell.self, forCellReuseIdentifier: CheckboxGroupCell.reuseIdentifier)
+
         case is ChipCell.Type:
             self.tableView.register(ChipCell.self, forCellReuseIdentifier: ChipCell.reuseIdentifier)
 
@@ -55,6 +58,9 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
 
         case is RadioButtonCell.Type:
             self.tableView.register(RadioButtonCell.self, forCellReuseIdentifier: RadioButtonCell.reuseIdentifier)
+
+        case is RadioButtonGroupCell.Type:
+            self.tableView.register(RadioButtonGroupCell.self, forCellReuseIdentifier: RadioButtonGroupCell.reuseIdentifier)
 
         case is RatingDisplayCell.Type:
             self.tableView.register(RatingDisplayCell.self, forCellReuseIdentifier: RatingDisplayCell.reuseIdentifier)
@@ -79,6 +85,9 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
 
         case is TextFieldCell.Type:
             self.tableView.register(TextFieldCell.self, forCellReuseIdentifier: TextFieldCell.reuseIdentifier)
+
+        case is AddOnTextFieldCell.Type:
+            self.tableView.register(AddOnTextFieldCell.self, forCellReuseIdentifier: AddOnTextFieldCell.reuseIdentifier)
 
         default:
             break

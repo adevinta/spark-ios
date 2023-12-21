@@ -51,6 +51,14 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             }
             return UITableViewCell()
 
+        /// Checkbox Group
+        case let checkboxGroupConfiguration as CheckboxGroupConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: CheckboxGroupCell.reuseIdentifier, for: indexPath) as? CheckboxGroupCell {
+                cell.configureCell(configuration: checkboxGroupConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
         /// Chip
         case let chipConfiguration as ChipConfiguration:
             if let cell = tableView.dequeueReusableCell(withIdentifier: ChipCell.reuseIdentifier, for: indexPath) as? ChipCell {
@@ -88,6 +96,14 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
         case let radioButtonConfiguration as RadioButtonConfiguration:
             if let cell = tableView.dequeueReusableCell(withIdentifier: RadioButtonCell.reuseIdentifier, for: indexPath) as? RadioButtonCell {
                 cell.configureCell(configuration: radioButtonConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
+        /// Radio Button Group
+        case let radioButtonGroupConfiguration as RadioButtonGroupConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: RadioButtonGroupCell.reuseIdentifier, for: indexPath) as? RadioButtonGroupCell {
+                cell.configureCell(configuration: radioButtonGroupConfiguration)
                 return cell
             }
             return UITableViewCell()
@@ -156,6 +172,14 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             }
             return UITableViewCell()
 
+        /// Add On Text Field
+        case let addOnTextFieldConfiguration as AddOnTextFieldConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: AddOnTextFieldCell.reuseIdentifier, for: indexPath) as? AddOnTextFieldCell {
+                cell.configureCell(configuration: addOnTextFieldConfiguration)
+                return cell
+            }
+            return UITableViewCell()
+
         default:
             return UITableViewCell()
         }
@@ -177,6 +201,9 @@ extension ListViewDataSource {
         case is CheckboxConfiguration.Type:
             data = self.createCheckboxConfigurations()
 
+        case is CheckboxGroupConfiguration.Type:
+            data = self.createCheckboxGroupConfigurations()
+
         case is ChipConfiguration.Type:
             data = self.createChipConfigurations()
 
@@ -191,6 +218,9 @@ extension ListViewDataSource {
 
         case is RadioButtonConfiguration.Type:
             data = self.createRadioButtonConfigurations()
+
+        case is RadioButtonGroupConfiguration.Type:
+            data = self.createRadioButtonGroupConfigurations()
 
         case is RatingDisplayConfiguration.Type:
             data = self.createRatingDisplayConfigurations()
@@ -215,6 +245,9 @@ extension ListViewDataSource {
 
         case is TextFieldConfiguration.Type:
             data = self.createTextFieldConfigurations()
+
+        case is AddOnTextFieldConfiguration.Type:
+            data = self.createAddOnTextFieldConfigurations()
 
         default:
             break
@@ -243,6 +276,13 @@ extension ListViewDataSource {
         [CheckboxConfiguration(theme: SparkTheme.shared, intent: .main),
          CheckboxConfiguration(theme: SparkTheme.shared, intent: .basic),
          CheckboxConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Checkbox Group
+    func createCheckboxGroupConfigurations() -> [CheckboxGroupConfiguration] {
+        [CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .main),
+         CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .basic),
+         CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .success)]
     }
 
     /// Chip
@@ -278,6 +318,13 @@ extension ListViewDataSource {
         [RadioButtonConfiguration(theme: SparkTheme.shared, intent: .main),
          RadioButtonConfiguration(theme: SparkTheme.shared, intent: .basic),
          RadioButtonConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Radio Button Group
+    func createRadioButtonGroupConfigurations() -> [RadioButtonGroupConfiguration] {
+        [RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .main),
+         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .basic),
+         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .success)]
     }
 
     /// Rating Display
@@ -334,5 +381,12 @@ extension ListViewDataSource {
         [TextFieldConfiguration(theme: SparkTheme.shared, intent: .alert),
          TextFieldConfiguration(theme: SparkTheme.shared, intent: .error),
          TextFieldConfiguration(theme: SparkTheme.shared, intent: .success)]
+    }
+
+    /// Add On Text Field
+    func createAddOnTextFieldConfigurations() -> [AddOnTextFieldConfiguration] {
+        [AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .alert),
+         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .error),
+         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .success)]
     }
 }

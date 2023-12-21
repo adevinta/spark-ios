@@ -84,7 +84,7 @@ extension ListComponentsViewController {
         case .checkbox:
             viewController = ListViewController<CheckboxCell, CheckboxConfiguration>()
         case .checkboxGroup:
-            viewController = ListViewController<CheckboxCell, CheckboxConfiguration>()
+            viewController = ListViewController<CheckboxGroupCell, CheckboxGroupConfiguration>()
         case .chip:
             viewController = ListViewController<ChipCell, ChipConfiguration>()
         case .icon:
@@ -96,7 +96,7 @@ extension ListComponentsViewController {
         case .radioButton:
             viewController = ListViewController<RadioButtonCell, RadioButtonConfiguration>()
         case .radioButtonGroup:
-            viewController = ListViewController<RadioButtonCell, RadioButtonConfiguration>()
+            viewController = ListViewController<RadioButtonGroupCell, RadioButtonGroupConfiguration>()
         case .ratingDisplay:
             viewController = ListViewController<RatingDisplayCell, RatingDisplayConfiguration>()
         case .ratingInput:
@@ -114,7 +114,7 @@ extension ListComponentsViewController {
         case .textField:
             viewController = ListViewController<TextFieldCell, TextFieldConfiguration>()
         case .addOnTextField:
-            viewController = ListViewController<TextFieldCell, TextFieldConfiguration>()
+            viewController = ListViewController<AddOnTextFieldCell, AddOnTextFieldConfiguration>()
         default:
             break
         }
