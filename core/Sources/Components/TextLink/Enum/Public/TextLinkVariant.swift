@@ -14,6 +14,6 @@ public enum TextLinkVariant: CaseIterable {
     case underline
 
     /// A text link without any variant (underline).
-    /// *Not recommanded, please use it carefully.*
+    /// *Not recommended, please use it carefully.*
     case none
 }
