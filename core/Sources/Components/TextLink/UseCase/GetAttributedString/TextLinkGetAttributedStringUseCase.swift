@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 // sourcery: AutoMockable, AutoMockTest
 protocol TextLinkGetAttributedStringUseCaseable {
@@ -50,7 +51,7 @@ struct TextLinkGetAttributedStringUseCase: TextLinkGetAttributedStringUseCaseabl
         variant: TextLinkVariant,
         typographies: TextLinkTypographies
     ) -> AttributedStringEither {
-        let underline = self.getUnderlineUseCaseable.execute(
+        let underlineStyle = self.getUnderlineUseCaseable.execute(
             variant: variant,
             isHighlighted: isHighlighted
         )
@@ -60,60 +61,97 @@ struct TextLinkGetAttributedStringUseCase: TextLinkGetAttributedStringUseCaseabl
         // - With range: Add highlight font and add underline from variant for range text, and normal for other.
         switch frameworkType {
         case .uiKit:
-            var attributedString: NSMutableAttributedString
-
-            var highlightAttributes: [NSAttributedString.Key: Any] = [
-                .foregroundColor: textColorToken.uiColor,
-                .font: typographies.highlight.uiFont
-            ]
-
-            if let underline {
-                highlightAttributes[.underlineStyle] = underline.rawValue
-                highlightAttributes[.underlineColor] = textColorToken.uiColor
-            }
-
-            if let textHighlightRange, text.count > textHighlightRange.upperBound {
-                let normalAttributes: [NSAttributedString.Key: Any] = [
-                    .foregroundColor: textColorToken.uiColor,
-                    .font: typographies.normal.uiFont
-                ]
-
-                attributedString = NSMutableAttributedString(
-                    string: text,
-                    attributes: normalAttributes
-                )
-
-                attributedString.addAttributes(
-                    highlightAttributes,
-                    range: textHighlightRange
-                )
-
-            } else {
-                attributedString = NSMutableAttributedString(
-                    string: text,
-                    attributes: highlightAttributes
-                )
-            }
-
+            let attributedString = self.makeNSAttributedString(
+                text: text,
+                textColorToken: textColorToken,
+                textHighlightRange: textHighlightRange,
+                underlineStyle: underlineStyle,
+                typographies: typographies
+            )
             return .left(attributedString)
 
         case .swiftUI:
-            var attributedString = AttributedString(text)
-            attributedString.foregroundColor = textColorToken.color
-
-            if let textHighlightRangeTemp = textHighlightRange,
-               let textHighlightRange = Range(textHighlightRangeTemp, in: attributedString) {
-                attributedString.font = typographies.normal.font
-
-                attributedString[textHighlightRange].font = typographies.highlight.font
-                attributedString[textHighlightRange].underlineStyle = underline
-
-            } else {
-                attributedString.font = typographies.highlight.font
-                attributedString.underlineStyle = underline
-            }
+            let attributedString = self.makerAttributedString(
+                text: text,
+                textColorToken: textColorToken,
+                textHighlightRange: textHighlightRange,
+                underlineStyle: underlineStyle,
+                typographies: typographies
+            )
 
             return .right(attributedString)
         }
+    }
+
+    // MARK: - Maker
+
+    private func makeNSAttributedString(
+        text: String,
+        textColorToken: any ColorToken,
+        textHighlightRange: NSRange?,
+        underlineStyle: NSUnderlineStyle?,
+        typographies: TextLinkTypographies
+    ) -> NSAttributedString {
+        var attributedString: NSMutableAttributedString
+
+        var highlightAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: textColorToken.uiColor,
+            .font: typographies.highlight.uiFont
+        ]
+
+        if let underlineStyle {
+            highlightAttributes[.underlineStyle] = underlineStyle.rawValue
+            highlightAttributes[.underlineColor] = textColorToken.uiColor
+        }
+
+        if let textHighlightRange, text.count > textHighlightRange.upperBound {
+            let normalAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: textColorToken.uiColor,
+                .font: typographies.normal.uiFont
+            ]
+
+            attributedString = NSMutableAttributedString(
+                string: text,
+                attributes: normalAttributes
+            )
+
+            attributedString.addAttributes(
+                highlightAttributes,
+                range: textHighlightRange
+            )
+
+        } else {
+            attributedString = NSMutableAttributedString(
+                string: text,
+                attributes: highlightAttributes
+            )
+        }
+
+        return attributedString
+    }
+
+    private func makerAttributedString(
+        text: String,
+        textColorToken: any ColorToken,
+        textHighlightRange: NSRange?,
+        underlineStyle: NSUnderlineStyle?,
+        typographies: TextLinkTypographies
+    ) -> AttributedString {
+        var attributedString = AttributedString(text)
+        attributedString.foregroundColor = textColorToken.color
+
+        if let textHighlightRangeTemp = textHighlightRange,
+           let textHighlightRange = Range(textHighlightRangeTemp, in: attributedString) {
+            attributedString.font = typographies.normal.font
+
+            attributedString[textHighlightRange].font = typographies.highlight.font
+            attributedString[textHighlightRange].underlineStyle = underlineStyle
+
+        } else {
+            attributedString.font = typographies.highlight.font
+            attributedString.underlineStyle = underlineStyle
+        }
+
+        return attributedString
     }
 }

@@ -12,27 +12,40 @@ import SwiftUI
 
 final class TextLinkGetAttributedStringTests: XCTestCase {
 
+    // MARK: - Properties
+
+    private var mocks = Mocks()
+    private var useCase = TextLinkGetAttributedStringUseCase()
+
+    // MARK: - Setupt
+
+    override func setUp() {
+        super.setUp()
+
+        self.mocks = Mocks()
+        self.useCase = TextLinkGetAttributedStringUseCase(
+            getUnderlineUseCaseable: self.mocks.getUnderlineUseCaseMock
+        )
+    }
+
     // MARK: - UIKit Tests
 
     func test_execute_for_UIKit_without_range() {
         // GIVEN
-        let stub = Stub()
-        let useCase = stub.useCase
-
-        let expectedAttributedString = NSAttributedString(
-            string: stub.textMock,
-            attributes: .highlightAttributes(from: stub)
+        let expectedAttributedString = NSMutableAttributedString(
+            mocks: self.mocks,
+            isRange: false
         )
 
         // WHEN
-        let attributedString = useCase.execute(
+        let attributedString = self.useCase.execute(
             frameworkType: .uiKit,
-            text: stub.textMock,
-            textColorToken: stub.colorTokenMock,
+            text: self.mocks.textMock,
+            textColorToken: self.mocks.colorTokenMock,
             textHighlightRange: nil,
-            isHighlighted: stub.isHighlightedMock,
-            variant: stub.variantMock,
-            typographies: stub.typographiesMock
+            isHighlighted: self.mocks.isHighlightedMock,
+            variant: self.mocks.variantMock,
+            typographies: self.mocks.typographiesMock
         )
 
         // THEN
@@ -43,33 +56,25 @@ final class TextLinkGetAttributedStringTests: XCTestCase {
         )
 
         // Use Case
-        self.testUseCase(from: stub)
+        self.testUseCase(from: self.mocks)
     }
 
     func test_execute_for_UIKit_with_range() {
         // GIVEN
-        let stub = Stub()
-        let useCase = stub.useCase
-
         let expectedAttributedString = NSMutableAttributedString(
-            string: stub.textMock,
-            attributes: .normalAttributes(from: stub)
-        )
-
-        expectedAttributedString.addAttributes(
-            .highlightAttributes(from: stub),
-            range: stub.textHighlightRangeMock
+            mocks: self.mocks,
+            isRange: true
         )
 
         // WHEN
-        let attributedString = useCase.execute(
+        let attributedString = self.useCase.execute(
             frameworkType: .uiKit,
-            text: stub.textMock,
-            textColorToken: stub.colorTokenMock,
-            textHighlightRange: stub.textHighlightRangeMock,
-            isHighlighted: stub.isHighlightedMock,
-            variant: stub.variantMock,
-            typographies: stub.typographiesMock
+            text: self.mocks.textMock,
+            textColorToken: self.mocks.colorTokenMock,
+            textHighlightRange: self.mocks.textHighlightRangeMock,
+            isHighlighted: self.mocks.isHighlightedMock,
+            variant: self.mocks.variantMock,
+            typographies: self.mocks.typographiesMock
         )
 
         // THEN
@@ -80,28 +85,27 @@ final class TextLinkGetAttributedStringTests: XCTestCase {
         )
 
         // Use Case
-        self.testUseCase(from: stub)
+        self.testUseCase(from: self.mocks)
     }
 
     // MARK: - SwiftUI Test
 
     func test_execute_for_SwiftUI_without_range() {
         // GIVEN
-        let stub = Stub()
-        let useCase = stub.useCase
-
-        var expectedAttributedString = AttributedString(stub.textMock)
-        expectedAttributedString.addHighlightAttributes(from: stub)
+        var expectedAttributedString = AttributedString(
+            mocks: self.mocks,
+            isRange: false
+        )
 
         // WHEN
-        let attributedString = useCase.execute(
+        let attributedString = self.useCase.execute(
             frameworkType: .swiftUI,
-            text: stub.textMock,
-            textColorToken: stub.colorTokenMock,
+            text: self.mocks.textMock,
+            textColorToken: self.mocks.colorTokenMock,
             textHighlightRange: nil,
-            isHighlighted: stub.isHighlightedMock,
-            variant: stub.variantMock,
-            typographies: stub.typographiesMock
+            isHighlighted: self.mocks.isHighlightedMock,
+            variant: self.mocks.variantMock,
+            typographies: self.mocks.typographiesMock
         )
 
         // THEN
@@ -112,33 +116,32 @@ final class TextLinkGetAttributedStringTests: XCTestCase {
         )
 
         // Use Case
-        self.testUseCase(from: stub)
+        self.testUseCase(from: self.mocks)
     }
 
     func test_execute_for_SwiftUI_with_range() throws {
         // GIVEN
-        let stub = Stub()
-        let useCase = stub.useCase
-
-        var expectedAttributedString = AttributedString(stub.textMock)
-        expectedAttributedString.addNormalAttributes(from: stub)
+        var expectedAttributedString = AttributedString(
+            mocks: self.mocks,
+            isRange: true
+        )
 
         let textHighlightRange = try XCTUnwrap(
-            Range(stub.textHighlightRangeMock, in: expectedAttributedString),
+            Range(self.mocks.textHighlightRangeMock, in: expectedAttributedString),
             "Range should not be nil"
         )
-        expectedAttributedString[textHighlightRange].font = stub.typographiesMock.highlight.font
-        expectedAttributedString[textHighlightRange].underlineStyle = stub.underlineStyleMock
+        expectedAttributedString[textHighlightRange].font = self.mocks.typographiesMock.highlight.font
+        expectedAttributedString[textHighlightRange].underlineStyle = self.mocks.underlineStyleMock
 
         // WHEN
-        let attributedString = useCase.execute(
+        let attributedString = self.useCase.execute(
             frameworkType: .swiftUI,
-            text: stub.textMock,
-            textColorToken: stub.colorTokenMock,
-            textHighlightRange: stub.textHighlightRangeMock,
-            isHighlighted: stub.isHighlightedMock,
-            variant: stub.variantMock,
-            typographies: stub.typographiesMock
+            text: self.mocks.textMock,
+            textColorToken: self.mocks.colorTokenMock,
+            textHighlightRange: self.mocks.textHighlightRangeMock,
+            isHighlighted: self.mocks.isHighlightedMock,
+            variant: self.mocks.variantMock,
+            typographies: self.mocks.typographiesMock
         )
 
         // THEN
@@ -149,7 +152,7 @@ final class TextLinkGetAttributedStringTests: XCTestCase {
         )
 
         // Use Case
-        self.testUseCase(from: stub)
+        self.testUseCase(from: self.mocks)
     }
 }
 
@@ -157,22 +160,20 @@ final class TextLinkGetAttributedStringTests: XCTestCase {
 
 private extension TextLinkGetAttributedStringTests {
 
-    func testUseCase(from stub: Stub) {
+    func testUseCase(from mocks: Mocks) {
         TextLinkGetUnderlineUseCaseableMockTest.XCTAssert(
-            stub.getUnderlineUseCaseMock,
+            mocks.getUnderlineUseCaseMock,
             expectedNumberOfCalls: 1,
-            givenVariant: stub.variantMock,
-            givenIsHighlighted: stub.isHighlightedMock,
-            expectedReturnValue: stub.underlineStyleMock
+            givenVariant: mocks.variantMock,
+            givenIsHighlighted: mocks.isHighlightedMock,
+            expectedReturnValue: mocks.underlineStyleMock
         )
     }
 }
 
-// MARK: - Stub
+// MARK: - Mocks
 
-private final class Stub {
-
-    // MARK: - Properties
+private final class Mocks {
 
     let textMock = "My Text"
     let textHighlightRangeMock = NSRange(location: 0, length: 2)
@@ -188,43 +189,56 @@ private final class Stub {
         mock.executeWithVariantAndIsHighlightedReturnValue = self.underlineStyleMock
         return mock
     }()
-
-    lazy var useCase: TextLinkGetAttributedStringUseCase = {
-        return .init(getUnderlineUseCaseable: self.getUnderlineUseCaseMock)
-    }()
 }
 
 // MARK: - Extension
 
-private extension [NSAttributedString.Key : Any]  {
+private extension NSMutableAttributedString {
 
-    static func highlightAttributes(from stub: Stub) -> Self {
-        return [
-            .foregroundColor: stub.colorTokenMock.uiColor,
-            .font: stub.typographiesMock.highlight.uiFont,
-            .underlineStyle: stub.underlineStyleMock.rawValue,
-            .underlineColor: stub.colorTokenMock.uiColor,
+    convenience init(mocks: Mocks, isRange: Bool) {
+        let highlightAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: mocks.colorTokenMock.uiColor,
+            .font: mocks.typographiesMock.highlight.uiFont,
+            .underlineStyle: mocks.underlineStyleMock.rawValue,
+            .underlineColor: mocks.colorTokenMock.uiColor,
         ]
-    }
 
-    static func normalAttributes(from stub: Stub) -> Self {
-        return [
-            .foregroundColor: stub.colorTokenMock.uiColor,
-            .font: stub.typographiesMock.normal.uiFont
-        ]
+        let attributes: [NSAttributedString.Key: Any]
+        if isRange {
+            attributes = [
+                .foregroundColor: mocks.colorTokenMock.uiColor,
+                .font: mocks.typographiesMock.normal.uiFont
+            ]
+        } else {
+            attributes = highlightAttributes
+        }
+
+        self.init(
+            string: mocks.textMock,
+            attributes: attributes
+        )
+
+        if isRange {
+            self.addAttributes(
+                highlightAttributes,
+                range: mocks.textHighlightRangeMock
+            )
+        }
     }
 }
 
 private extension AttributedString {
 
-    mutating func addHighlightAttributes(from stub: Stub) {
-        self.foregroundColor = stub.colorTokenMock.color
-        self.font = stub.typographiesMock.highlight.font
-        self.underlineStyle = stub.underlineStyleMock
-    }
+    init(mocks: Mocks, isRange: Bool) {
+        self.init(mocks.textMock)
 
-    mutating func addNormalAttributes(from stub: Stub) {
-        self.foregroundColor = stub.colorTokenMock.color
-        self.font = stub.typographiesMock.normal.font
+        if isRange {
+            self.foregroundColor = mocks.colorTokenMock.color
+            self.font = mocks.typographiesMock.normal.font
+        } else {
+            self.foregroundColor = mocks.colorTokenMock.color
+            self.font = mocks.typographiesMock.highlight.font
+            self.underlineStyle = mocks.underlineStyleMock
+        }
     }
 }
