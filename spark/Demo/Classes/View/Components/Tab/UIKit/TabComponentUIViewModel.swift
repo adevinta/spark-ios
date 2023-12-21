@@ -89,9 +89,16 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
 
     lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Disable",
+            name: "Disable Random Tab",
             type: .checkbox(title: "", isOn: self.disabledIndex != nil),
             target: (source: self, action: #selector(self.disableChanged(_:))))
+    }()
+
+    lazy var disableAllConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Disable All",
+            type: .checkbox(title: "", isOn: self.isDisabled),
+            target: (source: self, action: #selector(self.disableAll(_:))))
     }()
 
     lazy var equalWidthConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -147,6 +154,7 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
             self.iconConfigurationItemViewModel,
             self.badgeConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
+            self.disableAllConfigurationItemViewModel,
             self.equalWidthConfigurationItemViewModel,
             self.numberOfTabsConfigurationItemViewModel
         ]
@@ -166,6 +174,7 @@ final class TabComponentUIViewModel: ComponentUIViewModel {
     @Published var showIcon = true
     @Published var showBadge = false
     @Published var disabledIndex: Int?
+    @Published var isDisabled = false
     @Published var isEqualWidth = true
     @Published var numberOfTabs = 2
 
@@ -232,6 +241,10 @@ extension TabComponentUIViewModel {
         } else {
             self.disabledIndex = Int.random(in: 0..<self.numberOfTabs)
         }
+    }
+
+    @objc func disableAll(_ isSelected: Any?) {
+        self.isDisabled = isTrue(isSelected)
     }
 
     @objc func equalWidthChanged(_ isSelected: Any?) {
