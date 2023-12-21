@@ -15,12 +15,18 @@ final class StarCell: UITableViewCell, Configurable {
     typealias Component = StarUIView
 
     lazy var component: StarUIView = {
+        let configuration = StarConfiguration(
+            numberOfVertices: 5,
+            vertexSize: CGFloat(0.65),
+            cornerRadiusSize: CGFloat(0.15)
+        )
         let view = StarUIView(
             rating: CGFloat(0.5),
             fillMode: StarFillMode.half,
             lineWidth: 2,
             borderColor: UIColor.blue,
-            fillColor: UIColor.lightGray
+            fillColor: UIColor.lightGray,
+            configuration: configuration
         )
         return view
     }()
