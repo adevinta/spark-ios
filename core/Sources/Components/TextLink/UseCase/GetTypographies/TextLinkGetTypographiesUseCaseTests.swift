@@ -14,22 +14,18 @@ final class TextLinkGetTypographiesUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_for_all_intents() throws {
+    func test_execute_for_all_intents() {
         // GIVEN
         let useCase = TextLinkGetTypographiesUseCase()
-        let themeMock = ThemeGeneratedMock.mocked()
-        let typographyMock = try XCTUnwrap(
-            themeMock.typography as? TypographyGeneratedMock,
-            "Wrong typography mock type"
-        )
+        let typographyMock = TypographyGeneratedMock.mocked()
 
         let givenTypographies = TextLinkTypography.allCases
 
         // WHEN
         for givenTypography in givenTypographies {
             let typographies = useCase.execute(
-                typography: givenTypography,
-                theme: themeMock
+                textLinkTypography: givenTypography,
+                typography: typographyMock
             )
 
             let expectedTypographies = givenTypography.expectedTypographies(
