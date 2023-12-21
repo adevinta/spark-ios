@@ -34,6 +34,11 @@ final class StarCell: UITableViewCell, Configurable {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupView()
+
+        NSLayoutConstraint.activate([
+            self.component.widthAnchor.constraint(equalToConstant: 50),
+            self.component.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
 
     required init?(coder: NSCoder) {
