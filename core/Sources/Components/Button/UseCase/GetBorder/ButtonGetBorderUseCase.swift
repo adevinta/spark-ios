@@ -8,8 +8,9 @@
 
 import Foundation
 
-// sourcery: AutoMockable
+// sourcery: AutoMockable, AutoMockTest
 protocol ButtonGetBorderUseCaseable {
+    // sourcery: border = "Identical"
     func execute(shape: ButtonShape,
                  border: Border,
                  variant: ButtonVariant) -> ButtonBorder

@@ -13,5 +13,5 @@ struct ButtonState: Equatable {
     // MARK: - Properties
 
     let isUserInteractionEnabled: Bool
-    let opacity: CGFloat
+    let opacity: Double
 }

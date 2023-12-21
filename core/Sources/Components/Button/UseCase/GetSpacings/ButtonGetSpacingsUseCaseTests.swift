@@ -14,10 +14,33 @@ final class ButtonGetSpacingsUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_when_isOnlyIcon_is_true() {
+    func test_execute() {
         // GIVEN
         let spacingMock = LayoutSpacingGeneratedMock.mocked()
         
+        let useCase = ButtonGetSpacingsUseCase()
+
+        // WHEN
+        let spacings = useCase.execute(
+            spacing: spacingMock
+        )
+
+        // THEN
+        XCTAssertEqual(spacings.verticalSpacing,
+                       spacingMock.medium,
+                       "Wrong verticalSpacing value")
+        XCTAssertEqual(spacings.horizontalSpacing,
+                       spacingMock.large,
+                       "Wrong horizontalSpacing value")
+        XCTAssertEqual(spacings.horizontalPadding,
+                       spacingMock.medium,
+                       "Wrong horizontalPadding value")
+    }
+
+    func test_deprecated_execute_when_isOnlyIcon_is_true() {
+        // GIVEN
+        let spacingMock = LayoutSpacingGeneratedMock.mocked()
+
         let useCase = ButtonGetSpacingsUseCase()
 
         // WHEN
@@ -38,7 +61,7 @@ final class ButtonGetSpacingsUseCaseTests: XCTestCase {
                        "Wrong horizontalPadding value")
     }
 
-    func test_execute_when_isOnlyIcon_is_false() {
+    func test_deprecated_execute_when_isOnlyIcon_is_false() {
         // GIVEN
         let spacingMock = LayoutSpacingGeneratedMock.mocked()
 
