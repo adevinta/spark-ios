@@ -154,7 +154,6 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
                 selectedID: self.selectedID,
                 labelAlignment: self.labelAlignment
             )
-            .disabled(self.viewModel.isDisabled)
             .accessibilityIdentifier(RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: item.id))
             .padding(.bottom, self.bottomPadding(of: item))
         }
@@ -166,11 +165,6 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
         } else {
             return self.viewModel.spacing
         }
-    }
-
-    public func disabled(_ isDisabled: Bool) -> Self {
-        self.viewModel.isDisabled = isDisabled
-        return self
     }
 
     public func title(_ title: String) -> Self {
