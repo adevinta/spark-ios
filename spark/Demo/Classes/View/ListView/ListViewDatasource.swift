@@ -11,7 +11,7 @@ import UIKit
 
 final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject, UITableViewDataSource {
 
-    var configurations: [ComponentConfiguration]!
+    var configurations: [ComponentConfiguration] = []
 
     override init() {
         super.init()
@@ -164,60 +164,64 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
 
 extension ListViewDataSource {
 
-    func setupData() {
-        switch Configuration.self {
+    func setupData(newItem: Bool = false) {
 
+        var data: [ComponentConfiguration]!
+        switch Configuration.self {
         case is BadgeConfiguration.Type:
-            configurations = self.createBadgeConfigurations()
+            data = self.createBadgeConfigurations()
 
         case is ButtonConfiguration.Type:
-            configurations = self.createButtonConfigurations()
+            data = self.createButtonConfigurations()
 
         case is CheckboxConfiguration.Type:
-            configurations = self.createCheckboxConfigurations()
+            data = self.createCheckboxConfigurations()
 
         case is ChipConfiguration.Type:
-            configurations = self.createChipConfigurations()
+            data = self.createChipConfigurations()
 
         case is IconConfiguration.Type:
-            configurations = self.createIconConfigurations()
+            data = self.createIconConfigurations()
 
         case is ProgressBarIndeterminateConfiguration.Type:
-            configurations = self.createProgressBarIndeterminateConfigurations()
+            data = self.createProgressBarIndeterminateConfigurations()
 
         case is ProgressBarSingleConfiguration.Type:
-            configurations = self.createProgressBarSingleConfigurations()
+            data = self.createProgressBarSingleConfigurations()
 
         case is RadioButtonConfiguration.Type:
-            configurations = self.createRadioButtonConfigurations()
+            data = self.createRadioButtonConfigurations()
 
         case is RatingDisplayConfiguration.Type:
-            configurations = self.createRatingDisplayConfigurations()
+            data = self.createRatingDisplayConfigurations()
 
         case is RatingInputConfiguration.Type:
-            configurations = self.createRatingInputConfigurations()
+            data = self.createRatingInputConfigurations()
 
         case is SpinnerConfiguration.Type:
-            configurations = self.createSpinnerConfigurations()
+            data = self.createSpinnerConfigurations()
 
         case is StarCellConfiguration.Type:
-            configurations = self.createStarConfigurations()
+            data = self.createStarConfigurations()
 
         case is SwitchButtonConfiguration.Type:
-            configurations = self.createSwitchButtonConfigurations()
+            data = self.createSwitchButtonConfigurations()
 
         case is TabConfiguration.Type:
-            configurations = self.createTabConfigurations()
+            data = self.createTabConfigurations()
 
         case is TagConfiguration.Type:
-            configurations = self.createTagConfigurations()
+            data = self.createTagConfigurations()
 
         case is TextFieldConfiguration.Type:
-            configurations = self.createTextFieldConfigurations()
+            data = self.createTextFieldConfigurations()
 
         default:
-            configurations = []
+            break
         }
+
+        let randomItem = [data.randomElement() ?? data[0]]
+        self.configurations += newItem ? randomItem : data
     }
 
     /// Badge

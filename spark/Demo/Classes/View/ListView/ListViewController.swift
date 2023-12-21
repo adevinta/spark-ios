@@ -17,6 +17,7 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = Cell.reuseIdentifier
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add Item", style: .plain, target: self, action: #selector(self.addNewComponentToList))
 
         self.setupTableView()
     }
@@ -82,5 +83,10 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
         default:
             break
         }
+    }
+
+    @objc func addNewComponentToList() {
+        self.dataSource.setupData(newItem: true)
+        self.tableView.reloadData()
     }
 }
