@@ -18,9 +18,14 @@ final class ProgressBarSingleCell: UITableViewCell, Configurable {
         let view = ProgressBarUIView(
             theme: SparkTheme.shared,
             intent: .main,
-            shape: .square)
+            shape: .square
+        )
         return view
     }()
+
+    var stackViewAlignment: UIStackView.Alignment {
+        return .fill
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -34,5 +39,6 @@ final class ProgressBarSingleCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.value = configuration.value
     }
 }

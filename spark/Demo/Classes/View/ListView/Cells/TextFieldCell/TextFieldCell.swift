@@ -19,6 +19,10 @@ final class TextFieldCell: UITableViewCell, Configurable {
         return view
     }()
 
+    var stackViewAlignment: UIStackView.Alignment {
+        return .fill
+    }
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupView()

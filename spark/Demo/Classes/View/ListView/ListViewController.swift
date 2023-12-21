@@ -50,7 +50,7 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
             self.tableView.register(ProgressBarIndeterminateCell.self, forCellReuseIdentifier: ProgressBarIndeterminateCell.reuseIdentifier)
 
         case is ProgressBarSingleCell.Type:
-            self.tableView.register(IconCell.self, forCellReuseIdentifier: IconCell.reuseIdentifier)
+            self.tableView.register(ProgressBarSingleCell.self, forCellReuseIdentifier: ProgressBarSingleCell.reuseIdentifier)
 
         case is RadioButtonCell.Type:
             self.tableView.register(RadioButtonCell.self, forCellReuseIdentifier: RadioButtonCell.reuseIdentifier)

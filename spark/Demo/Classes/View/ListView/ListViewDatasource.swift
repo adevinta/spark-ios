@@ -264,9 +264,9 @@ extension ListViewDataSource {
 
     /// Progress Bar Single
     func createProgressBarSingleConfigurations() -> [ProgressBarSingleConfiguration] {
-        [ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .main),
-         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .basic),
-         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .main, value: 50),
+         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .basic, value: 75),
+         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .success, value: 30)]
     }
 
     /// Radio Button

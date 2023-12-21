@@ -19,6 +19,7 @@ protocol Configurable: AnyObject {
 
     static var reuseIdentifier: String { get }
     var component: Component { get set }
+    var stackViewAlignment: UIStackView.Alignment { get }
 
     func configureCell(configuration: CellConfigartion)
     func setupView()
@@ -30,10 +31,14 @@ extension Configurable where Self: UITableViewCell {
         return String(describing: Self.self)
     }
 
+    var stackViewAlignment: UIStackView.Alignment {
+        return .leading
+    }
+
     func setupView() {
         let stackView = UIStackView(arrangedSubviews: [self.component])
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = self.stackViewAlignment
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
         self.contentView.addSubview(stackView)

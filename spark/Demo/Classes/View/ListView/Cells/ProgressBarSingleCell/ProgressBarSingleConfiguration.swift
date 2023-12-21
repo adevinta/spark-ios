@@ -12,4 +12,5 @@ import SparkCore
 struct ProgressBarSingleConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: ProgressBarIntent
+    var value: CGFloat
 }
