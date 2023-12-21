@@ -63,11 +63,8 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 
     public override var isEnabled: Bool {
-        get {
-            return self.viewModel.state.isEnabled
-        }
-        set {
-            self.viewModel.set(enabled: newValue)
+        didSet {
+            self.viewModel.set(enabled: self.isEnabled)
         }
     }
 
@@ -152,7 +149,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     /// Changes of the selection state is posted to the publisher.
     public var publisher: some Publisher<Bool, Never> {
-        return self.publisherBinding.publisher.eraseToAnyPublisher()
+        return self.subject
     }
 
     // MARK: - Private Properties
@@ -162,7 +159,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     @ScaledUIMetric private var haloWidth = Constants.haloWidth
 
     private var subscriptions = Set<AnyCancellable>()
-    private var publisherBinding: PublishingBinding
+    private let subject = PassthroughSubject<Bool, Never>()
+    // Only needed as a binding for the single radio button
+    private var singleRadioButtonBinding: ValueBinding<ID>?
 
     // MARK: - View properties
     private lazy var toggleView: RadioButtonToggleUIView = {
@@ -212,20 +211,15 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         groupState: RadioButtonGroupState = .enabled,
         labelPosition: RadioButtonLabelPosition = .right
     ) {
-        let publisherBinding = PublishedBinding(binding: selectedID, id: id)
-
         let viewModel = RadioButtonViewModel(
             theme: theme, 
             intent: groupState.intent,
             id: id,
             label: .left(label),
-            selectedID: publisherBinding.wrappedBinding,
+            selectedID: selectedID,
             alignment: labelPosition.alignment)
 
-        self.init(
-            viewModel: viewModel,
-            publisherBinding: publisherBinding
-        )
+        self.init(viewModel: viewModel)
     }
 
     /// A radio button component which can be used as a standalone component.
@@ -246,20 +240,18 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         isSelected: Bool,
         labelAlignment: RadioButtonLabelAlignment = .trailing
     ) {
-        let publisherBinding = PublisherBinding(id: id, selectedID: isSelected ? id : nil)
+        let valueBinding = ValueBinding(selectedID: isSelected ? id : nil)
 
         let viewModel = RadioButtonViewModel(
             theme: theme,
             intent: intent,
             id: id,
             label: .left(label),
-            selectedID: publisherBinding.wrappedBinding,
+            selectedID: valueBinding.binding,
             alignment: labelAlignment)
 
-        self.init(
-            viewModel: viewModel,
-            publisherBinding: publisherBinding
-        )
+        self.init(viewModel: viewModel)
+        self.singleRadioButtonBinding = valueBinding
     }
 
     /// The radio button component takes a theme, an id, a label and a binding
@@ -279,31 +271,25 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         selectedID: Binding<ID?>,
         labelAlignment: RadioButtonLabelAlignment = .trailing
     ) {
-        let publisherBinding = PublishedBinding(binding: selectedID, id: id)
         let viewModel = RadioButtonViewModel(
             theme: theme,
             intent: intent,
             id: id,
             label: .left(label),
-            selectedID: publisherBinding.wrappedBinding,
+            selectedID: selectedID,
             alignment: labelAlignment)
 
-        self.init(
-            viewModel: viewModel,
-            publisherBinding: publisherBinding
-        )
+        self.init(viewModel: viewModel)
     }
 
-    init(viewModel: RadioButtonViewModel<ID>,
-         publisherBinding: PublishingBinding) {
+    init(viewModel: RadioButtonViewModel<ID>) {
         self.viewModel = viewModel
-        self.publisherBinding = publisherBinding
         self._spacing = ScaledUIMetric(wrappedValue: viewModel.spacing)
 
         super.init(frame: CGRect.zero)
 
         self.arrangeViews()
-        self.setupButtonActions(isDisabled: viewModel.isDisabled)
+        self.setupButtonActions()
         self.updateViewAttributes()
         self.setupSubscriptions()
     }
@@ -351,10 +337,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
             guard let self else { return }
             self.updateColors(colors)
             self.updateLabel()
-        }
-
-        self.viewModel.$isDisabled.subscribe(in: &self.subscriptions) { [weak self] isDisabled in
-            self?.setupButtonActions(isDisabled: isDisabled)
         }
 
         self.viewModel.$font.subscribe(in: &self.subscriptions) { [weak self] font in
@@ -405,12 +387,8 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.textLabel.textColor = colors.label.uiColor
     }
 
-    private func setupButtonActions(isDisabled: Bool) {
-        if isDisabled {
-            self.removeTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
-        } else {
-            self.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
-        }
+    private func setupButtonActions() {
+        self.addTarget(self, action: #selector(self.actionTapped(sender:)), for: .touchUpInside)
     }
 
     private func setupConstraints() {
@@ -492,7 +470,11 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     // MARK: - Control functions
     @IBAction func actionTapped(sender: Any?)  {
-        self.isSelected = true
+        if !self.isSelected {
+            self.isSelected = true
+            self.subject.send(true)
+            self.sendActions(for: .valueChanged)
+        }
         self.toggleView.isPressed = false
     }
 }

@@ -365,8 +365,9 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     private func createRadioButtonViews(
-        items: [RadioButtonUIItem<ID>]) -> [RadioButtonUIView<ID>] {
-         let radioButtonViews = items.map {
+        items: [RadioButtonUIItem<ID>]) -> [RadioButtonUIView<ID>] 
+    {
+        let radioButtonViews = items.map {
             let radioButtonView = RadioButtonUIView(
                 theme: self.theme,
                 intent: self.viewModel.intent,
@@ -376,6 +377,12 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                 labelAlignment: self.labelAlignment
             )
             radioButtonView.translatesAutoresizingMaskIntoConstraints = false
+
+            let action = UIAction { [weak self] _ in
+                self?.sendActions(for: .touchUpInside)
+            }
+            radioButtonView.addAction(action, for: .touchUpInside)
+
             return radioButtonView
         }
         return radioButtonViews
