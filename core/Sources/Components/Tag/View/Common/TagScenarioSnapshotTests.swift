@@ -177,20 +177,3 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
         ]
     }
 }
-
-// MARK: - Private Extensions
-
-private extension ImageEither {
-
-    static func mock(isSwiftUIComponent: Bool) -> Self {
-        return isSwiftUIComponent ? .right(Image.mock) : .left(UIImage.mock)
-    }
-}
-
-private extension Image {
-    static let mock = Image(systemName: "person.2.circle.fill")
-}
-
-private extension UIImage {
-    static var mock = UIImage(systemName: "person.2.circle.fill") ?? UIImage()
-}
