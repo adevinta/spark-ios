@@ -142,11 +142,17 @@ final class RadioButtonComponentUIView: ComponentUIView {
             }
         }
 
+        self.componentView.publisher.subscribe(in: &self.cancellables) { selected in
+            Console.log("[RadioButton] published \(selected)")
+        }
+        self.componentView.addTarget(self, action: #selector(self.buttonValueChanged(_:)), for: .valueChanged)
+
         self.singleComponentView.publisher
             .subscribe(in: &self.cancellables) {
                 [weak self] selected in
                 guard let self = self else { return }
                 self.singleRadioButtonValuePublished = selected
+                Console.log("[RadioButton] single \(selected)")
             }
 
         let action = UIAction { [weak self] action in
@@ -154,9 +160,18 @@ final class RadioButtonComponentUIView: ComponentUIView {
             if !self.singleRadioButtonValuePublished {
                 self.singleComponentView.isSelected = false
             }
+            Console.log("[RadioButton] single touchUpInside")
             self.singleRadioButtonValuePublished = false
         }
         self.singleComponentView.addAction(action, for: .touchUpInside)
+    }
+
+    @objc func buttonValueChanged(_ item: Any?) {
+        if let item = item as? RadioButtonUIGroupView<Int> {
+            Console.log("[RadioButton] valueChanged: \(item.selectedID ?? -1)")
+        } else {
+            Console.log("[RadioButton] ERROR non expected item!")
+        }
     }
 
     // MARK: - Private construction helper
