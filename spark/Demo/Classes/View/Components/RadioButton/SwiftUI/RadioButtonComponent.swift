@@ -84,9 +84,9 @@ struct RadioButtonComponent: View {
                     labelAlignment: self.trailingLabel == .selected ? .trailing : .leading,
                     groupLayout: self.verticalLayout == .selected ? .vertical : .horizontal
                 )
-                .disabled(self.isDisabled == .selected)
                 .title("Radio Button Group (SwiftUI)")
                 .supplementaryText("Radio Button Group Supplementary Text")
+                .disabled(self.isDisabled == .selected)
             }
         )
     }
