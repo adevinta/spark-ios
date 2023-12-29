@@ -42,6 +42,7 @@ public final class AddOnTextFieldUIView: UIView {
             }
         }
     }
+
     public var trailingAddOn: UIView? {
         didSet {
             if let addOn = trailingAddOn {
@@ -51,6 +52,7 @@ public final class AddOnTextFieldUIView: UIView {
             }
         }
     }
+
     public let textField: TextFieldUIView
     
     // MARK: - Private properties
@@ -127,6 +129,11 @@ public final class AddOnTextFieldUIView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.setBorderColor(from: self.viewModel.textFieldColors.border)
     }
 
     // MARK: - Private methods
