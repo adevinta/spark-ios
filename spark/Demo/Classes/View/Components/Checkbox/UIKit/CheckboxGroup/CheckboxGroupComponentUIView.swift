@@ -33,6 +33,8 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
         self.componentView.delegate = self
         // Setup
         self.setupSubscriptions()
+
+        self.addTargetActions()
     }
 
     required init?(coder: NSCoder) {
@@ -84,6 +86,13 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             self.viewModel.groupTypeConfigurationItemViewModel.buttonTitle = type.name
             self.componentView.updateItems(CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: type))
         }
+    }
+
+    private func addTargetActions() {
+        let valueChangedAction = UIAction { _ in
+            Console.log("Checkbox group: Value changed")
+        }
+        self.componentView.addAction(valueChangedAction, for: .valueChanged)
     }
 
     static func makeCheckboxGroupView(_ viewModel: CheckboxGroupComponentUIViewModel) -> CheckboxGroupUIView {
