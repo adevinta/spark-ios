@@ -115,14 +115,15 @@ class CheckboxControlUIView: UIView {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else { return }
-
-        let traitCollection = self.traitCollection
-        self._cornerRadius.update(traitCollection: traitCollection)
-        self._cornerRadiusPressed.update(traitCollection: traitCollection)
-        self._lineWidth.update(traitCollection: traitCollection)
-        self._lineWidthPressed.update(traitCollection: traitCollection)
-        self._controlSize.update(traitCollection: traitCollection)
+        
+        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            let traitCollection = self.traitCollection
+            self._cornerRadius.update(traitCollection: traitCollection)
+            self._cornerRadiusPressed.update(traitCollection: traitCollection)
+            self._lineWidth.update(traitCollection: traitCollection)
+            self._lineWidthPressed.update(traitCollection: traitCollection)
+            self._controlSize.update(traitCollection: traitCollection)
+        }
 
         self.addBorderToView(for: self.pressedBorderView)
     }
