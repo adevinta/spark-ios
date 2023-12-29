@@ -17,6 +17,7 @@ struct CheckboxGroupListView: View {
     @State private var intent: CheckboxIntent = .main
     @State private var alignment: CheckboxAlignment = .left
     @State private var layout: CheckboxSelectionState = CheckboxSelectionState.unselected
+    @State private var isEnabled: CheckboxSelectionState = CheckboxSelectionState.selected
     @State private var isTitleHidden: CheckboxSelectionState = CheckboxSelectionState.unselected
     @State private var textStyle: CheckboxTextStyle = .text
     @State private var selectedIcon = CheckboxListView.Icons.checkedImage
@@ -79,6 +80,14 @@ struct CheckboxGroupListView: View {
                 )
 
                 CheckboxView(
+                    text: "Is Enabled",
+                    checkedImage: CheckboxListView.Icons.checkedImage.image,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$isEnabled
+                )
+
+                CheckboxView(
                     text: "Show Group Title",
                     checkedImage: CheckboxListView.Icons.checkedImage.image,
                     theme: theme,
@@ -105,6 +114,7 @@ struct CheckboxGroupListView: View {
                 .onChange(of: self.groupType) { newValue in
                     self.items = self.setItems(groupType: newValue)
                 }
+                .disabled(self.isEnabled == .unselected)
             }
         )
     }
