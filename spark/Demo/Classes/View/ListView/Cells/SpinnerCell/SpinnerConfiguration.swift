@@ -12,4 +12,5 @@ import SparkCore
 struct SpinnerConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: SpinnerIntent
+    var size: SpinnerSize
 }

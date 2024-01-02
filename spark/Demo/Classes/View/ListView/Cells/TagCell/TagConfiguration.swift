@@ -12,4 +12,6 @@ import SparkCore
 struct TagConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: TagIntent
+    var variant: TagVariant
+    var content: TagContent
 }

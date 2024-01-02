@@ -34,5 +34,8 @@ final class RatingDisplayCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.size = configuration.size
+        self.component.rating = configuration.rating
+        self.component.count = configuration.count
     }
 }

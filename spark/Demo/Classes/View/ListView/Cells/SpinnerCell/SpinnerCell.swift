@@ -33,5 +33,6 @@ final class SpinnerCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.spinnerSize = configuration.size
     }
 }

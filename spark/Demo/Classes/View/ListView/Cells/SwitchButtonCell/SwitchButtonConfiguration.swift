@@ -12,4 +12,8 @@ import SparkCore
 struct SwitchButtonConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: SwitchIntent
+    var alignment: SwitchAlignment
+    var textContent: SwitchTextContentDefault
+    var isOn: Bool
+    var isEnabled: Bool
 }

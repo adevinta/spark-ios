@@ -13,4 +13,6 @@ struct StarCellConfiguration: ComponentConfiguration {
     var theme: Theme
     var borderColor: UIColor
     var fillColor: UIColor
+    var numberOfVertices: Int
+    var fillMode: StarFillMode
 }

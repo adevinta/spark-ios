@@ -48,5 +48,7 @@ final class StarCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.fillColor = configuration.fillColor
         self.component.borderColor = configuration.borderColor
+        self.component.numberOfVertices = configuration.numberOfVertices
+        self.component.fillMode = configuration.fillMode
     }
 }

@@ -8,6 +8,7 @@
 
 import Combine
 import UIKit
+import SparkCore
 
 final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject, UITableViewDataSource {
 
@@ -329,51 +330,53 @@ extension ListViewDataSource {
 
     /// Rating Display
     func createRatingDisplayConfigurations() -> [RatingDisplayConfiguration] {
-        [RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main),
-         RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main),
-         RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main)]
+        [RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main, size: .medium, rating: 3.0, count: .five),
+         RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main, size: .medium, rating: 0.5, count: .one),
+         RatingDisplayConfiguration(theme: SparkTheme.shared, intent: .main, size: .small, rating: 4.0, count: .five)]
     }
 
     /// Rating Input
     func createRatingInputConfigurations() -> [RatingInputConfiguration] {
-        [RatingInputConfiguration(theme: SparkTheme.shared, intent: .main),
-         RatingInputConfiguration(theme: SparkTheme.shared, intent: .main),
-         RatingInputConfiguration(theme: SparkTheme.shared, intent: .main)]
+        [RatingInputConfiguration(theme: SparkTheme.shared, intent: .main, rating: 0, isEnabled: true),
+         RatingInputConfiguration(theme: SparkTheme.shared, intent: .main, rating: 3.0, isEnabled: true),
+         RatingInputConfiguration(theme: SparkTheme.shared, intent: .main, rating: 1.5, isEnabled: false)]
     }
 
     /// Spinner
     func createSpinnerConfigurations() -> [SpinnerConfiguration] {
-        [SpinnerConfiguration(theme: SparkTheme.shared, intent: .main),
-         SpinnerConfiguration(theme: SparkTheme.shared, intent: .basic),
-         SpinnerConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [SpinnerConfiguration(theme: SparkTheme.shared, intent: .main, size: .medium),
+         SpinnerConfiguration(theme: SparkTheme.shared, intent: .basic, size: .small),
+         SpinnerConfiguration(theme: SparkTheme.shared, intent: .success, size: .medium)]
     }
 
     /// Star
     func createStarConfigurations() -> [StarCellConfiguration] {
-        [StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.blue),
-         StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.yellow),
-         StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.red)]
+        [StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.blue, numberOfVertices: 5, fillMode: .full),
+         StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.green, numberOfVertices: 8, fillMode: .full),
+         StarCellConfiguration(theme: SparkTheme.shared, borderColor: UIColor.lightGray, fillColor: UIColor.red, numberOfVertices: 5, fillMode: .half)]
     }
 
     /// Switch Button
     func createSwitchButtonConfigurations() -> [SwitchButtonConfiguration] {
-        [SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .main),
-         SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .basic),
-         SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .left, textContent: .text, isOn: true, isEnabled: true),
+         SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .right, textContent: .multilineText, isOn: false, isEnabled: true),
+         SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .success, alignment: .left, textContent: .attributedText, isOn: true, isEnabled: false)
+        ]
     }
 
     /// Tab
     func createTabConfigurations() -> [TabConfiguration] {
-        [TabConfiguration(theme: SparkTheme.shared, intent: .main),
-         TabConfiguration(theme: SparkTheme.shared, intent: .basic),
-         TabConfiguration(theme: SparkTheme.shared, intent: .support)]
+        [TabConfiguration(theme: SparkTheme.shared, intent: .basic, size: .md, contents: [TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2")], showBadge: false, isEqualWidth: true),
+         TabConfiguration(theme: SparkTheme.shared, intent: .main, size: .md, contents: [TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2")], showBadge: true, isEqualWidth: true),
+         TabConfiguration(theme: SparkTheme.shared, intent: .support, size: .sm, contents: [TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2"), TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 3")], showBadge: false, isEqualWidth: false)
+        ]
     }
 
     /// Tag
     func createTagConfigurations() -> [TagConfiguration] {
-        [TagConfiguration(theme: SparkTheme.shared, intent: .main),
-         TagConfiguration(theme: SparkTheme.shared, intent: .basic),
-         TagConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [TagConfiguration(theme: SparkTheme.shared, intent: .main, variant: .filled, content: .text),
+         TagConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, content: .icon),
+         TagConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, content: .all)]
     }
 
     /// Text Field

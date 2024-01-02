@@ -12,4 +12,8 @@ import SparkCore
 struct TabConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: TabIntent
+    var size: TabSize
+    var contents: [TabUIItemContent]
+    var showBadge: Bool
+    var isEqualWidth: Bool
 }

@@ -12,4 +12,7 @@ import SparkCore
 struct RatingDisplayConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: RatingIntent
+    var size: RatingDisplaySize
+    var rating: CGFloat
+    var count: RatingStarsCount
 }

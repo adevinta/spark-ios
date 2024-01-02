@@ -36,5 +36,16 @@ final class TagCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.variant = configuration.variant
+
+        switch configuration.content {
+        case .text:
+            self.component.text = "Tag 1"
+        case .icon:
+            self.component.iconImage = UIImage(systemName: "pencil.tip.crop.circle")
+        case .all:
+            self.component.text = "Tag 2"
+            self.component.iconImage = UIImage(systemName: "pencil.tip.crop.circle")
+        }
     }
 }

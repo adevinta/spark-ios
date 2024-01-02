@@ -12,4 +12,6 @@ import SparkCore
 struct RatingInputConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: RatingIntent
+    var rating: CGFloat
+    var isEnabled: Bool
 }

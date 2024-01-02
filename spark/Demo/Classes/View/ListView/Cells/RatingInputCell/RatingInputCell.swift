@@ -34,5 +34,7 @@ final class RatingInputCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.rating = configuration.rating
+        self.component.isEnabled = configuration.isEnabled
     }
 }
