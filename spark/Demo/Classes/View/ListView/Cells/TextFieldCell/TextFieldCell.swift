@@ -16,6 +16,8 @@ final class TextFieldCell: UITableViewCell, Configurable {
 
     lazy var component: TextFieldUIView = {
         let view = TextFieldUIView(theme: SparkTheme.shared)
+        view.leftView = UIImageView(image: UIImage(systemName: "rectangle.lefthalf.filled"))
+        view.rightView = UIImageView(image: UIImage(systemName: "square.rightthird.inset.filled"))
         return view
     }()
 
@@ -35,5 +37,9 @@ final class TextFieldCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.leftViewMode = .init(rawValue: configuration.leftViewMode.rawValue) ?? .never
+        self.component.rightViewMode = .init(rawValue: configuration.rightViewMode.rawValue) ?? .never
+        self.component.clearButtonMode = .init(rawValue: configuration.clearButtonMode.rawValue) ?? .never
+        self.component.text = configuration.text
     }
 }

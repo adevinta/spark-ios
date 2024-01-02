@@ -327,7 +327,7 @@ final class TextFieldComponentUIView: UIView {
         return imageView
     }
 
-    private func createButtonAddOn() -> UIButton {
+    func createButtonAddOn() -> UIButton {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         var buttonConfig = UIButton.Configuration.plain()

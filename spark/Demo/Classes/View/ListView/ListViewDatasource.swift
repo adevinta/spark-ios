@@ -378,15 +378,15 @@ extension ListViewDataSource {
 
     /// Text Field
     func createTextFieldConfigurations() -> [TextFieldConfiguration] {
-        [TextFieldConfiguration(theme: SparkTheme.shared, intent: .alert),
-         TextFieldConfiguration(theme: SparkTheme.shared, intent: .error),
-         TextFieldConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [TextFieldConfiguration(theme: SparkTheme.shared, intent: .success, leftViewMode: .always, rightViewMode: .never, clearButtonMode: .whileEditing),
+         TextFieldConfiguration(theme: SparkTheme.shared, intent: .neutral, leftViewMode: .always, rightViewMode: .whileEditing, clearButtonMode: .whileEditing),
+         TextFieldConfiguration(theme: SparkTheme.shared, intent: .error, leftViewMode: .always, rightViewMode: .always, clearButtonMode: .always)]
     }
 
     /// Add On Text Field
     func createAddOnTextFieldConfigurations() -> [AddOnTextFieldConfiguration] {
-        [AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .alert),
-         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .error),
-         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .success, leftViewMode: .always, rightViewMode: .never, leadingAddOnOption: .button, trailingAddOnOption: .none, clearButtonMode: .whileEditing),
+         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .neutral, leftViewMode: .always, rightViewMode: .whileEditing, leadingAddOnOption: .button, trailingAddOnOption: .shortText, clearButtonMode: .whileEditing),
+         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .error, leftViewMode: .always, rightViewMode: .always, leadingAddOnOption: .button, trailingAddOnOption: .longText, clearButtonMode: .always)]
     }
 }

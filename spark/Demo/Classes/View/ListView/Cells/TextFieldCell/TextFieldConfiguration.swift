@@ -12,4 +12,8 @@ import SparkCore
 struct TextFieldConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: TextFieldIntent
+    var leftViewMode: ViewMode
+    var rightViewMode: ViewMode
+    var clearButtonMode: ViewMode
+    var text: String?
 }
