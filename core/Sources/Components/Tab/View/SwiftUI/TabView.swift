@@ -173,12 +173,6 @@ public struct TabView: View {
         return self
     }
 
-    /// Disable the whole tab control
-    public func disabled(_ disabled: Bool) -> Self {
-        self.viewModel.isEnabled = !disabled
-        return self
-    }
-
     /// Set the selected tab
     public func selected(index: Int) -> Self {
         self.selectedIndex = index

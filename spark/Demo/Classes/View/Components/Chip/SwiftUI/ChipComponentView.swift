@@ -116,8 +116,8 @@ struct ChipComponentView: View {
                         action: self.withAction == .selected ? { self.showingAlert = true} : nil
                     )
                     .component(self.withComponent == .selected ? self.component() : nil)
-                    .disabled(self.isEnabled == .unselected)
                     .selected(self.isSelected == .selected)
+                    .disabled(self.isEnabled == .unselected)
                     .alert("Chip Pressed", isPresented: self.$showingAlert) {
                         Button("OK", role: .cancel) { }
                     }

@@ -17,6 +17,8 @@ public struct ChipView: View {
     private enum Constants {
         static let verticalPadding: CGFloat = 6.25
     }
+
+    @Environment(\.isEnabled) private var isEnabled: Bool
     @ObservedObject private var viewModel: ChipViewModel<ChipContent>
     @ScaledMetric private var imageSize = ChipConstants.imageSize
     @ScaledMetric private var height = ChipConstants.height
@@ -133,7 +135,9 @@ public struct ChipView: View {
         }
         .opacity(self.viewModel.colors.opacity)
         .cornerRadius(self.borderRadius)
-        .disabled(!self.viewModel.isEnabled)
+        .doAction {
+            self.viewModel.isEnabled = self.isEnabled
+        }
         .buttonStyle(ChipButtonStyle(viewModel: self.viewModel, hasAction: self.action != nil))
         .accessibilityIdentifier(ChipAccessibilityIdentifier.identifier)
     }
@@ -210,11 +214,6 @@ public struct ChipView: View {
     /// Set an extra component
     public func component(_ component: AnyView?) -> Self {
         self.viewModel.content.component = component
-        return self
-    }
-
-    public func disabled(_ disabled: Bool) -> Self {
-        self.viewModel.isEnabled = !disabled
         return self
     }
 

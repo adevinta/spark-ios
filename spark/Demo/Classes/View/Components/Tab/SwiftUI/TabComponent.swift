@@ -18,6 +18,7 @@ struct TabComponent: View {
     @State var showIcon = CheckboxSelectionState.selected
     @State var showBadge = CheckboxSelectionState.unselected
     @State var isDisabled = CheckboxSelectionState.unselected
+    @State var allDisabled = CheckboxSelectionState.unselected
     @State var equalSize = CheckboxSelectionState.selected
     @State var longLabel = CheckboxSelectionState.unselected
     @State var tabSize: TabSize = .md
@@ -97,7 +98,7 @@ struct TabComponent: View {
                 }
 
                 CheckboxView(
-                    text: "Disabled",
+                    text: "Disable Random Tab",
                     checkedImage: DemoIconography.shared.checkmark,
                     theme: theme,
                     isEnabled: true,
@@ -110,6 +111,14 @@ struct TabComponent: View {
                         self.disabledTab = 0
                     }
                 }
+
+                CheckboxView(
+                    text: "Disable All Tabs",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$allDisabled
+                )
 
                 CheckboxView(
                     text: "Equal sized",
@@ -129,8 +138,9 @@ struct TabComponent: View {
                     selectedIndex: self.$selectedTab
                 )
                 .apportionsSegmentWidthsByContent(!self.equalSize.isSelected)
-                .disabled(isDisabled.isSelected, index: self.disabledTab)
                 .badge(self.badge(), index: self.badgePosition)
+                .disabled(isDisabled.isSelected, index: self.disabledTab)
+                .disabled(self.allDisabled == .selected)
             }
         )
         .onChange(of: self.numberOfTabs) { _ in

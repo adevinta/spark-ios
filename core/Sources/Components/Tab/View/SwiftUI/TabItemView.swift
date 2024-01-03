@@ -13,6 +13,7 @@ public struct TabItemView: View {
 
     // MARK: - Private Variables
     @ObservedObject private var viewModel: TabItemViewModel<TabItemContent>
+    @Environment(\.isEnabled) private var isEnabled: Bool
 
     private let tapAction: () -> Void
 
@@ -80,9 +81,11 @@ public struct TabItemView: View {
                     .background(self.viewModel.tabStateAttributes.colors.background.color)
                     .contentShape(Rectangle())
             })
-        .disabled(!self.viewModel.isEnabled)
         .opacity(self.viewModel.tabStateAttributes.colors.opacity)
         .buttonStyle(TabItemButtonStyle(viewModel: self.viewModel))
+        .doAction {
+            self.viewModel.isEnabled = self.isEnabled
+        }
     }
 
     // MARK: Private Functions
@@ -139,12 +142,6 @@ public struct TabItemView: View {
     }
 
     //MARK: - Public modifiers
-    /// Set the tab to disabled
-    public func disabled(_ disabled: Bool) -> Self {
-        self.viewModel.isEnabled = !disabled
-        return self
-    }
-
     /// Indicates whether the control attempts to adjust segment widths based on their content widths.
     public func apportionsSegmentWidthsByContent(_ newValue: Bool) -> Self {
         self.viewModel.apportionsSegmentWidthsByContent = newValue
@@ -170,7 +167,9 @@ private struct TabItemButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Self.Configuration) -> some View {
         if configuration.isPressed != self.viewModel.isPressed {
-            self.viewModel.isPressed = configuration.isPressed
+            DispatchQueue.main.async {
+                self.viewModel.isPressed = configuration.isPressed
+            }
         }
         return configuration.label
             .animation(.easeOut(duration: 0.1), value: self.viewModel.isPressed)
