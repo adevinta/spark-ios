@@ -68,7 +68,7 @@ public struct RatingInputView: View {
                 .accessibilityIdentifier("\(RatingInputAccessibilityIdentifier.identifier)-\(index)")
             }
         }
-        .doAction {
+        .onChange(of: self.isEnabled) { value in
             self.viewModel.updateState(isEnabled: self.isEnabled)
         }
         .compositingGroup()
