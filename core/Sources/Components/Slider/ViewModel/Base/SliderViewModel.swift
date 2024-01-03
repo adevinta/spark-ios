@@ -2,17 +2,18 @@
 //  SliderViewModel.swift
 //  SparkCore
 //
-//  Created by louis.borlee on 23/11/2023.
+//  Created by louis.borlee on 19/12/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import Foundation
 
-class SliderViewModel {
+class SliderViewModel<V> where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint  {
 
     // MARK: - Private Properties
     private let getColorsUseCase: SliderGetColorsUseCasable
     private let getCornerRadiiUseCase: SliderGetCornerRadiiUseCasable
+    private let getStepValuesInBoundsUseCase: SliderGetStepValuesInBoundsUseCasable
     private let getClosestValueUseCase: SliderGetClosestValueUseCasable
 
     // MARK: - Internal Properties
@@ -44,7 +45,15 @@ class SliderViewModel {
     }
     var isContinuous = true
 
-    var steps: Float = 0.0
+    //TODO: var numberOfSteps
+
+    var step: V.Stride? = nil {
+        didSet {
+            guard self.step != oldValue else { return }
+            self.setStepValues()
+        }
+    }
+    private(set) var stepValues: [V]? = nil
 
     // MARK: - Published Colors
     @Published var trackColor: any ColorToken
@@ -56,9 +65,13 @@ class SliderViewModel {
     @Published var trackRadius: CGFloat
     @Published var indicatorRadius: CGFloat
 
-    // MARK: - Published Values
-    @Published var minimumValue: Float = .zero
-    @Published var maximumValue: Float = 1.0
+    // MARK: - Published Bounds
+    @Published var bounds: ClosedRange<V> = 0...1 {
+        didSet {
+            guard self.bounds != oldValue else { return }
+            self.setStepValues()
+        }
+    }
 
     // MARK: - Published Dim
     @Published var dim: CGFloat
@@ -68,12 +81,14 @@ class SliderViewModel {
                   intent: SliderIntent,
                   getColorsUseCase: SliderGetColorsUseCasable = SliderGetColorsUseCase(),
                   getCornerRadiiUseCase: SliderGetCornerRadiiUseCasable = SliderGetCornerRadiiUseCase(),
+                  getStepValuesInBoundsUseCase: SliderGetStepValuesInBoundsUseCasable = SliderGetStepValuesInBoundsUseCase(),
                   getClosestValueUseCase: SliderGetClosestValueUseCasable = SliderGetClosestValueUseCase()) {
         self.theme = theme
         self.shape = shape
         self.intent = intent
         self.getColorsUseCase = getColorsUseCase
         self.getCornerRadiiUseCase = getCornerRadiiUseCase
+        self.getStepValuesInBoundsUseCase = getStepValuesInBoundsUseCase
         self.getClosestValueUseCase = getClosestValueUseCase
 
         self.dim = self.theme.dims.none
@@ -107,20 +122,27 @@ class SliderViewModel {
         self.indicatorRadius = radii.indicatorRadius
     }
 
-    func getClosestValue(fromValue value: Float) -> Float {
-        return self.getClosestValueUseCase.execute(
-            from: self.minimumValue,
-            to: self.maximumValue,
-            withSteps: self.steps,
-            fromValue: value
-        )
+    private func setStepValues() {
+        if let step {
+            self.stepValues = self.getStepValuesInBoundsUseCase.execute(bounds: self.bounds, step: step)
+        } else {
+            self.stepValues = nil
+        }
     }
-}
 
-final class RangeSliderViewModel: SliderViewModel {
+    func resetBoundsIfNeeded() {
+        guard let lastValue = self.stepValues?.last,
+              lastValue < self.bounds.upperBound else {
+            return
+        }
+        self.bounds = self.bounds.lowerBound...lastValue
+    }
 
-    // MARK: - Published values
-    @Published var from: CGFloat = .zero
-    @Published var to: CGFloat = 1.0
-
+    func getClosestValue(fromValue value: V) -> V {
+        let boundedValue = max(self.bounds.lowerBound, min(self.bounds.upperBound, value))
+        guard let stepValues else {
+            return boundedValue
+        }
+        return self.getClosestValueUseCase.execute(value: boundedValue, in: stepValues)
+    }
 }

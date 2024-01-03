@@ -37,12 +37,12 @@ final class SliderUIControlSnapshotTests: UIKitComponentSnapshotTestCase {
         self._test(scenario: SliderScenario.test4)
     }
 
-    private func createConfigurations(from scenario: SliderScenario) -> [(testName: String, view: SliderUIControlV2<Float>)] {
-        var sliders = [(testName: String, view: SliderUIControlV2<Float>)]()
+    private func createConfigurations(from scenario: SliderScenario) -> [(testName: String, view: SliderUIControl<Float>)] {
+        var sliders = [(testName: String, view: SliderUIControl<Float>)]()
         for intent in scenario.intents {
             for state in scenario.states {
                 for value in scenario.values {
-                    let slider = SliderUIControlV2<Float>(
+                    let slider = SliderUIControl<Float>(
                         theme: self.theme,
                         shape: scenario.shape,
                         intent: intent

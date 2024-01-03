@@ -1,5 +1,5 @@
 //
-//  SingleSliderViewModelV2.swift
+//  SingleSliderViewModel.swift
 //  SparkCore
 //
 //  Created by louis.borlee on 02/01/2024.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class SingleSliderViewModelV2<V>: SliderViewModelV2<V> where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint {
+final class SingleSliderViewModel<V>: SliderViewModel<V> where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint {
 
     // MARK: - Published values
     @Published private(set) var value: V = 0.0

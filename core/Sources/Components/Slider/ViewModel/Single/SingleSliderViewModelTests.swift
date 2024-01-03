@@ -2,21 +2,43 @@
 //  SingleSliderViewModelTests.swift
 //  SparkCoreUnitTests
 //
-//  Created by louis.borlee on 11/12/2023.
-//  Copyright © 2023 Adevinta. All rights reserved.
+//  Created by louis.borlee on 03/01/2024.
+//  Copyright © 2024 Adevinta. All rights reserved.
 //
 
 import XCTest
+import Combine
 @testable import SparkCore
 
-final class SingleSliderViewModelTests: SliderViewModelTests<SingleSliderViewModel> {
+final class SingleSliderViewModelTests: SliderViewModelWithMocksTests {
+    var singleViewModel: SingleSliderViewModel<Float>!
+    override var viewModel: SliderViewModel<Float>! {
+        get { return self.singleViewModel }
+        set { self.singleViewModel = newValue as? SingleSliderViewModel<Float> }
+    }
 
-    var singlePublishers: SingleSliderPublishers {
-        return self.publishers as! SingleSliderPublishers
+    var singlePublishers: SingleSliderPublishers!
+    override var publishers: SliderPublishers! {
+        get { return self.singlePublishers }
+        set { self.singlePublishers = newValue as? SingleSliderPublishers }
+    }
+
+    override func setUp() {
+        super.setUp()
+        self.singleViewModel = SingleSliderViewModel(
+            theme: self.theme,
+            shape: self.shape,
+            intent: self.intent,
+            getColorsUseCase: self.getColorsUseCase,
+            getCornerRadiiUseCase: self.getCornerRadiiUseCase,
+            getStepValuesInBoundsUseCase: self.getStepValuesInBoundsUseCase,
+            getClosestValueUseCase: self.getClosestValueUseCase
+        )
+        self.setupPublishers()
     }
 
     override func setupPublishers() {
-        self.publishers = SingleSliderPublishers(
+        self.singlePublishers = SingleSliderPublishers(
             dim: PublisherMock(publisher: self.viewModel.$dim),
             trackColor: PublisherMock(publisher: self.viewModel.$trackColor),
             handleColor: PublisherMock(publisher: self.viewModel.$handleColor),
@@ -24,117 +46,82 @@ final class SingleSliderViewModelTests: SliderViewModelTests<SingleSliderViewMod
             handleActiveIndicatorColor: PublisherMock(publisher: self.viewModel.$handleActiveIndicatorColor),
             trackRadius: PublisherMock(publisher: self.viewModel.$trackRadius),
             indicatorRadius: PublisherMock(publisher: self.viewModel.$indicatorRadius),
-            value: PublisherMock(publisher: self.viewModel.$value)
+            value: PublisherMock(publisher: self.singleViewModel.$value)
         )
         self.publishers.load()
     }
 
-    func test_setAbsoluteValue_outOfBounds() throws {
-        // GIVEN
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-        self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueReturnValue = 1
-        self.viewModel.minimumValue = 0
-        self.viewModel.maximumValue = 4
-        self.viewModel.steps = 1
-
-        // WHEN
-        self.viewModel.setAbsoluteValue(2)
-
-        // THEN - UseCases
-        XCTAssertFalse(self.getColorsUseCase.executeWithThemeAndIntentCalled, "getColorsUseCase.executeWithThemeAndIntent shouldn't have been called")
-        XCTAssertFalse(self.getCornerRadiiUseCase.executeWithThemeAndShapeCalled, "getCornerRadiiUseCase.executeWithThemeAndShape shouldn't have been called")
-        XCTAssertEqual(self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueCallsCount, 1, "getClosestValueUseCase.executeWithFromAndToAndStepsAndValue shouldn have been called once")
-        let receivedArguments = try XCTUnwrap(self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueReceivedArguments, "Couldn't unwrap receivedArguments")
-        XCTAssertEqual(receivedArguments.value, 2, "Wrong receivedArguments.value")
-        XCTAssertEqual(receivedArguments.from, 0, "Wrong receivedArguments.from")
-        XCTAssertEqual(receivedArguments.to, 4, "Wrong receivedArguments.to")
-        XCTAssertEqual(receivedArguments.steps, 1, "Wrong receivedArguments.steps")
-
-        // THEN - Publishers
-        XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
-        XCTAssertFalse(self.publishers.handleColor.sinkCalled, "$handleColor should not have been called")
-        XCTAssertFalse(self.publishers.handleActiveIndicatorColor.sinkCalled, "$handleActiveIndicatorColor should not have been called")
-        XCTAssertFalse(self.publishers.trackColor.sinkCalled, "$trackColor should not have been called")
-        XCTAssertFalse(self.publishers.indicatorColor.sinkCalled, "$indicatorColor should not have been called")
-        XCTAssertFalse(self.publishers.trackRadius.sinkCalled, "$trackRadius should not have been called")
-        XCTAssertFalse(self.publishers.indicatorRadius.sinkCalled, "$indicatorRadius should not have been called")
-        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
-        XCTAssertEqual(self.singlePublishers.value.sinkValue, 1, "Wrong value.sinkValue")
-    }
-
-    func test_setAbsoluteValue_outOfBounds_under() throws {
-        // GIVEN
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-        self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueReturnValue = 3
-        self.viewModel.minimumValue = 0
-        self.viewModel.maximumValue = 4
-        self.viewModel.steps = 1
-
-        // WHEN
-        self.viewModel.setAbsoluteValue(-1)
-
-        // THEN - UseCases
-        XCTAssertFalse(self.getColorsUseCase.executeWithThemeAndIntentCalled, "getColorsUseCase.executeWithThemeAndIntent shouldn't have been called")
-        XCTAssertFalse(self.getCornerRadiiUseCase.executeWithThemeAndShapeCalled, "getCornerRadiiUseCase.executeWithThemeAndShape shouldn't have been called")
-        XCTAssertEqual(self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueCallsCount, 1, "getClosestValueUseCase.executeWithFromAndToAndStepsAndValue shouldn have been called once")
-        let receivedArguments = try XCTUnwrap(self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueReceivedArguments, "Couldn't unwrap receivedArguments")
-        XCTAssertEqual(receivedArguments.value, 0, "Wrong receivedArguments.value")
-        XCTAssertEqual(receivedArguments.from, 0, "Wrong receivedArguments.from")
-        XCTAssertEqual(receivedArguments.to, 4, "Wrong receivedArguments.to")
-        XCTAssertEqual(receivedArguments.steps, 1, "Wrong receivedArguments.steps")
-
-        // THEN - Publishers
-        XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
-        XCTAssertFalse(self.publishers.handleColor.sinkCalled, "$handleColor should not have been called")
-        XCTAssertFalse(self.publishers.handleActiveIndicatorColor.sinkCalled, "$handleActiveIndicatorColor should not have been called")
-        XCTAssertFalse(self.publishers.trackColor.sinkCalled, "$trackColor should not have been called")
-        XCTAssertFalse(self.publishers.indicatorColor.sinkCalled, "$indicatorColor should not have been called")
-        XCTAssertFalse(self.publishers.trackRadius.sinkCalled, "$trackRadius should not have been called")
-        XCTAssertFalse(self.publishers.indicatorRadius.sinkCalled, "$indicatorRadius should not have been called")
-        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
-        XCTAssertEqual(self.singlePublishers.value.sinkValue, 3, "Wrong value.sinkValue")
-    }
-
-    func test_setAbsoluteValue_outOfBounds_over() throws {
-        // GIVEN
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-        self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueReturnValue = 2
-        self.viewModel.minimumValue = 0
-        self.viewModel.maximumValue = 4
-        self.viewModel.steps = 1
-
-        // WHEN
-        self.viewModel.setAbsoluteValue(5)
-
-        // THEN - UseCases
-        XCTAssertFalse(self.getColorsUseCase.executeWithThemeAndIntentCalled, "getColorsUseCase.executeWithThemeAndIntent shouldn't have been called")
-        XCTAssertFalse(self.getCornerRadiiUseCase.executeWithThemeAndShapeCalled, "getCornerRadiiUseCase.executeWithThemeAndShape shouldn't have been called")
-        XCTAssertEqual(self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueCallsCount, 1, "getClosestValueUseCase.executeWithFromAndToAndStepsAndValue shouldn have been called once")
-        let receivedArguments = try XCTUnwrap(self.getClosestValueUseCase.executeWithFromAndToAndStepsAndValueReceivedArguments, "Couldn't unwrap receivedArguments")
-        XCTAssertEqual(receivedArguments.value, 4, "Wrong receivedArguments.value")
-        XCTAssertEqual(receivedArguments.from, 0, "Wrong receivedArguments.from")
-        XCTAssertEqual(receivedArguments.to, 4, "Wrong receivedArguments.to")
-        XCTAssertEqual(receivedArguments.steps, 1, "Wrong receivedArguments.steps")
-
-        // THEN - Publishers
-        XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
-        XCTAssertFalse(self.publishers.handleColor.sinkCalled, "$handleColor should not have been called")
-        XCTAssertFalse(self.publishers.handleActiveIndicatorColor.sinkCalled, "$handleActiveIndicatorColor should not have been called")
-        XCTAssertFalse(self.publishers.trackColor.sinkCalled, "$trackColor should not have been called")
-        XCTAssertFalse(self.publishers.indicatorColor.sinkCalled, "$indicatorColor should not have been called")
-        XCTAssertFalse(self.publishers.trackRadius.sinkCalled, "$trackRadius should not have been called")
-        XCTAssertFalse(self.publishers.indicatorRadius.sinkCalled, "$indicatorRadius should not have been called")
-        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
-        XCTAssertEqual(self.singlePublishers.value.sinkValue, 2, "Wrong value.sinkValue")
-    }
-
-    func test_init_value() throws {
+    // MARK: - init
+    func test_init() throws {
         // GIVEN / WHEN - Inits from setUp()
+        // THEN - Simple variables
+        XCTAssertEqual(self.singleViewModel.value, 0.0, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    // MARK: - Set Value
+    func test_setValue() {
+        // GIVEN / WHEN - Inits from setUp()
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.setValue(0.5)
 
         // THEN
+        XCTAssertEqual(self.singleViewModel.value, 0.5, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_setValue_under_bounds() {
+        // GIVEN / WHEN - Inits from setUp()
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.setValue(-1)
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 0, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_setValue_over_bounds() {
+        // GIVEN / WHEN - Inits from setUp()
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.setValue(2)
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 1, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_setValue_closest_value() {
+        // GIVEN / WHEN - Inits from setUp()
+        self.getClosestValueUseCase.executeWithValueAndValuesReturnValue = 0.4
+        self.getStepValuesInBoundsUseCase.executeWithBoundsAndStepReturnValue = [0, 0.4, 1]
+        self.viewModel.step = 0.3
+        self.resetUseCases() // Removes previous executes
+        self.publishers.reset() // Removes previous publishes
+
+        // WHEN
+        self.singleViewModel.setValue(0.5)
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 0.4, "Wrong value")
+
+        // THEN - Publishers
         XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
     }
 }
@@ -151,18 +138,12 @@ final class SingleSliderPublishers: SliderPublishers {
          indicatorRadius: PublisherMock<Published<CGFloat>.Publisher>,
          value: PublisherMock<Published<Float>.Publisher>) {
         self.value = value
-        super.init(dim: dim,
-                   trackColor: trackColor,
-                   handleColor: handleColor,
-                   indicatorColor: indicatorColor,
-                   handleActiveIndicatorColor: handleActiveIndicatorColor,
-                   trackRadius: trackRadius,
-                   indicatorRadius: indicatorRadius)
+        super.init(dim: dim, trackColor: trackColor, handleColor: handleColor, indicatorColor: indicatorColor, handleActiveIndicatorColor: handleActiveIndicatorColor, trackRadius: trackRadius, indicatorRadius: indicatorRadius)
     }
 
     override func load() {
         super.load()
-        self.value.loadTesting(on: &self.cancellables)
+        self.value.loadTesting(on: &super.cancellables)
     }
 
     override func reset() {

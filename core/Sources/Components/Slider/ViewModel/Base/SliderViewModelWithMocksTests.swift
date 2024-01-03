@@ -1,5 +1,5 @@
 //
-//  SliderViewModelV2WithMocksTests.swift
+//  SliderViewModelWithMocksTests.swift
 //  SparkCoreUnitTests
 //
 //  Created by louis.borlee on 03/01/2024.
@@ -10,23 +10,23 @@ import XCTest
 import Combine
 @testable import SparkCore
 
-class SliderViewModelV2WithMocksTests: XCTestCase {
+class SliderViewModelWithMocksTests: XCTestCase {
     let intent = SliderIntent.info
     let shape = SliderShape.rounded
     let expectedRadii = SliderRadii.mocked()
 
     var theme: ThemeGeneratedMock!
-    var viewModel: SliderViewModelV2<Float>!
+    var viewModel: SliderViewModel<Float>!
     var expectedColors: SliderColors!
     var getColorsUseCase: SliderGetColorsUseCasableGeneratedMock!
     var getCornerRadiiUseCase: SliderGetCornerRadiiUseCasableGeneratedMock!
     var getStepValuesInBoundsUseCase: SliderGetStepValuesInBoundsUseCasableMock<Float>!
-    var getClosestValueUseCase: SliderGetClosestValueUseCasableV2Mock<Float>!
+    var getClosestValueUseCase: SliderGetClosestValueUseCasableMock<Float>!
 
-    var publishers: SliderPublishersV2!
+    var publishers: SliderPublishers!
 
     func setupPublishers() {
-        self.publishers = SliderPublishersV2(
+        self.publishers = SliderPublishers(
             dim: PublisherMock(publisher: self.viewModel.$dim),
             trackColor: PublisherMock(publisher: self.viewModel.$trackColor),
             handleColor: PublisherMock(publisher: self.viewModel.$handleColor),
@@ -52,6 +52,6 @@ class SliderViewModelV2WithMocksTests: XCTestCase {
         self.getColorsUseCase = SliderGetColorsUseCasableGeneratedMock.mocked(returnedColors: self.expectedColors)
         self.getCornerRadiiUseCase = SliderGetCornerRadiiUseCasableGeneratedMock.mocked(expectedRadii: self.expectedRadii)
         self.getStepValuesInBoundsUseCase = SliderGetStepValuesInBoundsUseCasableMock<Float>()
-        self.getClosestValueUseCase = SliderGetClosestValueUseCasableV2Mock<Float>()
+        self.getClosestValueUseCase = SliderGetClosestValueUseCasableMock<Float>()
     }
 }

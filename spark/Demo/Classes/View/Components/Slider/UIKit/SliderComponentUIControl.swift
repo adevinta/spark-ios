@@ -236,8 +236,8 @@ final class SliderComponentUIView: UIView {
         return label
     }()
 
-    lazy var slider: SliderUIControlV2<Float> = {
-        let slider = SliderUIControlV2<Float>(
+    lazy var slider: SliderUIControl<Float> = {
+        let slider = SliderUIControl<Float>(
             theme: self.viewModel.theme,
             shape: self.viewModel.shape,
             intent: self.viewModel.intent

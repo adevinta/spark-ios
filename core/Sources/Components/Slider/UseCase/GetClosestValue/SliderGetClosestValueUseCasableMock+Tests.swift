@@ -9,7 +9,7 @@
 import Foundation
 @testable import SparkCore
 
-final class SliderGetClosestValueUseCasableV2Mock<U>: SparkCore.SliderGetClosestValueUseCasableV2 where U: BinaryFloatingPoint {
+final class SliderGetClosestValueUseCasableMock<U>: SparkCore.SliderGetClosestValueUseCasable where U: BinaryFloatingPoint {
 
 
     // MARK: - Initialization

@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol SliderGetClosestValueUseCasableV2 {
+protocol SliderGetClosestValueUseCasable {
     func execute<V>(value: V, in values: [V]) -> V where V: BinaryFloatingPoint
 }
 
-final class SliderGetClosestValueUseCaseV2: SliderGetClosestValueUseCasableV2 {
+final class SliderGetClosestValueUseCase: SliderGetClosestValueUseCasable {
     func execute<V>(value: V, in values: [V]) -> V where V : BinaryFloatingPoint {
         guard let closestValue = values.min(by: {
             return abs($0 - value) <= abs($1 - value)

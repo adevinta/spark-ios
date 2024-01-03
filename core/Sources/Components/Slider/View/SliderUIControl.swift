@@ -2,66 +2,54 @@
 //  SliderUIControl.swift
 //  SparkCore
 //
-//  Created by louis.borlee on 24/11/2023.
+//  Created by louis.borlee on 19/12/2023.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import UIKit
 import Combine
 
-public final class SliderUIControl: UIControl {
+public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint {
 
-    private let viewModel: SingleSliderViewModel
+    private let viewModel: SingleSliderViewModel<V>
     private var cancellables = Set<AnyCancellable>()
     private var _isTracking: Bool = false
 
     // MARK: - Public properties
     /// The slider's current theme.
     public var theme: Theme {
-        get { return self.viewModel.theme } 
+        get { return self.viewModel.theme }
         set { self.viewModel.theme = newValue }
     }
-    
+
     /// The slider's current intent.
     public var intent: SliderIntent {
         get { return self.viewModel.intent }
         set { self.viewModel.intent = newValue }
     }
-    
+
     /// The slider's current shape (`square` or `rounded`).
     public var shape: SliderShape {
         get { return self.viewModel.shape }
         set { self.viewModel.shape = newValue }
     }
-    
+
     /// A Boolean value indicating whether changes in the slider’s value generate continuous update events.
     public var isContinuous: Bool {
         get { return self.viewModel.isContinuous }
         set { self.viewModel.isContinuous = newValue }
     }
 
-    /// The minimum value of the slider.
-    public var minimumValue: Float {
-        get { return self.viewModel.minimumValue }
-        set {
-            self.viewModel.minimumValue = min(self.maximumValue, newValue)
-            self.resetValue()
-        }
+    /// The bounds of the slider.
+    public var range: ClosedRange<V> {
+        get { return self.viewModel.bounds }
+        set { self.viewModel.bounds = newValue }
     }
-    
-    /// The maximum value of the slider.
-    public var maximumValue: Float {
-        get { return self.viewModel.maximumValue }
-        set {
-            self.viewModel.maximumValue = max(self.minimumValue, newValue)
-            self.resetValue()
-        }
-    }
-    
+
     /// The distance between each valid value.
-    public var steps: Float {
-        get { return self.viewModel.steps }
-        set { self.viewModel.steps = newValue }
+    public var step: V.Stride? {
+        get { return self.viewModel.step }
+        set { self.viewModel.step = newValue }
     }
 
     public override var isEnabled: Bool {
@@ -72,7 +60,7 @@ public final class SliderUIControl: UIControl {
     }
 
     /// The slider’s current value.
-    public private(set) var value: Float = .zero {
+    public private(set) var value: V = .zero {
         didSet {
             switch (self._isTracking, self.isContinuous) {
             case (false, _):
@@ -92,10 +80,10 @@ public final class SliderUIControl: UIControl {
         }
     }
 
-    private var valueSubject = PassthroughSubject<Float, Never>()
+    private var valueSubject = PassthroughSubject<V, Never>()
     /// Value changes are sent to the publisher.
     /// Alternative: use addAction(UIAction, for: .valueChanged).
-    public var valuePublisher: some Publisher<Float, Never> {
+    public var valuePublisher: some Publisher<V, Never> {
         return self.valueSubject
     }
 
@@ -104,7 +92,7 @@ public final class SliderUIControl: UIControl {
     private let trackView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: SliderConstants.barHeight)))
     private let handle: SliderHandleUIControl
 
-    init(viewModel: SingleSliderViewModel) {
+    init(viewModel: SingleSliderViewModel<V>) {
         self.viewModel = viewModel
         self.handle = SliderHandleUIControl(
             viewModel: .init(color: viewModel.handleColor,
@@ -131,7 +119,7 @@ public final class SliderUIControl: UIControl {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     /// SliderUIControler initializer
     /// - Parameters:
     ///   - theme: The slider's current theme
@@ -147,13 +135,15 @@ public final class SliderUIControl: UIControl {
 
     public override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.viewModel.resetBoundsIfNeeded()
 
         self.indicatorView.center.y = self.frame.height / 2
         self.handle.center.y = self.frame.height / 2
         self.trackView.center.y = self.frame.height / 2
 
-        if self.minimumValue != self.maximumValue {
-            let value = (max(self.minimumValue, self.value) - self.minimumValue) / (self.maximumValue - self.minimumValue)
+        if self.range.lowerBound < self.range.upperBound {
+            let value = (max(self.range.lowerBound, self.value) - self.range.lowerBound) / (self.range.upperBound - self.range.lowerBound)
             self.handle.center.x = (self.frame.width - SliderConstants.handleSize.width) * CGFloat(value) + SliderConstants.handleSize.width / 2
         } else {
             self.handle.center.x = SliderConstants.handleSize.width / 2
@@ -164,25 +154,21 @@ public final class SliderUIControl: UIControl {
         self.trackView.frame.origin.x = self.handle.center.x
         self.trackView.frame.size.width = self.frame.width - self.trackView.frame.origin.x
     }
-    
+
     /// Sets the slider’s current value, allowing you to animate the change visually.
     /// - Parameters:
     ///   - value: The new value to assign to the value property
     ///   - animated: Specify `true` to animate the change in value; otherwise, specify `false` to update the slider’s appearance immediately. Animations are performed asynchronously and do not block the calling thread.
-    public func setValue(_ value: Float, animated: Bool = false) {
+    public func setValue(_ value: V, animated: Bool = false) {
         if animated {
             UIView.animate(withDuration: 0.3) { [weak self] in
                 guard let self else { return }
-                self.viewModel.setAbsoluteValue(value)
+                self.viewModel.setValue(value)
                 self.layoutSubviews()
             }
         } else {
-            self.viewModel.setAbsoluteValue(value)
+            self.viewModel.setValue(value)
         }
-    }
-
-    private func resetValue() {
-        self.viewModel.setAbsoluteValue(self.value)
     }
 
     private func setupBar() {
@@ -267,7 +253,7 @@ public final class SliderUIControl: UIControl {
         let relativeX = (absoluteX - SliderConstants.handleSize.width / 2) / (self.frame.width - SliderConstants.handleSize.width)
 
         self.setValue(
-            Float(relativeX) * (self.viewModel.maximumValue - self.viewModel.minimumValue) + self.viewModel.minimumValue,
+            V(relativeX) * (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) + self.viewModel.bounds.lowerBound,
             animated: false
         )
     }
