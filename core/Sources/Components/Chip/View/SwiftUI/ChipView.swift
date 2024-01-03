@@ -228,12 +228,13 @@ private struct ChipButtonStyle: ButtonStyle {
     var hasAction: Bool
 
     func makeBody(configuration: Self.Configuration) -> some View {
-        if self.hasAction, configuration.isPressed != self.viewModel.isPressed {
-            DispatchQueue.main.async {
-                self.viewModel.isPressed = configuration.isPressed
-            }
-        }
         return configuration.label
+            .onChange(of: configuration.isPressed) {
+                isPressed in
+                if self.hasAction {
+                    self.viewModel.isPressed = isPressed
+                }
+            }
             .animation(.easeOut(duration: 0.2), value: self.viewModel.isPressed)
     }
 }
