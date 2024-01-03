@@ -215,13 +215,13 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         @Binding var isPressed: Bool
 
         func makeBody(configuration: Self.Configuration) -> some View {
-            if configuration.isPressed != self.isPressed {
-                DispatchQueue.main.async {
-                    self.isPressed = configuration.isPressed
-                }
-            }
             return configuration.label
-                .animation(.easeOut(duration: 0.2), value: self.isPressed)
+                .onChange(of: configuration.isPressed) { isPressed in
+                    if self.isPressed != isPressed {
+                        self.isPressed = isPressed
+                    }
+                }
+                .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
         }
     }
 }
