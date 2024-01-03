@@ -12,4 +12,9 @@ import SparkCore
 struct CheckboxConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: CheckboxIntent
+    var isEnabled: Bool
+    var alignment: CheckboxAlignment
+    var text: String
+    var icon: UIImage?
+    var selectionState: CheckboxSelectionState
 }

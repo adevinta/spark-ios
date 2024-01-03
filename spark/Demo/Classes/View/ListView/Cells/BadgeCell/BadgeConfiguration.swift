@@ -12,4 +12,7 @@ import SparkCore
 struct BadgeConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: BadgeIntentType
+    var size: BadgeSize
+    var value: Int
+    var format: BadgeFormat
 }

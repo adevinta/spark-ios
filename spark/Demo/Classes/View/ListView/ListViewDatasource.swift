@@ -260,30 +260,32 @@ extension ListViewDataSource {
 
     /// Badge
     func createBadgeConfigurations() -> [BadgeConfiguration] {
-        [BadgeConfiguration(theme: SparkTheme.shared, intent: .main),
-         BadgeConfiguration(theme: SparkTheme.shared, intent: .basic),
-         BadgeConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [BadgeConfiguration(theme: SparkTheme.shared, intent: .main, size: .medium, value: 99, format: .default),
+         BadgeConfiguration(theme: SparkTheme.shared, intent: .basic, size: .small, value: 123456, format: .default),
+         BadgeConfiguration(theme: SparkTheme.shared, intent: .success, size: .medium, value: 99, format: .custom(formatter: BadgePreviewFormatter()))]
     }
 
     /// Button
     func createButtonConfigurations() -> [ButtonConfiguration] {
-        [ButtonConfiguration(theme: SparkTheme.shared, intent: .main),
-         ButtonConfiguration(theme: SparkTheme.shared, intent: .basic),
-         ButtonConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [ButtonConfiguration(theme: SparkTheme.shared, intent: .main, variant: .filled, size: .medium, shape: .rounded, alignment: .leadingIcon, content: .text, isEnabled: false),
+         ButtonConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, size: .large, shape: .square, alignment: .trailingIcon, content: .iconAndText, isEnabled: true),
+         ButtonConfiguration(theme: SparkTheme.shared, intent: .success, variant: .ghost, size: .small, shape: .pill, alignment: .leadingIcon, content: .attributedText, isEnabled: true)
+        ]
     }
 
     /// Checkbox
     func createCheckboxConfigurations() -> [CheckboxConfiguration] {
-        [CheckboxConfiguration(theme: SparkTheme.shared, intent: .main),
-         CheckboxConfiguration(theme: SparkTheme.shared, intent: .basic),
-         CheckboxConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [CheckboxConfiguration(theme: SparkTheme.shared, intent: .main, isEnabled: true, alignment: .left, text: "Hello World", selectionState: .indeterminate),
+         CheckboxConfiguration(theme: SparkTheme.shared, intent: .basic, isEnabled: true, alignment: .right, text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", selectionState: .unselected),
+         CheckboxConfiguration(theme: SparkTheme.shared, intent: .success, isEnabled: false, alignment: .right, text: "Hello World", selectionState: .selected)
+        ]
     }
 
     /// Checkbox Group
     func createCheckboxGroupConfigurations() -> [CheckboxGroupConfiguration] {
-        [CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .main),
-         CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .basic),
-         CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .left, layout: .vertical, showGroupTitle: false, items: [CheckboxGroupItemDefault(title: "Text", id: "1", selectionState: .selected, isEnabled: true), CheckboxGroupItemDefault(title: "Text 2", id: "2", selectionState: .unselected, isEnabled: true)]),
+         CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .support, alignment: .left, layout: .horizontal, showGroupTitle: false, items: [CheckboxGroupItemDefault(title: "Text", id: "1", selectionState: .selected, isEnabled: true), CheckboxGroupItemDefault(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", id: "2", selectionState: .indeterminate, isEnabled: true), CheckboxGroupItemDefault(title: "Hello World", id: "3", selectionState: .unselected, isEnabled: true)]),
+         CheckboxGroupConfiguration(theme: SparkTheme.shared, intent: .info, alignment: .right, layout: .vertical, showGroupTitle: true, items: [CheckboxGroupItemDefault(title: "Text", id: "1", selectionState: .selected, isEnabled: false), CheckboxGroupItemDefault(title: "Text 2", id: "2", selectionState: .unselected, isEnabled: true)])]
     }
 
     /// Chip

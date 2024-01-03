@@ -12,4 +12,8 @@ import SparkCore
 struct CheckboxGroupConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: CheckboxIntent
+    var alignment: CheckboxAlignment
+    var layout: CheckboxGroupLayout
+    var showGroupTitle: Bool
+    var items: [any CheckboxGroupItemProtocol]
 }

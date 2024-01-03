@@ -38,5 +38,7 @@ final class BadgeCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.value = configuration.value
+        self.component.format = configuration.format
     }
 }

@@ -28,6 +28,23 @@ final class ButtonCell: UITableViewCell, Configurable {
         return view
     }()
 
+    var attributeString: NSAttributedString {
+        let text: String = "Hello world"
+        let attributeString = NSMutableAttributedString(
+            string: text,
+            attributes: [.font: UIFont.italicSystemFont(ofSize: 18)]
+        )
+        let attributes: [NSMutableAttributedString.Key: Any] = [
+            .font: UIFont(
+                descriptor: UIFontDescriptor().withSymbolicTraits([.traitBold, .traitItalic]) ?? UIFontDescriptor(),
+                size: 18
+            ),
+            .foregroundColor: UIColor.red
+        ]
+        attributeString.setAttributes(attributes, range: NSRange(location: 0, length: 5))
+        return attributeString
+    }
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupView()
@@ -40,5 +57,22 @@ final class ButtonCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.variant = configuration.variant
+        self.component.size = configuration.size
+        self.component.shape = configuration.shape
+        self.component.alignment = configuration.alignment
+        self.component.isEnabled = configuration.isEnabled
+
+        switch configuration.content {
+        case .text:
+            self.component.text = "Button"
+        case .iconAndText:
+            self.component.text = "Hello World"
+            self.component.iconImage = UIImage(systemName: "book.circle")
+        case .attributedText:
+            self.component.attributedText = self.attributeString
+        default:
+            break
+        }
     }
 }

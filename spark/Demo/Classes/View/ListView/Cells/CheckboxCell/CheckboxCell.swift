@@ -38,5 +38,12 @@ final class CheckboxCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.isEnabled = configuration.isEnabled
+        self.component.alignment = configuration.alignment
+        self.component.text = configuration.text
+        self.component.selectionState = configuration.selectionState
+        if let icon = configuration.icon {
+            self.component.checkedImage = icon
+        }
     }
 }

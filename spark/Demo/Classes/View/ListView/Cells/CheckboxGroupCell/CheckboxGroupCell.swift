@@ -14,10 +14,13 @@ final class CheckboxGroupCell: UITableViewCell, Configurable {
     typealias CellConfigartion = CheckboxGroupConfiguration
     typealias Component = CheckboxGroupUIView
 
+    var stackViewAlignment: UIStackView.Alignment {
+        return .fill
+    }
+
     lazy var component: CheckboxGroupUIView = {
         let items = [
-            CheckboxGroupItemDefault(title: "Text", id: "1", selectionState: .selected, isEnabled: true),
-            CheckboxGroupItemDefault(title: "Text 2", id: "2", selectionState: .unselected, isEnabled: true)
+            CheckboxGroupItemDefault(title: "Text", id: "1", selectionState: .selected, isEnabled: true)
         ]
 
         let view = CheckboxGroupUIView(
@@ -43,5 +46,12 @@ final class CheckboxGroupCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.alignment = configuration.alignment
+        self.component.layout = configuration.layout
+        self.component.updateItems(configuration.items)
+
+        if configuration.showGroupTitle {
+            self.component.title = "Checkbox group title"
+        }
     }
 }
