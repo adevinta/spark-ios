@@ -270,8 +270,6 @@ final class TextFieldComponentUIView: UIView {
     }
 
     private func setupView() {
-        backgroundColor = .white
-
         self.textField.translatesAutoresizingMaskIntoConstraints = false
         self.addOnTextField.translatesAutoresizingMaskIntoConstraints = false
         self.textField.addDoneButtonOnKeyboard()
