@@ -119,8 +119,8 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         .buttonStyle(RadioButtonButtonStyle(isPressed: self.$isPressed))
         .accessibilityLabel(self.viewModel.label.rightValue ?? RadioButtonAccessibilityIdentifier.radioButton)
         .accessibilityValue(self.viewModel.id.description)
-        .doAction {
-            self.viewModel.set(enabled: self.isEnabled)
+        .isEnabledChanged { isEnabled in
+            self.viewModel.set(enabled: isEnabled)
         }
     }
 
