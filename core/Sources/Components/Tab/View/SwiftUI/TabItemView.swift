@@ -13,7 +13,6 @@ public struct TabItemView: View {
 
     // MARK: - Private Variables
     @ObservedObject private var viewModel: TabItemViewModel<TabItemContent>
-    @Environment(\.isEnabled) private var isEnabled: Bool
 
     private let tapAction: () -> Void
 
@@ -83,8 +82,8 @@ public struct TabItemView: View {
             })
         .opacity(self.viewModel.tabStateAttributes.colors.opacity)
         .buttonStyle(TabItemButtonStyle(viewModel: self.viewModel))
-        .doAction {
-            self.viewModel.isEnabled = self.isEnabled
+        .isEnabledChanged { isEnabled in
+            self.viewModel.isEnabled = isEnabled
         }
     }
 
