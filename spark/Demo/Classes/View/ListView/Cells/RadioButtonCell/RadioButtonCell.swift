@@ -37,5 +37,9 @@ final class RadioButtonCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.labelAlignment = configuration.alignment
+        self.component.isSelected = configuration.isSelected
+        self.component.isEnabled = configuration.isEnabled
+        self.component.text = configuration.text
     }
 }

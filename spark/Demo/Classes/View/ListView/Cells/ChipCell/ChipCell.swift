@@ -36,5 +36,11 @@ final class ChipCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.variant = configuration.variant
+        self.component.alignment = configuration.alignment
+        self.component.isEnabled = configuration.isEnabled
+        self.component.isSelected = configuration.isSelected
+        self.component.text = configuration.title
+        self.component.icon = configuration.icon
     }
 }

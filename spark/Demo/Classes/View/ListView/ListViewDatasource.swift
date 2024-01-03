@@ -288,44 +288,44 @@ extension ListViewDataSource {
 
     /// Chip
     func createChipConfigurations() -> [ChipConfiguration] {
-        [ChipConfiguration(theme: SparkTheme.shared, intent: .main),
-         ChipConfiguration(theme: SparkTheme.shared, intent: .basic),
-         ChipConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [ChipConfiguration(theme: SparkTheme.shared, intent: .main, variant: .dashed, alignment: .leadingIcon, isEnabled: true, isSelected: false, title: "This is", icon: UIImage(systemName: "calendar")),
+         ChipConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, alignment: .trailingIcon, isEnabled: false, isSelected: false, title: "A chip", icon: UIImage(systemName: "arrowshape.left") ),
+         ChipConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, alignment: .leadingIcon, isEnabled: true, isSelected: true, title: "Hello", icon: nil)]
     }
 
     /// Icon
     func createIconConfigurations() -> [IconConfiguration] {
-        [IconConfiguration(theme: SparkTheme.shared, intent: .main),
-         IconConfiguration(theme: SparkTheme.shared, intent: .basic),
-         IconConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [IconConfiguration(theme: SparkTheme.shared, intent: .main, size: .extraLarge),
+         IconConfiguration(theme: SparkTheme.shared, intent: .basic, size: .small),
+         IconConfiguration(theme: SparkTheme.shared, intent: .success, size: .medium)]
     }
 
     /// Progress Bar Indeterminate
     func createProgressBarIndeterminateConfigurations() -> [ProgressBarIndeterminateConfiguration] {
-        [ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .main),
-         ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .basic),
-         ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .main, isAnimated: true),
+         ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .basic, isAnimated: false),
+         ProgressBarIndeterminateConfiguration(theme: SparkTheme.shared, intent: .success, isAnimated: true)]
     }
 
     /// Progress Bar Single
     func createProgressBarSingleConfigurations() -> [ProgressBarSingleConfiguration] {
-        [ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .main, value: 50),
-         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .basic, value: 75),
-         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .success, value: 30)]
+        [ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .main, value: 0.5),
+         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .basic, value: 0.75),
+         ProgressBarSingleConfiguration(theme: SparkTheme.shared, intent: .success, value: 1.0)]
     }
 
     /// Radio Button
     func createRadioButtonConfigurations() -> [RadioButtonConfiguration] {
-        [RadioButtonConfiguration(theme: SparkTheme.shared, intent: .main),
-         RadioButtonConfiguration(theme: SparkTheme.shared, intent: .basic),
-         RadioButtonConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [RadioButtonConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .trailing, isSelected: true, isEnabled: true, text: "Sample of toggle on radio button"),
+         RadioButtonConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .leading, isSelected: false, isEnabled: true, text: "Hello world"),
+         RadioButtonConfiguration(theme: SparkTheme.shared, intent: .success, alignment: .trailing, isSelected: true, isEnabled: false, text: "This is an example of a multi-line text which is very long and in which the user should read all the information.")]
     }
 
     /// Radio Button Group
     func createRadioButtonGroupConfigurations() -> [RadioButtonGroupConfiguration] {
-        [RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .main),
-         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .basic),
-         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .success)]
+        [RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .leading, layout: .vertical, isEnabled: true),
+         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .leading, layout: .horizontal, isEnabled: true),
+         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .success, alignment: .trailing, layout: .vertical, isEnabled: false)]
     }
 
     /// Rating Display

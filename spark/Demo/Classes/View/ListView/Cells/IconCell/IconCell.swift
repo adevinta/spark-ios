@@ -36,5 +36,6 @@ final class IconCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        self.component.size = configuration.size
     }
 }

@@ -12,4 +12,5 @@ import SparkCore
 struct ProgressBarIndeterminateConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: ProgressBarIntent
+    var isAnimated: Bool
 }

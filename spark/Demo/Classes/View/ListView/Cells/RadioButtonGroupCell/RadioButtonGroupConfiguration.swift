@@ -12,5 +12,8 @@ import SparkCore
 struct RadioButtonGroupConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: RadioButtonIntent
+    var alignment: RadioButtonLabelAlignment
+    var layout: RadioButtonGroupLayout
+    var isEnabled: Bool
 }
 

@@ -39,5 +39,6 @@ final class ProgressBarIndeterminateCell: UITableViewCell, Configurable {
     func configureCell(configuration: CellConfigartion) {
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
+        configuration.isAnimated ? self.component.startAnimating() : self.component.stopAnimating()
     }
 }

@@ -12,4 +12,5 @@ import SparkCore
 struct IconConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: IconIntent
+    var size: IconSize
 }
