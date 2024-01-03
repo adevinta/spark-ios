@@ -99,6 +99,8 @@ final class RatingDisplayViewModel: ObservableObject {
     }
 
     func updateState(isEnabled: Bool) {
+        guard self.ratingState.isEnabled != isEnabled else { return }
+
         self.ratingState.isEnabled = isEnabled
         self.colors = self.colorsUseCase.execute(
             theme: self.theme,

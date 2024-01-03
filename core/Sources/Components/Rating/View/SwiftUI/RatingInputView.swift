@@ -12,7 +12,6 @@ import SwiftUI
 public struct RatingInputView: View {
 
     // MARK: - Private variables
-    @Environment(\.isEnabled) private var isEnabled: Bool
     @ObservedObject private var viewModel: RatingDisplayViewModel
     @State private var displayRating: CGFloat
     @Binding private var rating: CGFloat
@@ -68,8 +67,8 @@ public struct RatingInputView: View {
                 .accessibilityIdentifier("\(RatingInputAccessibilityIdentifier.identifier)-\(index)")
             }
         }
-        .onChange(of: self.isEnabled) { value in
-            self.viewModel.updateState(isEnabled: self.isEnabled)
+        .isEnabledChanged { isEnabled in
+            self.viewModel.updateState(isEnabled: isEnabled)
         }
         .compositingGroup()
         .opacity(colors.opacity)
