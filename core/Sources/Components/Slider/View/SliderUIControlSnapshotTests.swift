@@ -37,12 +37,12 @@ final class SliderUIControlSnapshotTests: UIKitComponentSnapshotTestCase {
         self._test(scenario: SliderScenario.test4)
     }
 
-    private func createConfigurations(from scenario: SliderScenario) -> [(testName: String, view: SliderUIControl)] {
-        var sliders = [(testName: String, view: SliderUIControl)]()
+    private func createConfigurations(from scenario: SliderScenario) -> [(testName: String, view: SliderUIControlV2<Float>)] {
+        var sliders = [(testName: String, view: SliderUIControlV2<Float>)]()
         for intent in scenario.intents {
             for state in scenario.states {
                 for value in scenario.values {
-                    let slider = SliderUIControl(
+                    let slider = SliderUIControlV2<Float>(
                         theme: self.theme,
                         shape: scenario.shape,
                         intent: intent
@@ -53,17 +53,13 @@ final class SliderUIControlSnapshotTests: UIKitComponentSnapshotTestCase {
                         slider.heightAnchor.constraint(equalToConstant: 44),
                         slider.widthAnchor.constraint(equalToConstant: 200)
                    ])
-                    switch value {
-                    case .medium: slider.setValue(0.5)
-                    case .min: slider.setValue(0.0)
-                    case .max: slider.setValue(1.0)
-                    }
+                    slider.setValue(value.rawValue)
                     switch state {
                     case .normal: slider.isEnabled = true
                     case .disabled: slider.isEnabled = false
                     case .highlighted: slider.isHighlighted = true
                     }
-                    let testName = "\(scenario)-\(intent)-\(state)-\(scenario.shape)-\(value)"
+                    let testName = scenario.getTestName(intent: intent, state: state, value: value)
                     sliders.append((testName: testName, view: slider))
                 }
             }

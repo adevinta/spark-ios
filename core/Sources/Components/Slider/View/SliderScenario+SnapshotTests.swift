@@ -21,8 +21,10 @@ struct SliderScenario: CustomStringConvertible {
         case normal, disabled, highlighted
     }
 
-    enum Value {
-        case min, medium, max
+    enum Value: Float {
+        case min = 0
+        case medium = 0.5
+        case max = 1.0
     }
 
     static let test1 = SliderScenario(
@@ -30,7 +32,7 @@ struct SliderScenario: CustomStringConvertible {
         intents: SliderIntent.allCases,
         states: [.highlighted],
         shape: .square,
-        modes: ComponentSnapshotTestMode.allCases,
+        modes: ComponentSnapshotTestConstants.Modes.all,
         values: [.medium]
     )
 
@@ -39,7 +41,7 @@ struct SliderScenario: CustomStringConvertible {
         intents: [.basic],
         states: [.normal],
         shape: .square,
-        modes: [.light],
+        modes: ComponentSnapshotTestConstants.Modes.default,
         values: [.min, .max]
     )
 
@@ -48,7 +50,7 @@ struct SliderScenario: CustomStringConvertible {
         intents: [.basic],
         states: State.allCases,
         shape: .square,
-        modes: ComponentSnapshotTestMode.allCases,
+        modes: ComponentSnapshotTestConstants.Modes.all,
         values: [.medium]
     )
 
@@ -57,7 +59,11 @@ struct SliderScenario: CustomStringConvertible {
         intents: [.basic],
         states: [.normal],
         shape: .rounded,
-        modes: [.light],
+        modes: ComponentSnapshotTestConstants.Modes.default,
         values: [.medium]
     )
+
+    func getTestName(intent: SliderIntent, state: State, value: Value) -> String {
+        return "\(self)-\(intent)-\(state)-\(self.shape)-\(value)"
+    }
 }
