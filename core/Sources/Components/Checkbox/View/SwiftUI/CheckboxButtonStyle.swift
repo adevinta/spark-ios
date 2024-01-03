@@ -22,13 +22,12 @@ struct CheckboxButtonStyle: ButtonStyle {
     // MARK: - Methods
 
     func makeBody(configuration: Self.Configuration) -> some View {
-        if configuration.isPressed != self.isPressed {
-            DispatchQueue.main.async {
-                self.isPressed = configuration.isPressed
-            }
-        }
-
         return configuration.label
+            .onChange(of: configuration.isPressed) { isPressed in
+                if self.isPressed != isPressed {
+                    self.isPressed = isPressed
+                }
+            }
             .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
 }
