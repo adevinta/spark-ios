@@ -1,5 +1,5 @@
 //
-//  TextFieldUIViewController.swift
+//  TextFieldComponentUIViewController.swift
 //  SparkCore
 //
 //  Created by louis.borlee on 11/09/2023.
@@ -12,7 +12,7 @@ import SwiftUI
 import UIKit
 import SparkCore
 
-class TextFieldUIViewController: UIViewController {
+class TextFieldComponentUIViewController: UIViewController {
 
     let textFieldComponentUIView: TextFieldComponentUIView
     let viewModel: TextFieldComponentUIViewModel
@@ -77,7 +77,7 @@ class TextFieldUIViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .systemBackground
         self.navigationItem.title = "TextField"
         self.addPublisher()
     }
@@ -107,17 +107,17 @@ class TextFieldUIViewController: UIViewController {
 
 }
 
-extension TextFieldUIViewController {
+extension TextFieldComponentUIViewController {
 
-    static func build() -> TextFieldUIViewController {
+    static func build() -> TextFieldComponentUIViewController {
         let viewModel = TextFieldComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = TextFieldUIViewController(viewModel: viewModel)
+        let viewController = TextFieldComponentUIViewController(viewModel: viewModel)
         return viewController
     }
 }
 
 // MARK: - Navigation
-extension TextFieldUIViewController {
+extension TextFieldComponentUIViewController {
 
     private func presentThemeActionSheet(_ themes: [ThemeCellModel]) {
         let actionSheet = SparkActionSheet<Theme>.init(

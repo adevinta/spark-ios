@@ -52,6 +52,7 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
             self.tabState.isEnabled
         }
         set {
+            guard self.tabState.isEnabled != newValue else { return }
             self.tabState = self.tabState.update(\.isEnabled, value: newValue)
         }
     }
