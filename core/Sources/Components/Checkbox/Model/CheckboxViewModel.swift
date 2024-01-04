@@ -36,6 +36,7 @@ final class CheckboxViewModel: ObservableObject {
 
     var isEnabled: Bool {
         didSet {
+            guard self.isEnabled != oldValue else { return }
             self.updateOpacity()
         }
     }
