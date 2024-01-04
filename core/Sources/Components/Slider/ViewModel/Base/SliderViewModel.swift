@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SliderViewModel<V> where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint  {
+class SliderViewModel<V>: ObservableObject where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint  {
 
     // MARK: - Private Properties
     private let getColorsUseCase: SliderGetColorsUseCasable
