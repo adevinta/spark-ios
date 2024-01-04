@@ -37,7 +37,6 @@ final class RadioButtonComponentUIView: ComponentUIView {
 
         self.stackView = stackView
 
-
         super.init(
             viewModel: viewModel,
             componentView: stackView
@@ -142,28 +141,43 @@ final class RadioButtonComponentUIView: ComponentUIView {
             }
         }
 
-        self.componentView.publisher.subscribe(in: &self.cancellables) { selected in
-            Console.log("[RadioButton] published \(selected)")
+        self.componentView.publisher.subscribe(in: &self.cancellables) { value in
+            Console.log("Group: published \(value)")
         }
-        self.componentView.addTarget(self, action: #selector(self.buttonValueChanged(_:)), for: .valueChanged)
+
+        let groupValueChanged = UIAction { _ in
+            Console.log("Group: value changed")
+        }
+
+        let groupTouchInsde = UIAction { _ in
+            Console.log("Group: touched")
+        }
+        self.componentView.addAction(groupValueChanged, for: .valueChanged)
+        self.componentView.addAction(groupTouchInsde, for: .touchUpInside)
 
         self.singleComponentView.publisher
             .subscribe(in: &self.cancellables) {
                 [weak self] selected in
                 guard let self = self else { return }
                 self.singleRadioButtonValuePublished = selected
-                Console.log("[RadioButton] single \(selected)")
+                Console.log("Single: published \(selected)")
             }
 
-        let action = UIAction { [weak self] action in
+        let touchAction = UIAction { [weak self] action in
             guard let self = self else { return }
+            Console.log("Single: touched")
             if !self.singleRadioButtonValuePublished {
                 self.singleComponentView.isSelected = false
             }
             Console.log("[RadioButton] single touchUpInside")
             self.singleRadioButtonValuePublished = false
         }
-        self.singleComponentView.addAction(action, for: .touchUpInside)
+        self.singleComponentView.addAction(touchAction, for: .touchUpInside)
+
+        let valueChanged = UIAction { _ in
+            Console.log("Single: value changed")
+        }
+        self.singleComponentView.addAction(valueChanged, for: .valueChanged)
     }
 
     @objc func buttonValueChanged(_ item: Any?) {
