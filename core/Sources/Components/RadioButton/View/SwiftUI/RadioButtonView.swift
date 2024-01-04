@@ -116,7 +116,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
             self.buttonAndLabel()
         })
         .opacity(self.viewModel.opacity)
-        .buttonStyle(RadioButtonButtonStyle(isPressed: self.$isPressed))
+        .buttonStyle(PressedButtonStyle(isPressed: self.$isPressed))
         .accessibilityLabel(self.viewModel.label.rightValue ?? RadioButtonAccessibilityIdentifier.radioButton)
         .accessibilityValue(self.viewModel.id.description)
         .isEnabledChanged { isEnabled in
@@ -207,21 +207,5 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                height: self.radioButtonSize)
         .padding(-self.pressedLineWidth)
         .animation(.easeIn(duration: 0.1), value: self.viewModel.selectedID)
-    }
-
-    // MARK: - Button Style
-
-    private struct RadioButtonButtonStyle: ButtonStyle {
-        @Binding var isPressed: Bool
-
-        func makeBody(configuration: Self.Configuration) -> some View {
-            if configuration.isPressed != self.isPressed {
-                DispatchQueue.main.async {
-                    self.isPressed = configuration.isPressed
-                }
-            }
-            return configuration.label
-                .animation(.easeOut(duration: 0.2), value: self.isPressed)
-        }
     }
 }
