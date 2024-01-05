@@ -278,6 +278,7 @@ public final class CheckboxUIView: UIControl {
             }
             self.delegate?.checkbox(self, didChangeSelection: self.selectionState)
             self.checkboxSelectionStateSubject.send(self.selectionState)
+            self.sendActions(for: .valueChanged)
         }
         self.addAction(toggleAction, for: .touchUpInside)
     }

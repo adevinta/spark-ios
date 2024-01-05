@@ -67,6 +67,9 @@ public struct SwitchView: View {
             guard let isOn else { return }
             self.isOn = isOn
         }
+        .isEnabledChanged { isEnabled in
+            self.viewModel.set(isEnabled: isEnabled)
+        }
     }
 
     // MARK: - Subview Maker
@@ -214,15 +217,6 @@ public struct SwitchView: View {
     /// - Returns: Current Switch View.
     public func attributedText(_ attributedText: AttributedString?) -> Self {
         self.viewModel.set(attributedText: attributedText.map { .right($0) })
-        return self
-    }
-
-    /// Set the switch to disabled.
-    /// - Parameters:
-    ///   - text: The switch is disabled or not.
-    /// - Returns: Current Switch View.
-    public func disabled(_ disabled: Bool) -> Self {
-        self.viewModel.set(isEnabled:  !disabled)
         return self
     }
 }
