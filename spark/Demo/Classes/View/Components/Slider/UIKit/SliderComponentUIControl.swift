@@ -242,8 +242,7 @@ final class SliderComponentUIView: UIView {
             shape: self.viewModel.shape,
             intent: self.viewModel.intent
         )
-        slider.minimumValue = 0
-        slider.maximumValue = 1
+        slider.range = 0...1
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
