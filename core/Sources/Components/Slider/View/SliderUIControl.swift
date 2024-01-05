@@ -22,6 +22,7 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
         set { self.viewModel.theme = newValue }
     }
 
+
     /// The slider's current intent.
     public var intent: SliderIntent {
         get { return self.viewModel.intent }

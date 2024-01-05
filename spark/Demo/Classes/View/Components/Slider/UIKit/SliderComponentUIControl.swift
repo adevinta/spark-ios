@@ -242,6 +242,8 @@ final class SliderComponentUIView: UIView {
             shape: self.viewModel.shape,
             intent: self.viewModel.intent
         )
+        slider.minimumValue = 0
+        slider.maximumValue = 1
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -361,6 +363,7 @@ extension SliderComponentUIView: UITextFieldDelegate {
     private func setMaximumValue(_ maximumValue: Float) {
         self.slider.range = self.slider.range.lowerBound...maximumValue
         self.maximumValueTextField.text = "\(self.slider.range.upperBound)"
+
     }
 
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {

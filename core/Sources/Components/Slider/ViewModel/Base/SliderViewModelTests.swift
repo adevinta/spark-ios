@@ -15,6 +15,7 @@ final class SliderViewModelTests: SliderViewModelWithMocksTests {
     override func setUp() {
         super.setUp()
         self.viewModel = SliderViewModel(
+
             theme: self.theme,
             shape: self.shape,
             intent: self.intent,
