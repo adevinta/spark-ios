@@ -103,8 +103,11 @@ public struct CheckboxView: View {
                 self.contentView
             }
         )
-        .buttonStyle(CheckboxButtonStyle(isPressed: self.$isPressed))
+        .buttonStyle(PressedButtonStyle(isPressed: self.$isPressed))
         .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
+        .isEnabledChanged { isEnabled in
+            self.viewModel.isEnabled = isEnabled
+        }
     }
 
     @ViewBuilder 

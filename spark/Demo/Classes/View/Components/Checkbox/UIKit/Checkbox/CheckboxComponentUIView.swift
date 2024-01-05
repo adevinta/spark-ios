@@ -34,6 +34,9 @@ final class CheckboxComponentUIView: ComponentUIView {
 
         // Setup
         self.setupSubscriptions()
+
+        // Add target actions
+        self.addTargetActions()
     }
 
     required init?(coder: NSCoder) {
@@ -128,6 +131,15 @@ final class CheckboxComponentUIView: ComponentUIView {
 
     @objc func valueChangedTarget() {
         Console.log("Checkbox value changed target")
+    }
+
+    private func addTargetActions() {
+        let valueChangedAction = UIAction { [weak self] _ in
+            guard let self else { return }
+            Console.log("Checkbox value changed. IsSelected = \(self.componentView.isSelected)")
+        }
+
+        self.componentView.addAction(valueChangedAction, for: .valueChanged)
     }
 
     static func makeCheckboxView(_ viewModel: CheckboxComponentUIViewModel) -> CheckboxUIView {

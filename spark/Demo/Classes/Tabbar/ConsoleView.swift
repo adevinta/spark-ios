@@ -209,6 +209,8 @@ class ConsoleTableViewCell: UITableViewCell {
         label.font = .monospacedSystemFont(ofSize: 10, weight: .regular)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.lineBreakMode = .byCharWrapping
         return label
     }()
 

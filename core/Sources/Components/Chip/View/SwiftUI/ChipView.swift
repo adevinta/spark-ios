@@ -137,7 +137,11 @@ public struct ChipView: View {
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
-        .buttonStyle(ChipButtonStyle(viewModel: self.viewModel, hasAction: self.action != nil))
+        .if(self.action == nil) { content in
+            content.buttonStyle(NoButtonStyle())
+        } else: { content in
+            content.buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isPressed))
+        }
         .accessibilityIdentifier(ChipAccessibilityIdentifier.identifier)
     }
 
@@ -219,22 +223,6 @@ public struct ChipView: View {
     public func selected(_ selected: Bool) -> Self {
         self.viewModel.isSelected = selected
         return self
-    }
-}
-
-// MARK: - Private Button Style
-private struct ChipButtonStyle: ButtonStyle {
-    var viewModel: ChipViewModel<ChipContent>
-    var hasAction: Bool
-
-    func makeBody(configuration: Self.Configuration) -> some View {
-        if self.hasAction, configuration.isPressed != self.viewModel.isPressed {
-            DispatchQueue.main.async {
-                self.viewModel.isPressed = configuration.isPressed
-            }
-        }
-        return configuration.label
-            .animation(.easeOut(duration: 0.2), value: self.viewModel.isPressed)
     }
 }
 
