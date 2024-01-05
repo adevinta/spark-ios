@@ -81,7 +81,7 @@ public struct TabItemView: View {
                     .contentShape(Rectangle())
             })
         .opacity(self.viewModel.tabStateAttributes.colors.opacity)
-        .buttonStyle(TabItemButtonStyle(viewModel: self.viewModel))
+        .buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isPressed, animationDuration: 0.1))
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
@@ -157,20 +157,5 @@ public struct TabItemView: View {
     public func selected(_ selected: Bool) -> Self {
         self.viewModel.isSelected = selected
         return self
-    }
-}
-
-//MARK: - Private Button Style
-private struct TabItemButtonStyle: ButtonStyle {
-    var viewModel: TabItemViewModel<TabItemContent>
-
-    func makeBody(configuration: Self.Configuration) -> some View {
-        if configuration.isPressed != self.viewModel.isPressed {
-            DispatchQueue.main.async {
-                self.viewModel.isPressed = configuration.isPressed
-            }
-        }
-        return configuration.label
-            .animation(.easeOut(duration: 0.1), value: self.viewModel.isPressed)
     }
 }
