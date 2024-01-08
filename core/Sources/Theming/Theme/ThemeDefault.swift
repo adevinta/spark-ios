@@ -10,21 +10,21 @@ public struct ThemeDefault: Theme {
 
     // MARK: - Properties
 
-    public let border: Border
-    public let colors: Colors
-    public let elevation: Elevation
-    public let layout: Layout
-    public let typography: Typography
-    public let dims: Dims
+    public let border: any Border
+    public let colors: any Colors
+    public let elevation: any Elevation
+    public let layout: any Layout
+    public let typography: any Typography
+    public let dims: any Dims
 
     // MARK: - Initialization
 
-    public init(border: Border,
-                colors: Colors,
-                elevation: Elevation,
-                layout: Layout,
-                typography: Typography,
-                dims: Dims) {
+    public init(border: some Border,
+                colors: some Colors,
+                elevation: some Elevation,
+                layout: some Layout,
+                typography: some Typography,
+                dims: some Dims) {
         self.border = border
         self.colors = colors
         self.elevation = elevation

@@ -64,14 +64,14 @@ public final class CheckboxGroupUIView: UIControl {
     // MARK: - Public properties.
 
     /// The delegate CheckboxGroupUIViewDelegate` which may be set to retrieve changes to the checkboxes.
-    public weak var delegate: CheckboxGroupUIViewDelegate?
+    public weak var delegate: (any CheckboxGroupUIViewDelegate)?
 
     /// Changes to the checkboxgroup are published to the publisher.
     public var publisher: some Publisher<[any CheckboxGroupItemProtocol], Never> {
         return self.subject
     }
 
-    @Published public var theme: Theme {
+    @Published public var theme: any Theme {
         didSet {
             self.updateTheme()
         }
@@ -147,7 +147,7 @@ public final class CheckboxGroupUIView: UIControl {
         items: [any CheckboxGroupItemProtocol],
         layout: CheckboxGroupLayout = .vertical,
         alignment: CheckboxAlignment = .left,
-        theme: Theme,
+        theme: some Theme,
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {

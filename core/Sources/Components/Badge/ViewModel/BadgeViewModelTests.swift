@@ -203,7 +203,7 @@ final class BadgeViewModelTests: XCTestCase {
 
 // MARK: - Private extensions
 private extension BadgeBorder {
-    func isEqual(to theme: Theme, isOutlined: Bool) -> Bool {
+    func isEqual(to theme: some Theme, isOutlined: Bool) -> Bool {
         return (isOutlined ? width == theme.border.width.medium : width == theme.border.width.none) &&
         radius == theme.border.radius.full &&
         color.color == theme.colors.base.surface.color

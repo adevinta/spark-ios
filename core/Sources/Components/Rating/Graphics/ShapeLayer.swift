@@ -12,14 +12,14 @@ import UIKit
 /// The Shape Layer draws a shape onto a layer and returns the CGLayer.
 final class ShapeLayer {
     // MARK: - Private variables
-    private let shape: CGPathShape
+    private let shape: any CGPathShape
     private let fillColor: CGColor
     private let strokeColor: CGColor
     private let fillPercentage: CGFloat
     private let strokeWidth: CGFloat
 
     // MARK: - Initializer
-    init(shape: CGPathShape,
+    init(shape: some CGPathShape,
          fillColor: CGColor,
          strokeColor: CGColor,
          fillPercentage: CGFloat,

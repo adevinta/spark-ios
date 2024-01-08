@@ -37,16 +37,16 @@ final class DisplayedTextViewModelDefault: DisplayedTextViewModel {
 
     // MARK: - Private Properties
 
-    private let getDisplayedTextTypeUseCase: GetDisplayedTextTypeUseCaseable
-    private let getDidDisplayedTextChangeUseCase: GetDidDisplayedTextChangeUseCaseable
+    private let getDisplayedTextTypeUseCase: any GetDisplayedTextTypeUseCaseable
+    private let getDidDisplayedTextChangeUseCase: any GetDidDisplayedTextChangeUseCaseable
 
     // MARK: - Initialization
 
     init(
         text: String?,
         attributedText: AttributedStringEither?,
-        getDisplayedTextTypeUseCase: GetDisplayedTextTypeUseCaseable = GetDisplayedTextTypeUseCase(),
-        getDidDisplayedTextChangeUseCase: GetDidDisplayedTextChangeUseCaseable = GetDidDisplayedTextChangeUseCase()
+        getDisplayedTextTypeUseCase: some GetDisplayedTextTypeUseCaseable = GetDisplayedTextTypeUseCase(),
+        getDidDisplayedTextChangeUseCase: some GetDidDisplayedTextChangeUseCaseable = GetDidDisplayedTextChangeUseCase()
     ) {
         self.displayedText = .init(
             text: text,

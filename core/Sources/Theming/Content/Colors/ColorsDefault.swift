@@ -13,23 +13,23 @@ public struct ColorsDefault: Colors {
 
     // MARK: - Properties
 
-    public let main: ColorsMain
-    public let support: ColorsSupport
-    public let accent: ColorsAccent
-    public let basic: ColorsBasic
-    public let base: ColorsBase
-    public let feedback: ColorsFeedback
-    public let states: ColorsStates
+    public let main: any ColorsMain
+    public let support: any ColorsSupport
+    public let accent: any ColorsAccent
+    public let basic: any ColorsBasic
+    public let base: any ColorsBase
+    public let feedback: any ColorsFeedback
+    public let states: any ColorsStates
 
     // MARK: - Initialization
 
-    public init(main: ColorsMain,
-                support: ColorsSupport,
-                accent: ColorsAccent,
-                basic: ColorsBasic,
-                base: ColorsBase,
-                feedback: ColorsFeedback,
-                states: ColorsStates) {
+    public init(main: some ColorsMain,
+                support: some ColorsSupport,
+                accent: some ColorsAccent,
+                basic: some ColorsBasic,
+                base: some ColorsBase,
+                feedback: some ColorsFeedback,
+                states: some ColorsStates) {
         self.main = main
         self.support = support
         self.accent = accent

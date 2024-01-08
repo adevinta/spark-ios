@@ -18,7 +18,7 @@ struct TabStateAttributes: Equatable {
     let spacings: TabItemSpacings
     let colors: TabItemColors
     let heights: TabItemHeights
-    let font: TypographyFontToken
+    let font: any TypographyFontToken
 
     static func == (lhs: TabStateAttributes, rhs: TabStateAttributes) -> Bool {
         return lhs.spacings == rhs.spacings &&

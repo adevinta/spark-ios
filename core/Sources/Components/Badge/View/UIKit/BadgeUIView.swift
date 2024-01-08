@@ -57,7 +57,7 @@ public class BadgeUIView: UIView {
 
     // MARK: - Public variables
     /// The current theme of the view
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -129,7 +129,7 @@ public class BadgeUIView: UIView {
     }
 
     // MARK: - Init
-    public init(theme: Theme, intent: BadgeIntentType, size: BadgeSize = .medium, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = false) {
+    public init(theme: some Theme, intent: BadgeIntentType, size: BadgeSize = .medium, value: Int? = nil, format: BadgeFormat = .default, isBorderVisible: Bool = false) {
         self.viewModel = BadgeViewModel(theme: theme, intent: intent, size: size, value: value, format: format, isBorderVisible: isBorderVisible)
 
         super.init(frame: .zero)
@@ -425,7 +425,7 @@ public extension BadgeUIView {
         self.viewModel.size = badgeSize
     }
 
-    func setTheme(_ theme: Theme) {
+    func setTheme(_ theme: some Theme) {
         self.viewModel.theme = theme
     }
 }

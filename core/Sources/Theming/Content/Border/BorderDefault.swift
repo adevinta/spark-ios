@@ -12,12 +12,12 @@ public struct BorderDefault: Border {
 
     // MARK: - Properties
 
-    public let width: BorderWidth
-    public let radius: BorderRadius
+    public let width: any BorderWidth
+    public let radius: any BorderRadius
 
     // MARK: - Initialization
 
-    public init(width: BorderWidth, radius: BorderRadius) {
+    public init(width: some BorderWidth, radius: some BorderRadius) {
         self.width = width
         self.radius = radius
     }

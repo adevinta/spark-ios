@@ -1562,7 +1562,7 @@ private final class Stub {
 
     func resetMockedData() {
         // Clear UseCases Mock
-        let useCases: [ResetGeneratedMock] = [
+        let useCases: [any ResetGeneratedMock] = [
             self.getBorderUseCaseMock,
             self.getColorsUseCaseMock,
             self.getContentUseCaseMock,

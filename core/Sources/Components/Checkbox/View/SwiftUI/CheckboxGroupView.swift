@@ -16,7 +16,7 @@ public struct CheckboxGroupView: View {
     private var checkedImage: UIImage
     @Binding private var items: [any CheckboxGroupItemProtocol]
 
-    private var theme: Theme
+    private var theme: any Theme
     private var intent: CheckboxIntent
     private var layout: CheckboxGroupLayout
     private var alignment: CheckboxAlignment
@@ -50,7 +50,7 @@ public struct CheckboxGroupView: View {
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         alignment: CheckboxAlignment,
-        theme: Theme,
+        theme: some Theme,
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {

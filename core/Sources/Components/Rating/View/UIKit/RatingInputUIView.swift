@@ -19,7 +19,7 @@ public final class RatingInputUIView: UIControl {
 
     // MARK: - Properties
     /// The current theme
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.ratingDisplay.theme
         }
@@ -69,7 +69,7 @@ public final class RatingInputUIView: UIControl {
     }
 
     /// A delegate which is called on rating changes by user interaction
-    public weak var delegate: RatingInputUIViewDelegate?
+    public weak var delegate: (any RatingInputUIViewDelegate)?
 
     // MARK: - Private properties
     private let ratingDisplay: RatingDisplayUIView
@@ -84,7 +84,7 @@ public final class RatingInputUIView: UIControl {
     ///   - rating: the current rating. This should be a value in the range between 0...5. The default value is 0
     ///   - configuration: The star configuration, the default is `default`
     public init(
-        theme: Theme,
+        theme: some Theme,
         intent: RatingIntent,
         rating: CGFloat = 0.0,
         configuration: StarConfiguration = .default

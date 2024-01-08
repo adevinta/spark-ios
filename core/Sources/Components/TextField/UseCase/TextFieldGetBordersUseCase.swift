@@ -10,12 +10,12 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol TextFieldGetBordersUseCasable {
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  borderStyle: TextFieldBorderStyle) -> TextFieldBorders
 }
 
 final class TextFieldGetBordersUseCase: TextFieldGetBordersUseCasable {
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  borderStyle: TextFieldBorderStyle) -> TextFieldBorders {
         switch borderStyle {
         case .none:

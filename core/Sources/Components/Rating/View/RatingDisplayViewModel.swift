@@ -13,7 +13,7 @@ import Foundation
 final class RatingDisplayViewModel: ObservableObject {
     
     /// The current theme of which colors and sizes are dependent.
-    var theme: Theme {
+    var theme: any Theme {
         didSet {
             self.colors = self.colorsUseCase.execute(theme: self.theme, intent: self.intent)
             self.ratingSize = self.sizeUseCase.execute(spacing: theme.layout.spacing, size: size)
@@ -63,19 +63,19 @@ final class RatingDisplayViewModel: ObservableObject {
     @Published var ratingValue: CGFloat
 
     // MARK: - Private variables
-    private let colorsUseCase: RatingGetColorsUseCaseable
-    private let sizeUseCase: RatingSizeAttributesUseCaseable
+    private let colorsUseCase: any RatingGetColorsUseCaseable
+    private let sizeUseCase: any RatingSizeAttributesUseCaseable
 
 
     // MARK: Initializer
-    init(theme: Theme,
+    init(theme: some Theme,
          intent: RatingIntent,
          size: RatingDisplaySize,
          count: RatingStarsCount,
          rating: CGFloat = 0.0,
          ratingState: RatingState = .standard,
-         colorsUseCase: RatingGetColorsUseCaseable = RatingGetColorsUseCase(),
-         sizeUseCase: RatingSizeAttributesUseCaseable = RatingSizeAttributesUseCase()
+         colorsUseCase: some RatingGetColorsUseCaseable = RatingGetColorsUseCase(),
+         sizeUseCase: some RatingSizeAttributesUseCaseable = RatingSizeAttributesUseCase()
     ) {
         self.theme = theme
         self.intent = intent

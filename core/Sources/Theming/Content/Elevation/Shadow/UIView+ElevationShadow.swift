@@ -9,7 +9,7 @@
 import UIKit
 
 public extension UIView {
-    func applyShadow(_ shadow: ElevationShadow) {
+    func applyShadow(_ shadow: some ElevationShadow) {
         self.layer.masksToBounds = false
         self.layer.shadowColor = shadow.colorToken.uiColor.cgColor
         self.layer.shadowOpacity = shadow.opacity

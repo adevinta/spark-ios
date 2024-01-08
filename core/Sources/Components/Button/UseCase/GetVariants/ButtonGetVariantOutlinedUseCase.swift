@@ -14,8 +14,8 @@ struct ButtonGetVariantOutlinedUseCase: ButtonGetVariantUseCaseable {
 
     func execute(
         intent: ButtonIntent,
-        colors: Colors,
-        dims: Dims
+        colors: any Colors,
+        dims: any Dims
     ) -> ButtonColors {
         let dim5 = dims.dim5
 

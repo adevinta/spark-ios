@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol TabGetStateAttributesUseCasable {
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  intent: TabIntent,
                  state: TabState,
                  tabSize: TabSize,
@@ -45,7 +45,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
     ///    - size: `TabSize`
     ///
     /// - Returns: ``TabStateAttributes`` return attributes of the tab.
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  intent: TabIntent,
                  state: TabState,
                  tabSize: TabSize,

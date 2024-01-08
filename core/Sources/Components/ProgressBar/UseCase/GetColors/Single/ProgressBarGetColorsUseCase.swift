@@ -12,8 +12,8 @@ struct ProgressBarGetColorsUseCase: ProgressBarMainGetColorsUseCaseable {
 
     func execute(
         intent: ProgressBarIntent,
-        colors: Colors,
-        dims: Dims
+        colors: some Colors,
+        dims: some Dims
     ) -> ProgressBarColors {
         let indicatorBackgroundColorToken: any ColorToken
         switch intent {

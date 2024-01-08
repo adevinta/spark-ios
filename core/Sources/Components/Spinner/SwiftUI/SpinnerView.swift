@@ -29,7 +29,7 @@ public struct SpinnerView: View {
     /// - theme: The current `Theme`
     /// - intent: The `SpinnerIntent` intent used for coloring the spinner. The default is `main`
     /// - spinnerSize: The defined size of the spinner`SpinnerSize`. The default is `small`
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 intent: SpinnerIntent = .main,
                 spinnerSize: SpinnerSize = .small) {
         self.init(viewModel: SpinnerViewModel(theme: theme, intent: intent, spinnerSize: spinnerSize))

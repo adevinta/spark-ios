@@ -13,6 +13,6 @@ protocol ProgressBarMainGetColorsUseCaseable {
 
     // sourcery: colors = "Identical", dims = "Identical"
     func execute(intent: Intent,
-                 colors: Colors,
-                 dims: Dims) -> Return
+                 colors: some Colors,
+                 dims: some Dims) -> Return
 }

@@ -110,7 +110,7 @@ public final class StarUIView: UIView {
     }
 
     // MARK: - Private variables
-    private var cache: CGLayerCaching
+    private var cache: any CGLayerCaching
 
     private var normalizedRating: CGFloat {
         return self.fillMode.rating(of: self.rating)
@@ -151,7 +151,7 @@ public final class StarUIView: UIView {
         borderColor: UIColor,
         fillColor: UIColor,
         configuration: StarConfiguration,
-        cache: CGLayerCaching
+        cache: some CGLayerCaching
     ) {
         self.fillMode = fillMode
         self.rating = rating

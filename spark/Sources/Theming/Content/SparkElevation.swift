@@ -11,27 +11,27 @@ import SwiftUI
 import SparkCore
 
 struct SparkElevation: Elevation {
-    let dropShadow: ElevationDropShadows & ElevationShadow = SparkDropShadow()
+    let dropShadow: any ElevationDropShadows & ElevationShadow = SparkDropShadow()
 }
 
 struct SparkDropShadow: ElevationDropShadows & ElevationShadow {
 
-    let small: ElevationShadow = ElevationShadowDefault(
+    let small: any ElevationShadow = ElevationShadowDefault(
         offset: .init(x: 0, y: 1),
         blur: 2,
         colorToken: SparkColorTokenShadow(),
         opacity: 0.20)
-    let medium: ElevationShadow = ElevationShadowDefault(
+    let medium: any ElevationShadow = ElevationShadowDefault(
         offset: .init(x: 0, y: 6),
         blur: 12,
         colorToken: SparkColorTokenShadow(),
         opacity: 0.20)
-    let large: ElevationShadow = ElevationShadowDefault(
+    let large: any ElevationShadow = ElevationShadowDefault(
         offset: .init(x: 0, y: 8),
         blur: 16,
         colorToken: SparkColorTokenShadow(),
         opacity: 0.20)
-    let extraLarge: ElevationShadow = ElevationShadowDefault(
+    let extraLarge: any ElevationShadow = ElevationShadowDefault(
         offset: .init(x: 0, y: 12),
         blur: 24,
         colorToken: SparkColorTokenShadow(),

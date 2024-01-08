@@ -17,7 +17,7 @@ struct ChipGetTintedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
     /// - intent: The intent of the chip
     ///
     /// Returns: ChipIntentColors
-    func execute(theme: Theme, intent: ChipIntent) -> ChipIntentColors {
+    func execute(theme: some Theme, intent: ChipIntent) -> ChipIntentColors {
         let colors = theme.colors
 
         switch intent {

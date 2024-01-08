@@ -54,7 +54,7 @@ public class RatingDisplayUIView: UIView {
     }
 
     /// The current theme.
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -126,7 +126,7 @@ public class RatingDisplayUIView: UIView {
     ///   - fillMode: Define incomplete stars are to be filled. The default is `.half`
     ///   - configuration: A configuration of the star. A default value is defined.
     public init(
-        theme: Theme,
+        theme: some Theme,
         intent: RatingIntent,
         count: RatingStarsCount = .five,
         size: RatingDisplaySize = .medium,

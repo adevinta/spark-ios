@@ -11,7 +11,7 @@ import Foundation
 // sourcery: AutoMockable
 protocol BadgeGetIntentColorsUseCaseable {
     func execute(intentType: BadgeIntentType,
-                 on colors: Colors) -> BadgeColors
+                 on colors: some Colors) -> BadgeColors
 }
 
 final class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
@@ -19,7 +19,7 @@ final class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
     // MARK: - Methods
 
     func execute(intentType: BadgeIntentType,
-                 on colors: Colors) -> BadgeColors {
+                 on colors: some Colors) -> BadgeColors {
         let surfaceColor = colors.base.surface
 
         switch intentType {

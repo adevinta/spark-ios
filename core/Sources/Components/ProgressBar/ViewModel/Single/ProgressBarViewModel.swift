@@ -12,7 +12,7 @@ final class ProgressBarViewModel: ProgressBarMainViewModel<ProgressBarGetColorsU
 
     convenience init(
         for frameworkType: FrameworkType,
-        theme: Theme,
+        theme: some Theme,
         intent: ProgressBarIntent,
         shape: ProgressBarShape
     ) {

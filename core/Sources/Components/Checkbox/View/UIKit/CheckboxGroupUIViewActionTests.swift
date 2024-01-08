@@ -13,7 +13,7 @@ import XCTest
 
 final class CheckboxGroupUIViewActionTests: TestCase {
     // MARK: Private Properties
-    private var theme: Theme!
+    private var theme: (any Theme)!
     private var subscriptions: Set<AnyCancellable>!
     private var delegate: CheckboxGroupUIViewDelegateGeneratedMock!
     private var items: [any CheckboxGroupItemProtocol] = [

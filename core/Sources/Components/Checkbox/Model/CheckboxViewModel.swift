@@ -25,7 +25,7 @@ final class CheckboxViewModel: ObservableObject {
     @Published var selectionState: CheckboxSelectionState
     @Published var opacity: CGFloat
     @Published var spacing: CGFloat
-    @Published var font: TypographyFontToken
+    @Published var font: any TypographyFontToken
 
     @Published var intent: CheckboxIntent {
         didSet {
@@ -41,7 +41,7 @@ final class CheckboxViewModel: ObservableObject {
         }
     }
 
-    var theme: Theme {
+    var theme: any Theme {
         didSet {
             self.font = self.theme.typography.body1
             self.updateColors()
@@ -51,18 +51,18 @@ final class CheckboxViewModel: ObservableObject {
     }
 
     // MARK: - Private properties
-    private let colorsUseCase: CheckboxColorsUseCaseable
-    private let spacingUseCase: CheckboxGetSpacingUseCaseable
+    private let colorsUseCase: any CheckboxColorsUseCaseable
+    private let spacingUseCase: any CheckboxGetSpacingUseCaseable
 
     // MARK: - Init
 
     init(
         text: Either<NSAttributedString?, String?>,
         checkedImage: UIImage,
-        theme: Theme,
+        theme: some Theme,
         intent: CheckboxIntent = .main,
-        colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
-        spacingUseCase: CheckboxGetSpacingUseCaseable = CheckboxGetSpacingUseCase(),
+        colorsUseCase: some CheckboxColorsUseCaseable = CheckboxColorsUseCase(),
+        spacingUseCase: some CheckboxGetSpacingUseCaseable = CheckboxGetSpacingUseCase(),
         isEnabled: Bool = true,
         alignment: CheckboxAlignment = .left,
         selectionState: CheckboxSelectionState

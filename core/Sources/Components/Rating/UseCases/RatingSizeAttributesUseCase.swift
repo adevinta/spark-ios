@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol RatingSizeAttributesUseCaseable {
-    func execute(spacing: LayoutSpacing, size: RatingDisplaySize) -> RatingSizeAttributes
+    func execute(spacing: some LayoutSpacing, size: RatingDisplaySize) -> RatingSizeAttributes
 }
 
 /// Calculates size attributes of the rating display according to the spacing and the size.
@@ -21,7 +21,7 @@ struct RatingSizeAttributesUseCase: RatingSizeAttributesUseCaseable {
     /// - Parameters:
     ///   - spacing: the spacing defined by the theme
     ///   - size: the size of the rating display
-    func execute(spacing: LayoutSpacing, size: RatingDisplaySize) -> RatingSizeAttributes {
+    func execute(spacing: some LayoutSpacing, size: RatingDisplaySize) -> RatingSizeAttributes {
         switch size {
         case .small: return size.sizeAttributes(spacing: spacing.small)
         case .medium: return size.sizeAttributes(spacing: spacing.small)

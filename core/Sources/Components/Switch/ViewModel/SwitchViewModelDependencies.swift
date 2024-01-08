@@ -10,34 +10,34 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol SwitchViewModelDependenciesProtocol {
-    var getColorsUseCase: SwitchGetColorsUseCaseable { get }
-    var getImagesStateUseCase: SwitchGetImagesStateUseCaseable { get }
-    var getToggleColorUseCase: SwitchGetToggleColorUseCaseable { get }
-    var getPositionUseCase: SwitchGetPositionUseCaseable { get }
-    var getToggleStateUseCase: SwitchGetToggleStateUseCaseable { get }
+    var getColorsUseCase: any SwitchGetColorsUseCaseable { get }
+    var getImagesStateUseCase: any SwitchGetImagesStateUseCaseable { get }
+    var getToggleColorUseCase: any SwitchGetToggleColorUseCaseable { get }
+    var getPositionUseCase: any SwitchGetPositionUseCaseable { get }
+    var getToggleStateUseCase: any SwitchGetToggleStateUseCaseable { get }
 
     func makeDisplayedTextViewModel(text: String?,
-                                    attributedText: AttributedStringEither?) -> DisplayedTextViewModel
+                                    attributedText: AttributedStringEither?) -> any DisplayedTextViewModel
 }
 
 struct SwitchViewModelDependencies: SwitchViewModelDependenciesProtocol {
 
     // MARK: - Properties
 
-    let getColorsUseCase: SwitchGetColorsUseCaseable
-    var getImagesStateUseCase: SwitchGetImagesStateUseCaseable
-    let getToggleColorUseCase: SwitchGetToggleColorUseCaseable
-    let getPositionUseCase: SwitchGetPositionUseCaseable
-    let getToggleStateUseCase: SwitchGetToggleStateUseCaseable
+    let getColorsUseCase: any SwitchGetColorsUseCaseable
+    var getImagesStateUseCase: any SwitchGetImagesStateUseCaseable
+    let getToggleColorUseCase: any SwitchGetToggleColorUseCaseable
+    let getPositionUseCase: any SwitchGetPositionUseCaseable
+    let getToggleStateUseCase: any SwitchGetToggleStateUseCaseable
 
     // MARK: - Initialization
 
     init(
-        getColorsUseCase: SwitchGetColorsUseCaseable = SwitchGetColorsUseCase(),
-        getImagesStateUseCase: SwitchGetImagesStateUseCaseable = SwitchGetImagesStateUseCase(),
-        getToggleColorUseCase: SwitchGetToggleColorUseCaseable = SwitchGetToggleColorUseCase(),
-        getPositionUseCase: SwitchGetPositionUseCaseable = SwitchGetPositionUseCase(),
-        getToggleStateUseCase: SwitchGetToggleStateUseCaseable = SwitchGetToggleStateUseCase()
+        getColorsUseCase: some SwitchGetColorsUseCaseable = SwitchGetColorsUseCase(),
+        getImagesStateUseCase: some SwitchGetImagesStateUseCaseable = SwitchGetImagesStateUseCase(),
+        getToggleColorUseCase: some SwitchGetToggleColorUseCaseable = SwitchGetToggleColorUseCase(),
+        getPositionUseCase: some SwitchGetPositionUseCaseable = SwitchGetPositionUseCase(),
+        getToggleStateUseCase: some SwitchGetToggleStateUseCaseable = SwitchGetToggleStateUseCase()
     ) {
         self.getColorsUseCase = getColorsUseCase
         self.getImagesStateUseCase = getImagesStateUseCase
@@ -51,7 +51,7 @@ struct SwitchViewModelDependencies: SwitchViewModelDependenciesProtocol {
     func makeDisplayedTextViewModel(
         text: String?,
         attributedText: AttributedStringEither?
-    ) -> DisplayedTextViewModel {
+    ) -> any DisplayedTextViewModel {
         return DisplayedTextViewModelDefault(
             text: text,
             attributedText: attributedText

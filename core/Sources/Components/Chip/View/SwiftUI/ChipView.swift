@@ -39,7 +39,7 @@ public struct ChipView: View {
     /// - variant: The chip variant, e.g. outlined, filled
     /// - icon: An icon
     /// - action: An optional action. If the chip has an action, it will be treated like a button
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 intent: ChipIntent,
                 variant: ChipVariant,
                 alignment: ChipAlignment = .leadingIcon,
@@ -63,7 +63,7 @@ public struct ChipView: View {
     /// - variant: The chip variant, e.g. outlined, filled
     /// - icon: An icon
     /// - action: An optional action. If the chip has an action, it will be treated like a button
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 intent: ChipIntent,
                 variant: ChipVariant,
                 alignment: ChipAlignment = .leadingIcon,
@@ -88,7 +88,7 @@ public struct ChipView: View {
     /// - icon: An optional icon
     /// - title: An optional title
     /// - action: An optional action. If the chip has an action, it will be treated like a button
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 intent: ChipIntent,
                 variant: ChipVariant,
                 alignment: ChipAlignment = .leadingIcon,

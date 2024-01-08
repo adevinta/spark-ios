@@ -51,7 +51,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     ///   - selectedID: a binding to the selected value.
     ///   - items: A list of ``RadioButtonItem``
     @available(*, deprecated, message: "Use init with intent instead.")
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 title: String? = nil,
                 selectedID: Binding<ID?>,
                 items: [RadioButtonItem<ID>],
@@ -76,7 +76,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     ///   - title: An option string. The title is rendered above the radio button items, if it is not empty.
     ///   - selectedID: a binding to the selected value.
     ///   - items: A list of ``RadioButtonItem``
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 intent: RadioButtonIntent,
                 selectedID: Binding<ID?>,
                 items: [RadioButtonItem<ID>],
@@ -115,7 +115,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
         }
     }
 
-    public func theme(_ theme: Theme) -> Self {
+    public func theme(_ theme: some Theme) -> Self {
         self.viewModel.theme = theme
         return self
     }

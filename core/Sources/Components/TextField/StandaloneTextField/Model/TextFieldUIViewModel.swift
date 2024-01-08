@@ -19,7 +19,7 @@ final class TextFieldUIViewModel: ObservableObject {
 
     // MARK: - Private properties
     
-    private(set) var theme: Theme {
+    private(set) var theme: any Theme {
         didSet {
             self.reloadTheme()
         }
@@ -43,7 +43,7 @@ final class TextFieldUIViewModel: ObservableObject {
     // MARK: - Initialization
 
     init(
-        theme: Theme,
+        theme: some Theme,
         intent: TextFieldIntent = .neutral,
         borderStyle: TextFieldBorderStyle,
         getColorsUseCase: any TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase(),
@@ -103,7 +103,7 @@ final class TextFieldUIViewModel: ObservableObject {
 
     // MARK: - Public Setter
 
-    func setTheme(_ theme: Theme) {
+    func setTheme(_ theme: some Theme) {
         self.theme = theme
     }
 

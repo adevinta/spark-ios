@@ -34,7 +34,7 @@ public enum BadgeFormat {
     /// You can define your custom behavior by using **custom** type. But in that case
     /// Formatter should be implemented and conform to **BadgeFormatting** protocol
     /// For example you can define thousand counter to show 96k instead of 96000
-    case custom(formatter: BadgeFormatting)
+    case custom(formatter: any BadgeFormatting)
 
     // MARK: - Getting text
 

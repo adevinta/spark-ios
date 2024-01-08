@@ -16,7 +16,7 @@ final class AddOnTextFieldViewModel: ObservableObject {
 
     // MARK: - Private properties
 
-    private(set) var theme: Theme {
+    private(set) var theme: any Theme {
         didSet {
             self.updateColor()
         }
@@ -28,14 +28,14 @@ final class AddOnTextFieldViewModel: ObservableObject {
         }
     }
 
-    private let getColorUseCase: TextFieldGetColorsUseCasable
+    private let getColorUseCase: any TextFieldGetColorsUseCasable
 
     // MARK: - Initialization
 
     init(
-        theme: Theme,
+        theme: some Theme,
         intent: TextFieldIntent,
-        getColorUseCase: TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase()
+        getColorUseCase: some TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase()
     ) {
         self.theme = theme
         self.intent = intent
@@ -60,7 +60,7 @@ final class AddOnTextFieldViewModel: ObservableObject {
 
     // MARK: - Public methods
 
-    public func setTheme(_ theme: Theme) {
+    public func setTheme(_ theme: some Theme) {
         self.theme = theme
     }
 

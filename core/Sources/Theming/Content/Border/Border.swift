@@ -10,8 +10,8 @@ import Foundation
 
 // sourcery: AutoMockable
 public protocol Border {
-    var width: BorderWidth { get }
-    var radius: BorderRadius { get }
+    var width: any BorderWidth { get }
+    var radius: any BorderRadius { get }
 }
 
 // MARK: - Width

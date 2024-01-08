@@ -13,16 +13,16 @@ final class TagViewModel: ObservableObject {
     // MARK: - Public properties
 
     @Published var colors: TagColors
-    @Published var typography: Typography
-    @Published var spacing: LayoutSpacing
-    @Published var border: Border
+    @Published var typography: any Typography
+    @Published var spacing: any LayoutSpacing
+    @Published var border: any Border
 
     @Published var iconImage: Image?
     @Published var text: String?
 
     // MARK: - Private properties
 
-    private let theme: Theme
+    private let theme: any Theme
     private var intent: TagIntent {
         didSet {
             self.reloadColors()
@@ -39,7 +39,7 @@ final class TagViewModel: ObservableObject {
     // MARK: - Initialization
 
     init(
-        theme: Theme,
+        theme: some Theme,
         intent: TagIntent = .main,
         variant: TagVariant = .filled,
         iconImage: Image? = nil,
@@ -98,7 +98,7 @@ final class TagViewModel: ObservableObject {
     // MARK: - Getter
 
     private static func getColors(
-        for theme: Theme,
+        for theme: some Theme,
         intent: TagIntent,
         variant: TagVariant,
         useCase: any TagGetColorsUseCaseable

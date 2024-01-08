@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 public protocol Layout {
-    var spacing: LayoutSpacing { get }
+    var spacing: any LayoutSpacing { get }
 }
 
 // MARK: - Spacing

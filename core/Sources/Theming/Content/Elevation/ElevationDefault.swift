@@ -10,11 +10,11 @@ public struct ElevationDefault: Elevation {
 
     // MARK: - Properties
 
-    public let dropShadow: ElevationDropShadows & ElevationShadow
+    public let dropShadow: any ElevationDropShadows & ElevationShadow
 
     // MARK: - Init
 
-    public init(dropShadow: ElevationDropShadows & ElevationShadow) {
+    public init(dropShadow: some ElevationDropShadows & ElevationShadow) {
         self.dropShadow = dropShadow
     }
 }

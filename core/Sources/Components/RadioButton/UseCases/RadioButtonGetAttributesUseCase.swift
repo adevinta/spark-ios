@@ -9,7 +9,7 @@
 import Foundation
 
 protocol RadioButtonGetAttributesUseCaseable {
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  intent: RadioButtonIntent,
                  state: RadioButtonStateAttribute,
                  alignment: RadioButtonLabelAlignment
@@ -17,12 +17,12 @@ protocol RadioButtonGetAttributesUseCaseable {
 }
 
 struct RadioButtonGetAttributesUseCase: RadioButtonGetAttributesUseCaseable {
-    let colorsUseCase: RadioButtonGetColorsUseCaseable
+    let colorsUseCase: any RadioButtonGetColorsUseCaseable
 
-    init(colorsUseCase: RadioButtonGetColorsUseCaseable = RadioButtonGetColorsUseCase()) {
+    init(colorsUseCase: some RadioButtonGetColorsUseCaseable = RadioButtonGetColorsUseCase()) {
         self.colorsUseCase = colorsUseCase
     }
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  intent: RadioButtonIntent,
                  state: RadioButtonStateAttribute,
                  alignment: RadioButtonLabelAlignment

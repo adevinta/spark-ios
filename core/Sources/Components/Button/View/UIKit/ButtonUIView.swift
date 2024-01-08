@@ -75,7 +75,7 @@ public final class ButtonUIView: UIView {
     // MARK: - Public Properties
 
     /// The delegate used to notify about some changed on button.
-    public weak var delegate: ButtonUIViewDelegate?
+    public weak var delegate: (any ButtonUIViewDelegate)?
 
     /// The tap publisher. Alternatively, you can set a delegate.
     public var tapPublisher: UIControl.EventPublisher {
@@ -99,7 +99,7 @@ public final class ButtonUIView: UIView {
     }
 
     /// The spark theme of the button.
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -255,7 +255,7 @@ public final class ButtonUIView: UIView {
     ///   - text: The text of the button.
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
@@ -289,7 +289,7 @@ public final class ButtonUIView: UIView {
     ///   - attributedText: The attributed text of the button.
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
@@ -323,7 +323,7 @@ public final class ButtonUIView: UIView {
     ///   - iconImage: The icon image of the button.
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
@@ -358,7 +358,7 @@ public final class ButtonUIView: UIView {
     ///   - text: The text of the button.
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
@@ -394,7 +394,7 @@ public final class ButtonUIView: UIView {
     ///   - attributedText: The attributed text of the button.
     ///   - isEnabled: The state of the button: enabled or not.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
@@ -419,7 +419,7 @@ public final class ButtonUIView: UIView {
     }
 
     private init(
-        _ theme: Theme,
+        _ theme: some Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,

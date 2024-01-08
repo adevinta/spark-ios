@@ -11,7 +11,7 @@ import Foundation
 // sourcery: AutoMockable
 protocol ButtonGetStateUseCaseable {
     func execute(isEnabled: Bool,
-                 dims: Dims) -> ButtonState
+                 dims: some Dims) -> ButtonState
 }
 
 struct ButtonGetStateUseCase: ButtonGetStateUseCaseable {
@@ -20,7 +20,7 @@ struct ButtonGetStateUseCase: ButtonGetStateUseCaseable {
 
     func execute(
         isEnabled: Bool,
-        dims: Dims
+        dims: some Dims
     ) -> ButtonState {
         let opacity = isEnabled ? dims.none : dims.dim3
 

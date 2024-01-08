@@ -16,7 +16,7 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
     // MARK: - Public Properties
 
     /// The spark theme of the progress bar.
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -71,7 +71,7 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
     ///   - intent: The intent of the progress bar.
     ///   - shape: The shape of the progress bar.
     public init(
-        theme: Theme,
+        theme: some Theme,
         intent: ProgressBarIntent,
         shape: ProgressBarShape
     ) {

@@ -57,7 +57,7 @@ public final class TabUIView: UIControl {
     }
 
     /// The current theme
-    public var theme: Theme {
+    public var theme: any Theme {
         didSet {
             self.segments.forEach { tab in
                 tab.theme = theme
@@ -126,7 +126,7 @@ public final class TabUIView: UIControl {
     /// Chages to the current selected item of the tabs will be sent to the delegate.
     /// An alternative approach would be to add an action just like `UISegmentControl`for `valueChanged`
     /// or to subscribe to the publisher.
-    public weak var delegate: TabUIViewDelegate?
+    public weak var delegate: (any TabUIViewDelegate)?
 
     /// The index of the newly selected tab will be published.
     /// This is an alternative to using the delegate or to setting an action for `valueChanged`
@@ -143,7 +143,7 @@ public final class TabUIView: UIControl {
     /// - titles: An array of labels.
     /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: TabIntent = .basic,
         tabSize: TabSize = .md,
         titles: [String],
@@ -165,7 +165,7 @@ public final class TabUIView: UIControl {
     /// - icons: An array of images.
     /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: TabIntent = .basic,
         tabSize: TabSize = .md,
         icons: [UIImage],
@@ -186,7 +186,7 @@ public final class TabUIView: UIControl {
     /// - tab size: the default value is `md`.
     /// - content: An array of TabUIItemContent with of image and string.
     /// - apportionsSegmentWIdthsByContent: Indicates whether the control attempts to adjust segment widths based on their content widths.
-    public init(theme: Theme,
+    public init(theme: some Theme,
          intent: TabIntent = .basic,
          tabSize: TabSize = .md,
          content: [TabUIItemContent],

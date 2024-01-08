@@ -15,9 +15,9 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     let id: ID
 
     private var formerSelecteID: ID?
-    private let useCase: RadioButtonGetAttributesUseCaseable
+    private let useCase: any RadioButtonGetAttributesUseCaseable
 
-    var theme: Theme
+    var theme: any Theme
     var intent: RadioButtonIntent
 
     private(set) var state: RadioButtonStateAttribute
@@ -30,11 +30,11 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     @Published var isDisabled: Bool
     @Published var opacity: CGFloat
     @Published var spacing: CGFloat
-    @Published var font: TypographyFontToken
+    @Published var font: any TypographyFontToken
     @Published var alignment: RadioButtonLabelAlignment
 
     // MARK: - Initialization
-    convenience init(theme: Theme,
+    convenience init(theme: some Theme,
                      intent: RadioButtonIntent,
                      id: ID,
                      label: Either<NSAttributedString?, String?>,
@@ -50,13 +50,13 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
                   useCase:RadioButtonGetAttributesUseCase())
     }
 
-    init(theme: Theme,
+    init(theme: some Theme,
          intent: RadioButtonIntent,
          id: ID,
          label: Either<NSAttributedString?, String?>,
          selectedID: Binding<ID?>,
          alignment: RadioButtonLabelAlignment,
-         useCase: RadioButtonGetAttributesUseCaseable) {
+         useCase: some RadioButtonGetAttributesUseCaseable) {
         self.theme = theme
         self.intent = intent
         self.id = id
@@ -82,7 +82,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
     }
 
     // MARK: - Functions
-    func set(theme: Theme) {
+    func set(theme: some Theme) {
         self.theme = theme
         self.themeDidUpdate()
         self.alignmentDidUpdate()

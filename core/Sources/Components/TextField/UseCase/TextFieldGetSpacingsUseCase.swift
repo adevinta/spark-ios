@@ -10,12 +10,12 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol TextFieldGetSpacingsUseCasable {
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  borderStyle: TextFieldBorderStyle) -> TextFieldSpacings
 }
 
 final class TextFieldGetSpacingsUseCase: TextFieldGetSpacingsUseCasable {
-    func execute(theme: Theme, borderStyle: TextFieldBorderStyle) -> TextFieldSpacings {
+    func execute(theme: some Theme, borderStyle: TextFieldBorderStyle) -> TextFieldSpacings {
         switch borderStyle {
         case .none:
             return .init(

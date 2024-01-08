@@ -14,7 +14,7 @@ struct SparkColors: Colors {
 
     private class ClassForBundle {}
 
-    let main: ColorsMain = ColorsMainDefault(
+    let main: any ColorsMain = ColorsMainDefault(
         main: ColorTokenDefault(named: "main", in: Bundle(for: ClassForBundle.self)),
         onMain: ColorTokenDefault(named: "on-main", in: Bundle(for: ClassForBundle.self)),
         mainVariant: ColorTokenDefault(named: "main-variant", in: Bundle(for: ClassForBundle.self)),
@@ -22,7 +22,7 @@ struct SparkColors: Colors {
         mainContainer: ColorTokenDefault(named: "main-container", in: Bundle(for: ClassForBundle.self)),
         onMainContainer: ColorTokenDefault(named: "on-main-container", in: Bundle(for: ClassForBundle.self)))
 
-    let support: ColorsSupport = ColorsSupportDefault(
+    let support: any ColorsSupport = ColorsSupportDefault(
         support: ColorTokenDefault(named: "support", in: Bundle(for: ClassForBundle.self)),
         onSupport: ColorTokenDefault(named: "on-support", in: Bundle(for: ClassForBundle.self)),
         supportVariant: ColorTokenDefault(named: "support-variant", in: Bundle(for: ClassForBundle.self)),
@@ -30,7 +30,7 @@ struct SparkColors: Colors {
         supportContainer: ColorTokenDefault(named: "support-container", in: Bundle(for: ClassForBundle.self)),
         onSupportContainer: ColorTokenDefault(named: "on-support-container", in: Bundle(for: ClassForBundle.self)))
 
-    let accent: ColorsAccent = ColorsAccentDefault(
+    let accent: any ColorsAccent = ColorsAccentDefault(
         accent: ColorTokenDefault(named: "accent", in: Bundle(for: ClassForBundle.self)),
         onAccent: ColorTokenDefault(named: "on-accent", in: Bundle(for: ClassForBundle.self)),
         accentVariant: ColorTokenDefault(named: "accent-variant", in: Bundle(for: ClassForBundle.self)),
@@ -38,13 +38,13 @@ struct SparkColors: Colors {
         accentContainer: ColorTokenDefault(named: "accent-container", in: Bundle(for: ClassForBundle.self)),
         onAccentContainer: ColorTokenDefault(named: "on-accent-container", in: Bundle(for: ClassForBundle.self)))
 
-    let basic: ColorsBasic = ColorsBasicDefault(
+    let basic: any ColorsBasic = ColorsBasicDefault(
         basic: ColorTokenDefault(named: "basic", in: Bundle(for: ClassForBundle.self)),
         onBasic: ColorTokenDefault(named: "on-basic", in: Bundle(for: ClassForBundle.self)),
         basicContainer: ColorTokenDefault(named: "basic-container", in: Bundle(for: ClassForBundle.self)),
         onBasicContainer: ColorTokenDefault(named: "on-basic-container", in: Bundle(for: ClassForBundle.self)))
 
-    let base: ColorsBase = ColorsBaseDefault(
+    let base: any ColorsBase = ColorsBaseDefault(
         background: ColorTokenDefault(named: "background", in: Bundle(for: ClassForBundle.self)),
         onBackground: ColorTokenDefault(named: "on-background", in: Bundle(for: ClassForBundle.self)),
         backgroundVariant: ColorTokenDefault(named: "background-variant", in: Bundle(for: ClassForBundle.self)),
@@ -58,7 +58,7 @@ struct SparkColors: Colors {
         overlay: ColorTokenDefault(named: "overlay", in: Bundle(for: ClassForBundle.self)),
         onOverlay: ColorTokenDefault(named: "on-overlay", in: Bundle(for: ClassForBundle.self)))
 
-    let feedback: ColorsFeedback = ColorsFeedbackDefault(
+    let feedback: any ColorsFeedback = ColorsFeedbackDefault(
         success: ColorTokenDefault(named: "success", in: Bundle(for: ClassForBundle.self)),
         onSuccess: ColorTokenDefault(named: "on-success", in: Bundle(for: ClassForBundle.self)),
         successContainer: ColorTokenDefault(named: "success-container", in: Bundle(for: ClassForBundle.self)),
@@ -81,7 +81,7 @@ struct SparkColors: Colors {
         onNeutralContainer: ColorTokenDefault(named: "on-neutral-container", in: Bundle(for: ClassForBundle.self))
     )
 
-    let states: ColorsStates = ColorsStatesDefault(
+    let states: any ColorsStates = ColorsStatesDefault(
         mainPressed: ColorTokenDefault(named: "main-pressed", in: Bundle(for: ClassForBundle.self)),
         mainVariantPressed: ColorTokenDefault(named: "main-variant-pressed", in: Bundle(for: ClassForBundle.self)),
         mainContainerPressed: ColorTokenDefault(named: "main-container-pressed", in: Bundle(for: ClassForBundle.self)),

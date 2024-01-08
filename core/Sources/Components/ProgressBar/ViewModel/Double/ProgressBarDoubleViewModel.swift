@@ -12,7 +12,7 @@ final class ProgressBarDoubleViewModel: ProgressBarMainViewModel<ProgressBarDoub
 
     convenience init(
         for frameworkType: FrameworkType,
-        theme: Theme,
+        theme: some Theme,
         intent: ProgressBarDoubleIntent,
         shape: ProgressBarShape
     ) {

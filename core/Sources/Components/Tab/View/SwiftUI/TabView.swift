@@ -10,7 +10,7 @@ import SwiftUI
 
 /// TabView is the similar to a SegmentControl
 public struct TabView: View {
-    private let theme: Theme
+    private let theme: any Theme
     private let intent: TabIntent
     private let tabSize: TabSize
 
@@ -27,7 +27,7 @@ public struct TabView: View {
     /// - intent: the tab intent. The default value is `main`.
     /// - tabSize: The tab size, see `TabSize`. The default value is medium `md`.
     /// - titles: An array of labels.
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 intent: TabIntent = .basic,
                 tabSize: TabSize = .md,
                 titles: [String],
@@ -46,7 +46,7 @@ public struct TabView: View {
     /// - intent: the tab intent. The default value is `main`.
     /// - tabSize: The tab size, see `TabSize`. The default value is medium `md`.
     /// - icons: An array of images.
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 intent: TabIntent = .basic,
                 tabSize: TabSize = .md,
                 icons: [Image],
@@ -66,7 +66,7 @@ public struct TabView: View {
     /// - intent: the tab intent. The default value is `main`.
     /// - tab size: the default value is `md`.
     /// - An array of tuples of image and string.
-    public init(theme: Theme,
+    public init(theme: some Theme,
                 intent: TabIntent = .basic,
                 tabSize: TabSize = .md,
                 content: [TabItemContent] = [],

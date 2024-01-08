@@ -12,7 +12,7 @@ final class ButtonViewModel: ObservableObject {
 
     // MARK: - Properties
 
-    private(set) var theme: Theme
+    private(set) var theme: any Theme
     private(set) var intent: ButtonIntent
     private(set) var variant: ButtonVariant
     private(set) var size: ButtonSize
@@ -32,7 +32,7 @@ final class ButtonViewModel: ObservableObject {
     @Published private(set) var spacings: ButtonSpacings?
 
     @Published private(set) var content: ButtonContent?
-    @Published private(set) var titleFontToken: TypographyFontToken?
+    @Published private(set) var titleFontToken: (any TypographyFontToken)?
 
     // MARK: - Private Properties
 
@@ -45,7 +45,7 @@ final class ButtonViewModel: ObservableObject {
         )
     }
 
-    private let displayedTitleViewModel: DisplayedTextViewModel
+    private let displayedTitleViewModel: any DisplayedTextViewModel
 
     private var isPressed: Bool = false
 
@@ -54,7 +54,7 @@ final class ButtonViewModel: ObservableObject {
     // MARK: - Initialization
 
     init(
-        theme: Theme,
+        theme: some Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
@@ -119,7 +119,7 @@ final class ButtonViewModel: ObservableObject {
 
     // MARK: - Setter
 
-    func set(theme: Theme) {
+    func set(theme: some Theme) {
         self.theme = theme
 
         self.updateAll(themeChanged: true)

@@ -28,7 +28,7 @@ public struct CheckboxView: View {
     // MARK: - Public Properties
 
     /// The current Spark theme.
-    public var theme: Theme {
+    public var theme: any Theme {
         return self.viewModel.theme
     }
 
@@ -72,7 +72,7 @@ public struct CheckboxView: View {
         text: String?,
         checkedImage: UIImage,
         alignment: CheckboxAlignment = .left,
-        theme: Theme,
+        theme: some Theme,
         intent: CheckboxIntent = .main,
         isEnabled: Bool = true,
         selectionState: Binding<CheckboxSelectionState>

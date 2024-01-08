@@ -14,7 +14,7 @@ final class RatingDisplayUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
     // MARK: - Properties
 
-    private let theme: Theme = SparkTheme.shared
+    private let theme: any Theme = SparkTheme.shared
 
     // MARK: - Tests
 

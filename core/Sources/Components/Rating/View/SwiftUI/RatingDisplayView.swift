@@ -32,7 +32,7 @@ public struct RatingDisplayView: View {
     ///   - fillMode: Define incomplete stars are to be filled. The default is `.half`
     ///   - configuration: A configuration of the star. A default value is defined.
     public init(
-        theme: Theme,
+        theme: some Theme,
         intent: RatingIntent,
         count: RatingStarsCount = .five,
         size: RatingDisplaySize = .medium,

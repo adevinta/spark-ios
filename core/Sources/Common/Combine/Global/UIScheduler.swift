@@ -70,7 +70,7 @@ struct UIScheduler: Scheduler {
         tolerance: SchedulerTimeType.Stride,
         options _: SchedulerOptions? = nil,
         _ action: @escaping () -> Void
-    ) -> Cancellable {
+    ) -> any Cancellable {
         self.dispatchQueue.schedule(after: date, interval: interval, tolerance: tolerance, options: nil, action)
     }
 }

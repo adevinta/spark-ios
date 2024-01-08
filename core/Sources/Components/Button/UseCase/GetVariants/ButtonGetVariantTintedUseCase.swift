@@ -14,8 +14,8 @@ struct ButtonGetVariantTintedUseCase: ButtonGetVariantUseCaseable {
 
     func execute(
         intent: ButtonIntent,
-        colors: Colors,
-        dims: Dims
+        colors: any Colors,
+        dims: any Dims
     ) -> ButtonColors {
         let borderColor = ColorTokenDefault.clear
         let pressedBorderColor = ColorTokenDefault.clear

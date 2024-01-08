@@ -8,12 +8,12 @@
 
 // sourcery: AutoMockable
 protocol CheckboxColorsUseCaseable {
-    func execute(from color: Colors, intent: CheckboxIntent) -> CheckboxColors
+    func execute(from color: some Colors, intent: CheckboxIntent) -> CheckboxColors
 }
 
 struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
 
-    func execute(from colors: Colors, intent: CheckboxIntent) -> CheckboxColors {
+    func execute(from colors: some Colors, intent: CheckboxIntent) -> CheckboxColors {
         switch intent {
         case .basic:
             return CheckboxColors(

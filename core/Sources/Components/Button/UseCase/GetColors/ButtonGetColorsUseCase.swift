@@ -8,7 +8,7 @@
 
 // sourcery: AutoMockable
 protocol ButtonGetColorsUseCaseable {
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  intent: ButtonIntent,
                  variant: ButtonVariant) -> ButtonColors
 }
@@ -17,20 +17,20 @@ struct ButtonGetColorsUseCase: ButtonGetColorsUseCaseable {
 
     // MARK: - Private properties
 
-    private let getContrastUseCase: ButtonGetVariantUseCaseable
-    private let getFilledUseCase: ButtonGetVariantUseCaseable
-    private let getGhostUseCase: ButtonGetVariantUseCaseable
-    private let getOutlinedUseCase: ButtonGetVariantUseCaseable
-    private let getTintedUseCase: ButtonGetVariantUseCaseable
+    private let getContrastUseCase: any ButtonGetVariantUseCaseable
+    private let getFilledUseCase: any ButtonGetVariantUseCaseable
+    private let getGhostUseCase: any ButtonGetVariantUseCaseable
+    private let getOutlinedUseCase: any ButtonGetVariantUseCaseable
+    private let getTintedUseCase: any ButtonGetVariantUseCaseable
 
     // MARK: - Initialization
 
     init(
-        getContrastUseCase: ButtonGetVariantUseCaseable = ButtonVariantGetContrastUseCase(),
-        getFilledUseCase: ButtonGetVariantUseCaseable = ButtonGetVariantFilledUseCase(),
-        getGhostUseCase: ButtonGetVariantUseCaseable = ButtonGetVariantGhostUseCase(),
-        getOutlinedUseCase: ButtonGetVariantUseCaseable = ButtonGetVariantOutlinedUseCase(),
-        getTintedUseCase: ButtonGetVariantUseCaseable = ButtonGetVariantTintedUseCase()
+        getContrastUseCase: some ButtonGetVariantUseCaseable = ButtonVariantGetContrastUseCase(),
+        getFilledUseCase: some ButtonGetVariantUseCaseable = ButtonGetVariantFilledUseCase(),
+        getGhostUseCase: some ButtonGetVariantUseCaseable = ButtonGetVariantGhostUseCase(),
+        getOutlinedUseCase: some ButtonGetVariantUseCaseable = ButtonGetVariantOutlinedUseCase(),
+        getTintedUseCase: some ButtonGetVariantUseCaseable = ButtonGetVariantTintedUseCase()
     ) {
         self.getContrastUseCase = getContrastUseCase
         self.getFilledUseCase = getFilledUseCase
@@ -41,14 +41,14 @@ struct ButtonGetColorsUseCase: ButtonGetColorsUseCaseable {
 
     // MARK: - Methods
     func execute(
-        theme: Theme,
+        theme: some Theme,
         intent: ButtonIntent,
         variant: ButtonVariant
     ) -> ButtonColors {
         let colors = theme.colors
         let dims = theme.dims
 
-        let useCase: ButtonGetVariantUseCaseable
+        let useCase: any ButtonGetVariantUseCaseable
         switch variant {
         case .contrast:
             useCase = self.getContrastUseCase

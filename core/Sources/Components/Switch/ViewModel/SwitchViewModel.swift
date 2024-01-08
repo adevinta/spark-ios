@@ -15,7 +15,7 @@ final class SwitchViewModel: ObservableObject {
     private(set) var isOn: Bool
 
     private let frameworkType: FrameworkType
-    private(set) var theme: Theme
+    private(set) var theme: any Theme
     private(set) var alignment: SwitchAlignment
     private(set) var intent: SwitchIntent
     private(set) var isEnabled: Bool
@@ -41,12 +41,12 @@ final class SwitchViewModel: ObservableObject {
     @Published private (set) var toggleDotImagesState: SwitchImagesState?
 
     @Published private (set) var displayedText: DisplayedText?
-    @Published private (set) var textFontToken: TypographyFontToken?
+    @Published private (set) var textFontToken: (any TypographyFontToken)?
 
     // MARK: - Private Properties
 
     private var colors: SwitchColors?
-    private let displayedTextViewModel: DisplayedTextViewModel
+    private let displayedTextViewModel: any DisplayedTextViewModel
 
     private let dependencies: any SwitchViewModelDependenciesProtocol
 
@@ -54,7 +54,7 @@ final class SwitchViewModel: ObservableObject {
 
     init(
         for frameworkType: FrameworkType,
-        theme: Theme,
+        theme: some Theme,
         isOn: Bool,
         alignment: SwitchAlignment,
         intent: SwitchIntent,
@@ -62,7 +62,7 @@ final class SwitchViewModel: ObservableObject {
         images: SwitchImagesEither?,
         text: String?,
         attributedText: AttributedStringEither?,
-        dependencies: any SwitchViewModelDependenciesProtocol = SwitchViewModelDependencies()
+        dependencies: some SwitchViewModelDependenciesProtocol = SwitchViewModelDependencies()
     ) {
         self.isOn = isOn
         self.frameworkType = frameworkType
@@ -123,7 +123,7 @@ final class SwitchViewModel: ObservableObject {
         }
     }
 
-    func set(theme: Theme) {
+    func set(theme: some Theme) {
         self.theme = theme
 
         self.updateAll()

@@ -13,7 +13,7 @@ final class TabsGetAttributesUseCaseTests: XCTestCase {
 
     // MARK: - Properties
     var sut: TabsGetAttributesUseCase!
-    var theme: Theme!
+    var theme: (any Theme)!
 
     // MARK: - Setup
     override func setUp() {
@@ -48,8 +48,8 @@ final class TabsGetAttributesUseCaseTests: XCTestCase {
 
         let attributes = self.sut.execute(theme: self.theme, isEnabled: false)
 
-        XCTAssertEqual(attributes.lineColor.uiColor, .red.withAlphaComponent(0.1), "Expect line to have an opacity.")
-        XCTAssertEqual(attributes.backgroundColor.uiColor, .clear, "Expect background to remain the same.")
+        XCTAssertEqual(attributes.lineColor.uiColor, UIColor.red.withAlphaComponent(0.1), "Expect line to have an opacity.")
+        XCTAssertEqual(attributes.backgroundColor.uiColor, UIColor.clear, "Expect background to remain the same.")
     }
 }
 

@@ -13,7 +13,7 @@ struct BadgeSizeDependentAttributes: Equatable {
 
     let offset: EdgeInsets
     let height: CGFloat
-    let font: TypographyFontToken
+    let font: any TypographyFontToken
 
     static func == (lhs: BadgeSizeDependentAttributes, rhs: BadgeSizeDependentAttributes) -> Bool {
         return lhs.offset == rhs.offset &&

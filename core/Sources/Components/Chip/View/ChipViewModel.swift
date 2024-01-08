@@ -11,11 +11,11 @@ import Foundation
 class ChipViewModel<Content>: ObservableObject {
 
     // MARK: - Properties Injected
-    private (set) var theme: Theme
+    private (set) var theme: any Theme
     private (set) var variant: ChipVariant
     private (set) var intent: ChipIntent
     private (set) var alignment: ChipAlignment
-    private let useCase: ChipGetColorsUseCasable
+    private let useCase: any ChipGetColorsUseCasable
 
     // MARK: - State Properties
     var isEnabled: Bool = true {
@@ -43,7 +43,7 @@ class ChipViewModel<Content>: ObservableObject {
     @Published var spacing: CGFloat
     @Published var padding: CGFloat
     @Published var borderRadius: CGFloat
-    @Published var font: TypographyFontToken
+    @Published var font: any TypographyFontToken
     @Published var colors: ChipStateColors
     @Published var isIconLeading: Bool
     @Published var content: Content
@@ -60,7 +60,7 @@ class ChipViewModel<Content>: ObservableObject {
     }
 
     // MARK: - Initializers
-    convenience init(theme: Theme,
+    convenience init(theme: some Theme,
                      variant: ChipVariant,
                      intent: ChipIntent,
                      alignment: ChipAlignment,
@@ -74,12 +74,12 @@ class ChipViewModel<Content>: ObservableObject {
                   useCase: ChipGetColorsUseCase())
     }
 
-    init(theme: Theme,
+    init(theme: some Theme,
          variant: ChipVariant,
          intent: ChipIntent,
          alignment: ChipAlignment,
          content: Content,
-         useCase: ChipGetColorsUseCasable) {
+         useCase: some ChipGetColorsUseCasable) {
         self.theme = theme
         self.variant = variant
         self.intent = intent
@@ -94,7 +94,7 @@ class ChipViewModel<Content>: ObservableObject {
         self.isIconLeading = alignment.isIconLeading
     }
 
-    func set(theme: Theme) {
+    func set(theme: some Theme) {
         self.theme = theme
         self.themeDidUpdate()
     }

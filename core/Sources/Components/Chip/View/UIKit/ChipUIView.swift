@@ -117,7 +117,7 @@ public final class ChipUIView: UIControl {
         }
     }
     /// The theme.
-    public var theme: Theme {
+    public var theme: any Theme {
         set {
             self.viewModel.set(theme: newValue)
         }
@@ -234,7 +234,7 @@ public final class ChipUIView: UIControl {
     ///   - variant: The chip variant, e.g. outlined, filled
     ///   - alignment: Leading or Trailing Icon
     ///   - iconImage: An icon
-    public convenience init(theme: Theme,
+    public convenience init(theme: some Theme,
                             intent: ChipIntent,
                             variant: ChipVariant,
                             alignment: ChipAlignment = .leadingIcon,
@@ -254,7 +254,7 @@ public final class ChipUIView: UIControl {
     /// - intent: The intent of the chip, e.g. main, support
     /// - variant: The chip variant, e.g. outlined, filled
     /// - text: The text label
-    public convenience init(theme: Theme,
+    public convenience init(theme: some Theme,
                             intent: ChipIntent,
                             variant: ChipVariant,
                             alignment: ChipAlignment = .leadingIcon,
@@ -275,7 +275,7 @@ public final class ChipUIView: UIControl {
     /// - variant: The chip variant, e.g. outlined, filled
     /// - text: The text label
     /// - iconImage: An icon
-    public convenience init(theme: Theme,
+    public convenience init(theme: some Theme,
                             intent: ChipIntent,
                             variant: ChipVariant,
                             alignment: ChipAlignment = .leadingIcon,
@@ -289,7 +289,7 @@ public final class ChipUIView: UIControl {
                   optionalIconImage: iconImage)
     }
 
-    init(theme: Theme,
+    init(theme: some Theme,
          intent: ChipIntent,
          variant: ChipVariant,
          alignment: ChipAlignment = .leadingIcon,

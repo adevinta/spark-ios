@@ -10,14 +10,14 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol IconGetColorUseCaseable {
-    func execute(for intent: IconIntent, colors: Colors) -> any ColorToken
+    func execute(for intent: IconIntent, colors: some Colors) -> any ColorToken
 }
 
 struct IconGetColorUseCase: IconGetColorUseCaseable {
 
     // MARK: - Methods
 
-    func execute(for intent: IconIntent, colors: Colors) -> any ColorToken {
+    func execute(for intent: IconIntent, colors: some Colors) -> any ColorToken {
         switch intent {
         case .accent:
             return colors.accent.accent

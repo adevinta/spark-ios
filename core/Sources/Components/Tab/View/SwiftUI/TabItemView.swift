@@ -33,7 +33,7 @@ public struct TabItemView: View {
     /// - apportionsSegmentWidthsByContent: Determins if the tab is to be as wide as it's content, or equally spaced.
     /// - tapAction: the action triggered by tapping on the tab.
     public init(
-        theme: Theme,
+        theme: some Theme,
         intent: TabIntent = .basic,
         size: TabSize = .md,
         content: TabItemContent,

@@ -12,9 +12,9 @@ final class IconViewModel: ObservableObject {
 
     // MARK: - Properties
 
-    private(set) var theme: Theme
+    private(set) var theme: any Theme
     private(set) var intent: IconIntent
-    private let getColorUseCase: IconGetColorUseCaseable
+    private let getColorUseCase: any IconGetColorUseCaseable
 
     // MARK: - Published properties
 
@@ -24,10 +24,10 @@ final class IconViewModel: ObservableObject {
     // MARK: - Initializers
 
     init(
-        theme: Theme,
+        theme: some Theme,
         intent: IconIntent,
         size: IconSize,
-        getColorUseCase: IconGetColorUseCaseable = IconGetColorUseCase()
+        getColorUseCase: some IconGetColorUseCaseable = IconGetColorUseCase()
     ) {
         self.theme = theme
         self.intent = intent
@@ -38,7 +38,7 @@ final class IconViewModel: ObservableObject {
 
     // MARK: - Setters
 
-    func set(theme: Theme) {
+    func set(theme: some Theme) {
         self.theme = theme
         self.updateColor()
     }

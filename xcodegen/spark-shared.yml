@@ -12,3 +12,9 @@ options:
   groupOrdering:
     - order: [core, spark]
   postGenCommand: sh postGenCommand.sh
+targetTemplates:
+  EnableUpcomingFeatures:
+    settings:
+      base:
+        OTHER_SWIFT_FLAGS: $(inherited) -enable-upcoming-feature ConciseMagicFile -enable-upcoming-feature BareSlashRegexLiterals -enable-upcoming-feature ExistentialAny
+

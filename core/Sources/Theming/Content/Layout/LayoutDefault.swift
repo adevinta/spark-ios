@@ -12,11 +12,11 @@ public struct LayoutDefault: Layout {
 
     // MARK: - Properties
 
-    public let spacing: LayoutSpacing
+    public let spacing: any LayoutSpacing
 
     // MARK: - Initialization
 
-    public init(spacing: LayoutSpacing) {
+    public init(spacing: some LayoutSpacing) {
         self.spacing = spacing
     }
 }

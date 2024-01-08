@@ -21,7 +21,7 @@ public final class TextFieldUIView: UITextField {
 
     // MARK: - Public properties
 
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -78,7 +78,7 @@ public final class TextFieldUIView: UITextField {
         self.setupSubscriptions()
     }
 
-    public convenience init(theme: Theme,
+    public convenience init(theme: some Theme,
                             intent: TextFieldIntent = .neutral) {
         let viewModel = TextFieldUIViewModel(theme: theme,
                                              intent: intent,

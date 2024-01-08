@@ -64,7 +64,7 @@ public final class CheckboxUIView: UIControl {
     }
 
     /// Set a delegate to receive selection state change callbacks. Alternatively, you can use bindings.
-    public weak var delegate: CheckboxUIViewDelegate?
+    public weak var delegate: (any CheckboxUIViewDelegate)?
 
     /// The text displayed in the checkbox.
     public var text: String? {
@@ -107,7 +107,7 @@ public final class CheckboxUIView: UIControl {
     }
 
     /// Returns the theme of the checkbox.
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -186,7 +186,7 @@ public final class CheckboxUIView: UIControl {
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     ///   - alignment: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: CheckboxIntent = .main,
         text: String,
         checkedImage: UIImage,
@@ -215,7 +215,7 @@ public final class CheckboxUIView: UIControl {
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     ///   - alignment: Positions the checkbox on the leading or trailing edge of the view.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: CheckboxIntent = .main,
         attributedText: NSAttributedString,
         checkedImage: UIImage,
@@ -235,7 +235,7 @@ public final class CheckboxUIView: UIControl {
     }
 
     init(
-        theme: Theme,
+        theme: some Theme,
         intent: CheckboxIntent = .main,
         content: Either<NSAttributedString?, String?>,
         checkedImage: UIImage,

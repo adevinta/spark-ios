@@ -14,7 +14,7 @@ protocol ProgressBarGetCornerRadiusUseCaseable {
     // sourcery: border = "Identical"
     func execute(
         shape: ProgressBarShape,
-        border: Border
+        border: some Border
     ) -> CGFloat
 }
 
@@ -28,7 +28,7 @@ struct ProgressBarGetCornerRadiusUseCase: ProgressBarGetCornerRadiusUseCaseable 
 
     func execute(
         shape: ProgressBarShape,
-        border: Border
+        border: some Border
     ) -> CGFloat {
         switch shape {
         case .rounded:

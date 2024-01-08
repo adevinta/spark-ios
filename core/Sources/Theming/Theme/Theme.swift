@@ -11,10 +11,10 @@ import SwiftUI
 
 // sourcery: AutoMockable
 public protocol Theme {
-    var border: SparkCore.Border { get }
-    var colors: SparkCore.Colors { get }
-    var elevation: SparkCore.Elevation { get }
-    var layout: SparkCore.Layout { get }
-    var typography: SparkCore.Typography { get }
-    var dims: SparkCore.Dims { get }
+    var border: any SparkCore.Border { get }
+    var colors: any SparkCore.Colors { get }
+    var elevation: any SparkCore.Elevation { get }
+    var layout: any SparkCore.Layout { get }
+    var typography: any SparkCore.Typography { get }
+    var dims: any SparkCore.Dims { get }
 }

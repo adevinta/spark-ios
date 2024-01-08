@@ -35,4 +35,5 @@ targets:
   SparkCoreUnitTests:
     templates:
       - SparkCoreUnitTestsTemplate
+      - EnableUpcomingFeatures
 

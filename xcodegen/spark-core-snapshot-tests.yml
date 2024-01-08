@@ -38,3 +38,4 @@ targets:
   SparkCoreSnapshotTests:
     templates:
       - SparkCoreSnapshotTestsTemplate
+      - EnableUpcomingFeatures

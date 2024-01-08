@@ -10,43 +10,43 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ButtonViewModelDependenciesProtocol {
-    var getBorderUseCase: ButtonGetBorderUseCaseable { get }
-    var getColorsUseCase: ButtonGetColorsUseCaseable { get }
-    var getContentUseCase: ButtonGetContentUseCaseable { get }
-    var getCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable { get }
-    var getIsIconOnlyUseCase: ButtonGetIsOnlyIconUseCaseable { get }
-    var getSizesUseCase: ButtonGetSizesUseCaseable { get }
-    var getSpacingsUseCase: ButtonGetSpacingsUseCaseable { get }
-    var getStateUseCase: ButtonGetStateUseCaseable { get }
+    var getBorderUseCase: any ButtonGetBorderUseCaseable { get }
+    var getColorsUseCase: any ButtonGetColorsUseCaseable { get }
+    var getContentUseCase: any ButtonGetContentUseCaseable { get }
+    var getCurrentColorsUseCase: any ButtonGetCurrentColorsUseCaseable { get }
+    var getIsIconOnlyUseCase: any ButtonGetIsOnlyIconUseCaseable { get }
+    var getSizesUseCase: any ButtonGetSizesUseCaseable { get }
+    var getSpacingsUseCase: any ButtonGetSpacingsUseCaseable { get }
+    var getStateUseCase: any ButtonGetStateUseCaseable { get }
 
     func makeDisplayedTitleViewModel(title: String?,
-                                     attributedTitle: AttributedStringEither?) -> DisplayedTextViewModel
+                                     attributedTitle: AttributedStringEither?) -> any DisplayedTextViewModel
 }
 
 struct ButtonViewModelDependencies: ButtonViewModelDependenciesProtocol {
 
     // MARK: - Properties
 
-    let getBorderUseCase: ButtonGetBorderUseCaseable
-    let getColorsUseCase: ButtonGetColorsUseCaseable
-    let getContentUseCase: ButtonGetContentUseCaseable
-    let getCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable
-    let getIsIconOnlyUseCase: ButtonGetIsOnlyIconUseCaseable
-    let getSizesUseCase: ButtonGetSizesUseCaseable
-    let getSpacingsUseCase: ButtonGetSpacingsUseCaseable
-    let getStateUseCase: ButtonGetStateUseCaseable
+    let getBorderUseCase: any ButtonGetBorderUseCaseable
+    let getColorsUseCase: any ButtonGetColorsUseCaseable
+    let getContentUseCase: any ButtonGetContentUseCaseable
+    let getCurrentColorsUseCase: any ButtonGetCurrentColorsUseCaseable
+    let getIsIconOnlyUseCase: any ButtonGetIsOnlyIconUseCaseable
+    let getSizesUseCase: any ButtonGetSizesUseCaseable
+    let getSpacingsUseCase: any ButtonGetSpacingsUseCaseable
+    let getStateUseCase: any ButtonGetStateUseCaseable
 
     // MARK: - Initialization
 
     init(
-        getBorderUseCase: ButtonGetBorderUseCaseable = ButtonGetBorderUseCase(),
-        getColorsUseCase: ButtonGetColorsUseCaseable = ButtonGetColorsUseCase(),
-        getContentUseCase: ButtonGetContentUseCaseable = ButtonGetContentUseCase(),
-        getCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable = ButtonGetCurrentColorsUseCase(),
-        getIsIconOnlyUseCase: ButtonGetIsOnlyIconUseCaseable = ButtonGetIsOnlyIconUseCase(),
-        getSizesUseCase: ButtonGetSizesUseCaseable = ButtonGetSizesUseCase(),
-        getSpacingsUseCase: ButtonGetSpacingsUseCaseable = ButtonGetSpacingsUseCase(),
-        getStateUseCase: ButtonGetStateUseCaseable = ButtonGetStateUseCase()
+        getBorderUseCase: some ButtonGetBorderUseCaseable = ButtonGetBorderUseCase(),
+        getColorsUseCase: some ButtonGetColorsUseCaseable = ButtonGetColorsUseCase(),
+        getContentUseCase: some ButtonGetContentUseCaseable = ButtonGetContentUseCase(),
+        getCurrentColorsUseCase: some ButtonGetCurrentColorsUseCaseable = ButtonGetCurrentColorsUseCase(),
+        getIsIconOnlyUseCase: some ButtonGetIsOnlyIconUseCaseable = ButtonGetIsOnlyIconUseCase(),
+        getSizesUseCase: some ButtonGetSizesUseCaseable = ButtonGetSizesUseCase(),
+        getSpacingsUseCase: some ButtonGetSpacingsUseCaseable = ButtonGetSpacingsUseCase(),
+        getStateUseCase: some ButtonGetStateUseCaseable = ButtonGetStateUseCase()
     ) {
         self.getBorderUseCase = getBorderUseCase
         self.getColorsUseCase = getColorsUseCase
@@ -63,7 +63,7 @@ struct ButtonViewModelDependencies: ButtonViewModelDependenciesProtocol {
     func makeDisplayedTitleViewModel(
         title: String?,
         attributedTitle: AttributedStringEither?
-    ) -> DisplayedTextViewModel {
+    ) -> any DisplayedTextViewModel {
         return DisplayedTextViewModelDefault(
             text: title,
             attributedText: attributedTitle

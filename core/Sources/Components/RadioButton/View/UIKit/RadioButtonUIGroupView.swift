@@ -114,7 +114,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     /// The current theme
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -199,7 +199,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     /// - groupLayout: The layout of the items within the group. These can be `horizontal` or `vertical`. The defalt is `vertical`.
     /// - state: The state of the radiobutton group, see `RadioButtonGroupState`
     @available(*, deprecated, message: "Use initializer with intent instead. Title and subtitle are also deprececated.")
-    public convenience init(theme: Theme,
+    public convenience init(theme: some Theme,
                 title: String? = nil,
                 selectedID: ID,
                 items: [RadioButtonUIItem<ID>],
@@ -234,7 +234,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     /// - radioButtonLabelPosition: The position of the label in each radio button item according to the toggle. The default value is, that the label is to the `right` of the toggle.
     /// - groupLayout: The layout of the items within the group. These can be `horizontal` or `vertical`. The defalt is `vertical`.
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: RadioButtonIntent,
         selectedID: ID?,
         items: [RadioButtonUIItem<ID>],

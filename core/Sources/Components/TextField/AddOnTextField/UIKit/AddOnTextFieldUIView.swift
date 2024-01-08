@@ -13,7 +13,7 @@ public final class AddOnTextFieldUIView: UIView {
 
     // MARK: - Public properties
 
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -85,7 +85,7 @@ public final class AddOnTextFieldUIView: UIView {
     // MARK: - Initializers
 
     public convenience init(
-        theme: Theme,
+        theme: some Theme,
         intent: TextFieldIntent = .neutral,
         leadingAddOn: UIView? = nil,
         trailingAddOn: UIView? = nil
@@ -100,11 +100,11 @@ public final class AddOnTextFieldUIView: UIView {
     }
 
     internal init(
-        theme: Theme,
+        theme: some Theme,
         intent: TextFieldIntent = .neutral,
         leadingAddOn: UIView? = nil,
         trailingAddOn: UIView? = nil,
-        getColorsUseCase: TextFieldGetColorsUseCasable
+        getColorsUseCase: some TextFieldGetColorsUseCasable
     ) {
         self.leadingAddOn = leadingAddOn
         self.trailingAddOn = trailingAddOn

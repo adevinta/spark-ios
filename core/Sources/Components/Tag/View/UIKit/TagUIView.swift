@@ -71,7 +71,7 @@ public final class TagUIView: UIView {
     // MARK: - Public Properties
 
     /// The spark theme of the tag.
-    public var theme: Theme {
+    public var theme: any Theme {
         didSet {
             self._colors = self.getColorsFromUseCase()
             self.reloadUIFromTheme()
@@ -150,7 +150,7 @@ public final class TagUIView: UIView {
     ///   - intent: The intent of the tag.
     ///   - variant: The variant of the tag.
     ///   - iconImage: The icon image of the tag.
-    public convenience init(theme: Theme,
+    public convenience init(theme: some Theme,
                             intent: TagIntent,
                             variant: TagVariant,
                             iconImage: UIImage) {
@@ -167,7 +167,7 @@ public final class TagUIView: UIView {
     ///   - intent: The intent of the tag.
     ///   - variant: The variant of the tag.
     ///   - text: The text of the tag.
-    public convenience init(theme: Theme,
+    public convenience init(theme: some Theme,
                             intent: TagIntent,
                             variant: TagVariant,
                             text: String) {
@@ -185,7 +185,7 @@ public final class TagUIView: UIView {
     ///   - variant: The variant of the tag.
     ///   - iconImage: The icon image of the tag.
     ///   - text: The text of the tag.
-    public convenience init(theme: Theme,
+    public convenience init(theme: some Theme,
                             intent: TagIntent,
                             variant: TagVariant,
                             iconImage: UIImage,
@@ -197,7 +197,7 @@ public final class TagUIView: UIView {
                   text: text)
     }
 
-    private init(_ theme: Theme,
+    private init(_ theme: some Theme,
                  intent: TagIntent,
                  variant: TagVariant,
                  iconImage: UIImage?,

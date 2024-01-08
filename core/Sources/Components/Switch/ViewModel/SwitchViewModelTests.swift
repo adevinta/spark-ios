@@ -1057,7 +1057,7 @@ private extension SwitchViewModelTests {
     func testGetColorsUseCaseMock(
         on stub: Stub,
         numberOfCalls: Int,
-        givenTheme: Theme? = nil,
+        givenTheme: (any Theme)? = nil,
         givenIntent: SwitchIntent? = nil
     ) {
         XCTAssertEqual(stub.getColorsUseCaseMock.executeWithIntentAndColorsAndDimsCallsCount,
@@ -1148,7 +1148,7 @@ private extension SwitchViewModelTests {
     func testGetPositionUseCaseMock(
         on stub: Stub,
         numberOfCalls: Int,
-        givenTheme: Theme? = nil,
+        givenTheme: (any Theme)? = nil,
         givenAlignment: SwitchAlignment? = nil
     ) {
         XCTAssertEqual(stub.getPositionUseCaseMock.executeWithAlignmentAndSpacingAndContainsTextCallsCount,
@@ -1172,7 +1172,7 @@ private extension SwitchViewModelTests {
     func testGetToggleStateUseCaseMock(
         on stub: Stub,
         numberOfCalls: Int,
-        givenTheme: Theme? = nil,
+        givenTheme: (any Theme)? = nil,
         givenIsEnabled: Bool? = nil
     ) {
         XCTAssertEqual(stub.getToggleStateUseCaseMock.executeWithIsEnabledAndDimsCallsCount,
@@ -1389,7 +1389,7 @@ private extension SwitchViewModelTests {
 
     func testDisplayedText(
         on stub: Stub,
-        givenNewTheme: Theme? = nil,
+        givenNewTheme: (any Theme)? = nil,
         expectedContainsValue: Bool = true
     ) {
         if expectedContainsValue {
@@ -1406,7 +1406,7 @@ private extension SwitchViewModelTests {
 
     func testTextFont(
         on stub: Stub,
-        givenNewTheme: Theme? = nil,
+        givenNewTheme: (any Theme)? = nil,
         expectedContainsValue: Bool = true
     ) {
         if expectedContainsValue {
@@ -1618,7 +1618,7 @@ private final class Stub {
 
     func resetMockedData() {
         // Clear UseCases Mock
-        let useCases: [ResetGeneratedMock] = [
+        let useCases: [any ResetGeneratedMock] = [
             self.getColorsUseCaseMock,
             self.getImagesStateUseCaseMock,
             self.getToggleColorUseCaseMock,

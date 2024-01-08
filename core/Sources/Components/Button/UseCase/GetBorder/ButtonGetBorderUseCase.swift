@@ -11,7 +11,7 @@ import Foundation
 // sourcery: AutoMockable
 protocol ButtonGetBorderUseCaseable {
     func execute(shape: ButtonShape,
-                 border: Border,
+                 border: some Border,
                  variant: ButtonVariant) -> ButtonBorder
 }
 
@@ -21,7 +21,7 @@ struct ButtonGetBorderUseCase: ButtonGetBorderUseCaseable {
 
     func execute(
         shape: ButtonShape,
-        border: Border,
+        border: some Border,
         variant: ButtonVariant
     ) -> ButtonBorder {
         let radius: CGFloat

@@ -10,9 +10,9 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol TabGetFontUseCaseable {
-    func execute(typography: Typography,
+    func execute(typography: some Typography,
                  size: TabSize
-    ) -> TypographyFontToken
+    ) -> any TypographyFontToken
 }
 
 /// Use case which returns the font according to the tab size
@@ -24,9 +24,9 @@ struct TabGetFontUseCase: TabGetFontUseCaseable {
     /// - size: the given tab size
     ///
     /// - Returns: TypographyFontToken
-    func execute(typography: Typography,
+    func execute(typography: some Typography,
                  size: TabSize
-    ) -> TypographyFontToken {
+    ) -> any TypographyFontToken {
         switch size {
         case .xs: return typography.caption
         case .sm: return typography.body2

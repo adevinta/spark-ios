@@ -17,7 +17,7 @@ class ProgressBarMainViewModel<
     // MARK: - Properties
 
     private let frameworkType: FrameworkType
-    private(set) var theme: Theme
+    private(set) var theme: any Theme
     private(set) var intent: GetColorsUseCase.Intent
     private(set) var shape: ProgressBarShape
 
@@ -29,17 +29,17 @@ class ProgressBarMainViewModel<
     // MARK: - Private Properties
 
     private let getColorsUseCase: GetColorsUseCase
-    private let getCornerRadiusUseCase: ProgressBarGetCornerRadiusUseCaseable
+    private let getCornerRadiusUseCase: any ProgressBarGetCornerRadiusUseCaseable
 
     // MARK: - Initialization
 
     init(
         for frameworkType: FrameworkType,
-        theme: Theme,
+        theme: some Theme,
         intent: GetColorsUseCase.Intent,
         shape: ProgressBarShape,
         getColorsUseCase: GetColorsUseCase,
-        getCornerRadiusUseCase: ProgressBarGetCornerRadiusUseCaseable = ProgressBarGetCornerRadiusUseCase()
+        getCornerRadiusUseCase: any ProgressBarGetCornerRadiusUseCaseable = ProgressBarGetCornerRadiusUseCase()
     ) {
         self.frameworkType = frameworkType
 
@@ -67,7 +67,7 @@ class ProgressBarMainViewModel<
 
     // MARK: - Setter
 
-    func set(theme: Theme) {
+    func set(theme: some Theme) {
         self.theme = theme
 
         self.updateAll()

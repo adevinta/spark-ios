@@ -11,14 +11,14 @@ import SwiftUI
 
 // sourcery: AutoMockable
 protocol BadgeGetSizeAttributesUseCaseable {
-    func execute(theme: Theme, size: BadgeSize) -> BadgeSizeDependentAttributes
+    func execute(theme: some Theme, size: BadgeSize) -> BadgeSizeDependentAttributes
 }
 
 /// A use case that returns size specific attributes according to the theme
 struct BadgeGetSizeAttributesUseCase: BadgeGetSizeAttributesUseCaseable {
 
     // MARK: - Functions
-    func execute(theme: Theme, size: BadgeSize) -> BadgeSizeDependentAttributes {
+    func execute(theme: some Theme, size: BadgeSize) -> BadgeSizeDependentAttributes {
         return .init(offset: size.offset(spacing: theme.layout.spacing),
                      height: size.badgeHeight(),
                      font: size.font(typography: theme.typography))
@@ -27,7 +27,7 @@ struct BadgeGetSizeAttributesUseCase: BadgeGetSizeAttributesUseCaseable {
 
 // MARK: - Private helper extension
 private extension BadgeSize {
-    func offset(spacing: LayoutSpacing) -> EdgeInsets {
+    func offset(spacing: some LayoutSpacing) -> EdgeInsets {
         switch self {
         case .medium: return  .init(vertical: spacing.small,
                                     horizontal: spacing.medium)
@@ -45,7 +45,7 @@ private extension BadgeSize {
         }
     }
 
-    func font(typography: Typography) -> TypographyFontToken {
+    func font(typography: some Typography) -> any TypographyFontToken {
         switch self {
         case .medium:
             return typography.captionHighlight

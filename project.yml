@@ -24,3 +24,4 @@ targets:
   SparkCore:
     templates:
       - SparkCoreSchemeTemplate
+      - EnableUpcomingFeatures

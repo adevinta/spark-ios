@@ -15,7 +15,7 @@ import SnapshotTesting
 final class IconViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 
     // MARK: - Properties
-    private let theme: Theme = SparkTheme.shared
+    private let theme: any Theme = SparkTheme.shared
     private var iconImage = Image(systemName: "lock.circle")
 
     // MARK: - Tests

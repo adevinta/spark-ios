@@ -7,5 +7,5 @@
 //
 
 public protocol Elevation {
-    var dropShadow: ElevationShadow & ElevationDropShadows { get }
+    var dropShadow: any ElevationShadow & ElevationDropShadows { get }
 }

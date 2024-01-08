@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ButtonGetSpacingsUseCaseable {
-    func execute(spacing: LayoutSpacing,
+    func execute(spacing: some LayoutSpacing,
                  isOnlyIcon: Bool) -> ButtonSpacings
 }
 
@@ -19,7 +19,7 @@ struct ButtonGetSpacingsUseCase: ButtonGetSpacingsUseCaseable {
     // MARK: - Methods
 
     func execute(
-        spacing: LayoutSpacing,
+        spacing: some LayoutSpacing,
         isOnlyIcon: Bool
     ) -> ButtonSpacings {
         if isOnlyIcon {

@@ -50,7 +50,7 @@ final class BadgeViewModel: ObservableObject {
             self.updateText()
         }
     }
-    var theme: Theme {
+    var theme: any Theme {
         didSet {
             self.updateColors()
             self.updateFont()
@@ -60,7 +60,7 @@ final class BadgeViewModel: ObservableObject {
 
     // MARK: - Internal Published Properties
     @Published var text: String
-    @Published var textFont: TypographyFontToken
+    @Published var textFont: any TypographyFontToken
     @Published var textColor: any ColorToken
     @Published var isBadgeEmpty: Bool
     @Published var backgroundColor: any ColorToken
@@ -70,19 +70,19 @@ final class BadgeViewModel: ObservableObject {
     @Published var offset: EdgeInsets
 
     // MARK: - Internal Appearance Properties
-    var colorsUseCase: BadgeGetIntentColorsUseCaseable
-    var sizeAttributesUseCase: BadgeGetSizeAttributesUseCaseable
+    var colorsUseCase: any BadgeGetIntentColorsUseCaseable
+    var sizeAttributesUseCase: any BadgeGetSizeAttributesUseCaseable
 
     // MARK: - Initializer
 
-    init(theme: Theme,
+    init(theme: some Theme,
          intent: BadgeIntentType,
          size: BadgeSize = .medium,
          value: Int? = nil,
          format: BadgeFormat = .default,
          isBorderVisible: Bool = true,
-         colorsUseCase: BadgeGetIntentColorsUseCaseable = BadgeGetIntentColorsUseCase(),
-         sizeAttributesUseCase: BadgeGetSizeAttributesUseCaseable = BadgeGetSizeAttributesUseCase()
+         colorsUseCase: some BadgeGetIntentColorsUseCaseable = BadgeGetIntentColorsUseCase(),
+         sizeAttributesUseCase: some BadgeGetSizeAttributesUseCaseable = BadgeGetSizeAttributesUseCase()
     ) {
         let colors = colorsUseCase.execute(intentType: intent, on: theme.colors)
 

@@ -23,10 +23,10 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
         }
     }
     
-    private let tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable
-    
+    private let tabGetStateAttributesUseCase: any TabGetStateAttributesUseCasable
+
     // MARK: Properties
-    var theme: Theme {
+    var theme: any Theme {
         didSet {
             self.updateStateAttributes()
         }
@@ -93,13 +93,13 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
     /// - content: the `TabUIItemContent` contents of the tab item:
     /// - tabGetStateAttributesUseCase: `TabGetStateAttributesUseCasable` has a default value `TabGetStateAttributesUseCase`
     init(
-        theme: Theme,
+        theme: some Theme,
         intent: TabIntent = .basic,
         tabSize: TabSize = .md,
         tabState: TabState = .init(),
         content: Content,
         apportionsSegmentWidthsByContent: Bool = false,
-        tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable = TabGetStateAttributesUseCase()
+        tabGetStateAttributesUseCase: some TabGetStateAttributesUseCasable = TabGetStateAttributesUseCase()
     ) {
         self.tabState = tabState
         self.theme = theme

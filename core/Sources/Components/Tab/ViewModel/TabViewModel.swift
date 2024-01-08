@@ -14,7 +14,7 @@ final class TabViewModel<Content>: ObservableObject {
     private var useCase: any TabsGetAttributesUseCaseable
 
     // MARK: - Internal variables
-    var theme: Theme {
+    var theme: any Theme {
         didSet {
             self.tabsAttributes = self.useCase.execute(theme: theme, isEnabled: self.isEnabled)
         }

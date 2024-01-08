@@ -8,15 +8,15 @@
 
 // sourcery: AutoMockable
 public protocol ElevationDropShadows {
-    var small: ElevationShadow { get }
-    var medium: ElevationShadow { get }
-    var large: ElevationShadow { get }
-    var extraLarge: ElevationShadow { get }
-    var none: ElevationShadow { get }
+    var small: any ElevationShadow { get }
+    var medium: any ElevationShadow { get }
+    var large: any ElevationShadow { get }
+    var extraLarge: any ElevationShadow { get }
+    var none: any ElevationShadow { get }
 }
 
 public extension ElevationDropShadows {
-    var none: ElevationShadow {
+    var none: any ElevationShadow {
         ElevationShadowDefault(offset: .zero,
                                blur: 0,
                                colorToken: ColorTokenDefault.clear,

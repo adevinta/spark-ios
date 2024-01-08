@@ -10,14 +10,14 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol RatingGetColorsUseCaseable {
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  intent: RatingIntent,
                  state: RatingState
     ) -> RatingColors
 }
 
 extension RatingGetColorsUseCaseable {
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  intent: RatingIntent
     ) -> RatingColors {
         return self.execute(theme: theme, intent: intent, state: .standard)
@@ -33,7 +33,7 @@ struct RatingGetColorsUseCase: RatingGetColorsUseCaseable {
     ///   - theme: the current theme
     ///   - intent: the intent defining the color in the theme
     ///   - state: the current state
-    func execute(theme: Theme,
+    func execute(theme: some Theme,
                  intent: RatingIntent,
                  state: RatingState
     ) -> RatingColors {

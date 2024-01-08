@@ -11,8 +11,8 @@ import Foundation
 // sourcery: AutoMockable
 protocol SwitchGetColorsUseCaseable {
     func execute(intent: SwitchIntent,
-                 colors: Colors,
-                 dims: Dims) -> SwitchColors
+                 colors: some Colors,
+                 dims: some Dims) -> SwitchColors
 }
 
 struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
@@ -31,8 +31,8 @@ struct SwitchGetColorsUseCase: SwitchGetColorsUseCaseable {
 
     func execute(
         intent: SwitchIntent,
-        colors: Colors,
-        dims: Dims
+        colors: some Colors,
+        dims: some Dims
     ) -> SwitchColors {
 
         // Get color from use case
