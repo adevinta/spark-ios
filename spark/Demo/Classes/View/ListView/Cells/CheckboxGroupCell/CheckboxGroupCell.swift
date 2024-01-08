@@ -52,6 +52,8 @@ final class CheckboxGroupCell: UITableViewCell, Configurable {
 
         if configuration.showGroupTitle {
             self.component.title = "Checkbox group title"
+        } else {
+            self.component.title = nil
         }
     }
 }

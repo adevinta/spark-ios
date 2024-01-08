@@ -19,7 +19,7 @@ final class TabCell: UITableViewCell, Configurable {
             theme: SparkTheme.shared,
             intent: .main,
             tabSize: .md,
-            content: [TabUIItemContent(title: "Tab 1")]
+            content: []
         )
         return view
     }()
@@ -50,15 +50,12 @@ final class TabCell: UITableViewCell, Configurable {
         self.component.intent = configuration.intent
         self.component.tabSize = configuration.size
         self.component.apportionsSegmentWidthsByContent = !configuration.isEqualWidth
-
-        if self.component.segments.count == 1 {
-            configuration.contents.forEach {
-                self.component.addSegment(withImage: $0.icon ?? UIImage(), andTitle: $0.title ?? "")
-            }
-        }
+        self.component.setSegments(withContent: configuration.contents)
 
         if configuration.showBadge {
             self.component.setBadge(self.badge, forSegementAt: 1)
+        } else {
+            self.component.setBadge(nil, forSegementAt: 1)
         }
     }
 }

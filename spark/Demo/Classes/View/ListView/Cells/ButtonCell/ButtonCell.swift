@@ -66,11 +66,13 @@ final class ButtonCell: UITableViewCell, Configurable {
         switch configuration.content {
         case .text:
             self.component.text = "Button"
+            self.component.iconImage = nil
         case .iconAndText:
             self.component.text = "Hello World"
             self.component.iconImage = UIImage(systemName: "book.circle")
         case .attributedText:
             self.component.attributedText = self.attributeString
+            self.component.iconImage = nil
         default:
             break
         }
