@@ -36,12 +36,6 @@ struct TextLinkGetAttributedStringUseCase: TextLinkGetAttributedStringUseCaseabl
 
     // MARK: - Methods
 
-
-    func execute(
-        textHighlightRange: NSRange?) -> String? {
-            return nil
-        }
-
     func execute(
         frameworkType: FrameworkType,
         text: String,

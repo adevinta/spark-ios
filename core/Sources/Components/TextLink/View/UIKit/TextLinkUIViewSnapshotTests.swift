@@ -30,8 +30,8 @@ final class TextLinkUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 let view: TextLinkUIView = .init(
                     theme: self.theme,
                     text: configuration.type.text,
-                    textColorToken: configuration.color.colorToken(from: self.theme),
                     textHighlightRange: configuration.type.textHighlightRange,
+                    intent: configuration.intent,
                     typography: configuration.size.typography,
                     variant: configuration.variant,
                     image: configuration.image?.leftValue,

@@ -19,7 +19,7 @@ struct TextLinkComponentView: View {
     // MARK: - Properties
 
     @State private var theme: Theme = SparkThemePublisher.shared.theme
-    @State private var textColorToken: TextLinkColorToken = .main
+    @State private var intent: TextLinkIntent = .main
     @State private var variant: TextLinkVariant = .underline
     @State private var typography: TextLinkTypography = .body1
     @State private var content: TextLinkContent = .text
@@ -27,7 +27,7 @@ struct TextLinkComponentView: View {
     @State private var textAlignment: TextAlignment = .leading
     @State private var isLineLimit: CheckboxSelectionState = .unselected
 
-    @State private var showingActionAlert = false
+    @State private var showIngActionAlert = false
 
     // MARK: - View
 
@@ -38,10 +38,10 @@ struct TextLinkComponentView: View {
                 ThemeSelector(theme: self.$theme)
 
                 EnumSelector(
-                    title: "Color Token",
-                    dialogTitle: "Select a text color token",
-                    values: TextLinkColorToken.allCases,
-                    value: self.$textColorToken
+                    title: "Intent",
+                    dialogTitle: "Select an intent",
+                    values: TextLinkIntent.allCases,
+                    value: self.$intent
                 )
 
                 EnumSelector(
@@ -91,19 +91,19 @@ struct TextLinkComponentView: View {
                 TextLinkView(
                     theme: self.theme,
                     text: self.getText(from: self.content),
-                    textColorToken: self.textColorToken.getColorToken(from: self.theme),
                     textHighlightRange: self.getTextHighlightRange(from: self.content),
+                    intent: self.intent,
                     typography: self.typography,
                     variant: self.variant,
                     image: self.getImage(from: self.content),
                     alignment: self.contentAlignment,
                     action: {
-                        self.showingActionAlert = true
+                        self.showIngActionAlert = true
                     }
                 )
                 .multilineTextAlignment(self.textAlignment)
                 .lineLimit(self.isLineLimit == .selected ? 2 : nil)
-                .alert("TextLink tap", isPresented: $showingActionAlert) {
+                .alert("TextLink tap", isPresented: $showIngActionAlert) {
                     Button("OK", role: .cancel) { }
                 }
             }
