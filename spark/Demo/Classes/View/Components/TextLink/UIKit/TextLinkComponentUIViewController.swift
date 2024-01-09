@@ -67,12 +67,12 @@ final class TextLinkComponentUIViewController: UIViewController {
             }
             .store(in: &self.subscriptions)
 
-        self.viewModel.showThemeSheet.subscribe(in: &self.subscriptions) { textColorTokens in
-            self.presentThemeActionSheet(textColorTokens)
+        self.viewModel.showThemeSheet.subscribe(in: &self.subscriptions) { intents in
+            self.presentThemeActionSheet(intents)
         }
 
-        self.viewModel.showTextColorTokenSheet.subscribe(in: &self.subscriptions) { textColorTokens in
-            self.presentTextColorTokenActionSheet(textColorTokens)
+        self.viewModel.showIntentSheet.subscribe(in: &self.subscriptions) { intents in
+            self.presentIntentActionSheet(intents)
         }
 
         self.viewModel.showVariantSheet.subscribe(in: &self.subscriptions) { variants in
@@ -127,11 +127,11 @@ extension TextLinkComponentUIViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentTextColorTokenActionSheet(_ textColorTokens: [TextLinkColorToken]) {
-        let actionSheet = SparkActionSheet<TextLinkColorToken>.init(
-            values: textColorTokens,
-            texts: textColorTokens.map { $0.name }) { textColorToken in
-                self.viewModel.textColorToken = textColorToken
+    private func presentIntentActionSheet(_ intents: [TextLinkIntent]) {
+        let actionSheet = SparkActionSheet<TextLinkIntent>.init(
+            values: intents,
+            texts: intents.map { $0.name }) { intent in
+                self.viewModel.intent = intent
             }
         self.present(actionSheet, animated: true)
     }

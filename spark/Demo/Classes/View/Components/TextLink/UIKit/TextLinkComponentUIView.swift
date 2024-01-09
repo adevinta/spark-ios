@@ -40,7 +40,7 @@ final class TextLinkComponentUIView: ComponentUIView {
         self.componentView = .init(
             theme: viewModel.theme,
             text: viewModel.content.containsText ? Constants.text : Constants.Long.text,
-            textColorToken: viewModel.textColorToken.getColorToken(from: viewModel.theme),
+            intent: viewModel.intent,
             typography: viewModel.typography,
             variant: viewModel.variant,
             image: .init(resource: .info)
@@ -76,10 +76,10 @@ final class TextLinkComponentUIView: ComponentUIView {
             self.componentView.theme = theme
         }
 
-        self.viewModel.$textColorToken.subscribe(in: &self.subcriptions) { [weak self] textColorToken in
+        self.viewModel.$intent.subscribe(in: &self.subcriptions) { [weak self] intent in
             guard let self = self else { return }
-            self.viewModel.textColorTokenConfigurationItemViewModel.buttonTitle = textColorToken.name
-            self.componentView.textColorToken = textColorToken.getColorToken(from: self.viewModel.theme)
+            self.viewModel.intentConfigurationItemViewModel.buttonTitle = intent.name
+            self.componentView.intent = intent
         }
 
         self.viewModel.$variant.subscribe(in: &self.subcriptions) { [weak self] variant in
@@ -98,27 +98,27 @@ final class TextLinkComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.viewModel.contentConfigurationItemViewModel.buttonTitle = content.name
 
-//            switch content {
-//            case .text:
-//                self.componentView.text = Constants.text
-//                self.componentView.textHighlightRange = nil
-//                self.componentView.image = nil
-//
-//            case .paragraph:
-//                self.componentView.text = Constants.Long.text
-//                self.componentView.textHighlightRange = Constants.Long.textHighlightRange
-//                self.componentView.image = nil
-//
-//            case .imageAndText:
-//                self.componentView.text = Constants.text
-//                self.componentView.textHighlightRange = nil
-//                self.componentView.image = .init(resource: .info)
-//
-//            case .imageAndParagraph:
-//                self.componentView.text = Constants.Long.text
-//                self.componentView.textHighlightRange = Constants.Long.textHighlightRange
-//                self.componentView.image = .init(resource: .info)
-//            }
+            switch content {
+            case .text:
+                self.componentView.text = Constants.text
+                self.componentView.textHighlightRange = nil
+                self.componentView.image = nil
+
+            case .paragraph:
+                self.componentView.text = Constants.Long.text
+                self.componentView.textHighlightRange = Constants.Long.textHighlightRange
+                self.componentView.image = nil
+
+            case .imageAndText:
+                self.componentView.text = Constants.text
+                self.componentView.textHighlightRange = nil
+                self.componentView.image = .init(resource: .info)
+
+            case .imageAndParagraph:
+                self.componentView.text = Constants.Long.text
+                self.componentView.textHighlightRange = Constants.Long.textHighlightRange
+                self.componentView.image = .init(resource: .info)
+            }
         }
 
         self.viewModel.$contentAlignment.subscribe(in: &self.subcriptions) { [weak self] contentAlignment in

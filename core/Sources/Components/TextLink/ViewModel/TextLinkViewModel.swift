@@ -13,34 +13,80 @@ import Foundation
 // sourcery: imageTintColor = "Identical"
 class TextLinkViewModel: ObservableObject {
 
-    // MARK: - Properties
+    // MARK: - State Properties
 
-    private(set) var theme: any Theme
-    private(set) var text: String
-    private(set) var textColorToken: any ColorToken
-    private(set) var textHighlightRange: NSRange?
-    private(set) var typography: TextLinkTypography
-    private(set) var variant: TextLinkVariant
-    private(set) var alignment: TextLinkAlignment
+    var theme: any Theme {
+        didSet {
+            self.updateContentAndImageSize()
+        }
+    }
+
+    var text: String {
+        didSet {
+            guard self.text != oldValue else { return }
+            self.contentDidUpdate()
+        }
+    }
+
+    var textHighlightRange: NSRange? {
+        didSet {
+            guard self.textHighlightRange != oldValue else { return }
+            self.contentDidUpdate()
+        }
+    }
+
+    var intent: TextLinkIntent {
+        didSet {
+            guard self.intent != oldValue else { return }
+            self.contentDidUpdate()
+        }
+    }
+
+    var isHighlighted: Bool = false {
+        didSet {
+            guard self.isHighlighted != oldValue else { return }
+            self.contentDidUpdate()
+        }
+    }
+
+    var variant: TextLinkVariant {
+        didSet {
+            guard self.variant != oldValue else { return }
+            self.contentDidUpdate()
+        }
+    }
+
+    var typography: TextLinkTypography {
+        didSet {
+            guard self.typography != oldValue else { return }
+            self.updateAll()
+        }
+    }
+
+    var alignment: TextLinkAlignment {
+        didSet {
+            guard self.alignment != oldValue else { return }
+            self.aligmentDidUpdate()
+        }
+    }
 
     // MARK: - Published Properties
 
     @Published private(set) var attributedText: AttributedStringEither?
-    @Published private(set) var spacing: CGFloat?
+    @Published private(set) var spacing: CGFloat = .zero
     @Published private(set) var imageSize: TextLinkImageSize?
-    @Published private(set) var imageTintColor: (any ColorToken)?
-    @Published private(set) var isTrailingImage: Bool?
+    @Published private(set) var imageTintColor: any ColorToken = ColorTokenDefault.clear
+    @Published private(set) var isTrailingImage: Bool = false
 
     // MARK: - Private Properties
 
     private let frameworkType: FrameworkType
 
-    private var isHighlighted: Bool = false
-
     private var typographies: TextLinkTypographies?
 
     // MARK: - UseCases
 
+    let getColorUseCase: TextLinkGetColorUseCaseable
     let getTypographiesUseCase: TextLinkGetTypographiesUseCaseable
     let getAttributedStringUseCase: TextLinkGetAttributedStringUseCaseable
     let getImageSizeUseCase: TextLinkGetImageSizeUseCaseable
@@ -51,11 +97,12 @@ class TextLinkViewModel: ObservableObject {
         for frameworkType: FrameworkType,
         theme: any Theme,
         text: String,
-        textColorToken: any ColorToken,
         textHighlightRange: NSRange?,
+        intent: TextLinkIntent,
         typography: TextLinkTypography,
         variant: TextLinkVariant,
         alignment: TextLinkAlignment,
+        getColorUseCase: TextLinkGetColorUseCaseable = TextLinkGetColorUseCase(),
         getTypographiesUseCase: TextLinkGetTypographiesUseCaseable = TextLinkGetTypographiesUseCase(),
         getAttributedStringUseCase: TextLinkGetAttributedStringUseCaseable = TextLinkGetAttributedStringUseCase(),
         getImageSizeUseCase: TextLinkGetImageSizeUseCaseable = TextLinkGetImageSizeUseCase()
@@ -64,12 +111,13 @@ class TextLinkViewModel: ObservableObject {
 
         self.theme = theme
         self.text = text
-        self.textColorToken = textColorToken
         self.textHighlightRange = textHighlightRange
+        self.intent = intent
         self.typography = typography
         self.variant = variant
         self.alignment = alignment
 
+        self.getColorUseCase = getColorUseCase
         self.getTypographiesUseCase = getTypographiesUseCase
         self.getAttributedStringUseCase = getAttributedStringUseCase
         self.getImageSizeUseCase = getImageSizeUseCase
@@ -86,68 +134,6 @@ class TextLinkViewModel: ObservableObject {
         // Update all values when UIKit view is ready to receive published values
         if self.frameworkType == .uiKit {
             self.updateAll()
-        }
-    }
-
-    // MARK: - Setter
-
-    func set(theme: Theme) {
-        self.theme = theme
-
-        self.updateContentAndImageSize()
-    }
-
-    func set(text: String) {
-        if self.text != text {
-            self.text = text
-
-            self.contentDidUpdate()
-        }
-    }
-
-    func set(textColorToken: any ColorToken) {
-        self.textColorToken = textColorToken
-
-        self.contentDidUpdate()
-    }
-
-    func set(textHighlightRange: NSRange?) {
-        if self.textHighlightRange != textHighlightRange {
-            self.textHighlightRange = textHighlightRange
-
-            self.contentDidUpdate()
-        }
-    }
-
-    func set(isHighlighted: Bool) {
-        if self.isHighlighted != isHighlighted {
-            self.isHighlighted = isHighlighted
-
-            self.contentDidUpdate()
-        }
-    }
-
-    func set(variant: TextLinkVariant) {
-        if self.variant != variant {
-            self.variant = variant
-
-            self.contentDidUpdate()
-        }
-    }
-
-    func set(typography: TextLinkTypography) {
-        if self.typography != typography {
-            self.typography = typography
-
-            self.contentDidUpdate()
-        }
-    }
-
-    func set(alignment: TextLinkAlignment) {
-        if self.alignment != alignment {
-            self.alignment = alignment
-
-            self.aligmentDidUpdate()
         }
     }
 
@@ -173,14 +159,20 @@ class TextLinkViewModel: ObservableObject {
     }
 
     private func contentDidUpdate(forceToReload: Bool = false) {
+        let color = self.getColorUseCase.execute(
+            intent: self.intent, 
+            isHighlighted: self.isHighlighted,
+            colors: self.theme.colors
+        )
+
         self.spacing = self.theme.layout.spacing.medium
 
-        self.imageTintColor = self.textColorToken
+        self.imageTintColor = color
 
         self.attributedText = self.getAttributedStringUseCase.execute(
             frameworkType: self.frameworkType,
-            text: self.text, 
-            textColorToken: self.textColorToken,
+            text: self.text,
+            textColorToken: color,
             textHighlightRange: self.textHighlightRange,
             isHighlighted: self.isHighlighted,
             variant: self.variant,

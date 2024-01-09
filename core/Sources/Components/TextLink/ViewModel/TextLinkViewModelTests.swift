@@ -10,7 +10,7 @@ import XCTest
 @testable import SparkCore
 import Combine
 
-final class TextLinkCommonViewModelTests: XCTestCase {
+final class TextLinkViewModelTests: XCTestCase {
 
     // MARK: - Properties
 
@@ -76,8 +76,8 @@ final class TextLinkCommonViewModelTests: XCTestCase {
     ) throws {
         // GIVEN
         let textMock = "My Text"
-        let textColorTokenMock = ColorTokenGeneratedMock()
         let textHighlightRangeMock = NSRange()
+        let intentMock: TextLinkIntent = .accent
         let typographyMock: TextLinkTypography = .body1
         let variantMock: TextLinkVariant = .underline
         let alignmentMock: TextLinkAlignment = .leadingImage
@@ -86,8 +86,8 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         let stub = Stub(
             frameworkType: givenFrameworkType,
             text: textMock,
-            textColorToken: textColorTokenMock,
             textHighlightRange: textHighlightRangeMock,
+            intent: intentMock,
             typography: typographyMock,
             variant: variantMock,
             alignment: alignmentMock
@@ -114,10 +114,14 @@ final class TextLinkCommonViewModelTests: XCTestCase {
             textMock,
             "Wrong text value"
         )
-        XCTAssertIdentical(
-            viewModel.textColorToken as? ColorTokenGeneratedMock,
-            textColorTokenMock,
-            "Wrong text color token value"
+        XCTAssertEqual(
+            viewModel.intent,
+            intentMock,
+            "Wrong intent value"
+        )
+        XCTAssertFalse(
+            viewModel.isHighlighted,
+            "Wrong isHighlighted value"
         )
         XCTAssertEqual(
             viewModel.textHighlightRange,
@@ -151,22 +155,30 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         TextLinkViewModelPublisherTest.XCTAssert(
             spacing: stub.spacingPublisherMock,
             expectedNumberOfSinks: expectedNumberOfSinks,
-            expectedValue: expectedIsSinksValues ? stub.spacingMock : nil
+            expectedValue: expectedIsSinksValues ? stub.spacingMock : .zero
         )
         TextLinkViewModelPublisherTest.XCTAssert(
             imageSize: stub.imageSizePublisherMock,
             expectedNumberOfSinks: expectedNumberOfSinks,
             expectedValue: expectedIsSinksValues ? stub.imageSizeMock : nil
         )
-        try TextLinkViewModelPublisherTest.XCTAssert(
-            imageTintColor: stub.imageTintColorPublisherMock,
-            expectedNumberOfSinks: expectedNumberOfSinks,
-            expectedValue: expectedIsSinksValues ? stub.imageTintColorMock : nil
-        )
+        if expectedIsSinksValues {
+            TextLinkViewModelPublisherTest.XCTAssert(
+                imageTintColor: stub.imageTintColorPublisherMock,
+                expectedNumberOfSinks: expectedNumberOfSinks,
+                expectedValue: stub.colorMock
+            )
+        } else {
+            TextLinkViewModelPublisherTest.XCTSinksCount(
+                imageTintColor: stub.imageTintColorPublisherMock,
+                expectedNumberOfSinks: expectedNumberOfSinks
+            )
+        }
+
         TextLinkViewModelPublisherTest.XCTAssert(
             isTrailingImage: stub.isTrailingImagePublisherMock,
             expectedNumberOfSinks: expectedNumberOfSinks,
-            expectedValue: expectedIsSinksValues ? stub.isTrailingImageMock : nil
+            expectedValue: expectedIsSinksValues ? stub.isTrailingImageMock : false
         )
         // **
 
@@ -184,7 +196,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
             expectedNumberOfCalls: expectedNumberOfCalls,
             givenFrameworkType: givenFrameworkType,
             givenText: textMock,
-            givenTextColorToken: textColorTokenMock,
+            givenTextColorToken: stub.colorMock,
             givenTextHighlightRange: textHighlightRangeMock,
             givenIsHighlighted: false,
             givenVariant: variantMock,
@@ -199,7 +211,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         )
     }
 
-    // MARK: - Setter Tests
+    // MARK: - Update State Properties Tests
 
     func test_set_themes() {
         // GIVEN
@@ -214,7 +226,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(theme: newTheme)
+        viewModel.theme = newTheme
 
         // THEN
         XCTAssertIdentical(
@@ -293,7 +305,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(text: newValue)
+        viewModel.text = newValue
 
         // THEN
         XCTAssertEqual(
@@ -304,38 +316,10 @@ final class TextLinkCommonViewModelTests: XCTestCase {
 
         self.testPublishersAndUseCasesWhenContentChanged(
             stub: stub,
-            givenIsDifferentNewValue: givenIsDifferentNewValue
+            givenIsContentDidUpdate: givenIsDifferentNewValue
         )
     }
-
-    func test_set_textColorToken() {
-        // GIVEN
-        let newValue = ColorTokenGeneratedMock()
-
-        let stub = Stub(frameworkType: .swiftUI)
-        let viewModel = stub.viewModel
-
-        stub.subscribePublishers(on: &self.subscriptions)
-
-        // Reset all UseCase mock
-        stub.resetMockedData()
-
-        // WHEN
-        viewModel.set(textColorToken: newValue)
-
-        // THEN
-        XCTAssertIdentical(
-            viewModel.textColorToken as? ColorTokenGeneratedMock,
-            newValue,
-            "Wrong text color token value"
-        )
-
-        self.testPublishersAndUseCasesWhenContentChanged(
-            stub: stub,
-            givenIsDifferentNewValue: true
-        )
-    }
-
+    
     func test_set_textHighlightRange_with_different_new_value() {
         self.testSetTextHighlightRange(
             givenIsDifferentNewValue: true
@@ -367,7 +351,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(textHighlightRange: newValue)
+        viewModel.textHighlightRange = newValue
 
         // THEN
         XCTAssertEqual(
@@ -378,7 +362,53 @@ final class TextLinkCommonViewModelTests: XCTestCase {
 
         self.testPublishersAndUseCasesWhenContentChanged(
             stub: stub,
-            givenIsDifferentNewValue: givenIsDifferentNewValue
+            givenIsContentDidUpdate: givenIsDifferentNewValue
+        )
+    }
+
+    func test_set_intent_with_different_new_value() {
+        self.testSetIntent(
+            givenIsDifferentNewValue: true
+        )
+    }
+
+    func test_set_intent_with_same_new_value() {
+        self.testSetIntent(
+            givenIsDifferentNewValue: false
+        )
+    }
+
+    func testSetIntent(
+        givenIsDifferentNewValue: Bool
+    ) {
+        // GIVEN
+        let defaultValue: TextLinkIntent = .main
+        let newValue = givenIsDifferentNewValue ? .accent : defaultValue
+
+        let stub = Stub(
+            frameworkType: .swiftUI, 
+            intent: defaultValue
+        )
+        let viewModel = stub.viewModel
+
+        stub.subscribePublishers(on: &self.subscriptions)
+
+        // Reset all UseCase mock
+        stub.resetMockedData()
+
+        // WHEN
+        viewModel.intent = newValue
+
+        // THEN
+        XCTAssertEqual(
+            viewModel.intent,
+            newValue,
+            "Wrong intent value"
+        )
+
+        self.testPublishersAndUseCasesWhenContentChanged(
+            stub: stub,
+            givenIsContentDidUpdate: givenIsDifferentNewValue
         )
     }
 
@@ -411,12 +441,12 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(isHighlighted: newValue)
+        viewModel.isHighlighted = newValue
 
         // THEN
         self.testPublishersAndUseCasesWhenContentChanged(
             stub: stub,
-            givenIsDifferentNewValue: givenIsDifferentNewValue
+            givenIsContentDidUpdate: givenIsDifferentNewValue
         )
     }
 
@@ -451,7 +481,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(typography: newValue)
+        viewModel.typography = newValue
 
         // THEN
         XCTAssertEqual(
@@ -462,7 +492,8 @@ final class TextLinkCommonViewModelTests: XCTestCase {
 
         self.testPublishersAndUseCasesWhenContentChanged(
             stub: stub,
-            givenIsDifferentNewValue: givenIsDifferentNewValue
+            givenIsContentDidUpdate: givenIsDifferentNewValue,
+            givenIsImageSizeDidUpdate: givenIsDifferentNewValue
         )
     }
 
@@ -497,7 +528,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(variant: newValue)
+        viewModel.variant = newValue
 
         // THEN
         XCTAssertEqual(
@@ -508,7 +539,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
 
         self.testPublishersAndUseCasesWhenContentChanged(
             stub: stub,
-            givenIsDifferentNewValue: givenIsDifferentNewValue
+            givenIsContentDidUpdate: givenIsDifferentNewValue
         )
     }
 
@@ -543,7 +574,7 @@ final class TextLinkCommonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(alignment: newValue)
+        viewModel.alignment = newValue
 
         // THEN
         XCTAssertEqual(
@@ -593,44 +624,45 @@ final class TextLinkCommonViewModelTests: XCTestCase {
 
     private func testPublishersAndUseCasesWhenContentChanged(
         stub: Stub,
-        givenIsDifferentNewValue: Bool
+        givenIsContentDidUpdate: Bool,
+        givenIsImageSizeDidUpdate: Bool = false
     ) {
         // **
         // Published count (the properties are already test on load and init tests)
         TextLinkViewModelPublisherTest.XCTSinksCount(
             attributedText: stub.attributedTextPublisherMock,
-            expectedNumberOfSinks: givenIsDifferentNewValue ? 1 : 0
+            expectedNumberOfSinks: givenIsContentDidUpdate ? 1 : 0
         )
         TextLinkViewModelPublisherTest.XCTSinksCount(
             spacing: stub.spacingPublisherMock,
-            expectedNumberOfSinks: givenIsDifferentNewValue ? 1 : 0
+            expectedNumberOfSinks: givenIsContentDidUpdate ? 1 : 0
         )
         TextLinkViewModelPublisherTest.XCTSinksCount(
             imageSize: stub.imageSizePublisherMock,
-            expectedNumberOfSinks: 0
+            expectedNumberOfSinks: givenIsImageSizeDidUpdate ? 1 : 0
         )
         TextLinkViewModelPublisherTest.XCTSinksCount(
             imageTintColor: stub.imageTintColorPublisherMock,
-            expectedNumberOfSinks: givenIsDifferentNewValue ? 1 : 0
+            expectedNumberOfSinks: givenIsContentDidUpdate ? 1 : 0
         )
         TextLinkViewModelPublisherTest.XCTSinksCount(
             isTrailingImage: stub.isTrailingImagePublisherMock,
-            expectedNumberOfSinks: 0
+            expectedNumberOfSinks: givenIsImageSizeDidUpdate ? 1 : 0
         )
         // **
 
         // Use Cases count (the parameters and returns are already test on load and init tests)
         TextLinkGetTypographiesUseCaseableMockTest.XCTCallsCount(
             stub.getTypographiesUseCaseMock,
-            executeWithTextLinkTypographyAndTypographyNumberOfCalls: givenIsDifferentNewValue ? 1 : 0
+            executeWithTextLinkTypographyAndTypographyNumberOfCalls: givenIsContentDidUpdate ? 1 : 0
         )
         TextLinkGetAttributedStringUseCaseableMockTest.XCTCallsCount(
             stub.getAttributedStringUseCaseMock,
-            executeWithFrameworkTypeAndTextAndTextColorTokenAndTextHighlightRangeAndIsHighlightedAndVariantAndTypographiesNumberOfCalls: givenIsDifferentNewValue ? 1 : 0
+            executeWithFrameworkTypeAndTextAndTextColorTokenAndTextHighlightRangeAndIsHighlightedAndVariantAndTypographiesNumberOfCalls: givenIsContentDidUpdate ? 1 : 0
         )
         TextLinkGetImageSizeUseCaseableMockTest.XCTCallsCount(
             stub.getImageSizeUseCaseMock,
-            executeWithTypographiesNumberOfCalls: 0
+            executeWithTypographiesNumberOfCalls: givenIsImageSizeDidUpdate ? 1 : 0
         )
     }
 
@@ -701,20 +733,14 @@ private final class Stub: TextLinkViewModelStub {
 
     let themeMock = ThemeGeneratedMock.mocked()
 
+    let colorMock = ColorTokenGeneratedMock.random()
+
     let typographiesMock = TextLinkTypographies.mocked()
     let attributedStringMock: AttributedStringEither = .left(.init(string: "AS"))
     var spacingMock: CGFloat {
         return self.themeMock.layout.spacing.medium
     }
     let imageSizeMock = TextLinkImageSize.mocked()
-    var imageTintColorMock: ColorTokenGeneratedMock? {
-        get throws {
-            return try XCTUnwrap(
-                self.viewModel.textColorToken as? ColorTokenGeneratedMock,
-                "Wrong textColorToken type"
-            )
-        }
-    }
     var isTrailingImageMock: Bool {
         return self.viewModel.alignment.isTrailingImage
     }
@@ -724,8 +750,8 @@ private final class Stub: TextLinkViewModelStub {
     init(
         frameworkType: FrameworkType,
         text: String = "My Text",
-        textColorToken: any ColorToken = ColorTokenGeneratedMock(),
         textHighlightRange: NSRange? = nil,
+        intent: TextLinkIntent = .main,
         typography: TextLinkTypography = .body1,
         variant: TextLinkVariant = .underline,
         alignment: TextLinkAlignment = .leadingImage
@@ -735,6 +761,9 @@ private final class Stub: TextLinkViewModelStub {
 
         // **
         // Use Cases
+        let getColorUseCaseMock = TextLinkGetColorUseCaseableGeneratedMock()
+        getColorUseCaseMock.executeWithIntentAndIsHighlightedAndColorsReturnValue = self.colorMock
+
         let getTypographiesUseCaseMock = TextLinkGetTypographiesUseCaseableGeneratedMock()
         getTypographiesUseCaseMock.executeWithTextLinkTypographyAndTypographyReturnValue = self.typographiesMock
 
@@ -750,18 +779,20 @@ private final class Stub: TextLinkViewModelStub {
             for: frameworkType,
             theme: self.themeMock,
             text: text,
-            textColorToken: textColorToken,
             textHighlightRange: textHighlightRange,
+            intent: intent,
             typography: typography,
             variant: variant,
             alignment: alignment,
+            getColorUseCase: getColorUseCaseMock,
             getTypographiesUseCase: getTypographiesUseCaseMock,
             getAttributedStringUseCase: getAttributedStringUseCaseMock,
             getImageSizeUseCase: getImageSizeUseCaseMock
         )
 
         super.init(
-            viewModel: viewModel,
+            viewModel: viewModel, 
+            getColorUseCaseMock: getColorUseCaseMock,
             getTypographiesUseCaseMock: getTypographiesUseCaseMock,
             getAttributedStringUseCaseMock: getAttributedStringUseCaseMock,
             getImageSizeUseCaseMock: getImageSizeUseCaseMock

@@ -13,10 +13,6 @@ import SwiftUI
 /// The UIKit version for the text link.
 public final class TextLinkUIView: UIControl {
 
-    // MARK: - Type alias
-
-    private typealias AccessibilityIdentifier = TextLinkAccessibilityIdentifier
-
     // MARK: - Components
 
     private lazy var contentStackView: UIStackView = {
@@ -29,7 +25,7 @@ public final class TextLinkUIView: UIControl {
         )
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.accessibilityIdentifier = AccessibilityIdentifier.contentStackView
+        stackView.accessibilityIdentifier = TextLinkAccessibilityIdentifier.contentStackView
         stackView.isUserInteractionEnabled = false
         return stackView
     }()
@@ -44,7 +40,7 @@ public final class TextLinkUIView: UIControl {
                 ]
         )
         stackView.axis = .vertical
-        stackView.accessibilityIdentifier = AccessibilityIdentifier.imageContentStackView
+        stackView.accessibilityIdentifier = TextLinkAccessibilityIdentifier.imageContentStackView
         return stackView
     }()
 
@@ -53,7 +49,7 @@ public final class TextLinkUIView: UIControl {
     private var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = AccessibilityIdentifier.image
+        imageView.accessibilityIdentifier = TextLinkAccessibilityIdentifier.image
         return imageView
     }()
 
@@ -65,7 +61,7 @@ public final class TextLinkUIView: UIControl {
         label.lineBreakMode = self.lineBreakMode
         label.textAlignment = self.textAlignment
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = AccessibilityIdentifier.text
+        label.accessibilityIdentifier = TextLinkAccessibilityIdentifier.text
         return label
     }()
 
@@ -82,7 +78,7 @@ public final class TextLinkUIView: UIControl {
             return self.viewModel.theme
         }
         set {
-            self.viewModel.set(theme: newValue)
+            self.viewModel.theme = newValue
         }
     }
 
@@ -92,17 +88,17 @@ public final class TextLinkUIView: UIControl {
             return self.viewModel.text
         }
         set {
-            self.viewModel.set(text: newValue)
+            self.viewModel.text = newValue
         }
     }
 
-    /// The text color token of the text link.
-    public var textColorToken: any ColorToken {
+    /// The intent of the text link.
+    public var intent: TextLinkIntent {
         get {
-            return self.viewModel.textColorToken
+            return self.viewModel.intent
         }
         set {
-            self.viewModel.set(textColorToken: newValue)
+            self.viewModel.intent = newValue
         }
     }
 
@@ -112,7 +108,7 @@ public final class TextLinkUIView: UIControl {
             return self.viewModel.textHighlightRange
         }
         set {
-            self.viewModel.set(textHighlightRange: newValue)
+            self.viewModel.textHighlightRange = newValue
         }
     }
 
@@ -122,7 +118,7 @@ public final class TextLinkUIView: UIControl {
             return self.viewModel.typography
         }
         set {
-            self.viewModel.set(typography: newValue)
+            self.viewModel.typography = newValue
         }
     }
 
@@ -132,7 +128,7 @@ public final class TextLinkUIView: UIControl {
             return self.viewModel.variant
         }
         set {
-            self.viewModel.set(variant: newValue)
+            self.viewModel.variant = newValue
         }
     }
 
@@ -149,7 +145,7 @@ public final class TextLinkUIView: UIControl {
             return self.viewModel.alignment
         }
         set {
-            self.viewModel.set(alignment: newValue)
+            self.viewModel.alignment = newValue
         }
     }
 
@@ -181,7 +177,7 @@ public final class TextLinkUIView: UIControl {
         }
         set {
             super.isHighlighted = newValue
-            self.viewModel.set(isHighlighted: newValue)
+            self.viewModel.isHighlighted = newValue
         }
     }
 
@@ -202,8 +198,8 @@ public final class TextLinkUIView: UIControl {
     /// - Parameters:
     ///   - theme: The spark theme of the text link.
     ///   - text: The text of the text link.
-    ///   - textColorToken: The text color token of the text link.
     ///   - textHighlightRange: The optional range to specify the highlighted part of the text link.
+    ///   - intent: The intent of the text link.
     ///   - typography: The typography of the text link.
     ///   - variant: The variant of the text link.
     ///   - image: The optional image of the text link..
@@ -211,8 +207,8 @@ public final class TextLinkUIView: UIControl {
     public init(
         theme: any Theme,
         text: String,
-        textColorToken: any ColorToken,
         textHighlightRange: NSRange? = nil,
+        intent: TextLinkIntent,
         typography: TextLinkTypography,
         variant: TextLinkVariant,
         image: UIImage? = nil,
@@ -222,8 +218,8 @@ public final class TextLinkUIView: UIControl {
             for: .uiKit,
             theme: theme,
             text: text,
-            textColorToken: textColorToken,
             textHighlightRange: textHighlightRange,
+            intent: intent,
             typography: typography,
             variant: variant,
             alignment: alignment
@@ -246,7 +242,7 @@ public final class TextLinkUIView: UIControl {
         self.addSubview(self.contentStackView)
 
         // Identifiers
-        self.accessibilityIdentifier = AccessibilityIdentifier.view
+        self.accessibilityIdentifier = TextLinkAccessibilityIdentifier.view
 
         // View properties
         self.backgroundColor = .clear
@@ -331,7 +327,7 @@ public final class TextLinkUIView: UIControl {
 
         // Spacing
         self.viewModel.$spacing.subscribe(in: &self.subscriptions) { [weak self] spacing in
-            guard let self, let spacing else { return }
+            guard let self else { return }
 
             self.contentStackViewSpacing = spacing
             self._contentStackViewSpacing.update(traitCollection: self.traitCollection)
@@ -352,14 +348,14 @@ public final class TextLinkUIView: UIControl {
 
         // Image Tint Color
         self.viewModel.$imageTintColor.subscribe(in: &self.subscriptions) { [weak self] imageTintColor in
-            guard let self, let imageTintColor else { return }
+            guard let self else { return }
 
             self.imageView.tintColor = imageTintColor.uiColor
         }
 
         // Image Position
         self.viewModel.$isTrailingImage.subscribe(in: &self.subscriptions) { [weak self] isTrailingImage in
-            guard let self, let isTrailingImage else { return }
+            guard let self else { return }
 
             self.contentStackView.semanticContentAttribute = isTrailingImage ? .forceRightToLeft : .forceLeftToRight
         }
