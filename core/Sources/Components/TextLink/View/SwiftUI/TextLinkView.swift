@@ -10,10 +10,6 @@ import SwiftUI
 
 public struct TextLinkView: View {
 
-    // MARK: - Type alias
-
-    private typealias AccessibilityIdentifier = TextLinkAccessibilityIdentifier
-
     // MARK: - Component
 
     private let image: Image?
@@ -35,8 +31,8 @@ public struct TextLinkView: View {
     /// - Parameters:
     ///   - theme: The spark theme of the text link.
     ///   - text: The text of the text link.
-    ///   - textColorToken: The text color of the text link.
     ///   - textHighlightRange: The optional range to specify the highlighted part of the text link.
+    ///   - intent: The intent of the text link.
     ///   - typography: The typography of the text link.
     ///   - variant: The variant of the text link.   
     ///   - image: The optional image of the text link.
@@ -45,8 +41,8 @@ public struct TextLinkView: View {
     public init(
         theme: any Theme,
         text: String,
-        textColorToken: any ColorToken,
         textHighlightRange: NSRange? = nil,
+        intent: TextLinkIntent,
         typography: TextLinkTypography,
         variant: TextLinkVariant,
         image: Image?,
@@ -57,8 +53,8 @@ public struct TextLinkView: View {
             for: .swiftUI,
             theme: theme,
             text: text,
-            textColorToken: textColorToken,
             textHighlightRange: textHighlightRange,
+            intent: intent,
             typography: typography,
             variant: variant,
             alignment: alignment
@@ -67,7 +63,7 @@ public struct TextLinkView: View {
 
         self.image = image
 
-        self._spacing = .init(wrappedValue: viewModel.spacing ?? .zero)
+        self._spacing = .init(wrappedValue: viewModel.spacing)
 
         self.action = action
     }
@@ -78,8 +74,8 @@ public struct TextLinkView: View {
         Button(action: self.action) {
             self.content()
         }
-        .buttonStyle(PressedButtonStyle(viewModel: self.viewModel))
-        .accessibilityIdentifier(AccessibilityIdentifier.view)
+        .buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isHighlighted))
+        .accessibilityIdentifier(TextLinkAccessibilityIdentifier.view)
     }
 
     // MARK: - View Builder
@@ -90,7 +86,7 @@ public struct TextLinkView: View {
             alignment: .top,
             spacing: self.spacing
         ) {
-            if self.viewModel.isTrailingImage ?? false {
+            if self.viewModel.isTrailingImage {
                 self.text()
                 self.imageView()
             } else {
@@ -114,8 +110,8 @@ public struct TextLinkView: View {
                 vertical: self.viewModel.imageSize?.padding ?? .zero,
                 horizontal: .zero
             ))
-            .foregroundStyle(self.viewModel.imageTintColor?.color ?? ColorTokenDefault.clear.color)
-            .accessibilityIdentifier(AccessibilityIdentifier.image)
+            .foregroundStyle(self.viewModel.imageTintColor.color)
+            .accessibilityIdentifier(TextLinkAccessibilityIdentifier.image)
     }
 
     @ViewBuilder
@@ -123,8 +119,8 @@ public struct TextLinkView: View {
         Text(self.viewModel.attributedText?.rightValue ?? "")
             .multilineTextAlignment(self.style.multilineTextAlignment)
             .lineLimit(self.style.lineLimit)
-        .accessibilityIdentifier(AccessibilityIdentifier.text)
-        .onChange(of: self.sizeCategory) { value in
+        .accessibilityIdentifier(TextLinkAccessibilityIdentifier.text)
+        .onChange(of: self.sizeCategory) { _ in
             self.viewModel.contentSizeCategoryDidUpdate()
         }
     }
@@ -150,36 +146,12 @@ public struct TextLinkView: View {
     }
 }
 
-// MARK: - Button Style
-
-private struct PressedButtonStyle: ButtonStyle {
-
-    // MARK: - Properties
-
-    private var viewModel: TextLinkViewModel
-
-    // MARK: - Initialization
-
-    init(viewModel: TextLinkViewModel) {
-        self.viewModel = viewModel
-    }
-
-    // MARK: - View
-
-    func makeBody(configuration: Configuration) -> some View {
-        return configuration.label
-            .onChange(of: configuration.isPressed) { value in
-                self.viewModel.set(isHighlighted: value)
-            }
-    }
-}
-
 // MARK: - Observable Style
 
 private final class TextLinkStyle: ObservableObject {
 
     // MARK: - Properties
 
-    var multilineTextAlignment: TextAlignment = .leading
-    var lineLimit: Int?
+    @Published var multilineTextAlignment: TextAlignment = .leading
+    @Published var lineLimit: Int?
 }

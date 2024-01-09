@@ -23,7 +23,7 @@ struct TextLinkConfigurationSnapshotTests {
     let variant: TextLinkVariant
     let image: ImageEither?
     let alignment: TextLinkAlignment
-    let color: TextLinkColor
+    let intent: TextLinkIntent
     let size: TextLinkSize
     let modes: [ComponentSnapshotTestMode]
     let sizes: [UIContentSizeCategory]
@@ -36,7 +36,7 @@ struct TextLinkConfigurationSnapshotTests {
         variant: TextLinkVariant = .underline,
         image: ImageEither? = nil,
         alignment: TextLinkAlignment = .leadingImage,
-        color: TextLinkColor = .color1,
+        intent: TextLinkIntent = .main,
         size: TextLinkSize = .size1,
         modes: [ComponentSnapshotTestMode] = Constants.Modes.default,
         sizes: [UIContentSizeCategory] = Constants.Sizes.default
@@ -46,7 +46,7 @@ struct TextLinkConfigurationSnapshotTests {
         self.variant = variant
         self.image = image
         self.alignment = alignment
-        self.color = color
+        self.intent = intent
         self.size = size
         self.modes = modes
         self.sizes = sizes
@@ -58,9 +58,9 @@ struct TextLinkConfigurationSnapshotTests {
         return [
             self.scenario.rawValue,
             self.type.rawValue,
+            "\(self.intent)" + "Intent",
             "\(self.variant)" + "Variant",
             self.image != nil ? "\(self.alignment)" : nil,
-            self.color.rawValue,
             self.size.rawValue,
         ].compactMap { $0 }.joined(separator: "-")
     }
@@ -89,22 +89,6 @@ enum TextLinkType: String, CaseIterable {
             return nil
         case .paragraph:
             return .init(location: 0, length: 13)
-        }
-    }
-}
-
-enum TextLinkColor: String, CaseIterable {
-    case color1
-    case color2
-
-    // MARK: - Methods
-
-    func colorToken(from theme: any Theme) -> any ColorToken {
-        switch self {
-        case .color1:
-            return theme.colors.main.main
-        case .color2:
-            return theme.colors.feedback.alert
         }
     }
 }

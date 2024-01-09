@@ -24,8 +24,8 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showTextColorTokenSheet: AnyPublisher<[TextLinkColorToken], Never> {
-        showTextColorTokenSheetSubject
+    var showIntentSheet: AnyPublisher<[TextLinkIntent], Never> {
+        showIntentSheetSubject
             .eraseToAnyPublisher()
     }
 
@@ -67,7 +67,7 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
     // MARK: - Private Properties
 
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
-    private var showTextColorTokenSheetSubject: PassthroughSubject<[TextLinkColorToken], Never> = .init()
+    private var showIntentSheetSubject: PassthroughSubject<[TextLinkIntent], Never> = .init()
     private var showVariantSheetSubject: PassthroughSubject<[TextLinkVariant], Never> = .init()
     private var showTypographySheetSubject: PassthroughSubject<[TextLinkTypography], Never> = .init()
     private var showContentSheetSubject: PassthroughSubject<[TextLinkContent], Never> = .init()
@@ -86,11 +86,11 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var textColorTokenConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var intentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "TextColorToken",
+            name: "Intent",
             type: .button,
-            target: (source: self, action: #selector(self.presentTextColorTokenSheet))
+            target: (source: self, action: #selector(self.presentIntentSheet))
         )
     }()
 
@@ -163,7 +163,7 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
         return  [
             self.themeConfigurationItemViewModel,
-            self.textColorTokenConfigurationItemViewModel,
+            self.intentConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
             self.typographyConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
@@ -180,7 +180,7 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
     let themes = ThemeCellModel.themes
 
     @Published var theme: Theme
-    @Published var textColorToken: TextLinkColorToken
+    @Published var intent: TextLinkIntent
     @Published var variant: TextLinkVariant
     @Published var typography: TextLinkTypography
     @Published var content: TextLinkContent
@@ -194,10 +194,10 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
 
     init(
         theme: Theme,
-        textColorToken: TextLinkColorToken = .main,
+        intent: TextLinkIntent = .main,
         variant: TextLinkVariant = .underline,
         typography: TextLinkTypography = .body1,
-        content: TextLinkContent = .imageAndText,
+        content: TextLinkContent = .text,
         contentAlignment: TextLinkAlignment = .leadingImage,
         textAlignment: NSTextAlignment = .natural,
         lineBreakMode: NSLineBreakMode = .byWordWrapping,
@@ -205,7 +205,7 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
         controlType: TextLinkControlType = .action
     ) {
         self.theme = theme
-        self.textColorToken = textColorToken
+        self.intent = intent
         self.variant = variant
         self.typography = typography
         self.content = content
@@ -227,8 +227,8 @@ extension TextLinkComponentUIViewModel {
         self.showThemeSheetSubject.send(self.themes)
     }
 
-    @objc func presentTextColorTokenSheet() {
-        self.showTextColorTokenSheetSubject.send(TextLinkColorToken.allCases)
+    @objc func presentIntentSheet() {
+        self.showIntentSheetSubject.send(TextLinkIntent.allCases)
     }
 
     @objc func presentVariantSheet() {

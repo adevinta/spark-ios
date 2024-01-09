@@ -49,7 +49,7 @@ enum TextLinkScenarioSnapshotTests: String, CaseIterable {
     /// - underline: default
     /// - with icon: default
     /// - icon aligment: default
-    /// - color: default
+    /// - intent: default
     /// - size: default
     /// - a11y size: default
     /// - mode: all
@@ -74,20 +74,20 @@ enum TextLinkScenarioSnapshotTests: String, CaseIterable {
     /// - underline: default
     /// - with icon: true
     /// - icon aligment: default
-    /// - color: all
+    /// - intent: all
     /// - size: all
     /// - a11y size: default
     /// - mode: default
     private func test2(isSwiftUIComponent: Bool) -> [TextLinkConfigurationSnapshotTests] {
-        let colorsPossibilities = TextLinkColor.allCases
+        let intentsPossibilities = TextLinkIntent.allCases
         let sizesPossibilities = TextLinkSize.allCases
 
-        return colorsPossibilities.flatMap { color in
+        return intentsPossibilities.flatMap { intent in
             sizesPossibilities.map { size in
                 return .init(
                     scenario: self,
                     image: .mock(isSwiftUIComponent: isSwiftUIComponent),
-                    color: color,
+                    intent: intent,
                     size: size
                 )
             }
@@ -103,7 +103,7 @@ enum TextLinkScenarioSnapshotTests: String, CaseIterable {
     /// - underline: all
     /// - with icon: default
     /// - icon aligment: default
-    /// - color: default
+    /// - intent: default
     /// - size: default
     /// - a11y size: default
     /// - mode: default
@@ -127,7 +127,7 @@ enum TextLinkScenarioSnapshotTests: String, CaseIterable {
     /// - underline: default
     /// - with icon: true
     /// - icon aligment: all
-    /// - color: default
+    /// - intent: default
     /// - size: default
     /// - a11y size: default
     /// - mode: default
@@ -156,7 +156,7 @@ enum TextLinkScenarioSnapshotTests: String, CaseIterable {
     /// - underline: default
     /// - with icon: default
     /// - icon aligment: default
-    /// - color: default
+    /// - intent: default
     /// - size: default
     /// - a11y size: all
     /// - mode: default
