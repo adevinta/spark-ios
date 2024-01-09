@@ -44,11 +44,11 @@ final class CheckboxGroupCell: UITableViewCell, Configurable {
     }
 
     func configureCell(configuration: CellConfigartion) {
+        self.component.updateItems(configuration.items)
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
         self.component.alignment = configuration.alignment
         self.component.layout = configuration.layout
-        self.component.updateItems(configuration.items)
 
         if configuration.showGroupTitle {
             self.component.title = "Checkbox group title"
