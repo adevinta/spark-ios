@@ -39,6 +39,14 @@ final class RatingSizeAttributesUseCaseTests: XCTestCase {
         XCTAssertEqual(sizes, .init(borderWidth: 1.33, height: 16.0, spacing: 3.0))
     }
 
+    func test_large() {
+        // When
+        let sizes = sut.execute(spacing: self.spacing, size: .large)
+
+        // Then
+        XCTAssertEqual(sizes, .init(borderWidth: 2.0, height: 24.0, spacing: 3.0))
+    }
+
     func test_input() {
         // When
         let sizes = sut.execute(spacing: self.spacing, size: .input)

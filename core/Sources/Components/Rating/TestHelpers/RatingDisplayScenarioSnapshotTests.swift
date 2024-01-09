@@ -95,7 +95,7 @@ enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
     ///  - accessibility sizes: default
     private func test3(isSwiftUIComponent: Bool) -> [RatingDisplayConfigurationSnapshotTests] {
 
-        return RatingDisplaySize.allCases.map { size in
+        return [RatingDisplaySize.small, .medium, .input].map { size in
             return .init(
                 scenario: self,
                 rating: 2.5,

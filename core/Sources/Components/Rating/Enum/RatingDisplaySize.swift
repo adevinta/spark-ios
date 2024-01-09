@@ -11,5 +11,6 @@ import Foundation
 public enum RatingDisplaySize: Int, CaseIterable {
     case small = 12
     case medium = 16
+    case large = 24
     case input = 40
 }
