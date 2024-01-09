@@ -326,7 +326,7 @@ extension ListViewDataSource {
     /// Radio Button Group
     func createRadioButtonGroupConfigurations() -> [RadioButtonGroupConfiguration] {
         [RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .trailing, layout: .vertical, isEnabled: true, selectedID: 0),
-         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .trailing, layout: .horizontal, isEnabled: true, selectedID: 1),
+         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .trailing, layout: .vertical, isEnabled: true, selectedID: 1),
          RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .success, alignment: .leading, layout: .vertical, isEnabled: false, selectedID: 2)]
     }
 
