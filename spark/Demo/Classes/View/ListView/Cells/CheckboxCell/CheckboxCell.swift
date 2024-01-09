@@ -26,6 +26,10 @@ final class CheckboxCell: UITableViewCell, Configurable {
         return view
     }()
 
+    var stackViewAlignment: UIStackView.Alignment {
+        return .fill
+    }
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupView()
@@ -36,9 +40,9 @@ final class CheckboxCell: UITableViewCell, Configurable {
     }
 
     func configureCell(configuration: CellConfigartion) {
+        self.component.isEnabled = configuration.isEnabled
         self.component.theme = configuration.theme
         self.component.intent = configuration.intent
-        self.component.isEnabled = configuration.isEnabled
         self.component.alignment = configuration.alignment
         self.component.text = configuration.text
         self.component.selectionState = configuration.selectionState
