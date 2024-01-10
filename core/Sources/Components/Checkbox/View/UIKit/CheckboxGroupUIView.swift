@@ -11,7 +11,7 @@ import SwiftUI
 import UIKit
 
 /// The `CheckboxGroupUIView` renders a group containing of multiple`CheckboxUIView`-views. It supports a title, different layout and positioning options.
-public final class CheckboxGroupUIView: UIView {
+public final class CheckboxGroupUIView: UIControl {
     // MARK: - Private properties.
 
     private lazy var titleLabel: UILabel = {
@@ -216,6 +216,7 @@ public final class CheckboxGroupUIView: UIView {
                 self.items[index] = item
                 self.delegate?.checkboxGroup(self, didChangeSelection: self.items)
                 self.subject.send(self.items)
+                self.sendActions(for: .valueChanged)
             }
             .store(in: &self.subscriptions)
 

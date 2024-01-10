@@ -103,7 +103,7 @@ final class SliderHandleUIControl: UIControl {
         }
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         // CGColors need to be refreshed on trait changes
         if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {

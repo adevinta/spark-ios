@@ -88,12 +88,12 @@ public struct TabView: View {
     // MARK: - View
     public var body: some View {
         self.tabItems()
-            .scrollOnOverflow(value: self.$viewModel.content)
             .background(
                 Rectangle()
                     .frame(width: nil, height: self.lineHeight, alignment: .bottom)
                     .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
                 alignment: .bottom)
+            .scrollOnOverflow(value: self.$viewModel.content)
             .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
             .onChange(of: self.viewModel.content) { _ in
                 self.minWidth = 0

@@ -22,7 +22,6 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
         set { self.viewModel.theme = newValue }
     }
 
-
     /// The slider's current intent.
     public var intent: SliderIntent {
         get { return self.viewModel.intent }
@@ -255,7 +254,6 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
 
         self.setValue(
             V(relativeX) * (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) + self.viewModel.bounds.lowerBound,
-            animated: false
         )
     }
 }

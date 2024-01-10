@@ -65,7 +65,6 @@ final class SliderGetClosestValueUseCaseTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(closestValue, expectedClosestValue)
-
     }
 
     func test_execute_inbetween() {
