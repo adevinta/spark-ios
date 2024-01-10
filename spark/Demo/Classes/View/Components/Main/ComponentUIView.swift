@@ -195,12 +195,12 @@ class ComponentUIView: UIView {
             to: self.scrollView,
             insets: .init(top: 0, left: spacing, bottom: 0, right: spacing)
         )
-        NSLayoutConstraint.activate([
-            self.contentStackView.widthAnchor.constraint(
-                equalTo: self.widthAnchor,
-                constant: -spacing * 2
-            )
-        ])
+        let widthConstraint = self.contentStackView.widthAnchor.constraint(
+            equalTo: self.widthAnchor,
+            constant: -spacing * 2
+        )
+        widthConstraint.priority = .init(999)
+        widthConstraint.isActive = true
 
         // Separation Line View
         NSLayoutConstraint.activate([
@@ -270,10 +270,10 @@ private extension UIView {
 
         self.translatesAutoresizingMaskIntoConstraints = false
         if let fixedWidth = spaceContainer.fixedWidth {
-            self.widthAnchor.constraint(equalToConstant: fixedWidth).isActive = true
+            self.widthAnchor.constraint(greaterThanOrEqualToConstant: fixedWidth).isActive = true
         }
         if let fixedHeight = spaceContainer.fixedHeight {
-            self.heightAnchor.constraint(equalToConstant: fixedHeight).isActive = true
+            self.heightAnchor.constraint(greaterThanOrEqualToConstant: fixedHeight).isActive = true
         }
     }
 }

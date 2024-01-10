@@ -17,6 +17,7 @@ public struct ChipView: View {
     private enum Constants {
         static let verticalPadding: CGFloat = 6.25
     }
+
     @ObservedObject private var viewModel: ChipViewModel<ChipContent>
     @ScaledMetric private var imageSize = ChipConstants.imageSize
     @ScaledMetric private var height = ChipConstants.height
@@ -133,8 +134,14 @@ public struct ChipView: View {
         }
         .opacity(self.viewModel.colors.opacity)
         .cornerRadius(self.borderRadius)
-        .disabled(!self.viewModel.isEnabled)
-        .buttonStyle(ChipButtonStyle(viewModel: self.viewModel, hasAction: self.action != nil))
+        .isEnabledChanged { isEnabled in
+            self.viewModel.isEnabled = isEnabled
+        }
+        .if(self.action == nil) { content in
+            content.buttonStyle(NoButtonStyle())
+        } else: { content in
+            content.buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isPressed))
+        }
         .accessibilityIdentifier(ChipAccessibilityIdentifier.identifier)
     }
 
@@ -213,30 +220,9 @@ public struct ChipView: View {
         return self
     }
 
-    public func disabled(_ disabled: Bool) -> Self {
-        self.viewModel.isEnabled = !disabled
-        return self
-    }
-
     public func selected(_ selected: Bool) -> Self {
         self.viewModel.isSelected = selected
         return self
-    }
-}
-
-// MARK: - Private Button Style
-private struct ChipButtonStyle: ButtonStyle {
-    var viewModel: ChipViewModel<ChipContent>
-    var hasAction: Bool
-
-    func makeBody(configuration: Self.Configuration) -> some View {
-        if self.hasAction, configuration.isPressed != self.viewModel.isPressed {
-            DispatchQueue.main.async {
-                self.viewModel.isPressed = configuration.isPressed
-            }
-        }
-        return configuration.label
-            .animation(.easeOut(duration: 0.2), value: self.viewModel.isPressed)
     }
 }
 

@@ -30,9 +30,13 @@ final class CheckboxComponentUIView: ComponentUIView {
             viewModel: viewModel,
             componentView: self.componentView
         )
+        self.componentView.delegate = self
 
         // Setup
         self.setupSubscriptions()
+
+        // Add target actions
+        self.addTargetActions()
     }
 
     required init?(coder: NSCoder) {
@@ -100,6 +104,42 @@ final class CheckboxComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.integrationStackViewAlignment = containerViewAlignment ? .fill : .leading
         }
+
+        self.componentView.publisher.subscribe(in: &self.cancellables) { state in
+            Console.log("Checkbox publisher \(state)")
+        }
+
+        let touchAction = UIAction { _ in
+            Console.log("Checkbox touch action")
+        }
+        let valueChangeAction = UIAction { _ in
+            Console.log("Checkbox value changed")
+        }
+
+        self.componentView.addAction(touchAction, for: .touchUpInside)
+        self.componentView.addTarget(self, action: #selector(self.touchedTarget), for: .touchUpInside)
+        self.componentView.addAction(valueChangeAction, for: .valueChanged)
+        self.componentView.addTarget(
+            self,
+            action: #selector(self.valueChangedTarget),
+            for: .valueChanged)
+    }
+
+    @objc func touchedTarget() {
+        Console.log("Checkbox touch target")
+    }
+
+    @objc func valueChangedTarget() {
+        Console.log("Checkbox value changed target")
+    }
+
+    private func addTargetActions() {
+        let valueChangedAction = UIAction { [weak self] _ in
+            guard let self else { return }
+            Console.log("Checkbox value changed. IsSelected = \(self.componentView.isSelected)")
+        }
+
+        self.componentView.addAction(valueChangedAction, for: .valueChanged)
     }
 
     static func makeCheckboxView(_ viewModel: CheckboxComponentUIViewModel) -> CheckboxUIView {
@@ -133,5 +173,11 @@ final class CheckboxComponentUIView: ComponentUIView {
                 alignment: viewModel.alignment
             )
         }
+    }
+}
+
+extension CheckboxComponentUIView: CheckboxUIViewDelegate {
+    func checkbox(_ checkbox: SparkCore.CheckboxUIView, didChangeSelection state: SparkCore.CheckboxSelectionState) {
+        Console.log("Checkbox delegate \(state)")
     }
 }

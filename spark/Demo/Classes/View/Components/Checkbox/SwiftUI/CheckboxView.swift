@@ -85,9 +85,9 @@ struct CheckboxListView: View {
                         alignment: self.alignment,
                         theme: self.theme,
                         intent: self.intent,
-                        isEnabled: self.isEnabled == .selected ? true : false,
                         selectionState: self.isIndeterminate == .selected ? .constant(.indeterminate) : $selectionState
                     )
+                    .disabled(self.isEnabled == .unselected)
                 }
             }
         )

@@ -120,6 +120,10 @@ final class TabComponentUIView: ComponentUIView {
             self?.componentView.segments[index].isEnabled = false
         }
 
+        self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] isDisabled in
+            self?.componentView.isEnabled = !isDisabled
+        }
+
         self.viewModel.$isEqualWidth.subscribe(in: &self.cancellables) { [weak self] equalWidth in
             guard let self = self else { return }
 

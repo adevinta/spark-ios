@@ -45,6 +45,7 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
 
     // MARK: - Local Properties
 
+    @Environment(\.isEnabled) private var isEnabled: Bool
     @ScaledMetric private var pressedLineWidth: CGFloat = Constants.pressedLineWidth
     @ScaledMetric private var lineWidth: CGFloat = Constants.lineWidth
     @ScaledMetric private var size: CGFloat = Constants.size
@@ -114,22 +115,19 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
         }, label: {
             self.buttonAndLabel()
         })
-        .disabled(self.viewModel.isDisabled)
         .opacity(self.viewModel.opacity)
-        .buttonStyle(RadioButtonButtonStyle(isPressed: self.$isPressed))
+        .buttonStyle(PressedButtonStyle(isPressed: self.$isPressed))
         .accessibilityLabel(self.viewModel.label.rightValue ?? RadioButtonAccessibilityIdentifier.radioButton)
         .accessibilityValue(self.viewModel.id.description)
+        .isEnabledChanged { isEnabled in
+            self.viewModel.set(enabled: isEnabled)
+        }
     }
 
     // MARK: - View modifier
     @available(*, deprecated, message: "Use intent and disabled instead")
     public func groupState(_ groupState: RadioButtonGroupState) -> Self {
         self.viewModel.set(enabled: groupState != .disabled)
-        return self
-    }
-
-    public func disabled(_ isDisabled: Bool) -> Self {
-        self.viewModel.set(enabled: !isDisabled)
         return self
     }
 
@@ -209,21 +207,5 @@ public struct RadioButtonView<ID: Equatable & CustomStringConvertible>: View {
                height: self.radioButtonSize)
         .padding(-self.pressedLineWidth)
         .animation(.easeIn(duration: 0.1), value: self.viewModel.selectedID)
-    }
-
-    // MARK: - Button Style
-
-    private struct RadioButtonButtonStyle: ButtonStyle {
-        @Binding var isPressed: Bool
-
-        func makeBody(configuration: Self.Configuration) -> some View {
-            if configuration.isPressed != self.isPressed {
-                DispatchQueue.main.async {
-                    self.isPressed = configuration.isPressed
-                }
-            }
-            return configuration.label
-                .animation(.easeOut(duration: 0.2), value: self.isPressed)
-        }
     }
 }

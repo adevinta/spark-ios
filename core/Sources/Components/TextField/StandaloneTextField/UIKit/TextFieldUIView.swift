@@ -195,6 +195,7 @@ public final class TextFieldUIView: UITextField {
         self.invalidateIntrinsicContentSize()
         self._height.update(traitCollection: traitCollection)
         self.updateHeight()
+        self.setBorderColor(from: self.viewModel.colors.border)
     }
 
     // MARK: - Instance methods
