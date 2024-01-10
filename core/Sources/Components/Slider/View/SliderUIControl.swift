@@ -253,7 +253,7 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
         let relativeX = (absoluteX - SliderConstants.handleSize.width / 2) / (self.frame.width - SliderConstants.handleSize.width)
 
         self.setValue(
-            V(relativeX) * (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) + self.viewModel.bounds.lowerBound,
+            V(relativeX) * (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) + self.viewModel.bounds.lowerBound
         )
     }
 }
