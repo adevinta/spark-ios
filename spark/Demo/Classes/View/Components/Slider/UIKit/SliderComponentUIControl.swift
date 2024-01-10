@@ -216,6 +216,7 @@ final class SliderComponentUIView: UIView {
                 self.maximumValueStackView
             ]
         )
+        stackView.spacing = 4
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
