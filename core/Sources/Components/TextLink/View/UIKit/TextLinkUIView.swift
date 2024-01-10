@@ -49,6 +49,7 @@ public final class TextLinkUIView: UIControl {
     private var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.tintAdjustmentMode = .normal
         imageView.accessibilityIdentifier = TextLinkAccessibilityIdentifier.image
         return imageView
     }()
