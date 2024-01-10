@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import Combine
 
-final class SliderHandleViewModel {
+final class SliderHandleViewModel: ObservableObject {
 
     @Published var color: any ColorToken
     @Published var activeIndicatorColor: any ColorToken

@@ -142,7 +142,7 @@ final class SliderComponentUIView: UIView {
 
     private lazy var stepsTextField: UITextField = {
         let textField = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 44))
-        textField.text = "0.0"
+        textField.text = "0"
         textField.borderStyle = .roundedRect
         textField.addDoneButtonOnKeyboard()
         textField.delegate = self
@@ -216,6 +216,7 @@ final class SliderComponentUIView: UIView {
                 self.maximumValueStackView
             ]
         )
+        stackView.spacing = 4
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -236,14 +237,13 @@ final class SliderComponentUIView: UIView {
         return label
     }()
 
-    lazy var slider: SliderUIControl = {
-        let slider = SliderUIControl(
+    lazy var slider: SliderUIControl<Float> = {
+        let slider = SliderUIControl<Float>(
             theme: self.viewModel.theme,
             shape: self.viewModel.shape,
             intent: self.viewModel.intent
         )
-        slider.minimumValue = 0
-        slider.maximumValue = 1
+        slider.range = 0...1
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -350,19 +350,20 @@ extension SliderComponentUIView: UITextFieldDelegate {
         self.valueTextField.text = "\(self.slider.value)"
     }
 
-    private func setSteps(_ steps: Float) {
-        self.slider.steps = steps
-        self.stepsTextField.text = "\(self.slider.steps)"
+    private func setStep(_ step: Float) {
+        self.slider.step = step == .zero ? nil : step
+        self.stepsTextField.text = "\(self.slider.step ?? 0)"
     }
 
     private func setMinimumValue(_ minimumValue: Float) {
-        self.slider.minimumValue = minimumValue
-        self.minimumValueTextField.text = "\(self.slider.minimumValue)"
+        self.slider.range = minimumValue...self.slider.range.upperBound
+        self.minimumValueTextField.text = "\(self.slider.range.lowerBound)"
     }
 
     private func setMaximumValue(_ maximumValue: Float) {
-        self.slider.maximumValue = maximumValue
-        self.maximumValueTextField.text = "\(self.slider.maximumValue)"
+        self.slider.range = self.slider.range.lowerBound...maximumValue
+        self.maximumValueTextField.text = "\(self.slider.range.upperBound)"
+
     }
 
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
@@ -373,7 +374,7 @@ extension SliderComponentUIView: UITextFieldDelegate {
         case self.valueTextField:
             self.setValue(float)
         case self.stepsTextField:
-            self.setSteps(float)
+            self.setStep(float)
         case self.minimumValueTextField:
             self.setMinimumValue(float)
         case self.maximumValueTextField:
