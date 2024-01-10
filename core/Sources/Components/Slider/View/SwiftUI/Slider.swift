@@ -108,6 +108,7 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
+        .accessibilityIdentifier(SliderAccessibilityIdentifier.slider)
     }
 
     func moveHandle(to: CGFloat, width: CGFloat) {
