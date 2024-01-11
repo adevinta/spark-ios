@@ -202,6 +202,7 @@ public final class ChipUIView: UIControl {
         imageView.isUserInteractionEnabled = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.tintAdjustmentMode = .normal
         imageView.accessibilityIdentifier = ChipAccessibilityIdentifier.icon
         imageView.setContentCompressionResistancePriority(.required,
                                                           for: .horizontal)
