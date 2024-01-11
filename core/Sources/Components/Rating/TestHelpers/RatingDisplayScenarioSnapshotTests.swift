@@ -89,13 +89,13 @@ enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
     ///
     /// Content:
     ///  - ratings: [2.5]
-    ///  - size: [small, medium, input]
+    ///  - size: [small, medium, large, input]
     ///  - count: five (number of stars)
     ///  - modes: default
     ///  - accessibility sizes: default
     private func test3(isSwiftUIComponent: Bool) -> [RatingDisplayConfigurationSnapshotTests] {
 
-        return [RatingDisplaySize.small, .medium, .input].map { size in
+        return RatingDisplaySize.allCases.map { size in
             return .init(
                 scenario: self,
                 rating: 2.5,
