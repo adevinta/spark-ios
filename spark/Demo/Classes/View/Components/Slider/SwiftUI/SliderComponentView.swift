@@ -14,7 +14,7 @@ struct SliderComponentView: View {
 
 
     @State private var theme: Theme = SparkThemePublisher.shared.theme
-    @State private var intent: SliderIntent = .main
+    @State private var intent: SliderIntent = .basic
     @State private var shape: SliderShape = .square
 
     @State private var selectionState: CheckboxSelectionState = .selected

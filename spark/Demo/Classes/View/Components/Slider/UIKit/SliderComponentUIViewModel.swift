@@ -43,7 +43,7 @@ final class SliderComponentUIViewModel: ObservableObject {
 
     init(
         theme: Theme,
-        intent: SliderIntent = .main,
+        intent: SliderIntent = .basic,
         shape: SliderShape = .rounded
     ) {
         self.theme = theme

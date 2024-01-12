@@ -38,7 +38,7 @@ struct SliderHandle: View {
     private func activeIndicatorStroke() -> some View {
         Circle()
             .strokeBorder(self.viewModel.color.color, lineWidth: 1.0)
-            .frame(width: SliderConstants.activeIndicatorSize.width + 1, height: SliderConstants.activeIndicatorSize.height + 1)
+            .frame(width: SliderConstants.activeIndicatorSize.width + 2, height: SliderConstants.activeIndicatorSize.height + 2)
     }
 
     @ViewBuilder
