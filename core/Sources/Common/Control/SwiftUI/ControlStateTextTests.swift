@@ -42,11 +42,13 @@ final class ControlStateTextTests: XCTestCase {
             for: .normal
         )
 
+        var control = ControlStatus()
+
         // WHEN
         controlStateText.setText(
             givenText,
             for: .normal,
-            on: .init()
+            on: control
         )
 
         // THEN
@@ -58,6 +60,26 @@ final class ControlStateTextTests: XCTestCase {
         XCTAssertNil(
             controlStateText.attributedText,
             "Wrong attributedText value"
+        )
+
+        // WHEN
+        
+        // Check when a text is nil for an another state,
+        // The text text for the normal state should be returned
+
+        control.isHighlighted = true
+
+        controlStateText.setText(
+            nil,
+            for: .highlighted,
+            on: control
+        )
+
+        // THEN
+        XCTAssertEqual(
+            controlStateText.text,
+            statesMock.value(for: .normal),
+            "Wrong text value when control isPressed"
         )
     }
 
@@ -73,11 +95,13 @@ final class ControlStateTextTests: XCTestCase {
             for: .normal
         )
 
+        var control = ControlStatus()
+
         // WHEN
         controlStateText.setAttributedText(
             givenAttributedText,
             for: .normal,
-            on: .init()
+            on: control
         )
 
         // THEN
@@ -90,13 +114,33 @@ final class ControlStateTextTests: XCTestCase {
             statesMock.value(for: .normal),
             "Wrong attributedText value"
         )
+
+        // WHEN
+
+        // Check when a attributedText is nil for an another state,
+        // The attributedText value for the normal state should be returned
+
+        control.isHighlighted = true
+
+        controlStateText.setAttributedText(
+            nil,
+            for: .highlighted,
+            on: control
+        )
+
+        // THEN
+        XCTAssertEqual(
+            controlStateText.attributedText,
+            statesMock.value(for: .normal),
+            "Wrong attributedText value when control isPressed"
+        )
     }
 
     func test_updateContent() {
         // GIVEN
         let givenDisabledText = "My Disabled Text"
 
-        let control = Control(isDisabled: true)
+        let control = ControlStatus(isEnabled: false)
 
         let controlStateText = ControlStateText()
 

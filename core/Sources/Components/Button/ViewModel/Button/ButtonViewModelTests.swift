@@ -75,7 +75,7 @@ final class ButtonViewModelTests: XCTestCase {
         ButtonViewModelPublisherTest.XCTAssert(
             isImageTrailing: stub.isImageTrailingPublisherMock,
             expectedNumberOfSinks: 1,
-            expectedValue: !isUIKit ? givenAlignment.isTrailingImage : nil
+            expectedValue: !isUIKit ? givenAlignment.isTrailingImage : false
         )
 
         // Title Font Token
@@ -129,7 +129,7 @@ final class ButtonViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(alignment: newValue)
+        viewModel.alignment = newValue
 
         // THEN
 

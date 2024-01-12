@@ -1,5 +1,5 @@
 //
-//  ButtonContentView.swift
+//  ButtonContainerView.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 24/11/2023.
@@ -9,7 +9,7 @@
 import SwiftUI
 import Foundation
 
-struct ButtonContentView<ContentView: View, ViewModel: ButtonMainViewModel>: View {
+struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel>: View {
 
     // MARK: - Properties
 
@@ -28,7 +28,7 @@ struct ButtonContentView<ContentView: View, ViewModel: ButtonMainViewModel>: Vie
 
     // MARK: - Components
 
-    private var contentView: () -> ContentView
+    private var contentView: () -> ContainerView
 
     // MARK: - Initialization
 
@@ -36,7 +36,7 @@ struct ButtonContentView<ContentView: View, ViewModel: ButtonMainViewModel>: Vie
         manager: ButtonMainManager<ViewModel>,
         padding: EdgeInsets? = nil,
         action: @escaping () -> Void,
-        contentView: @escaping () -> ContentView
+        contentView: @escaping () -> ContainerView
     ) {
         self.manager = manager
 
@@ -69,7 +69,7 @@ struct ButtonContentView<ContentView: View, ViewModel: ButtonMainViewModel>: Vie
             colorToken: self.viewModel.currentColors?.borderColor ?? ColorTokenDefault.clear
         )
         .compositingGroup()
-        .disabled(!(self.viewModel.state?.isUserInteractionEnabled ?? true))
+        .disabled(self.viewModel.state?.isUserInteractionEnabled == false)
         .opacity(self.viewModel.state?.opacity ?? .zero)
         .accessibilityIdentifier(ButtonAccessibilityIdentifier.button)
     }

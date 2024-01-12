@@ -12,10 +12,6 @@ import Foundation
 
 public struct IconButtonView: View {
 
-    // MARK: - Type alias
-
-    private typealias AccessibilityIdentifier = ButtonAccessibilityIdentifier
-
     // MARK: - Private Properties
 
     @ObservedObject private var manager: IconButtonManager
@@ -68,7 +64,7 @@ public struct IconButtonView: View {
     // MARK: - View
 
     public var body: some View {
-        ButtonContentView(
+        ButtonContainerView(
             manager: self.manager,
             action: self.action
         ) {

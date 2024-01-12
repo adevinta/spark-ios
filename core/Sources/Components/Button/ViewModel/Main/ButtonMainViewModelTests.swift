@@ -195,7 +195,7 @@ final class ButtonMainViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(intent: newValue)
+        viewModel.intent = newValue
 
         // THEN
         XCTAssertEqual(
@@ -294,7 +294,7 @@ final class ButtonMainViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(variant: newValue)
+        viewModel.variant = newValue
 
         // THEN
         XCTAssertEqual(
@@ -396,7 +396,7 @@ final class ButtonMainViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(size: newValue)
+        viewModel.size = newValue
 
         // THEN
         XCTAssertEqual(
@@ -489,7 +489,7 @@ final class ButtonMainViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(shape: newValue)
+        viewModel.shape = newValue
 
         // THEN
         XCTAssertEqual(
@@ -578,7 +578,7 @@ final class ButtonMainViewModelTests: XCTestCase {
         stub.resetMockedData()
 
         // WHEN
-        viewModel.set(isEnabled: newValue)
+        viewModel.isEnabled = newValue
 
         // THEN
         XCTAssertEqual(
@@ -677,7 +677,7 @@ final class ButtonMainViewModelTests: XCTestCase {
         case .updateAll:
             viewModel.updateAll()
         case .setTheme:
-            viewModel.set(theme: themeMock)
+            viewModel.theme = themeMock
         default:
             break
         }

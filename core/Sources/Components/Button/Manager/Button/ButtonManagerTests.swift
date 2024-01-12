@@ -67,7 +67,9 @@ final class ButtonManagerTests: XCTestCase {
         let isPressedMock = true
         let isPressedText = "My Text"
 
-        let expectedControl = Control(isPressed: isPressedMock)
+        let expectedControl = ControlStatus(
+            isHighlighted: isPressedMock
+        )
 
         stub.addTextOnControlState(
             isPressedText,
@@ -79,8 +81,8 @@ final class ButtonManagerTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(
-            manager.control,
-            .init(isPressed: isPressedMock),
+            manager.controlStatus,
+            .init(isHighlighted: isPressedMock),
             "Wrong control value"
         )
         XCTAssertEqual(
@@ -98,7 +100,9 @@ final class ButtonManagerTests: XCTestCase {
         let isDisabledMock = true
         let isDisabledText = "My Text"
 
-        let expectedControl = Control(isDisabled: isDisabledMock)
+        let expectedControl = ControlStatus(
+            isEnabled: !isDisabledMock
+        )
 
         stub.addTextOnControlState(
             isDisabledText,
@@ -110,8 +114,8 @@ final class ButtonManagerTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(
-            manager.control,
-            .init(isDisabled: isDisabledMock),
+            manager.controlStatus,
+            .init(isEnabled: !isDisabledMock),
             "Wrong control value"
         )
         XCTAssertEqual(
@@ -129,7 +133,9 @@ final class ButtonManagerTests: XCTestCase {
         let isSelectedMock = true
         let isSelectedText = "My Text"
 
-        let expectedControl = Control(isSelected: isSelectedMock)
+        let expectedControl = ControlStatus(
+            isSelected: isSelectedMock
+        )
 
         stub.addTextOnControlState(
             isSelectedText,
@@ -141,7 +147,7 @@ final class ButtonManagerTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(
-            manager.control,
+            manager.controlStatus,
             .init(isSelected: isSelectedMock),
             "Wrong control value"
         )
@@ -191,7 +197,7 @@ private struct Stub {
         self.controlStateText.setText(
             text,
             for: controlState,
-            on: self.manager.control
+            on: self.manager.controlStatus
         )
     }
 }

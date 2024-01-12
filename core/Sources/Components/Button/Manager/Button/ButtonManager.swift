@@ -34,7 +34,7 @@ final class ButtonManager: ButtonMainManager<ButtonViewModel> {
     override func updateContent() {
         super.updateContent()
 
-        self.controlStateText.updateContent(from: self.control)
+        self.controlStateText.updateContent(from: self.controlStatus)
     }
 
     // MARK: - Setter
@@ -43,7 +43,7 @@ final class ButtonManager: ButtonMainManager<ButtonViewModel> {
         self.controlStateText.setText(
             title,
             for: state,
-            on: self.control
+            on: self.controlStatus
         )
     }
 
@@ -51,25 +51,25 @@ final class ButtonManager: ButtonMainManager<ButtonViewModel> {
         self.controlStateText.setAttributedText(
             attributedTitle,
             for: state,
-            on: self.control
+            on: self.controlStatus
         )
     }
 
     override func setIsPressed(_ isPressed: Bool) {
         super.setIsPressed(isPressed)
 
-        self.controlStateText.updateContent(from: self.control)
+        self.controlStateText.updateContent(from: self.controlStatus)
     }
 
     override func setIsDisabled(_ isDisabled: Bool) {
         super.setIsDisabled(isDisabled)
 
-        self.controlStateText.updateContent(from: self.control)
+        self.controlStateText.updateContent(from: self.controlStatus)
     }
 
     override func setIsSelected(_ isSelected: Bool) {
         super.setIsSelected(isSelected)
 
-        self.controlStateText.updateContent(from: self.control)
+        self.controlStateText.updateContent(from: self.controlStatus)
     }
 }
