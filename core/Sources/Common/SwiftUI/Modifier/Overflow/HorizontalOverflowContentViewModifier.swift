@@ -14,6 +14,7 @@ struct HorizontalOverflowContentViewModifier<Value>: ViewModifier where Value: E
     @State private var contentOverflow: Bool = false
     @State private var height: CGFloat = 0
     @Binding var value: Value
+    var minWidth: CGFloat
 
     // MARK: - View
     func body(content: Content) -> some View {
@@ -24,11 +25,11 @@ struct HorizontalOverflowContentViewModifier<Value>: ViewModifier where Value: E
                         Color.clear
                             .onAppear{
                                 self.height = contentGeometry.size.height
-                                contentOverflow = contentGeometry.size.width > geometry.size.width
+                                contentOverflow = max(contentGeometry.size.width, self.minWidth) > geometry.size.width
                             }
                             .onChange(of: self.value) { _ in
                                 self.height = contentGeometry.size.height
-                                contentOverflow = contentGeometry.size.width > geometry.size.width
+                                contentOverflow = max(contentGeometry.size.width, self.minWidth) > geometry.size.width
                             }
                     }
                 )
@@ -50,7 +51,7 @@ extension View {
         }
     }
 
-    func scrollOnOverflow<Value>(value: Binding<Value>) -> some View where Value: Equatable {
-        modifier(HorizontalOverflowContentViewModifier<Value>(value: value))
+    func scrollOnOverflow<Value>(value: Binding<Value>, minWidth: CGFloat) -> some View where Value: Equatable {
+        modifier(HorizontalOverflowContentViewModifier<Value>(value: value, minWidth: minWidth))
     }
 }

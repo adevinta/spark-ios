@@ -42,7 +42,11 @@ final class TabViewModel<Content>: ObservableObject {
     @Published var disabledTabs: [Bool]
     @Published var apportionsSegmentWidthsByContent: Bool = false
     @Published var tabsAttributes: TabsAttributes
-    @Published var content: [Content]
+    @Published var content: [Content] {
+        didSet {
+            self.disabledTabs = content.map{ _ in return false }
+        }
+    }
 
     // MARK: - Initializer
     init(theme: some Theme,
@@ -61,7 +65,7 @@ final class TabViewModel<Content>: ObservableObject {
     // Disable or enable a single tab.
     func disableTab(_ disabled: Bool, index: Int) {
         guard index < self.content.count else { return }
-        
+
         self.disabledTabs[index] = disabled
     }
 }

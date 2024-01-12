@@ -14,11 +14,15 @@ public struct TabView: View {
     private let intent: TabIntent
     private let tabSize: TabSize
 
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+
     @ObservedObject private var viewModel: TabViewModel<TabItemContent>
     @Binding private var selectedIndex: Int
     @ScaledMetric private var lineHeight: CGFloat
     @State private var minWidth: CGFloat = 0
-    @State private var appeared: Bool = false
+    @State private var recalculateScrollWidth = 0
+    @State private var contentOverflow = false
 
     // MARK: - Initialization
     /// Initializer
@@ -90,14 +94,24 @@ public struct TabView: View {
         self.tabItems()
             .background(
                 Rectangle()
-                    .frame(width: nil, height: self.lineHeight, alignment: .bottom)
+                    .frame(height: self.lineHeight, alignment: .bottom)
                     .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
                 alignment: .bottom)
-            .scrollOnOverflow(value: self.$viewModel.content)
+            .scrollOnOverflow(value: self.$recalculateScrollWidth, minWidth: self.minWidth * CGFloat(self.viewModel.content.count))
             .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
-            .onChange(of: self.viewModel.content) { _ in
-                self.minWidth = 0
+            .onAppear {
+                self.resetMinWidth()
             }
+            .onChange(of: self.dynamicTypeSize) { size in
+                self.resetMinWidth()
+            }
+            .onChange(of: self.verticalSizeClass) { size in
+                self.resetMinWidth()
+            }
+            .onChange(of: self.viewModel.content) { _ in
+                self.resetMinWidth()
+            }
+
     }
 
     // MARK: - Private functions
@@ -126,7 +140,16 @@ public struct TabView: View {
     }
 
     private func updateMinWidth(_ width: CGFloat, index: Int) {
-        self.minWidth = max(self.minWidth,width)
+        let formerMinWidth = self.minWidth
+        self.minWidth = max(self.minWidth, width)
+        if formerMinWidth != self.minWidth {
+            self.recalculateScrollWidth += 1
+        }
+    }
+
+    private func resetMinWidth() {
+        self.minWidth = 0
+        self.recalculateScrollWidth += 1
     }
 
     @ViewBuilder
@@ -153,7 +176,7 @@ public struct TabView: View {
                     .onAppear {
                         self.updateMinWidth(geometry.size.width, index: index)
                     }
-                    .onChange(of: self.viewModel.content) { _ in
+                    .onChange(of: self.recalculateScrollWidth) { _ in
                         self.updateMinWidth(geometry.size.width, index: index)
                     }
             }
