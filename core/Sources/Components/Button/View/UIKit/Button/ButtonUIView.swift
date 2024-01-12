@@ -14,7 +14,6 @@ public final class ButtonUIView: ButtonMainUIView {
 
     // MARK: - Type alias
 
-    private typealias AccessibilityIdentifier = ButtonAccessibilityIdentifier
     private typealias Animation = ButtonConstants.Animation
 
     // MARK: - Components
@@ -28,7 +27,7 @@ public final class ButtonUIView: ButtonMainUIView {
                 ]
         )
         stackView.axis = .horizontal
-        stackView.accessibilityIdentifier = AccessibilityIdentifier.contentStackView
+        stackView.accessibilityIdentifier = ButtonAccessibilityIdentifier.contentStackView
         stackView.isUserInteractionEnabled = false
         return stackView
     }()
@@ -36,7 +35,7 @@ public final class ButtonUIView: ButtonMainUIView {
     private lazy var imageContentView: UIView = {
         let view = UIView()
         view.addSubview(self.imageView)
-        view.accessibilityIdentifier = AccessibilityIdentifier.imageContentView
+        view.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageContentView
         view.setContentCompressionResistancePriority(.required,
                                                      for: .vertical)
         view.setContentCompressionResistancePriority(.required,
@@ -54,7 +53,7 @@ public final class ButtonUIView: ButtonMainUIView {
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .left
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = AccessibilityIdentifier.text
+        label.accessibilityIdentifier = ButtonAccessibilityIdentifier.text
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
@@ -67,7 +66,7 @@ public final class ButtonUIView: ButtonMainUIView {
             return self.viewModel.alignment
         }
         set {
-            self.viewModel.set(alignment: newValue)
+            self.viewModel.alignment = newValue
         }
     }
 
@@ -159,7 +158,7 @@ public final class ButtonUIView: ButtonMainUIView {
 
     internal override func setupView() {
         // Accessibility Identifier
-        self.accessibilityIdentifier = AccessibilityIdentifier.button
+        self.accessibilityIdentifier = ButtonAccessibilityIdentifier.button
 
         // Add subviews
         self.addSubview(self.contentStackView)
@@ -268,13 +267,8 @@ public final class ButtonUIView: ButtonMainUIView {
 
     private func spacingsDidUpdate(_ spacings: ButtonSpacings) {
         self.verticalSpacing = spacings.verticalSpacing
-        self._verticalSpacing.update(traitCollection: self.traitCollection)
-
         self.horizontalSpacing = spacings.horizontalSpacing
-        self._horizontalSpacing.update(traitCollection: self.traitCollection)
-
         self.horizontalPadding = spacings.horizontalPadding
-        self._horizontalPadding.update(traitCollection: self.traitCollection)
 
         self.updateSpacings()
     }
@@ -310,7 +304,7 @@ public final class ButtonUIView: ButtonMainUIView {
         // **
         // Content
         self.viewModel.$isImageTrailing.subscribe(in: &self.subscriptions) { [weak self] isImageTrailing in
-            guard let self, let isImageTrailing else { return }
+            guard let self else { return }
 
             self.contentStackView.semanticContentAttribute = isImageTrailing ? .forceRightToLeft : .forceLeftToRight
         }

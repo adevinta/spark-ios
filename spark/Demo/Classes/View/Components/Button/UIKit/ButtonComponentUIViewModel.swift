@@ -319,7 +319,7 @@ extension ButtonComponentUIViewModel {
     }
 
     @objc func presentContentNormalSheet() {
-        self.showContentNormalSheetSubject.send(ButtonContentDefault.allCases)
+        self.showContentNormalSheetSubject.send(ButtonContentDefault.allCasesExceptNone)
     }
 
     @objc func presentContentHighlightedCSheet() {

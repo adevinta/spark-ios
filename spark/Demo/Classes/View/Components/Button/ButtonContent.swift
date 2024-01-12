@@ -14,6 +14,14 @@ enum ButtonContentDefault: CaseIterable {
     case imageAndAttributedText
     case none
 
+    // MARK: - Static Properties
+
+    static var allCasesExceptNone: [Self] {
+        var test = self.allCases
+        test.removeAll { $0 == .none }
+        return test
+    }
+
     // MARK: - Properties
 
     var containsImage: Bool {

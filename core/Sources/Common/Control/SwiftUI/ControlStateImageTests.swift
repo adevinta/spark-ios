@@ -53,7 +53,7 @@ final class ControlStateImageTests: XCTestCase {
         // GIVEN
         let givenDisabledImage = Image("switchOff")
 
-        let control = Control(isDisabled: true)
+        let control = ControlStatus(isEnabled: false)
 
         let controlStateImage = ControlStateImage()
 

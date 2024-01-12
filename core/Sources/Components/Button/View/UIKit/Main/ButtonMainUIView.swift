@@ -15,7 +15,6 @@ public class ButtonMainUIView: UIControl {
 
     // MARK: - Type alias
 
-    private typealias AccessibilityIdentifier = ButtonAccessibilityIdentifier
     private typealias Animation = ButtonConstants.Animation
 
     // MARK: - Components
@@ -27,7 +26,8 @@ public class ButtonMainUIView: UIControl {
     private var imageStateView: UIControlStateImageView = {
         let imageView = UIControlStateImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = AccessibilityIdentifier.imageView
+        imageView.tintAdjustmentMode = .normal
+        imageView.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageView
         return imageView
     }()
 
@@ -60,7 +60,7 @@ public class ButtonMainUIView: UIControl {
             return self.viewModel.theme
         }
         set {
-            self.viewModel.set(theme: newValue)
+            self.viewModel.theme = newValue
         }
     }
 
@@ -70,7 +70,7 @@ public class ButtonMainUIView: UIControl {
             return self.viewModel.intent
         }
         set {
-            self.viewModel.set(intent: newValue)
+            self.viewModel.intent = newValue
         }
     }
 
@@ -80,7 +80,7 @@ public class ButtonMainUIView: UIControl {
             return self.viewModel.variant
         }
         set {
-            self.viewModel.set(variant: newValue)
+            self.viewModel.variant = newValue
         }
     }
 
@@ -90,7 +90,7 @@ public class ButtonMainUIView: UIControl {
             return self.viewModel.size
         }
         set {
-            self.viewModel.set(size: newValue)
+            self.viewModel.size = newValue
         }
     }
 
@@ -100,7 +100,7 @@ public class ButtonMainUIView: UIControl {
             return self.viewModel.shape
         }
         set {
-            self.viewModel.set(shape: newValue)
+            self.viewModel.shape = newValue
         }
     }
 
@@ -111,7 +111,7 @@ public class ButtonMainUIView: UIControl {
         }
         set {
             super.isEnabled = newValue
-            self.viewModel.set(isEnabled: newValue)
+            self.viewModel.isEnabled = newValue
 
             self.imageStateView.updateContent(from: self)
         }
@@ -321,24 +321,20 @@ public class ButtonMainUIView: UIControl {
     private func sizesDidUpdate(_ sizes: ButtonSizes) {
         // Height
         self.height = sizes.height
-        self._height.update(traitCollection: self.traitCollection)
         self.updateHeight()
 
         // ImageView height
         self.imageHeight = sizes.imageSize
-        self._imageHeight.update(traitCollection: self.traitCollection)
         self.updateImageViewHeight()
     }
 
     private func borderDidUpdate(_ border: ButtonBorder) {
         // Radius
         self.cornerRadius = border.radius
-        self._cornerRadius.update(traitCollection: self.traitCollection)
         self.updateBorderRadius()
 
         // Width
         self.borderWidth = border.width
-        self._borderWidth.update(traitCollection: self.traitCollection)
         self.updateBorderWidth()
     }
 

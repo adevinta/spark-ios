@@ -9,7 +9,7 @@
 import Foundation
 
 /// Manage all the states for a dynamic property.
-final class ControlPropertyStates<PropertyType> {
+final class ControlPropertyStates<PropertyType: Equatable> {
 
     // MARK: - Type Alias
 
@@ -70,7 +70,7 @@ final class ControlPropertyStates<PropertyType> {
 
         if status.isHighlighted, let value = self.highlightedState.value {
             return value
-        } else if status.isDisabled, let value = self.disabledState.value {
+        } else if !status.isEnabled, let value = self.disabledState.value {
             return value
         } else if status.isSelected, let value = self.selectedState.value {
             return value

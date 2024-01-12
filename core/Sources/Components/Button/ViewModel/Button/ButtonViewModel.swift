@@ -14,12 +14,17 @@ final class ButtonViewModel: ButtonMainViewModel {
 
     // MARK: - Properties
 
-    private(set) var alignment: ButtonAlignment
+    var alignment: ButtonAlignment {
+        didSet {
+            guard self.alignment != oldValue else { return }
+            self.alignmentDidUpdate()
+        }
+    }
 
     // MARK: - Published Properties
 
     @Published private(set) var spacings: ButtonSpacings?
-    @Published private(set) var isImageTrailing: Bool?
+    @Published private(set) var isImageTrailing: Bool = false
     @Published private(set) var titleFontToken: TypographyFontToken?
 
     // MARK: - Private Properties
@@ -50,16 +55,6 @@ final class ButtonViewModel: ButtonMainViewModel {
             size: size,
             shape: shape
         )
-    }
-
-    // MARK: - Setter
-
-    func set(alignment: ButtonAlignment) {
-        if self.alignment != alignment {
-            self.alignment = alignment
-
-            self.alignmentDidUpdate()
-        }
     }
 
     // MARK: - Update

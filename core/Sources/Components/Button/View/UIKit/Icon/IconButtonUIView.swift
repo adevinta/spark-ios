@@ -12,10 +12,6 @@ import UIKit
 /// The UIKit version for the icon button.
 public final class IconButtonUIView: ButtonMainUIView {
 
-    // MARK: - Type alias
-
-    private typealias AccessibilityIdentifier = ButtonAccessibilityIdentifier
-
     // MARK: - Initialization
 
     /// Initialize a new button view.
@@ -50,7 +46,7 @@ public final class IconButtonUIView: ButtonMainUIView {
 
     internal override func setupView() {
         // Accessibility Identifier
-        self.accessibilityIdentifier = AccessibilityIdentifier.iconButton
+        self.accessibilityIdentifier = ButtonAccessibilityIdentifier.iconButton
 
         // Add subviews
         self.addSubview(self.imageView)

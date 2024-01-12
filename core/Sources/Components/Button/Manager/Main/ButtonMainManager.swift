@@ -15,7 +15,7 @@ class ButtonMainManager<ViewModel: ButtonMainViewModel>: ObservableObject {
 
     let viewModel: ViewModel
 
-    private(set) var control = Control()
+    private(set) var controlStatus = ControlStatus()
     let controlStateImage: ControlStateImage
 
     // MARK: - Initialization
@@ -31,7 +31,7 @@ class ButtonMainManager<ViewModel: ButtonMainViewModel>: ObservableObject {
     // MARK: - Update
 
     func updateContent() {
-        self.controlStateImage.updateContent(from: self.control)
+        self.controlStateImage.updateContent(from: self.controlStatus)
     }
 
     // MARK: - Setter
@@ -40,29 +40,29 @@ class ButtonMainManager<ViewModel: ButtonMainViewModel>: ObservableObject {
         self.controlStateImage.setImage(
             image,
             for: state,
-            on: self.control
+            on: self.controlStatus
         )
     }
 
     func setIsPressed(_ isPressed: Bool) {
-        self.control.isPressed = isPressed
+        self.controlStatus.isHighlighted = isPressed
 
         self.viewModel.pressedAction(isPressed)
 
-        self.controlStateImage.updateContent(from: self.control)
+        self.controlStateImage.updateContent(from: self.controlStatus)
     }
 
     func setIsDisabled(_ isDisabled: Bool) {
-        self.control.isDisabled = isDisabled
+        self.controlStatus.isEnabled = !isDisabled
 
-        self.viewModel.set(isEnabled: !isDisabled)
+        self.viewModel.isEnabled = !isDisabled
 
-        self.controlStateImage.updateContent(from: self.control)
+        self.controlStateImage.updateContent(from: self.controlStatus)
     }
 
     func setIsSelected(_ isSelected: Bool) {
-        self.control.isSelected = isSelected
+        self.controlStatus.isSelected = isSelected
 
-        self.controlStateImage.updateContent(from: self.control)
+        self.controlStateImage.updateContent(from: self.controlStatus)
     }
 }

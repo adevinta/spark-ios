@@ -80,7 +80,7 @@ struct ButtonComponentView: View {
                 EnumSelector(
                     title: "Content (normal state)",
                     dialogTitle: "Select a normal content",
-                    values: ButtonContentDefault.allCases,
+                    values: ButtonContentDefault.allCasesExceptNone,
                     value: self.$contentNormal
                 )
 
@@ -148,7 +148,7 @@ struct ButtonComponentView: View {
                 .padding(.vertical, self.shouldShowReverseBackgroundColor ? 4 : 0)
                 .background(self.shouldShowReverseBackgroundColor ? Color.gray : Color.clear)
                 .alert("Button tap", isPresented: $showingActionAlert) {
-                    Button("OK", role: .cancel) { }
+//                    Button("OK", role: .cancel) { }
                 }
 
                 Spacer()

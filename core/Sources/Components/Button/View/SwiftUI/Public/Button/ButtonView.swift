@@ -11,10 +11,6 @@ import Foundation
 
 public struct ButtonView: View {
 
-    // MARK: - Type alias
-
-    private typealias AccessibilityIdentifier = ButtonAccessibilityIdentifier
-
     // MARK: - Private Properties
 
     @ObservedObject private var manager: ButtonManager
@@ -89,7 +85,7 @@ public struct ButtonView: View {
     // MARK: - View
 
     public var body: some View {
-        ButtonContentView(
+        ButtonContainerView(
             manager: self.manager,
             padding: .init(
                 vertical: self.verticalSpacing,
@@ -109,7 +105,7 @@ public struct ButtonView: View {
             alignment: .center,
             spacing: self.horizontalPadding
         ) {
-            if self.viewModel.isImageTrailing ?? false {
+            if self.viewModel.isImageTrailing {
                 self.title()
                 self.image()
             } else {
@@ -131,10 +127,10 @@ public struct ButtonView: View {
             Text(text)
                 .foregroundStyle(self.viewModel.currentColors?.titleColor?.color ?? ColorTokenDefault.clear.color)
                 .font(self.viewModel.titleFontToken?.font)
-                .accessibilityIdentifier(AccessibilityIdentifier.text)
+                .accessibilityIdentifier(ButtonAccessibilityIdentifier.text)
         } else if let attributedText = self.manager.controlStateText.attributedText {
             Text(attributedText)
-                .accessibilityIdentifier(AccessibilityIdentifier.text)
+                .accessibilityIdentifier(ButtonAccessibilityIdentifier.text)
         }
     }
 
@@ -157,7 +153,7 @@ public struct ButtonView: View {
         self.manager.controlStateText.setText(
             title,
             for: state,
-            on: self.manager.control
+            on: self.manager.controlStatus
         )
 
         return self
@@ -171,7 +167,7 @@ public struct ButtonView: View {
         self.manager.controlStateText.setAttributedText(
             attributedTitle,
             for: state,
-            on: self.manager.control
+            on: self.manager.controlStatus
         )
 
         return self

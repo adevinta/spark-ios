@@ -26,60 +26,54 @@ final class ControlStateText: ObservableObject {
     /// Set the text for a state.
     /// - parameter text: new text
     /// - parameter state: state of the text
-    /// - parameter control: the parent control
+    /// - parameter status: the status of the parent control
     func setText(
         _ text: String?,
         for state: ControlState,
-        on control: Control
+        on status: ControlStatus
     ) {
         self.textStates.setValue(text, for: state)
         self.textTypesStates.setValue(
             text != nil ? .text : DisplayedTextType.none,
             for: state
         )
-        self.updateContent(from: control)
+        self.updateContent(from: status)
     }
 
     /// Set the attributed text for a state.
     /// - parameter text: new attributed text
     /// - parameter state: state of the attributed text
-    /// - parameter control: the parent control
+    /// - parameter status: the status of the parent control 
     func setAttributedText(
         _ attributedText: AttributedString?,
         for state: ControlState,
-        on control: Control
+        on status: ControlStatus
     ) {
         self.attributedTextStates.setValue(attributedText, for: state)
         self.textTypesStates.setValue(
             attributedText != nil ? .attributedText : DisplayedTextType.none,
             for: state
         )
-        self.updateContent(from: control)
+        self.updateContent(from: status)
     }
 
     // MARK: - Update UI
 
     /// Update the label (text or attributed) for a parent control state.
-    /// - parameter control: the parent control
-    func updateContent(from control: Control) {
-        // Create the status from the control
-        let status = ControlStatus(
-            isHighlighted: control.isPressed,
-            isEnabled: !control.isDisabled,
-            isSelected: control.isSelected
-        )
-
+    /// - parameter status: the status of the parent control
+    func updateContent(from status: ControlStatus) {
         // Get the current textType from status
         let textType = self.textTypesStates.value(for: status)
+        let textTypeContainsText = textType?.containsText ?? false
 
         // Set the text or the attributedText from textType and states
         if let text = self.textStates.value(for: status),
-           textType == .text {
+           textType == .text || !textTypeContainsText {
             self.attributedText = nil
             self.text = text
 
         } else if let attributedText = self.attributedTextStates.value(for: status),
-                  textType == .attributedText {
+                  textType == .attributedText || !textTypeContainsText {
             self.text = nil
             self.attributedText = attributedText
 

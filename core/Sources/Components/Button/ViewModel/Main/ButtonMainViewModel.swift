@@ -15,12 +15,47 @@ class ButtonMainViewModel: ObservableObject {
 
     // MARK: - Properties
 
-    private(set) var theme: Theme
-    private(set) var intent: ButtonIntent
-    private(set) var variant: ButtonVariant
-    private(set) var size: ButtonSize
-    private(set) var shape: ButtonShape
-    private(set) var isEnabled: Bool = true
+    var theme: Theme {
+        didSet {
+            self.updateAll()
+        }
+    }
+
+    var intent: ButtonIntent {
+        didSet {
+            guard self.intent != oldValue else { return }
+            self.colorsDidUpdate(reloadColorsFromUseCase: true)
+        }
+    }
+
+    var variant: ButtonVariant {
+        didSet {
+            guard self.variant != oldValue else { return }
+            self.colorsDidUpdate(reloadColorsFromUseCase: true)
+            self.borderDidUpdate()
+        }
+    }
+
+    var size: ButtonSize {
+        didSet {
+            guard self.size != oldValue else { return }
+            self.sizesDidUpdate()
+        }
+    }
+
+    var shape: ButtonShape {
+        didSet {
+            guard self.shape != oldValue else { return }
+            self.borderDidUpdate()
+        }
+    }
+
+    var isEnabled: Bool = true {
+        didSet {
+            guard self.isEnabled != oldValue else { return }
+            self.stateDidUpdate()
+        }
+    }
 
     // MARK: - Published Properties
 
@@ -99,55 +134,6 @@ class ButtonMainViewModel: ObservableObject {
             self.isPressed.toggle()
 
             self.colorsDidUpdate(reloadColorsFromUseCase: false)
-        }
-    }
-
-    // MARK: - Setter
-
-    func set(theme: Theme) {
-        self.theme = theme
-
-        self.updateAll()
-    }
-
-    func set(intent: ButtonIntent) {
-        if self.intent != intent {
-            self.intent = intent
-
-            self.colorsDidUpdate(reloadColorsFromUseCase: true)
-        }
-    }
-
-    func set(variant: ButtonVariant) {
-        if self.variant != variant {
-            self.variant = variant
-
-            self.colorsDidUpdate(reloadColorsFromUseCase: true)
-            self.borderDidUpdate()
-        }
-    }
-
-    func set(size: ButtonSize) {
-        if self.size != size {
-            self.size = size
-
-            self.sizesDidUpdate()
-        }
-    }
-
-    func set(shape: ButtonShape) {
-        if self.shape != shape {
-            self.shape = shape
-
-            self.borderDidUpdate()
-        }
-    }
-
-    func set(isEnabled: Bool) {
-        if self.isEnabled != isEnabled {
-            self.isEnabled = isEnabled
-
-            self.stateDidUpdate()
         }
     }
 

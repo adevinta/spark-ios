@@ -45,7 +45,9 @@ final class ButtonMainManagerTests: XCTestCase {
         let isPressedMock = true
         let isPressedImage = Image("switchOn")
 
-        let expectedControl = Control(isPressed: isPressedMock)
+        let expectedStatus = ControlStatus(
+            isHighlighted: isPressedMock
+        )
 
         stub.addImageOnControlState(
             isPressedImage,
@@ -57,8 +59,8 @@ final class ButtonMainManagerTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(
-            manager.control,
-            .init(isPressed: isPressedMock),
+            manager.controlStatus,
+            .init(isHighlighted: isPressedMock),
             "Wrong control value"
         )
         XCTAssertEqual(
@@ -76,7 +78,9 @@ final class ButtonMainManagerTests: XCTestCase {
         let isDisabledMock = true
         let isDisabledImage = Image("switchOn")
 
-        let expectedControl = Control(isDisabled: isDisabledMock)
+        let expectedStatus = ControlStatus(
+            isEnabled: !isDisabledMock
+        )
 
         stub.addImageOnControlState(
             isDisabledImage,
@@ -88,8 +92,8 @@ final class ButtonMainManagerTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(
-            manager.control,
-            .init(isDisabled: isDisabledMock),
+            manager.controlStatus,
+            .init(isEnabled: !isDisabledMock),
             "Wrong control value"
         )
         XCTAssertEqual(
@@ -107,7 +111,9 @@ final class ButtonMainManagerTests: XCTestCase {
         let isSelectedMock = true
         let isSelectedImage = Image("switchOn")
 
-        let expectedControl = Control(isSelected: isSelectedMock)
+        let expectedStatus = ControlStatus(
+            isSelected: isSelectedMock
+        )
 
         stub.addImageOnControlState(
             isSelectedImage,
@@ -119,7 +125,7 @@ final class ButtonMainManagerTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(
-            manager.control,
+            manager.controlStatus,
             .init(isSelected: isSelectedMock),
             "Wrong control value"
         )
@@ -168,7 +174,7 @@ private struct Stub {
         self.controlStateImage.setImage(
             image,
             for: controlState,
-            on: self.manager.control
+            on: self.manager.controlStatus
         )
     }
 }
