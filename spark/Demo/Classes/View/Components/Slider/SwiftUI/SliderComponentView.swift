@@ -12,7 +12,6 @@ import SparkCore
 // swiftlint:disable no_debugging_method
 struct SliderComponentView: View {
 
-
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: SliderIntent = .basic
     @State private var shape: SliderShape = .square
@@ -53,6 +52,7 @@ struct SliderComponentView: View {
         Component(
             name: "Slider",
             configuration: {
+                ThemeSelector(theme: self.$theme)
                 EnumSelector(
                     title: "Intent",
                     dialogTitle: "Select an intent",
