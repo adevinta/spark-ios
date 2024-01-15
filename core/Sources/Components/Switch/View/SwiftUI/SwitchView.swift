@@ -70,6 +70,7 @@ public struct SwitchView: View {
         .isEnabledChanged { isEnabled in
             self.viewModel.set(isEnabled: isEnabled)
         }
+        .disabled(!self.viewModel.isEnabled)
     }
 
     // MARK: - Subview Maker
@@ -192,6 +193,14 @@ public struct SwitchView: View {
     }
 
     // MARK: - Modifier
+
+    /// Set disabled
+    /// - Parameters:
+    ///   - isDisabled: true = disabled, false  = enabled
+    public func disabled(_ isDisabled: Bool) -> Self {
+        self.viewModel.set(isEnabled: !isDisabled)
+        return self
+    }
 
     /// Set the images on switch.
     /// - Parameters:
