@@ -48,6 +48,10 @@ final class RadioButtonGroupCell: UITableViewCell, Configurable {
         return view
     }()
 
+    var stackViewAlignment: UIStackView.Alignment {
+        return .fill
+    }
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupView()
@@ -62,5 +66,7 @@ final class RadioButtonGroupCell: UITableViewCell, Configurable {
         self.component.intent = configuration.intent
         self.component.groupLayout = configuration.layout
         self.component.isEnabled = configuration.isEnabled
+        self.component.selectedID = configuration.selectedID
+        self.component.labelAlignment = configuration.alignment
     }
 }

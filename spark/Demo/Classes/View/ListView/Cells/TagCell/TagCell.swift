@@ -41,8 +41,10 @@ final class TagCell: UITableViewCell, Configurable {
         switch configuration.content {
         case .text:
             self.component.text = "Tag 1"
+            self.component.iconImage = nil
         case .icon:
             self.component.iconImage = UIImage(systemName: "pencil.tip.crop.circle")
+            self.component.text = nil
         case .all:
             self.component.text = "Tag 2"
             self.component.iconImage = UIImage(systemName: "pencil.tip.crop.circle")

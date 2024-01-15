@@ -277,7 +277,7 @@ extension ListViewDataSource {
     func createCheckboxConfigurations() -> [CheckboxConfiguration] {
         [CheckboxConfiguration(theme: SparkTheme.shared, intent: .main, isEnabled: true, alignment: .left, text: "Hello World", selectionState: .indeterminate),
          CheckboxConfiguration(theme: SparkTheme.shared, intent: .basic, isEnabled: true, alignment: .right, text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", selectionState: .unselected),
-         CheckboxConfiguration(theme: SparkTheme.shared, intent: .success, isEnabled: false, alignment: .right, text: "Hello World", selectionState: .selected)
+         CheckboxConfiguration(theme: SparkTheme.shared, intent: .success, isEnabled: false, alignment: .left, text: "Hello World", icon: DemoIconography.shared.close, selectionState: .selected)
         ]
     }
 
@@ -325,9 +325,9 @@ extension ListViewDataSource {
 
     /// Radio Button Group
     func createRadioButtonGroupConfigurations() -> [RadioButtonGroupConfiguration] {
-        [RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .leading, layout: .vertical, isEnabled: true),
-         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .leading, layout: .horizontal, isEnabled: true),
-         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .success, alignment: .trailing, layout: .vertical, isEnabled: false)]
+        [RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .trailing, layout: .vertical, isEnabled: true, selectedID: 0),
+         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .trailing, layout: .vertical, isEnabled: true, selectedID: 1),
+         RadioButtonGroupConfiguration(theme: SparkTheme.shared, intent: .success, alignment: .leading, layout: .vertical, isEnabled: false, selectedID: 2)]
     }
 
     /// Rating Display
@@ -368,9 +368,9 @@ extension ListViewDataSource {
 
     /// Tab
     func createTabConfigurations() -> [TabConfiguration] {
-        [TabConfiguration(theme: SparkTheme.shared, intent: .basic, size: .md, contents: [TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2")], showBadge: false, isEqualWidth: true),
-         TabConfiguration(theme: SparkTheme.shared, intent: .main, size: .md, contents: [TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2")], showBadge: true, isEqualWidth: true),
-         TabConfiguration(theme: SparkTheme.shared, intent: .support, size: .sm, contents: [TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2"), TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 3")], showBadge: false, isEqualWidth: false)
+        [TabConfiguration(theme: SparkTheme.shared, intent: .basic, size: .md, contents: [TabUIItemContent(title: "Tab 1"), TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2")], showBadge: false, isEqualWidth: true),
+         TabConfiguration(theme: SparkTheme.shared, intent: .main, size: .md, contents: [TabUIItemContent(title: "Tab 1"), TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2")], showBadge: true, isEqualWidth: true),
+         TabConfiguration(theme: SparkTheme.shared, intent: .support, size: .sm, contents: [TabUIItemContent(title: "Tab 1"), TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 2"), TabUIItemContent(icon: UIImage(systemName: "paperplane.fill"), title: "Tab 3")], showBadge: false, isEqualWidth: false)
         ]
     }
 
@@ -384,14 +384,14 @@ extension ListViewDataSource {
     /// Text Field
     func createTextFieldConfigurations() -> [TextFieldConfiguration] {
         [TextFieldConfiguration(theme: SparkTheme.shared, intent: .success, leftViewMode: .always, rightViewMode: .never, clearButtonMode: .whileEditing),
-         TextFieldConfiguration(theme: SparkTheme.shared, intent: .neutral, leftViewMode: .always, rightViewMode: .whileEditing, clearButtonMode: .whileEditing),
+         TextFieldConfiguration(theme: SparkTheme.shared, intent: .neutral, leftViewMode: .always, rightViewMode: .whileEditing, clearButtonMode: .whileEditing, text: "Hello world"),
          TextFieldConfiguration(theme: SparkTheme.shared, intent: .error, leftViewMode: .always, rightViewMode: .always, clearButtonMode: .always)]
     }
 
     /// Add On Text Field
     func createAddOnTextFieldConfigurations() -> [AddOnTextFieldConfiguration] {
         [AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .success, leftViewMode: .always, rightViewMode: .never, leadingAddOnOption: .button, trailingAddOnOption: .none, clearButtonMode: .whileEditing),
-         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .neutral, leftViewMode: .always, rightViewMode: .whileEditing, leadingAddOnOption: .button, trailingAddOnOption: .shortText, clearButtonMode: .whileEditing),
+         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .neutral, leftViewMode: .always, rightViewMode: .whileEditing, leadingAddOnOption: .button, trailingAddOnOption: .shortText, clearButtonMode: .whileEditing, text: "Hello world"),
          AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .error, leftViewMode: .always, rightViewMode: .always, leadingAddOnOption: .button, trailingAddOnOption: .longText, clearButtonMode: .always)]
     }
 }

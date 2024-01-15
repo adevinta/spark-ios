@@ -15,5 +15,6 @@ struct RadioButtonGroupConfiguration: ComponentConfiguration {
     var alignment: RadioButtonLabelAlignment
     var layout: RadioButtonGroupLayout
     var isEnabled: Bool
+    var selectedID: Int
 }
 
