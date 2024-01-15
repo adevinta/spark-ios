@@ -173,9 +173,11 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
 
     private func setupBar() {
         self.indicatorView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner] // Left
+        self.indicatorView.isUserInteractionEnabled = false
         self.addSubview(self.indicatorView)
 
         self.trackView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner] // Right
+        self.trackView.isUserInteractionEnabled = false
         self.addSubview(self.trackView)
     }
 
