@@ -28,6 +28,7 @@ final class SliderComponentUIViewController: UIViewController {
         self.viewModel = viewModel
         self.componentView = SliderComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
+        self.componentView.viewController = self
     }
 
     required init?(coder: NSCoder) {
