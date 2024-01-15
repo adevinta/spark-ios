@@ -31,6 +31,10 @@ struct HorizontalOverflowContentViewModifier<Value>: ViewModifier where Value: E
                                 self.height = contentGeometry.size.height
                                 contentOverflow = max(contentGeometry.size.width, self.minWidth) > geometry.size.width
                             }
+                            .onChange(of: contentGeometry.size.width) { _ in
+                                self.height = contentGeometry.size.height
+                                contentOverflow = max(contentGeometry.size.width, self.minWidth) > geometry.size.width
+                            }
                     }
                 )
                 .wrappedInScrollView(when: contentOverflow)
