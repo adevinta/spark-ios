@@ -1,15 +1,15 @@
 //
-//  ComponentsViewController.swift
-//  SparkDemo
+//  ListComponentsViewController.swift
+//  Spark
 //
-//  Created by alican.aycil on 14.08.23.
+//  Created by alican.aycil on 13.12.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
 import UIKit
 import SwiftUI
 
-final class ComponentsViewController: UICollectionViewController {
+final class ListComponentsViewController: UICollectionViewController {
 
     // MARK: - Typealias
     fileprivate typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
@@ -17,6 +17,14 @@ final class ComponentsViewController: UICollectionViewController {
 
     // MARK: - Properties
     private let reuseIdentifier = "defaultCell"
+
+    var uiComponentAllCases: [UIComponent] {
+        var all = UIComponent.allCases
+        all.insert(.checkboxGroup, at: 3)
+        all.insert(.radioButtonGroup, at: 9)
+        all.append(.addOnTextField)
+        return all
+    }
 
     private lazy var collectionViewDataSource: DataSource = {
         /// CollectionView cell registration
@@ -39,7 +47,7 @@ final class ComponentsViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.title = "UIComponents"
+        navigationItem.title = "List"
         setupData()
     }
 
@@ -47,13 +55,13 @@ final class ComponentsViewController: UICollectionViewController {
         /// CollectionView append sections and items
         var snapShot = SnapShot()
         snapShot.appendSections([.all])
-        snapShot.appendItems(UIComponent.allCases.map{ $0.rawValue }, toSection: .all)
+        snapShot.appendItems(uiComponentAllCases.map{ $0.rawValue }, toSection: .all)
         collectionViewDataSource.apply(snapShot)
     }
 }
 
 // MARK: - CollectionViewLayout
-extension ComponentsViewController {
+extension ListComponentsViewController {
 
     static func makeLayout() -> UICollectionViewCompositionalLayout {
         let listConfiguration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
@@ -62,48 +70,51 @@ extension ComponentsViewController {
 }
 
 // MARK: - CollectionViewDelegates
-extension ComponentsViewController {
+extension ListComponentsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let section = UIComponent.allCases[indexPath.row]
+
         var viewController: UIViewController!
-        switch section {
+
+        switch uiComponentAllCases[indexPath.row] {
         case .badge:
-            viewController = BadgeComponentViewController.build()
+            viewController = ListViewController<BadgeCell, BadgeConfiguration>()
         case .button:
-            viewController = ButtonComponentViewController.build()
+            viewController = ListViewController<ButtonCell, ButtonConfiguration>()
         case .checkbox:
-            viewController = UIHostingController(
-                rootView: ComponentsCheckboxListView(
-                    isSwiftUI: false
-                ).environment(\.navigationController, self.navigationController)
-            )
+            viewController = ListViewController<CheckboxCell, CheckboxConfiguration>()
+        case .checkboxGroup:
+            viewController = ListViewController<CheckboxGroupCell, CheckboxGroupConfiguration>()
         case .chip:
-            viewController = ChipComponentViewController.build()
+            viewController = ListViewController<ChipCell, ChipConfiguration>()
         case .icon:
-            viewController = IconComponentUIViewController.build()
+            viewController = ListViewController<IconCell, IconConfiguration>()
         case .progressBarIndeterminate:
-            viewController = ProgressBarIndeterminateComponentUIViewController.build()
+            viewController = ListViewController<ProgressBarIndeterminateCell, ProgressBarIndeterminateConfiguration>()
         case .progressBarSingle:
-            viewController = ProgressBarComponentUIViewController.build()
+            viewController = ListViewController<ProgressBarSingleCell, ProgressBarSingleConfiguration>()
         case .radioButton:
-            viewController = RadioButtonComponentUIViewController.build()
+            viewController = ListViewController<RadioButtonCell, RadioButtonConfiguration>()
+        case .radioButtonGroup:
+            viewController = ListViewController<RadioButtonGroupCell, RadioButtonGroupConfiguration>()
         case .ratingDisplay:
-            viewController = RatingDisplayComponentViewController.build()
+            viewController = ListViewController<RatingDisplayCell, RatingDisplayConfiguration>()
         case .ratingInput:
-            viewController = RatingInputComponentViewController.build()
+            viewController = ListViewController<RatingInputCell, RatingInputConfiguration>()
         case .spinner:
-            viewController = SpinnerComponentUIViewController.build()
+            viewController = ListViewController<SpinnerCell, SpinnerConfiguration>()
         case .star:
-            viewController = StarComponentViewController.build()
+            viewController = ListViewController<StarCell, StarCellConfiguration>()
         case .switchButton:
-            viewController = SwitchComponentUIViewController.build()
+            viewController = ListViewController<SwitchButtonCell, SwitchButtonConfiguration>()
         case .tab:
-            viewController = TabComponentUIViewController.build()
+            viewController = ListViewController<TabCell, TabConfiguration>()
         case .tag:
-            viewController = TagComponentUIViewController.build()
+            viewController = ListViewController<TagCell, TagConfiguration>()
         case .textField:
-            viewController = TextFieldComponentUIViewController.build()
+            viewController = ListViewController<TextFieldCell, TextFieldConfiguration>()
+        case .addOnTextField:
+            viewController = ListViewController<AddOnTextFieldCell, AddOnTextFieldConfiguration>()
         default:
             break
         }
@@ -113,9 +124,15 @@ extension ComponentsViewController {
 }
 
 // MARK: - Enums
-private extension ComponentsViewController {
+private extension ListComponentsViewController {
 
     enum Section {
         case all
     }
+}
+
+private extension UIComponent {
+    static let checkboxGroup = UIComponent(rawValue: "Checkbox Group")
+    static let radioButtonGroup = UIComponent(rawValue: "Radio Button Group")
+    static let addOnTextField = UIComponent(rawValue: "Add-on Text Field")
 }

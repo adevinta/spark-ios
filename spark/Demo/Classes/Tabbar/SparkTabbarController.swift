@@ -31,11 +31,19 @@ final class SparkTabbarController: UITabBarController {
     private lazy var componentVersionViewController: UIViewController = {
         var layout = ComponentVersionViewController.makeLayout()
         let viewController = UINavigationController(rootViewController: ComponentVersionViewController(collectionViewLayout: layout))
-        viewController.tabBarItem = UITabBarItem(title: "Components", image: UIImage(systemName: "list.bullet.rectangle"), tag: 0)
+        viewController.tabBarItem = UITabBarItem(title: "Components", image: UIImage(systemName: "apple.logo"), tag: 0)
         return viewController
     }()
 
     /// Third Tab
+    private lazy var listViewController: UIViewController = {
+        let layout = ComponentsViewController.makeLayout()
+        let viewController = UINavigationController(rootViewController: ListComponentsViewController(collectionViewLayout: layout))
+        viewController.tabBarItem = UITabBarItem(title: "List", image: UIImage(systemName: "list.bullet.rectangle"), tag: 0)
+        return viewController
+    }()
+
+    /// Fourth Tab
     private lazy var settingsViewController: UIViewController = {
         var layout = SettingsViewController.makeLayout()
         let viewController = UINavigationController(rootViewController: SettingsViewController(collectionViewLayout: layout))
@@ -60,6 +68,7 @@ final class SparkTabbarController: UITabBarController {
         viewControllers = [
             self.themeViewController,
             self.componentVersionViewController,
+            self.listViewController,
             self.settingsViewController
         ]
     }
