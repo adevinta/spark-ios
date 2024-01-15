@@ -120,7 +120,17 @@ final class ChipComponentUIView: ComponentUIView {
         self.viewModel.$action.subscribe(in: &self.cancellables) { [weak self] action in
             guard let self = self else { return }
 
-            self.componentView.action = action
+            self.componentView.action = action.map{ [weak self] _ in { self?.showAlert() } }
         }
+    }
+
+    func showAlert() {
+        let alertController = UIAlertController(
+            title: "Chip tap",
+            message: nil,
+            preferredStyle: .alert
+        )
+        alertController.addAction(.init(title: "Ok", style: .default))
+        self.viewController?.present(alertController, animated: true)
     }
 }
