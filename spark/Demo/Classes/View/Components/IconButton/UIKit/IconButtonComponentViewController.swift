@@ -84,10 +84,6 @@ final class IconButtonComponentViewController: UIViewController {
             self.presentShapeActionSheet(shapes)
         }
 
-        self.viewModel.showContentNormalSheet.subscribe(in: &self.cancellables) { contents in
-            self.presentContentNormalActionSheet(contents)
-        }
-
         self.viewModel.showContentHighlightedSheet.subscribe(in: &self.cancellables) { contents in
             self.presentContentHighlightedActionSheet(contents)
         }
@@ -162,15 +158,6 @@ extension IconButtonComponentViewController {
             values: shapes,
             texts: shapes.map { $0.name }) { shape in
                 self.viewModel.shape = shape
-            }
-        self.present(actionSheet, animated: true)
-    }
-
-    private func presentContentNormalActionSheet(_ contents: [IconButtonContentDefault]) {
-        let actionSheet = SparkActionSheet<IconButtonContentDefault>.init(
-            values: contents,
-            texts: contents.map { $0.name }) { content in
-                self.viewModel.contentNormal = content
             }
         self.present(actionSheet, animated: true)
     }

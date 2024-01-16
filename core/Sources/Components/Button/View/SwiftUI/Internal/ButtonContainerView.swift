@@ -9,15 +9,11 @@
 import SwiftUI
 import Foundation
 
-struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel>: View {
+struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel & ButtonMainSUIViewModel>: View {
 
     // MARK: - Properties
 
-    private let manager: ButtonMainManager<ViewModel>
-
-    private var viewModel: ButtonMainViewModel {
-        return self.manager.viewModel
-    }
+    @ObservedObject private var viewModel: ViewModel
 
     @ScaledMetric private var height: CGFloat
     @ScaledMetric private var borderWidth: CGFloat
@@ -33,14 +29,13 @@ struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel>:
     // MARK: - Initialization
 
     init(
-        manager: ButtonMainManager<ViewModel>,
+        viewModel: ViewModel,
         padding: EdgeInsets? = nil,
         action: @escaping () -> Void,
         contentView: @escaping () -> ContainerView
     ) {
-        self.manager = manager
+        self.viewModel = viewModel
 
-        let viewModel = manager.viewModel
         self._height = .init(wrappedValue: viewModel.sizes?.height ?? .zero)
         self._borderWidth = .init(wrappedValue: viewModel.border?.width ?? .zero)
         self._borderRadius = .init(wrappedValue: viewModel.border?.radius ?? .zero)
@@ -57,7 +52,7 @@ struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel>:
             self.contentView()
         }
         .buttonStyle(PressedButtonStyle(
-            manager: self.manager
+            viewModel: self.viewModel
         ))
         .padding(self.padding)
         .frame(height: self.height)
@@ -105,18 +100,18 @@ private extension View {
 
 // MARK: - Style
 
-private struct PressedButtonStyle<ViewModel: ButtonMainViewModel>: ButtonStyle {
+private struct PressedButtonStyle<ViewModel: ButtonMainViewModel & ButtonMainSUIViewModel>: ButtonStyle {
 
     // MARK: - Properties
 
-    let manager: ButtonMainManager<ViewModel>
+    let viewModel: ViewModel
 
     // MARK: - View
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
         .onChange(of: configuration.isPressed) { value in
-            self.manager.setIsPressed(value)
+            self.viewModel.setIsPressed(value)
         }
     }
 }

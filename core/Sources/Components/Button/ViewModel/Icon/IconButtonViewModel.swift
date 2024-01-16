@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-final class IconButtonViewModel: ButtonMainViewModel {
+class IconButtonViewModel: ButtonMainViewModel {
 
     // MARK: - Initialization
 

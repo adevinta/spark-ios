@@ -19,7 +19,7 @@ struct IconButtonComponentView: View {
     @State private var variant: ButtonVariant = .filled
     @State private var size: ButtonSize = .medium
     @State private var shape: ButtonShape = .rounded
-    @State private var contentNormal: IconButtonContentDefault = .image
+    private let contentNormal: IconButtonContentDefault = .image
     @State private var contentHighlighted: IconButtonContentDefault = .image
     @State private var contentDisabled: IconButtonContentDefault = .image
     @State private var contentSelected: IconButtonContentDefault = .image
@@ -67,13 +67,6 @@ struct IconButtonComponentView: View {
                     dialogTitle: "Select a shape",
                     values: ButtonShape.allCases,
                     value: self.$shape
-                )
-
-                EnumSelector(
-                    title: "Content (normal state)",
-                    dialogTitle: "Select a normal content",
-                    values: IconButtonContentDefault.allCases,
-                    value: self.$contentNormal
                 )
 
                 EnumSelector(

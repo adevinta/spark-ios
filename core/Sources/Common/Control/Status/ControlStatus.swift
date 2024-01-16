@@ -7,7 +7,7 @@
 //
 
 /// The current status of the control: highlighted or not, disabled or not and selected or not.
-struct ControlStatus: Equatable {
+final class ControlStatus: Equatable {
 
     // MARK: - Properties
 
@@ -28,5 +28,13 @@ struct ControlStatus: Equatable {
         self.isHighlighted = isHighlighted
         self.isEnabled = isEnabled
         self.isSelected = isSelected
+    }
+
+    // MARK: - Equatable
+
+    static func == (lhs: ControlStatus, rhs: ControlStatus) -> Bool {
+        return lhs.isHighlighted == rhs.isHighlighted &&
+        lhs.isEnabled == rhs.isEnabled &&
+        lhs.isSelected == rhs.isSelected
     }
 }

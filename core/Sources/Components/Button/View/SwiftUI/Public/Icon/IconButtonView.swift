@@ -14,11 +14,7 @@ public struct IconButtonView: View {
 
     // MARK: - Private Properties
 
-    @ObservedObject private var manager: IconButtonManager
-
-    @ObservedObject private var viewModel: IconButtonViewModel
-
-    @ObservedObject private var controlStateImage: ControlStateImage
+    @ObservedObject private var viewModel: IconButtonSUIViewModel
 
     private var action: () -> Void
 
@@ -40,8 +36,7 @@ public struct IconButtonView: View {
         shape: ButtonShape,
         action: @escaping () -> Void
     ) {
-        let viewModel = IconButtonViewModel(
-            for: .swiftUI,
+        let viewModel = IconButtonSUIViewModel(
             theme: theme,
             intent: intent,
             variant: variant,
@@ -50,14 +45,6 @@ public struct IconButtonView: View {
         )
         self.viewModel = viewModel
 
-        let controlStateImage = ControlStateImage()
-        self.controlStateImage = controlStateImage
-
-        self.manager = .init(
-            viewModel: viewModel,
-            controlStateImage: controlStateImage
-        )
-
         self.action = action
     }
 
@@ -65,10 +52,10 @@ public struct IconButtonView: View {
 
     public var body: some View {
         ButtonContainerView(
-            manager: self.manager,
+            viewModel: self.viewModel,
             action: self.action
         ) {
-            ButtonImageView(manager: self.manager)
+            ButtonImageView(viewModel: self.viewModel)
                 .animation(nil, value: UUID())
         }
     }
@@ -80,7 +67,7 @@ public struct IconButtonView: View {
     /// - parameter state: state of the image
     /// - Returns: Current Button View.
     public func image(_ image: Image?, for state: ControlState) -> Self {
-        self.manager.setImage(image, for: state)
+        self.viewModel.setImage(image, for: state)
         return self
     }
 
@@ -89,7 +76,7 @@ public struct IconButtonView: View {
     ///   - text: The button is disabled or not.
     /// - Returns: Current Button View.
     public func disabled(_ isDisabled: Bool) -> Self {
-        self.manager.setIsDisabled(isDisabled)
+        self.viewModel.setIsDisabled(isDisabled)
 
         return self
     }
@@ -99,7 +86,7 @@ public struct IconButtonView: View {
     ///   - text: The switch is selected or not.
     /// - Returns: Current Button View.
     public func selected(_ isSelected: Bool) -> Self {
-        self.manager.setIsSelected(isSelected)
+        self.viewModel.setIsSelected(isSelected)
 
         return self
     }
