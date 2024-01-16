@@ -95,7 +95,7 @@ final class ConsoleView: UIView {
         self.layer.zPosition = .greatestFiniteMagnitude
 
         self.trailingAnchor.constraint(equalTo: window.trailingAnchor, constant: -20).isActive = true
-        self.topAnchor.constraint(equalTo: window.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        self.topAnchor.constraint(equalTo: window.safeAreaLayoutGuide.topAnchor, constant: 28).isActive = true
     }
 
     private func setupView() {

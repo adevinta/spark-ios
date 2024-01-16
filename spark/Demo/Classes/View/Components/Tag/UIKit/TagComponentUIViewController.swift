@@ -97,7 +97,7 @@ extension TagComponentUIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [TagIntent]) {
@@ -106,7 +106,7 @@ extension TagComponentUIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentVariantActionSheet(_ variants: [TagVariant]) {
@@ -115,7 +115,7 @@ extension TagComponentUIViewController {
             texts: variants.map { $0.name }) { variant in
                 self.viewModel.variant = variant
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentContentActionSheet(_ contents: [TagContent]) {
@@ -124,6 +124,6 @@ extension TagComponentUIViewController {
             texts: contents.map { $0.name }) { content in
                 self.viewModel.content = content
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }
