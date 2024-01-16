@@ -40,11 +40,6 @@ final class IconButtonComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showContentNormalSheet: AnyPublisher<[IconButtonContentDefault], Never> {
-        showContentNormalSheetSubject
-            .eraseToAnyPublisher()
-    }
-
     var showContentHighlightedSheet: AnyPublisher<[IconButtonContentDefault], Never> {
         showContentHighlightedSheetSubject
             .eraseToAnyPublisher()
@@ -123,14 +118,6 @@ final class IconButtonComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var contentNormalConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Content (normal state)",
-            type: .button,
-            target: (source: self, action: #selector(self.presentContentNormalSheet))
-        )
-    }()
-
     lazy var contentHighlightedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Content (highlighted state)",
@@ -202,7 +189,6 @@ final class IconButtonComponentUIViewModel: ComponentUIViewModel {
             self.variantConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
             self.shapeConfigurationItemViewModel,
-            self.contentNormalConfigurationItemViewModel,
             self.contentHighlightedConfigurationItemViewModel,
             self.contentDisabledConfigurationItemViewModel,
             self.contentSelectedConfigurationItemViewModel,
@@ -220,7 +206,6 @@ final class IconButtonComponentUIViewModel: ComponentUIViewModel {
     private var showVariantSheetSubject: PassthroughSubject<[ButtonVariant], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[ButtonSize], Never> = .init()
     private var showShapeSheetSubject: PassthroughSubject<[ButtonShape], Never> = .init()
-    private var showContentNormalSheetSubject: PassthroughSubject<[IconButtonContentDefault], Never> = .init()
     private var showContentHighlightedSheetSubject: PassthroughSubject<[IconButtonContentDefault], Never> = .init()
     private var showContentDisabledSheetSubject: PassthroughSubject<[IconButtonContentDefault], Never> = .init()
     private var showContentSelectedSheetSubject: PassthroughSubject<[IconButtonContentDefault], Never> = .init()
@@ -294,10 +279,6 @@ extension IconButtonComponentUIViewModel {
 
     @objc func presentShapeSheet() {
         self.showShapeSheetSubject.send(ButtonShape.allCases)
-    }
-
-    @objc func presentContentNormalSheet() {
-        self.showContentNormalSheetSubject.send(IconButtonContentDefault.allCases)
     }
 
     @objc func presentContentHighlightedCSheet() {

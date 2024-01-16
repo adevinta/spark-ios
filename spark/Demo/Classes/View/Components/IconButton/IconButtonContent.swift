@@ -9,4 +9,12 @@
 enum IconButtonContentDefault: CaseIterable {
     case image
     case none
+
+    // MARK: - Static Properties
+
+    static var allCasesExceptNone: [Self] {
+        var test = self.allCases
+        test.removeAll { $0 == .none }
+        return test
+    }
 }

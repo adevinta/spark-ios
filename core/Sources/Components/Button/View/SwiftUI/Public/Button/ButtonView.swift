@@ -13,12 +13,7 @@ public struct ButtonView: View {
 
     // MARK: - Private Properties
 
-    @ObservedObject private var manager: ButtonManager
-
-    @ObservedObject private var viewModel: ButtonViewModel
-
-    @ObservedObject private var controlStateText: ControlStateText
-    @ObservedObject private var controlStateImage: ControlStateImage
+    @ObservedObject private var viewModel: ButtonSUIViewModel
 
     @ScaledMetric private var verticalSpacing: CGFloat
     @ScaledMetric private var horizontalSpacing: CGFloat
@@ -46,8 +41,7 @@ public struct ButtonView: View {
         alignment: ButtonAlignment,
         action: @escaping () -> Void
     ) {
-        let viewModel = ButtonViewModel(
-            for: .swiftUI,
+        let viewModel = ButtonSUIViewModel(
             theme: theme,
             intent: intent,
             variant: variant,
@@ -58,26 +52,11 @@ public struct ButtonView: View {
         self.viewModel = viewModel
 
         // **
-        // Control States
-        let controlStateText = ControlStateText()
-        let controlStateImage = ControlStateImage()
-
-        self.controlStateText = controlStateText
-        self.controlStateImage = controlStateImage
-        // **
-
-        // **
         // Scaled Metric
         self._verticalSpacing = .init(wrappedValue: viewModel.spacings?.verticalSpacing ?? .zero)
         self._horizontalSpacing = .init(wrappedValue: viewModel.spacings?.horizontalSpacing ?? .zero)
         self._horizontalPadding = .init(wrappedValue: viewModel.spacings?.horizontalPadding ?? .zero)
         // **
-
-        self.manager = .init(
-            viewModel: viewModel,
-            controlStateText: controlStateText,
-            controlStateImage: controlStateImage
-        )
 
         self.action = action
     }
@@ -86,7 +65,7 @@ public struct ButtonView: View {
 
     public var body: some View {
         ButtonContainerView(
-            manager: self.manager,
+            viewModel: self.viewModel,
             padding: .init(
                 vertical: self.verticalSpacing,
                 horizontal: self.horizontalSpacing
@@ -118,17 +97,17 @@ public struct ButtonView: View {
 
     @ViewBuilder
     private func image() -> some View {
-        ButtonImageView(manager: self.manager)
+        ButtonImageView(viewModel: self.viewModel)
     }
 
     @ViewBuilder
     private func title() -> some View {
-        if let text = self.manager.controlStateText.text {
+        if let text = self.viewModel.controlStateText?.text {
             Text(text)
                 .foregroundStyle(self.viewModel.currentColors?.titleColor?.color ?? ColorTokenDefault.clear.color)
                 .font(self.viewModel.titleFontToken?.font)
                 .accessibilityIdentifier(ButtonAccessibilityIdentifier.text)
-        } else if let attributedText = self.manager.controlStateText.attributedText {
+        } else if let attributedText = self.viewModel.controlStateText?.attributedText {
             Text(attributedText)
                 .accessibilityIdentifier(ButtonAccessibilityIdentifier.text)
         }
@@ -141,7 +120,7 @@ public struct ButtonView: View {
     /// - parameter state: state of the image
     /// - Returns: Current Button View.
     public func image(_ image: Image?, for state: ControlState) -> Self {
-        self.manager.setImage(image, for: state)
+        self.viewModel.setImage(image, for: state)
         return self
     }
 
@@ -150,10 +129,9 @@ public struct ButtonView: View {
     /// - parameter state: state of the title
     /// - Returns: Current Button View.
     public func title(_ title: String?, for state: ControlState) -> Self {
-        self.manager.controlStateText.setText(
+        self.viewModel.setTitle(
             title,
-            for: state,
-            on: self.manager.controlStatus
+            for: state
         )
 
         return self
@@ -164,10 +142,9 @@ public struct ButtonView: View {
     /// - parameter state: state of the attributedTitle
     /// - Returns: Current Button View.
     public func attributedTitle(_ attributedTitle: AttributedString?, for state: ControlState) -> Self {
-        self.manager.controlStateText.setAttributedText(
+        self.viewModel.setAttributedTitle(
             attributedTitle,
-            for: state,
-            on: self.manager.controlStatus
+            for: state
         )
 
         return self
@@ -178,7 +155,7 @@ public struct ButtonView: View {
     ///   - text: The button is disabled or not.
     /// - Returns: Current Button View.
     public func disabled(_ isDisabled: Bool) -> Self {
-        self.manager.setIsDisabled(isDisabled)
+        self.viewModel.setIsDisabled(isDisabled)
 
         return self
     }
@@ -188,7 +165,7 @@ public struct ButtonView: View {
     ///   - text: The switch is selected or not.
     /// - Returns: Current Button View.
     public func selected(_ isSelected: Bool) -> Self {
-        self.manager.setIsSelected(isSelected)
+        self.viewModel.setIsSelected(isSelected)
 
         return self
     }

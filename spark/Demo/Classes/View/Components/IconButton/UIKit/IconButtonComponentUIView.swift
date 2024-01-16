@@ -93,7 +93,6 @@ final class IconButtonComponentUIView: ComponentUIView {
         self.viewModel.$contentNormal.subscribe(in: &self.cancellables) { [weak self] content in
             guard let self = self else { return }
 
-            self.viewModel.contentNormalConfigurationItemViewModel.buttonTitle = content.name
             self.showRightSpacing = content != .image
             self.setContent(content, for: .normal)
         }

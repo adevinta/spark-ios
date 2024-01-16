@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ButtonImageView<ViewModel: ButtonMainViewModel>: View {
+struct ButtonImageView<ViewModel: ButtonMainViewModel & ButtonMainSUIViewModel>: View {
 
     // MARK: - Properties
 
@@ -18,10 +18,10 @@ struct ButtonImageView<ViewModel: ButtonMainViewModel>: View {
 
     // MARK: - Initialization
 
-    init(manager: ButtonMainManager<ViewModel>) {
-        self.image = manager.controlStateImage.image
-        self._size = .init(wrappedValue: manager.viewModel.sizes?.imageSize ?? .zero)
-        self.foregroundColor = manager.viewModel.currentColors?.imageTintColor
+    init(viewModel: ViewModel) {
+        self.image = viewModel.controlStateImage.image
+        self._size = .init(wrappedValue: viewModel.sizes?.imageSize ?? .zero)
+        self.foregroundColor = viewModel.currentColors?.imageTintColor
     }
 
     // MARK: - View

@@ -10,7 +10,7 @@ import Combine
 
 // sourcery: AutoPublisherTest, AutoViewModelStub
 // sourcery: titleFontToken = "Identical"
-final class ButtonViewModel: ButtonMainViewModel {
+class ButtonViewModel: ButtonMainViewModel {
 
     // MARK: - Properties
 
