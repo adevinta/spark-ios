@@ -247,6 +247,7 @@ public final class CheckboxUIView: UIControl {
             text: content,
             checkedImage: checkedImage,
             theme: theme,
+            intent: intent,
             isEnabled: isEnabled,
             alignment: alignment,
             selectionState: selectionState
@@ -352,6 +353,8 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$text.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] text in
             guard let self else { return }
+            let labelHidden: Bool = (text.leftValue?.string ?? "").isEmpty
+            self.textLabel.isHidden = labelHidden
             self.textLabel.font = self.viewModel.font.uiFont
             self.textLabel.attributedText = text.leftValue
         }
