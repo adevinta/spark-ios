@@ -94,7 +94,7 @@ extension TabComponentUIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [TabIntent]) {
@@ -103,7 +103,7 @@ extension TabComponentUIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentSizeActionSheet(_ variants: [TabSize]) {
@@ -112,6 +112,6 @@ extension TabComponentUIViewController {
             texts: variants.map { $0.name }) { size in
                 self.viewModel.size = size
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }

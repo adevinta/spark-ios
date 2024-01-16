@@ -97,7 +97,7 @@ extension RatingDisplayComponentViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [RatingIntent]) {
@@ -106,7 +106,7 @@ extension RatingDisplayComponentViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentSizeActionSheet(_ sizes: [RatingDisplaySize]) {
@@ -115,7 +115,7 @@ extension RatingDisplayComponentViewController {
             texts: sizes.map{ $0.name }) { size in
                 self.viewModel.size = size
             }
-            self.present(actionSheet, animated: true)
+            self.present(actionSheet, isAnimated: true)
     }
 
     private func presentCountActionSheet(_ counts: [RatingStarsCount]) {
@@ -124,6 +124,6 @@ extension RatingDisplayComponentViewController {
             texts: counts.map{ $0.name }) { count in
                 self.viewModel.count = count
             }
-            self.present(actionSheet, animated: true)
+            self.present(actionSheet, isAnimated: true)
     }
 }
