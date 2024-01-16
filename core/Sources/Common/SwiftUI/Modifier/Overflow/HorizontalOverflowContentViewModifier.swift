@@ -22,32 +22,45 @@ struct HorizontalOverflowContentViewModifier<Value>: ViewModifier where Value: E
                 .overlay(
                     GeometryReader { contentGeometry in
                         Color.clear
-                            .onAppear{
+                            .onAppear {
                                 self.height = contentGeometry.size.height
                                 contentOverflow = contentGeometry.size.width > geometry.size.width
+                                print("HEIGHT \(self.height) / \(geometry.size.height)")
                             }
                             .onChange(of: self.value) { _ in
                                 self.height = contentGeometry.size.height
                                 contentOverflow = contentGeometry.size.width > geometry.size.width
                             }
+                            .onChange(of: geometry.size) { newSize in
+                                print("GEO CHANGE w \(geometry.size.width.des) \(newSize.width.des)")
+                                print("GEO CHANGE h \(geometry.size.height.des) \(newSize.height.des)")
+
+                                contentOverflow = contentGeometry.size.width > geometry.size.width
+                                self.height = newSize.height
+                            }
                     }
                 )
                 .wrappedInScrollView(when: contentOverflow)
+//                .frame(height: self.height)
         }
-        .frame(height: self.height)
+//        .frame(height: self.height)
     }
 }
 
 extension View {
     @ViewBuilder
     func wrappedInScrollView(when condition: Bool) -> some View {
-        if condition {
-            ScrollView(.horizontal, showsIndicators: false) {
-                self
-            }
-        } else {
+        ScrollView(condition ? .horizontal : [],
+                   showsIndicators: false) {
             self
         }
+//        if condition {
+//            ScrollView(.horizontal, showsIndicators: false) {
+//                self
+//            }
+//        } else {
+//            self
+//        }
     }
 
     func scrollOnOverflow<Value>(value: Binding<Value>) -> some View where Value: Equatable {
