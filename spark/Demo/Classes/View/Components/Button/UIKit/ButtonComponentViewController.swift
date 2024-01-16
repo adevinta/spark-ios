@@ -109,7 +109,7 @@ extension ButtonComponentViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [ButtonIntent]) {
@@ -118,7 +118,7 @@ extension ButtonComponentViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentVariantActionSheet(_ variants: [ButtonVariant]) {
@@ -127,7 +127,7 @@ extension ButtonComponentViewController {
             texts: variants.map{ $0.name }) { variant in
                 self.viewModel.variant = variant
             }
-            self.present(actionSheet, animated: true)
+            self.present(actionSheet, isAnimated: true)
     }
 
     private func presentSizeActionSheet(_ sizes: [ButtonSize]) {
@@ -136,7 +136,7 @@ extension ButtonComponentViewController {
             texts: sizes.map { $0.name }) { size in
                 self.viewModel.size = size
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentShapeActionSheet(_ shapes: [ButtonShape]) {
@@ -145,7 +145,7 @@ extension ButtonComponentViewController {
             texts: shapes.map { $0.name }) { shape in
                 self.viewModel.shape = shape
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentAlignmentActionSheet(_ alignments: [ButtonAlignment]) {
@@ -154,7 +154,7 @@ extension ButtonComponentViewController {
             texts: alignments.map { $0.name }) { alignment in
                 self.viewModel.alignment = alignment
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentContentActionSheet(_ contents: [ButtonContentDefault]) {
@@ -163,7 +163,7 @@ extension ButtonComponentViewController {
             texts: contents.map { $0.name }) { content in
                 self.viewModel.content = content
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
 }

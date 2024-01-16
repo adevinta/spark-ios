@@ -101,7 +101,7 @@ extension ChipComponentViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [ChipIntent]) {
@@ -110,7 +110,7 @@ extension ChipComponentViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentVariantActionSheet(_ variants: [ChipVariant]) {
@@ -119,7 +119,7 @@ extension ChipComponentViewController {
             texts: variants.map{ $0.name }) { variant in
                 self.viewModel.variant = variant
             }
-            self.present(actionSheet, animated: true)
+            self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIconAlignmentActionSheet(_ variants: [ChipComponentUIViewModel.IconPosition]) {
@@ -128,7 +128,7 @@ extension ChipComponentViewController {
             texts: variants.map{ $0.name }) { variant in
                 self.viewModel.iconAlignmentDidUpdate(variant)
             }
-            self.present(actionSheet, animated: true)
+            self.present(actionSheet, isAnimated: true)
     }
 
     private func presentExtraComponentActionSheet(_ variants: [ChipComponentUIViewModel.ExtraComponent]) {
@@ -137,6 +137,6 @@ extension ChipComponentViewController {
             texts: variants.map{ $0.name }) { variant in
                 self.viewModel.extraComponentDidUpdate(variant)
             }
-            self.present(actionSheet, animated: true)
+            self.present(actionSheet, isAnimated: true)
     }
 }

@@ -97,7 +97,7 @@ extension SwitchComponentUIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [SwitchIntent]) {
@@ -106,7 +106,7 @@ extension SwitchComponentUIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentAlignmentActionSheet(_ alignments: [SwitchAlignment]) {
@@ -115,7 +115,7 @@ extension SwitchComponentUIViewController {
             texts: alignments.map { $0.name }) { alignment in
                 self.viewModel.alignment = alignment
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentContentActionSheet(_ contents: [SwitchTextContentDefault]) {
@@ -124,6 +124,6 @@ extension SwitchComponentUIViewController {
             texts: contents.map { $0.name }) { content in
                 self.viewModel.textContent = content
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }
