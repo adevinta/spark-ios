@@ -31,20 +31,19 @@ struct SliderHandle: View {
                 .foregroundColor(self.viewModel.color.color)
                 .frame(width: SliderConstants.handleSize.width, height: SliderConstants.handleSize.height)
         }
-        .frame(width: SliderConstants.handleSize.width, height: SliderConstants.handleSize.height)
     }
 
     @ViewBuilder
     private func activeIndicatorStroke() -> some View {
         Circle()
             .strokeBorder(self.viewModel.color.color, lineWidth: 1.0)
-            .frame(width: SliderConstants.activeIndicatorSize.width + 2, height: SliderConstants.activeIndicatorSize.height + 2)
+            .frame(width: SliderConstants.activeIndicatorSize.width, height: SliderConstants.activeIndicatorSize.height)
     }
 
     @ViewBuilder
     private func activeIndicatorHalo() -> some View {
         Circle()
             .fill(self.viewModel.activeIndicatorColor)
-            .frame(width: SliderConstants.activeIndicatorSize.width, height: SliderConstants.activeIndicatorSize.height)
+            .frame(width: SliderConstants.activeIndicatorSize.width - 2, height: SliderConstants.activeIndicatorSize.height - 2)
     }
 }
