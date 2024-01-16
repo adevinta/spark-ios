@@ -1,8 +1,8 @@
 //
-//  CheckboxConfigurationSnapshotTest.swift
+//  CheckboxConfigurationSnapshotTests.swift
 //  SparkCoreSnapshotTests
 //
-//  Created by alican.aycil on 12.01.24.
+//  Created by alican.aycil on 16.01.24.
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
