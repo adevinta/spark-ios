@@ -10,15 +10,19 @@ import SwiftUI
 
 /// TabView is the similar to a SegmentControl
 public struct TabView: View {
-    private let theme: Theme
     private let intent: TabIntent
-    private let tabSize: TabSize
 
     @ObservedObject private var viewModel: TabViewModel<TabItemContent>
     @Binding private var selectedIndex: Int
-    @ScaledMetric private var lineHeight: CGFloat
-    @State private var minWidth: CGFloat = 0
+//    @ScaledMetric private var lineHeight: CGFloat
+    @ScaledMetric private var factor: CGFloat = 1.0
+    @State private var minItemWidth: CGFloat = 40.0
+    @State private var screenWidth: CGFloat = UIScreen.main.bounds.width
     @State private var appeared: Bool = false
+    @State private var axis: Axis.Set = .horizontal
+    private var tabsWidth: CGFloat {
+        return self.minItemWidth * CGFloat(self.viewModel.content.count) * self.factor
+    }
 
     // MARK: - Initialization
     /// Initializer
@@ -72,32 +76,54 @@ public struct TabView: View {
                 content: [TabItemContent] = [],
                 selectedIndex: Binding<Int>
     ) {
-        self.theme = theme
         self.intent = intent
-        self.tabSize = tabSize
         self._selectedIndex = selectedIndex
         let viewModel = TabViewModel(
             theme: theme,
             apportionsSegmentWidthsByContent: false,
-            content: content
+            content: content, 
+            tabSize: tabSize
         )
-        self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabsAttributes.lineHeight)
         self.viewModel = viewModel
     }
 
     // MARK: - View
     public var body: some View {
-        self.tabItems()
-            .background(
-                Rectangle()
-                    .frame(width: nil, height: self.lineHeight, alignment: .bottom)
-                    .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
-                alignment: .bottom)
-            .scrollOnOverflow(value: self.$viewModel.content)
-            .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
-            .onChange(of: self.viewModel.content) { _ in
-                self.minWidth = 0
+//        let contentWidth = self.minWidth * CGFloat(self.viewModel.content.count)
+        ZStack(alignment: .bottom) {
+            GeometryReader { geometry in
+                VStack(alignment: .trailing) {
+                    Spacer()
+                    Rectangle()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: self.viewModel.tabsAttributes.lineHeight * self.factor)
+                        .frame(width: geometry.size.width)
+//                        .foregroundColor(self.viewModel.tabsAttributes.lineColor.color)
+                        .foregroundColor(.red)
+                        .onAppear {
+                            self.screenWidth = geometry.size.width
+                            self.minItemWidth = geometry.size.width / CGFloat(self.viewModel.content.count)
+                            print("MINWIDTH a \(self.minItemWidth) / \(self.screenWidth)")
+                        }
+                        .onChange(of: geometry.size.width) { width in
+                            self.screenWidth = width
+                            self.minItemWidth = width / CGFloat(self.viewModel.content.count)
+                            print("MINWIDTH c \(self.minItemWidth) / \(self.screenWidth)")
+                        }
+                }
+                .frame(height: self.factor * self.viewModel.tabsAttributes.itemHeight)
             }
+            ScrollView(self.axis, showsIndicators: false) {
+                self.tabItems()
+                    .frame(height: self.factor * self.viewModel.tabsAttributes.itemHeight)
+                    .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
+                    .onChange(of: self.viewModel.content) { content in
+                        self.minItemWidth = self.screenWidth / CGFloat(content.count)
+                    }
+            }
+            .frame(height: self.factor * self.viewModel.tabsAttributes.itemHeight)
+
+        }
     }
 
     // MARK: - Private functions
@@ -121,20 +147,22 @@ public struct TabView: View {
             tabItem(index: index, content: content, proxy: proxy)
         } else {
             tabItem(index: index, content: content, proxy: proxy)
-                .frame(minWidth: self.minWidth)
+                .frame(minWidth: self.minItemWidth)
         }
     }
 
     private func updateMinWidth(_ width: CGFloat, index: Int) {
-        self.minWidth = max(self.minWidth,width)
+        print("WIDTHS old: \(self.minItemWidth) new: \(width) tabs: \(self.tabsWidth) > screen: \(self.screenWidth)")
+        self.minItemWidth = max(self.minItemWidth,width)
+        self.axis = floor(self.tabsWidth) > self.screenWidth ? .horizontal : []
     }
 
     @ViewBuilder
     private func tabItem(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
         TabItemView(
-            theme: self.theme,
+            theme: self.viewModel.theme,
             intent: self.intent,
-            size: self.tabSize,
+            size: self.viewModel.tabSize,
             content: content,
             apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
             isSelected: self.selectedIndex == index
@@ -151,9 +179,15 @@ public struct TabView: View {
             GeometryReader { geometry in
                 Color.clear
                     .onAppear {
+                        print("x SIZE \(geometry.size)")
                         self.updateMinWidth(geometry.size.width, index: index)
                     }
-                    .onChange(of: self.viewModel.content) { _ in
+//                    .onChange(of: self.viewModel.content) { _ in
+//                        print("x ContentChange \(geometry.size)")
+//                        self.updateMinWidth(geometry.size.width, index: index)
+//                    }
+                    .onChange(of: geometry.size) { size in
+                        print("y SIZE \(size) / \(self.minItemWidth)")
                         self.updateMinWidth(geometry.size.width, index: index)
                     }
             }
@@ -192,5 +226,11 @@ public struct TabView: View {
         content.badge = badge
         self.viewModel.content[index] = content
         return self
+    }
+}
+
+extension CGFloat {
+    var des: String {
+        String(format: "%.2f", self)
     }
 }
