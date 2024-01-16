@@ -81,7 +81,7 @@ extension StarComponentViewController {
             texts: colors.map { $0.name }) { color in
                 self.viewModel.fillColor = color
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentStrokeColorActionSheet(_ colors: [StarColor]) {
@@ -90,7 +90,7 @@ extension StarComponentViewController {
             texts: colors.map { $0.name }) { color in
                 self.viewModel.strokeColor = color
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentFillModeActionSheet(_ fillModes: [StarFillMode]) {
@@ -99,7 +99,7 @@ extension StarComponentViewController {
             texts: fillModes.map { $0.name }) { fillMode in
                 self.viewModel.fillMode = fillMode
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
 }

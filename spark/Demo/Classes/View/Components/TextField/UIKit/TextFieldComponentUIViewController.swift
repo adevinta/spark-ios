@@ -125,7 +125,7 @@ extension TextFieldComponentUIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [TextFieldIntent]) {
@@ -134,7 +134,7 @@ extension TextFieldComponentUIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentLeftViewModeActionSheet(_ viewModes: [ViewMode]) {
@@ -142,7 +142,7 @@ extension TextFieldComponentUIViewController {
                                                           texts: viewModes.map{ $0.name }) { viewMode in
             self.viewModel.leftViewMode = viewMode
         }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentRightViewModeActionSheet(_ viewModes: [ViewMode]) {
@@ -150,7 +150,7 @@ extension TextFieldComponentUIViewController {
                                                           texts: viewModes.map{ $0.name }) { viewMode in
             self.viewModel.rightViewMode = viewMode
         }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentLeadingAddOnOptionSheet(_ addOnOptions: [AddOnOption]) {
@@ -159,7 +159,7 @@ extension TextFieldComponentUIViewController {
             texts: addOnOptions.map { $0.name }) { addOnOption in
                 self.viewModel.leadingAddOnOption = addOnOption
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentTrailingAddOnOptionSheet(_ addOnOptions: [AddOnOption]) {
@@ -168,7 +168,7 @@ extension TextFieldComponentUIViewController {
             texts: addOnOptions.map { $0.name }) { addOnOption in
                 self.viewModel.trailingAddOnOption = addOnOption
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentClearButtonModeActionSheet(_ viewModes: [ViewMode]) {
@@ -176,7 +176,7 @@ extension TextFieldComponentUIViewController {
                                                           texts: viewModes.map{ $0.name }) { viewMode in
             self.viewModel.clearButtonMode = viewMode
         }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
 }

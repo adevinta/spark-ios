@@ -93,7 +93,7 @@ extension IconComponentUIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [IconIntent]) {
@@ -102,7 +102,7 @@ extension IconComponentUIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentSizeActionSheet(_ sizes: [IconSize]) {
@@ -111,6 +111,6 @@ extension IconComponentUIViewController {
             texts: sizes.map { $0.name }) { size in
                 self.viewModel.size = size
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }

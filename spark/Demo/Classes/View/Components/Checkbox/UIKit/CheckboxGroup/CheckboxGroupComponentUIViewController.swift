@@ -95,7 +95,7 @@ extension CheckboxGroupComponentUIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [CheckboxIntent]) {
@@ -104,7 +104,7 @@ extension CheckboxGroupComponentUIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIconActionSheet(_ icons: [String: UIImage]) {
@@ -113,7 +113,7 @@ extension CheckboxGroupComponentUIViewController {
             texts: icons.map { $0.0 }) { iconKey in
                 self.viewModel.icon = icons.filter { $0.0 == iconKey }
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentGroupTypeActionSheet(_ types: [CheckboxGroupType]) {
@@ -122,6 +122,6 @@ extension CheckboxGroupComponentUIViewController {
             texts: types.map { $0.name }) { type in
                 self.viewModel.groupType = type
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }
