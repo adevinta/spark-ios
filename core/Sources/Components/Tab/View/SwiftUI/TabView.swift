@@ -94,12 +94,12 @@ public struct TabView: View {
             GeometryReader { geometry in
                 VStack(alignment: .trailing) {
                     Spacer()
+
                     Rectangle()
                         .frame(maxWidth: .infinity)
                         .frame(height: self.viewModel.tabsAttributes.lineHeight * self.factor)
                         .frame(width: geometry.size.width)
-//                        .foregroundColor(self.viewModel.tabsAttributes.lineColor.color)
-                        .foregroundColor(.red)
+                        .foregroundColor(self.viewModel.tabsAttributes.lineColor.color)
                         .onAppear {
                             self.screenWidth = geometry.size.width
                             self.minItemWidth = geometry.size.width / CGFloat(self.viewModel.content.count)

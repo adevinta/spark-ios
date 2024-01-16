@@ -17,11 +17,32 @@ public struct TabItemView: View {
     private let tapAction: () -> Void
 
     // MARK: - Scaled Metrics
-    @ScaledMetric private var lineHeight: CGFloat
-    @ScaledMetric private var itemHeight: CGFloat
-    @ScaledMetric private var iconHeight: CGFloat
-    @ScaledMetric private var paddingHorizontal: CGFloat
-    @ScaledMetric private var spacing: CGFloat
+//    @ScaledMetric private var lineHeight: CGFloat
+//    @ScaledMetric private var itemHeight: CGFloat
+//    @ScaledMetric private var iconHeight: CGFloat
+//    @ScaledMetric private var paddingHorizontal: CGFloat
+//    @ScaledMetric private var spacing: CGFloat
+    @ScaledMetric private var factor: CGFloat = 1
+
+    private var lineHeight: CGFloat {
+        return self.viewModel.tabStateAttributes.heights.separatorLineHeight * self.factor
+    }
+    //        self._iconHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.iconHeight)
+    //        self._spacing = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
+    //        self._paddingHorizontal = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
+
+    private var itemHeight: CGFloat {
+        return self.viewModel.tabStateAttributes.heights.itemHeight * self.factor
+    }
+    private var iconHeight: CGFloat {
+        return self.viewModel.tabStateAttributes.heights.iconHeight * self.factor
+    }
+    private var paddingHorizontal: CGFloat {
+        return self.viewModel.tabStateAttributes.spacings.horizontalEdge * self.factor
+    }
+    private var spacing: CGFloat {
+        return self.viewModel.tabStateAttributes.spacings.content * self.factor
+    }
 
     // MARK: Initialization
     /// Initializer
@@ -62,11 +83,11 @@ public struct TabItemView: View {
         self.viewModel = viewModel
         self.tapAction = tapAction
 
-        self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.separatorLineHeight)
-        self._itemHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.itemHeight)
-        self._iconHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.iconHeight)
-        self._spacing = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
-        self._paddingHorizontal = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
+//        self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.separatorLineHeight)
+//        self._itemHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.itemHeight)
+//        self._iconHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.iconHeight)
+//        self._spacing = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
+//        self._paddingHorizontal = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
     }
 
     // MARK: - View

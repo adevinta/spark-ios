@@ -19,7 +19,7 @@ struct TabComponent: View {
     @State var showBadge = CheckboxSelectionState.unselected
     @State var isDisabled = CheckboxSelectionState.unselected
     @State var allDisabled = CheckboxSelectionState.unselected
-    @State var equalSize = CheckboxSelectionState.unselected
+    @State var equalSize = CheckboxSelectionState.selected
     @State var longLabel = CheckboxSelectionState.unselected
     @State var tabSize: TabSize = .md
     @State var numberOfTabs = 4
