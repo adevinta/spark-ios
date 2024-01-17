@@ -99,7 +99,7 @@ extension CheckboxComponentUIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [CheckboxIntent]) {
@@ -108,7 +108,7 @@ extension CheckboxComponentUIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentAlignmentActionSheet(_ alignments: [CheckboxAlignment]) {
@@ -117,7 +117,7 @@ extension CheckboxComponentUIViewController {
             texts: alignments.map { $0.name }) { alignment in
                 self.viewModel.alignment = alignment
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentTextStyleActionSheet(_ textStyles: [CheckboxTextStyle]) {
@@ -126,7 +126,7 @@ extension CheckboxComponentUIViewController {
             texts: textStyles.map { $0.name }) { textStyle in
                 self.viewModel.textStyle = textStyle
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIconActionSheet(_ icons: [String: UIImage]) {
@@ -135,6 +135,6 @@ extension CheckboxComponentUIViewController {
             texts: icons.map { $0.0 }) { iconKey in
                 self.viewModel.icon = icons.filter { $0.0 == iconKey }
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }

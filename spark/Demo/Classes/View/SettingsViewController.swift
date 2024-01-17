@@ -89,7 +89,7 @@ extension SettingsViewController {
                 window.overrideUserInterfaceStyle = mode
             }
         }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }
 

@@ -95,7 +95,7 @@ extension BadgeComponentViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [BadgeIntentType]) {
@@ -104,7 +104,7 @@ extension BadgeComponentViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentSizeActionSheet(_ sizes: [BadgeSize]) {
@@ -113,7 +113,7 @@ extension BadgeComponentViewController {
             texts: sizes.map { $0.name }) { size in
                 self.viewModel.size = size
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentFormatActionSheet(_ formats: [String]) {
@@ -122,7 +122,7 @@ extension BadgeComponentViewController {
             texts: formats) { format in
                 self.viewModel.format = BadgeFormat.from(name: format)
             }
-            self.present(actionSheet, animated: true)
+            self.present(actionSheet, isAnimated: true)
     }
 }
 

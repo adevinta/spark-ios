@@ -47,7 +47,7 @@ final class ComponentsViewController: UICollectionViewController {
         /// CollectionView append sections and items
         var snapShot = SnapShot()
         snapShot.appendSections([.all])
-        snapShot.appendItems(Row.allCases.map{ $0.name }, toSection: .all)
+        snapShot.appendItems(UIComponent.allCases.map{ $0.rawValue }, toSection: .all)
         collectionViewDataSource.apply(snapShot)
     }
 }
@@ -65,7 +65,7 @@ extension ComponentsViewController {
 extension ComponentsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let section = Row.allCases[indexPath.row]
+        let section = UIComponent.allCases[indexPath.row]
         var viewController: UIViewController!
         switch section {
         case .badge:
@@ -106,6 +106,8 @@ extension ComponentsViewController {
             viewController = TagComponentUIViewController.build()
         case .textField:
             viewController = TextFieldComponentUIViewController.build()
+        default:
+            break
         }
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -117,25 +119,5 @@ private extension ComponentsViewController {
 
     enum Section {
         case all
-    }
-
-    enum Row: CaseIterable {
-        case badge
-        case button
-        case checkbox
-        case chip
-        case icon
-        case progressBarIndeterminate
-        case progressBarSingle
-        case radioButton
-        case ratingDisplay
-        case ratingInput
-        case slider
-        case spinner
-        case star
-        case switchButton
-        case tab
-        case tag
-        case textField
     }
 }

@@ -100,7 +100,7 @@ extension ProgressBarIndeterminateComponentUIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [ProgressBarIntent]) {
@@ -109,7 +109,7 @@ extension ProgressBarIndeterminateComponentUIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentShapeActionSheet(_ shapes: [ProgressBarShape]) {
@@ -118,6 +118,6 @@ extension ProgressBarIndeterminateComponentUIViewController {
             texts: shapes.map { $0.name }) { shape in
                 self.viewModel.shape = shape
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }
