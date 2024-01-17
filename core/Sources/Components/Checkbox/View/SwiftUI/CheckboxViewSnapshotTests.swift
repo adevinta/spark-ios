@@ -38,7 +38,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             for configuration in configurations {
                 self.selectionState = configuration.selectionState
 
-                var view = CheckboxView(
+                let view = CheckboxView(
                     text: configuration.text,
                     checkedImage: configuration.image,
                     alignment: configuration.alignment,
