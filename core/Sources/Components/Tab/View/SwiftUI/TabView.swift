@@ -11,28 +11,8 @@ import SwiftUI
 /// TabView is the similar to a SegmentControl
 public struct TabView: View {
     private let intent: TabIntent
-
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @ObservedObject private var viewModel: TabViewModel<TabItemContent>
     @Binding private var selectedIndex: Int
-    @ScaledMetric private var factor: CGFloat = 1.0
-    @State private var minItemWidth: CGFloat = 40.0
-    @State private var screenWidth: CGFloat = UIScreen.main.bounds.width
-    @State private var appeared: Bool = false
-    @State private var axis: Axis.Set = .horizontal
-    @State private var apportionsContentWidth: CGFloat = 0
-
-    private var tabsWidth: CGFloat {
-        return self.minItemWidth * CGFloat(self.viewModel.content.count) * self.factor
-    }
-
-    private var lineHeight: CGFloat {
-        return self.viewModel.tabsAttributes.lineHeight * self.factor
-    }
-
-    private var itemHeight: CGFloat {
-        return self.viewModel.tabsAttributes.itemHeight * self.factor
-    }
 
     // MARK: - Initialization
     /// Initializer
@@ -99,147 +79,11 @@ public struct TabView: View {
 
     // MARK: - View
     public var body: some View {
-//        let contentWidth = self.minWidth * CGFloat(self.viewModel.content.count)
-        ZStack(alignment: .bottom) {
-            GeometryReader { geometry in
-                VStack(alignment: .trailing) {
-                    Spacer()
-
-                    Rectangle()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: self.lineHeight)
-                        .frame(width: geometry.size.width)
-                        .foregroundColor(self.viewModel.tabsAttributes.lineColor.color)
-                        .onAppear {
-                            self.screenWidth = geometry.size.width
-                            if self.viewModel.apportionsSegmentWidthsByContent {
-                                if self.apportionsContentWidth > self.screenWidth {
-                                    self.axis = .horizontal
-                                } else {
-                                    self.axis = []
-                                }
-                            } else {
-                                self.minItemWidth = geometry.size.width / CGFloat(self.viewModel.content.count)
-                                print("MINWIDTH a \(self.minItemWidth) / \(self.screenWidth)")
-                            }
-                        }
-                        .onChange(of: geometry.size.width) { width in
-                            self.screenWidth = width
-                            if self.viewModel.apportionsSegmentWidthsByContent {
-                                if self.apportionsContentWidth > self.screenWidth {
-                                    self.axis = .horizontal
-                                } else {
-                                    self.axis = []
-                                }
-                            } else {
-                                self.minItemWidth = width / CGFloat(self.viewModel.content.count)
-                                print("MINWIDTH c \(self.minItemWidth) / \(self.screenWidth)")
-                            }
-                        }
-                }
-                .frame(height: self.itemHeight)
-            }
-
-            ScrollView(self.axis, showsIndicators: false) {
-                if self.viewModel.apportionsSegmentWidthsByContent {
-                    self.tabItems()
-                        .frame(height: self.itemHeight)
-                        .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
-                } else {
-                    self.tabItems()
-                        .frame(height: self.itemHeight)
-                        .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
-                }
-            }
-            .frame(height: self.itemHeight)
-            .onChange(of: self.viewModel.content) { content in
-                self.minItemWidth = self.screenWidth / CGFloat(content.count)
-            }
-        }
-    }
-
-    // MARK: - Private functions
-    @ViewBuilder
-    private func tabItems() -> some View {
-        ScrollViewReader { proxy in
-            HStack(spacing: 0) {
-                ForEach(Array(self.viewModel.content.enumerated()), id: \.element.id) { (index, content) in
-                    self.tabContent(index: index, content: content, proxy: proxy)
-                }
-                if self.viewModel.apportionsSegmentWidthsByContent {
-                    Spacer()
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func tabContent(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
         if self.viewModel.apportionsSegmentWidthsByContent {
-            tabItem(index: index, content: content, proxy: proxy)
+            TabApportionsSizeView(viewModel: self.viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
         } else {
-            tabItem(index: index, content: content, proxy: proxy)
-                .frame(minWidth: self.minItemWidth)
+            TabEqualSizeView(viewModel: self.viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
         }
-    }
-
-    @ViewBuilder
-    private func tabItem(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
-        TabItemView(
-            theme: self.viewModel.theme,
-            intent: self.intent,
-            size: self.viewModel.tabSize,
-            content: content,
-            apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
-            isSelected: self.selectedIndex == index
-        ) {
-            self.selectedIndex = index
-            withAnimation{
-                proxy.scrollTo(content.id)
-            }
-        }
-        .disabled(self.viewModel.disabledTabs[index])
-        .id(content.id)
-        .accessibilityIdentifier("\(TabAccessibilityIdentifier.tabItem)_\(index)")
-        .background {
-            GeometryReader { geometry in
-                if self.viewModel.apportionsSegmentWidthsByContent {
-                    Color.clear
-                        .onAppear {
-                            print("ITEM APPEAR \(geometry.size)")
-                            self.updateApportionsContentWidth(geometry.size.width, index: index)
-                        }
-                        .onChange(of: geometry.size) { size in
-                            print("ITEM CHANGE \(size)")
-                            self.updateApportionsContentWidth(geometry.size.width, index: index)
-                        }
-                } else {
-                    Color.clear
-                        .onAppear {
-                            self.updateMinWidth(geometry.size.width, index: index)
-                        }
-                        .onChange(of: geometry.size) { size in
-                            self.updateMinWidth(geometry.size.width, index: index)
-                        }
-                }
-            }
-        }
-    }
-
-    private func updateApportionsContentWidth(_ width: CGFloat, index: Int) {
-        if index == self.viewModel.content.count - 1 {
-            self.apportionsContentWidth = width
-        } else {
-            self.apportionsContentWidth += width
-        }
-        print("A WIDTH \(index) = \(self.apportionsContentWidth) / \(width) (\(self.screenWidth)")
-        self.axis = self.apportionsContentWidth > self.screenWidth ? .horizontal : []
-    }
-
-    private func updateMinWidth(_ width: CGFloat, index: Int) {
-        print("WIDTHS old: \(self.minItemWidth) new: \(width) tabs: \(self.tabsWidth) > screen: \(self.screenWidth)")
-        self.minItemWidth = max(self.minItemWidth,width)
-        self.axis = floor(self.tabsWidth) > self.screenWidth ? .horizontal : []
     }
 
     // MARK: - Public view modifiers

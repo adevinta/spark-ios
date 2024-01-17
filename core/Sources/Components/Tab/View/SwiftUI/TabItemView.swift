@@ -17,19 +17,11 @@ public struct TabItemView: View {
     private let tapAction: () -> Void
 
     // MARK: - Scaled Metrics
-//    @ScaledMetric private var lineHeight: CGFloat
-//    @ScaledMetric private var itemHeight: CGFloat
-//    @ScaledMetric private var iconHeight: CGFloat
-//    @ScaledMetric private var paddingHorizontal: CGFloat
-//    @ScaledMetric private var spacing: CGFloat
     @ScaledMetric private var factor: CGFloat = 1
 
     private var lineHeight: CGFloat {
         return self.viewModel.tabStateAttributes.heights.separatorLineHeight * self.factor
     }
-    //        self._iconHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.iconHeight)
-    //        self._spacing = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
-    //        self._paddingHorizontal = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
 
     private var itemHeight: CGFloat {
         return self.viewModel.tabStateAttributes.heights.itemHeight * self.factor
