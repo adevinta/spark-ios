@@ -160,7 +160,7 @@ public struct ButtonView: View {
         return self
     }
 
-    /// Set the switch to selected.
+    /// Set the button to selected.
     /// - Parameters:
     ///   - text: The switch is selected or not.
     /// - Returns: Current Button View.

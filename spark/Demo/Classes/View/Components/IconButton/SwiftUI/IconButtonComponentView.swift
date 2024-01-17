@@ -84,8 +84,8 @@ struct IconButtonComponentView: View {
                 )
 
                 EnumSelector(
-                    title: "Content (selectec state)",
-                    dialogTitle: "Select a selectec content",
+                    title: "Content (selected state)",
+                    dialogTitle: "Select a selected content",
                     values: IconButtonContentDefault.allCases,
                     value: self.$contentSelected
                 )

@@ -48,7 +48,7 @@ final class IconButtonComponentViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Button"
+        self.navigationItem.title = "Icon Button"
         addPublisher()
     }
 

@@ -20,6 +20,8 @@ struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel &
     @ScaledMetric private var borderRadius: CGFloat
     private let padding: EdgeInsets?
 
+    @State private var isPressed: Bool = false
+
     private let action: () -> Void
 
     // MARK: - Components
@@ -52,7 +54,7 @@ struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel &
             self.contentView()
         }
         .buttonStyle(PressedButtonStyle(
-            viewModel: self.viewModel
+            isPressed: self.$isPressed
         ))
         .padding(self.padding)
         .frame(height: self.height)
@@ -67,6 +69,9 @@ struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel &
         .disabled(self.viewModel.state?.isUserInteractionEnabled == false)
         .opacity(self.viewModel.state?.opacity ?? .zero)
         .accessibilityIdentifier(ButtonAccessibilityIdentifier.button)
+        .onChange(of: self.isPressed) { isPressed in
+            self.viewModel.setIsPressed(isPressed)
+        }
     }
 }
 
@@ -95,23 +100,5 @@ private extension View {
         self.modifier(ButtonOptionalPaddingModifier(
             padding: padding
         ))
-    }
-}
-
-// MARK: - Style
-
-private struct PressedButtonStyle<ViewModel: ButtonMainViewModel & ButtonMainSUIViewModel>: ButtonStyle {
-
-    // MARK: - Properties
-
-    let viewModel: ViewModel
-
-    // MARK: - View
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-        .onChange(of: configuration.isPressed) { value in
-            self.viewModel.setIsPressed(value)
-        }
     }
 }
