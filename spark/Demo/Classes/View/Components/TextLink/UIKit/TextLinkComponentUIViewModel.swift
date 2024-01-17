@@ -194,7 +194,7 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
 
     init(
         theme: Theme,
-        intent: TextLinkIntent = .main,
+        intent: TextLinkIntent = .basic,
         variant: TextLinkVariant = .underline,
         typography: TextLinkTypography = .body1,
         content: TextLinkContent = .text,

@@ -52,8 +52,6 @@ final class TextLinkComponentUIView: ComponentUIView {
             componentView: self.componentView
         )
 
-        self.showRightSpacing = true
-
         // Setup
         self.setupSubscriptions()
     }
@@ -97,6 +95,8 @@ final class TextLinkComponentUIView: ComponentUIView {
         self.viewModel.$content.subscribe(in: &self.subcriptions) { [weak self] content in
             guard let self = self else { return }
             self.viewModel.contentConfigurationItemViewModel.buttonTitle = content.name
+
+            self.showRightSpacing = content.containsText ? true : false
 
             switch content {
             case .text:
