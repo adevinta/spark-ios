@@ -19,7 +19,7 @@ struct TextLinkComponentView: View {
     // MARK: - Properties
 
     @State private var theme: Theme = SparkThemePublisher.shared.theme
-    @State private var intent: TextLinkIntent = .main
+    @State private var intent: TextLinkIntent = .basic
     @State private var variant: TextLinkVariant = .underline
     @State private var typography: TextLinkTypography = .body1
     @State private var content: TextLinkContent = .text

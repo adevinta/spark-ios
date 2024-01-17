@@ -45,14 +45,13 @@ final class TextLinkComponentUIView: ComponentUIView {
             variant: viewModel.variant,
             image: .init(resource: .info)
         )
+        componentView.backgroundColor = .orange
 
         super.init(
             viewModel: viewModel,
             integrationStackViewAlignment: .fill,
             componentView: self.componentView
         )
-
-        self.showRightSpacing = true
 
         // Setup
         self.setupSubscriptions()
@@ -97,6 +96,8 @@ final class TextLinkComponentUIView: ComponentUIView {
         self.viewModel.$content.subscribe(in: &self.subcriptions) { [weak self] content in
             guard let self = self else { return }
             self.viewModel.contentConfigurationItemViewModel.buttonTitle = content.name
+
+            self.showRightSpacing = content.containsText ? true : false
 
             switch content {
             case .text:
