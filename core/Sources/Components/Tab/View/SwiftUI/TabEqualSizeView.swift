@@ -13,6 +13,7 @@ import SwiftUI
 struct TabEqualSizeView: View {
     private let intent: TabIntent
 
+    @StateObject private var widthStates = WidthStates()
     @ObservedObject private var viewModel: TabViewModel<TabItemContent>
     @Binding private var selectedIndex: Int
     @ScaledMetric private var factor: CGFloat = 1.0
@@ -31,7 +32,6 @@ struct TabEqualSizeView: View {
     private var itemHeight: CGFloat {
         return self.viewModel.tabsAttributes.itemHeight * self.factor
     }
-
 
     /// Initializer
     /// - Parameters:
@@ -66,7 +66,7 @@ struct TabEqualSizeView: View {
                         }
                         .onChange(of: geometry.size.width) { width in
                             self.screenWidth = width
-                            self.minItemWidth = width / CGFloat(self.viewModel.content.count)
+                            self.minItemWidth = self.widthStates.widths[round(width)] ?? width / CGFloat(self.viewModel.content.count)
                         }
                 }
                 .frame(height: self.itemHeight)
@@ -122,6 +122,10 @@ struct TabEqualSizeView: View {
     private func updateMinWidth(_ width: CGFloat, index: Int) {
         self.minItemWidth = max(self.minItemWidth, width)
         self.axis = floor(self.tabsWidth) > self.screenWidth ? .horizontal : []
+        self.widthStates.widths[round(self.screenWidth)] = self.minItemWidth
     }
 }
 
+private class WidthStates: ObservableObject {
+    var widths: [CGFloat: CGFloat] = [:]
+}
