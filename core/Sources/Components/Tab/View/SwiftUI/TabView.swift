@@ -12,16 +12,26 @@ import SwiftUI
 public struct TabView: View {
     private let intent: TabIntent
 
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @ObservedObject private var viewModel: TabViewModel<TabItemContent>
     @Binding private var selectedIndex: Int
-//    @ScaledMetric private var lineHeight: CGFloat
     @ScaledMetric private var factor: CGFloat = 1.0
     @State private var minItemWidth: CGFloat = 40.0
     @State private var screenWidth: CGFloat = UIScreen.main.bounds.width
     @State private var appeared: Bool = false
     @State private var axis: Axis.Set = .horizontal
+    @State private var apportionsContentWidth: CGFloat = 0
+
     private var tabsWidth: CGFloat {
         return self.minItemWidth * CGFloat(self.viewModel.content.count) * self.factor
+    }
+
+    private var lineHeight: CGFloat {
+        return self.viewModel.tabsAttributes.lineHeight * self.factor
+    }
+
+    private var itemHeight: CGFloat {
+        return self.viewModel.tabsAttributes.itemHeight * self.factor
     }
 
     // MARK: - Initialization
@@ -97,32 +107,54 @@ public struct TabView: View {
 
                     Rectangle()
                         .frame(maxWidth: .infinity)
-                        .frame(height: self.viewModel.tabsAttributes.lineHeight * self.factor)
+                        .frame(height: self.lineHeight)
                         .frame(width: geometry.size.width)
                         .foregroundColor(self.viewModel.tabsAttributes.lineColor.color)
                         .onAppear {
                             self.screenWidth = geometry.size.width
-                            self.minItemWidth = geometry.size.width / CGFloat(self.viewModel.content.count)
-                            print("MINWIDTH a \(self.minItemWidth) / \(self.screenWidth)")
+                            if self.viewModel.apportionsSegmentWidthsByContent {
+                                if self.apportionsContentWidth > self.screenWidth {
+                                    self.axis = .horizontal
+                                } else {
+                                    self.axis = []
+                                }
+                            } else {
+                                self.minItemWidth = geometry.size.width / CGFloat(self.viewModel.content.count)
+                                print("MINWIDTH a \(self.minItemWidth) / \(self.screenWidth)")
+                            }
                         }
                         .onChange(of: geometry.size.width) { width in
                             self.screenWidth = width
-                            self.minItemWidth = width / CGFloat(self.viewModel.content.count)
-                            print("MINWIDTH c \(self.minItemWidth) / \(self.screenWidth)")
+                            if self.viewModel.apportionsSegmentWidthsByContent {
+                                if self.apportionsContentWidth > self.screenWidth {
+                                    self.axis = .horizontal
+                                } else {
+                                    self.axis = []
+                                }
+                            } else {
+                                self.minItemWidth = width / CGFloat(self.viewModel.content.count)
+                                print("MINWIDTH c \(self.minItemWidth) / \(self.screenWidth)")
+                            }
                         }
                 }
-                .frame(height: self.factor * self.viewModel.tabsAttributes.itemHeight)
+                .frame(height: self.itemHeight)
             }
-            ScrollView(self.axis, showsIndicators: false) {
-                self.tabItems()
-                    .frame(height: self.factor * self.viewModel.tabsAttributes.itemHeight)
-                    .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
-                    .onChange(of: self.viewModel.content) { content in
-                        self.minItemWidth = self.screenWidth / CGFloat(content.count)
-                    }
-            }
-            .frame(height: self.factor * self.viewModel.tabsAttributes.itemHeight)
 
+            ScrollView(self.axis, showsIndicators: false) {
+                if self.viewModel.apportionsSegmentWidthsByContent {
+                    self.tabItems()
+                        .frame(height: self.itemHeight)
+                        .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
+                } else {
+                    self.tabItems()
+                        .frame(height: self.itemHeight)
+                        .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
+                }
+            }
+            .frame(height: self.itemHeight)
+            .onChange(of: self.viewModel.content) { content in
+                self.minItemWidth = self.screenWidth / CGFloat(content.count)
+            }
         }
     }
 
@@ -151,12 +183,6 @@ public struct TabView: View {
         }
     }
 
-    private func updateMinWidth(_ width: CGFloat, index: Int) {
-        print("WIDTHS old: \(self.minItemWidth) new: \(width) tabs: \(self.tabsWidth) > screen: \(self.screenWidth)")
-        self.minItemWidth = max(self.minItemWidth,width)
-        self.axis = floor(self.tabsWidth) > self.screenWidth ? .horizontal : []
-    }
-
     @ViewBuilder
     private func tabItem(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
         TabItemView(
@@ -177,21 +203,43 @@ public struct TabView: View {
         .accessibilityIdentifier("\(TabAccessibilityIdentifier.tabItem)_\(index)")
         .background {
             GeometryReader { geometry in
-                Color.clear
-                    .onAppear {
-                        print("x SIZE \(geometry.size)")
-                        self.updateMinWidth(geometry.size.width, index: index)
-                    }
-//                    .onChange(of: self.viewModel.content) { _ in
-//                        print("x ContentChange \(geometry.size)")
-//                        self.updateMinWidth(geometry.size.width, index: index)
-//                    }
-                    .onChange(of: geometry.size) { size in
-                        print("y SIZE \(size) / \(self.minItemWidth)")
-                        self.updateMinWidth(geometry.size.width, index: index)
-                    }
+                if self.viewModel.apportionsSegmentWidthsByContent {
+                    Color.clear
+                        .onAppear {
+                            print("ITEM APPEAR \(geometry.size)")
+                            self.updateApportionsContentWidth(geometry.size.width, index: index)
+                        }
+                        .onChange(of: geometry.size) { size in
+                            print("ITEM CHANGE \(size)")
+                            self.updateApportionsContentWidth(geometry.size.width, index: index)
+                        }
+                } else {
+                    Color.clear
+                        .onAppear {
+                            self.updateMinWidth(geometry.size.width, index: index)
+                        }
+                        .onChange(of: geometry.size) { size in
+                            self.updateMinWidth(geometry.size.width, index: index)
+                        }
+                }
             }
         }
+    }
+
+    private func updateApportionsContentWidth(_ width: CGFloat, index: Int) {
+        if index == self.viewModel.content.count - 1 {
+            self.apportionsContentWidth = width
+        } else {
+            self.apportionsContentWidth += width
+        }
+        print("A WIDTH \(index) = \(self.apportionsContentWidth) / \(width) (\(self.screenWidth)")
+        self.axis = self.apportionsContentWidth > self.screenWidth ? .horizontal : []
+    }
+
+    private func updateMinWidth(_ width: CGFloat, index: Int) {
+        print("WIDTHS old: \(self.minItemWidth) new: \(width) tabs: \(self.tabsWidth) > screen: \(self.screenWidth)")
+        self.minItemWidth = max(self.minItemWidth,width)
+        self.axis = floor(self.tabsWidth) > self.screenWidth ? .horizontal : []
     }
 
     // MARK: - Public view modifiers
