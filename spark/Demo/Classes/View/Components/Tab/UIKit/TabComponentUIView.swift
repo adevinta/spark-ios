@@ -28,7 +28,7 @@ final class TabComponentUIView: ComponentUIView {
 
         super.init(
             viewModel: viewModel,
-            integrationStackViewAlignment: .fill, 
+            integrationStackViewAlignment: .fill,
             componentView: componentView
         )
 
