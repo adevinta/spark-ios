@@ -25,6 +25,7 @@ struct RatingSizeAttributesUseCase: RatingSizeAttributesUseCaseable {
         switch size {
         case .small: return size.sizeAttributes(spacing: spacing.small)
         case .medium: return size.sizeAttributes(spacing: spacing.small)
+        case .large: return size.sizeAttributes(spacing: spacing.small)
         case .input: return size.sizeAttributes(spacing: spacing.medium)
         }
     }
@@ -36,6 +37,7 @@ private extension RatingDisplaySize {
         switch self {
         case .small: return .init(borderWidth: 1.0, height: self.height, spacing: spacing)
         case .medium: return .init(borderWidth: 1.33, height: self.height, spacing: spacing)
+        case .large: return .init(borderWidth: 2.0, height: self.height, spacing: spacing)
         case .input: return .init(borderWidth: 3.33, height: self.height, spacing: spacing)
         }
     }
