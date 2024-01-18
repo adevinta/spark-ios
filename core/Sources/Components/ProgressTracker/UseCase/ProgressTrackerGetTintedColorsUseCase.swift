@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A use case to calculate the tinted colors of the progress tracker
 struct ProgressTrackerGetTintedColorsUseCase: ProgressTrackerGetVariantColorsUseCaseable {
 
     func execute(colors: Colors,
@@ -61,7 +62,6 @@ struct ProgressTrackerGetTintedColorsUseCase: ProgressTrackerGetVariantColorsUse
             return .init(
                 background: colors.states.successContainerPressed,
                 content: colors.feedback.onSuccessContainer)
-
         case .support:
             return .init(
                 background: colors.states.supportContainerPressed,
