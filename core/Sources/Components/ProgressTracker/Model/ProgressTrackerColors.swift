@@ -14,15 +14,6 @@ struct ProgressTrackerColors: Equatable {
     let content: any ColorToken
     let label: any ColorToken
 
-    func withOpacity(_ opacity: CGFloat) -> Self {
-        return .init(
-            background: self.background.opacity(opacity),
-            outline: self.background.opacity(opacity),
-            content: self.content.opacity(opacity),
-            label: self.label.opacity(opacity)
-        )
-    }
-
     static func == (lhs: ProgressTrackerColors, rhs: ProgressTrackerColors) -> Bool {
         return lhs.background.equals(rhs.background) &&
         lhs.outline.equals(rhs.outline) &&
