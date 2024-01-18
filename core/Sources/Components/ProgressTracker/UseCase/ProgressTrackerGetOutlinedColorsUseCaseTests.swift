@@ -1,0 +1,244 @@
+//
+//  ProgressTrackerGetOutlinedColorsUseCaseTests.swift
+//  SparkCoreSnapshotTests
+//
+//  Created by Michael Zimmermann on 18.01.24.
+//  Copyright © 2024 Adevinta. All rights reserved.
+//
+
+import XCTest
+
+@testable import SparkCore
+
+final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
+
+    var sut: ProgressTrackerGetOutlinedColorsUseCase!
+    var theme: ThemeGeneratedMock!
+
+    override func setUp()  {
+        super.setUp()
+
+        self.theme = ThemeGeneratedMock.mocked()
+        self.sut = ProgressTrackerGetOutlinedColorsUseCase()
+    }
+
+    func test_selected_colors() {
+        // GIVEN
+
+        for intent in ProgressTrackerIntent.allCases {
+            // WHEN
+            let colors = self.sut.execute(colors: self.theme.colors, intent: intent, state: .selected)
+
+            // THEN
+            XCTAssertEqual(colors, intent.selectedColors(self.theme.colors), "Selected colors for intent \(intent) not as expected")
+        }
+    }
+
+    func test_enabled_colors() {
+        // GIVEN
+
+        for intent in ProgressTrackerIntent.allCases {
+            // WHEN
+
+            let colors = self.sut.execute(colors: self.theme.colors, intent: intent, state: .default)
+
+            // THEN
+            XCTAssertEqual(colors, intent.enabledColors(self.theme.colors), "Enabled colors for intent \(intent) not as expected")
+        }
+    }
+
+    func test_pressed_colors() {
+        // GIVEN
+
+        for intent in ProgressTrackerIntent.allCases {
+            // WHEN
+
+            let colors = self.sut.execute(colors: self.theme.colors, intent: intent, state: .pressed)
+
+            // THEN
+            XCTAssertEqual(colors, intent.pressedColors(self.theme.colors), "Pressed colors for intent \(intent) not as expected")
+        }
+    }
+
+}
+
+private extension ProgressTrackerIntent {
+
+    func selectedColors(_ colors: Colors) -> ProgressTrackerColors {
+        switch self {
+        case .accent:
+            return .init(
+                background: colors.accent.accentContainer,
+                outline: colors.accent.accent,
+                content: colors.accent.onAccentContainer,
+                label: colors.base.onSurface)
+        case .alert:
+            return .init(
+                background: colors.feedback.alertContainer,
+                outline: colors.feedback.alert,
+                content: colors.feedback.onAlertContainer,
+                label: colors.base.onSurface)
+        case .basic:
+            return .init(
+                background: colors.basic.basicContainer,
+                outline: colors.basic.basic,
+                content: colors.basic.onBasicContainer,
+                label: colors.base.onSurface)
+        case .danger:
+            return .init(
+                background: colors.feedback.errorContainer,
+                outline: colors.feedback.error,
+                content: colors.feedback.onErrorContainer,
+                label: colors.base.onSurface)
+        case .info:
+            return .init(
+                background: colors.feedback.infoContainer,
+                outline: colors.feedback.info,
+                content: colors.feedback.onInfoContainer,
+                label: colors.base.onSurface)
+        case .main:
+            return .init(
+                background: colors.main.mainContainer,
+                outline: colors.main.main,
+                content: colors.main.onMainContainer,
+                label: colors.base.onSurface)
+        case .neutral:
+            return .init(
+                background: colors.feedback.neutralContainer,
+                outline: colors.feedback.neutral,
+                content: colors.feedback.onNeutralContainer,
+                label: colors.base.onSurface)
+        case .success:
+            return .init(
+                background: colors.feedback.successContainer,
+                outline: colors.feedback.success,
+                content: colors.feedback.onSuccessContainer,
+                label: colors.base.onSurface)
+        case .support:
+            return .init(
+                background: colors.support.supportContainer,
+                outline: colors.support.support,
+                content: colors.support.onSupportContainer,
+                label: colors.base.onSurface)
+        }
+    }
+
+    func enabledColors(_ colors: Colors) -> ProgressTrackerColors {
+        switch self {
+        case .accent:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.accent.accent,
+                content: colors.accent.onAccentContainer,
+                label: colors.base.onSurface)
+        case .alert:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.feedback.alert,
+                content: colors.feedback.onAlertContainer,
+                label: colors.base.onSurface)
+        case .basic:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.basic.basic,
+                content: colors.basic.onBasicContainer,
+                label: colors.base.onSurface)
+        case .danger:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.feedback.error,
+                content: colors.feedback.onErrorContainer,
+                label: colors.base.onSurface)
+        case .info:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.feedback.info,
+                content: colors.feedback.onInfoContainer,
+                label: colors.base.onSurface)
+        case .main:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.main.main,
+                content: colors.main.onMainContainer,
+                label: colors.base.onSurface)
+        case .neutral:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.feedback.neutral,
+                content: colors.feedback.onNeutralContainer,
+                label: colors.base.onSurface)
+        case .success:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.feedback.success,
+                content: colors.feedback.onSuccessContainer,
+                label: colors.base.onSurface)
+        case .support:
+            return .init(
+                background: ColorTokenDefault.clear,
+                outline: colors.support.support,
+                content: colors.support.onSupportContainer,
+                label: colors.base.onSurface)
+        }
+    }
+
+    func pressedColors(_ colors: Colors) -> ProgressTrackerColors {
+        switch self {
+        case .accent:
+            return .init(
+                background: colors.states.accentContainerPressed,
+                outline: colors.accent.accent,
+                content: colors.accent.onAccentContainer,
+                label: colors.base.onSurface)
+        case .alert:
+            return .init(
+                background: colors.states.alertContainerPressed,
+                outline: colors.feedback.alert,
+                content: colors.feedback.onAlertContainer,
+                label: colors.base.onSurface)
+        case .basic:
+            return .init(
+                background: colors.states.basicContainerPressed,
+                outline: colors.basic.basic,
+                content: colors.basic.onBasicContainer,
+                label: colors.base.onSurface)
+        case .danger:
+            return .init(
+                background: colors.states.errorContainerPressed,
+                outline: colors.feedback.error,
+                content: colors.feedback.onErrorContainer,
+                label: colors.base.onSurface)
+        case .info:
+            return .init(
+                background: colors.states.infoContainerPressed,
+                outline: colors.feedback.info,
+                content: colors.feedback.onInfoContainer,
+                label: colors.base.onSurface)
+        case .main:
+            return .init(
+                background: colors.states.mainContainerPressed,
+                outline: colors.main.main,
+                content: colors.main.onMainContainer,
+                label: colors.base.onSurface)
+        case .neutral:
+            return .init(
+                background: colors.states.neutralContainerPressed,
+                outline: colors.feedback.neutral,
+                content: colors.feedback.onNeutralContainer,
+                label: colors.base.onSurface)
+        case .success:
+            return .init(
+                background: colors.states.successContainerPressed,
+                outline: colors.feedback.success,
+                content: colors.feedback.onSuccessContainer,
+                label: colors.base.onSurface)
+        case .support:
+            return .init(
+                background: colors.states.supportContainerPressed,
+                outline: colors.support.support,
+                content: colors.support.onSupportContainer,
+                label: colors.base.onSurface)
+        }
+    }
+}
+
