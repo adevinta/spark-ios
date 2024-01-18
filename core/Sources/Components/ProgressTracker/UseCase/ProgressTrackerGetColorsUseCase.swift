@@ -8,6 +8,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol ProgressTrackerGetColorsUseCaseable {
     func execute(theme: Theme,
                  intent: ProgressTrackerIntent,
@@ -15,10 +16,14 @@ protocol ProgressTrackerGetColorsUseCaseable {
                  state: ProgressTrackerState) -> ProgressTrackerColors
 }
 
+/// A use case that returns the color of the progress tracker.
 struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
+
+    // MARK: - Properties
     let getTintedColorsUseCase: any ProgressTrackerGetVariantColorsUseCaseable
     let getOutlinedColorsUseCase: any ProgressTrackerGetVariantColorsUseCaseable
 
+    // MARK: - Initialization
     init(
         getTintedColorsUseCase: some ProgressTrackerGetVariantColorsUseCaseable = ProgressTrackerGetTintedColorsUseCase(),
         getOutlinedColorsUseCase: some ProgressTrackerGetVariantColorsUseCaseable = ProgressTrackerGetOutlinedColorsUseCase()) {
@@ -26,10 +31,12 @@ struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
         self.getOutlinedColorsUseCase = getOutlinedColorsUseCase
     }
 
-    func execute(theme: Theme, 
-                 intent: ProgressTrackerIntent,
-                 variant: ProgressTrackerVariant,
-                 state: ProgressTrackerState) -> ProgressTrackerColors {
+    // MARK: Execute
+    func execute(
+        theme: Theme,
+        intent: ProgressTrackerIntent,
+        variant: ProgressTrackerVariant,
+        state: ProgressTrackerState) -> ProgressTrackerColors {
         let variantColors: ProgressTrackerColors = {
             switch variant {
             case .outlined: return self.getOutlinedColorsUseCase.execute(colors: theme.colors, intent: intent, state: state)
@@ -38,12 +45,11 @@ struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
         }()
 
         if state.isDisabled {
-            let disabledColors = variantColors.withOpacity(theme.dims.dim2)
             return ProgressTrackerColors(
-                background: disabledColors.background,
-                outline: disabledColors.outline,
-                content: disabledColors.content,
-                label: theme.colors.base.onSurface.opacity(theme.dims.dim1))
+                background: variantColors.background.opacity(theme.dims.dim2),
+                outline: variantColors.outline.opacity(theme.dims.dim2),
+                content: variantColors.content.opacity(theme.dims.dim2),
+                label: variantColors.label.opacity(theme.dims.dim1))
         } else {
             return variantColors
         }
