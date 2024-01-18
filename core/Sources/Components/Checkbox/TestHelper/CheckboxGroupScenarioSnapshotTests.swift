@@ -127,7 +127,7 @@ enum CheckboxGroupScenarioSnapshotTests: String, CaseIterable {
         let alignments = CheckboxAlignment.allCases
         let layouts: [CheckboxGroupLayout] = [.vertical, .horizontal]
         let items = [
-            CheckboxGroupItemDefault(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", id: "1", selectionState: .indeterminate, isEnabled: true),
+            CheckboxGroupItemDefault(title: "Hello World", id: "1", selectionState: .indeterminate, isEnabled: true),
             CheckboxGroupItemDefault(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", id: "2", selectionState: .indeterminate, isEnabled: true)
         ]
 
@@ -161,7 +161,7 @@ enum CheckboxGroupScenarioSnapshotTests: String, CaseIterable {
     ///  - sizes (accessibility): default
     private func test4() -> [CheckboxGroupConfigurationSnapshotTests] {
         let layouts: [CheckboxGroupLayout] = [.vertical, .horizontal]
-        let itemsArray = [[CheckboxGroupItemDefault(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", id: "1", selectionState: .selected, isEnabled: true),
+        let itemsArray = [[CheckboxGroupItemDefault(title: "Hello World", id: "1", selectionState: .selected, isEnabled: true),
             CheckboxGroupItemDefault(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", id: "2", selectionState: .selected, isEnabled: true)],
             [CheckboxGroupItemDefault(title: "Hello World", id: "1", selectionState: .selected, isEnabled: true),
             CheckboxGroupItemDefault(title: "This is the way.", id: "2", selectionState: .selected, isEnabled: true)]]
