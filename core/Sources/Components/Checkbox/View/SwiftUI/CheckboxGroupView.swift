@@ -143,15 +143,15 @@ public struct CheckboxGroupView: View {
     private func makeContentView(maxWidth: CGFloat? = nil) -> some View {
         return ForEach(self.$items, id: \.id) { item in
             let checkboxWidth = self.calculateSingleCheckboxWidth(string: item.title.wrappedValue, alignment: self.alignment)
-            self.checkBoxView(item: item)
-                .if(checkboxWidth > maxWidth ?? 0) { view in
-                    view
-                        .frame(width: maxWidth)
-                        .fixedSize(horizontal: false, vertical: true)
-                } else: { view in
-                    view
-                        .fixedSize()
-                }
+
+            if checkboxWidth > maxWidth ?? 0 {
+                self.checkBoxView(item: item)
+                    .frame(width: maxWidth)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                  self.checkBoxView(item: item)
+                  .fixedSize()
+            }
         }
     }
 
@@ -169,8 +169,6 @@ public struct CheckboxGroupView: View {
         .accessibilityIdentifier(identifier)
     }
 }
-
-
 
 // MARK: - Helpers
 extension CheckboxGroupView {
