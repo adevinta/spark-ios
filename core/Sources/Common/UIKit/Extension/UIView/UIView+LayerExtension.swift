@@ -10,6 +10,7 @@ import UIKit
 
 extension UIView {
 
+    /// CGColors need to be refreshed on trait changes
     func setBorderColor(from colorToken: any ColorToken) {
         self.layer.borderColor = colorToken.uiColor.cgColor
     }

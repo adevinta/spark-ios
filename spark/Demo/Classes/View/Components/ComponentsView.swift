@@ -76,6 +76,12 @@ struct ComponentsView: View {
                 self.navigateToView(SpinnerComponent())
             }
 
+            Button("Slider") {
+                self.navigateToView(
+                    SliderComponentView()
+                )
+            }
+
             Button("Switch") {
                 self.navigateToView(SwitchComponentView())
             }
