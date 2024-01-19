@@ -10,7 +10,12 @@ import {{ import }}
 {% for import in argument.autoMockableTestableImports %}
 @testable import {{ import }}
 
-{% macro GenericTestedParam GenericList paramName %}{% set paramV2 %}"{{paramName}}"{% endset %}{% if GenericList | contains: paramV2 %}Any{% else %}{{paramName}}{%endif%}{% endmacro %}
+{% macro existentialVariableTypeName typeName %}{% if typeName|contains:"any" and typeName|contains:"!" %}{{ typeName | replace:"any","(any" | replace:"!",")!" }}{% elif typeName|contains:"any" and typeName.isOptional %}{{ typeName | replace:"any","(any" | replace:"?",")?" }}{% elif typeName|contains:"any" and typeName.isClosure %}({{ typeName | replace:"any","(any" | replace:"?",")?" }}){%else%}{{ typeName }}{%endif%}{% endmacro %}
+{% macro existentialClosureVariableTypeName typeName %}{% if typeName|contains:"any" and typeName|contains:"!" %}{{ typeName | replace:"any","(any" | replace:"!",")?" }}{% elif typeName|contains:"any" and typeName.isClosure and typeName|contains:"?" %}{{ typeName | replace:"any","(any" | replace:"?",")?" }}{% elif typeName|contains:"any" and typeName|contains:"?" %}{{ typeName | replace:"any","(any" | replace:"?",")?" }}{%else%}{{ typeName }}{%endif%}{% endmacro %}
+{% macro existentialParameterTypeName typeName %}{% if typeName|contains:"any" and typeName|contains:"!" %}{{ typeName | replace:"any","(any" | replace:"!",")!" }}{% elif typeName|contains:"any" and typeName.isClosure and typeName|contains:"?" %}{{ typeName | replace:"any","(any" | replace:"?",")?" }}{% elif typeName|contains:"any" and typeName.isOptional %}{{ typeName | replace:"any","(any" | replace:"?",")?" }}{%else%}{{ typeName }}{%endif%}{% endmacro %}
+{% macro methodName method %}func {{ method.shortName}}({%- for param in method.parameters %}{% if param.argumentLabel == nil %}_ {{ param.name }}{%elif param.argumentLabel == param.name%}{{ param.name }}{%else%}{{ param.argumentLabel }} {{ param.name }}{% endif %}: {% call existentialParameterTypeName param.typeName %}{% if not forloop.last %}, {% endif %}{% endfor -%}){% endmacro %}
+
+{% macro genericTestedParam GenericList paramName %}{% set paramV2 %}"{{paramName}}"{% endset %}{% if GenericList | contains: paramV2 %}Any{% else %}{{paramName}}{%endif%}{% endmacro %}
 {% macro removeGenericContentInMethodName name %}{% if method.shortName| hasSuffix:">" %}{% for element in name|split:"<" %}{% if forloop.first %}{{ element }}{% endif %}{% endfor %}{% else %}{{name}}{% endif %}{% endmacro %}
 {% macro swiftifyMethodNameV2 method %}{%if method.parameters.count > 0 %}{% call removeGenericContentInMethodName method.shortName %}With{% for param in method.parameters %}{{ param.name | snakeToCamelCase }}{% if not forloop.last %}And{% endif %}{% endfor %}{% else %}{{method.shortName}}{% endif %}{% endmacro %}
 {% macro methodThrowableErrorDeclaration method %}
@@ -54,11 +59,11 @@ import {{ import }}
 {% macro closureReturnTypeName method %}{% if method.isOptionalReturnType %}({{ method.unwrappedReturnTypeName }})?{% else %}{{ method.returnTypeName }}{% endif %}{% endmacro %}
 
 {% macro methodClosureDeclaration method %}
-    var {% call methodClosureName method %}: (({% for param in method.parameters %}{% if param.typeName|contains:"any" and param.typeName|contains:"?" %}{{ param.typeName | replace:"any","(any" | replace:"?",")?" }}{%else%}{{ param.typeName }}{%endif%}{% if not forloop.last %}, {% endif %}{% endfor %}) {% if method.isAsync %}async {% endif %}{% if method.throws %}throws {% endif %}-> {% if method.isInitializer %}Void{% else %}{% call closureReturnTypeName method %}{% endif %})?
+    var {% call methodClosureName method %}: (({% for param in method.parameters %}{% call existentialVariableTypeName param.typeName %}{% if not forloop.last %}, {% endif %}{% endfor %}) {% if method.isAsync %}async {% endif %}{% if method.throws %}throws {% endif %}-> {% if method.isInitializer %}Void{% else %}{% call closureReturnTypeName method %}{% endif %})?
 {% endmacro %}
 
 {% macro methodClosureDeclarationV2 method GenericParameters %}
-    var {% call methodClosureName method %}: (({% for param in method.parameters %}{% call GenericTestedParam GenericParameters param.typeName.unwrappedTypeName %}{%if param.typeName.isOptional%}?{%endif%}{% if not forloop.last %}, {% endif %}{% endfor %}) {% if method.throws %}throws {% endif %}-> {% if method.isInitializer %}Void{% else %}{% call closureReturnTypeNameV2 method GenericParameters %}{% endif %})?
+    var {% call methodClosureName method %}: (({% for param in method.parameters %}{% call genericTestedParam GenericParameters param.typeName.unwrappedTypeName %}{%if param.typeName.isOptional%}?{%endif%}{% if not forloop.last %}, {% endif %}{% endfor %}) {% if method.throws %}throws {% endif %}-> {% if method.isInitializer %}Void{% else %}{% call closureReturnTypeNameV2 method GenericParameters %}{% endif %})?
 {% endmacro %}
 {% macro methodClosureCallParameters method %}{% for param in method.parameters %}{% if param.typeName.name| hasPrefix:"inout" %}&{% endif %}{{ param.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endmacro %}
 {% macro methodReturnValueDefaultValueMacro typeName %}{% if typeName.name == "Int" or typeName.name == "UInt" or typeName.name == "Double" or typeName.name == "Float" or typeName.name == "CGFloat" %} = 0{% elif typeName.name == "Bool" %} = false{% elif typeName.name == "String" %} = ""{% elif typeName.name == "UIViewController" or typeName.name == "UINavigationController" or typeName.name == "UIView" or typeName.name|hasPrefix:"PassthroughSubject<" or typeName.name|hasPrefix:"PassthroughRelay<" %} = .init(){% elif typeName.name == "URL" %} = .init(fileURLWithPath: ""){% elif typeName.name == "URLRequest" %} = .init(url: .init(fileURLWithPath: "")){% elif typeName.name|hasPrefix:"AnyPublisher<" %} = Empty().eraseToAnyPublisher(){% elif typeName.isArray %} = []{% elif typeName.isDictionary %} = [:]{% else %}!{% endif %}
@@ -85,11 +90,11 @@ import {{ import }}
     var {% call swiftifyMethodName method.selectorName %}ReceivedInvocations{% for param in method.parameters %}: [{%if param.typeName.isOptional%}({%endif%}{{ '(' if param.isClosure }}{{ param.typeName.unwrappedTypeName }}{{ ')' if param.isClosure }}{%if param.typeName.isOptional%})?{%endif%}]{% endfor %} = []
 
             {% elif not method.parameters.count == 0 %}
-    var {% call swiftifyMethodNameV2 method %}ReceivedArguments: ({% for param in method.parameters %}{{ param.name }}: {% call GenericTestedParam GenericParameters param.unwrappedTypeName %}{% if param.typeName.isOptional %}{% endif%}{{ ', ' if not forloop.last }}{% endfor %})?
-    var {% call swiftifyMethodNameV2 method %}ReceivedInvocations: [({% for param in method.parameters %}{{ param.name }}: {% call GenericTestedParam GenericParameters param.unwrappedTypeName %}{% if param.typeName.isOptional %}{% endif%}{{ ', ' if not forloop.last }}{% endfor %})] = []
+    var {% call swiftifyMethodNameV2 method %}ReceivedArguments: ({% for param in method.parameters %}{{ param.name }}: {% call genericTestedParam GenericParameters param.unwrappedTypeName %}{% if param.typeName.isOptional %}{% endif%}{{ ', ' if not forloop.last }}{% endfor %})?
+    var {% call swiftifyMethodNameV2 method %}ReceivedInvocations: [({% for param in method.parameters %}{{ param.name }}: {% call genericTestedParam GenericParameters param.unwrappedTypeName %}{% if param.typeName.isOptional %}{% endif%}{{ ', ' if not forloop.last }}{% endfor %})] = []
             {% endif %}
             {% if not method.returnTypeName.isVoid and not method.isInitializer %}
-    var {% call swiftifyMethodNameV2 method %}ReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '(' if method.returnTypeName|contains:"any" }}{% call GenericTestedParam GenericParameters method.returnTypeName.unwrappedTypeName %}{% if method.returnTypeName.isOptional %}?{% endif%}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }}
+    var {% call swiftifyMethodNameV2 method %}ReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '(' if method.returnTypeName|contains:"any" }}{% call genericTestedParam GenericParameters method.returnTypeName.unwrappedTypeName %}{% if method.returnTypeName.isOptional %}?{% endif%}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }}
             {% endif %}
             {% call methodClosureDeclarationV2 method GenericParameters %}
 
@@ -123,7 +128,7 @@ import {{ import }}
         {% call methodClosureName method %}?({% call methodClosureCallParameters method %})
     }
 {% else %}
-    func {% if method.name|contains:"any" and method.name|contains:"?" %}{{ method.name | replace:"any","(any" | replace:"?",")?" }}{%else%}{{ method.name }}{%endif%}{{ ' async' if method.isAsync }}{{ ' throws' if method.throws }}{% if not method.returnTypeName.isVoid %} -> {{ method.returnTypeName }}{% endif %} {
+    {% call methodName method %}{{ ' async' if method.isAsync }}{{ ' throws' if method.throws }}{% if not method.returnTypeName.isVoid %} -> {{ method.returnTypeName }}{% endif %} {
     {% if not method.shortName| hasSuffix:">" %}
         {% if method.throws %}
         {% call methodThrowableErrorUsage method %}

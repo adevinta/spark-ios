@@ -270,10 +270,10 @@ private extension UIView {
 
         self.translatesAutoresizingMaskIntoConstraints = false
         if let fixedWidth = spaceContainer.fixedWidth {
-            self.widthAnchor.constraint(equalToConstant: fixedWidth).isActive = true
+            self.widthAnchor.constraint(greaterThanOrEqualToConstant: fixedWidth).isActive = true
         }
         if let fixedHeight = spaceContainer.fixedHeight {
-            self.heightAnchor.constraint(equalToConstant: fixedHeight).isActive = true
+            self.heightAnchor.constraint(greaterThanOrEqualToConstant: fixedHeight).isActive = true
         }
     }
 }

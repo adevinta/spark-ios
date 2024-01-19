@@ -106,6 +106,8 @@ extension ComponentsViewController {
             viewController = TagComponentUIViewController.build()
         case .textField:
             viewController = TextFieldComponentUIViewController.build()
+        case .textLink:
+            viewController = TextLinkComponentUIViewController.build()
         default:
             break
         }
