@@ -206,6 +206,7 @@ public final class TabUIView: UIControl {
         self.setupViews(items: content)
         self.setupConstraints()
         self.setupSubscriptions()
+        self.setupAccessibility()
     }
 
     required init?(coder: NSCoder) {
@@ -457,9 +458,6 @@ public final class TabUIView: UIControl {
 
     // MARK: - Private Functions
     private func setupViews(items: [TabUIItemContent]) {
-
-        self.accessibilityIdentifier = TabAccessibilityIdentifier.tab
-
         let tabItemViews = items.map{ item in
             return TabItemUIView(
                 theme: theme,
@@ -512,6 +510,12 @@ public final class TabUIView: UIControl {
         stackView.distribution = self.apportionsSegmentWidthsByContent ? .fill : .fillEqually
     }
 
+    private func setupAccessibility() {
+        self.accessibilityTraits.insert(.tabBar)
+        self.isAccessibilityElement = false
+        self.accessibilityContainerType = .semanticGroup
+    }
+
     private func setTabItems(content: [TabUIItemContent]) {
         self.viewModel.content = content
 
@@ -525,6 +529,7 @@ public final class TabUIView: UIControl {
         }
         self.stackView.removeArrangedSubviews()
         self.stackView.addArrangedSubviews(items)
+        self.accessibilityElements?.append(contentsOf: items)
 
         self.updateAccessibilityIdentifiers()
         self.invalidateIntrinsicContentSize()
