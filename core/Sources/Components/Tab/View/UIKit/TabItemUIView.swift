@@ -66,6 +66,12 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.isSelected
         }
         set {
+            if newValue {
+                self.accessibilityTraits.insert(.selected)
+            }else {
+                self.accessibilityTraits.remove(.selected)
+            }
+            guard newValue != self.viewModel.isSelected else { return }
             self.viewModel.updateState(isSelected: newValue)
         }
     }
@@ -139,7 +145,7 @@ public final class TabItemUIView: UIControl {
                 newBadge.isHidden.toggle()
                 newBadge.isHidden.toggle()
             }
-            
+
             self.invalidateIntrinsicContentSize()
         }
     }
@@ -236,15 +242,6 @@ public final class TabItemUIView: UIControl {
         }
     }
 
-    public override var isHighlighted: Bool {
-        get {
-            return self.viewModel.isPressed
-        }
-        set {
-            self.viewModel.updateState(isPressed: newValue)
-        }
-    }
-
     /// A Boolean value indicating whether the control is in the enabled state.
     ///
     /// Set the value of this property to true to enable the control or false to disable it. An enabled control is capable of responding to user interactions, whereas a disabled control ignores touch events and may draw itself differently.
@@ -254,7 +251,13 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.isEnabled
         }
         set {
-            self.viewModel.updateState(isEnabled: newValue)
+            if newValue {
+                self.accessibilityTraits.remove(.notEnabled)
+            }else {
+                self.accessibilityTraits.insert(.notEnabled)
+            }
+            guard newValue != self.viewModel.isEnabled else { return }
+            self.viewModel.isEnabled = newValue
         }
     }
 
@@ -338,6 +341,8 @@ public final class TabItemUIView: UIControl {
         self.setupConstraints()
         self.enableTouch()
         self.setupSubscriptions()
+        self.isAccessibilityElement = true
+        self.accessibilityTraits.insert(.button)
     }
 
     required init?(coder: NSCoder) {
@@ -361,6 +366,22 @@ public final class TabItemUIView: UIControl {
         self.invalidateIntrinsicContentSize()
         self.updateLayoutConstraints()
         self.setNeedsLayout()
+    }
+
+    // MARK: - Control functions
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.viewModel.isPressed = true
+    }
+
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        self.viewModel.isPressed = false
+    }
+
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        self.viewModel.isPressed = false
     }
 
     // MARK: - Private functions
@@ -391,7 +412,7 @@ public final class TabItemUIView: UIControl {
         self.bringSubviewToFront(self.bottomLine)
 
         self.setupColors(attributes: self.viewModel.tabStateAttributes)
-        
+
         self.addOrRemoveIcon(self.viewModel.content.icon)
         self.addOrRemoveTitle(self.viewModel.content.title)
     }
@@ -471,6 +492,7 @@ public final class TabItemUIView: UIControl {
         self.label.textColor = self.viewModel.tabStateAttributes.colors.label.uiColor
 
         self.label.text = text
+        self.accessibilityLabel = text
         self.label.isHidden = text == nil
 
         self.invalidateIntrinsicContentSize()
