@@ -89,7 +89,7 @@ enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
     ///
     /// Content:
     ///  - ratings: [2.5]
-    ///  - size: [small, medium, input]
+    ///  - size: [small, medium, large, input]
     ///  - count: five (number of stars)
     ///  - modes: default
     ///  - accessibility sizes: default

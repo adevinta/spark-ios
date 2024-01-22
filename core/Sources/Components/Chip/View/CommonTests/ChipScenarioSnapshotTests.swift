@@ -190,11 +190,6 @@ enum ChipScenarioSnapshotTests: String, CaseIterable {
 }
 
 // MARK: - Private Extensions
-private extension ImageEither {
-    static func mock(isSwiftUIComponent: Bool) -> Self {
-        return isSwiftUIComponent ? .right(Image.mock) : .left(UIImage.mock)
-    }
-}
 
 private extension ViewEither {
     static func mock(_ isSwiftUIComponent: Bool) -> Self {
@@ -216,14 +211,6 @@ private extension ViewEither {
             return .left(view)
         }
     }
-}
-
-private extension Image {
-    static let mock = Image(systemName: "person.2.circle.fill")
-}
-
-private extension UIImage {
-    static var mock = UIImage(systemName: "person.2.circle.fill") ?? UIImage()
 }
 
 private func all<U, V>(_ lhs: [U], _ rhs: [V]) -> [(U, V)] {

@@ -92,6 +92,8 @@ extension ComponentsViewController {
             viewController = RatingDisplayComponentViewController.build()
         case .ratingInput:
             viewController = RatingInputComponentViewController.build()
+        case .slider:
+            viewController = SliderComponentUIViewController.build()
         case .spinner:
             viewController = SpinnerComponentUIViewController.build()
         case .star:
@@ -104,6 +106,8 @@ extension ComponentsViewController {
             viewController = TagComponentUIViewController.build()
         case .textField:
             viewController = TextFieldComponentUIViewController.build()
+        case .textLink:
+            viewController = TextLinkComponentUIViewController.build()
         default:
             break
         }

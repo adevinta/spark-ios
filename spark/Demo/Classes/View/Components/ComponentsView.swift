@@ -76,6 +76,12 @@ struct ComponentsView: View {
                 self.navigateToView(SpinnerComponent())
             }
 
+            Button("Slider") {
+                self.navigateToView(
+                    SliderComponentView()
+                )
+            }
+
             Button("Switch") {
                 self.navigateToView(SwitchComponentView())
             }
@@ -87,6 +93,10 @@ struct ComponentsView: View {
 
                 Button("Tag") {
                     self.navigateToView(TagComponentView())
+                }
+
+                Button("TextLink") {
+                    self.navigateToView(TextLinkComponentView())
                 }
             }
         }
