@@ -35,6 +35,13 @@ public struct CheckboxView: View {
     /// A binding for the selection state of the checkbox (`.selected`, `.unselected` or `.indeterminate`). The value will update when the control is tapped.
     @Binding public var selectionState: CheckboxSelectionState
 
+    private var isSelected: Binding<Bool> { Binding (
+        get: { self.selectionState == .selected },
+        set: { newValue in
+            self.selectionState = newValue ? .selected : .unselected
+        }
+    )}
+
     // MARK: - Internal Properties
 
     @State var isPressed: Bool = false
@@ -42,7 +49,7 @@ public struct CheckboxView: View {
     @ObservedObject var viewModel: CheckboxViewModel
 
     // MARK: - Private Properties
-    
+
     @Namespace private var namespace
 
     @ScaledMetric var checkboxSize: CGFloat = Constants.checkboxSize
@@ -110,7 +117,7 @@ public struct CheckboxView: View {
         }
     }
 
-    @ViewBuilder 
+    @ViewBuilder
     private var checkboxView: some View {
         let tintColor = self.viewModel.colors.tintColor.color
         let iconColor = self.viewModel.colors.iconColor.color
@@ -153,9 +160,15 @@ public struct CheckboxView: View {
         }
         .id(Identifier.checkbox.rawValue)
         .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: self.namespace)
+        .accessibilityRepresentation {
+            // Here, we specify that we want our component to take on all the accessibility behaviours associated with the native Toggle, without having to recreate them.
+            Toggle(isOn: self.isSelected) {
+                Text(self.viewModel.text.rightValue ?? "")
+            }
+        }
     }
 
-    @ViewBuilder 
+    @ViewBuilder
     private var contentView: some View {
         HStack(spacing: 0) {
             switch self.viewModel.alignment {
