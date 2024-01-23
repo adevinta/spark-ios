@@ -12,15 +12,12 @@ import SwiftUI
 public struct CheckboxGroupView: View {
 
     // MARK: - Private properties
-    private var title: String?
-    private var checkedImage: UIImage
-    @Binding private var items: [any CheckboxGroupItemProtocol]
 
-    private var theme: Theme
-    private var intent: CheckboxIntent
-    private var layout: CheckboxGroupLayout
-    private var alignment: CheckboxAlignment
-    private var accessibilityIdentifierPrefix: String
+    @Binding private var items: [any CheckboxGroupItemProtocol]
+    private var itemContents: [String] {
+        return self.items.map { $0.id + ($0.title ?? "") }
+    }
+    @ObservedObject var viewModel: CheckboxGroupViewModel
 
     @ScaledMetric private var spacingSmall: CGFloat
     @ScaledMetric private var spacingLarge: CGFloat
@@ -28,9 +25,7 @@ public struct CheckboxGroupView: View {
     
     @State private var viewWidth: CGFloat = 0
     @State private var isScrollableHStack: Bool = true
-    private var itemContents: [String] {
-        return self.items.map { $0.id + ($0.title ?? "") }
-    }
+
 
     // MARK: - Initialization
 
@@ -53,17 +48,20 @@ public struct CheckboxGroupView: View {
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {
-        self.title = title
-        self.checkedImage = checkedImage
-        self._items = items
-        self.layout = layout
-        self.alignment = alignment
-        self.theme = theme
-        self.intent = intent
-        self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
+        let viewModel = CheckboxGroupViewModel(
+            title: title,
+            checkedImage: checkedImage,
+            accessibilityIdentifierPrefix: accessibilityIdentifierPrefix,
+            theme: theme,
+            intent: intent,
+            alignment: alignment,
+            layout: layout
+        )
+        self.viewModel = viewModel
 
-        self._spacingSmall = .init(wrappedValue: theme.layout.spacing.small)
-        self._spacingLarge = .init(wrappedValue: theme.layout.spacing.large)
+        self._items = items
+        self._spacingSmall = .init(wrappedValue: viewModel.spacing.small)
+        self._spacingLarge = .init(wrappedValue: viewModel.spacing.large)
         self._checkboxSelectedBorderWidth = .init(wrappedValue: CheckboxView.Constants.checkboxSelectedBorderWidth)
     }
 
@@ -72,13 +70,13 @@ public struct CheckboxGroupView: View {
     /// Returns the rendered checkbox group view.
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if let title = self.title, !title.isEmpty  {
+            if let title = self.viewModel.title, !title.isEmpty  {
                 Text(title)
-                    .foregroundColor(self.theme.colors.base.onSurface.color)
-                    .font(self.theme.typography.subhead.font)
+                    .foregroundColor(self.viewModel.titleColor.color)
+                    .font(self.viewModel.titleFont.font)
                     .padding(.bottom, self.spacingLarge - self.spacingSmall)
             }
-            switch self.layout {
+            switch self.viewModel.layout {
             case .horizontal:
                 self.makeHStackView()
             case .vertical:
@@ -142,7 +140,7 @@ public struct CheckboxGroupView: View {
 
     private func makeContentView(maxWidth: CGFloat? = nil) -> some View {
         return ForEach(self.$items, id: \.id) { item in
-            let checkboxWidth = self.calculateSingleCheckboxWidth(string: item.title.wrappedValue, alignment: self.alignment)
+            let checkboxWidth = self.viewModel.calculateSingleCheckboxWidth(string: item.title.wrappedValue)
 
             if checkboxWidth > maxWidth ?? 0 {
                 self.checkBoxView(item: item)
@@ -156,40 +154,17 @@ public struct CheckboxGroupView: View {
     }
 
     private func checkBoxView(item: Binding<any CheckboxGroupItemProtocol>) -> some View {
-        let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
+        let identifier = "\(self.viewModel.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
         return CheckboxView(
             text: item.title.wrappedValue,
-            checkedImage: self.checkedImage,
-            alignment: self.alignment,
-            theme: self.theme,
-            intent: self.intent,
+            checkedImage: self.viewModel.checkedImage,
+            alignment: self.viewModel.alignment,
+            theme: self.viewModel.theme,
+            intent: self.viewModel.intent,
             isEnabled: item.isEnabled.wrappedValue,
             selectionState: item.selectionState
         )
         .accessibilityIdentifier(identifier)
-    }
-}
-
-// MARK: - Helpers
-extension CheckboxGroupView {
-    private func calculateSingleCheckboxWidth(string: String?, alignment: CheckboxAlignment) -> CGFloat {
-        let font: UIFont = self.theme.typography.body1.uiFont
-        let textWidth: CGFloat = string?.widthOfString(usingFont: font) ?? 0
-        let spacing: CGFloat = CheckboxGetSpacingUseCase().execute(layoutSpacing: self.theme.layout.spacing, alignment: alignment)
-        let checkboxControlSize: CGFloat = CheckboxView.Constants.checkboxSize
-        let width: CGFloat = checkboxControlSize + spacing + textWidth
-        return width
-    }
-}
-
-private extension String {
-   func widthOfString(usingFont font: UIFont?) -> CGFloat {
-       if let font = font {
-           let fontAttributes = [NSAttributedString.Key.font: font]
-           let size = self.size(withAttributes: fontAttributes)
-           return size.width
-       }
-       return 0
     }
 }
 
