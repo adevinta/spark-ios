@@ -40,7 +40,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 
                 let view = CheckboxView(
                     text: configuration.text,
-                    checkedImage: configuration.image,
+                    checkedImage: Image(uiImage: configuration.image),
                     alignment: configuration.alignment,
                     theme: self.theme,
                     intent: configuration.intent,

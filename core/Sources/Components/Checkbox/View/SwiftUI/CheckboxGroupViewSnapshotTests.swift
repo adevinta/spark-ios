@@ -39,7 +39,7 @@ final class CheckboxGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 self.items = configuration.items
 
                 var view = CheckboxGroupView(
-                    checkedImage: configuration.image,
+                    checkedImage: Image(uiImage: configuration.image),
                     items: self._items,
                     layout: configuration.axis,
                     alignment: configuration.alignment,

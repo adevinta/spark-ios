@@ -14,7 +14,7 @@ final class CheckboxGroupViewModel: ObservableObject {
 
     // MARK: - Internal properties
     @Published var title: String?
-    @Published var checkedImage: UIImage
+    @Published var checkedImage: Image
     @Published var layout: CheckboxGroupLayout
     @Published var spacing: LayoutSpacing
     @Published var accessibilityIdentifierPrefix: String
@@ -27,7 +27,7 @@ final class CheckboxGroupViewModel: ObservableObject {
     // MARK: - Init
     init(
         title: String?,
-        checkedImage: UIImage,
+        checkedImage: Image,
         accessibilityIdentifierPrefix: String,
         theme: Theme,
         intent: CheckboxIntent = .main,

@@ -8,6 +8,7 @@
 
 import XCTest
 import UIKit
+import SwiftUI
 @testable import SparkCore
 
 final class CheckboxGroupViewModelTests: XCTestCase {
@@ -23,7 +24,7 @@ final class CheckboxGroupViewModelTests: XCTestCase {
         self.theme = ThemeGeneratedMock.mock
         self.sut = CheckboxGroupViewModel(
             title: "Title",
-            checkedImage: self.checkedImage,
+            checkedImage: Image(uiImage: self.checkedImage),
             accessibilityIdentifierPrefix: "id",
             theme: self.theme
         )
@@ -38,7 +39,7 @@ final class CheckboxGroupViewModelTests: XCTestCase {
                                "Wrong typography value")
 
             XCTAssertEqual(sut.title, "Title", "text does not match")
-            XCTAssertEqual(sut.checkedImage, self.checkedImage, "Checked image does not match")
+            XCTAssertEqual(sut.checkedImage, Image(uiImage: self.checkedImage), "Checked image does not match")
             XCTAssertEqual(sut.alignment, .left, "Alignment does not match")
             XCTAssertEqual(sut.layout, .vertical, "Layout does not match")
             XCTAssertEqual(sut.intent, .main, "Intent does not match")
@@ -62,7 +63,7 @@ final class CheckboxGroupViewModelTests: XCTestCase {
 
         let checkboxViewModel = CheckboxViewModel(
             text: .left(NSAttributedString(string: "Text")),
-            checkedImage: self.checkedImage,
+            checkedImage: .left(self.checkedImage),
             theme: self.theme,
             selectionState: .selected
         )
