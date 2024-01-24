@@ -25,6 +25,9 @@ final class IconButtonComponentUIView: ComponentUIView {
     private lazy var buttonAction: UIAction = .init { _ in
         self.showAlert(for: .action)
     }
+    private lazy var buttonToggleAction: UIAction = .init { _ in
+        self.viewModel.isSelectedChanged()
+    }
     private var buttonControlCancellable: AnyCancellable?
 
     // MARK: - Initializer
@@ -38,6 +41,7 @@ final class IconButtonComponentUIView: ComponentUIView {
             size: viewModel.size,
             shape: viewModel.shape
         )
+        self.buttonView.accessibilityLabel = "My icon button"
 
         super.init(
             viewModel: viewModel,
@@ -175,6 +179,13 @@ final class IconButtonComponentUIView: ComponentUIView {
             self.buttonView.addTarget(self, action: #selector(self.touchUpInsideTarget), for: .touchUpInside)
         } else {
             self.buttonView.removeTarget(self, action: #selector(self.touchUpInsideTarget), for: .touchUpInside)
+        }
+
+        // Toggle ?
+        if controlType == .toggle {
+            self.buttonView.addAction(self.buttonToggleAction, for: .touchUpInside)
+        } else {
+            self.buttonView.removeAction(self.buttonToggleAction, for: .touchUpInside)
         }
     }
 
