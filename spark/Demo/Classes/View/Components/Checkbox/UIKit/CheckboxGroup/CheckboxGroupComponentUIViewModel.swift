@@ -213,7 +213,7 @@ extension CheckboxGroupComponentUIViewModel {
 // MARK: - Items
 extension CheckboxGroupComponentUIViewModel {
 
-    static func makeCheckboxGroupItems(type: CheckboxGroupType) -> [CheckboxGroupItemDefault] {
+    static func makeCheckboxGroupItems(type: CheckboxGroupType, isSwiftUI: Bool = false) -> [CheckboxGroupItemDefault] {
         var items: [CheckboxGroupItemDefault] = []
 
         switch type {
@@ -226,24 +226,44 @@ extension CheckboxGroupComponentUIViewModel {
                 CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true)
             ]
         case .singleMultilineText:
-            items = [
-                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "1", selectionState: .unselected, isEnabled: true),
-            ]
+            if !isSwiftUI {
+                items = [
+                    CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "1", selectionState: .unselected, isEnabled: true),
+                ]
+            } else {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .unselected, isEnabled: true),
+                ]
+            }
         case .doubleBasic:
             items = [
                 CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true),
                 CheckboxGroupItemDefault(title: Self.text + " 2", id: "2", selectionState: .unselected, isEnabled: true)
             ]
         case .doubleMultilineText:
-            items = [
-                CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: true),
-                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "2", selectionState: .indeterminate, isEnabled: true)
-            ]
+            if !isSwiftUI {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: true),
+                    CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "2", selectionState: .indeterminate, isEnabled: true)
+                ]
+            } else {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: true),
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .indeterminate, isEnabled: true)
+                ]
+            }
         case .doubleMix:
-            items = [
-                CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .unselected, isEnabled: true),
-                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "2", selectionState: .selected, isEnabled: true)
-            ]
+            if !isSwiftUI {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .unselected, isEnabled: true),
+                    CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "2", selectionState: .selected, isEnabled: true)
+                ]
+            } else {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .unselected, isEnabled: true),
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .selected, isEnabled: true)
+                ]
+            }
         case .tripleBasic:
             items = [
                 CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .unselected, isEnabled: true),
@@ -251,11 +271,19 @@ extension CheckboxGroupComponentUIViewModel {
                 CheckboxGroupItemDefault(title: Self.text + " 3", id: "3", selectionState: .unselected, isEnabled: true),
             ]
         case .tripleMultilineText:
-            items = [
-                CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: false),
-                CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .unselected, isEnabled: true),
-                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate, isEnabled: true)
-            ]
+            if !isSwiftUI {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: false),
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .unselected, isEnabled: true),
+                    CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate, isEnabled: true)
+                ]
+            } else {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "1", selectionState: .selected, isEnabled: false),
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .unselected, isEnabled: true),
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "3", selectionState: .indeterminate, isEnabled: true)
+                ]
+            }
         case .tripleMix1:
             items = [
                 CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true),
@@ -263,11 +291,20 @@ extension CheckboxGroupComponentUIViewModel {
                 CheckboxGroupItemDefault(title: Self.multilineText, id: "3", selectionState: .unselected, isEnabled: true)
             ]
         case .tripleMix2:
-            items = [
-                CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true),
-                CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .unselected, isEnabled: true),
-                CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate, isEnabled: true)
-            ]
+            if !isSwiftUI {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true),
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .unselected, isEnabled: true),
+                    CheckboxGroupItemDefault(attributedTitle: Self.attributeText, id: "3", selectionState: .indeterminate, isEnabled: true)
+                ]
+            } else {
+                items = [
+                    CheckboxGroupItemDefault(title: Self.text, id: "1", selectionState: .selected, isEnabled: true),
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "2", selectionState: .unselected, isEnabled: true),
+                    CheckboxGroupItemDefault(title: Self.multilineText, id: "3", selectionState: .indeterminate, isEnabled: true)
+                ]
+            }
+
         }
         return items
     }
