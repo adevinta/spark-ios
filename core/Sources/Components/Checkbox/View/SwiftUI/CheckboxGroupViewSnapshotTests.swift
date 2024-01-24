@@ -12,21 +12,6 @@ import SwiftUI
 
 final class CheckboxGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 
-    // MARK: - Properties
-
-    private let theme: Theme = SparkTheme.shared
-
-    private var items: [any CheckboxGroupItemProtocol] = []
-
-    private lazy var _items: Binding<[any CheckboxGroupItemProtocol]> = {
-        return Binding<[any CheckboxGroupItemProtocol]>(
-            get: { return self.items },
-            set: { newValue, transaction in
-                self.items = newValue
-            }
-        )
-    }()
-
     // MARK: - Tests
 
     func test() {
@@ -35,20 +20,10 @@ final class CheckboxGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
         for scenario in scenarios {
             let configurations = scenario.configuration()
 
-            for (index, configuration) in configurations.enumerated() {
-                self.items = configuration.items
+            for configuration in configurations {
 
-                var view = CheckboxGroupView(
-                    checkedImage: Image(uiImage: configuration.image),
-                    items: self._items,
-                    layout: configuration.axis,
-                    alignment: configuration.alignment,
-                    theme: self.theme,
-                    intent: configuration.intent,
-                    accessibilityIdentifierPrefix: "\(index)"
-                )
-                .frame(width: UIScreen.main.bounds.width)
-                .background(Color.systemBackground)
+                let view = CheckboxGroupContainerView(configuration: configuration)
+                .fixedSize()
 
                 self.assertSnapshot(
                     matching: view,
@@ -59,5 +34,43 @@ final class CheckboxGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 )
             }
         }
+    }
+}
+
+private struct CheckboxGroupContainerView: View {
+
+    private let theme: Theme = SparkTheme.shared
+    let configuration: CheckboxGroupConfigurationSnapshotTests
+
+    @Binding var items: [any CheckboxGroupItemProtocol]
+    @State var viewHeight: CGFloat = 0
+
+    init(configuration: CheckboxGroupConfigurationSnapshotTests) {
+        self.configuration = configuration
+        self._items = .constant(configuration.items)
+    }
+
+    var body: some View {
+        VStack {
+            CheckboxGroupView(
+                checkedImage: Image(uiImage: configuration.image),
+                items: self.$items,
+                layout: configuration.axis,
+                alignment: configuration.alignment,
+                theme: self.theme,
+                intent: configuration.intent,
+                accessibilityIdentifierPrefix: "id"
+            )
+            .background(Color.systemBackground)
+            .frame(width: UIScreen.main.bounds.width)
+            .overlay(
+                GeometryReader { geo in
+                    Color.clear.onAppear {
+                        self.viewHeight = geo.size.height
+                    }
+                }
+            )
+        }
+        .frame(height: self.viewHeight)
     }
 }
