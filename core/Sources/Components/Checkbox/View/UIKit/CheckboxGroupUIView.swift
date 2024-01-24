@@ -183,6 +183,8 @@ public final class CheckboxGroupUIView: UIControl {
     }
 
     private func setupItemsStackView() {
+        self.updateLayout()
+        
         for item in self.items {
 
             var content: Either<NSAttributedString?, String?>
