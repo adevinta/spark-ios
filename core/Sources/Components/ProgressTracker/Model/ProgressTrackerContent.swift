@@ -55,7 +55,6 @@ public struct ProgressTrackerContent<ComponentContent: ProgressTrackerContenting
     }
 
     mutating func setIndicatorImage(_ image: ComponentContent.ImageType?, forPage page: Int) {
-        var pageContent = content[page]
         content[page]?.indicatorImage = image
     }
 
