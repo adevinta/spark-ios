@@ -24,7 +24,7 @@ final class CheckboxGroupCell: UITableViewCell, Configurable {
         ]
 
         let view = CheckboxGroupUIView(
-            checkedImage: DemoIconography.shared.checkmark,
+            checkedImage: DemoIconography.shared.uiCheckmark,
             items: items,
             alignment: .left,
             theme: SparkTheme.shared,
