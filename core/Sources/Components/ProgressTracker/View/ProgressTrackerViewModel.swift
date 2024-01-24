@@ -13,6 +13,7 @@ enum ProgressTrackerConstants {
     static var minTrackWidth: CGFloat = 1.0
 }
 
+/// A view model for a Progress Tracker.
 final class ProgressTrackerViewModel: ObservableObject {
 
     var theme: Theme {
@@ -49,6 +50,7 @@ final class ProgressTrackerViewModel: ObservableObject {
     private var colorUseCase: ProgressTrackerGetTrackColorUseCaseable
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
 
+    // MARK: - Initialization
     init(theme: Theme,
          intent: ProgressTrackerIntent,
          orientation: ProgressTrackerOrientation,
