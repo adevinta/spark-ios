@@ -197,7 +197,7 @@ public final class CheckboxGroupUIView: UIControl {
                 theme: theme,
                 intent: intent,
                 content: content,
-                checkedImage: self.checkedImage,
+                checkedImage: .left(self.checkedImage),
                 isEnabled: item.isEnabled,
                 selectionState: item.selectionState,
                 alignment: self.alignment

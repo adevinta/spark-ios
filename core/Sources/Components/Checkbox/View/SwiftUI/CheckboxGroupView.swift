@@ -13,7 +13,7 @@ public struct CheckboxGroupView: View {
 
     // MARK: - Private properties
     private var title: String?
-    private var checkedImage: UIImage
+    private var checkedImage: Image
     @Binding private var items: [any CheckboxGroupItemProtocol]
 
     private var theme: Theme
@@ -46,7 +46,7 @@ public struct CheckboxGroupView: View {
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
     public init(
         title: String? = nil,
-        checkedImage: UIImage,
+        checkedImage: Image,
         items: Binding<[any CheckboxGroupItemProtocol]>,
         layout: CheckboxGroupLayout = .vertical,
         alignment: CheckboxAlignment,
