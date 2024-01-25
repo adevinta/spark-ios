@@ -39,8 +39,7 @@ final class ProgressTrackerGetColorsUseCaseTests: XCTestCase {
         let expectedColors = ProgressTrackerColors(
             background: colors.main.mainContainer,
             outline: colors.main.mainContainer,
-            content: colors.main.onMainContainer,
-            label: colors.basic.basic)
+            content: colors.main.onMainContainer)
 
         self.tintedUseCase.executeWithColorsAndIntentAndStateReturnValue = expectedColors
 
@@ -61,8 +60,7 @@ final class ProgressTrackerGetColorsUseCaseTests: XCTestCase {
         let expectedColors = ProgressTrackerColors(
             background: colors.main.mainContainer,
             outline: colors.main.main,
-            content: colors.main.main,
-            label: colors.basic.basic)
+            content: colors.main.main)
 
         self.outlinedUseCase.executeWithColorsAndIntentAndStateReturnValue = expectedColors
 
@@ -85,14 +83,12 @@ final class ProgressTrackerGetColorsUseCaseTests: XCTestCase {
         let useCaseColors = ProgressTrackerColors(
             background: colors.main.mainContainer,
             outline: colors.main.main,
-            content: colors.main.main,
-            label: colors.basic.basic)
+            content: colors.main.main)
 
         let expectedColors = ProgressTrackerColors(
             background: useCaseColors.background.opacity(dims.dim2),
             outline: useCaseColors.outline.opacity(dims.dim2),
-            content: useCaseColors.content.opacity(dims.dim2),
-            label: useCaseColors.label.opacity(dims.dim1)
+            content: useCaseColors.content.opacity(dims.dim2)
         )
 
         self.outlinedUseCase.executeWithColorsAndIntentAndStateReturnValue = useCaseColors

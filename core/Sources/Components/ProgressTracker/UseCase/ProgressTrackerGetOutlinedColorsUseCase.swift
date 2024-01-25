@@ -28,8 +28,7 @@ struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsU
         return ProgressTrackerColors(
             background: intentColors.background,
             outline: intentColors.outline,
-            content: intentColors.content,
-            label: colors.base.onSurface)
+            content: intentColors.content)
     }
 
     private func pressedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerOutlinedColors {
