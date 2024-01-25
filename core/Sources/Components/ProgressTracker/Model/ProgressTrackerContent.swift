@@ -10,67 +10,123 @@ import Foundation
 import UIKit
 import SwiftUI
 
-public protocol ProgressTrackerContenting {
+// A model representing the content of a single Progress Tracker Indicator
+protocol ProgressTrackerContentIndicating {
     associatedtype ImageType
     associatedtype TextType
     var indicatorImage: ImageType? { get set }
-    var currentPageIndicatorImage: ImageType? { get set }
-    var attributedLabel: TextType? { get set }
     var label: String? { get set }
-    var contentLabel: String? { get set}
+
+    init()
 }
 
-public struct ProgressTrackerUIItemContent: ProgressTrackerContenting {
-    public var indicatorImage: UIImage?
-    public var currentPageIndicatorImage: UIImage?
-    public var attributedLabel: NSAttributedString?
-    public var label: String?
-    public var contentLabel: String?
+// The UIKit progress tracker indicator 
+struct ProgressTrackerUIIndicatorContent: ProgressTrackerContentIndicating {
+    typealias TextType = NSAttributedString
+
+    var indicatorImage: UIImage?
+    var label: String?
 }
 
-public struct ProgressTrackerItemContent: ProgressTrackerContenting {
-    public var indicatorImage: Image?
-    public var currentPageIndicatorImage: Image?
-    public var attributedLabel: AttributedString?
-    public var label: String?
-    public var contentLabel: String?
+struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating {
+    typealias TextType = AttributedString
+
+    var indicatorImage: Image?
+    var label: String?
 }
 
-public struct ProgressTrackerContent<ComponentContent: ProgressTrackerContenting> {
+final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> {
     let numberOfPages: Int
     let showDefaultPageNumber: Bool
+    var currentPage: Int
     var preferredIndicatorImage: ComponentContent.ImageType?
-    var content = [Int: ComponentContent]()
+    var preferredCurrentPageIndicatorImage:  ComponentContent.ImageType?
+    var visitedPageIndicatorImage: ComponentContent.ImageType?
+    private var content = [Int: ComponentContent]()
+    private var currentPageIndicator = [Int: ComponentContent.ImageType]()
+    var labels = [Int: ComponentContent.TextType?]()
 
-    public init(
+    init(
         numberOfPages: Int,
-        showDefaultPageNumber: Bool,
+        currentPage: Int,
+        showDefaultPageNumber: Bool = true,
         preferredIndicatorImage: ComponentContent.ImageType? = nil,
-        content: [Int: ComponentContent] = [Int: ComponentContent]())
+        preferredCurrentPageIndicatorImage: ComponentContent.ImageType? = nil,
+        visitedPageIndicatorImage: ComponentContent.ImageType? = nil)
     {
         self.numberOfPages = numberOfPages
+        self.currentPage = currentPage
         self.showDefaultPageNumber = showDefaultPageNumber
         self.preferredIndicatorImage = preferredIndicatorImage
-        self.content = content
+        self.visitedPageIndicatorImage = visitedPageIndicatorImage
+        self.preferredCurrentPageIndicatorImage = preferredCurrentPageIndicatorImage
     }
 
-    mutating func setIndicatorImage(_ image: ComponentContent.ImageType?, forPage page: Int) {
-        content[page]?.indicatorImage = image
+    func content(ofPage page: Int) -> ComponentContent {
+        var content: ComponentContent
+
+        if let pageContent = self.content[page] {
+            content = pageContent
+        } else {
+            content = .init()
+            self.content[page] = content
+        }
+
+        if content.label == nil && self.showDefaultPageNumber {
+            content.label = "\(page)"
+        }
+
+        if page == self.currentPage {
+            if let currentPageImage = self.currentPageIndicator[page]  {
+                content.indicatorImage = currentPageImage
+            } else if let currentPageImage = self.preferredCurrentPageIndicatorImage {
+                content.indicatorImage = currentPageImage
+            } else if content.indicatorImage == nil {
+                content.indicatorImage = self.preferredIndicatorImage
+            }
+        } else if page < self.currentPage, content.indicatorImage == nil {
+            content.indicatorImage =  self.visitedPageIndicatorImage ?? self.preferredIndicatorImage
+        } else if content.indicatorImage == nil {
+            content.indicatorImage = self.preferredIndicatorImage
+        }
+
+        return content
     }
 
-    mutating func setCurrentPageIndicatorImage(_ image: ComponentContent.ImageType?, forPage page: Int) {
-        content[page]?.currentPageIndicatorImage = image
+    func setIndicatorImage(_ image: ComponentContent.ImageType?, forPage page: Int) {
+        var content: ComponentContent
+
+        if let pageContent = self.content[page] {
+            content = pageContent
+        } else {
+            content = .init()
+        }
+        content.indicatorImage = image
+        self.content[page] = content
     }
 
-    mutating func setAttributedLabel(_ attributedLabel: ComponentContent.TextType?, forPage page: Int) {
-        content[page]?.attributedLabel = attributedLabel
+    func setCurrentPageIndicatorImage(_ image: ComponentContent.ImageType?, forPage page: Int) {
+
+        self.currentPageIndicator[page] = image
     }
 
-    mutating func setLabel(_ label: String?, forPage page: Int) {
-        content[page]?.label = label
+    func setAttributedLabel(_ attributedLabel: ComponentContent.TextType?, forPage page: Int) {
+        self.labels[page] = attributedLabel
     }
 
-    mutating func setContentLabel(_ label: String?, forPage page: Int) {
-        content[page]?.label = label
+    func getAttributedLabel(forPage page: Int) -> ComponentContent.TextType? {
+        return self.labels[page].flatMap{ $0 }
+    }
+
+    func setContentLabel(_ label: String?, forPage page: Int) {
+        var content: ComponentContent
+
+        if let pageContent = self.content[page] {
+            content = pageContent
+        } else {
+            content = .init()
+        }
+        content.label = label
+        self.content[page] = content
     }
 }

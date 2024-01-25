@@ -25,7 +25,10 @@ struct ProgressTrackerGetTintedColorsUseCase: ProgressTrackerGetVariantColorsUse
             }
         }()
 
-        return ProgressTrackerColors(background: intentColors.background, outline: intentColors.background, content: intentColors.content, label: colors.base.onSurface)
+        return ProgressTrackerColors(
+            background: intentColors.background,
+            outline: intentColors.background,
+            content: intentColors.content)
     }
 
     private func pressedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerTintedColors {
