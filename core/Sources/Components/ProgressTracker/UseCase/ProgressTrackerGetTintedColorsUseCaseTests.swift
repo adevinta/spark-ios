@@ -109,8 +109,7 @@ private extension ProgressTrackerIntent {
         return ProgressTrackerColors(
             background: tintedColors.background,
             outline: tintedColors.background,
-            content: tintedColors.content,
-            label: colors.base.onSurface)
+            content: tintedColors.content)
     }
 
     func enabledColors(_ colors: Colors) -> ProgressTrackerColors {
@@ -158,8 +157,7 @@ private extension ProgressTrackerIntent {
         return ProgressTrackerColors(
             background: tintedColors.background,
             outline: tintedColors.background,
-            content: tintedColors.content,
-            label: colors.base.onSurface)
+            content: tintedColors.content)
     }
 
     func pressedColors(_ colors: Colors) -> ProgressTrackerColors {
@@ -207,8 +205,7 @@ private extension ProgressTrackerIntent {
         return ProgressTrackerColors(
             background: tintedColors.background,
             outline: tintedColors.background,
-            content: tintedColors.content,
-            label: colors.base.onSurface)
+            content: tintedColors.content)
     }
 }
 
