@@ -12,12 +12,10 @@ struct ProgressTrackerColors: Equatable {
     let background: any ColorToken
     let outline: any ColorToken
     let content: any ColorToken
-    let label: any ColorToken
 
     static func == (lhs: ProgressTrackerColors, rhs: ProgressTrackerColors) -> Bool {
         return lhs.background.equals(rhs.background) &&
         lhs.outline.equals(rhs.outline) &&
-        lhs.content.equals(rhs.content) &&
-        lhs.label.equals(rhs.label)
+        lhs.content.equals(rhs.content) 
     }
 }
