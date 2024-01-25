@@ -119,18 +119,18 @@ extension CheckboxListView {
         var uiImage: UIImage {
             switch self {
             case .checkedImage:
-                return DemoIconography.shared.uiCheckmark
+                return DemoIconography.shared.checkmark.uiImage
             case .close:
-                return DemoIconography.shared.uiClose
+                return DemoIconography.shared.close.uiImage
             }
         }
 
         var image: Image {
             switch self {
             case .checkedImage:
-                return DemoIconography.shared.checkmark
+                return DemoIconography.shared.checkmark.image
             case .close:
-                return DemoIconography.shared.close
+                return DemoIconography.shared.close.image
             }
         }
 

@@ -113,8 +113,8 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
     let description: String = "This is Description"
 
     let icons: [String: UIImage] = [
-        "Checkmark": DemoIconography.shared.uiCheckmark,
-        "Close": DemoIconography.shared.uiClose
+        "Checkmark": DemoIconography.shared.checkmark.uiImage,
+        "Close": DemoIconography.shared.close.uiImage
     ]
 
     static let text: String = "Hello World"
@@ -151,7 +151,7 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         isAlignmentLeft: Bool = true,
         isLayoutVertical: Bool = false,
         showGroupTitle: Bool = false,
-        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.uiCheckmark],
+        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark.uiImage],
         groupType: CheckboxGroupType = .doubleMix
     ) {
         self.theme = theme

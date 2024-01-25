@@ -18,7 +18,7 @@ final class CheckboxCell: UITableViewCell, Configurable {
         let view = CheckboxUIView(
             theme: SparkTheme.shared,
             text: "Checkbox",
-            checkedImage: DemoIconography.shared.uiCheckmark,
+            checkedImage: DemoIconography.shared.checkmark.uiImage,
             isEnabled: true,
             selectionState: .selected,
             alignment: .left
@@ -50,7 +50,7 @@ final class CheckboxCell: UITableViewCell, Configurable {
         if let icon = configuration.icon {
             self.component.checkedImage = icon
         } else {
-            self.component.checkedImage = DemoIconography.shared.uiCheckmark
+            self.component.checkedImage = DemoIconography.shared.checkmark.uiImage
         }
     }
 }

@@ -85,7 +85,7 @@ struct ButtonComponentView: View {
 
                 CheckboxView(
                     text: "Is enabled",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
                     selectionState: self.$isEnabled
@@ -93,7 +93,7 @@ struct ButtonComponentView: View {
 
                 CheckboxView(
                     text: "Is animated",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
                     selectionState: self.$isAnimated

@@ -21,19 +21,29 @@ struct DemoIconography {
 
     // MARK: - Icons
 
-    var checkmark: Image {
-        return Image(uiImage: DemoIconography.shared.uiCheckmark)
-    }
+    let checkmark: Icon = CheckmarkIcon()
+    let close: Icon = CloseIcon()
+}
 
-    var close: Image {
-        return Image(uiImage: DemoIconography.shared.uiClose)
-    }
+protocol Icon {
+      var uiImage: UIImage { get }
+      var image: Image { get }
+}
 
-    lazy var uiCheckmark: UIImage = {
-        return UIImage(named: "checkbox-selected")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
-    }()
+extension Icon {
+     var image: Image {
+         return Image(uiImage: self.uiImage)
+     }
+}
 
-    lazy var uiClose: UIImage = {
+final class CheckmarkIcon: Icon {
+     lazy var uiImage: UIImage = {
+         return UIImage(named: "checkbox-selected")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+     }()
+}
+
+final class CloseIcon: Icon {
+    lazy var uiImage: UIImage = {
         return UIImage(named: "close")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
     }()
 }
