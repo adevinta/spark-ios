@@ -75,4 +75,12 @@ final class ProgressTrackerIndicatorViewModel<ComponentContent: ProgressTrackerC
     func set(enabled: Bool) {
         self.state.isEnabled = enabled
     }
+
+    func set(highlighted: Bool) {
+        self.state.isPressed = highlighted
+    }
+
+    func set(selected: Bool) {
+        self.state.isSelected = selected
+    }
 }
