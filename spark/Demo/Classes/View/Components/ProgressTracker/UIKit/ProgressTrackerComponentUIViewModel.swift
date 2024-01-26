@@ -69,6 +69,20 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Disable",
+            type: .checkbox(title: "", isOn: self.isDisabled),
+            target: (source: self, action: #selector(self.disableChanged(_:))))
+    }()
+
+    lazy var selectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Selected (for single radio button)",
+            type: .checkbox(title: "", isOn: self.isSelected),
+            target: (source: self, action: #selector(self.selectedChanged(_:))))
+    }()
+
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         showThemeSheetSubject
@@ -110,7 +124,9 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.intentConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
-            self.contentConfigurationItemViewModel
+            self.contentConfigurationItemViewModel,
+            self.disableConfigurationItemViewModel,
+            self.selectedConfigurationItemViewModel
         ]
     }
 
@@ -120,6 +136,8 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var variant: ProgressTrackerVariant
     @Published var size: ProgressTrackerSize
     @Published var content: ContentType
+    @Published var isDisabled = false
+    @Published var isSelected = false
 
     init(
         theme: Theme,
@@ -157,4 +175,13 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func presentContentSheet() {
         self.showContentSheetSubject.send(ContentType.allCases)
-    }}
+    }
+
+    @objc func disableChanged(_ selected: Any?) {
+        self.isDisabled = isTrue(selected)
+    }
+
+    @objc func selectedChanged(_ selected: Any?) {
+        self.isSelected = isTrue(selected)
+    }
+}

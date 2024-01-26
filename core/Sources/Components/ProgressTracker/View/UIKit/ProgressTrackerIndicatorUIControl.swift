@@ -99,19 +99,19 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
 
     override var isHighlighted: Bool {
         didSet {
-            self.viewModel.state = self.isHighlighted ? .pressed : .normal
+            self.viewModel.set(highlighted: self.isHighlighted)
         }
     }
 
     override var isEnabled: Bool {
         didSet {
-            self.viewModel.state = self.isEnabled ? .normal : .disabled
+            self.viewModel.set(enabled: self.isEnabled)
         }
     }
 
     override var isSelected: Bool {
         didSet {
-            self.viewModel.state = self.isSelected ? .selected : .normal
+            self.viewModel.set(selected: self.isSelected)
         }
     }
 
