@@ -45,8 +45,9 @@ struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
         }()
 
         if state.isDisabled {
+            let background = variantColors.background.equals(ColorTokenDefault.clear) ? variantColors.background : variantColors.background.opacity(theme.dims.dim2)
             return ProgressTrackerColors(
-                background: variantColors.background.opacity(theme.dims.dim2),
+                background: background,
                 outline: variantColors.outline.opacity(theme.dims.dim2),
                 content: variantColors.content.opacity(theme.dims.dim2)
                 )
