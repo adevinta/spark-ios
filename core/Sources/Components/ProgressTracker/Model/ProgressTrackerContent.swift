@@ -15,7 +15,7 @@ protocol ProgressTrackerContentIndicating {
     associatedtype ImageType
     associatedtype TextType
     var indicatorImage: ImageType? { get set }
-    var label: String? { get set }
+    var label: Character? { get set }
 
     init()
 }
@@ -25,14 +25,14 @@ struct ProgressTrackerUIIndicatorContent: ProgressTrackerContentIndicating {
     typealias TextType = NSAttributedString
 
     var indicatorImage: UIImage?
-    var label: String?
+    var label: Character?
 }
 
 struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating {
     typealias TextType = AttributedString
 
     var indicatorImage: Image?
-    var label: String?
+    var label: Character?
 }
 
 final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> {
@@ -73,7 +73,7 @@ final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndic
         }
 
         if content.label == nil && self.showDefaultPageNumber {
-            content.label = "\(page)"
+            content.label = "\(page)".first
         }
 
         if page == self.currentPage {
@@ -118,7 +118,7 @@ final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndic
         return self.labels[page].flatMap{ $0 }
     }
 
-    func setContentLabel(_ label: String?, forPage page: Int) {
+    func setContentLabel(_ label: Character?, forPage page: Int) {
         var content: ComponentContent
 
         if let pageContent = self.content[page] {

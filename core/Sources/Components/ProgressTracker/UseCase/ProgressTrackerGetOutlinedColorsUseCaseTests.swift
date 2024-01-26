@@ -40,7 +40,7 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
         for intent in ProgressTrackerIntent.allCases {
             // WHEN
 
-            let colors = self.sut.execute(colors: self.theme.colors, intent: intent, state: .default)
+            let colors = self.sut.execute(colors: self.theme.colors, intent: intent, state: .normal)
 
             // THEN
             XCTAssertEqual(colors, intent.enabledColors(self.theme.colors), "Enabled colors for intent \(intent) not as expected")
