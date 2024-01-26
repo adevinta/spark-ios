@@ -87,5 +87,15 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
             self.componentView.content = content.content
         }
+
+        self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] isDisabled in
+            guard let self else { return }
+            self.componentView.isEnabled = !isDisabled
+        }
+
+        self.viewModel.$isSelected.subscribe(in: &self.cancellables) { [weak self] isSelected in
+            guard let self else { return }
+            self.componentView.isSelected = isSelected
+        }
     }
 }
