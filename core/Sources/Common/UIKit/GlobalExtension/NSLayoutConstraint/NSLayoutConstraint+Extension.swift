@@ -23,4 +23,11 @@ extension NSLayoutConstraint {
             from.trailingAnchor.constraint(equalTo: to.trailingAnchor, constant: -insets.right)
         ])
     }
+
+    static func center(from: UIView, to: UIView) {
+        NSLayoutConstraint.activate([
+            from.centerXAnchor.constraint(equalTo: to.centerXAnchor),
+            from.centerYAnchor.constraint(equalTo: to.centerYAnchor)
+        ])
+    }
 }
