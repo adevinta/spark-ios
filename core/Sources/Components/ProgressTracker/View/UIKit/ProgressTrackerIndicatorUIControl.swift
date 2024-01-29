@@ -12,7 +12,7 @@ import UIKit
 
 final class ProgressTrackerIndicatorUIControl: UIControl {
 
-    private let viewModel: ProgressTrackerIndicatorViewModel<ProgressTrackerUIIndicatorContent>
+    private let viewModel: ProgressTrackerIndicatorViewModel<ProgressTrackerUIIndicatorContent
 
     var theme: Theme {
         get {
