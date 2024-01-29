@@ -172,6 +172,7 @@ public class ButtonMainUIView: UIControl {
     internal func setupView() {
         // Accessibility
         self.accessibilityTraits = [.button]
+        self.isAccessibilityElement = true
 
         // Needed values from viewModel (important for superview)
         self.height = self.viewModel.sizes?.height ?? 0

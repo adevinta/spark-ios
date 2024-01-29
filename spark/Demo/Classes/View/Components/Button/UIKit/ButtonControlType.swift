@@ -12,4 +12,5 @@ enum ButtonControlType: CaseIterable {
     case publisher
     case action
     case target
+    case toggle
 }

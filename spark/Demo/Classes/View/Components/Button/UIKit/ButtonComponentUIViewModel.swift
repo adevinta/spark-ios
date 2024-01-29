@@ -86,6 +86,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var isSelected: Bool
     @Published var isAnimated: Bool
     @Published var controlType: ButtonControlType
+    @Published var isCustomAccessibilityLabel: Bool
 
     // MARK: - Items Properties
 
@@ -201,6 +202,14 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var isCustomAccessibilityLabelConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "is Custom AccessibilityLabel",
+            type: .toggle(isOn: self.isCustomAccessibilityLabel),
+            target: (source: self, action: #selector(self.isCustomAccessibilityLabelChanged))
+        )
+    }()
+
     // MARK: - Properties
 
     let text: String
@@ -224,7 +233,8 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             self.isEnabledConfigurationItemViewModel,
             self.isSelectedConfigurationItemViewModel,
             self.isAnimatedConfigurationItemViewModel,
-            self.controlTypeConfigurationItemViewModel
+            self.controlTypeConfigurationItemViewModel,
+            self.isCustomAccessibilityLabelConfigurationItemViewModel
         ]
     }
 
@@ -260,7 +270,8 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         isEnabled: Bool = true,
         isSelected: Bool = false,
         isAnimated: Bool = true,
-        controlType: ButtonControlType = .action
+        controlType: ButtonControlType = .action,
+        isCustomAccessibilityLabel: Bool = false
     ) {
         self.text = text
         self.iconImage = .init(named: iconImageNamed) ?? UIImage()
@@ -285,6 +296,7 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         self.isSelected = isSelected
         self.isAnimated = isAnimated
         self.controlType = controlType
+        self.isCustomAccessibilityLabel = isCustomAccessibilityLabel
 
         super.init(identifier: "Button")
     }
@@ -348,5 +360,9 @@ extension ButtonComponentUIViewModel {
 
     @objc func presentControlTypeSheet() {
         self.showControlTypeSheetSubject.send(ButtonControlType.allCases)
+    }
+
+    @objc func isCustomAccessibilityLabelChanged() {
+        self.isCustomAccessibilityLabel.toggle()
     }
 }

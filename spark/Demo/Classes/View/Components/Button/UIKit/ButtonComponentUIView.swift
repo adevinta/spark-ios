@@ -25,6 +25,9 @@ final class ButtonComponentUIView: ComponentUIView {
     private lazy var buttonAction: UIAction = .init { _ in
         self.showAlert(for: .action)
     }
+    private lazy var buttonToggleAction: UIAction = .init { _ in
+        self.viewModel.isSelectedChanged()
+    }
     private var buttonControlCancellable: AnyCancellable?
 
     // MARK: - Initializer
@@ -146,6 +149,11 @@ final class ButtonComponentUIView: ComponentUIView {
             self.viewModel.controlTypeConfigurationItemViewModel.buttonTitle = controlType.name
             self.setControl(from: controlType)
         }
+
+        self.viewModel.$isCustomAccessibilityLabel.subscribe(in: &self.cancellables) { [weak self] isCustomAccessibilityLabel in
+            guard let self = self else { return }
+            self.buttonView.accessibilityLabel = isCustomAccessibilityLabel ? "My Button Label" : nil
+        }
     }
 
     // MARK: - Setter
@@ -207,6 +215,13 @@ final class ButtonComponentUIView: ComponentUIView {
             self.buttonView.addTarget(self, action: #selector(self.touchUpInsideTarget), for: .touchUpInside)
         } else {
             self.buttonView.removeTarget(self, action: #selector(self.touchUpInsideTarget), for: .touchUpInside)
+        }
+
+        // Toggle ?
+        if controlType == .toggle {
+            self.buttonView.addAction(self.buttonToggleAction, for: .touchUpInside)
+        } else {
+            self.buttonView.removeAction(self.buttonToggleAction, for: .touchUpInside)
         }
     }
 

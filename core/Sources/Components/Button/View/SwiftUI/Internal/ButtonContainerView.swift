@@ -69,6 +69,7 @@ struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel &
         .disabled(self.viewModel.state?.isUserInteractionEnabled == false)
         .opacity(self.viewModel.state?.opacity ?? .zero)
         .accessibilityIdentifier(ButtonAccessibilityIdentifier.button)
+        .accessibilityAddTraits(.isButton)
         .onChange(of: self.isPressed) { isPressed in
             self.viewModel.setIsPressed(isPressed)
         }

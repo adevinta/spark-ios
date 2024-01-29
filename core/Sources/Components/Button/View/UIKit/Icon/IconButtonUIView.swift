@@ -45,7 +45,7 @@ public final class IconButtonUIView: ButtonMainUIView {
     // MARK: - View setup
 
     internal override func setupView() {
-        // Accessibility Identifier
+        // Accessibility
         self.accessibilityIdentifier = ButtonAccessibilityIdentifier.iconButton
 
         // Add subviews

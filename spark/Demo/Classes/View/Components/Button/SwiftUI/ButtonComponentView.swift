@@ -26,6 +26,7 @@ struct ButtonComponentView: View {
     @State private var contentSelected: ButtonContentDefault = .text
     @State private var isEnabled: CheckboxSelectionState = .selected
     @State private var isSelected: CheckboxSelectionState = .unselected
+    @State private var isToggle: CheckboxSelectionState = .unselected
 
     @State private var shouldShowReverseBackgroundColor: Bool = false
 
@@ -120,6 +121,14 @@ struct ButtonComponentView: View {
                     isEnabled: true,
                     selectionState: self.$isSelected
                 )
+
+                CheckboxView(
+                    text: "Is toggle",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: self.theme,
+                    isEnabled: false,
+                    selectionState: self.$isToggle
+                )
             },
             integration: {
                 ButtonView(
@@ -130,7 +139,11 @@ struct ButtonComponentView: View {
                     shape: self.shape,
                     alignment: self.alignment,
                     action: {
-                        self.showingActionAlert = true
+                        if self.isToggle == .selected {
+                            self.isSelected = (self.isSelected == .selected) ? .unselected : .selected
+                        } else {
+                            self.showingActionAlert = true
+                        }
                     })
                 .disabled(self.isEnabled == .unselected)
                 .selected(self.isSelected == .selected)
@@ -148,10 +161,8 @@ struct ButtonComponentView: View {
                 .padding(.vertical, self.shouldShowReverseBackgroundColor ? 4 : 0)
                 .background(self.shouldShowReverseBackgroundColor ? Color.gray : Color.clear)
                 .alert("Button tap", isPresented: $showingActionAlert) {
-//                    Button("OK", role: .cancel) { }
+                    Button("OK", role: .cancel) { }
                 }
-
-                Spacer()
             }
         )
     }
