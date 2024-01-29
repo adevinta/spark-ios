@@ -48,8 +48,8 @@ struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
             return ProgressTrackerColors(
                 background: variantColors.background.opacity(theme.dims.dim2),
                 outline: variantColors.outline.opacity(theme.dims.dim2),
-                content: variantColors.content.opacity(theme.dims.dim2),
-                label: variantColors.label.opacity(theme.dims.dim1))
+                content: variantColors.content.opacity(theme.dims.dim2)
+                )
         } else {
             return variantColors
         }
