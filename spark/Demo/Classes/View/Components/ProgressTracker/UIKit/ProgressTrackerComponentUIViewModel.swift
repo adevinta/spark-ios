@@ -76,9 +76,16 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.disableChanged(_:))))
     }()
 
+    lazy var touchableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Touchable",
+            type: .checkbox(title: "", isOn: self.isTouchable),
+            target: (source: self, action: #selector(self.touchableChanged(_:))))
+    }()
+
     lazy var selectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Selected (for single radio button)",
+            name: "Selected",
             type: .checkbox(title: "", isOn: self.isSelected),
             target: (source: self, action: #selector(self.selectedChanged(_:))))
     }()
@@ -126,6 +133,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.variantConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
+            self.touchableConfigurationItemViewModel,
             self.selectedConfigurationItemViewModel
         ]
     }
@@ -137,6 +145,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var size: ProgressTrackerSize
     @Published var content: ContentType
     @Published var isDisabled = false
+    @Published var isTouchable = true
     @Published var isSelected = false
 
     init(
@@ -179,6 +188,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func disableChanged(_ selected: Any?) {
         self.isDisabled = isTrue(selected)
+    }
+
+    @objc func touchableChanged(_ selected: Any?) {
+        self.isTouchable = isTrue(selected)
     }
 
     @objc func selectedChanged(_ selected: Any?) {

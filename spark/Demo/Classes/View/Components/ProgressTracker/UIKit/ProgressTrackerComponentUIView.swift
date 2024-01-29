@@ -6,12 +6,6 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-
-import Combine
-import SparkCore
-import Spark
-import UIKit
-
 import UIKit
 import Combine
 @testable import SparkCore
@@ -43,9 +37,9 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
     private static func makeProgressTrackerView(viewModel: ProgressTrackerComponentUIViewModel) -> ProgressTrackerIndicatorUIControl {
         let view = ProgressTrackerIndicatorUIControl(
             theme: viewModel.theme,
-            intent: viewModel.intent, 
+            intent: viewModel.intent,
             variant: viewModel.variant,
-            size: viewModel.size, 
+            size: viewModel.size,
             content: viewModel.content.content
         )
         return view
@@ -96,6 +90,11 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         self.viewModel.$isSelected.subscribe(in: &self.cancellables) { [weak self] isSelected in
             guard let self else { return }
             self.componentView.isSelected = isSelected
+        }
+
+        self.viewModel.$isTouchable.subscribe(in: &self.cancellables) { [weak self] isTouchable in
+            guard let self else { return }
+            self.componentView.isUserInteractionEnabled = isTouchable
         }
     }
 }

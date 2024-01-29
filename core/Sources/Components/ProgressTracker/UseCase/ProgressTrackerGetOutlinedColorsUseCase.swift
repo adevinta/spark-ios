@@ -11,17 +11,19 @@ import Foundation
 /// A use case to calculate the outlined colors of the progress tracker
 struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsUseCaseable {
 
-    func execute(colors: Colors,
+    func execute(theme: Theme,
                  intent: ProgressTrackerIntent,
                  state: ProgressTrackerState
     ) -> ProgressTrackerColors {
-        let intentColors: ProgressTrackerOutlinedColors = {
-            if state.isPressed {
-                return self.pressedColors(colors: colors, intent: intent)
+        let intentColors: ProgressTrackerColors = {
+            if state.isDisabled {
+                return self.disabledColors(colors: theme.colors, dims: theme.dims, intent: intent)
+            } else if state.isPressed {
+                return self.pressedColors(colors: theme.colors, intent: intent)
             } else if state.isSelected {
-                return self.selectedColors(colors: colors, intent: intent)
+                return self.selectedColors(colors: theme.colors, intent: intent)
             } else {
-                return self.enabledColors(colors: colors, intent: intent)
+                return self.enabledColors(colors: theme.colors, intent: intent)
             }
         }()
 
@@ -31,7 +33,16 @@ struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsU
             content: intentColors.content)
     }
 
-    private func pressedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerOutlinedColors {
+    private func disabledColors(colors: Colors, dims: Dims, intent: ProgressTrackerIntent) -> ProgressTrackerColors {
+        let variantColors = self.enabledColors(colors: colors, intent: intent)
+        return .init(
+            background: variantColors.background,
+            outline: variantColors.outline.opacity(dims.dim2),
+            content: variantColors.content.opacity(dims.dim2)
+            )
+    }
+
+    private func pressedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerColors {
         switch intent {
         case .accent:
             return .init(
@@ -81,7 +92,7 @@ struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsU
         }
     }
 
-    private func selectedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerOutlinedColors {
+    private func selectedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerColors {
 
         switch intent {
         case .accent:
@@ -132,7 +143,7 @@ struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsU
         }
     }
 
-    private func enabledColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerOutlinedColors {
+    private func enabledColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerColors {
         switch intent {
         case .accent:
             return .init(

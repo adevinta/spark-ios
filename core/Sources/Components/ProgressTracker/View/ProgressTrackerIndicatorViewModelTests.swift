@@ -43,20 +43,16 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         XCTAssertEqual(sut.size, .small, "Expected size to be small")
         XCTAssertIdentical(sut.theme as? ThemeGeneratedMock, self.theme, "Expected theme to be identical")
 
-        XCTAssertEqual(sut.spacing, self.theme.layout.spacing.medium, "Expected spacing to be medium")
-
         XCTAssertEqual(self.colorsUseCase.executeWithThemeAndIntentAndVariantAndStateCallsCount, 1)
     }
 
     func test_update_theme() {
         // Given
         let sut = self.sut()
-        let expectation = expectation(description: "Expect colors and spacing to have been triggered")
+        let expectation = expectation(description: "Expect colors to have been triggered")
         expectation.expectedFulfillmentCount = 2
 
-        let publisher = Publishers.Zip(sut.$colors, sut.$spacing)
-
-        publisher.sink { _ in
+        sut.$colors.sink { _ in
             expectation.fulfill()
         }.store(in: &self.cancellables)
 
