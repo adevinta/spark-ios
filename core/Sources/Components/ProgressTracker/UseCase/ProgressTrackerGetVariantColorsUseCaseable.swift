@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ProgressTrackerGetVariantColorsUseCaseable {
-    func execute(colors: Colors,
+    func execute(theme: Theme,
                  intent: ProgressTrackerIntent,
                  state: ProgressTrackerState
     ) -> ProgressTrackerColors

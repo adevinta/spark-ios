@@ -41,14 +41,14 @@ final class ProgressTrackerGetColorsUseCaseTests: XCTestCase {
             outline: colors.main.mainContainer,
             content: colors.main.onMainContainer)
 
-        self.tintedUseCase.executeWithColorsAndIntentAndStateReturnValue = expectedColors
+        self.tintedUseCase.executeWithThemeAndIntentAndStateReturnValue = expectedColors
 
         // WHEN
         let tabColors = self.sut.execute(
             theme: self.theme,
             intent: .basic,
             variant: .tinted,
-            state: .default)
+            state: .normal)
 
         // THEN
         XCTAssertEqual(tabColors, expectedColors)
@@ -62,46 +62,16 @@ final class ProgressTrackerGetColorsUseCaseTests: XCTestCase {
             outline: colors.main.main,
             content: colors.main.main)
 
-        self.outlinedUseCase.executeWithColorsAndIntentAndStateReturnValue = expectedColors
+        self.outlinedUseCase.executeWithThemeAndIntentAndStateReturnValue = expectedColors
 
         // WHEN
         let tabColors = self.sut.execute(
             theme: self.theme,
             intent: .basic,
             variant: .outlined,
-            state: .default)
+            state: .normal)
 
         // THEN
         XCTAssertEqual(tabColors, expectedColors)
     }
-
-    func test_colors_disabled() {
-        // GIVEN
-        let colors = self.theme.colors
-        let dims = self.theme.dims
-
-        let useCaseColors = ProgressTrackerColors(
-            background: colors.main.mainContainer,
-            outline: colors.main.main,
-            content: colors.main.main)
-
-        let expectedColors = ProgressTrackerColors(
-            background: useCaseColors.background.opacity(dims.dim2),
-            outline: useCaseColors.outline.opacity(dims.dim2),
-            content: useCaseColors.content.opacity(dims.dim2)
-        )
-
-        self.outlinedUseCase.executeWithColorsAndIntentAndStateReturnValue = useCaseColors
-
-        // WHEN
-        let tabColors = self.sut.execute(
-            theme: self.theme,
-            intent: .basic,
-            variant: .outlined,
-            state: .disabled)
-
-        // THEN
-        XCTAssertEqual(tabColors, expectedColors)
-    }
-
 }
