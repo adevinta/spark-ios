@@ -37,22 +37,9 @@ struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
         intent: ProgressTrackerIntent,
         variant: ProgressTrackerVariant,
         state: ProgressTrackerState) -> ProgressTrackerColors {
-        let variantColors: ProgressTrackerColors = {
             switch variant {
-            case .outlined: return self.getOutlinedColorsUseCase.execute(colors: theme.colors, intent: intent, state: state)
-            case .tinted: return self.getTintedColorsUseCase.execute(colors: theme.colors, intent: intent, state: state)
+            case .outlined: return self.getOutlinedColorsUseCase.execute(theme: theme, intent: intent, state: state)
+            case .tinted: return self.getTintedColorsUseCase.execute(theme: theme, intent: intent, state: state)
             }
-        }()
-
-        if state.isDisabled {
-            let background = variantColors.background.equals(ColorTokenDefault.clear) ? variantColors.background : variantColors.background.opacity(theme.dims.dim2)
-            return ProgressTrackerColors(
-                background: background,
-                outline: variantColors.outline.opacity(theme.dims.dim2),
-                content: variantColors.content.opacity(theme.dims.dim2)
-                )
-        } else {
-            return variantColors
-        }
     }
 }

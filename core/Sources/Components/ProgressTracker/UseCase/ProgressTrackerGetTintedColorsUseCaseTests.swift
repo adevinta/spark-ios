@@ -27,7 +27,7 @@ final class ProgressTrackerGetTintedColorsUseCaseTests: XCTestCase {
 
         for intent in ProgressTrackerIntent.allCases {
             // WHEN
-            let colors = self.sut.execute(colors: self.theme.colors, intent: intent, state: .selected)
+            let colors = self.sut.execute(theme: self.theme, intent: intent, state: .selected)
 
             // THEN
             XCTAssertEqual(colors, intent.selectedColors(self.theme.colors), "Selected colors for intent \(intent) not as expected")
@@ -40,7 +40,7 @@ final class ProgressTrackerGetTintedColorsUseCaseTests: XCTestCase {
         for intent in ProgressTrackerIntent.allCases {
             // WHEN
 
-            let colors = self.sut.execute(colors: self.theme.colors, intent: intent, state: .default)
+            let colors = self.sut.execute(theme: self.theme, intent: intent, state: .normal)
 
             // THEN
             XCTAssertEqual(colors, intent.enabledColors(self.theme.colors), "Enabled colors for intent \(intent) not as expected")
@@ -53,13 +53,28 @@ final class ProgressTrackerGetTintedColorsUseCaseTests: XCTestCase {
         for intent in ProgressTrackerIntent.allCases {
             // WHEN
 
-            let colors = self.sut.execute(colors: self.theme.colors, intent: intent, state: .pressed)
+            let colors = self.sut.execute(theme: self.theme, intent: intent, state: .pressed)
 
             // THEN
             XCTAssertEqual(colors, intent.pressedColors(self.theme.colors), "Pressed colors for intent \(intent) not as expected")
         }
     }
 
+
+    func test_colors_disabled() {
+        // GIVEN
+
+        for intent in ProgressTrackerIntent.allCases {
+            // WHEN
+
+            let colors = self.sut.execute(theme: self.theme, intent: intent, state: .disabled)
+
+            let expectedColors = intent.disabledColors(self.theme.colors, dims: self.theme.dims)
+
+            // THEN
+            XCTAssertEqual(colors, expectedColors, "Disabled colors for intent \(intent) not as expected")
+        }
+    }
 }
 
 private extension ProgressTrackerIntent {
@@ -112,6 +127,14 @@ private extension ProgressTrackerIntent {
             content: tintedColors.content)
     }
 
+    func disabledColors(_ colors: Colors, dims: Dims) -> ProgressTrackerColors {
+        let enabledColors = self.enabledColors(colors)
+
+        return ProgressTrackerColors(
+            background: enabledColors.background.opacity(dims.dim2),
+            outline: enabledColors.outline.opacity(dims.dim2),
+            content: enabledColors.content.opacity(dims.dim2))
+    }
     func enabledColors(_ colors: Colors) -> ProgressTrackerColors {
         let tintedColors: ProgressTrackerTintedColors = {
             switch self {
