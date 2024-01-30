@@ -8,12 +8,12 @@
 
 import UIKit
 import Combine
-@testable import SparkCore
+import SparkCore
 import Spark
 
 final class ProgressTrackerComponentUIView: ComponentUIView {
 
-    private var componentView: ProgressTrackerIndicatorUIControl!
+    private var componentView: ProgressTrackerUIControl!
 
     // MARK: - Properties
     private let viewModel: ProgressTrackerComponentUIViewModel
@@ -34,13 +34,12 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private static func makeProgressTrackerView(viewModel: ProgressTrackerComponentUIViewModel) -> ProgressTrackerIndicatorUIControl {
-        let view = ProgressTrackerIndicatorUIControl(
+    private static func makeProgressTrackerView(viewModel: ProgressTrackerComponentUIViewModel) -> ProgressTrackerUIControl {
+        let view = ProgressTrackerUIControl(
             theme: viewModel.theme,
             intent: viewModel.intent,
             variant: viewModel.variant,
-            size: viewModel.size,
-            content: viewModel.content.content
+            size: viewModel.size
         )
         return view
     }
@@ -79,7 +78,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.viewModel.contentConfigurationItemViewModel.buttonTitle = content.name
 
-            self.componentView.content = content.content
+//            self.componentView.content = content.content
         }
 
         self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] isDisabled in

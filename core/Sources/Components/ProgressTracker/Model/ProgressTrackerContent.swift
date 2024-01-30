@@ -36,7 +36,7 @@ struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating {
 }
 
 final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> {
-    let numberOfPages: Int
+    var numberOfPages: Int
     let showDefaultPageNumber: Bool
     var currentPage: Int
     var preferredIndicatorImage: ComponentContent.ImageType?
@@ -45,6 +45,13 @@ final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndic
     private var content = [Int: ComponentContent]()
     private var currentPageIndicator = [Int: ComponentContent.ImageType]()
     var labels = [Int: ComponentContent.TextType?]()
+
+    var hasLabel: Bool {
+        return labels.reduce(false) { (partialResult, arg1) in
+            let (_, value) = arg1
+            return partialResult || value != nil
+        }
+    }
 
     init(
         numberOfPages: Int,

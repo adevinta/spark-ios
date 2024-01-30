@@ -10,6 +10,6 @@ import Foundation
 
 enum ProgressTrackerConstants {
     static let borderWidth: CGFloat = 1.0
-    static let minTrackWidth: CGFloat = 1.0
+    static let trackSize: CGFloat = 1.0
     static let iconHeight: CGFloat = 16.0
 }
