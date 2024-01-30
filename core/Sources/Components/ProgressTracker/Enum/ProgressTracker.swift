@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SwiftUI
+import UIKit
 
 public enum ProgressTracker {
     public enum Orientation {
@@ -41,5 +43,20 @@ public enum ProgressTracker {
         case none
         case discrete
         case continuous
+    }
+
+    // The UIKit progress tracker indicator
+    struct UIIndicatorContent: ProgressTrackerContentIndicating {
+        typealias TextType = NSAttributedString
+
+        var indicatorImage: UIImage?
+        var label: Character?
+    }
+
+    struct IndicatorContent: ProgressTrackerContentIndicating {
+        typealias TextType = AttributedString
+
+        var indicatorImage: Image?
+        var label: Character?
     }
 }
