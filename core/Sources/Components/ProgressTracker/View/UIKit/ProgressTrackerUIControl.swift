@@ -6,6 +6,7 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
+import Combine
 import Foundation
 import UIKit
 
@@ -17,6 +18,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
         set {
             self.viewModel.theme = newValue
+            self.didUpdate(theme: newValue)
         }
     }
 
@@ -26,18 +28,34 @@ public final class ProgressTrackerUIControl: UIControl {
         }
         set {
             self.viewModel.intent = newValue
+            self.didUpdate(intent: newValue)
         }
     }
 
     public var variant: ProgressTrackerVariant {
         didSet {
-
+            self.didUpdate(variant: self.variant)
         }
     }
 
     public var size: ProgressTrackerSize {
         didSet {
+            self.didUpdate(size: self.size)
+        }
+    }
 
+    public override var isEnabled: Bool {
+        didSet {
+            self.didUpdate(isEnabled: self.isEnabled)
+        }
+    }
+
+    public var showDefaultPageNumber: Bool {
+        get {
+            return self.viewModel.showDefaultPageNumber
+        }
+        set {
+            self.viewModel.showDefaultPageNumber = newValue
         }
     }
 
@@ -81,6 +99,7 @@ public final class ProgressTrackerUIControl: UIControl {
     private lazy var trackViews = [ProgressTrackerTrackUIView]()
 
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
+    private var cancellables = Set<AnyCancellable>()
 
     private var trackHeightConstraint: NSLayoutConstraint?
 
@@ -88,14 +107,19 @@ public final class ProgressTrackerUIControl: UIControl {
         return self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
     }
 
+    private var labelSpacing: CGFloat {
+        return self.viewModel.spacings.minLabelSpacing * self.scaleFactor
+    }
+
     public init(
         theme: Theme,
         intent: ProgressTrackerIntent,
         variant: ProgressTrackerVariant,
         size: ProgressTrackerSize = .medium,
+        numberOfPages: Int,
         orientation: ProgressTrackerOrientation = .horizontal
     ) {
-        let content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 5, currentPage: 0)
+        let content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: numberOfPages, currentPage: 0)
 
         let viewModel = ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>(
             theme: theme,
@@ -111,6 +135,7 @@ public final class ProgressTrackerUIControl: UIControl {
         super.init(frame: .zero)
 
         self.setupView()
+        self.setupSubscriptions()
     }
 
     private func createIndicatorViews() -> [ProgressTrackerIndicatorUIControl] {
@@ -122,7 +147,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 intent: self.intent,
                 variant: self.variant,
                 size: self.size,
-                content: self.viewModel.content.content(ofPage: index))
+                content: self.viewModel.content.content(ofIndex: index))
             indicator.translatesAutoresizingMaskIntoConstraints = false
             return indicator
         }
@@ -134,7 +159,7 @@ public final class ProgressTrackerUIControl: UIControl {
         return (0..<self.numberOfPages).map{ index in
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.attributedText = self.viewModel.content.getAttributedLabel(forPage: index)
+            label.attributedText = self.viewModel.content.getAttributedLabel(ofIndex: index)
             return label
         }
     }
@@ -168,6 +193,8 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     private func setupView() {
+        guard self.numberOfPages > 0 else { return }
+
         self.setupIndicatorsAndLabels()
         if self.viewModel.orientation == .horizontal {
             self.setupHorizontalViewConstraints()
@@ -176,8 +203,19 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
-    private func setupHorizontalViewConstraints() {
+    private func setupSubscriptions() {
+        self.viewModel.$content.subscribe(in: &self.cancellables) { content in
+            if content.numberOfPages != self.indicatorViews.count {
+                self.setupIndicatorsAndLabels()
+            } else if content.numberOfPages > 0 {
+                for i in 0..<content.numberOfPages {
+                    self.indicatorViews[i].content = content.content(ofIndex: i)
+                }
+            }
+        }
+    }
 
+    private func setupHorizontalViewConstraints() {
         var precedingView = self.indicatorViews[0]
         var constraints = [NSLayoutConstraint]()
 
@@ -196,8 +234,11 @@ public final class ProgressTrackerUIControl: UIControl {
         if self.viewModel.content.hasLabel {
             for i in 0..<self.numberOfPages {
                 constraints.append(self.indicatorViews[i].centerXAnchor.constraint(equalTo: self.labels[i].centerXAnchor))
-                constraints.append(self.labels[i].topAnchor.constraint(equalTo: self.indicatorViews[i].bottomAnchor))
+                constraints.append(self.labels[i].topAnchor.constraint(equalTo: self.indicatorViews[i].bottomAnchor, constant: self.labelSpacing))
                 constraints.append(self.labels[i].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
+            }
+            for i in 1..<self.numberOfPages {
+                constraints.append(self.labels[i].leadingAnchor.constraint(equalTo: self.labels[i-1].leadingAnchor, constant: self.labelSpacing))
             }
             constraints.append(self.labels[0].leadingAnchor.constraint(equalTo: self.leadingAnchor))
             constraints.append(self.labels[lastIndex].trailingAnchor.constraint(equalTo: self.trailingAnchor))
@@ -213,8 +254,68 @@ public final class ProgressTrackerUIControl: UIControl {
     private func setupVerticalViewConstraints() {
 
     }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func didUpdate(intent: ProgressTrackerIntent) {
+        for indicatorView in self.indicatorViews {
+            indicatorView.intent = intent
+        }
+        for trackView in self.trackViews {
+            trackView.intent = intent
+        }
+    }
+
+    private func didUpdate(theme: Theme) {
+        for indicatorView in self.indicatorViews {
+            indicatorView.theme = theme
+        }
+        for trackView in self.trackViews {
+            trackView.theme = theme
+        }
+    }
+
+    private func didUpdate(variant: ProgressTrackerVariant) {
+        for indicatorView in self.indicatorViews {
+            indicatorView.variant = variant
+        }
+    }
+
+    private func didUpdate(size: ProgressTrackerSize) {
+        for indicatorView in self.indicatorViews {
+            indicatorView.size = size
+        }
+    }
+
+    private func didUpdate(isEnabled: Bool) {
+        for indicatorView in self.indicatorViews {
+            indicatorView.isEnabled = isEnabled
+        }
+        for trackView in self.trackViews {
+            trackView.isEnabled = isEnabled
+        }
+    }
+
+    public func setIndicatorImage(_ image: UIImage?, forIndex index: Int) {
+        self.viewModel.content.setIndicatorImage(image, forIndex: index)
+    }
+
+    public func setCurrentPageIndicatorImage(_ image: UIImage?, forIndex index: Int) {
+        self.viewModel.content.setCurrentPageIndicatorImage(image, forIndex: index)
+    }
+
+    public func setAttributedLabel(_ attributedLabel: NSAttributedString?, forIndex index: Int) {
+        self.viewModel.content.setAttributedLabel(attributedLabel, forIndex: index)
+    }
+
+    public func getAttributedLabel(ofIndex index: Int) -> NSAttributedString? {
+        return self.viewModel.content.getAttributedLabel(ofIndex: index)
+    }
+
+    public func setContentLabel(_ label: Character?, ofIndex index: Int) {
+        self.viewModel.content.setContentLabel(label, ofIndex: index)
     }
 }
 
