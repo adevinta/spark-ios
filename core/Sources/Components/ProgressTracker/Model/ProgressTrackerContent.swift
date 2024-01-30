@@ -35,9 +35,9 @@ struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating {
     var label: Character?
 }
 
-final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> {
+struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> {
     var numberOfPages: Int
-    let showDefaultPageNumber: Bool
+    var showDefaultPageNumber: Bool 
     var currentPage: Int
     var preferredIndicatorImage: ComponentContent.ImageType?
     var preferredCurrentPageIndicatorImage:  ComponentContent.ImageType?
@@ -69,29 +69,28 @@ final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndic
         self.preferredCurrentPageIndicatorImage = preferredCurrentPageIndicatorImage
     }
 
-    func content(ofPage page: Int) -> ComponentContent {
+    func content(ofIndex index: Int) -> ComponentContent {
         var content: ComponentContent
 
-        if let pageContent = self.content[page] {
+        if let pageContent = self.content[index] {
             content = pageContent
         } else {
             content = .init()
-            self.content[page] = content
         }
 
         if content.label == nil && self.showDefaultPageNumber {
-            content.label = "\(page)".first
+            content.label = "\(index + 1)".first
         }
 
-        if page == self.currentPage {
-            if let currentPageImage = self.currentPageIndicator[page]  {
+        if index == self.currentPage {
+            if let currentPageImage = self.currentPageIndicator[index]  {
                 content.indicatorImage = currentPageImage
             } else if let currentPageImage = self.preferredCurrentPageIndicatorImage {
                 content.indicatorImage = currentPageImage
             } else if content.indicatorImage == nil {
                 content.indicatorImage = self.preferredIndicatorImage
             }
-        } else if page < self.currentPage, content.indicatorImage == nil {
+        } else if index < self.currentPage, content.indicatorImage == nil {
             content.indicatorImage =  self.visitedPageIndicatorImage ?? self.preferredIndicatorImage
         } else if content.indicatorImage == nil {
             content.indicatorImage = self.preferredIndicatorImage
@@ -100,40 +99,40 @@ final class ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndic
         return content
     }
 
-    func setIndicatorImage(_ image: ComponentContent.ImageType?, forPage page: Int) {
+    mutating func setIndicatorImage(_ image: ComponentContent.ImageType?, forIndex index: Int) {
         var content: ComponentContent
 
-        if let pageContent = self.content[page] {
+        if let pageContent = self.content[index] {
             content = pageContent
         } else {
             content = .init()
         }
         content.indicatorImage = image
-        self.content[page] = content
+        self.content[index] = content
     }
 
-    func setCurrentPageIndicatorImage(_ image: ComponentContent.ImageType?, forPage page: Int) {
+    mutating func setCurrentPageIndicatorImage(_ image: ComponentContent.ImageType?, forIndex index: Int) {
 
-        self.currentPageIndicator[page] = image
+        self.currentPageIndicator[index] = image
     }
 
-    func setAttributedLabel(_ attributedLabel: ComponentContent.TextType?, forPage page: Int) {
-        self.labels[page] = attributedLabel
+    mutating func setAttributedLabel(_ attributedLabel: ComponentContent.TextType?, forIndex index: Int) {
+        self.labels[index] = attributedLabel
     }
 
-    func getAttributedLabel(forPage page: Int) -> ComponentContent.TextType? {
-        return self.labels[page].flatMap{ $0 }
+    func getAttributedLabel(ofIndex index: Int) -> ComponentContent.TextType? {
+        return self.labels[index].flatMap{ $0 }
     }
 
-    func setContentLabel(_ label: Character?, forPage page: Int) {
+    mutating func setContentLabel(_ label: Character?, ofIndex index: Int) {
         var content: ComponentContent
 
-        if let pageContent = self.content[page] {
+        if let pageContent = self.content[index] {
             content = pageContent
         } else {
             content = .init()
         }
         content.label = label
-        self.content[page] = content
+        self.content[index] = content
     }
 }

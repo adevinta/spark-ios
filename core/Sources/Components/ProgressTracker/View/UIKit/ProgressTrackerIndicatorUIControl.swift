@@ -66,7 +66,7 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         return view
     }()
 
-    private lazy var label: UILabel = {
+    lazy var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
