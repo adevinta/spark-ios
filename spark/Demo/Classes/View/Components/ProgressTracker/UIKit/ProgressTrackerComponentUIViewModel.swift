@@ -13,16 +13,32 @@ import UIKit
 
 final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
+    enum Constants {
+        static let numberOfPages = 2
+    }
+
     enum ContentType: CaseIterable {
+        case page
         case icon
         case text
         case none
 
-        var content: ProgressTrackerUIIndicatorContent {
+        var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> {
+            let startingValue = Int(("A" as UnicodeScalar).value)
+
             switch self {
-            case .icon: return .init(indicatorImage: UIImage(systemName: "checkmark"))
-            case .text: return .init(label: "A")
-            case .none: return .init()
+            case .icon: return .init(
+                numberOfPages: Constants.numberOfPages,
+                currentPage: 0,
+                showDefaultPageNumber: false,
+                preferredIndicatorImage: UIImage(systemName: "checkmark"))
+            case .text: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(numberOfPages: Constants.numberOfPages, currentPage: 0, showDefaultPageNumber: false)
+                for i in 0..<Constants.numberOfPages {
+                    content.setContentLabel(Character(UnicodeScalar(i + startingValue)!), ofIndex: i)
+                }
+                return content
+            case .none: return .init(numberOfPages: Constants.numberOfPages, currentPage: 0, showDefaultPageNumber: false)
+            case .page: return .init(numberOfPages: Constants.numberOfPages, currentPage: 0, showDefaultPageNumber: true)
             }
         }
     }
@@ -144,6 +160,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var variant: ProgressTrackerVariant
     @Published var size: ProgressTrackerSize
     @Published var content: ContentType
+    @Published var showPageNumber = true
     @Published var isDisabled = false
     @Published var isTouchable = true
     @Published var isSelected = false

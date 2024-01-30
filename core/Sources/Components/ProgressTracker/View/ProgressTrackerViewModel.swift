@@ -33,6 +33,16 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         }
     }
 
+    var showDefaultPageNumber: Bool {
+        get {
+            return self.content.showDefaultPageNumber
+        }
+        set {
+            guard self.content.showDefaultPageNumber != newValue else { return }
+            self.content.showDefaultPageNumber = newValue
+        }
+    }
+
     @Published var orientation: ProgressTrackerOrientation {
         didSet {
             guard self.orientation != oldValue else { return }
