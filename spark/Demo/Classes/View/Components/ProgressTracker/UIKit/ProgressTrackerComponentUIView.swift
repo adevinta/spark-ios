@@ -8,7 +8,7 @@
 
 import UIKit
 import Combine
-import SparkCore
+@testable import SparkCore
 import Spark
 
 final class ProgressTrackerComponentUIView: ComponentUIView {
@@ -39,8 +39,11 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             theme: viewModel.theme,
             intent: viewModel.intent,
             variant: viewModel.variant,
-            size: viewModel.size
+            size: viewModel.size, 
+            numberOfPages: viewModel.content.content.numberOfPages
         )
+        view.showDefaultPageNumber = viewModel.content.content.showDefaultPageNumber
+        view.currentPage = viewModel.content.content.currentPage
         return view
     }
 
@@ -74,11 +77,20 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             self.componentView.intent = intent
         }
 
-        self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] content in
+        self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] contentType in
             guard let self = self else { return }
-            self.viewModel.contentConfigurationItemViewModel.buttonTitle = content.name
+            self.viewModel.contentConfigurationItemViewModel.buttonTitle = contentType.name
 
-//            self.componentView.content = content.content
+            self.componentView.showDefaultPageNumber = contentType.content.showDefaultPageNumber
+            self.componentView.numberOfPages = contentType.content.numberOfPages
+            self.componentView.currentPage = contentType.content.currentPage
+
+            for i in 0..<contentType.content.numberOfPages {
+                let content = contentType.content.content(ofIndex: i)
+                self.componentView.setContentLabel(content.label, ofIndex: i)
+                self.componentView.setIndicatorImage(content.indicatorImage, forIndex: i)
+
+            }
         }
 
         self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] isDisabled in
