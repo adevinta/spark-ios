@@ -1,5 +1,5 @@
 //
-//  ButtonViewModelDependencies.swift
+//  ButtonViewModelDeprecatedDependencies.swift
 //  SparkCore
 //
 //  Created by robin.lemaire on 03/07/2023.
@@ -8,8 +8,9 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Use ButtonViewModelDependenciesProtocol instead")
 // sourcery: AutoMockable
-protocol ButtonViewModelDependenciesProtocol {
+protocol ButtonViewModelDeprecatedDependenciesProtocol {
     var getBorderUseCase: ButtonGetBorderUseCaseable { get }
     var getColorsUseCase: ButtonGetColorsUseCaseable { get }
     var getContentUseCase: ButtonGetContentUseCaseable { get }
@@ -23,7 +24,7 @@ protocol ButtonViewModelDependenciesProtocol {
                                      attributedTitle: AttributedStringEither?) -> DisplayedTextViewModel
 }
 
-struct ButtonViewModelDependencies: ButtonViewModelDependenciesProtocol {
+struct ButtonViewModelDeprecatedDependencies: ButtonViewModelDeprecatedDependenciesProtocol {
 
     // MARK: - Properties
 

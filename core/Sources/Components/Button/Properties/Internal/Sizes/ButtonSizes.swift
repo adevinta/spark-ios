@@ -13,5 +13,5 @@ struct ButtonSizes: Equatable {
     // MARK: - Properties
 
     let height: CGFloat
-    let iconSize: CGFloat
+    let imageSize: CGFloat
 }

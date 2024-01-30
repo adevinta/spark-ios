@@ -7,7 +7,7 @@
 //
 
 /// Contains the dynamic property for a ControlState.
-final class ControlPropertyState<T> {
+final class ControlPropertyState<T: Equatable> {
 
     // MARK: - Properties
 

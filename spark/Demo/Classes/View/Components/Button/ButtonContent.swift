@@ -7,9 +7,47 @@
 //
 
 enum ButtonContentDefault: CaseIterable {
-    case icon
+    case image
     case text
     case attributedText
-    case iconAndText
-    case iconAndAttributedText
+    case imageAndText
+    case imageAndAttributedText
+    case none
+
+    // MARK: - Static Properties
+
+    static var allCasesExceptNone: [Self] {
+        var test = self.allCases
+        test.removeAll { $0 == .none }
+        return test
+    }
+
+    // MARK: - Properties
+
+    var containsImage: Bool {
+        switch self {
+        case .image, .imageAndText, .imageAndAttributedText:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var containsText: Bool {
+        switch self {
+        case .text, .imageAndText:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var containsAttributedText: Bool {
+        switch self {
+        case .attributedText, .imageAndAttributedText:
+            return true
+        default:
+            return false
+        }
+    }
 }

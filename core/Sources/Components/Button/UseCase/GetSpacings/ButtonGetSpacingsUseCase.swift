@@ -8,10 +8,15 @@
 
 import Foundation
 
-// sourcery: AutoMockable
+// sourcery: AutoMockable, AutoMockTest
 protocol ButtonGetSpacingsUseCaseable {
+    @available(*, deprecated, message: "Use the execute function without isOnlyIcon parameter instead. Must be removed when ButtonViewModelDeprecated is deleted")
+    // sourcery: spacing = "Identical"
     func execute(spacing: LayoutSpacing,
                  isOnlyIcon: Bool) -> ButtonSpacings
+
+    // sourcery: spacing = "Identical"
+    func execute(spacing: LayoutSpacing) -> ButtonSpacings
 }
 
 struct ButtonGetSpacingsUseCase: ButtonGetSpacingsUseCaseable {
@@ -35,5 +40,13 @@ struct ButtonGetSpacingsUseCase: ButtonGetSpacingsUseCaseable {
                 horizontalPadding: spacing.medium
             )
         }
+    }
+
+    func execute(spacing: LayoutSpacing) -> ButtonSpacings {
+        return .init(
+            verticalSpacing: spacing.medium,
+            horizontalSpacing: spacing.large,
+            horizontalPadding: spacing.medium
+        )
     }
 }

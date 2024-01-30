@@ -9,6 +9,7 @@
 import UIKit
 
 /// All button touch events supported by this control.
+@available(*, deprecated, message: "Use native **action** or **target** on UIControl or publisher instead")
 public enum ButtonTouchEvent {
     /// Event triggered directly when the view is touched.
     /// - warning: This should not trigger a user action and should only be used for things like tracking.

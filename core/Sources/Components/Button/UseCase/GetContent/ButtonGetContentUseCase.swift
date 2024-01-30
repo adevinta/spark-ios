@@ -6,9 +6,10 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+@available(*, deprecated, message: "Must be removed when ButtonViewModelDeprecated is deleted")
 // sourcery: AutoMockable
 protocol ButtonGetContentUseCaseable {
-    func execute(alignment: ButtonAlignment,
+    func execute(alignment: ButtonAlignmentDeprecated,
                  iconImage: ImageEither?,
                  containsTitle: Bool) -> ButtonContent
 }
@@ -18,7 +19,7 @@ struct ButtonGetContentUseCase: ButtonGetContentUseCaseable {
     // MARK: - Methods
 
     func execute(
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: ImageEither?,
         containsTitle: Bool
     ) -> ButtonContent {

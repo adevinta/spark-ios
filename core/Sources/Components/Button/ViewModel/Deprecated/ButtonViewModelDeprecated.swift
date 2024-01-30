@@ -1,5 +1,5 @@
 //
-//  ButtonViewModel.swift
+//  ButtonViewModelDeprecated.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 09.05.23.
@@ -8,7 +8,8 @@
 
 import Foundation
 
-final class ButtonViewModel: ObservableObject {
+@available(*, deprecated, message: "Use ButtonViewModel instead")
+final class ButtonViewModelDeprecated: ObservableObject {
 
     // MARK: - Properties
 
@@ -17,7 +18,7 @@ final class ButtonViewModel: ObservableObject {
     private(set) var variant: ButtonVariant
     private(set) var size: ButtonSize
     private(set) var shape: ButtonShape
-    private(set) var alignment: ButtonAlignment
+    private(set) var alignment: ButtonAlignmentDeprecated
     private(set) var iconImage: ImageEither?
     private(set) var isEnabled: Bool
 
@@ -49,7 +50,7 @@ final class ButtonViewModel: ObservableObject {
 
     private var isPressed: Bool = false
 
-    private let dependencies: any ButtonViewModelDependenciesProtocol
+    private let dependencies: any ButtonViewModelDeprecatedDependenciesProtocol
 
     // MARK: - Initialization
 
@@ -59,12 +60,12 @@ final class ButtonViewModel: ObservableObject {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: ImageEither?,
         title: String? ,
         attributedTitle: AttributedStringEither?,
         isEnabled: Bool,
-        dependencies: any ButtonViewModelDependenciesProtocol = ButtonViewModelDependencies()
+        dependencies: any ButtonViewModelDeprecatedDependenciesProtocol = ButtonViewModelDeprecatedDependencies()
     ) {
         self.theme = theme
         self.intent = intent
@@ -158,7 +159,7 @@ final class ButtonViewModel: ObservableObject {
         }
     }
 
-    func set(alignment: ButtonAlignment) {
+    func set(alignment: ButtonAlignmentDeprecated) {
         if self.alignment != alignment {
             self.alignment = alignment
 

@@ -21,7 +21,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
     func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_containsTitle_is_false() {
         self.testExecute(
             givenAlignment: .leadingIcon,
-            givenIconImage: self.imageMock,
+            givenImage: self.imageMock,
             givenContainsTitle: false,
             expectedContent: .init(
                 shouldShowIconImage: true,
@@ -35,7 +35,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
     func test_execute_when_alignment_is_trailingIcon_and_image_is_set_and_containsTitle_is_false() {
         self.testExecute(
             givenAlignment: .trailingIcon,
-            givenIconImage: self.imageMock,
+            givenImage: self.imageMock,
             givenContainsTitle: false,
             expectedContent: .init(
                 shouldShowIconImage: true,
@@ -49,7 +49,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
     func test_execute_when_alignment_is_leadingIcon_and_image_is_set_and_containsTitle_is_true() {
         self.testExecute(
             givenAlignment: .leadingIcon,
-            givenIconImage: self.imageMock,
+            givenImage: self.imageMock,
             givenContainsTitle: true,
             expectedContent: .init(
                 shouldShowIconImage: true,
@@ -63,7 +63,7 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
     func test_execute_when_alignment_is_leadingIcon_and_containsTitle_is_true() {
         self.testExecute(
             givenAlignment: .leadingIcon,
-            givenIconImage: nil,
+            givenImage: nil,
             givenContainsTitle: true,
             expectedContent: .init(
                 shouldShowIconImage: false,
@@ -80,14 +80,14 @@ final class ButtonGetContentUseCaseTests: XCTestCase {
 private extension ButtonGetContentUseCaseTests {
 
     func testExecute(
-        givenAlignment: ButtonAlignment,
-        givenIconImage: UIImage?,
+        givenAlignment: ButtonAlignmentDeprecated,
+        givenImage: UIImage?,
         givenContainsTitle: Bool,
         expectedContent: ButtonContent
     ) {
         // GIVEN
         var errorSuffixMessage = " for \(givenAlignment) alignment case"
-        if givenIconImage != nil {
+        if givenImage != nil {
             errorSuffixMessage += " - with icon image"
         }
         if givenContainsTitle {
@@ -97,8 +97,8 @@ private extension ButtonGetContentUseCaseTests {
         let useCase = ButtonGetContentUseCase()
 
         let iconImage: ImageEither?
-        if let givenIconImage {
-            iconImage = .left(givenIconImage)
+        if let givenImage {
+            iconImage = .left(givenImage)
         } else {
             iconImage = nil
         }
