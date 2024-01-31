@@ -78,9 +78,18 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
 
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.isUserInteractionEnabled = false
         imageView.isHidden = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
+        imageView.isUserInteractionEnabled = false
+        imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
+
+        imageView.setContentCompressionResistancePriority(.required,
+                                                      for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
+
         return imageView
     }()
 
