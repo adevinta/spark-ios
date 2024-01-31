@@ -70,6 +70,7 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
+        label.adjustsFontForContentSizeCategory = true
         label.isHidden = true
         label.numberOfLines = 1
         return label
