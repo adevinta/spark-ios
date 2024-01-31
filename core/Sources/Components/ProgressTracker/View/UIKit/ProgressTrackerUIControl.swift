@@ -12,6 +12,8 @@ import UIKit
 
 public final class ProgressTrackerUIControl: UIControl {
 
+    typealias Content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>
+
     public var theme: Theme {
         get {
             return self.viewModel.theme
@@ -23,12 +25,9 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     public var intent: ProgressTrackerIntent {
-        get {
-            return self.viewModel.intent
-        }
-        set {
-            self.viewModel.intent = newValue
-            self.didUpdate(intent: newValue)
+        didSet {
+            guard self.intent != oldValue else { return }
+            self.didUpdate(intent: self.intent)
         }
     }
 
@@ -119,26 +118,26 @@ public final class ProgressTrackerUIControl: UIControl {
         numberOfPages: Int,
         orientation: ProgressTrackerOrientation = .horizontal
     ) {
-        let content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: numberOfPages, currentPage: 0)
+        let content = Content(numberOfPages: numberOfPages, currentPage: 0)
 
         let viewModel = ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>(
             theme: theme,
-            intent: intent,
-            orientation: orientation, 
+            orientation: orientation,
             content: content)
 
         self.viewModel = viewModel
         self.variant = variant
         self.size = size
         self.interactionState = .discrete
+        self.intent = intent
 
         super.init(frame: .zero)
 
-        self.setupView()
+        self.setupView(content: content)
         self.setupSubscriptions()
     }
 
-    private func createIndicatorViews() -> [ProgressTrackerIndicatorUIControl] {
+    private func createIndicatorViews(content: Content) -> [ProgressTrackerIndicatorUIControl] {
         guard self.numberOfPages > 0 else { return [] }
 
         return (0..<self.numberOfPages).map { index in
@@ -147,27 +146,28 @@ public final class ProgressTrackerUIControl: UIControl {
                 intent: self.intent,
                 variant: self.variant,
                 size: self.size,
-                content: self.viewModel.content.content(ofIndex: index))
+                content: content.content(ofIndex: index))
             indicator.translatesAutoresizingMaskIntoConstraints = false
             return indicator
         }
     }
 
-    private func createLabels() ->
+    private func createLabels(content: Content) ->
     [UILabel] {
-        guard self.viewModel.content.hasLabel else { return [] }
+        guard content.hasLabel else { return [] }
         return (0..<self.numberOfPages).map{ index in
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.attributedText = self.viewModel.content.getAttributedLabel(ofIndex: index)
+            label.attributedText = content.getAttributedLabel(ofIndex: index)
+            label.font = self.viewModel.font.uiFont
             return label
         }
     }
 
-    private func createTrackView() -> [ProgressTrackerTrackUIView] {
+    private func createTrackView(numberOfPages: Int) -> [ProgressTrackerTrackUIView] {
         guard self.numberOfPages > 1 else { return [] }
 
-        return (0..<self.numberOfPages - 1).map { _ in
+        return (0..<numberOfPages - 1).map { _ in
             let view = ProgressTrackerTrackUIView(
                 theme: self.theme,
                 intent: self.intent,
@@ -178,26 +178,27 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
-    private func setupIndicatorsAndLabels() {
+    private func setupIndicatorsAndLabels(content: Content) {
         self.indicatorViews.removeAllFromSuperView()
-        self.indicatorViews = self.createIndicatorViews()
+        self.trackViews.removeAllFromSuperView()
+        self.labels.removeAllFromSuperView()
+
+        self.indicatorViews = self.createIndicatorViews(content: content)
         self.indicatorViews.addToSuperView(self)
 
-        self.trackViews.removeAllFromSuperView()
-        self.trackViews = self.createTrackView()
+        self.trackViews = self.createTrackView(numberOfPages: content.numberOfPages)
         self.trackViews.addToSuperView(self)
 
-        self.labels.removeAllFromSuperView()
-        self.labels = self.createLabels()
+        self.labels = self.createLabels(content: content)
         self.labels.addToSuperView(self)
     }
 
-    private func setupView() {
-        guard self.numberOfPages > 0 else { return }
+    private func setupView(content: Content) {
+        guard content.numberOfPages > 0 else { return }
 
-        self.setupIndicatorsAndLabels()
+        self.setupIndicatorsAndLabels(content: content)
         if self.viewModel.orientation == .horizontal {
-            self.setupHorizontalViewConstraints()
+            self.setupHorizontalViewConstraints(content: content)
         } else {
             self.setupVerticalViewConstraints()
         }
@@ -205,23 +206,31 @@ public final class ProgressTrackerUIControl: UIControl {
 
     private func setupSubscriptions() {
         self.viewModel.$content.subscribe(in: &self.cancellables) { content in
-            if content.numberOfPages != self.indicatorViews.count {
-                self.setupIndicatorsAndLabels()
+            if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
+                self.setupView(content: content)
             } else if content.numberOfPages > 0 {
                 for i in 0..<content.numberOfPages {
                     self.indicatorViews[i].content = content.content(ofIndex: i)
                 }
             }
         }
+
+        self.viewModel.$font.subscribe(in: &self.cancellables) { font in
+            for label in self.labels {
+                label.font = font.uiFont
+            }
+        }
     }
 
-    private func setupHorizontalViewConstraints() {
+    private func setupHorizontalViewConstraints(content: Content) {
         var precedingView = self.indicatorViews[0]
         var constraints = [NSLayoutConstraint]()
 
         constraints.append(precedingView.topAnchor.constraint(equalTo: self.topAnchor))
 
-        for i in 1..<self.numberOfPages {
+        let numberOfPages = self.indicatorViews.count
+
+        for i in 1..<numberOfPages {
             let trackView = self.trackViews[i-1]
             constraints.append(trackView.leadingAnchor.constraint(equalTo: precedingView.trailingAnchor, constant: self.trackSpacing))
             constraints.append(trackView.centerYAnchor.constraint(equalTo: precedingView.centerYAnchor))
@@ -230,15 +239,15 @@ public final class ProgressTrackerUIControl: UIControl {
             precedingView = self.indicatorViews[i]
         }
 
-        let lastIndex = self.numberOfPages - 1
-        if self.viewModel.content.hasLabel {
-            for i in 0..<self.numberOfPages {
+        let lastIndex = numberOfPages - 1
+        if content.hasLabel {
+            for i in 0..<numberOfPages {
                 constraints.append(self.indicatorViews[i].centerXAnchor.constraint(equalTo: self.labels[i].centerXAnchor))
                 constraints.append(self.labels[i].topAnchor.constraint(equalTo: self.indicatorViews[i].bottomAnchor, constant: self.labelSpacing))
                 constraints.append(self.labels[i].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
             }
-            for i in 1..<self.numberOfPages {
-                constraints.append(self.labels[i].leadingAnchor.constraint(equalTo: self.labels[i-1].leadingAnchor, constant: self.labelSpacing))
+            for i in 1..<numberOfPages {
+                constraints.append(self.labels[i].leadingAnchor.constraint(equalTo: self.labels[i-1].trailingAnchor, constant: self.labelSpacing))
             }
             constraints.append(self.labels[0].leadingAnchor.constraint(equalTo: self.leadingAnchor))
             constraints.append(self.labels[lastIndex].trailingAnchor.constraint(equalTo: self.trailingAnchor))
@@ -314,8 +323,21 @@ public final class ProgressTrackerUIControl: UIControl {
         return self.viewModel.content.getAttributedLabel(ofIndex: index)
     }
 
-    public func setContentLabel(_ label: Character?, ofIndex index: Int) {
+    public func setLabel(_ label: String?, forIndex index: Int) {
+        let attributedLabel = label.map(NSAttributedString.init)
+        self.viewModel.content.setAttributedLabel(attributedLabel, forIndex: index)
+    }
+
+    public func getLabel(forIndex index: Int) -> String? {
+        return self.viewModel.content.getAttributedLabel(ofIndex: index)?.string
+    }
+
+    public func setIndicatorLabel(_ label: Character?, forIndex index: Int) {
         self.viewModel.content.setContentLabel(label, ofIndex: index)
+    }
+
+    public func getIndicatorLabel(forIndex index: Int) -> Character? {
+        self.viewModel.content.getContentLabel(ofIndex: index)
     }
 }
 

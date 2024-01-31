@@ -14,7 +14,7 @@ import UIKit
 final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
     enum Constants {
-        static let numberOfPages = 2
+        static let numberOfPages = 4
     }
 
     enum ContentType: CaseIterable {
@@ -92,6 +92,13 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.disableChanged(_:))))
     }()
 
+    lazy var labelsConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Labels",
+            type: .checkbox(title: "", isOn: self.showLabels),
+            target: (source: self, action: #selector(self.showLabelsChanged(_:))))
+    }()
+
     lazy var touchableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Touchable",
@@ -150,7 +157,8 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.contentConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.touchableConfigurationItemViewModel,
-            self.selectedConfigurationItemViewModel
+            self.selectedConfigurationItemViewModel,
+            self.labelsConfigurationItemViewModel
         ]
     }
 
@@ -164,6 +172,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var isDisabled = false
     @Published var isTouchable = true
     @Published var isSelected = false
+    @Published var showLabels = false
 
     init(
         theme: Theme,
@@ -205,6 +214,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func disableChanged(_ selected: Any?) {
         self.isDisabled = isTrue(selected)
+    }
+
+    @objc func showLabelsChanged(_ selected: Any?) {
+        self.showLabels = isTrue(selected)
     }
 
     @objc func touchableChanged(_ selected: Any?) {
