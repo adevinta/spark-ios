@@ -23,34 +23,30 @@ final class ProgressTrackerTrackViewModel: ObservableObject {
         }
     }
 
-    var state: ProgressTrackerState {
+    var isEnabled: Bool {
         didSet {
-            guard self.state != oldValue else { return }
+            guard self.isEnabled != oldValue else { return }
             self.updateLineColor()
         }
     }
 
-    private let useCase: ProgressTrackerGetColorsUseCaseable
+    private var useCase: ProgressTrackerGetTrackColorUseCaseable
     @Published var lineColor: any ColorToken
 
     init(theme: Theme,
          intent: ProgressTrackerIntent,
-         state: ProgressTrackerState = .normal,
-         useCase: ProgressTrackerGetColorsUseCaseable = ProgressTrackerGetColorsUseCase()
+         isEnabled: Bool = true,
+         useCase: ProgressTrackerGetTrackColorUseCaseable = ProgressTrackerGetTrackColorUseCase()
     ) {
         self.theme = theme
         self.intent = intent
-        self.state = state
         self.useCase = useCase
-        self.lineColor = useCase.execute(theme: theme, intent: intent, variant: .outlined, state: state).outline
+        self.isEnabled = isEnabled
+        self.lineColor = useCase.execute(theme: theme, intent: intent, isEnabled: isEnabled)
     }
 
     private func updateLineColor() {
-        let newLineColor = self.useCase.execute(
-            theme: self.theme,
-            intent: self.intent,
-            variant: .outlined,
-            state: self.state).outline
+        let newLineColor = useCase.execute(theme: theme, intent: intent, isEnabled: isEnabled)
         if !newLineColor.equals(self.lineColor) {
             self.lineColor = newLineColor
         }

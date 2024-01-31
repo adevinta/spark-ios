@@ -87,9 +87,15 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
             for i in 0..<contentType.content.numberOfPages {
                 let content = contentType.content.content(ofIndex: i)
-                self.componentView.setContentLabel(content.label, ofIndex: i)
+                self.componentView.setIndicatorLabel(content.label, forIndex: i)
                 self.componentView.setIndicatorImage(content.indicatorImage, forIndex: i)
+            }
+        }
 
+        self.viewModel.$showLabels.subscribe(in: &self.cancellables) { showLabels in
+            for i in 0..<self.viewModel.content.content.numberOfPages {
+                let label: String? = showLabels ? "Lore \(i)" : nil
+                self.componentView.setLabel(label, forIndex: i)
             }
         }
 
