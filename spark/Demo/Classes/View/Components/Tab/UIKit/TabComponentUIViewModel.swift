@@ -257,7 +257,7 @@ extension TabComponentUIViewModel {
 }
 
 // MARK: - Private helpers
-private extension UIImage {
+extension UIImage {
     static let names = [
         "trash",
         "folder",
@@ -278,6 +278,16 @@ private extension UIImage {
         let allSfs: [String] = names.flatMap{ [$0, "\($0).fill"] }
         let imageName = allSfs[index % allSfs.count]
         return UIImage(systemName: imageName) ?? UIImage()
+    }
+
+    static func standardImage(at index: Int) -> UIImage {
+        let imageName = names[index % names.count]
+        return UIImage(systemName: imageName) ?? UIImage()
+    }
+
+    static func filledImage(at index: Int) -> UIImage {
+        let imageName = names[index % names.count]
+        return UIImage(systemName: "\(imageName).fill") ?? UIImage()
     }
 }
 
