@@ -14,22 +14,8 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     var theme: Theme {
         didSet {
-            self.updateTrackColor()
             self.updateSpacings()
-        }
-    }
-
-    var intent: ProgressTrackerIntent {
-        didSet {
-            guard self.intent != oldValue else { return }
-            self.updateTrackColor()
-        }
-    }
-
-    var isEnabled: Bool = true {
-        didSet {
-            guard self.isEnabled != oldValue else { return }
-            self.updateTrackColor()
+            self.updateFont()
         }
     }
 
@@ -52,8 +38,8 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     @Published var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent>
 
-    @Published var trackColor: any ColorToken
     @Published var spacings: ProgressTrackerSpacing
+    @Published var font: TypographyFontToken
 
     var numberOfPages: Int {
         set {
@@ -73,34 +59,29 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         }
     }
 
-
-    private var colorUseCase: ProgressTrackerGetTrackColorUseCaseable
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
 
     // MARK: - Initialization
     init(theme: Theme,
-         intent: ProgressTrackerIntent,
          orientation: ProgressTrackerOrientation,
          content:  ProgressTrackerContent<ProgressTrackerUIIndicatorContent>,
-         colorUseCase: ProgressTrackerGetTrackColorUseCaseable = ProgressTrackerGetTrackColorUseCase(),
          spacingUseCase: ProgressTrackerGetSpacingsUseCaseable = ProgressTrackerGetSpacingsUseCase()
     ) {
         self.orientation = orientation
         self.theme = theme
-        self.intent = intent
         self.content = content
-        self.colorUseCase = colorUseCase
         self.spacingUseCase = spacingUseCase
 
         self.spacings = spacingUseCase.execute(spacing: theme.layout.spacing, orientation: orientation)
-        self.trackColor = colorUseCase.execute(theme: theme, intent: intent, isEnabled: true)
-    }
 
-    private func updateTrackColor() {
-        self.trackColor = colorUseCase.execute(theme: self.theme, intent: self.intent, isEnabled: self.isEnabled)
+        self.font = theme.typography.body2Highlight
     }
 
     private func updateSpacings() {
         self.spacings = spacingUseCase.execute(spacing: self.theme.layout.spacing, orientation: self.orientation)
+    }
+
+    private func updateFont() {
+        self.font = self.theme.typography.body2Highlight
     }
 }
