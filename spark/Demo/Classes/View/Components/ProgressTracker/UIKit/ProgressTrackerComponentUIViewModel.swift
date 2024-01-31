@@ -27,11 +27,16 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             let startingValue = Int(("A" as UnicodeScalar).value)
 
             switch self {
-            case .icon: return .init(
+            case .icon: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(
                 numberOfPages: Constants.numberOfPages,
                 currentPage: 0,
-                showDefaultPageNumber: false,
-                preferredIndicatorImage: UIImage(systemName: "checkmark"))
+                showDefaultPageNumber: false)
+
+                for i in 0..<Constants.numberOfPages {
+                    content.setIndicatorImage(UIImage.standardImage(at: i), forIndex: i)
+                }
+                return content
+
             case .text: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(numberOfPages: Constants.numberOfPages, currentPage: 0, showDefaultPageNumber: false)
                 for i in 0..<Constants.numberOfPages {
                     content.setContentLabel(Character(UnicodeScalar(i + startingValue)!), ofIndex: i)
