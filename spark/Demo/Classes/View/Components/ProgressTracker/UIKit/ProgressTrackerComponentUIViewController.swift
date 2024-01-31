@@ -69,6 +69,10 @@ final class ProgressTrackerComponentUIViewController: UIViewController {
             self.presentIntentActionSheet(intents)
         }
 
+        self.viewModel.showOrientationSheet.subscribe(in: &self.cancellables) { variants in
+            self.presentOrientationActionSheet(variants)
+        }
+
         self.viewModel.showSizeSheet.subscribe(in: &self.cancellables) { sizes in
             self.presentSizeActionSheet(sizes)
         }
@@ -110,6 +114,15 @@ extension ProgressTrackerComponentUIViewController {
             values: intents,
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
+            }
+        self.present(actionSheet, isAnimated: true)
+    }
+
+    private func presentOrientationActionSheet(_ variants: [ProgressTrackerOrientation]) {
+        let actionSheet = SparkActionSheet<ProgressTrackerOrientation>.init(
+            values: variants,
+            texts: variants.map { $0.name }) { variant in
+                self.viewModel.orientation = variant
             }
         self.present(actionSheet, isAnimated: true)
     }

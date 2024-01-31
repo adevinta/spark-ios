@@ -14,7 +14,7 @@ import UIKit
 final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
     enum Constants {
-        static let numberOfPages = 4
+        static let numberOfPages = 2
     }
 
     enum ContentType: CaseIterable {
@@ -61,6 +61,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var orientationConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Orientation",
+            type: .button,
+            target: (source: self, action: #selector(self.presentOrientationSheet))
+        )
+    }()
+
     lazy var sizeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Size",
@@ -92,6 +100,13 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.disableChanged(_:))))
     }()
 
+    lazy var labelContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Label",
+            type: .input(text: self.label),
+            target: (source: self, action: #selector(self.labelChanged(_:))))
+    }()
+
     lazy var labelsConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Labels",
@@ -113,29 +128,40 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.selectedChanged(_:))))
     }()
 
+    private var label: String? = "Lore Ipsum" {
+        didSet {
+            self.title = self.label ?? ""
+        }
+    }
+
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
-        showThemeSheetSubject
+        self.showThemeSheetSubject
             .eraseToAnyPublisher()
     }
 
     var showIntentSheet: AnyPublisher<[ProgressTrackerIntent], Never> {
-        showIntentSheetSubject
+        self.showIntentSheetSubject
+            .eraseToAnyPublisher()
+    }
+
+    var showOrientationSheet: AnyPublisher<[ProgressTrackerOrientation], Never> {
+        self.showOrientationSheetSubject
             .eraseToAnyPublisher()
     }
 
     var showSizeSheet: AnyPublisher<[ProgressTrackerSize], Never> {
-        showSizeSheetSubject
+        self.showSizeSheetSubject
             .eraseToAnyPublisher()
     }
 
     var showVariantSheet: AnyPublisher<[ProgressTrackerVariant], Never> {
-        showVariantSheetSubject
+        self.showVariantSheetSubject
             .eraseToAnyPublisher()
     }
 
     var showContentSheet: AnyPublisher<[ContentType], Never> {
-        showContentSheetSubject
+        self.showContentSheetSubject
             .eraseToAnyPublisher()
     }
 
@@ -144,6 +170,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[ProgressTrackerIntent], Never> = .init()
+    private var showOrientationSheetSubject: PassthroughSubject<[ProgressTrackerOrientation], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[ProgressTrackerSize], Never> = .init()
     private var showVariantSheetSubject: PassthroughSubject<[ProgressTrackerVariant], Never> = .init()
     private var showContentSheetSubject: PassthroughSubject<[ContentType], Never> = .init()
@@ -154,10 +181,12 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.intentConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
+            self.orientationConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.touchableConfigurationItemViewModel,
             self.selectedConfigurationItemViewModel,
+            self.labelContentConfigurationItemViewModel,
             self.labelsConfigurationItemViewModel
         ]
     }
@@ -165,6 +194,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     // MARK: - Initialization
     @Published var theme: Theme
     @Published var intent: ProgressTrackerIntent
+    @Published var orientation: ProgressTrackerOrientation = .vertical
     @Published var variant: ProgressTrackerVariant
     @Published var size: ProgressTrackerSize
     @Published var content: ContentType
@@ -173,6 +203,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var isTouchable = true
     @Published var isSelected = false
     @Published var showLabels = false
+    @Published var title: String = "Lore ipsum"
 
     init(
         theme: Theme,
@@ -200,6 +231,10 @@ extension ProgressTrackerComponentUIViewModel {
         self.showIntentSheetSubject.send(ProgressTrackerIntent.allCases)
     }
 
+    @objc func presentOrientationSheet() {
+        self.showOrientationSheetSubject.send(ProgressTrackerOrientation.allCases)
+    }
+
     @objc func presentSizeSheet() {
         self.showSizeSheetSubject.send(ProgressTrackerSize.allCases)
     }
@@ -214,6 +249,14 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func disableChanged(_ selected: Any?) {
         self.isDisabled = isTrue(selected)
+    }
+
+    @objc func labelChanged(_ textField: UITextField) {
+        if textField.text?.isEmpty == false {
+            self.label = textField.text
+        } else  {
+            self.label = nil
+        }
     }
 
     @objc func showLabelsChanged(_ selected: Any?) {

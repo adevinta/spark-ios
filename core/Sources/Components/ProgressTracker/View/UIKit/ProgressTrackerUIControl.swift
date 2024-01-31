@@ -31,6 +31,15 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    public var orientation: ProgressTrackerOrientation {
+        get {
+            return self.viewModel.orientation
+        }
+        set {
+            self.viewModel.orientation = newValue
+        }
+    }
+
     public var variant: ProgressTrackerVariant {
         didSet {
             self.didUpdate(variant: self.variant)
@@ -64,7 +73,7 @@ public final class ProgressTrackerUIControl: UIControl {
 
     public var interactionState: ProgressInteractionState {
         didSet {
-
+            // needs to be implemented
         }
     }
 
@@ -99,6 +108,7 @@ public final class ProgressTrackerUIControl: UIControl {
 
     private lazy var indicatorViews = [ProgressTrackerIndicatorUIControl]()
     private lazy var labels = [UILabel]()
+    private lazy var hiddenLabels = [UILabel]()
     private lazy var trackViews = [ProgressTrackerTrackUIView]()
 
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
@@ -138,7 +148,7 @@ public final class ProgressTrackerUIControl: UIControl {
 
         super.init(frame: .zero)
 
-        self.setupView(content: content)
+        self.setupView(content: content, orientation: orientation)
         self.setupSubscriptions()
     }
 
@@ -179,61 +189,83 @@ public final class ProgressTrackerUIControl: UIControl {
             label.attributedText = content.getAttributedLabel(ofIndex: index)
             label.font = self.viewModel.font.uiFont
             label.textColor = self.viewModel.labelColor.uiColor
+            label.numberOfLines = 0
+            label.lineBreakMode = .byWordWrapping
             return label
         }
     }
 
-    private func createTrackView(numberOfPages: Int) -> [ProgressTrackerTrackUIView] {
+    private func createTrackView(numberOfPages: Int, orientation: ProgressTrackerOrientation) -> [ProgressTrackerTrackUIView] {
         guard self.numberOfPages > 1 else { return [] }
 
         return (0..<numberOfPages - 1).map { _ in
             let view = ProgressTrackerTrackUIView(
                 theme: self.theme,
                 intent: self.intent,
-                orientation: self.viewModel.orientation)
+                orientation: orientation)
             view.isEnabled = self.isEnabled
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }
     }
 
-    private func setupIndicatorsAndLabels(content: Content) {
+    private func setupIndicatorsAndLabels(content: Content, orientation: ProgressTrackerOrientation) {
         self.indicatorViews.removeAllFromSuperView()
         self.trackViews.removeAllFromSuperView()
         self.labels.removeAllFromSuperView()
+        self.hiddenLabels.removeAllFromSuperView()
+
         self.trackSpacingConstraints = []
         self.labelSpacingConstraints = []
 
         self.indicatorViews = self.createIndicatorViews(content: content)
         self.indicatorViews.addToSuperView(self)
 
-        self.trackViews = self.createTrackView(numberOfPages: content.numberOfPages)
+        self.trackViews = self.createTrackView(numberOfPages: content.numberOfPages, orientation: orientation)
         self.trackViews.addToSuperView(self)
 
         self.labels = self.createLabels(content: content)
         self.labels.addToSuperView(self)
+
+        if orientation == .vertical {
+            self.hiddenLabels = self.createLabels(content: content)
+            for hiddenLabel in hiddenLabels {
+                hiddenLabel.text = " "
+            }
+            self.hiddenLabels.addToSuperView(self)
+        }
     }
 
-    private func setupView(content: Content) {
+    private func setupView(content: Content, orientation: ProgressTrackerOrientation) {
         guard content.numberOfPages > 0 else { return }
 
-        self.setupIndicatorsAndLabels(content: content)
-        if self.viewModel.orientation == .horizontal {
+        self.setupIndicatorsAndLabels(content: content, orientation: orientation)
+
+        if orientation == .horizontal {
             self.setupHorizontalViewConstraints(content: content)
         } else {
-            self.setupVerticalViewConstraints()
+            self.setupVerticalViewConstraints(content: content)
         }
     }
 
     private func setupSubscriptions() {
         self.viewModel.$content.subscribe(in: &self.cancellables) { content in
             if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
-                self.setupView(content: content)
+                self.setupView(content: content, orientation: self.viewModel.orientation)
             } else if content.numberOfPages > 0 {
                 for i in 0..<content.numberOfPages {
                     self.indicatorViews[i].content = content.content(ofIndex: i)
                 }
+                if content.hasLabel {
+                    for i in 0..<content.numberOfPages {
+                        self.labels[i].attributedText = content.getAttributedLabel(ofIndex: i)
+                    }
+                }
             }
+        }
+
+        self.viewModel.$orientation.subscribe(in: &self.cancellables) { orientation in
+            self.setupView(content: self.viewModel.content, orientation: orientation)
         }
 
         self.viewModel.$font.subscribe(in: &self.cancellables) { font in
@@ -296,8 +328,54 @@ public final class ProgressTrackerUIControl: UIControl {
         NSLayoutConstraint.activate(constraints)
     }
 
-    private func setupVerticalViewConstraints() {
+    private func setupVerticalViewConstraints(content: Content) {
+        var precedingView = self.indicatorViews[0]
+        var constraints = [NSLayoutConstraint]()
 
+        constraints.append(precedingView.leadingAnchor.constraint(equalTo: self.leadingAnchor))
+
+        let numberOfPages = self.indicatorViews.count
+
+        for i in 1..<numberOfPages {
+            let trackView = self.trackViews[i-1]
+            let trackTopSpacing = trackView.topAnchor.constraint(equalTo: precedingView.bottomAnchor, constant: self.trackSpacing)
+            constraints.append(trackTopSpacing)
+            self.trackSpacingConstraints.append(trackTopSpacing)
+            constraints.append(trackView.centerXAnchor.constraint(equalTo: precedingView.centerXAnchor))
+            let trackBottomSpacing = self.indicatorViews[i].topAnchor.constraint(equalTo: trackView.bottomAnchor, constant: self.trackSpacing)
+            constraints.append(trackBottomSpacing)
+            self.trackSpacingConstraints.append(trackBottomSpacing)
+            constraints.append(self.indicatorViews[i].leadingAnchor.constraint(equalTo: self.leadingAnchor))
+            precedingView = self.indicatorViews[i]
+        }
+
+        let lastIndex = numberOfPages - 1
+        if content.hasLabel {
+            for i in 0..<numberOfPages {
+                constraints.append(self.indicatorViews[i].centerYAnchor.constraint(equalTo: self.hiddenLabels[i].centerYAnchor))
+                constraints.append(self.indicatorViews[i].trailingAnchor.constraint(equalTo: self.hiddenLabels[i].leadingAnchor))
+                constraints.append(self.labels[i].topAnchor.constraint(equalTo:  self.hiddenLabels[i].topAnchor))
+
+                let labelLeadingConstraint = self.labels[i].leadingAnchor.constraint(equalTo: self.indicatorViews[i].trailingAnchor, constant: self.labelSpacing)
+                constraints.append(labelLeadingConstraint)
+                self.labelSpacingConstraints.append(labelLeadingConstraint)
+                constraints.append(self.labels[i].trailingAnchor.constraint(equalTo: self.trailingAnchor))
+            }
+            for i in 1..<numberOfPages {
+                let labelTrailingConstraint = self.labels[i].topAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].bottomAnchor, constant: self.labelSpacing)
+                self.labelSpacingConstraints.append(labelTrailingConstraint)
+                constraints.append(labelTrailingConstraint)
+            }
+            constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
+            constraints.append(self.labels[lastIndex].bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor))
+            constraints.append(self.indicatorViews[lastIndex].bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor))
+        } else {
+            constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
+            constraints.append(self.indicatorViews [lastIndex].bottomAnchor.constraint(equalTo: self.bottomAnchor))
+            constraints.append(self.indicatorViews[0].trailingAnchor.constraint(equalTo: self.trailingAnchor))
+        }
+
+        NSLayoutConstraint.activate(constraints)
     }
 
     required init?(coder: NSCoder) {
