@@ -21,21 +21,21 @@ protocol ProgressTrackerContentIndicating {
 }
 
 // The UIKit progress tracker indicator 
-struct ProgressTrackerUIIndicatorContent: ProgressTrackerContentIndicating {
+struct ProgressTrackerUIIndicatorContent: ProgressTrackerContentIndicating, Equatable {
     typealias TextType = NSAttributedString
 
     var indicatorImage: UIImage?
     var label: Character?
 }
 
-struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating {
+struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating, Equatable {
     typealias TextType = AttributedString
 
     var indicatorImage: Image?
     var label: Character?
 }
 
-struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> {
+struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> where ComponentContent: Equatable {
     var numberOfPages: Int
     var showDefaultPageNumber: Bool 
     var currentPage: Int
@@ -47,9 +47,14 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     var labels = [Int: ComponentContent.TextType?]()
 
     var hasLabel: Bool {
-        return labels.reduce(false) { (partialResult, arg1) in
-            let (_, value) = arg1
+        return labels.values.reduce(false) { (partialResult, value) in
             return partialResult || value != nil
+        }
+    }
+
+    var numberOfLabels: Int {
+        return labels.values.reduce(0) { (partialResult, value) in
+            return partialResult + (value == nil ? 0 : 1)
         }
     }
 
@@ -67,6 +72,17 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
         self.preferredIndicatorImage = preferredIndicatorImage
         self.visitedPageIndicatorImage = visitedPageIndicatorImage
         self.preferredCurrentPageIndicatorImage = preferredCurrentPageIndicatorImage
+    }
+
+    func needsUpdateOfLayout(otherComponent content: Self) -> Bool {
+        if content.numberOfPages != self.numberOfPages {
+            return true
+        }
+        if content.numberOfLabels != self.numberOfLabels {
+            return true
+        }
+
+        return false
     }
 
     func content(ofIndex index: Int) -> ComponentContent {
@@ -134,5 +150,9 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
         }
         content.label = label
         self.content[index] = content
+    }
+
+    func getContentLabel(ofIndex index:  Int) -> Character? {
+        return self.content[index]?.label
     }
 }

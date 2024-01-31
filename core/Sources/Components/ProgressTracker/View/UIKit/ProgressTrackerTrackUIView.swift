@@ -47,11 +47,11 @@ final class ProgressTrackerTrackUIView: UIView {
 
     var isEnabled: Bool {
         get {
-            return self.viewModel.state.isEnabled
+            return self.viewModel.isEnabled
         }
         set {
-            guard newValue != self.viewModel.state.isEnabled else { return }
-            self.viewModel.state.isEnabled = newValue
+            guard newValue != self.viewModel.isEnabled else { return }
+            self.viewModel.isEnabled = newValue
         }
     }
 
