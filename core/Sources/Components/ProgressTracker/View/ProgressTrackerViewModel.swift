@@ -16,6 +16,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         didSet {
             self.updateSpacings()
             self.updateFont()
+            self.updateLabelColor()
         }
     }
 
@@ -26,6 +27,12 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         set {
             guard self.content.showDefaultPageNumber != newValue else { return }
             self.content.showDefaultPageNumber = newValue
+        }
+    }
+
+    var isEnabled: Bool = true {
+        didSet {
+            self.updateLabelColor()
         }
     }
 
@@ -40,6 +47,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     @Published var spacings: ProgressTrackerSpacing
     @Published var font: TypographyFontToken
+    @Published var labelColor: any ColorToken
 
     var numberOfPages: Int {
         set {
@@ -75,6 +83,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         self.spacings = spacingUseCase.execute(spacing: theme.layout.spacing, orientation: orientation)
 
         self.font = theme.typography.body2Highlight
+        self.labelColor = theme.colors.base.onSurface
     }
 
     private func updateSpacings() {
@@ -83,5 +92,13 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     private func updateFont() {
         self.font = self.theme.typography.body2Highlight
+    }
+
+    private func updateLabelColor() {
+        var color = self.theme.colors.base.onSurface
+        if !self.isEnabled {
+            color = color.opacity(self.theme.dims.dim1)
+        }
+        self.labelColor = color
     }
 }
