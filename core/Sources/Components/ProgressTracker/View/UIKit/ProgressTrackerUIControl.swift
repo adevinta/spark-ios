@@ -125,7 +125,30 @@ public final class ProgressTrackerUIControl: UIControl {
         return self.viewModel.spacings.minLabelSpacing * self.scaleFactor
     }
 
-    public init(
+    public convenience init(
+        theme: Theme,
+        intent: ProgressTrackerIntent,
+        variant: ProgressTrackerVariant,
+        size: ProgressTrackerSize = .medium,
+        labels: [String],
+        orientation: ProgressTrackerOrientation = .horizontal
+    ) {
+        var content = Content(numberOfPages: labels.count, currentPage: 0)
+        for (index, label) in labels.enumerated() {
+            content.setAttributedLabel(NSAttributedString(string: label), forIndex: index)
+        }
+
+        self.init(
+            theme: theme,
+            intent: intent,
+            variant: variant,
+            size: size,
+            content: content,
+            orientation: orientation
+        )
+    }
+
+    public convenience init(
         theme: Theme,
         intent: ProgressTrackerIntent,
         variant: ProgressTrackerVariant,
@@ -134,6 +157,25 @@ public final class ProgressTrackerUIControl: UIControl {
         orientation: ProgressTrackerOrientation = .horizontal
     ) {
         let content = Content(numberOfPages: numberOfPages, currentPage: 0)
+
+        self.init(
+            theme: theme,
+            intent: intent,
+            variant: variant,
+            size: size,
+            content: content,
+            orientation: orientation
+        )
+    }
+
+    init(
+        theme: Theme,
+        intent: ProgressTrackerIntent,
+        variant: ProgressTrackerVariant,
+        size: ProgressTrackerSize = .medium,
+        content: Content,
+        orientation: ProgressTrackerOrientation = .horizontal
+    ) {
 
         let viewModel = ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>(
             theme: theme,
@@ -191,6 +233,7 @@ public final class ProgressTrackerUIControl: UIControl {
             label.textColor = self.viewModel.labelColor.uiColor
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
+            label.allowsDefaultTighteningForTruncation = true
             return label
         }
     }
@@ -210,6 +253,9 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     private func setupIndicatorsAndLabels(content: Content, orientation: ProgressTrackerOrientation) {
+        NSLayoutConstraint.deactivate(self.labelSpacingConstraints)
+        NSLayoutConstraint.deactivate(self.trackSpacingConstraints)
+        
         self.indicatorViews.removeAllFromSuperView()
         self.trackViews.removeAllFromSuperView()
         self.labels.removeAllFromSuperView()
@@ -316,9 +362,15 @@ public final class ProgressTrackerUIControl: UIControl {
                 let labelTrailingConstraint = self.labels[i].leadingAnchor.constraint(equalTo: self.labels[i-1].trailingAnchor, constant: self.labelSpacing)
                 self.labelSpacingConstraints.append(labelTrailingConstraint)
                 constraints.append(labelTrailingConstraint)
+
+                let labelWidthAnchor = self.labels[i].widthAnchor.constraint(equalTo: self.labels[i-1].widthAnchor)
+                labelWidthAnchor.priority = .defaultLow
+                constraints.append(labelWidthAnchor)
             }
-            constraints.append(self.labels[0].leadingAnchor.constraint(equalTo: self.leadingAnchor))
-            constraints.append(self.labels[lastIndex].trailingAnchor.constraint(equalTo: self.trailingAnchor))
+            constraints.append(self.labels[0].leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor))
+            constraints.append(self.indicatorViews[0].leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor))
+            constraints.append(self.labels[lastIndex].trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor))
+            constraints.append(self.indicatorViews [lastIndex].trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor))
         } else {
             constraints.append(self.indicatorViews[0].leadingAnchor.constraint(equalTo: self.leadingAnchor))
             constraints.append(self.indicatorViews [lastIndex].trailingAnchor.constraint(equalTo: self.trailingAnchor))
@@ -372,7 +424,7 @@ public final class ProgressTrackerUIControl: UIControl {
         } else {
             constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
             constraints.append(self.indicatorViews [lastIndex].bottomAnchor.constraint(equalTo: self.bottomAnchor))
-            constraints.append(self.indicatorViews[0].trailingAnchor.constraint(equalTo: self.trailingAnchor))
+//            constraints.append(self.indicatorViews[0].trailingAnchor.constraint(equalTo: self.trailingAnchor))
         }
 
         NSLayoutConstraint.activate(constraints)

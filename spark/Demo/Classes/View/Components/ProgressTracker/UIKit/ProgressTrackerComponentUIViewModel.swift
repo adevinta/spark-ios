@@ -14,7 +14,7 @@ import UIKit
 final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
     enum Constants {
-        static let numberOfPages = 2
+        static let numberOfPages = 3
     }
 
     enum ContentType: CaseIterable {
@@ -199,7 +199,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     // MARK: - Initialization
     @Published var theme: Theme
     @Published var intent: ProgressTrackerIntent
-    @Published var orientation: ProgressTrackerOrientation = .vertical
+    @Published var orientation: ProgressTrackerOrientation = .horizontal
     @Published var variant: ProgressTrackerVariant
     @Published var size: ProgressTrackerSize
     @Published var content: ContentType
@@ -207,7 +207,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var isDisabled = false
     @Published var isTouchable = true
     @Published var isSelected = false
-    @Published var showLabels = false
+    @Published var showLabels = true
     @Published var title: String = "Lore ipsum"
 
     init(
