@@ -16,10 +16,10 @@ struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsU
                  state: ProgressTrackerState
     ) -> ProgressTrackerColors {
         let intentColors: ProgressTrackerColors = {
-            if state.isSelected {
-                return self.selectedColors(colors: theme.colors, intent: intent)
-            } else if state.isDisabled {
+            if state.isDisabled {
                 return self.disabledColors(colors: theme.colors, dims: theme.dims, intent: intent)
+            } else if state.isSelected {
+                    return self.selectedColors(colors: theme.colors, intent: intent)
             } else if state.isPressed {
                 return self.pressedColors(colors: theme.colors, intent: intent)
             } else {
