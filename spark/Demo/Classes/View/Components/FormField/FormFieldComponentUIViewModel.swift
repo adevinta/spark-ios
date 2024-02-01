@@ -34,11 +34,17 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
+    var showComponentSheet: AnyPublisher<[FormFieldComponentStyle], Never> {
+        showComponentStyleSheetSubject
+            .eraseToAnyPublisher()
+    }
+
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[FormFieldIntent], Never> = .init()
     private var showTitleStyleSheetSubject: PassthroughSubject<[FormFieldTextStyle], Never> = .init()
     private var showDescriptionStyleSheetSubject: PassthroughSubject<[FormFieldTextStyle], Never> = .init()
+    private var showComponentStyleSheetSubject: PassthroughSubject<[FormFieldComponentStyle], Never> = .init()
 
     // MARK: - Items Properties
     lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -70,6 +76,14 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             name: "Description Style",
             type: .button,
             target: (source: self, action: #selector(self.presentDescriptionStyleSheet))
+        )
+    }()
+
+    lazy var componentStyleConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Description Style",
+            type: .button,
+            target: (source: self, action: #selector(self.presentComponentStyleSheet))
         )
     }()
 
@@ -106,6 +120,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
     @Published var intent: FormFieldIntent
     @Published var titleStyle: FormFieldTextStyle
     @Published var descriptionStyle: FormFieldTextStyle
+    @Published var componentStyle: FormFieldComponentStyle
     @Published var isEnabled: Bool
 
     init(
@@ -113,12 +128,14 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
         intent: FormFieldIntent = .support,
         titleStyle: FormFieldTextStyle = .text,
         descriptionStyle: FormFieldTextStyle = .text,
+        componentStyle: FormFieldComponentStyle = .singleCheckbox,
         isEnabled: Bool = true
     ) {
         self.theme = theme
         self.intent = intent
         self.titleStyle = titleStyle
         self.descriptionStyle = descriptionStyle
+        self.componentStyle = componentStyle
         self.isEnabled = isEnabled
         super.init(identifier: "FormField")
 
@@ -127,6 +144,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             self.intentConfigurationItemViewModel,
             self.titleStyleConfigurationItemViewModel,
             self.descriptionStyleConfigurationItemViewModel,
+            self.componentStyleConfigurationItemViewModel,
             self.disableConfigurationItemViewModel
         ])
     }
@@ -151,6 +169,10 @@ extension FormFieldComponentUIViewModel {
         self.showDescriptionStyleSheetSubject.send(FormFieldTextStyle.allCases)
     }
 
+    @objc func presentComponentStyleSheet() {
+        self.showComponentStyleSheetSubject.send(FormFieldComponentStyle.allCases)
+    }
+
     @objc func enabledChanged(_ isSelected: Any?) {
         self.isEnabled = isTrue(isSelected)
     }
@@ -162,4 +184,18 @@ enum FormFieldTextStyle: CaseIterable {
     case multilineText
     case attributeText
     case none
+}
+
+enum FormFieldComponentStyle: CaseIterable {
+    case basic
+    case singleCheckbox
+    case verticalCheckbox
+    case horizontalCheckbox
+    case horizontalScrollableCheckbox
+    case singleRadioButton
+    case verticalRadioButton
+    case horizontalRadioButton
+    case textField
+    case addOnTextField
+    case ratingInput
 }

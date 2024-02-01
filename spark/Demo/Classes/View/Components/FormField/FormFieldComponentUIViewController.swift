@@ -73,6 +73,10 @@ final class FormFieldComponentUIViewController: UIViewController {
         self.viewModel.showDescriptionSheet.subscribe(in: &self.cancellables) { descriptions in
             self.presentDescriptionStyleActionSheet(descriptions)
         }
+
+        self.viewModel.showComponentSheet.subscribe(in: &self.cancellables) { components in
+            self.presentComponentStyleActionSheet(components)
+        }
     }
 }
 
@@ -121,6 +125,15 @@ extension FormFieldComponentUIViewController {
             values: textStyles,
             texts: textStyles.map { $0.name }) { textStyle in
                 self.viewModel.descriptionStyle = textStyle
+            }
+        self.present(actionSheet, isAnimated: true)
+    }
+
+    private func presentComponentStyleActionSheet(_ componentStyles: [FormFieldComponentStyle]) {
+        let actionSheet = SparkActionSheet<FormFieldComponentStyle>.init(
+            values: componentStyles,
+            texts: componentStyles.map { $0.name }) { componentStyle in
+                self.viewModel.componentStyle = componentStyle
             }
         self.present(actionSheet, isAnimated: true)
     }
