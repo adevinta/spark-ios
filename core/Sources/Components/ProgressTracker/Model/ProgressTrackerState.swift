@@ -13,7 +13,7 @@ struct ProgressTrackerState: Updateable, Equatable {
     var isPressed: Bool
     var isSelected: Bool
 
-    static var `default` = ProgressTrackerState(isEnabled: true, isPressed: false, isSelected: false)
+    static var normal = ProgressTrackerState(isEnabled: true, isPressed: false, isSelected: false)
 
     static var disabled = ProgressTrackerState(isEnabled: false, isPressed: false, isSelected: false)
 

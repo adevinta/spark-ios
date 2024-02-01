@@ -15,7 +15,7 @@ final class ProgressTrackerIndicatorViewModel<ComponentContent: ProgressTrackerC
     var theme: Theme {
         didSet {
             self.updateColors()
-            self.updateSpacing()
+            self.font = theme.typography.body2Highlight
         }
     }
 
@@ -45,14 +45,14 @@ final class ProgressTrackerIndicatorViewModel<ComponentContent: ProgressTrackerC
     @Published var size: ProgressTrackerSize
     @Published var content: ComponentContent
     @Published var colors: ProgressTrackerColors
-    @Published var spacing: CGFloat
+    @Published var font: TypographyFontToken
 
     init(theme: Theme, 
          intent: ProgressTrackerIntent,
          variant: ProgressTrackerVariant,
          size: ProgressTrackerSize,
          content: ComponentContent,
-         state: ProgressTrackerState = .default,
+         state: ProgressTrackerState = .normal,
          colorsUseCase: ProgressTrackerGetColorsUseCaseable = ProgressTrackerGetColorsUseCase()
     ) {
         self.theme = theme
@@ -64,18 +64,23 @@ final class ProgressTrackerIndicatorViewModel<ComponentContent: ProgressTrackerC
         self.state = state
 
         self.colors = colorsUseCase.execute(theme: theme, intent: intent, variant: variant, state: state)
-        self.spacing = theme.layout.spacing.medium
+
+        self.font = theme.typography.body2Highlight
     }
 
     private func updateColors() {
         self.colors = self.colorsUseCase.execute(theme: theme, intent: intent, variant: variant, state: self.state)
     }
 
-    private func updateSpacing() {
-        self.spacing = theme.layout.spacing.medium
-    }
-
     func set(enabled: Bool) {
         self.state.isEnabled = enabled
+    }
+
+    func set(highlighted: Bool) {
+        self.state.isPressed = highlighted
+    }
+
+    func set(selected: Bool) {
+        self.state.isSelected = selected
     }
 }

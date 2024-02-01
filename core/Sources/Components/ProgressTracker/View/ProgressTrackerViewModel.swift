@@ -9,10 +9,6 @@
 import Foundation
 import SwiftUI
 
-enum ProgressTrackerConstants {
-    static var minTrackWidth: CGFloat = 1.0
-}
-
 /// A view model for a Progress Tracker.
 final class ProgressTrackerViewModel: ObservableObject {
 
