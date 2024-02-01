@@ -22,9 +22,9 @@ final class TextFieldGetSpacingsUseCaseTests: XCTestCase {
         self.testExecute(
             givenBorderStyle: .none,
             expectedSpacings: .init(
-                left: self.themeMock.layout.spacing.large,
+                left: self.themeMock.layout.spacing.none,
                 content: self.themeMock.layout.spacing.medium,
-                right: self.themeMock.layout.spacing.large
+                right: self.themeMock.layout.spacing.none
             )
         )
     }
