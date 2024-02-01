@@ -14,7 +14,6 @@ import XCTest
 final class ProgressTrackerViewModelTests: XCTestCase {
 
     var theme: ThemeGeneratedMock!
-    var colorsUseCase: ProgressTrackerGetTrackColorUseCaseableGeneratedMock!
     var spacingsUseCase: ProgressTrackerGetSpacingsUseCaseableGeneratedMock!
     var cancellables = Set<AnyCancellable>()
 
@@ -22,25 +21,16 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         super.setUp()
 
         self.theme = ThemeGeneratedMock.mocked()
-        self.colorsUseCase = ProgressTrackerGetTrackColorUseCaseableGeneratedMock()
         self.spacingsUseCase = ProgressTrackerGetSpacingsUseCaseableGeneratedMock()
         self.spacingsUseCase.executeWithSpacingAndOrientationReturnValue = .stub()
-        self.colorsUseCase.executeWithThemeAndIntentAndIsEnabledReturnValue = ColorTokenGeneratedMock.random()
     }
 
     func test_vertical_setup() {
         // Given
-        let _ = self.sut(intent: .alert, orientation: .vertical)
+        let _ = self.sut(orientation: .vertical)
 
         // Then
-        XCTAssertEqual(self.colorsUseCase.executeWithThemeAndIntentAndIsEnabledCallsCount, 1, "Colors use case expected to have been called")
-
-        let colorsParameters = self.colorsUseCase.executeWithThemeAndIntentAndIsEnabledReceivedArguments
-
-        XCTAssertEqual(colorsParameters?.intent, .alert, "Intent expected to be alert")
-        XCTAssertTrue(colorsParameters?.isEnabled ?? false, "Is enabled expected to be true")
-
-        XCTAssertEqual(self.spacingsUseCase.executeWithSpacingAndOrientationCallsCount, 1, "Spacings use case expected to have been called")
+        XCTAssertEqual(self.spacingsUseCase.executeWithSpacingAndOrientationCallsCount, 1, "Use case expected to have been called")
 
         let spacingsParameters = self.spacingsUseCase.executeWithSpacingAndOrientationReceivedArguments
 
@@ -49,48 +39,23 @@ final class ProgressTrackerViewModelTests: XCTestCase {
 
     func test_horizontal_setup() {
         // Given
-        let _ = self.sut(intent: .success, orientation: .horizontal)
+        let _ = self.sut(orientation: .horizontal)
 
         // Then
-        XCTAssertEqual(self.colorsUseCase.executeWithThemeAndIntentAndIsEnabledCallsCount, 1, "Colors use case expected to have been called")
-
-        let colorsParameters = self.colorsUseCase.executeWithThemeAndIntentAndIsEnabledReceivedArguments
-
-        XCTAssertEqual(colorsParameters?.intent, .success, "Intent expected to be success")
-        XCTAssertTrue(colorsParameters?.isEnabled ?? false, "Is enabled expected to be true")
-
         XCTAssertEqual(self.spacingsUseCase.executeWithSpacingAndOrientationCallsCount, 1, "Spacings use case expected to have been called")
 
         let spacingsParameters = self.spacingsUseCase.executeWithSpacingAndOrientationReceivedArguments
 
         XCTAssertEqual(spacingsParameters?.orientation, .horizontal, "Orientation expected to be have been horizontal")
-
-    }
-
-    func test_change_intent() {
-        // Given
-        let sut = self.sut(intent: .success, orientation: .horizontal)
-        let expectation = expectation(description: "Wait for color change")
-        expectation.expectedFulfillmentCount = 2
-
-        sut.$trackColor.sink { _ in
-            expectation.fulfill()
-        }.store(in: &self.cancellables)
-
-        // When
-        sut.intent = .alert
-
-        // Then
-        wait(for: [expectation], timeout: 1)
     }
 
     func test_theme_changed() {
         // Given
-        let sut = self.sut(intent: .success, orientation: .horizontal)
-        let expectation = expectation(description: "Wait for color change")
+        let sut = self.sut(orientation: .horizontal)
+        let expectation = expectation(description: "Wait for spacing & font change")
         expectation.expectedFulfillmentCount = 2
 
-        Publishers.Zip(sut.$trackColor, sut.$spacings).sink { _ in
+        Publishers.Zip(sut.$spacings, sut.$font).sink { _ in
             expectation.fulfill()
         }.store(in: &self.cancellables)
 
@@ -103,11 +68,11 @@ final class ProgressTrackerViewModelTests: XCTestCase {
 
     func test_enabled_status_changed() {
         // Given
-        let sut = self.sut(intent: .info, orientation: . vertical)
+        let sut = self.sut(orientation: . vertical)
         let expectation = expectation(description: "Wait for color change")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$trackColor.sink { _ in
+        sut.$labelColor.sink { _ in
             expectation.fulfill()
         }.store(in: &self.cancellables)
 
@@ -120,7 +85,7 @@ final class ProgressTrackerViewModelTests: XCTestCase {
 
     func test_orientation_is_changed() {
         // Given
-        let sut = self.sut(intent: .info, orientation: . vertical)
+        let sut = self.sut(orientation: . vertical)
         let expectation = expectation(description: "Wait for color change")
         expectation.expectedFulfillmentCount = 2
 
@@ -135,16 +100,15 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-    private func sut(intent: ProgressTrackerIntent, orientation: ProgressTrackerOrientation) -> ProgressTrackerViewModel {
-        return .init(
+    private func sut(orientation: ProgressTrackerOrientation) -> ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent> {
+        let content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 4, currentPage: 0)
+        return ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>(
             theme: self.theme,
-            intent: intent,
             orientation: orientation,
-            colorUseCase: self.colorsUseCase,
+            content: content,
             spacingUseCase: self.spacingsUseCase
         )
     }
-
 }
 
 private extension ProgressTrackerSpacing {
