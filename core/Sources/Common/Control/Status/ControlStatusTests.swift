@@ -14,6 +14,16 @@ final class ControlStatusTests: XCTestCase {
 
     // MARK: - Tests
 
+    func test_init_with_default_values() {
+        // GIVEN / WHEN
+        let status = ControlStatus()
+
+        // THEN
+        XCTAssertFalse(status.isHighlighted, "Wrong isHighlighted value")
+        XCTAssertTrue(status.isEnabled, "Wrong isSelected value")
+        XCTAssertFalse(status.isSelected, "Wrong isSelected value")
+    }
+
     func test_init() {
         // GIVEN
         let givenIsHighlighted = true
@@ -35,9 +45,9 @@ final class ControlStatusTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            status.isDisabled,
-            !givenIsEnabled,
-            "Wrong isDisabled"
+            status.isEnabled,
+            givenIsEnabled,
+            "Wrong isEnabled"
         )
 
         XCTAssertEqual(

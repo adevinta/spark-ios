@@ -9,7 +9,7 @@
 import Foundation
 
 /// Constants describing the state of a Spark control.
-public enum ControlState: CaseIterable {
+public enum ControlState: CaseIterable, Equatable {
     /// The normal, or default, state of a control where the control is enabled but neither selected nor highlighted.
     case normal
     /// The highlighted state of a control.

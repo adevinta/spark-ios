@@ -8,8 +8,9 @@
 
 import Foundation
 
-// sourcery: AutoMockable
+// sourcery: AutoMockable, AutoMockTest
 protocol ButtonGetStateUseCaseable {
+    // sourcery: dims = "Identical"
     func execute(isEnabled: Bool,
                  dims: Dims) -> ButtonState
 }

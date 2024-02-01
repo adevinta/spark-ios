@@ -9,7 +9,7 @@
 import Foundation
 
 /// Manage all the states for a dynamic property.
-final class ControlPropertyStates<PropertyType> {
+final class ControlPropertyStates<PropertyType: Equatable> {
 
     // MARK: - Type Alias
 
@@ -50,7 +50,7 @@ final class ControlPropertyStates<PropertyType> {
     /// Get the value for a state.
     /// - Parameters:
     ///   - state: the state of the value
-    func value(forState state: ControlState) -> PropertyType? {
+    func value(for state: ControlState) -> PropertyType? {
         switch state {
         case .normal: return self.normalState.value
         case .highlighted: return self.highlightedState.value
@@ -61,8 +61,8 @@ final class ControlPropertyStates<PropertyType> {
 
     /// Get the value for the status of the control.
     /// - Parameters:
-    ///   - state: the status of the control
-    func value(forStatus status: ControlStatus) -> PropertyType? {
+    ///   - status: the status of the control
+    func value(for status: ControlStatus) -> PropertyType? {
         // isHighlighted has the highest priority,
         // then isDisabled,
         // then isSelected,
@@ -70,7 +70,7 @@ final class ControlPropertyStates<PropertyType> {
 
         if status.isHighlighted, let value = self.highlightedState.value {
             return value
-        } else if status.isDisabled, let value = self.disabledState.value {
+        } else if !status.isEnabled, let value = self.disabledState.value {
             return value
         } else if status.isSelected, let value = self.selectedState.value {
             return value

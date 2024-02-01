@@ -7,22 +7,34 @@
 //
 
 /// The current status of the control: highlighted or not, disabled or not and selected or not.
-struct ControlStatus {
+final class ControlStatus: Equatable {
 
     // MARK: - Properties
 
     /// A Boolean value indicating whether the control draws a highlight.
-    let isHighlighted: Bool
-    /// A Boolean value indicating whether the control is in the disabled state.
-    let isDisabled: Bool
+    var isHighlighted: Bool
+    /// A Boolean value indicating whether the control is in the enabled state.
+    var isEnabled: Bool
     /// A Boolean value indicating whether the control is in the selected state.
-    let isSelected: Bool
+    var isSelected: Bool
 
     // MARK: - Initialization
 
-    init(isHighlighted: Bool, isEnabled: Bool, isSelected: Bool) {
+    init(
+        isHighlighted: Bool = false,
+        isEnabled: Bool = true,
+        isSelected: Bool = false
+    ) {
         self.isHighlighted = isHighlighted
-        self.isDisabled = !isEnabled
+        self.isEnabled = isEnabled
         self.isSelected = isSelected
+    }
+
+    // MARK: - Equatable
+
+    static func == (lhs: ControlStatus, rhs: ControlStatus) -> Bool {
+        return lhs.isHighlighted == rhs.isHighlighted &&
+        lhs.isEnabled == rhs.isEnabled &&
+        lhs.isSelected == rhs.isSelected
     }
 }

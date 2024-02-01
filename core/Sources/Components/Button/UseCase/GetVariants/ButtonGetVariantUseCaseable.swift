@@ -8,7 +8,8 @@
 
 import SwiftUI
 
-// sourcery: AutoMockable
+// sourcery: AutoMockable, AutoMockTest
 protocol ButtonGetVariantUseCaseable {
+    // sourcery: colors = "Identical", dims = "Identical"
     func execute(intent: ButtonIntent, colors: Colors, dims: Dims) -> ButtonColors
 }

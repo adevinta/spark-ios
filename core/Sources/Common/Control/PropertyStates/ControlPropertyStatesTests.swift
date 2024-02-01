@@ -25,7 +25,7 @@ final class ControlPropertyStatesTests: XCTestCase {
             states.setValue(expectedValue, for: state)
             
             // WHEN
-            let value = states.value(forState: state)
+            let value = states.value(for: state)
             
             // THEN
             XCTAssertEqual(
@@ -45,7 +45,7 @@ final class ControlPropertyStatesTests: XCTestCase {
             states.setValue(nil, for: state)
             
             // WHEN
-            let value = states.value(forState: state)
+            let value = states.value(for: state)
             
             // THEN
             XCTAssertNil(
@@ -73,7 +73,7 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         var status = ControlStatus(isHighlighted: true)
         states.setValue(highlightedValue, for: .highlighted)
-        var value = states.value(forStatus: status)
+        var value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -89,7 +89,7 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         status = ControlStatus(isHighlighted: true)
         states.setValue(nil, for: .highlighted)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -106,7 +106,7 @@ final class ControlPropertyStatesTests: XCTestCase {
         status = .init(isHighlighted: false)
 
         states.setValue(highlightedValue, for: .highlighted)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -130,11 +130,11 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         // **
         // WHEN
-        // Test with .disabled value and true isDisabled status.
+        // Test with .disabled value and false isEnabled status.
 
-        var status = ControlStatus(isDisabled: true)
+        var status = ControlStatus(isEnabled: false)
         states.setValue(disabledValue, for: .disabled)
-        var value = states.value(forStatus: status)
+        var value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -146,11 +146,11 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         // **
         // WHEN
-        // Test without .disabled value and true isDisabled status.
+        // Test without .disabled value and false isEnabled status.
 
-        status = ControlStatus(isDisabled: true)
+        status = ControlStatus(isEnabled: false)
         states.setValue(nil, for: .disabled)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -164,10 +164,10 @@ final class ControlPropertyStatesTests: XCTestCase {
         // WHEN
         // Test with .disabled value and false isDisabled status.
 
-        status = .init(isDisabled: false)
+        status = .init(isEnabled: true)
 
         states.setValue(disabledValue, for: .disabled)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -179,14 +179,14 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         // **
         // WHEN
-        // Test with .disabled value and true isDisabled status.
+        // Test with .disabled value and false isEnabled status.
         // AND with value for .highlighted and isHighlighted status is true
 
-        status = .init(isHighlighted: true, isDisabled: true)
+        status = .init(isHighlighted: true, isEnabled: false)
 
         states.setValue(disabledValue, for: .disabled)
         states.setValue(highlightedValue, for: .highlighted)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -198,14 +198,14 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         // **
         // WHEN
-        // Test with .disabled value and true isDisabled status.
+        // Test with .disabled value and false isEnabled status.
         // AND without value for .highlighted and isHighlighted status is true
 
-        status = .init(isHighlighted: true, isDisabled: true)
+        status = .init(isHighlighted: true, isEnabled: false)
 
         states.setValue(disabledValue, for: .disabled)
         states.setValue(nil, for: .highlighted)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -235,7 +235,7 @@ final class ControlPropertyStatesTests: XCTestCase {
         // Test with .selected value and true isSelected status.
 
         states.setValue(selectedValue, for: .selected)
-        var value = states.value(forStatus: status)
+        var value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -250,7 +250,7 @@ final class ControlPropertyStatesTests: XCTestCase {
         // Test without .selected value and true isSelected status.
 
         states.setValue(nil, for: .selected)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -267,7 +267,7 @@ final class ControlPropertyStatesTests: XCTestCase {
         status = .init(isSelected: false)
 
         states.setValue(selectedValue, for: .selected)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -286,7 +286,7 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         states.setValue(selectedValue, for: .selected)
         states.setValue(highlightedValue, for: .highlighted)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -305,7 +305,7 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         states.setValue(selectedValue, for: .selected)
         states.setValue(nil, for: .highlighted)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -318,13 +318,13 @@ final class ControlPropertyStatesTests: XCTestCase {
         // **
         // WHEN
         // Test with .selected value and true isSelected status.
-        // AND with value for .disabled and isDisabled status is true
+        // AND with value for .disabled and isEnabled status is false.
 
-        status = .init(isDisabled: true, isSelected: true)
+        status = .init(isEnabled: false, isSelected: true)
 
         states.setValue(selectedValue, for: .selected)
         states.setValue(disabledValue, for: .disabled)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -337,13 +337,13 @@ final class ControlPropertyStatesTests: XCTestCase {
         // **
         // WHEN
         // Test with .selected value and true isSelected status.
-        // AND without value for .disabled and isDisabled status is true
+        // AND without value for .disabled and isEnabled status is false.
 
-        status = .init(isDisabled: true, isSelected: true)
+        status = .init(isEnabled: false, isSelected: true)
 
         states.setValue(selectedValue, for: .selected)
         states.setValue(nil, for: .disabled)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -366,7 +366,7 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         var status = ControlStatus()
         states.setValue(normalStateValue, for: .normal)
-        var value = states.value(forStatus: status)
+        var value = states.value(for: status)
 
         // THEN
         XCTAssertEqual(
@@ -382,7 +382,7 @@ final class ControlPropertyStatesTests: XCTestCase {
 
         status = ControlStatus()
         states.setValue(nil, for: .normal)
-        value = states.value(forStatus: status)
+        value = states.value(for: status)
 
         // THEN
         XCTAssertNil(
@@ -390,18 +390,5 @@ final class ControlPropertyStatesTests: XCTestCase {
             "Wrong value WHEN all status properties are false AND nil .normal state value"
         )
         // **
-    }
-}
-
-// MARK: - Extension
-
-private extension ControlStatus {
-
-    init(isHighlighted: Bool = false, isDisabled: Bool = false, isSelected: Bool = false) {
-        self.init(
-            isHighlighted: isHighlighted,
-            isEnabled: !isDisabled,
-            isSelected: isSelected
-        )
     }
 }
