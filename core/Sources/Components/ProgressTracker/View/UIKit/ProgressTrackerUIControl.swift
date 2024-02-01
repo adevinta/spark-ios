@@ -267,6 +267,8 @@ public final class ProgressTrackerUIControl: UIControl {
         self.indicatorViews = self.createIndicatorViews(content: content)
         self.indicatorViews.addToSuperView(self)
 
+        self.indicatorViews[content.currentPage].isSelected = true
+
         self.trackViews = self.createTrackView(numberOfPages: content.numberOfPages, orientation: orientation)
         self.trackViews.addToSuperView(self)
 
@@ -299,6 +301,8 @@ public final class ProgressTrackerUIControl: UIControl {
             if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
                 self.setupView(content: content, orientation: self.viewModel.orientation)
             } else if content.numberOfPages > 0 {
+                self.indicatorViews[content.currentPage].isSelected = true
+
                 for i in 0..<content.numberOfPages {
                     self.indicatorViews[i].content = content.content(ofIndex: i)
                 }
