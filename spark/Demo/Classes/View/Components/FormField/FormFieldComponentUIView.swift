@@ -62,6 +62,10 @@ final class FormFieldComponentUIView: ComponentUIView {
             switch textStyle {
             case .text:
                 self.componentView.title = self.viewModel.text
+            case .asterixText:
+                self.componentView.attributedTitle = self.viewModel.textWithAsterix
+            case .opacityText:
+                self.componentView.attributedTitle = self.viewModel.textWithOpacity
             case .multilineText:
                 self.componentView.title = self.viewModel.multilineText
             case .attributeText:
@@ -77,6 +81,10 @@ final class FormFieldComponentUIView: ComponentUIView {
             switch textStyle {
             case .text:
                 self.componentView.descriptionString = self.viewModel.descriptionText
+            case .asterixText:
+                self.componentView.attributedDescription = self.viewModel.textWithAsterix
+            case .opacityText:
+                self.componentView.attributedDescription = self.viewModel.textWithOpacity
             case .multilineText:
                 self.componentView.descriptionString = self.viewModel.multilineText
             case .attributeText:
@@ -173,82 +181,123 @@ final class FormFieldComponentUIView: ComponentUIView {
     }
 
     static func makeSingleCheckbox() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.red
-        view.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        let view = CheckboxUIView(
+            theme: SparkTheme.shared,
+            text: "Hello World",
+            checkedImage: DemoIconography.shared.checkmark,
+            selectionState: .unselected,
+            alignment: .left
+        )
         return view
     }
 
     static func makeVerticalCheckbox() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.blue
-        view.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        let view = CheckboxGroupUIView(
+            checkedImage: DemoIconography.shared.checkmark,
+            items: [
+                CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
+                CheckboxGroupItemDefault(title: "Checkbox 2", id: "2", selectionState: .selected, isEnabled: true),
+            ],
+            theme: SparkTheme.shared,
+            intent: .success,
+            accessibilityIdentifierPrefix: "checkbox"
+        )
+        view.layout = .vertical
         return view
     }
 
     static func makeHorizontalCheckbox() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.black
-        view.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        let view = CheckboxGroupUIView(
+            checkedImage: DemoIconography.shared.checkmark,
+            items: [
+                CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
+                CheckboxGroupItemDefault(title: "Checkbox 2", id: "2", selectionState: .selected, isEnabled: true),
+            ],
+            theme: SparkTheme.shared,
+            intent: .alert,
+            accessibilityIdentifierPrefix: "checkbox"
+        )
+        view.layout = .horizontal
         return view
     }
 
     static func makeHorizontalScrollableCheckbox() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.brown
-        view.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 140).isActive = true
+        let view = CheckboxGroupUIView(
+            checkedImage: DemoIconography.shared.checkmark,
+            items: [
+                CheckboxGroupItemDefault(title: "Hello World", id: "1", selectionState: .unselected, isEnabled: true),
+                CheckboxGroupItemDefault(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", id: "2", selectionState: .selected, isEnabled: true),
+            ],
+            theme: SparkTheme.shared,
+            accessibilityIdentifierPrefix: "checkbox"
+        )
+        view.layout = .horizontal
         return view
     }
 
     static func makeSingleRadioButton() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.systemPink
-        view.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        let view = RadioButtonUIView(
+            theme: SparkTheme.shared,
+            intent: .info,
+            id: "radiobutton",
+            label: NSAttributedString(string: "Hello World"),
+            isSelected: true
+        )
         return view
     }
 
     static func makeVerticalRadioButton() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.green
-        view.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        let view = RadioButtonUIGroupView(
+            theme: SparkTheme.shared,
+            intent: .danger,
+            selectedID: "radiobutton",
+            items: [
+                RadioButtonUIItem(id: "1", label: "Radio Button 1"),
+                RadioButtonUIItem(id: "2", label: "Radio Button 2"),
+            ],
+            groupLayout: .vertical
+        )
         return view
     }
 
     static func makeHorizontalRadioButton() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.cyan
-        view.heightAnchor.constraint(equalToConstant: 110).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 310).isActive = true
+        let view = RadioButtonUIGroupView(
+            theme: SparkTheme.shared,
+            intent: .support,
+            selectedID: "radiobutton",
+            items: [
+                RadioButtonUIItem(id: "1", label: "Radio Button 1"),
+                RadioButtonUIItem(id: "2", label: "Radio Button 2"),
+            ],
+            groupLayout: .horizontal
+        )
         return view
     }
 
     static func makeTextField() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.orange
-        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        let view = TextFieldUIView(
+            theme: SparkTheme.shared,
+            intent: .alert
+        )
+        view.text = "TextField"
         return view
     }
 
     static func makeAddOnTextField() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.magenta
-        view.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        let view = TextFieldUIView(
+            theme: SparkTheme.shared,
+            intent: .alert
+        )
+        view.text = "I couldn't add addOnTextField. It is not UIControl for now"
         return view
     }
 
     static func makeRatingInput() -> UIControl {
-        let view = UIControl()
-        view.backgroundColor = UIColor.purple
-        view.heightAnchor.constraint(equalToConstant: 500).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        let view = RatingInputUIView(
+            theme: SparkTheme.shared,
+            intent: .main,
+            rating: 2.0
+        )
         return view
     }
 }

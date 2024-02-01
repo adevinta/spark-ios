@@ -81,7 +81,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
 
     lazy var componentStyleConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Description Style",
+            name: "Component Style",
             type: .button,
             target: (source: self, action: #selector(self.presentComponentStyleSheet))
         )
@@ -112,6 +112,28 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             .foregroundColor: UIColor.red
         ]
         attributeString.setAttributes(attributes, range: NSRange(location: 0, length: 11))
+        return attributeString
+    }
+    var textWithOpacity: NSAttributedString {
+        let attributeString = NSMutableAttributedString(
+            string: "Your agreement is important to us.",
+            attributes: [
+                .font: self.theme.typography.caption.uiFont,
+                .foregroundColor: self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1).uiColor
+            ]
+        )
+        return attributeString
+    }
+    var textWithAsterix: NSAttributedString {
+        let attributeString = NSMutableAttributedString(
+            string: "Label *",
+            attributes: [.font: self.theme.typography.body2.uiFont]
+        )
+        let attributes: [NSMutableAttributedString.Key: Any] = [
+            .font: self.theme.typography.caption.uiFont,
+            .foregroundColor: self.theme.colors.base.onSurface.opacity(self.theme.dims.dim3).uiColor
+        ]
+        attributeString.setAttributes(attributes, range: NSRange(location: 6, length: 1))
         return attributeString
     }
 
@@ -181,6 +203,8 @@ extension FormFieldComponentUIViewModel {
 // MARK: - Enum
 enum FormFieldTextStyle: CaseIterable {
     case text
+    case asterixText
+    case opacityText
     case multilineText
     case attributeText
     case none
