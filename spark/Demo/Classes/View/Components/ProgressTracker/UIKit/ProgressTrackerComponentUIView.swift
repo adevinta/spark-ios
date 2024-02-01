@@ -35,14 +35,30 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
     }
 
     private static func makeProgressTrackerView(viewModel: ProgressTrackerComponentUIViewModel) -> ProgressTrackerUIControl {
-        let view = ProgressTrackerUIControl(
-            theme: viewModel.theme,
-            intent: viewModel.intent,
-            variant: viewModel.variant,
-            size: viewModel.size, 
-            numberOfPages: viewModel.content.content.numberOfPages,
-            orientation: viewModel.orientation
-        )
+        let view: ProgressTrackerUIControl
+
+        if viewModel.showLabels {
+            let labels: [String] = (0..<viewModel.content.content.numberOfPages).map { index in
+                return "\(viewModel.title) \(index)"
+            }
+            view = ProgressTrackerUIControl(
+                theme: viewModel.theme,
+                intent: viewModel.intent,
+                variant: viewModel.variant,
+                size: viewModel.size,
+                labels: labels,
+                orientation: viewModel.orientation
+            )
+        } else {
+            view = ProgressTrackerUIControl(
+                theme: viewModel.theme,
+                intent: viewModel.intent,
+                variant: viewModel.variant,
+                size: viewModel.size,
+                numberOfPages: viewModel.content.content.numberOfPages,
+                orientation: viewModel.orientation
+            )
+        }
         view.showDefaultPageNumber = viewModel.content.content.showDefaultPageNumber
         view.currentPage = viewModel.content.content.currentPage
         return view
@@ -99,14 +115,14 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             }
         }
 
-        self.viewModel.$showLabels.subscribe(in: &self.cancellables) { showLabels in
+        self.viewModel.$showLabels.dropFirst().subscribe(in: &self.cancellables) { showLabels in
             for i in 0..<self.viewModel.content.content.numberOfPages {
                 let label: String? = showLabels ? "\(self.viewModel.title) \(i)" : nil
                 self.componentView.setLabel(label, forIndex: i)
             }
         }
 
-        self.viewModel.$title.subscribe(in: &self.cancellables) { title in
+        self.viewModel.$title.dropFirst().subscribe(in: &self.cancellables) { title in
             for i in 0..<self.viewModel.content.content.numberOfPages {
                 let label: String? = self.viewModel.showLabels ? "\(String(describing: title)) \(i)" : nil
                 self.componentView.setLabel(label, forIndex: i)
