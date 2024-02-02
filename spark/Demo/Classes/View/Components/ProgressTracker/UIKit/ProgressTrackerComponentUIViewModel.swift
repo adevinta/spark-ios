@@ -29,21 +29,20 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             switch self {
             case .icon: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(
                 numberOfPages: Constants.numberOfPages,
-                currentPage: 0,
                 showDefaultPageNumber: false)
 
                 for i in 0..<Constants.numberOfPages {
-                    content.setIndicatorImage(UIImage.standardImage(at: i), forIndex: i)
+                    content.setIndicatorImage(UIImage.standardImage(at: i), atIndex: i)
                 }
                 return content
 
-            case .text: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(numberOfPages: Constants.numberOfPages, currentPage: 0, showDefaultPageNumber: false)
+            case .text: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(numberOfPages: Constants.numberOfPages, showDefaultPageNumber: false)
                 for i in 0..<Constants.numberOfPages {
-                    content.setContentLabel(Character(UnicodeScalar(i + startingValue)!), ofIndex: i)
+                    content.setIndicatorLabel(Character(UnicodeScalar(i + startingValue)!), atIndex: i)
                 }
                 return content
-            case .none: return .init(numberOfPages: Constants.numberOfPages, currentPage: 0, showDefaultPageNumber: false)
-            case .page: return .init(numberOfPages: Constants.numberOfPages, currentPage: 0, showDefaultPageNumber: true)
+            case .none: return .init(numberOfPages: Constants.numberOfPages, showDefaultPageNumber: false)
+            case .page: return .init(numberOfPages: Constants.numberOfPages, showDefaultPageNumber: true)
             }
         }
     }

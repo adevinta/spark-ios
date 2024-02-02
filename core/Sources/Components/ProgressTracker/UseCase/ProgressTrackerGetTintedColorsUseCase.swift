@@ -33,6 +33,7 @@ struct ProgressTrackerGetTintedColorsUseCase: ProgressTrackerGetVariantColorsUse
             content: intentColors.content)
     }
 
+    // MARK: - Private functions
     private func disabledColors(colors: Colors, dims: Dims, intent: ProgressTrackerIntent) -> ProgressTrackerTintedColors {
         let variantColors = self.enabledColors(colors: colors, intent: intent)
 
@@ -40,8 +41,8 @@ struct ProgressTrackerGetTintedColorsUseCase: ProgressTrackerGetVariantColorsUse
             background: variantColors.background.opacity(dims.dim2),
             content: variantColors.content.opacity(dims.dim2)
         )
-
     }
+
     private func pressedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerTintedColors {
         switch intent {
         case .accent:

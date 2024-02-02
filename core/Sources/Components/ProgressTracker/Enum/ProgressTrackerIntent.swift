@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// All possible intents of the progress tracker
 public enum ProgressTrackerIntent: CaseIterable {
     case accent
     case alert

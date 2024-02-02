@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// The orientation of the progress tracker
 public enum ProgressTrackerOrientation: CaseIterable {
     case horizontal
     case vertical

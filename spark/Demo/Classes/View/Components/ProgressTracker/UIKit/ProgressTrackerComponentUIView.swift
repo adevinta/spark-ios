@@ -60,7 +60,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             )
         }
         view.showDefaultPageNumber = viewModel.content.content.showDefaultPageNumber
-        view.currentPage = viewModel.content.content.currentPage
+        view.currentPage = viewModel.content.content.currentPageIndex
         return view
     }
 
@@ -106,10 +106,10 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
             self.componentView.showDefaultPageNumber = contentType.content.showDefaultPageNumber
             self.componentView.numberOfPages = contentType.content.numberOfPages
-            self.componentView.currentPage = contentType.content.currentPage
+            self.componentView.currentPage = contentType.content.currentPageIndex
 
             for i in 0..<contentType.content.numberOfPages {
-                let content = contentType.content.content(ofIndex: i)
+                let content = contentType.content.content(atIndex: i)
                 self.componentView.setIndicatorLabel(content.label, forIndex: i)
                 self.componentView.setIndicatorImage(content.indicatorImage, forIndex: i)
             }

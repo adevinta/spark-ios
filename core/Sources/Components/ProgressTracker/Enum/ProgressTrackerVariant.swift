@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// The progress tracker variant
 public enum ProgressTrackerVariant: CaseIterable {
     case outlined
     case tinted
