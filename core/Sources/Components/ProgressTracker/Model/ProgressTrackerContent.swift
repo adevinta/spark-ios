@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
-// A model representing the content of a single Progress Tracker Indicator
+/// A model representing the content of a single Progress Tracker Indicator
 protocol ProgressTrackerContentIndicating {
     associatedtype ImageType
     associatedtype TextType
@@ -20,7 +20,7 @@ protocol ProgressTrackerContentIndicating {
     init()
 }
 
-// The UIKit progress tracker indicator 
+/// The content model of the UIKit progress tracker indicator
 struct ProgressTrackerUIIndicatorContent: ProgressTrackerContentIndicating, Equatable {
     typealias TextType = NSAttributedString
 
@@ -28,6 +28,7 @@ struct ProgressTrackerUIIndicatorContent: ProgressTrackerContentIndicating, Equa
     var label: Character?
 }
 
+/// The content model of tje SwiftUI progress tracker indicator
 struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating, Equatable {
     typealias TextType = AttributedString
 
@@ -35,45 +36,49 @@ struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating, Equata
     var label: Character?
 }
 
+/// A model representing the content of a progress tracker.
 struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> where ComponentContent: Equatable {
     var numberOfPages: Int
     var showDefaultPageNumber: Bool 
-    var currentPage: Int
+    var currentPageIndex: Int
     var preferredIndicatorImage: ComponentContent.ImageType?
     var preferredCurrentPageIndicatorImage:  ComponentContent.ImageType?
-    var visitedPageIndicatorImage: ComponentContent.ImageType?
+    var completedPageIndicatorImage: ComponentContent.ImageType?
     private var content = [Int: ComponentContent]()
     private var currentPageIndicator = [Int: ComponentContent.ImageType]()
     var labels = [Int: ComponentContent.TextType?]()
 
+    /// Returns true, if the content contains a label
     var hasLabel: Bool {
-        return labels.values.reduce(false) { (partialResult, value) in
-            return partialResult || value != nil
-        }
+        return self.numberOfLabels > 0
     }
 
+    /// The number of labels
     var numberOfLabels: Int {
         return labels.values.reduce(0) { (partialResult, value) in
             return partialResult + (value == nil ? 0 : 1)
         }
     }
 
+    // MARK: - Initialization
     init(
         numberOfPages: Int,
-        currentPage: Int,
+        currentPageIndex: Int = 0,
         showDefaultPageNumber: Bool = true,
         preferredIndicatorImage: ComponentContent.ImageType? = nil,
         preferredCurrentPageIndicatorImage: ComponentContent.ImageType? = nil,
-        visitedPageIndicatorImage: ComponentContent.ImageType? = nil)
+        completedPageIndicatorImage: ComponentContent.ImageType? = nil)
     {
         self.numberOfPages = numberOfPages
-        self.currentPage = currentPage
+        self.currentPageIndex = currentPageIndex
         self.showDefaultPageNumber = showDefaultPageNumber
         self.preferredIndicatorImage = preferredIndicatorImage
-        self.visitedPageIndicatorImage = visitedPageIndicatorImage
+        self.completedPageIndicatorImage = completedPageIndicatorImage
         self.preferredCurrentPageIndicatorImage = preferredCurrentPageIndicatorImage
     }
 
+    /// A function which determines, that so much content has changed, that the view needs to be setup again.
+    /// The view needs to be setup from fresh, when the number of pages have changed, or the number of labels.
     func needsUpdateOfLayout(otherComponent content: Self) -> Bool {
         if content.numberOfPages != self.numberOfPages {
             return true
@@ -85,7 +90,8 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
         return false
     }
 
-    func content(ofIndex index: Int) -> ComponentContent {
+    /// Return the content for the indicator at that given index.
+    func content(atIndex index: Int) -> ComponentContent {
         var content: ComponentContent
 
         if let pageContent = self.content[index] {
@@ -98,7 +104,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
             content.label = "\(index + 1)".first
         }
 
-        if index == self.currentPage {
+        if index == self.currentPageIndex {
             if let currentPageImage = self.currentPageIndicator[index]  {
                 content.indicatorImage = currentPageImage
             } else if let currentPageImage = self.preferredCurrentPageIndicatorImage {
@@ -106,8 +112,8 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
             } else if content.indicatorImage == nil {
                 content.indicatorImage = self.preferredIndicatorImage
             }
-        } else if index < self.currentPage, content.indicatorImage == nil {
-            content.indicatorImage =  self.visitedPageIndicatorImage ?? self.preferredIndicatorImage
+        } else if index < self.currentPageIndex, content.indicatorImage == nil {
+            content.indicatorImage =  self.completedPageIndicatorImage ?? self.preferredIndicatorImage
         } else if content.indicatorImage == nil {
             content.indicatorImage = self.preferredIndicatorImage
         }
@@ -115,7 +121,8 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
         return content
     }
 
-    mutating func setIndicatorImage(_ image: ComponentContent.ImageType?, forIndex index: Int) {
+    /// Set the indicator image at the specified index
+    mutating func setIndicatorImage(_ image: ComponentContent.ImageType?, atIndex index: Int) {
         var content: ComponentContent
 
         if let pageContent = self.content[index] {
@@ -127,20 +134,24 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
         self.content[index] = content
     }
 
-    mutating func setCurrentPageIndicatorImage(_ image: ComponentContent.ImageType?, forIndex index: Int) {
+    /// Set the current page indicator image at the specified index
+    mutating func setCurrentPageIndicatorImage(_ image: ComponentContent.ImageType?, atIndex index: Int) {
 
         self.currentPageIndicator[index] = image
     }
 
-    mutating func setAttributedLabel(_ attributedLabel: ComponentContent.TextType?, forIndex index: Int) {
+    /// Set an attribute label at the given index
+    mutating func setAttributedLabel(_ attributedLabel: ComponentContent.TextType?, atIndex index: Int) {
         self.labels[index] = attributedLabel
     }
 
-    func getAttributedLabel(ofIndex index: Int) -> ComponentContent.TextType? {
+    /// Return the attributed label at the given index
+    func getAttributedLabel(atIndex index: Int) -> ComponentContent.TextType? {
         return self.labels[index].flatMap{ $0 }
     }
 
-    mutating func setContentLabel(_ label: Character?, ofIndex index: Int) {
+    /// Set the indicator label at the given index
+    mutating func setIndicatorLabel(_ label: Character?, atIndex index: Int) {
         var content: ComponentContent
 
         if let pageContent = self.content[index] {
@@ -152,7 +163,8 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
         self.content[index] = content
     }
 
-    func getContentLabel(ofIndex index:  Int) -> Character? {
+    /// Return the indicator label at the given index
+    func getIndicatorLabel(atIndex index:  Int) -> Character? {
         return self.content[index]?.label
     }
 }

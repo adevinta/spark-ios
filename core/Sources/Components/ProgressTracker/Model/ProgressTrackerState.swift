@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// The possible states of the progress tracker
 struct ProgressTrackerState: Updateable, Equatable {
     var isEnabled: Bool
     var isPressed: Bool

@@ -8,7 +8,8 @@
 
 import Foundation
 
-public enum ProgressInteractionState: CaseIterable {
+/// The possible interaction states of the progress tracker
+public enum ProgressTrackerInteractionState: CaseIterable {
     case none
     case discrete
     case continuous

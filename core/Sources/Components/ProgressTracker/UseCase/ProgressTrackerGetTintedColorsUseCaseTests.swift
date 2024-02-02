@@ -12,9 +12,11 @@ import XCTest
 
 final class ProgressTrackerGetTintedColorsUseCaseTests: XCTestCase {
 
+    // MARK: Properties
     var sut: ProgressTrackerGetTintedColorsUseCase!
     var theme: ThemeGeneratedMock!
 
+    // MARK: Setup
     override func setUp()  {
         super.setUp()
 
@@ -22,6 +24,7 @@ final class ProgressTrackerGetTintedColorsUseCaseTests: XCTestCase {
         self.theme = ThemeGeneratedMock.mocked()
     }
 
+    // MARK: - Tests
     func test_selected_colors() {
         // GIVEN
 
@@ -77,6 +80,7 @@ final class ProgressTrackerGetTintedColorsUseCaseTests: XCTestCase {
     }
 }
 
+// MARK: - Private helpers
 private extension ProgressTrackerIntent {
 
     func selectedColors(_ colors: Colors) -> ProgressTrackerColors {
@@ -135,6 +139,7 @@ private extension ProgressTrackerIntent {
             outline: enabledColors.outline.opacity(dims.dim2),
             content: enabledColors.content.opacity(dims.dim2))
     }
+
     func enabledColors(_ colors: Colors) -> ProgressTrackerColors {
         let tintedColors: ProgressTrackerTintedColors = {
             switch self {
