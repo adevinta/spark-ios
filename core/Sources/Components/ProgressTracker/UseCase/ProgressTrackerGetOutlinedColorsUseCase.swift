@@ -8,9 +8,10 @@
 
 import Foundation
 
-/// A use case to calculate the outlined colors of the progress tracker
+/// A use case to calculate the outlined colors of the progress tracker indicator
 struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsUseCaseable {
 
+    /// Return the colors of the progress tracker indicator
     func execute(theme: Theme,
                  intent: ProgressTrackerIntent,
                  state: ProgressTrackerState

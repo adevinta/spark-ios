@@ -12,9 +12,11 @@ import XCTest
 
 final class ProgressTrackerGetSpacingsUseCaseTests: XCTestCase {
 
+    // MARK: Properties
     var sut: ProgressTrackerGetSpacingsUseCase!
     var spacing: LayoutSpacing!
 
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
 
@@ -22,6 +24,7 @@ final class ProgressTrackerGetSpacingsUseCaseTests: XCTestCase {
         self.sut = ProgressTrackerGetSpacingsUseCase()
     }
 
+    // MARK: - Tests
     func test_horizontal_spacing() {
         let spacing = self.sut.execute(spacing: self.spacing, orientation: .horizontal)
 
@@ -33,5 +36,4 @@ final class ProgressTrackerGetSpacingsUseCaseTests: XCTestCase {
 
         XCTAssertEqual(spacing, .init(trackIndicatorSpacing: 5.0, minLabelSpacing: 5.0))
     }
-
 }

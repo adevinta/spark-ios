@@ -12,9 +12,11 @@ import XCTest
 
 final class ProgressTrackerGetTrackColorUseCaseTests: XCTestCase {
 
+    // MARK: - Properties
     var sut: ProgressTrackerGetTrackColorUseCase!
     var theme: ThemeGeneratedMock!
 
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
 
@@ -22,6 +24,7 @@ final class ProgressTrackerGetTrackColorUseCaseTests: XCTestCase {
         self.sut = ProgressTrackerGetTrackColorUseCase()
     }
 
+    // MARK: - Tests
     func test_all_intents() {
         let colors = self.theme.colors
         let expectedColors: [ProgressTrackerIntent: any ColorToken] =
