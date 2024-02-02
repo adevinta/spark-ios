@@ -22,7 +22,6 @@ final class ListComponentsViewController: UICollectionViewController {
         var all = UIComponent.allCases
         all.insert(.checkboxGroup, at: 3)
         all.insert(.radioButtonGroup, at: 9)
-        all.append(.addOnTextField)
         return all
     }
 
@@ -111,10 +110,6 @@ extension ListComponentsViewController {
             viewController = ListViewController<TabCell, TabConfiguration>()
         case .tag:
             viewController = ListViewController<TagCell, TagConfiguration>()
-        case .textField:
-            viewController = ListViewController<TextFieldCell, TextFieldConfiguration>()
-        case .addOnTextField:
-            viewController = ListViewController<AddOnTextFieldCell, AddOnTextFieldConfiguration>()
         default:
             break
         }
@@ -134,5 +129,4 @@ private extension ListComponentsViewController {
 private extension UIComponent {
     static let checkboxGroup = UIComponent(rawValue: "Checkbox Group")
     static let radioButtonGroup = UIComponent(rawValue: "Radio Button Group")
-    static let addOnTextField = UIComponent(rawValue: "Add-on Text Field")
 }

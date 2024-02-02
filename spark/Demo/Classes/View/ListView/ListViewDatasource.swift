@@ -165,22 +165,6 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             }
             return UITableViewCell()
 
-        /// Text Field
-        case let textFieldConfiguration as TextFieldConfiguration:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as? TextFieldCell {
-                cell.configureCell(configuration: textFieldConfiguration)
-                return cell
-            }
-            return UITableViewCell()
-
-        /// Add On Text Field
-        case let addOnTextFieldConfiguration as AddOnTextFieldConfiguration:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: AddOnTextFieldCell.reuseIdentifier, for: indexPath) as? AddOnTextFieldCell {
-                cell.configureCell(configuration: addOnTextFieldConfiguration)
-                return cell
-            }
-            return UITableViewCell()
-
         default:
             return UITableViewCell()
         }
@@ -243,12 +227,6 @@ extension ListViewDataSource {
 
         case is TagConfiguration.Type:
             data = self.createTagConfigurations()
-
-        case is TextFieldConfiguration.Type:
-            data = self.createTextFieldConfigurations()
-
-        case is AddOnTextFieldConfiguration.Type:
-            data = self.createAddOnTextFieldConfigurations()
 
         default:
             break
@@ -379,19 +357,5 @@ extension ListViewDataSource {
         [TagConfiguration(theme: SparkTheme.shared, intent: .main, variant: .filled, content: .text),
          TagConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, content: .icon),
          TagConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, content: .all)]
-    }
-
-    /// Text Field
-    func createTextFieldConfigurations() -> [TextFieldConfiguration] {
-        [TextFieldConfiguration(theme: SparkTheme.shared, intent: .success, leftViewMode: .always, rightViewMode: .never, clearButtonMode: .whileEditing),
-         TextFieldConfiguration(theme: SparkTheme.shared, intent: .neutral, leftViewMode: .always, rightViewMode: .whileEditing, clearButtonMode: .whileEditing, text: "Hello world"),
-         TextFieldConfiguration(theme: SparkTheme.shared, intent: .error, leftViewMode: .always, rightViewMode: .always, clearButtonMode: .always)]
-    }
-
-    /// Add On Text Field
-    func createAddOnTextFieldConfigurations() -> [AddOnTextFieldConfiguration] {
-        [AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .success, leftViewMode: .always, rightViewMode: .never, leadingAddOnOption: .button, trailingAddOnOption: .none, clearButtonMode: .whileEditing),
-         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .neutral, leftViewMode: .always, rightViewMode: .whileEditing, leadingAddOnOption: .button, trailingAddOnOption: .shortText, clearButtonMode: .whileEditing, text: "Hello world"),
-         AddOnTextFieldConfiguration(theme: SparkTheme.shared, intent: .error, leftViewMode: .always, rightViewMode: .always, leadingAddOnOption: .button, trailingAddOnOption: .longText, clearButtonMode: .always)]
     }
 }
