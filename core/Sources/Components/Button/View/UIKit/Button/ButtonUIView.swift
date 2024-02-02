@@ -188,6 +188,12 @@ public final class ButtonUIView: ButtonMainUIView {
         self.setupImageContentViewConstraints()
     }
 
+    internal override func setupViewConstraints() {
+        super.setupViewConstraints()
+
+        self.widthAnchor.constraint(greaterThanOrEqualTo: self.heightAnchor).isActive = true
+    }
+
     private func setupContentStackViewConstraints() {
         self.contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
