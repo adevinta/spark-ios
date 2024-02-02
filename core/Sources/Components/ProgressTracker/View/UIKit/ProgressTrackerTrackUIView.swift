@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import UIKit
 
+// The small track between indicators in the Progress Tracker
 final class ProgressTrackerTrackUIView: UIView {
 
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
@@ -64,6 +65,7 @@ final class ProgressTrackerTrackUIView: UIView {
         return self.scaleFactor * ProgressTrackerConstants.trackSize
     }
 
+    // MARK: Initialization
     init(theme: Theme,
          intent: ProgressTrackerIntent,
          orientation: ProgressTrackerOrientation) {

@@ -10,10 +10,12 @@ import Combine
 import Foundation
 import UIKit
 
+/// A progress tracker, similar to the UIPageControl
 public final class ProgressTrackerUIControl: UIControl {
 
     typealias Content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>
 
+    /// The general theme
     public var theme: Theme {
         get {
             return self.viewModel.theme
@@ -24,6 +26,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    /// The intent defining the colors
     public var intent: ProgressTrackerIntent {
         didSet {
             guard self.intent != oldValue else { return }
@@ -31,6 +34,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    /// The orientation. There are two orientations, horizontal, which is the default, and vertical.
     public var orientation: ProgressTrackerOrientation {
         get {
             return self.viewModel.orientation
@@ -40,18 +44,21 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    /// The coloring variant, tinted or outlined.
     public var variant: ProgressTrackerVariant {
         didSet {
             self.didUpdate(variant: self.variant)
         }
     }
 
+    /// The size of the indicator. Small indicator show now content.
     public var size: ProgressTrackerSize {
         didSet {
             self.didUpdate(size: self.size)
         }
     }
 
+    /// Boolean to enable/disable the control.
     public override var isEnabled: Bool {
         get {
             return self.viewModel.isEnabled
@@ -62,6 +69,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    /// A boolean determining if the  page number should be shown on the indicator by default.
     public var showDefaultPageNumber: Bool {
         get {
             return self.viewModel.showDefaultPageNumber
@@ -71,12 +79,14 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
-    public var interactionState: ProgressInteractionState {
+    /// The type of interaction enabled for the Progress Tracker
+    public var interactionState: ProgressTrackerInteractionState {
         didSet {
             // needs to be implemented
         }
     }
 
+    /// The number of pages shown in the Progress Tracker
     public var numberOfPages: Int {
         set {
             self.viewModel.numberOfPages = newValue
@@ -86,6 +96,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    /// The current page. This value represents the index of the current page.
     public var currentPage: Int {
         set {
             self.viewModel.currentPage = newValue
@@ -95,6 +106,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    /// Enable continuous interaction on the progress tracker.
     public var allowsContinuousInteraction: Bool {
         set {
             self.interactionState = newValue ? .continuous : .discrete
@@ -104,6 +116,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    // MARK: - Private variables
     private let viewModel: ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>
 
     private lazy var indicatorViews = [ProgressTrackerIndicatorUIControl]()
@@ -125,6 +138,15 @@ public final class ProgressTrackerUIControl: UIControl {
         return self.viewModel.spacings.minLabelSpacing * self.scaleFactor
     }
 
+    // MARK: Initialization
+    /// Initializer
+    /// - Parameters:
+    ///  - theme: the general theme
+    ///  - intent: The intent defining the colors
+    ///  - variant: Tinted or outlined
+    ///  - size: The default is `medium`
+    ///  - labels: The labels under each indicator
+    ///  - orienation: The default is `horizontal`
     public convenience init(
         theme: Theme,
         intent: ProgressTrackerIntent,
@@ -133,9 +155,9 @@ public final class ProgressTrackerUIControl: UIControl {
         labels: [String],
         orientation: ProgressTrackerOrientation = .horizontal
     ) {
-        var content = Content(numberOfPages: labels.count, currentPage: 0)
+        var content = Content(numberOfPages: labels.count, currentPageIndex: 0)
         for (index, label) in labels.enumerated() {
-            content.setAttributedLabel(NSAttributedString(string: label), forIndex: index)
+            content.setAttributedLabel(NSAttributedString(string: label), atIndex: index)
         }
 
         self.init(
@@ -148,6 +170,15 @@ public final class ProgressTrackerUIControl: UIControl {
         )
     }
 
+    // MARK: Initialization
+    /// Initializer
+    /// - Parameters:
+    ///  - theme: the general theme
+    ///  - intent: The intent defining the colors
+    ///  - variant: Tinted or outlined
+    ///  - size: The default is `medium`
+    ///  - numberOfPages: The number of track indicators (pages)
+    ///  - orienation: The default is `horizontal`
     public convenience init(
         theme: Theme,
         intent: ProgressTrackerIntent,
@@ -156,7 +187,7 @@ public final class ProgressTrackerUIControl: UIControl {
         numberOfPages: Int,
         orientation: ProgressTrackerOrientation = .horizontal
     ) {
-        let content = Content(numberOfPages: numberOfPages, currentPage: 0)
+        let content = Content(numberOfPages: numberOfPages, currentPageIndex: 0)
 
         self.init(
             theme: theme,
@@ -168,6 +199,7 @@ public final class ProgressTrackerUIControl: UIControl {
         )
     }
 
+    // MARK: - Internal init
     init(
         theme: Theme,
         intent: ProgressTrackerIntent,
@@ -206,6 +238,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    // MARK: Private functions
     private func createIndicatorViews(content: Content) -> [ProgressTrackerIndicatorUIControl] {
         guard self.numberOfPages > 0 else { return [] }
 
@@ -215,7 +248,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 intent: self.intent,
                 variant: self.variant,
                 size: self.size,
-                content: content.content(ofIndex: index))
+                content: content.content(atIndex: index))
             indicator.translatesAutoresizingMaskIntoConstraints = false
             return indicator
         }
@@ -228,7 +261,7 @@ public final class ProgressTrackerUIControl: UIControl {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.adjustsFontForContentSizeCategory = true
-            label.attributedText = content.getAttributedLabel(ofIndex: index)
+            label.attributedText = content.getAttributedLabel(atIndex: index)
             label.font = self.viewModel.font.uiFont
             label.textColor = self.viewModel.labelColor.uiColor
             label.numberOfLines = 0
@@ -267,7 +300,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.indicatorViews = self.createIndicatorViews(content: content)
         self.indicatorViews.addToSuperView(self)
 
-        self.indicatorViews[content.currentPage].isSelected = true
+        self.indicatorViews[content.currentPageIndex].isSelected = true
 
         self.trackViews = self.createTrackView(numberOfPages: content.numberOfPages, orientation: orientation)
         self.trackViews.addToSuperView(self)
@@ -301,14 +334,14 @@ public final class ProgressTrackerUIControl: UIControl {
             if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
                 self.setupView(content: content, orientation: self.viewModel.orientation)
             } else if content.numberOfPages > 0 {
-                self.indicatorViews[content.currentPage].isSelected = true
+                self.indicatorViews[content.currentPageIndex].isSelected = true
 
                 for i in 0..<content.numberOfPages {
-                    self.indicatorViews[i].content = content.content(ofIndex: i)
+                    self.indicatorViews[i].content = content.content(atIndex: i)
                 }
                 if content.hasLabel {
                     for i in 0..<content.numberOfPages {
-                        self.labels[i].attributedText = content.getAttributedLabel(ofIndex: i)
+                        self.labels[i].attributedText = content.getAttributedLabel(atIndex: i)
                     }
                 }
             }
@@ -478,36 +511,36 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     public func setIndicatorImage(_ image: UIImage?, forIndex index: Int) {
-        self.viewModel.content.setIndicatorImage(image, forIndex: index)
+        self.viewModel.content.setIndicatorImage(image, atIndex: index)
     }
 
     public func setCurrentPageIndicatorImage(_ image: UIImage?, forIndex index: Int) {
-        self.viewModel.content.setCurrentPageIndicatorImage(image, forIndex: index)
+        self.viewModel.content.setCurrentPageIndicatorImage(image, atIndex: index)
     }
 
     public func setAttributedLabel(_ attributedLabel: NSAttributedString?, forIndex index: Int) {
-        self.viewModel.content.setAttributedLabel(attributedLabel, forIndex: index)
+        self.viewModel.content.setAttributedLabel(attributedLabel, atIndex: index)
     }
 
     public func getAttributedLabel(ofIndex index: Int) -> NSAttributedString? {
-        return self.viewModel.content.getAttributedLabel(ofIndex: index)
+        return self.viewModel.content.getAttributedLabel(atIndex: index)
     }
 
     public func setLabel(_ label: String?, forIndex index: Int) {
         let attributedLabel = label.map(NSAttributedString.init)
-        self.viewModel.content.setAttributedLabel(attributedLabel, forIndex: index)
+        self.viewModel.content.setAttributedLabel(attributedLabel, atIndex: index)
     }
 
     public func getLabel(forIndex index: Int) -> String? {
-        return self.viewModel.content.getAttributedLabel(ofIndex: index)?.string
+        return self.viewModel.content.getAttributedLabel(atIndex: index)?.string
     }
 
     public func setIndicatorLabel(_ label: Character?, forIndex index: Int) {
-        self.viewModel.content.setContentLabel(label, ofIndex: index)
+        self.viewModel.content.setIndicatorLabel(label, atIndex: index)
     }
 
     public func getIndicatorLabel(forIndex index: Int) -> Character? {
-        self.viewModel.content.getContentLabel(ofIndex: index)
+        self.viewModel.content.getIndicatorLabel(atIndex: index)
     }
 }
 

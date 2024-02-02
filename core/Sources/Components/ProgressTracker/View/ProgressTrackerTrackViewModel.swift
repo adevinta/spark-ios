@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A view model for the Progress Tracker Track
 final class ProgressTrackerTrackViewModel: ObservableObject {
     
     var theme: Theme {
@@ -33,6 +34,7 @@ final class ProgressTrackerTrackViewModel: ObservableObject {
     private var useCase: ProgressTrackerGetTrackColorUseCaseable
     @Published var lineColor: any ColorToken
 
+    // MARK: - Initialization
     init(theme: Theme,
          intent: ProgressTrackerIntent,
          isEnabled: Bool = true,

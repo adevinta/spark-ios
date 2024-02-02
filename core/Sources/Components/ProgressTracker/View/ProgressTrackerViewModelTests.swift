@@ -13,10 +13,12 @@ import XCTest
 
 final class ProgressTrackerViewModelTests: XCTestCase {
 
+    // MARK: Properties
     var theme: ThemeGeneratedMock!
     var spacingsUseCase: ProgressTrackerGetSpacingsUseCaseableGeneratedMock!
     var cancellables = Set<AnyCancellable>()
 
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
 
@@ -25,6 +27,7 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         self.spacingsUseCase.executeWithSpacingAndOrientationReturnValue = .stub()
     }
 
+    // MARK: - Tests
     func test_vertical_setup() {
         // Given
         let _ = self.sut(orientation: .vertical)
@@ -101,7 +104,7 @@ final class ProgressTrackerViewModelTests: XCTestCase {
     }
 
     private func sut(orientation: ProgressTrackerOrientation) -> ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent> {
-        let content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 4, currentPage: 0)
+        let content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 4, currentPageIndex: 0)
         return ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>(
             theme: self.theme,
             orientation: orientation,

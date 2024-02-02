@@ -16,7 +16,7 @@ protocol ProgressTrackerGetColorsUseCaseable {
                  state: ProgressTrackerState) -> ProgressTrackerColors
 }
 
-/// A use case that returns the color of the progress tracker.
+/// A use case that returns the color of the progress tracker indicator.
 struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
 
     // MARK: - Properties
@@ -32,6 +32,7 @@ struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
     }
 
     // MARK: Execute
+    /// Returns the colors of the progress tracker indicator
     func execute(
         theme: Theme,
         intent: ProgressTrackerIntent,

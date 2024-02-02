@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// The size of the progress tracker
 public enum ProgressTrackerSize: CGFloat, CaseIterable {
     case small = 16
     case medium = 24

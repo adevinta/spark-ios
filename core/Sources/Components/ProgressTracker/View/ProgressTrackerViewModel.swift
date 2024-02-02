@@ -36,6 +36,25 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         }
     }
 
+    var numberOfPages: Int {
+        set {
+            self.content.numberOfPages = newValue
+        }
+        get {
+            return self.content.numberOfPages
+        }
+    }
+
+    var currentPage: Int {
+        set {
+            self.content.currentPageIndex = min(max(0, newValue), self.content.numberOfPages - 1)
+        }
+        get {
+            return self.content.currentPageIndex
+        }
+    }
+
+    // MARK: Published properties
     @Published var orientation: ProgressTrackerOrientation {
         didSet {
             guard self.orientation != oldValue else { return }
@@ -49,24 +68,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     @Published var font: TypographyFontToken
     @Published var labelColor: any ColorToken
 
-    var numberOfPages: Int {
-        set {
-            self.content.numberOfPages = newValue
-        }
-        get {
-            return self.content.numberOfPages
-        }
-    }
-
-    var currentPage: Int {
-        set {
-            self.content.currentPage = min(max(0, newValue), self.content.numberOfPages - 1)
-        }
-        get {
-            return self.content.currentPage
-        }
-    }
-
+    // MARK: Private properties
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
 
     // MARK: - Initialization

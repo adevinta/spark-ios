@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A model cotaining the colors of the progress tracker indicator
 struct ProgressTrackerColors: Equatable {
     let background: any ColorToken
     let outline: any ColorToken

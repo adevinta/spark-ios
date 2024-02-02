@@ -40,14 +40,17 @@ final class ProgressTrackerIndicatorViewModel<ComponentContent: ProgressTrackerC
         }
     }
 
+    // MARK: - Private properties
     private let colorsUseCase: ProgressTrackerGetColorsUseCaseable
 
+    // MARK: - Published properties
     @Published var size: ProgressTrackerSize
     @Published var content: ComponentContent
     @Published var colors: ProgressTrackerColors
     @Published var font: TypographyFontToken
 
-    init(theme: Theme, 
+    // MARK: Initialization
+    init(theme: Theme,
          intent: ProgressTrackerIntent,
          variant: ProgressTrackerVariant,
          size: ProgressTrackerSize,
