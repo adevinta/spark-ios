@@ -149,7 +149,7 @@ extension ProgressTrackerComponentUIViewController {
         let actionSheet = SparkActionSheet<ProgressTrackerComponentUIViewModel.ContentType>.init(
             values: content,
             texts: content.map{ $0.name }) { content in
-                self.viewModel.content = content
+                self.viewModel.contentType = content
             }
             self.present(actionSheet, isAnimated: true)
     }
