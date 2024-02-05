@@ -22,35 +22,6 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         case icon
         case text
         case none
-
-        func makeContent(currentPageIndex: Int = 0) -> ProgressTrackerContent<ProgressTrackerUIIndicatorContent> {
-            let startingValue = Int(("A" as UnicodeScalar).value)
-
-            switch self {
-            case .icon: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(
-                numberOfPages: Constants.numberOfPages,
-                currentPageIndex: currentPageIndex,
-                showDefaultPageNumber: false)
-
-                for i in 0..<Constants.numberOfPages {
-                    content.setIndicatorImage(UIImage.standardImage(at: i), atIndex: i)
-                }
-                return content
-
-            case .text: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> =
-                    .init(
-                        numberOfPages: Constants.numberOfPages,
-                        currentPageIndex: currentPageIndex,
-                        showDefaultPageNumber: false
-                    )
-                for i in 0..<Constants.numberOfPages {
-                    content.setIndicatorLabel(Character(UnicodeScalar(i + startingValue)!), atIndex: i)
-                }
-                return content
-            case .none: return .init(numberOfPages: Constants.numberOfPages, showDefaultPageNumber: false)
-            case .page: return .init(numberOfPages: Constants.numberOfPages, showDefaultPageNumber: true)
-            }
-        }
     }
 
 
@@ -113,7 +84,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     lazy var labelContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Label",
-            type: .input(text: self.label),
+            type: .input(text: self.title),
             target: (source: self, action: #selector(self.labelChanged(_:))))
     }()
 
@@ -124,11 +95,11 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.showLabelsChanged(_:))))
     }()
 
-    lazy var touchableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var completedPageIndicatorConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Touchable",
-            type: .checkbox(title: "", isOn: self.isTouchable),
-            target: (source: self, action: #selector(self.touchableChanged(_:))))
+            name: "Completed Page Indicator",
+            type: .checkbox(title: "", isOn: self.useCompletedPageIndicator),
+            target: (source: self, action: #selector(self.useCompletedPageIndicatorChanged(_:))))
     }()
 
     lazy var currentPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -141,11 +112,11 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.selectedPageChanged(_:))))
     }()
 
-    private var label: String? = "Lore Ipsum" {
-        didSet {
-            self.title = self.label
-        }
-    }
+//    private var label: String? = "Lore" {
+//        didSet {
+//            self.title = self.label
+//        }
+//    }
 
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
@@ -197,12 +168,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.orientationConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
-            self.touchableConfigurationItemViewModel,
+            self.completedPageIndicatorConfigurationItemViewModel,
             self.currentPageIndexConfigurationItemViewModel,
             self.labelContentConfigurationItemViewModel,
             self.labelsConfigurationItemViewModel
         ]
     }
+
+    lazy var checkmarkImage = UIImage(systemName: "checkmark")
 
     // MARK: - Initialization
     @Published var theme: Theme
@@ -210,13 +183,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var orientation: ProgressTrackerOrientation = .horizontal
     @Published var variant: ProgressTrackerVariant
     @Published var size: ProgressTrackerSize
-    @Published var content: ContentType
+    @Published var contentType: ContentType
     @Published var showPageNumber = true
     @Published var isDisabled = false
-    @Published var isTouchable = true
+    @Published var useCompletedPageIndicator = true
     @Published var showLabels = true
-    @Published var title: String? = "Lore ipsum"
+    @Published var title: String? = "Lore"
     @Published var selectedPageIndex: Int = 0
+    var numberOfPages = Constants.numberOfPages
 
     init(
         theme: Theme,
@@ -227,9 +201,13 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         self.theme = theme
         self.intent = intent
         self.size = size
-        self.content = .none
+        self.contentType = .none
         self.variant = variant
         super.init(identifier: "Progress Tracker")
+    }
+
+    func title(at index: Int) -> String? {
+        return self.title.map{"\($0)-\(index)"}
     }
 }
 
@@ -266,9 +244,9 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func labelChanged(_ textField: UITextField) {
         if textField.text?.isEmpty == false {
-            self.label = textField.text
+            self.title = textField.text
         } else  {
-            self.label = nil
+            self.title = nil
         }
     }
 
@@ -276,11 +254,22 @@ extension ProgressTrackerComponentUIViewModel {
         self.showLabels = isTrue(selected)
     }
 
-    @objc func touchableChanged(_ selected: Any?) {
-        self.isTouchable = isTrue(selected)
-    }
-
     @objc func selectedPageChanged(_ control: NumberSelector) {
         self.selectedPageIndex = control.selectedValue
+    }
+
+    @objc func useCompletedPageIndicatorChanged(_ selected: Any?) {
+        self.useCompletedPageIndicator = isTrue(selected)
+    }
+
+}
+
+extension String {
+    func character(at index: Int) -> Character {
+        self.characters[index]
+    }
+
+    var characters: [Character] {
+        return Array(self)
     }
 }

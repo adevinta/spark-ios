@@ -18,8 +18,8 @@ final class ProgressTrackerContentTests: XCTestCase {
         let sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 2, currentPageIndex: 1, showDefaultPageNumber: true)
 
         // THEN
-        XCTAssertEqual(sut.content(atIndex: 0).label, "1", "Expected label to be 1")
-        XCTAssertEqual(sut.content(atIndex: 1).label
+        XCTAssertEqual(sut.pageContent(atIndex: 0).label, "1", "Expected label to be 1")
+        XCTAssertEqual(sut.pageContent(atIndex: 1).label
             , "2", "Expected label to be 1")
     }
 
@@ -28,8 +28,8 @@ final class ProgressTrackerContentTests: XCTestCase {
         let sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 2, currentPageIndex: 1, showDefaultPageNumber: false)
 
         // THEN
-        XCTAssertNil(sut.content(atIndex: 0).label, "Expected label 1 to be nil")
-        XCTAssertNil(sut.content(atIndex: 1).label, "Expected label 2 to be nil")
+        XCTAssertNil(sut.pageContent(atIndex: 0).label, "Expected label 1 to be nil")
+        XCTAssertNil(sut.pageContent(atIndex: 1).label, "Expected label 2 to be nil")
     }
 
     func test_uses_set_label()  {
@@ -41,8 +41,8 @@ final class ProgressTrackerContentTests: XCTestCase {
         sut.setIndicatorLabel("B", atIndex: 1)
 
         // THEN
-        XCTAssertEqual(sut.content(atIndex: 0).label, "A", "Expected label 1 to be A")
-        XCTAssertEqual(sut.content(atIndex: 1).label, "B", "Expected label 2 to be B")
+        XCTAssertEqual(sut.pageContent(atIndex: 0).label, "A", "Expected label 1 to be A")
+        XCTAssertEqual(sut.pageContent(atIndex: 1).label, "B", "Expected label 2 to be B")
     }
 
     func test_uses_preferred_image()  {
@@ -51,8 +51,8 @@ final class ProgressTrackerContentTests: XCTestCase {
         let sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 2, currentPageIndex: 1, showDefaultPageNumber: false, preferredIndicatorImage: preferredImage)
 
         // THEN
-        XCTAssertEqual(sut.content(atIndex: 0).indicatorImage, preferredImage, "Expected image 1 to be preferred")
-        XCTAssertEqual(sut.content(atIndex: 1).indicatorImage, preferredImage, "Expected image 2 to be preferred")
+        XCTAssertEqual(sut.pageContent(atIndex: 0).indicatorImage, preferredImage, "Expected image 1 to be preferred")
+        XCTAssertEqual(sut.pageContent(atIndex: 1).indicatorImage, preferredImage, "Expected image 2 to be preferred")
     }
 
     func test_uses_preferred_current_page_image()  {
@@ -68,8 +68,8 @@ final class ProgressTrackerContentTests: XCTestCase {
         )
 
         // THEN
-        XCTAssertEqual(sut.content(atIndex: 0).indicatorImage, preferredImage, "Expected image 1 to be preferred")
-        XCTAssertEqual(sut.content(atIndex: 1).indicatorImage, currentPagePreferredImage, "Expected image 2 to be currentPagePreferredImage")
+        XCTAssertEqual(sut.pageContent(atIndex: 0).indicatorImage, preferredImage, "Expected image 1 to be preferred")
+        XCTAssertEqual(sut.pageContent(atIndex: 1).indicatorImage, currentPagePreferredImage, "Expected image 2 to be currentPagePreferredImage")
     }
 
     func test_uses_image_set()  {
@@ -90,9 +90,9 @@ final class ProgressTrackerContentTests: XCTestCase {
         sut.setIndicatorImage(contentImage, atIndex: 2)
 
         // THEN
-        XCTAssertEqual(sut.content(atIndex: 0).indicatorImage, preferredImage, "Expected image 1 to be preferredImage")
-        XCTAssertEqual(sut.content(atIndex: 1).indicatorImage, contentImage, "Expected image 2 to be currentImage")
-        XCTAssertEqual(sut.content(atIndex: 2).indicatorImage, currentPagePreferredImage, "Expected image 3 to be contentPagePreferredImage")
+        XCTAssertEqual(sut.pageContent(atIndex: 0).indicatorImage, preferredImage, "Expected image 1 to be preferredImage")
+        XCTAssertEqual(sut.pageContent(atIndex: 1).indicatorImage, contentImage, "Expected image 2 to be currentImage")
+        XCTAssertEqual(sut.pageContent(atIndex: 2).indicatorImage, currentPagePreferredImage, "Expected image 3 to be contentPagePreferredImage")
     }
 
     func test_uses_current_page_image_set()  {
@@ -114,9 +114,9 @@ final class ProgressTrackerContentTests: XCTestCase {
         sut.setCurrentPageIndicatorImage(currentContentImage, atIndex: 1)
 
         // THEN
-        XCTAssertEqual(sut.content(atIndex: 0).indicatorImage, visitedImage, "Expected image 1 to be currentPagePreferredImage")
-        XCTAssertEqual(sut.content(atIndex: 1).indicatorImage, currentContentImage, "Expected image 2 to be contentImage")
-        XCTAssertEqual(sut.content(atIndex: 2).indicatorImage, preferredImage, "Expected image 3 to be preferred")
+        XCTAssertEqual(sut.pageContent(atIndex: 0).indicatorImage, visitedImage, "Expected image 1 to be currentPagePreferredImage")
+        XCTAssertEqual(sut.pageContent(atIndex: 1).indicatorImage, currentContentImage, "Expected image 2 to be contentImage")
+        XCTAssertEqual(sut.pageContent(atIndex: 2).indicatorImage, preferredImage, "Expected image 3 to be preferred")
     }
 
     func test_attributed_label() {

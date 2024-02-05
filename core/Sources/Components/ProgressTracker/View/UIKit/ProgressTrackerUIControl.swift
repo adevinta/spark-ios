@@ -248,7 +248,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 intent: self.intent,
                 variant: self.variant,
                 size: self.size,
-                content: content.content(atIndex: index))
+                content: content.pageContent(atIndex: index))
             indicator.translatesAutoresizingMaskIntoConstraints = false
             return indicator
         }
@@ -335,7 +335,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 self.setupView(content: content, orientation: self.viewModel.orientation)
             } else if content.numberOfPages > 0 {
                 for i in 0..<content.numberOfPages {
-                    self.indicatorViews[i].content = content.content(atIndex: i)
+                    self.indicatorViews[i].content = content.pageContent(atIndex: i)
                     self.indicatorViews[i].isSelected = (i == content.currentPageIndex)
                 }
                 if content.hasLabel {
@@ -539,6 +539,14 @@ public final class ProgressTrackerUIControl: UIControl {
 
     public func getIndicatorLabel(forIndex index: Int) -> Character? {
         self.viewModel.content.getIndicatorLabel(atIndex: index)
+    }
+
+    public func getCompletedIndicatorImage() -> UIImage? {
+        return self.viewModel.content.completedPageIndicatorImage
+    }
+
+    public func setCompletedIndicatorImage(_ image: UIImage?) {
+        self.viewModel.content.completedPageIndicatorImage = image
     }
 }
 
