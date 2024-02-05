@@ -91,7 +91,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     }
 
     /// Return the content for the indicator at that given index.
-    func content(atIndex index: Int) -> ComponentContent {
+    func pageContent(atIndex index: Int) -> ComponentContent {
         var content: ComponentContent
 
         if let pageContent = self.content[index] {
@@ -112,8 +112,8 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
             } else if content.indicatorImage == nil {
                 content.indicatorImage = self.preferredIndicatorImage
             }
-        } else if index < self.currentPageIndex, content.indicatorImage == nil {
-            content.indicatorImage =  self.completedPageIndicatorImage ?? self.preferredIndicatorImage
+        } else if index < self.currentPageIndex, let completedImage = self.completedPageIndicatorImage {
+            content.indicatorImage = completedImage
         } else if content.indicatorImage == nil {
             content.indicatorImage = self.preferredIndicatorImage
         }

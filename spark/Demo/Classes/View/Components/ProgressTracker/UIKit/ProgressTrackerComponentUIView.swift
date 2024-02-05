@@ -37,10 +37,9 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
     private static func makeProgressTrackerView(viewModel: ProgressTrackerComponentUIViewModel) -> ProgressTrackerUIControl {
         let view: ProgressTrackerUIControl
 
-        let content = viewModel.content.makeContent(currentPageIndex: viewModel.selectedPageIndex)
         if viewModel.showLabels {
-            let labels: [String] = (0..<content.numberOfPages).map { index in
-                return viewModel.title.map{"\($0)-\(index)"} ?? "??"
+            let labels: [String] = (0..<viewModel.numberOfPages).map { index in
+                return viewModel.title(at: index) ?? "??"
             }
             view = ProgressTrackerUIControl(
                 theme: viewModel.theme,
@@ -56,12 +55,11 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
                 intent: viewModel.intent,
                 variant: viewModel.variant,
                 size: viewModel.size,
-                numberOfPages: content.numberOfPages,
+                numberOfPages: viewModel.numberOfPages,
                 orientation: viewModel.orientation
             )
         }
-        view.showDefaultPageNumber = content.showDefaultPageNumber
-//        view.currentPage = content.currentPageIndex
+        view.showDefaultPageNumber = viewModel.contentType == .page
         return view
     }
 
@@ -101,34 +99,20 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             self.componentView.orientation = orientation
         }
 
-        self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] contentType in
+        self.viewModel.$contentType.subscribe(in: &self.cancellables) { [weak self] contentType in
             guard let self = self else { return }
-
-            let content = contentType.makeContent(currentPageIndex: self.viewModel.selectedPageIndex)
-
-            self.viewModel.contentConfigurationItemViewModel.buttonTitle = contentType.name
-
-            self.componentView.showDefaultPageNumber = content.showDefaultPageNumber
-            self.componentView.numberOfPages = content.numberOfPages
-
-            for i in 0..<content.numberOfPages {
-                let content = content.content(atIndex: i)
-                self.componentView.setIndicatorLabel(content.label, forIndex: i)
-                self.componentView.setIndicatorImage(content.indicatorImage, forIndex: i)
-            }
+            self.updateContent(contentType)
         }
 
         self.viewModel.$showLabels.dropFirst().subscribe(in: &self.cancellables) { showLabels in
-            let content = self.viewModel.content.makeContent(currentPageIndex: self.viewModel.selectedPageIndex)
-            for i in 0..<content.numberOfPages {
-                let label: String? = showLabels ? "\(self.viewModel.title) \(i)" : nil
+            for i in 0..<self.viewModel.numberOfPages {
+                let label: String? = showLabels ? self.viewModel.title(at: i) : nil
                 self.componentView.setLabel(label, forIndex: i)
             }
         }
 
         self.viewModel.$title.dropFirst().subscribe(in: &self.cancellables) { title in
-            let content = self.viewModel.content.makeContent(currentPageIndex: self.viewModel.selectedPageIndex)
-            for i in 0..<content.numberOfPages {
+            for i in 0..<self.viewModel.numberOfPages {
                 let label: String? = self.viewModel.showLabels ? title.map{"\($0)-\(i)"} : nil
                 self.componentView.setLabel(label, forIndex: i)
             }
@@ -144,9 +128,36 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             self.componentView.isEnabled = !isDisabled
         }
 
-        self.viewModel.$isTouchable.subscribe(in: &self.cancellables) { [weak self] isTouchable in
-            guard let self else { return }
-            self.componentView.isUserInteractionEnabled = isTouchable
+        self.viewModel.$useCompletedPageIndicator.subscribe(in: &self.cancellables) { useImage in
+            self.componentView.setCompletedIndicatorImage(useImage ? self.viewModel.checkmarkImage : nil)
         }
+    }
+
+    private func updateContent(_ contentType: ProgressTrackerComponentUIViewModel.ContentType) {
+
+        self.viewModel.contentConfigurationItemViewModel.buttonTitle = contentType.name
+
+        let numberOfPages = ProgressTrackerComponentUIViewModel.Constants.numberOfPages
+        self.componentView.showDefaultPageNumber = contentType == .page
+        self.componentView.numberOfPages = numberOfPages
+
+        self.componentView.setCompletedIndicatorImage(self.viewModel.checkmarkImage)
+
+        if contentType == .icon {
+            for i in 0..<numberOfPages {
+                self.componentView.setIndicatorImage(UIImage.standardImage(at: i), forIndex: i)
+            }
+        } else if contentType == .text {
+            for i in 0..<numberOfPages {
+                self.componentView.setIndicatorImage(nil, forIndex: i)
+                self.componentView.setIndicatorLabel("ABCDEFGH".character(at: i), forIndex: i)
+            }
+        } else if contentType == .none {
+            for i in 0..<numberOfPages {
+                self.componentView.setIndicatorImage(nil, forIndex: i)
+                self.componentView.setIndicatorLabel(nil, forIndex: i)
+            }
+        }
+
     }
 }
