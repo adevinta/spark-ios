@@ -45,7 +45,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         }
     }
 
-    var currentPage: Int {
+    var currentPageIndex: Int {
         set {
             self.content.currentPageIndex = min(max(0, newValue), self.content.numberOfPages - 1)
         }

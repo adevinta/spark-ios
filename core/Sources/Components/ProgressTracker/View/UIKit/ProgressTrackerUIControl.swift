@@ -97,12 +97,12 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     /// The current page. This value represents the index of the current page.
-    public var currentPage: Int {
+    public var currentPageIndex: Int {
         set {
-            self.viewModel.currentPage = newValue
+            self.viewModel.currentPageIndex = newValue
         }
         get {
-            return self.viewModel.currentPage
+            return self.viewModel.currentPageIndex
         }
     }
 
@@ -334,10 +334,9 @@ public final class ProgressTrackerUIControl: UIControl {
             if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
                 self.setupView(content: content, orientation: self.viewModel.orientation)
             } else if content.numberOfPages > 0 {
-                self.indicatorViews[content.currentPageIndex].isSelected = true
-
                 for i in 0..<content.numberOfPages {
                     self.indicatorViews[i].content = content.content(atIndex: i)
+                    self.indicatorViews[i].isSelected = (i == content.currentPageIndex)
                 }
                 if content.hasLabel {
                     for i in 0..<content.numberOfPages {
@@ -456,13 +455,12 @@ public final class ProgressTrackerUIControl: UIControl {
                 constraints.append(labelTrailingConstraint)
             }
             constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
-            constraints.append(self.labels[lastIndex].bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor))
-            constraints.append(self.indicatorViews[lastIndex].bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor))
+            constraints.append(self.labels[lastIndex].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
+            constraints.append(self.indicatorViews[lastIndex].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
         } else {
             constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
             constraints.append(self.indicatorViews [lastIndex].bottomAnchor.constraint(equalTo: self.bottomAnchor))
-//            constraints.append(self.indicatorViews[0].trailingAnchor.constraint(equalTo: self.trailingAnchor))
-        }
+      }
 
         NSLayoutConstraint.activate(constraints)
     }
