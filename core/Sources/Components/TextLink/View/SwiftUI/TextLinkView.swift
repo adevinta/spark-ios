@@ -76,6 +76,8 @@ public struct TextLinkView: View {
         }
         .buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isHighlighted))
         .accessibilityIdentifier(TextLinkAccessibilityIdentifier.view)
+        .accessibilityRemoveTraits(.isButton)
+        .accessibilityAddTraits(.isLink)
     }
 
     // MARK: - View Builder

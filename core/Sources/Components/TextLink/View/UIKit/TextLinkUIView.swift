@@ -90,6 +90,7 @@ public final class TextLinkUIView: UIControl {
         }
         set {
             self.viewModel.text = newValue
+            self.accessibilityLabel = newValue
         }
     }
 
@@ -252,6 +253,9 @@ public final class TextLinkUIView: UIControl {
         // Setup constraints
         self.setupConstraints()
 
+        // Setup accessibility
+        self.setupAccessibility()
+
         // Setup subscriptions
         self.setupSubscriptions()
 
@@ -299,6 +303,13 @@ public final class TextLinkUIView: UIControl {
         self.imageViewHeightConstraint?.isActive = true
 
         self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor).isActive = true
+    }
+
+    // MARK: - Accessibility
+    private func setupAccessibility() {
+        self.isAccessibilityElement = UIAccessibility.isVoiceOverRunning
+        self.accessibilityLabel = self.viewModel.text
+        self.accessibilityTraits.insert(.link)
     }
 
     // MARK: - Update UI
