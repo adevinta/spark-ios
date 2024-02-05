@@ -104,6 +104,7 @@ public final class RatingInputUIView: UIControl {
         self.setupView()
         self.enableTouch()
         self.addPanGestureToPreventCancelTracking()
+        self.setupAccessibility()
     }
     
     required init?(coder: NSCoder) {
@@ -148,6 +149,27 @@ public final class RatingInputUIView: UIControl {
         self.accessibilityIdentifier = RatingInputAccessibilityIdentifier.identifier
     }
 
+    // MARK: - Accessibility
+    private func setupAccessibility() {
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .adjustable
+        self.updateAccessibilityValue()
+    }
+
+    public override func accessibilityIncrement() {
+        let incrementedRating = min(self.rating + 1, CGFloat(self.ratingDisplay.count.rawValue))
+        self.ratingStarSelected(Int(incrementedRating) - 1)
+    }
+
+    public override func accessibilityDecrement() {
+        let decrementedRating = max(self.rating - 1, 1)
+        self.ratingStarSelected(Int(decrementedRating) - 1)
+    }
+
+    private func updateAccessibilityValue() {
+        self.accessibilityValue = "\(Int(self.rating))/\(self.ratingDisplay.count.rawValue)"
+    }
+
     // MARK: - Handling touch actions
     private func handleTouch(_ touch: UITouch, with event: UIEvent?) -> Bool {
 
@@ -183,6 +205,7 @@ public final class RatingInputUIView: UIControl {
         self.subject.send(rating)
         self.sendActions(for: .valueChanged)
         self.delegate?.rating(self, didChangeRating: rating)
+        self.updateAccessibilityValue()
     }
 
     private func ratingStarHighlighted(_ index: Int) {
