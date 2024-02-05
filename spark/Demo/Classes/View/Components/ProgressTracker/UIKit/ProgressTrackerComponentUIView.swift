@@ -37,9 +37,10 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
     private static func makeProgressTrackerView(viewModel: ProgressTrackerComponentUIViewModel) -> ProgressTrackerUIControl {
         let view: ProgressTrackerUIControl
 
+        let content = viewModel.content.makeContent(currentPageIndex: viewModel.selectedPageIndex)
         if viewModel.showLabels {
-            let labels: [String] = (0..<viewModel.content.content.numberOfPages).map { index in
-                return "\(viewModel.title) \(index)"
+            let labels: [String] = (0..<content.numberOfPages).map { index in
+                return viewModel.title.map{"\($0)-\(index)"} ?? "??"
             }
             view = ProgressTrackerUIControl(
                 theme: viewModel.theme,
@@ -55,12 +56,12 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
                 intent: viewModel.intent,
                 variant: viewModel.variant,
                 size: viewModel.size,
-                numberOfPages: viewModel.content.content.numberOfPages,
+                numberOfPages: content.numberOfPages,
                 orientation: viewModel.orientation
             )
         }
-        view.showDefaultPageNumber = viewModel.content.content.showDefaultPageNumber
-        view.currentPage = viewModel.content.content.currentPageIndex
+        view.showDefaultPageNumber = content.showDefaultPageNumber
+//        view.currentPage = content.currentPageIndex
         return view
     }
 
@@ -102,41 +103,45 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
         self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] contentType in
             guard let self = self else { return }
+
+            let content = contentType.makeContent(currentPageIndex: self.viewModel.selectedPageIndex)
+
             self.viewModel.contentConfigurationItemViewModel.buttonTitle = contentType.name
 
-            self.componentView.showDefaultPageNumber = contentType.content.showDefaultPageNumber
-            self.componentView.numberOfPages = contentType.content.numberOfPages
-            self.componentView.currentPage = contentType.content.currentPageIndex
+            self.componentView.showDefaultPageNumber = content.showDefaultPageNumber
+            self.componentView.numberOfPages = content.numberOfPages
 
-            for i in 0..<contentType.content.numberOfPages {
-                let content = contentType.content.content(atIndex: i)
+            for i in 0..<content.numberOfPages {
+                let content = content.content(atIndex: i)
                 self.componentView.setIndicatorLabel(content.label, forIndex: i)
                 self.componentView.setIndicatorImage(content.indicatorImage, forIndex: i)
             }
         }
 
         self.viewModel.$showLabels.dropFirst().subscribe(in: &self.cancellables) { showLabels in
-            for i in 0..<self.viewModel.content.content.numberOfPages {
+            let content = self.viewModel.content.makeContent(currentPageIndex: self.viewModel.selectedPageIndex)
+            for i in 0..<content.numberOfPages {
                 let label: String? = showLabels ? "\(self.viewModel.title) \(i)" : nil
                 self.componentView.setLabel(label, forIndex: i)
             }
         }
 
         self.viewModel.$title.dropFirst().subscribe(in: &self.cancellables) { title in
-            for i in 0..<self.viewModel.content.content.numberOfPages {
-                let label: String? = self.viewModel.showLabels ? "\(String(describing: title)) \(i)" : nil
+            let content = self.viewModel.content.makeContent(currentPageIndex: self.viewModel.selectedPageIndex)
+            for i in 0..<content.numberOfPages {
+                let label: String? = self.viewModel.showLabels ? title.map{"\($0)-\(i)"} : nil
                 self.componentView.setLabel(label, forIndex: i)
             }
+        }
+
+        self.viewModel.$selectedPageIndex.dropFirst().subscribe(in: &self.cancellables) { pageIndex in
+
+            self.componentView.currentPageIndex = pageIndex
         }
 
         self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] isDisabled in
             guard let self else { return }
             self.componentView.isEnabled = !isDisabled
-        }
-
-        self.viewModel.$isSelected.subscribe(in: &self.cancellables) { [weak self] isSelected in
-            guard let self else { return }
-            self.componentView.isSelected = isSelected
         }
 
         self.viewModel.$isTouchable.subscribe(in: &self.cancellables) { [weak self] isTouchable in

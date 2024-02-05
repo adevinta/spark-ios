@@ -14,7 +14,7 @@ import UIKit
 final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
     enum Constants {
-        static let numberOfPages = 3
+        static let numberOfPages = 4
     }
 
     enum ContentType: CaseIterable {
@@ -23,12 +23,13 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         case text
         case none
 
-        var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> {
+        func makeContent(currentPageIndex: Int = 0) -> ProgressTrackerContent<ProgressTrackerUIIndicatorContent> {
             let startingValue = Int(("A" as UnicodeScalar).value)
 
             switch self {
             case .icon: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(
                 numberOfPages: Constants.numberOfPages,
+                currentPageIndex: currentPageIndex,
                 showDefaultPageNumber: false)
 
                 for i in 0..<Constants.numberOfPages {
@@ -36,7 +37,12 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
                 }
                 return content
 
-            case .text: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> = .init(numberOfPages: Constants.numberOfPages, showDefaultPageNumber: false)
+            case .text: var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent> =
+                    .init(
+                        numberOfPages: Constants.numberOfPages,
+                        currentPageIndex: currentPageIndex,
+                        showDefaultPageNumber: false
+                    )
                 for i in 0..<Constants.numberOfPages {
                     content.setIndicatorLabel(Character(UnicodeScalar(i + startingValue)!), atIndex: i)
                 }
@@ -125,16 +131,19 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.touchableChanged(_:))))
     }()
 
-    lazy var selectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var currentPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Selected",
-            type: .checkbox(title: "", isOn: self.isSelected),
-            target: (source: self, action: #selector(self.selectedChanged(_:))))
+            name: "Current Page",
+            type: .rangeSelector(
+                selected: self.selectedPageIndex,
+                range: 0...Constants.numberOfPages
+            ),
+            target: (source: self, action: #selector(self.selectedPageChanged(_:))))
     }()
 
     private var label: String? = "Lore Ipsum" {
         didSet {
-            self.title = self.label ?? ""
+            self.title = self.label
         }
     }
 
@@ -189,7 +198,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.contentConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.touchableConfigurationItemViewModel,
-            self.selectedConfigurationItemViewModel,
+            self.currentPageIndexConfigurationItemViewModel,
             self.labelContentConfigurationItemViewModel,
             self.labelsConfigurationItemViewModel
         ]
@@ -205,9 +214,9 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var showPageNumber = true
     @Published var isDisabled = false
     @Published var isTouchable = true
-    @Published var isSelected = false
     @Published var showLabels = true
-    @Published var title: String = "Lore ipsum"
+    @Published var title: String? = "Lore ipsum"
+    @Published var selectedPageIndex: Int = 0
 
     init(
         theme: Theme,
@@ -271,7 +280,7 @@ extension ProgressTrackerComponentUIViewModel {
         self.isTouchable = isTrue(selected)
     }
 
-    @objc func selectedChanged(_ selected: Any?) {
-        self.isSelected = isTrue(selected)
+    @objc func selectedPageChanged(_ control: NumberSelector) {
+        self.selectedPageIndex = control.selectedValue
     }
 }
