@@ -90,7 +90,7 @@ public final class TextLinkUIView: UIControl {
         }
         set {
             self.viewModel.text = newValue
-            self.accessibilityLabelManager.internalValue = newValue
+            self.accessibilityLabel = newValue
         }
     }
 
@@ -255,9 +255,7 @@ public final class TextLinkUIView: UIControl {
         self.addSubview(self.contentStackView)
 
         // Accessibility
-        self.accessibilityTraits = [.button]
         self.accessibilityIdentifier = TextLinkAccessibilityIdentifier.view
-        self.isAccessibilityElement = true
 
         // View properties
         self.backgroundColor = .clear
@@ -268,6 +266,9 @@ public final class TextLinkUIView: UIControl {
 
         // Setup gesture
         self.enableTouch()
+
+        // Setup accessibility
+        self.setupAccessibility()
 
         // Setup subscriptions
         self.setupSubscriptions()
@@ -316,6 +317,13 @@ public final class TextLinkUIView: UIControl {
         self.imageViewHeightConstraint?.isActive = true
 
         self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor).isActive = true
+    }
+
+    // MARK: - Accessibility
+    private func setupAccessibility() {
+        self.isAccessibilityElement = UIAccessibility.isVoiceOverRunning
+        self.accessibilityLabel = self.viewModel.text
+        self.accessibilityTraits.insert(.link)
     }
 
     // MARK: - Update UI
