@@ -236,9 +236,9 @@ public final class ProgressTrackerUIControl: UIControl {
 
     // MARK: Private functions
     private func createIndicatorViews(content: Content) -> [ProgressTrackerIndicatorUIControl] {
-        guard self.numberOfPages > 0 else { return [] }
+        guard content.numberOfPages > 0 else { return [] }
 
-        return (0..<self.numberOfPages).map { index in
+        return (0..<content.numberOfPages).map { index in
             let indicator = ProgressTrackerIndicatorUIControl(
                 theme: self.theme,
                 intent: self.intent,
@@ -246,6 +246,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 size: self.size,
                 content: content.pageContent(atIndex: index))
             indicator.translatesAutoresizingMaskIntoConstraints = false
+            indicator.isEnabled = self.isEnabled
             return indicator
         }
     }
@@ -253,7 +254,7 @@ public final class ProgressTrackerUIControl: UIControl {
     private func createLabels(content: Content) ->
     [UILabel] {
         guard content.hasLabel else { return [] }
-        return (0..<self.numberOfPages).map{ index in
+        return (0..<content.numberOfPages).map{ index in
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.adjustsFontForContentSizeCategory = true
@@ -268,7 +269,7 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     private func createTrackView(numberOfPages: Int, orientation: ProgressTrackerOrientation) -> [ProgressTrackerTrackUIView] {
-        guard self.numberOfPages > 1 else { return [] }
+        guard numberOfPages > 1 else { return [] }
 
         return (0..<numberOfPages - 1).map { _ in
             let view = ProgressTrackerTrackUIView(
