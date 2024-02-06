@@ -53,6 +53,7 @@ final class BottomSheetViewController: UIViewController {
                     return 500
                 }
                 sheet.detents = [detent]
+//                sheet.largestUndimmedDetentIdentifier = smallIdentifier
             } else {
                 sheet.detents = [.medium()]
             }
