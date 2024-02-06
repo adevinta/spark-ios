@@ -107,16 +107,10 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             name: "Current Page",
             type: .rangeSelector(
                 selected: self.selectedPageIndex,
-                range: 0...Constants.numberOfPages
+                range: 0...(Constants.numberOfPages - 1)
             ),
             target: (source: self, action: #selector(self.selectedPageChanged(_:))))
     }()
-
-//    private var label: String? = "Lore" {
-//        didSet {
-//            self.title = self.label
-//        }
-//    }
 
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {

@@ -201,7 +201,7 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         self.viewModel.$content.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] content in
             self?.update(content: content)
         }
-        self.viewModel.$font.removeDuplicates(by: { $0.uiFont != $1.uiFont }).subscribe(in: &self.cancellables) { [weak self] font in
+        self.viewModel.$font.removeDuplicates(by: { $0.uiFont == $1.uiFont }).subscribe(in: &self.cancellables) { [weak self] font in
             self?.update(font: font)
         }
     }

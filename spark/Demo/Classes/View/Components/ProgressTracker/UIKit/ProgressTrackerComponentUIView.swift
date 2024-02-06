@@ -143,21 +143,21 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
         self.componentView.setCompletedIndicatorImage(self.viewModel.checkmarkImage)
 
-        if contentType == .icon {
+        switch contentType {
+        case .icon:
             for i in 0..<numberOfPages {
                 self.componentView.setIndicatorImage(UIImage.standardImage(at: i), forIndex: i)
             }
-        } else if contentType == .text {
+        case .text:
             for i in 0..<numberOfPages {
                 self.componentView.setIndicatorImage(nil, forIndex: i)
                 self.componentView.setIndicatorLabel("ABCDEFGH".character(at: i), forIndex: i)
             }
-        } else if contentType == .none {
+        case .none, .page:
             for i in 0..<numberOfPages {
                 self.componentView.setIndicatorImage(nil, forIndex: i)
                 self.componentView.setIndicatorLabel(nil, forIndex: i)
             }
         }
-
     }
 }
