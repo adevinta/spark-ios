@@ -38,15 +38,23 @@ struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating, Equata
 
 /// A model representing the content of a progress tracker.
 struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> where ComponentContent: Equatable {
-    var numberOfPages: Int
-    var showDefaultPageNumber: Bool 
-    var currentPageIndex: Int
+    var numberOfPages: Int {
+        didSet {
+            self.currentPageIndex = min(self.currentPageIndex, self.numberOfPages - 1)
+        }
+    }
+    var showDefaultPageNumber: Bool
+    var currentPageIndex: Int {
+        didSet {
+            self.currentPageIndex = min(max(self.currentPageIndex, 0), self.numberOfPages - 1)
+        }
+    }
     var preferredIndicatorImage: ComponentContent.ImageType?
     var preferredCurrentPageIndicatorImage:  ComponentContent.ImageType?
     var completedPageIndicatorImage: ComponentContent.ImageType?
     private var content = [Int: ComponentContent]()
     private var currentPageIndicator = [Int: ComponentContent.ImageType]()
-    var labels = [Int: ComponentContent.TextType?]()
+    var labels = [Int: ComponentContent.TextType]()
 
     /// Returns true, if the content contains a label
     var hasLabel: Bool {
@@ -56,7 +64,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     /// The number of labels
     var numberOfLabels: Int {
         return labels.values.reduce(0) { (partialResult, value) in
-            return partialResult + (value == nil ? 0 : 1)
+            return partialResult + 1 //(value == nil ? 0 : 1)
         }
     }
 

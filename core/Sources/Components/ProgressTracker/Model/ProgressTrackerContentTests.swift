@@ -32,17 +32,37 @@ final class ProgressTrackerContentTests: XCTestCase {
         XCTAssertNil(sut.pageContent(atIndex: 1).label, "Expected label 2 to be nil")
     }
 
-    func test_uses_set_label()  {
+    func test_uses_set_indicator_label()  {
         // GIVEN
         var sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 2, currentPageIndex: 1, showDefaultPageNumber: false)
 
         // WHEN
+        sut.setIndicatorLabel("X", atIndex: 0)
+        XCTAssertEqual(sut.getIndicatorLabel(atIndex: 0), "X", "Expected indicator label to be X")
+
         sut.setIndicatorLabel("A", atIndex: 0)
         sut.setIndicatorLabel("B", atIndex: 1)
 
         // THEN
+        XCTAssertFalse(sut.hasLabel, "Expected not to labels")
         XCTAssertEqual(sut.pageContent(atIndex: 0).label, "A", "Expected label 1 to be A")
         XCTAssertEqual(sut.pageContent(atIndex: 1).label, "B", "Expected label 2 to be B")
+    }
+
+    func test_uses_set_label()  {
+        // GIVEN
+        var sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 4, currentPageIndex: 1, showDefaultPageNumber: false)
+
+        // WHEN
+        sut.setAttributedLabel(NSAttributedString(string: "A"), atIndex: 0)
+        sut.setAttributedLabel(NSAttributedString(string: "B"), atIndex: 1)
+        sut.setAttributedLabel(nil, atIndex: 3)
+
+        // THEN
+        XCTAssertTrue(sut.hasLabel, "Expected hasLabel to be true")
+        XCTAssertEqual(sut.numberOfLabels, 2, "Expected number of labels to be 2")
+        XCTAssertEqual(sut.labels[0], NSAttributedString(string: "A"), "Expected label to be A")
+        XCTAssertEqual(sut.labels[1], NSAttributedString(string: "B"), "Expected label 2 to be B")
     }
 
     func test_uses_preferred_image()  {
@@ -86,6 +106,8 @@ final class ProgressTrackerContentTests: XCTestCase {
             preferredCurrentPageIndicatorImage: currentPagePreferredImage
         )
 
+        /// WHEN
+        sut.setIndicatorImage(preferredImage, atIndex: 1)
         sut.setIndicatorImage(contentImage, atIndex: 1)
         sut.setIndicatorImage(contentImage, atIndex: 2)
 
@@ -131,5 +153,55 @@ final class ProgressTrackerContentTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(sut.getAttributedLabel(atIndex: 1)?.string, "hello")
+    }
+
+    func test_needs_update_of_layout_when_pagecount_differs() {
+        // GIVEN
+        let sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(
+            numberOfPages: 3,
+            currentPageIndex: 2
+        )
+
+        let other = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(
+            numberOfPages: 4,
+            currentPageIndex: 2
+        )
+
+        // THEN
+        XCTAssertTrue(sut.needsUpdateOfLayout(otherComponent: other))
+    }
+
+    func test_needs_update_of_label_counts_differ() {
+        // GIVEN
+        let sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(
+            numberOfPages: 3,
+            currentPageIndex: 2
+        )
+
+        var other = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(
+            numberOfPages: 3,
+            currentPageIndex: 2
+        )
+
+        other.setAttributedLabel(NSAttributedString(string: "A"), atIndex: 0)
+
+        // THEN
+        XCTAssertTrue(sut.needsUpdateOfLayout(otherComponent: other))
+    }
+
+    func test_no_need_for_layout_updated() {
+        // GIVEN
+        let sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(
+            numberOfPages: 3,
+            currentPageIndex: 2
+        )
+
+        let other = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(
+            numberOfPages: 3,
+            currentPageIndex: 2
+        )
+
+        // THEN
+        XCTAssertFalse(sut.needsUpdateOfLayout(otherComponent: other))
     }
 }
