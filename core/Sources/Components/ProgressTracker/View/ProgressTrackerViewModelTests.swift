@@ -29,10 +29,10 @@ final class ProgressTrackerViewModelTests: XCTestCase {
 
     // MARK: - Tests
     func test_vertical_setup() {
-        // Given
+        // GIVEN
         let _ = self.sut(orientation: .vertical)
 
-        // Then
+        // THEN
         XCTAssertEqual(self.spacingsUseCase.executeWithSpacingAndOrientationCallsCount, 1, "Use case expected to have been called")
 
         let spacingsParameters = self.spacingsUseCase.executeWithSpacingAndOrientationReceivedArguments
@@ -41,10 +41,10 @@ final class ProgressTrackerViewModelTests: XCTestCase {
     }
 
     func test_horizontal_setup() {
-        // Given
+        // GIVEN
         let _ = self.sut(orientation: .horizontal)
 
-        // Then
+        // THEN
         XCTAssertEqual(self.spacingsUseCase.executeWithSpacingAndOrientationCallsCount, 1, "Spacings use case expected to have been called")
 
         let spacingsParameters = self.spacingsUseCase.executeWithSpacingAndOrientationReceivedArguments
@@ -53,7 +53,7 @@ final class ProgressTrackerViewModelTests: XCTestCase {
     }
 
     func test_theme_changed() {
-        // Given
+        // GIVEN
         let sut = self.sut(orientation: .horizontal)
         let expectation = expectation(description: "Wait for spacing & font change")
         expectation.expectedFulfillmentCount = 2
@@ -62,15 +62,15 @@ final class ProgressTrackerViewModelTests: XCTestCase {
             expectation.fulfill()
         }.store(in: &self.cancellables)
 
-        // When
+        // WHEN
         sut.theme = ThemeGeneratedMock.mocked()
 
-        // Then
+        // THEN
         wait(for: [expectation], timeout: 1)
     }
 
     func test_enabled_status_changed() {
-        // Given
+        // GIVEN
         let sut = self.sut(orientation: . vertical)
         let expectation = expectation(description: "Wait for color change")
         expectation.expectedFulfillmentCount = 2
@@ -79,32 +79,101 @@ final class ProgressTrackerViewModelTests: XCTestCase {
             expectation.fulfill()
         }.store(in: &self.cancellables)
 
-        // When
+        // WHEN
         sut.isEnabled = false
 
-        // Then
+        // THEN
         wait(for: [expectation], timeout: 1)
     }
 
-    func test_orientation_is_changed() {
-        // Given
+    func test_orientation_is_changed_spacings_updated() {
+        // GIVEN
         let sut = self.sut(orientation: . vertical)
-        let expectation = expectation(description: "Wait for color change")
+        let expectation = expectation(description: "Wait for spacings to be change")
         expectation.expectedFulfillmentCount = 2
 
         sut.$spacings.sink { _ in
             expectation.fulfill()
         }.store(in: &self.cancellables)
 
-        // When
+        // WHEN
         sut.orientation = .horizontal
 
-        // Then
+        // THEN
         wait(for: [expectation], timeout: 1)
+        let arguments = self.spacingsUseCase.executeWithSpacingAndOrientationReceivedArguments
+        XCTAssertIdentical(arguments?.spacing as? LayoutSpacingGeneratedMock, self.theme.layout.spacing as? LayoutSpacingGeneratedMock)
+        XCTAssertEqual(arguments?.orientation, .horizontal)
+        XCTAssertEqual(self.spacingsUseCase.executeWithSpacingAndOrientationCallsCount, 2)
     }
 
-    private func sut(orientation: ProgressTrackerOrientation) -> ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent> {
-        let content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 4, currentPageIndex: 0)
+    func test_orientation_is_not_changed_spacings_is_not_updated() {
+        // GIVEN
+        let sut = self.sut(orientation: . vertical)
+
+        // WHEN
+        sut.orientation = .vertical
+
+        // THEN
+        XCTAssertEqual(self.spacingsUseCase.executeWithSpacingAndOrientationCallsCount, 1)
+
+    }
+
+    func test_change_show_default_page_number() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, showDefaultPageNumber: false)
+
+        XCTAssertFalse(sut.content.showDefaultPageNumber, "Expected show default page number of content to be false")
+        XCTAssertFalse(sut.showDefaultPageNumber, "Expected show default page number to be false")
+
+        // WHEN
+        sut.showDefaultPageNumber = true
+
+        // THEN
+        XCTAssertTrue(sut.content.showDefaultPageNumber, "Expected show default page number of content to be true")
+        XCTAssertTrue(sut.showDefaultPageNumber, "Expected show default page number to be true")
+    }
+
+    func test_change_number_of_pages() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 2)
+
+        XCTAssertEqual(sut.content.numberOfPages, 2, "Expected number of pages of content to be 2")
+        XCTAssertEqual(sut.numberOfPages, 2, "Expected number of pages to be 2")
+
+        // WHEN
+        sut.numberOfPages = 6
+
+        // THEN
+        XCTAssertEqual(sut.content.numberOfPages, 6, "Expected number of pages of content to be 6")
+        XCTAssertEqual(sut.numberOfPages, 6, "Expected number of pages to be 6")
+    }
+
+    func test_change_current_page_index() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+        let allGivenExpected: [(given: Int, expected: Int)] = [(-1, 0), (0, 0), (3, 3), (4, 3) ]
+
+        for givenExpected in allGivenExpected {
+            // WHEN
+            sut.currentPageIndex = givenExpected.given
+
+            // THEN
+            XCTAssertEqual(sut.currentPageIndex, givenExpected.expected, "Expected current page index when set to \(givenExpected.given) to be \(givenExpected.expected)")
+
+        }
+    }
+
+    // MARK: - Private helper functions
+    private func sut(
+        orientation: ProgressTrackerOrientation,
+        numberOfPages: Int = 4,
+        showDefaultPageNumber: Bool = true
+    ) -> ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent> {
+        let content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(
+            numberOfPages: numberOfPages,
+            currentPageIndex: 0,
+            showDefaultPageNumber: showDefaultPageNumber)
         return ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>(
             theme: self.theme,
             orientation: orientation,

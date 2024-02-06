@@ -101,14 +101,11 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
         self.viewModel.$contentType.subscribe(in: &self.cancellables) { [weak self] contentType in
             guard let self = self else { return }
-            self.updateContent(contentType)
+            self.updateContent(contentType, numberOfPages: self.viewModel.numberOfPages)
         }
 
         self.viewModel.$showLabels.dropFirst().subscribe(in: &self.cancellables) { showLabels in
-            for i in 0..<self.viewModel.numberOfPages {
-                let label: String? = showLabels ? self.viewModel.title(at: i) : nil
-                self.componentView.setLabel(label, forIndex: i)
-            }
+            self.updateLabels(showLabels: showLabels, numberOfPages: self.viewModel.numberOfPages)
         }
 
         self.viewModel.$title.dropFirst().subscribe(in: &self.cancellables) { title in
@@ -131,13 +128,26 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         self.viewModel.$useCompletedPageIndicator.subscribe(in: &self.cancellables) { useImage in
             self.componentView.setCompletedIndicatorImage(useImage ? self.viewModel.checkmarkImage : nil)
         }
+
+        self.viewModel.$numberOfPages.subscribe(in: &self.cancellables) { numberOfPages in
+            self.updateContent(self.viewModel.contentType, numberOfPages: numberOfPages)
+            self.updateLabels(showLabels: self.viewModel.showLabels, numberOfPages: numberOfPages)
+            self.componentView.currentPageIndex = self.viewModel.selectedPageIndex
+        }
     }
 
-    private func updateContent(_ contentType: ProgressTrackerComponentUIViewModel.ContentType) {
+    private func updateLabels(showLabels: Bool, numberOfPages: Int) {
+        for i in 0..<numberOfPages {
+            let label: String? = showLabels ? self.viewModel.title(at: i) : nil
+            self.componentView.setLabel(label, forIndex: i)
+        }
+
+    }
+
+    private func updateContent(_ contentType: ProgressTrackerComponentUIViewModel.ContentType, numberOfPages: Int) {
 
         self.viewModel.contentConfigurationItemViewModel.buttonTitle = contentType.name
 
-        let numberOfPages = ProgressTrackerComponentUIViewModel.Constants.numberOfPages
         self.componentView.showDefaultPageNumber = contentType == .page
         self.componentView.numberOfPages = numberOfPages
 
