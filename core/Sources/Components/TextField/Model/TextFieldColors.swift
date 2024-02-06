@@ -8,19 +8,18 @@
 
 import Foundation
 
-struct TextFieldColors {
-
-    // MARK: - Properties
-
+struct TextFieldColors: Equatable {
+    let text: any ColorToken
+    let placeholder: any ColorToken
     let border: any ColorToken
-    //TODO: let statusColor: any ColorToken
-}
-
-// MARK: Equatable
-
-extension TextFieldColors: Equatable {
+    let statusIcon: any ColorToken
+    let background: any ColorToken
 
     static func == (lhs: TextFieldColors, rhs: TextFieldColors) -> Bool {
-        lhs.border.equals(rhs.border)
+        return lhs.text.equals(rhs.text) &&
+        lhs.placeholder.equals(rhs.placeholder) &&
+        lhs.border.equals(rhs.border) &&
+        lhs.statusIcon.equals(rhs.statusIcon) &&
+        lhs.background.equals(rhs.background)
     }
 }

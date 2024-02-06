@@ -19,9 +19,9 @@ final class TextFieldGetSpacingsUseCase: TextFieldGetSpacingsUseCasable {
         switch borderStyle {
         case .none:
             return .init(
-                left: theme.layout.spacing.large,
+                left: theme.layout.spacing.none,
                 content: theme.layout.spacing.medium,
-                right: theme.layout.spacing.large
+                right: theme.layout.spacing.none
             )
         case .roundedRect:
             return .init(
