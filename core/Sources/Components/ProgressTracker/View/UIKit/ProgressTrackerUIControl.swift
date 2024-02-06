@@ -229,13 +229,9 @@ public final class ProgressTrackerUIControl: UIControl {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        self.trackSpacingConstraints.forEach { constraint in
-            constraint.constant = self.trackSpacing
-        }
+        self._scaleFactor.update(traitCollection: self.traitCollection)
 
-        self.labelSpacingConstraints.forEach { constraint in
-            constraint.constant = self.labelSpacing
-        }
+        self.didUpdate(spacings: self.viewModel.spacings)
     }
 
     // MARK: Private functions
@@ -330,36 +326,31 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     private func setupSubscriptions() {
-        self.viewModel.$content.subscribe(in: &self.cancellables) { content in
-            if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
-                self.setupView(content: content, orientation: self.viewModel.orientation)
-            } else if content.numberOfPages > 0 {
-                for i in 0..<content.numberOfPages {
-                    self.indicatorViews[i].content = content.pageContent(atIndex: i)
-                    self.indicatorViews[i].isSelected = (i == content.currentPageIndex)
-                }
-                if content.hasLabel {
-                    for i in 0..<content.numberOfPages {
-                        self.labels[i].attributedText = content.getAttributedLabel(atIndex: i)
-                    }
-                }
-            }
+        self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] content in
+            self?.didUpdate(content: content)
         }
 
-        self.viewModel.$orientation.subscribe(in: &self.cancellables) { orientation in
+        self.viewModel.$orientation.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] orientation in
+            guard let self = self else { return }
             self.setupView(content: self.viewModel.content, orientation: orientation)
         }
 
-        self.viewModel.$font.subscribe(in: &self.cancellables) { font in
+        self.viewModel.$font.removeDuplicates(by: {$0.uiFont == $1.uiFont}).subscribe(in: &self.cancellables) { [weak self] font in
+            guard let self = self else { return }
             for label in self.labels {
                 label.font = font.uiFont
             }
         }
 
-        self.viewModel.$labelColor.subscribe(in: &self.cancellables) { color in
+        self.viewModel.$labelColor.removeDuplicates(by: {$0.uiColor == $1.uiColor}).subscribe(in: &self.cancellables) { [weak self] color in
+            guard let self = self else { return }
             for label in self.labels {
                 label.textColor = color.uiColor
             }
+        }
+
+        self.viewModel.$spacings.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] spacings in
+            self?.didUpdate(spacings: spacings)
         }
     }
 
@@ -469,6 +460,22 @@ public final class ProgressTrackerUIControl: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func didUpdate(content: Content) {
+        if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
+            self.setupView(content: content, orientation: self.viewModel.orientation)
+        } else if content.numberOfPages > 0 {
+            for i in 0..<content.numberOfPages {
+                self.indicatorViews[i].content = content.pageContent(atIndex: i)
+                self.indicatorViews[i].isSelected = (i == content.currentPageIndex)
+            }
+            if content.hasLabel {
+                for i in 0..<content.numberOfPages {
+                    self.labels[i].attributedText = content.getAttributedLabel(atIndex: i)
+                }
+            }
+        }
+    }
+
     private func didUpdate(intent: ProgressTrackerIntent) {
         for indicatorView in self.indicatorViews {
             indicatorView.intent = intent
@@ -497,6 +504,17 @@ public final class ProgressTrackerUIControl: UIControl {
         for indicatorView in self.indicatorViews {
             indicatorView.size = size
         }
+    }
+
+    private func didUpdate(spacings: ProgressTrackerSpacing) {
+        self.trackSpacingConstraints.forEach { constraint in
+            constraint.constant = spacings.trackIndicatorSpacing * self.scaleFactor
+        }
+
+        self.labelSpacingConstraints.forEach { constraint in
+            constraint.constant = spacings.minLabelSpacing * self.scaleFactor
+        }
+
     }
 
     private func didUpdate(isEnabled: Bool) {

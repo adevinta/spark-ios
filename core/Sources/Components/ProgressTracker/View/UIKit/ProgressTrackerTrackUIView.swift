@@ -80,11 +80,13 @@ final class ProgressTrackerTrackUIView: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self._scaleFactor.update(traitCollection: self.traitCollection)
+
+        self.updateSizeConstraints()
     }
 
     private func setupSubscriptions() {
-        self.viewModel.$lineColor.subscribe(in: &self.cancellables) { newColor in
-            self.lineView.backgroundColor = newColor.uiColor
+        self.viewModel.$lineColor.subscribe(in: &self.cancellables) { [weak self] newColor in
+            self?.lineView.backgroundColor = newColor.uiColor
         }
     }
 
@@ -112,6 +114,12 @@ final class ProgressTrackerTrackUIView: UIView {
 
         NSLayoutConstraint.activate(self.sizeConstraints)
         self.lineView.backgroundColor = self.viewModel.lineColor.uiColor
+    }
+
+    private func updateSizeConstraints() {
+        for sizeConstraint in self.sizeConstraints {
+            sizeConstraint.constant = self.trackSize
+        }
     }
 
     required init?(coder: NSCoder) {
