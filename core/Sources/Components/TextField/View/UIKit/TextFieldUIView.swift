@@ -9,12 +9,14 @@
 import UIKit
 import Combine
 
+/// Spark TextField, subclasses UITextField
 public final class TextFieldUIView: UITextField {
 
     private let viewModel: TextFieldViewModel
     private var cancellables = Set<AnyCancellable>()
 
     @ScaledUIMetric private var height: CGFloat = 44
+    @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
     private let defaultStatusImageSize: CGFloat = 16
     private let defaultClearButtonRightSpacing = 5.0
@@ -60,6 +62,7 @@ public final class TextFieldUIView: UITextField {
         }
     }
 
+    /// The textfield's current theme.
     public var theme: Theme {
         get {
             return self.viewModel.theme
@@ -68,6 +71,7 @@ public final class TextFieldUIView: UITextField {
             self.viewModel.theme = newValue
         }
     }
+    /// The textfield's current intent.
     public var intent: TextFieldIntent {
         get {
             return self.viewModel.intent
@@ -128,6 +132,13 @@ public final class TextFieldUIView: UITextField {
         )
     }
 
+    /// TextFieldUIView initializer
+    /// - Parameters:
+    ///   - theme: The textfield's current theme
+    ///   - intent: The textfield's current intent
+    ///   - successImage: Success image, will be shown in the rightView when intent = .success
+    ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
+    ///   - errorImage: Error image, will be shown in the rightView when intent = .error
     public convenience init(
         theme: Theme,
         intent: TextFieldIntent,
@@ -188,7 +199,7 @@ public final class TextFieldUIView: UITextField {
 
         self.viewModel.$borderWidth.subscribe(in: &self.cancellables) { [weak self] borderWidth in
             guard let self else { return }
-            self.setBorderWidth(borderWidth)
+            self.setBorderWidth(borderWidth * self.scaleFactor)
         }
 
         self.viewModel.$borderRadius.subscribe(in: &self.cancellables) { [weak self] borderRadius in
@@ -331,6 +342,10 @@ public final class TextFieldUIView: UITextField {
         }
 
         guard previousTraitCollection?.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory else { return }
+
+        self._height.update(traitCollection: self.traitCollection)
+        self._scaleFactor.update(traitCollection: self.traitCollection)
+        self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
 
         self.invalidateIntrinsicContentSize()
     }
