@@ -107,9 +107,19 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             name: "Current Page",
             type: .rangeSelector(
                 selected: self.selectedPageIndex,
-                range: 0...(Constants.numberOfPages - 1)
+                range: 0...7
             ),
             target: (source: self, action: #selector(self.selectedPageChanged(_:))))
+    }()
+
+    lazy var numberOfPagesPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Number of Pages",
+            type: .rangeSelector(
+                selected: self.numberOfPages,
+                range: 2...8
+            ),
+            target: (source: self, action: #selector(self.numberOfPagesChanged(_:))))
     }()
 
     // MARK: - Published Properties
@@ -164,6 +174,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.disableConfigurationItemViewModel,
             self.completedPageIndicatorConfigurationItemViewModel,
             self.currentPageIndexConfigurationItemViewModel,
+            self.numberOfPagesPageIndexConfigurationItemViewModel,
             self.labelContentConfigurationItemViewModel,
             self.labelsConfigurationItemViewModel
         ]
@@ -184,7 +195,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var showLabels = true
     @Published var title: String? = "Lore"
     @Published var selectedPageIndex: Int = 0
-    var numberOfPages = Constants.numberOfPages
+    @Published var numberOfPages = Constants.numberOfPages
 
     init(
         theme: Theme,
@@ -250,6 +261,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func selectedPageChanged(_ control: NumberSelector) {
         self.selectedPageIndex = control.selectedValue
+    }
+
+    @objc func numberOfPagesChanged(_ control: NumberSelector) {
+        self.numberOfPages = control.selectedValue
     }
 
     @objc func useCompletedPageIndicatorChanged(_ selected: Any?) {

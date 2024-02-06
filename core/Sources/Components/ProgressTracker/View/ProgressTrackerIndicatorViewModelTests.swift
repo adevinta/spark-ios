@@ -80,6 +80,23 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         wait(for: [expectation])
     }
 
+    func test_intent_no_change() {
+        // Given
+        let sut = self.sut(intent: .basic)
+        let expectation = expectation(description: "Expect colors to have been triggered once")
+        expectation.expectedFulfillmentCount = 1
+
+        sut.$colors.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.cancellables)
+
+        // When
+        sut.intent = .basic
+
+        // Then
+        wait(for: [expectation])
+    }
+
     func test_variant_change() {
         // Given
         let sut = self.sut(variant: .outlined)
@@ -92,6 +109,23 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
 
         // When
         sut.variant = .tinted
+
+        // Then
+        wait(for: [expectation])
+    }
+
+    func test_variant_no_change() {
+        // Given
+        let sut = self.sut(variant: .outlined)
+        let expectation = expectation(description: "Expect colors to have been triggered once")
+        expectation.expectedFulfillmentCount = 1
+
+        sut.$colors.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.cancellables)
+
+        // When
+        sut.variant = .outlined
 
         // Then
         wait(for: [expectation])
@@ -114,6 +148,75 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         wait(for: [expectation])
     }
 
+    func test_state_no_change() {
+        // Given
+        let sut = self.sut(state: .pressed)
+        let expectation = expectation(description: "Expect colors to have been triggered once")
+        expectation.expectedFulfillmentCount = 1
+
+        sut.$colors.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.cancellables)
+
+        // When
+        sut.state = .pressed
+
+        // Then
+        wait(for: [expectation])
+    }
+
+    func test_selected_changed() {
+        // Given
+        let sut = self.sut(state: .normal)
+        let expectation = expectation(description: "Expect colors to have been triggered twice")
+        expectation.expectedFulfillmentCount = 2
+
+        sut.$colors.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.cancellables)
+
+        // When
+        sut.set(selected: true)
+
+        // Then
+        wait(for: [expectation])
+    }
+
+    func test_enabled_changed() {
+        // Given
+        let sut = self.sut(state: .normal)
+        let expectation = expectation(description: "Expect colors to have been triggered twice")
+        expectation.expectedFulfillmentCount = 2
+
+        sut.$colors.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.cancellables)
+
+        // When
+        sut.set(enabled: false)
+
+        // Then
+        wait(for: [expectation])
+    }
+
+    func test_highlighted_changed() {
+        // Given
+        let sut = self.sut(state: .normal)
+        let expectation = expectation(description: "Expect colors to have been triggered twice")
+        expectation.expectedFulfillmentCount = 2
+
+        sut.$colors.sink { _ in
+            expectation.fulfill()
+        }.store(in: &self.cancellables)
+
+        // When
+        sut.set(highlighted: true)
+
+        // Then
+        wait(for: [expectation])
+    }
+
+    // MARK: Private functions
     private func sut(
         intent: ProgressTrackerIntent = .basic,
         variant: ProgressTrackerVariant = .outlined,
