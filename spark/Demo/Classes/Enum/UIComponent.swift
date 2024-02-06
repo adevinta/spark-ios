@@ -13,6 +13,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static var allCases: [UIComponent] = [
         .badge,
         .button,
+        .bottomSheet,
         .iconButton,
         .checkbox,
         .chip,
@@ -36,6 +37,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
 
     static let badge = UIComponent(rawValue: "Badge")
     static let button = UIComponent(rawValue: "Button")
+    static let bottomSheet = UIComponent(rawValue: "Bottom Sheet")
     static let checkbox = UIComponent(rawValue: "Checkbox")
     static let chip = UIComponent(rawValue: "Chip")
     static let icon = UIComponent(rawValue: "Icon")
