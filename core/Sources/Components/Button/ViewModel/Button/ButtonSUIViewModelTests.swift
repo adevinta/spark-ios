@@ -38,5 +38,14 @@ final class ButtonSUIViewModelTests: XCTestCase {
             viewModel.controlStateText,
             "Wrong constrol state text"
         )
+        XCTAssertNil(
+            viewModel.maxWidth,
+            "Wrong max Width"
+        )
+        XCTAssertEqual(
+            viewModel.frameAlignment,
+            .center,
+            "Wrong frame alignment"
+        )
     }
 }

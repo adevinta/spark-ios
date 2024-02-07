@@ -18,6 +18,8 @@ final class ButtonSUIViewModel: ButtonViewModel, ButtonMainSUIViewModel {
 
     @Published private(set) var controlStateImage: ControlStateImage = .init()
     @Published private(set) var controlStateText: ControlStateText? = .init()
+    @Published var maxWidth: CGFloat?
+    @Published var frameAlignment: Alignment = .center
 
     // MARK: - Initialization
 
