@@ -200,7 +200,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var showPageNumber = true
     @Published var isDisabled = false
     @Published var useCompletedPageIndicator = true
-    @Published var useCurrentPageIndicatorImage = true
+    @Published var useCurrentPageIndicatorImage = false
     @Published var showLabels = true
     @Published var title: String? = "Lore"
     @Published var selectedPageIndex: Int = 0
