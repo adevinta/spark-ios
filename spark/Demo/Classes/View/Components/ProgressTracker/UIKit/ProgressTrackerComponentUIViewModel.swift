@@ -102,6 +102,13 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.useCompletedPageIndicatorChanged(_:))))
     }()
 
+    lazy var currentPageIndicatorImageConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Current Page Indicator Image",
+            type: .checkbox(title: "", isOn: self.useCurrentPageIndicatorImage),
+            target: (source: self, action: #selector(self.useCurrentPageIndicatorImageChanged(_:))))
+    }()
+
     lazy var currentPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Current Page",
@@ -173,6 +180,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.contentConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.completedPageIndicatorConfigurationItemViewModel,
+            self.currentPageIndicatorImageConfigurationItemViewModel,
             self.currentPageIndexConfigurationItemViewModel,
             self.numberOfPagesPageIndexConfigurationItemViewModel,
             self.labelContentConfigurationItemViewModel,
@@ -192,6 +200,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var showPageNumber = true
     @Published var isDisabled = false
     @Published var useCompletedPageIndicator = true
+    @Published var useCurrentPageIndicatorImage = true
     @Published var showLabels = true
     @Published var title: String? = "Lore"
     @Published var selectedPageIndex: Int = 0
@@ -269,6 +278,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func useCompletedPageIndicatorChanged(_ selected: Any?) {
         self.useCompletedPageIndicator = isTrue(selected)
+    }
+
+    @objc func useCurrentPageIndicatorImageChanged(_ selected: Any?) {
+        self.useCurrentPageIndicatorImage = isTrue(selected)
     }
 
 }
