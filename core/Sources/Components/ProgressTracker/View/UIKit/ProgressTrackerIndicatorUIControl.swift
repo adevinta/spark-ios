@@ -162,7 +162,12 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         super.traitCollectionDidChange(previousTraitCollection)
         self._scaleFactor.update(traitCollection: self.traitCollection)
 
-        self.sizesChanged()
+        if self.traitCollection.hasDifferentSizeCategory(comparedTo: previousTraitCollection) {
+            self.sizesChanged()
+        }
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.updateBorderColor()
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -216,9 +221,17 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
 
     private func update(colors: ProgressTrackerColors) {
         self.indicatorView.backgroundColor = colors.background.uiColor
-        self.indicatorView.setBorderColor(from: colors.outline)
         self.imageView.tintColor = colors.content.uiColor
         self.label.textColor = colors.content.uiColor
+        self.updateBorderColor(colors.outline)
+    }
+
+    private func updateBorderColor() {
+        self.updateBorderColor(self.viewModel.colors.outline)
+    }
+
+    private func updateBorderColor(_ color: any ColorToken) {
+        self.indicatorView.setBorderColor(from: color)
     }
 
     private func update(content: ProgressTrackerUIIndicatorContent) {
@@ -255,6 +268,8 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         self.indicatorView.setBorderWidth(self.borderWidth)
     }
 
+    // MARK: Modifier
+    /// Change the size of the indicator
     func set(size: ProgressTrackerSize) {
         self.viewModel.size = size
     }
