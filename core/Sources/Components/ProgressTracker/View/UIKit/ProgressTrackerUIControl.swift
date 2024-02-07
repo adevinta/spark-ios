@@ -79,10 +79,16 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    private var _interactionState: ProgressTrackerInteractionState = .none
+
     /// The type of interaction enabled for the Progress Tracker
     public var interactionState: ProgressTrackerInteractionState {
-        didSet {
+        get {
+            return self._interactionState
+        }
+        set {
             // needs to be implemented
+            self.didUpdate(interactionState: newValue)
         }
     }
 
@@ -217,13 +223,13 @@ public final class ProgressTrackerUIControl: UIControl {
         self.viewModel = viewModel
         self.variant = variant
         self.size = size
-        self.interactionState = .discrete
         self.intent = intent
 
         super.init(frame: .zero)
 
         self.setupView(content: content, orientation: orientation)
         self.setupSubscriptions()
+        self.isUserInteractionEnabled = false
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -232,6 +238,60 @@ public final class ProgressTrackerUIControl: UIControl {
         self._scaleFactor.update(traitCollection: self.traitCollection)
 
         self.didUpdate(spacings: self.viewModel.spacings)
+    }
+
+    //MARK: - Handle touch events
+    public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        return self.handleTouch(touch, with: event)
+    }
+
+    public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        return self.handleTouch(touch, with: event)
+    }
+
+    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+
+//        guard let location = touch?.location(in: self) else {
+//            self.cancelHighlighted()
+//            return
+//        }
+//
+//        if !self.bounds.contains(location) {
+//            self.ratingStarHighlightCancelled()
+//        } else if let index = self.ratingDisplay.ratingStarViews.index(closestTo: location) {
+//            self.ratingStarSelected(index)
+//        } else if let index = self.lastSelectedIndex {
+//            self.ratingStarSelected(index)
+//        } else {
+//            self.ratingStarHighlightCancelled()
+//        }
+//
+//        self.lastSelectedIndex = nil
+    }
+
+    // MARK: - Handling touch actions
+    private func handleTouch(_ touch: UITouch, with event: UIEvent?) -> Bool {
+
+        let location = touch.location(in: self)
+
+//        if !self.frame.contains(location) {
+//            if !self.isHighlighted {
+//                self.ratingStarHighlightCancelled()
+//            }
+//            return true
+//        }
+//
+//        guard let index = self.ratingDisplay.ratingStarViews.index(closestTo: location) else {
+//            if !self.isHighlighted {
+//                self.ratingStarHighlightCancelled()
+//            }
+//            return true
+//        }
+//
+//        self.lastSelectedIndex = index
+//        self.ratingStarHighlighted(index)
+
+        return true
     }
 
     // MARK: Private functions
@@ -247,6 +307,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 content: content.pageContent(atIndex: index))
             indicator.translatesAutoresizingMaskIntoConstraints = false
             indicator.isEnabled = self.isEnabled
+            indicator.isUserInteractionEnabled = false
             return indicator
         }
     }
@@ -260,7 +321,7 @@ public final class ProgressTrackerUIControl: UIControl {
             label.adjustsFontForContentSizeCategory = true
             label.attributedText = content.getAttributedLabel(atIndex: index)
             label.font = self.viewModel.font.uiFont
-            label.textColor = self.viewModel.labelColor.uiColor
+            label.textColor = self.viewModel.labelColor(forIndex: index).uiColor
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.allowsDefaultTighteningForTruncation = true
@@ -343,15 +404,12 @@ public final class ProgressTrackerUIControl: UIControl {
             }
         }
 
-        self.viewModel.$labelColor.removeDuplicates(by: {$0.uiColor == $1.uiColor}).subscribe(in: &self.cancellables) { [weak self] color in
-            guard let self = self else { return }
-            for label in self.labels {
-                label.textColor = color.uiColor
-            }
-        }
-
         self.viewModel.$spacings.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] spacings in
             self?.didUpdate(spacings: spacings)
+        }
+
+        self.viewModel.$disabledIndices.removeDuplicates().subscribe(in: &self.cancellables) { disabledIndices in
+            self.doUpdateLabelColors(for: disabledIndices)
         }
     }
 
@@ -505,6 +563,10 @@ public final class ProgressTrackerUIControl: UIControl {
         for indicatorView in self.indicatorViews {
             indicatorView.size = size
         }
+
+        if size != .large {
+            self.interactionState = .none
+        }
     }
 
     private func didUpdate(spacings: ProgressTrackerSpacing) {
@@ -525,6 +587,26 @@ public final class ProgressTrackerUIControl: UIControl {
         for trackView in self.trackViews {
             trackView.isEnabled = isEnabled
         }
+    }
+
+    private func didUpdate(interactionState: ProgressTrackerInteractionState) {
+        guard self.size != .large else { return }
+
+        if interactionState == .none {
+            self.isUserInteractionEnabled = false
+        }
+
+        self._interactionState = interactionState
+    }
+
+    private func doUpdateLabelColors(for disabledIndices: Set<Int>) {
+        for (index, _) in self.labels.enumerated() {
+            self.doUpdateLabelColor(forIndex: index, isDisabled: disabledIndices.contains(index))
+        }
+    }
+
+    private func doUpdateLabelColor(forIndex index: Int, isDisabled: Bool) {
+        self.labels[safe: index]?.textColor = self.viewModel.labelColor(isDisabled: isDisabled).uiColor
     }
 
     // MARK: - Public modifiers
@@ -592,6 +674,15 @@ public final class ProgressTrackerUIControl: UIControl {
     /// Return the indicator image of the pages already visited
     public func getCompletedIndicatorImage() -> UIImage? {
         return self.viewModel.content.completedPageIndicatorImage
+    }
+
+    /// Set the indicator at
+    public func setIsEnabled(_ isEnabled: Bool, forIndex index: Int) {
+        guard index < self.indicatorViews.count else { return }
+
+        self.indicatorViews[index].isEnabled = isEnabled
+        self.viewModel.setIsEnabled(isEnabled: isEnabled, forIndex: index)
+        self.trackViews[safe: index-1]?.isEnabled = isEnabled
     }
 }
 

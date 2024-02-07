@@ -16,7 +16,6 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         didSet {
             self.updateSpacings()
             self.updateFont()
-            self.updateLabelColor()
         }
     }
 
@@ -32,7 +31,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     var isEnabled: Bool = true {
         didSet {
-            self.updateLabelColor()
+            self.updateEnabledIndices()
         }
     }
 
@@ -63,10 +62,10 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     }
 
     @Published var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent>
+    @Published var disabledIndices = Set<Int>()
 
     @Published var spacings: ProgressTrackerSpacing
     @Published var font: TypographyFontToken
-    @Published var labelColor: any ColorToken
 
     // MARK: Private properties
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
@@ -85,7 +84,6 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         self.spacings = spacingUseCase.execute(spacing: theme.layout.spacing, orientation: orientation)
 
         self.font = theme.typography.body2Highlight
-        self.labelColor = theme.colors.base.onSurface
     }
 
     private func updateSpacings() {
@@ -96,11 +94,37 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         self.font = self.theme.typography.body2Highlight
     }
 
-    private func updateLabelColor() {
+    func labelColor(forIndex index: Int) -> any ColorToken {
         var color = self.theme.colors.base.onSurface
-        if !self.isEnabled {
+        if self.disabledIndices.contains(index) {
             color = color.opacity(self.theme.dims.dim1)
         }
-        self.labelColor = color
+        return color
+    }
+
+    func labelColor(isDisabled: Bool) -> any ColorToken {
+        var color = self.theme.colors.base.onSurface
+        if isDisabled {
+            color = color.opacity(self.theme.dims.dim1)
+        }
+        return color
+    }
+
+    func setIsEnabled(isEnabled: Bool, forIndex index: Int) {
+        if isEnabled {
+            self.disabledIndices.remove(index)
+        } else {
+            self.disabledIndices.insert(index)
+        }
+    }
+
+    private func updateEnabledIndices() {
+        if !self.isEnabled {
+            for i in (0..<self.numberOfPages) {
+                self.disabledIndices.insert(i)
+            }
+        } else {
+            self.disabledIndices.removeAll()
+        }
     }
 }
