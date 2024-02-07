@@ -101,7 +101,17 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
         self.viewModel.$contentType.subscribe(in: &self.cancellables) { [weak self] contentType in
             guard let self = self else { return }
-            self.updateContent(contentType, numberOfPages: self.viewModel.numberOfPages)
+            self.updateContent(
+                contentType,
+                numberOfPages: self.viewModel.numberOfPages,
+                useCurrentPageIndicatorImage: self.viewModel.useCurrentPageIndicatorImage)
+        }
+
+        self.viewModel.$useCurrentPageIndicatorImage.subscribe(in: &self.cancellables) { useCurrentIndicatorImage in
+            self.updateContent(
+                self.viewModel.contentType,
+                numberOfPages: self.viewModel.numberOfPages,
+                useCurrentPageIndicatorImage: useCurrentIndicatorImage)
         }
 
         self.viewModel.$showLabels.dropFirst().subscribe(in: &self.cancellables) { showLabels in
@@ -130,7 +140,10 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$numberOfPages.subscribe(in: &self.cancellables) { numberOfPages in
-            self.updateContent(self.viewModel.contentType, numberOfPages: numberOfPages)
+            self.updateContent(
+                self.viewModel.contentType,
+                numberOfPages: numberOfPages,
+                useCurrentPageIndicatorImage: self.viewModel.useCurrentPageIndicatorImage)
             self.updateLabels(showLabels: self.viewModel.showLabels, numberOfPages: numberOfPages)
             self.componentView.currentPageIndex = self.viewModel.selectedPageIndex
         }
@@ -144,7 +157,11 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
     }
 
-    private func updateContent(_ contentType: ProgressTrackerComponentUIViewModel.ContentType, numberOfPages: Int) {
+    private func updateContent(
+        _ contentType: ProgressTrackerComponentUIViewModel.ContentType,
+        numberOfPages: Int,
+        useCurrentPageIndicatorImage: Bool
+    ) {
 
         self.viewModel.contentConfigurationItemViewModel.buttonTitle = contentType.name
 
@@ -168,6 +185,10 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
                 self.componentView.setIndicatorImage(nil, forIndex: i)
                 self.componentView.setIndicatorLabel(nil, forIndex: i)
             }
+        }
+
+        for i in 0..<numberOfPages {
+            self.componentView.setCurrentPageIndicatorImage(useCurrentPageIndicatorImage ? UIImage.selectedImage(at: i) : nil, forIndex: i)
         }
     }
 }

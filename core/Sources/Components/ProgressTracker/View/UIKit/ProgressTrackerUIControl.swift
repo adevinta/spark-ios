@@ -527,49 +527,75 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    // MARK: - Public modifiers
+    /// Set the indicator image at the specified index
+    /// - Parameters:
+    ///   - image: An optional image. Setting the image to nil will remove it.
+    ///   - forIndex: The index to use the image
     public func setIndicatorImage(_ image: UIImage?, forIndex index: Int) {
         self.viewModel.content.setIndicatorImage(image, atIndex: index)
     }
 
+    /// Set the current indicator image at the given index. This indicator image will be shown when the page is selected
+    /// - Parameters:
+    ///   - image: An optional image. Setting the image to nil will remove it
+    ///   - forIndex: The page index for the image
     public func setCurrentPageIndicatorImage(_ image: UIImage?, forIndex index: Int) {
         self.viewModel.content.setCurrentPageIndicatorImage(image, atIndex: index)
     }
 
+    /// Set an attributed label aligned to the corresponding indicator. This will be below the indicator in a horizontal alignment and to the right of it in a vertical alignment. Setting an attributed label and label are mutually exclusive. Setting a label at the position of an attributed label will overwrite the attributed label.
+    /// - Parameters:
+    ///   - attributedLabel: An optional attributed label to set at the given index. Setting this value to nil will remove an existing attributedLabel or label at the index.
+    ///   - forIndex: The index of the label
     public func setAttributedLabel(_ attributedLabel: NSAttributedString?, forIndex index: Int) {
         self.viewModel.content.setAttributedLabel(attributedLabel, atIndex: index)
     }
 
+    /// Returns the attributed label at the given index.
     public func getAttributedLabel(ofIndex index: Int) -> NSAttributedString? {
         return self.viewModel.content.getAttributedLabel(atIndex: index)
     }
 
+    /// Set a label at the corresponding index. This will overwrite an existing attributed label at the same position.
+    /// - Parameters:
+    ///   - label: An optional label. Setting it to nil, will remove an existing label or attributed label.
+    ///   - index: The page index
     public func setLabel(_ label: String?, forIndex index: Int) {
         let attributedLabel = label.map(NSAttributedString.init)
         self.viewModel.content.setAttributedLabel(attributedLabel, atIndex: index)
     }
 
+    /// Returns the label aligned to the indicator at the given index.
     public func getLabel(forIndex index: Int) -> String? {
         return self.viewModel.content.getAttributedLabel(atIndex: index)?.string
     }
 
+    /// Set a character on the indicator for the given index.
+    /// - Parameters:
+    ///   - label: An optional character for the indicator label
+    ///   - forIndex: The index of the indicator
     public func setIndicatorLabel(_ label: Character?, forIndex index: Int) {
         self.viewModel.content.setIndicatorLabel(label, atIndex: index)
     }
 
+    /// Return the current indicator label at the given index.
     public func getIndicatorLabel(forIndex index: Int) -> Character? {
         self.viewModel.content.getIndicatorLabel(atIndex: index)
     }
 
-    public func getCompletedIndicatorImage() -> UIImage? {
-        return self.viewModel.content.completedPageIndicatorImage
-    }
-
+    /// Set the indicator image of the already visited pages
     public func setCompletedIndicatorImage(_ image: UIImage?) {
         self.viewModel.content.completedPageIndicatorImage = image
     }
+
+    /// Return the indicator image of the pages already visited
+    public func getCompletedIndicatorImage() -> UIImage? {
+        return self.viewModel.content.completedPageIndicatorImage
+    }
 }
 
-
+// MARK: Private helper extensions
 private extension Collection where Element: UIView {
     func removeAllFromSuperView() {
         for view in self {

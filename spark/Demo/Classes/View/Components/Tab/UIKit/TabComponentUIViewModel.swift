@@ -289,6 +289,11 @@ extension UIImage {
         let imageName = names[index % names.count]
         return UIImage(systemName: "\(imageName).fill") ?? UIImage()
     }
+
+    static func selectedImage(at index: Int) -> UIImage {
+        let imageName = names[index % names.count]
+        return UIImage(systemName: "\(imageName).circle.fill") ?? UIImage()
+    }
 }
 
 private extension TabSize {
