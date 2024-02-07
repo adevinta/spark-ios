@@ -64,7 +64,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     /// The number of labels
     var numberOfLabels: Int {
         return labels.values.reduce(0) { (partialResult, value) in
-            return partialResult + 1 //(value == nil ? 0 : 1)
+            return partialResult + 1
         }
     }
 
