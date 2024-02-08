@@ -79,6 +79,11 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    private var _publisher = PassthroughSubject<Int, Never>()
+    public var publisher: some Publisher<Int, Never> {
+        return self._publisher
+    }
+
     private var _interactionState: ProgressTrackerInteractionState = .none
 
     /// The type of interaction enabled for the Progress Tracker
@@ -143,6 +148,8 @@ public final class ProgressTrackerUIControl: UIControl {
     private var labelSpacing: CGFloat {
         return self.viewModel.spacings.minLabelSpacing * self.scaleFactor
     }
+
+    private var trackingPageIndex: Int?
 
     // MARK: Initialization
     /// Initializer
@@ -242,23 +249,53 @@ public final class ProgressTrackerUIControl: UIControl {
 
     //MARK: - Handle touch events
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        return self.handleTouch(touch, with: event)
+        print("TOUCH BEGIN")
+
+        let location = touch.location(in: self)
+
+//        if !self.frame.contains(location) {
+//            self.cancelHighlighted()
+//            return true
+//        }
+
+        // self.bounds.contains(location),
+        if let index = self.indicatorViewsClosestToCurrentPage().index(closestTo: location) {
+            print("CLOSEST \(index)")
+            self.updateCurrentHighlighted(index)
+        }
+
+        return true
     }
 
     public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        print("TOUCH CONTINUE")
+        guard let trackingIndex = self.trackingPageIndex else { return false }
+
+        if !self.isHighlighted {
+            self.cancelHighlighted()
+        } else {
+            self.indicatorViews[safe: trackingIndex]?.isHighlighted = true
+        }
         return self.handleTouch(touch, with: event)
     }
 
     public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
 
-//        guard let location = touch?.location(in: self) else {
-//            self.cancelHighlighted()
-//            return
-//        }
-//
-//        if !self.bounds.contains(location) {
-//            self.ratingStarHighlightCancelled()
-//        } else if let index = self.ratingDisplay.ratingStarViews.index(closestTo: location) {
+        print("TOUCH ENDED")
+        self.cancelHighlighted()
+
+        guard let location = touch?.location(in: self), self.isHighlighted else {
+            return
+        }
+
+        if let index = self.trackingPageIndex {
+            print("CLOSEST \(index)")
+            self.updateCurrentPageTrackingIndex(index)
+        }
+
+        self.trackingPageIndex = nil
+
+//        else if let index = self.ratingDisplay.ratingStarViews.index(closestTo: location) {
 //            self.ratingStarSelected(index)
 //        } else if let index = self.lastSelectedIndex {
 //            self.ratingStarSelected(index)
@@ -269,18 +306,68 @@ public final class ProgressTrackerUIControl: UIControl {
 //        self.lastSelectedIndex = nil
     }
 
+    private func updateCurrentHighlighted(_ index: Int) {
+        guard let highlighedIndex = self.selectedIndicatorImageIndex(index) else { return }
+
+        self.trackingPageIndex = highlighedIndex
+
+        self.indicatorViews[safe: self.currentPageIndex]?.isHighlighted = false
+        self.indicatorViews[safe: highlighedIndex]?.isHighlighted = true
+    }
+
+    private func selectedIndicatorImageIndex(_ index: Int) -> Int? {
+        if self.currentPageIndex == 0 {
+            if index == 1 {
+                return self.currentPageIndex + 1
+            }
+        } else if self.currentPageIndex == self.numberOfPages - 1 {
+            if index == 0 {
+                return self.currentPageIndex - 1
+            }
+        } else if index == 0 {
+            return self.currentPageIndex - 1
+        } else if index == 2 {
+            return self.currentPageIndex + 1
+        }
+
+        return nil
+    }
+
+    private func updateCurrentPageTrackingIndex(_ index: Int) {
+        self.cancelHighlighted()
+
+        self.currentPageIndex = index
+
+        self._publisher.send(index)
+        self.sendActions(for: .valueChanged)
+    }
+
+    private func indicatorViewsClosestToCurrentPage() -> [UIView] {
+        guard self.numberOfPages > 1 else { return [] }
+
+        if self.currentPageIndex == 0 {
+            return [self.indicatorViews[0], self.indicatorViews[1]]
+        } else if self.currentPageIndex == self.numberOfPages - 1 {
+            return [self.indicatorViews[self.numberOfPages - 2], self.indicatorViews[self.numberOfPages - 1]]
+        } else {
+            return [self.indicatorViews[self.currentPageIndex - 1],
+                    self.indicatorViews[self.currentPageIndex],
+                    self.indicatorViews[self.currentPageIndex + 1]]
+        }
+    }
+
     // MARK: - Handling touch actions
     private func handleTouch(_ touch: UITouch, with event: UIEvent?) -> Bool {
 
-        let location = touch.location(in: self)
-
+//        let location = touch.location(in: self)
+//
 //        if !self.frame.contains(location) {
 //            if !self.isHighlighted {
 //                self.ratingStarHighlightCancelled()
 //            }
 //            return true
 //        }
-//
+
 //        guard let index = self.ratingDisplay.ratingStarViews.index(closestTo: location) else {
 //            if !self.isHighlighted {
 //                self.ratingStarHighlightCancelled()
@@ -292,6 +379,11 @@ public final class ProgressTrackerUIControl: UIControl {
 //        self.ratingStarHighlighted(index)
 
         return true
+    }
+
+    private func cancelHighlighted() {
+        guard let index = self.trackingPageIndex else { return }
+        self.indicatorViews[safe: index]?.isHighlighted = false
     }
 
     // MARK: Private functions
@@ -325,6 +417,7 @@ public final class ProgressTrackerUIControl: UIControl {
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.allowsDefaultTighteningForTruncation = true
+            label.isUserInteractionEnabled = false
             return label
         }
     }
@@ -338,6 +431,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 intent: self.intent,
                 orientation: orientation)
             view.isEnabled = self.isEnabled
+            view.isUserInteractionEnabled = false
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }
@@ -564,9 +658,9 @@ public final class ProgressTrackerUIControl: UIControl {
             indicatorView.size = size
         }
 
-        if size != .large {
-            self.interactionState = .none
-        }
+//        if size != .large {
+//            self.interactionState = .none
+//        }
     }
 
     private func didUpdate(spacings: ProgressTrackerSpacing) {
@@ -590,11 +684,9 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     private func didUpdate(interactionState: ProgressTrackerInteractionState) {
-        guard self.size != .large else { return }
+        guard self.size == .large || interactionState == .none else { return }
 
-        if interactionState == .none {
-            self.isUserInteractionEnabled = false
-        }
+        self.isUserInteractionEnabled = interactionState != .none
 
         self._interactionState = interactionState
     }

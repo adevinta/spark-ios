@@ -58,6 +58,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var interactionConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Interaction* (Size Large)",
+            type: .button,
+            target: (source: self, action: #selector(self.presentInteractionSheet))
+        )
+    }()
+
     lazy var contentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Content",
@@ -150,6 +158,11 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
+    var showInteractionSheet: AnyPublisher<[ProgressTrackerInteractionState], Never> {
+        self.showInteractionSheetSubject
+            .eraseToAnyPublisher()
+    }
+
     var showVariantSheet: AnyPublisher<[ProgressTrackerVariant], Never> {
         self.showVariantSheetSubject
             .eraseToAnyPublisher()
@@ -167,6 +180,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     private var showIntentSheetSubject: PassthroughSubject<[ProgressTrackerIntent], Never> = .init()
     private var showOrientationSheetSubject: PassthroughSubject<[ProgressTrackerOrientation], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[ProgressTrackerSize], Never> = .init()
+    private var showInteractionSheetSubject: PassthroughSubject<[ProgressTrackerInteractionState], Never> = .init()
     private var showVariantSheetSubject: PassthroughSubject<[ProgressTrackerVariant], Never> = .init()
     private var showContentSheetSubject: PassthroughSubject<[ContentType], Never> = .init()
 
@@ -175,6 +189,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
+            self.interactionConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
             self.orientationConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
@@ -196,6 +211,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var orientation: ProgressTrackerOrientation = .horizontal
     @Published var variant: ProgressTrackerVariant
     @Published var size: ProgressTrackerSize
+    @Published var interaction: ProgressTrackerInteractionState
     @Published var contentType: ContentType
     @Published var showPageNumber = true
     @Published var isDisabled = false
@@ -210,13 +226,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         theme: Theme,
         intent: ProgressTrackerIntent = .main,
         variant: ProgressTrackerVariant = .tinted,
-        size: ProgressTrackerSize = .medium
+        size: ProgressTrackerSize = .large
     ) {
         self.theme = theme
         self.intent = intent
         self.size = size
         self.contentType = .none
         self.variant = variant
+        self.interaction = size.interaction
         super.init(identifier: "Progress Tracker")
     }
 
@@ -242,6 +259,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func presentSizeSheet() {
         self.showSizeSheetSubject.send(ProgressTrackerSize.allCases)
+    }
+
+    @objc func presentInteractionSheet() {
+        self.showInteractionSheetSubject.send(ProgressTrackerInteractionState.allCases)
     }
 
     @objc func presentVariantSheet() {
@@ -283,7 +304,6 @@ extension ProgressTrackerComponentUIViewModel {
     @objc func useCurrentPageIndicatorImageChanged(_ selected: Any?) {
         self.useCurrentPageIndicatorImage = isTrue(selected)
     }
-
 }
 
 extension String {
@@ -293,5 +313,14 @@ extension String {
 
     var characters: [Character] {
         return Array(self)
+    }
+}
+
+private extension ProgressTrackerSize {
+    var interaction: ProgressTrackerInteractionState {
+        switch self {
+        case .large: return .discrete
+        default: return .none
+        }
     }
 }
