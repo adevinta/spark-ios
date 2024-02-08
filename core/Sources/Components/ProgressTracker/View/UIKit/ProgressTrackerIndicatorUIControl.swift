@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import UIKit
 
+/// The round small indicator on the progress tracker
 final class ProgressTrackerIndicatorUIControl: UIControl {
 
     private let viewModel: ProgressTrackerIndicatorViewModel<ProgressTrackerUIIndicatorContent>
@@ -66,10 +67,11 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         return view
     }()
 
-    private lazy var label: UILabel = {
+    lazy var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
+        label.adjustsFontForContentSizeCategory = true
         label.isHidden = true
         label.numberOfLines = 1
         return label
@@ -77,9 +79,18 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
 
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.isUserInteractionEnabled = false
         imageView.isHidden = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
+        imageView.isUserInteractionEnabled = false
+        imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
+
+        imageView.setContentCompressionResistancePriority(.required,
+                                                      for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required,
+                                                      for: .vertical)
+
         return imageView
     }()
 
@@ -115,6 +126,7 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         }
     }
 
+    // MARK: - Initialization
     convenience init(
         theme: Theme,
         intent: ProgressTrackerIntent,
@@ -150,13 +162,19 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         super.traitCollectionDidChange(previousTraitCollection)
         self._scaleFactor.update(traitCollection: self.traitCollection)
 
-        self.sizesChanged()
+        if self.traitCollection.hasDifferentSizeCategory(comparedTo: previousTraitCollection) {
+            self.sizesChanged()
+        }
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.updateBorderColor()
+        }
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Private functions
     private func setupView() {
         self.addSubviewSizedEqually(self.indicatorView)
         self.indicatorView.addSubviewCentered(self.imageView)
@@ -179,16 +197,16 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
     }
 
     private func setupSubscriptions() {
-        self.viewModel.$colors.subscribe(in: &self.cancellables) { [weak self] colors in
+        self.viewModel.$colors.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] colors in
             self?.update(colors: colors)
         }
-        self.viewModel.$size.subscribe(in: &self.cancellables) { [weak self] size in
+        self.viewModel.$size.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] size in
             self?.update(size: size)
         }
-        self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] content in
+        self.viewModel.$content.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] content in
             self?.update(content: content)
         }
-        self.viewModel.$font.subscribe(in: &self.cancellables) { [weak self] font in
+        self.viewModel.$font.removeDuplicates(by: { $0.uiFont == $1.uiFont }).subscribe(in: &self.cancellables) { [weak self] font in
             self?.update(font: font)
         }
     }
@@ -203,9 +221,17 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
 
     private func update(colors: ProgressTrackerColors) {
         self.indicatorView.backgroundColor = colors.background.uiColor
-        self.indicatorView.setBorderColor(from: colors.outline)
         self.imageView.tintColor = colors.content.uiColor
         self.label.textColor = colors.content.uiColor
+        self.updateBorderColor(colors.outline)
+    }
+
+    private func updateBorderColor() {
+        self.updateBorderColor(self.viewModel.colors.outline)
+    }
+
+    private func updateBorderColor(_ color: any ColorToken) {
+        self.indicatorView.setBorderColor(from: color)
     }
 
     private func update(content: ProgressTrackerUIIndicatorContent) {
@@ -242,6 +268,8 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         self.indicatorView.setBorderWidth(self.borderWidth)
     }
 
+    // MARK: Modifier
+    /// Change the size of the indicator
     func set(size: ProgressTrackerSize) {
         self.viewModel.size = size
     }

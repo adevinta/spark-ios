@@ -15,6 +15,7 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
     var sut: ProgressTrackerGetOutlinedColorsUseCase!
     var theme: ThemeGeneratedMock!
 
+    // MARK: - Setup
     override func setUp()  {
         super.setUp()
 
@@ -22,6 +23,7 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
         self.sut = ProgressTrackerGetOutlinedColorsUseCase()
     }
 
+    // MARK: - Tests
     func test_selected_colors() {
         // GIVEN
 
@@ -63,8 +65,7 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
     func test_colors_disabled() {
         // GIVEN
 
-//        for intent in ProgressTrackerIntent.allCases {
-        let intent: ProgressTrackerIntent = .support
+        for intent in ProgressTrackerIntent.allCases {
             // WHEN
 
             let colors = self.sut.execute(theme: self.theme, intent: intent, state: .disabled)
@@ -73,10 +74,11 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
 
             // THEN
             XCTAssertEqual(colors, expectedColors, "Disabled colors for intent \(intent) not as expected")
-//        }
+        }
     }
 }
 
+// MARK: Private helpers
 private extension ProgressTrackerIntent {
 
     func selectedColors(_ colors: Colors) -> ProgressTrackerColors {

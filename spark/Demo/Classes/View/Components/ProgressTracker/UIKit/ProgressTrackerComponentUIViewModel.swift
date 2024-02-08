@@ -13,18 +13,15 @@ import UIKit
 
 final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
+    enum Constants {
+        static let numberOfPages = 4
+    }
+
     enum ContentType: CaseIterable {
+        case page
         case icon
         case text
         case none
-
-        var content: ProgressTrackerUIIndicatorContent {
-            switch self {
-            case .icon: return .init(indicatorImage: UIImage(systemName: "checkmark"))
-            case .text: return .init(label: "A")
-            case .none: return .init()
-            }
-        }
     }
 
 
@@ -42,6 +39,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             name: "Intent",
             type: .button,
             target: (source: self, action: #selector(self.presentIntentSheet))
+        )
+    }()
+
+    lazy var orientationConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Orientation",
+            type: .button,
+            target: (source: self, action: #selector(self.presentOrientationSheet))
         )
     }()
 
@@ -76,43 +81,82 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.disableChanged(_:))))
     }()
 
-    lazy var touchableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var labelContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Touchable",
-            type: .checkbox(title: "", isOn: self.isTouchable),
-            target: (source: self, action: #selector(self.touchableChanged(_:))))
+            name: "Label",
+            type: .input(text: self.title),
+            target: (source: self, action: #selector(self.labelChanged(_:))))
     }()
 
-    lazy var selectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var labelsConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Selected",
-            type: .checkbox(title: "", isOn: self.isSelected),
-            target: (source: self, action: #selector(self.selectedChanged(_:))))
+            name: "Labels",
+            type: .checkbox(title: "", isOn: self.showLabels),
+            target: (source: self, action: #selector(self.showLabelsChanged(_:))))
+    }()
+
+    lazy var completedPageIndicatorConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Completed Page Indicator",
+            type: .checkbox(title: "", isOn: self.useCompletedPageIndicator),
+            target: (source: self, action: #selector(self.useCompletedPageIndicatorChanged(_:))))
+    }()
+
+    lazy var currentPageIndicatorImageConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Current Page Indicator Image",
+            type: .checkbox(title: "", isOn: self.useCurrentPageIndicatorImage),
+            target: (source: self, action: #selector(self.useCurrentPageIndicatorImageChanged(_:))))
+    }()
+
+    lazy var currentPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Current Page",
+            type: .rangeSelector(
+                selected: self.selectedPageIndex,
+                range: 0...7
+            ),
+            target: (source: self, action: #selector(self.selectedPageChanged(_:))))
+    }()
+
+    lazy var numberOfPagesPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Number of Pages",
+            type: .rangeSelector(
+                selected: self.numberOfPages,
+                range: 2...8
+            ),
+            target: (source: self, action: #selector(self.numberOfPagesChanged(_:))))
     }()
 
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
-        showThemeSheetSubject
+        self.showThemeSheetSubject
             .eraseToAnyPublisher()
     }
 
     var showIntentSheet: AnyPublisher<[ProgressTrackerIntent], Never> {
-        showIntentSheetSubject
+        self.showIntentSheetSubject
+            .eraseToAnyPublisher()
+    }
+
+    var showOrientationSheet: AnyPublisher<[ProgressTrackerOrientation], Never> {
+        self.showOrientationSheetSubject
             .eraseToAnyPublisher()
     }
 
     var showSizeSheet: AnyPublisher<[ProgressTrackerSize], Never> {
-        showSizeSheetSubject
+        self.showSizeSheetSubject
             .eraseToAnyPublisher()
     }
 
     var showVariantSheet: AnyPublisher<[ProgressTrackerVariant], Never> {
-        showVariantSheetSubject
+        self.showVariantSheetSubject
             .eraseToAnyPublisher()
     }
 
     var showContentSheet: AnyPublisher<[ContentType], Never> {
-        showContentSheetSubject
+        self.showContentSheetSubject
             .eraseToAnyPublisher()
     }
 
@@ -121,6 +165,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[ProgressTrackerIntent], Never> = .init()
+    private var showOrientationSheetSubject: PassthroughSubject<[ProgressTrackerOrientation], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[ProgressTrackerSize], Never> = .init()
     private var showVariantSheetSubject: PassthroughSubject<[ProgressTrackerVariant], Never> = .init()
     private var showContentSheetSubject: PassthroughSubject<[ContentType], Never> = .init()
@@ -131,22 +176,35 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.intentConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
+            self.orientationConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
-            self.touchableConfigurationItemViewModel,
-            self.selectedConfigurationItemViewModel
+            self.completedPageIndicatorConfigurationItemViewModel,
+            self.currentPageIndicatorImageConfigurationItemViewModel,
+            self.currentPageIndexConfigurationItemViewModel,
+            self.numberOfPagesPageIndexConfigurationItemViewModel,
+            self.labelContentConfigurationItemViewModel,
+            self.labelsConfigurationItemViewModel
         ]
     }
+
+    lazy var checkmarkImage = UIImage(systemName: "checkmark")
 
     // MARK: - Initialization
     @Published var theme: Theme
     @Published var intent: ProgressTrackerIntent
+    @Published var orientation: ProgressTrackerOrientation = .horizontal
     @Published var variant: ProgressTrackerVariant
     @Published var size: ProgressTrackerSize
-    @Published var content: ContentType
+    @Published var contentType: ContentType
+    @Published var showPageNumber = true
     @Published var isDisabled = false
-    @Published var isTouchable = true
-    @Published var isSelected = false
+    @Published var useCompletedPageIndicator = true
+    @Published var useCurrentPageIndicatorImage = false
+    @Published var showLabels = true
+    @Published var title: String? = "Lore"
+    @Published var selectedPageIndex: Int = 0
+    @Published var numberOfPages = Constants.numberOfPages
 
     init(
         theme: Theme,
@@ -157,9 +215,13 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         self.theme = theme
         self.intent = intent
         self.size = size
-        self.content = .none
+        self.contentType = .none
         self.variant = variant
         super.init(identifier: "Progress Tracker")
+    }
+
+    func title(at index: Int) -> String? {
+        return self.title.map{"\($0)-\(index)"}
     }
 }
 
@@ -172,6 +234,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func presentIntentSheet() {
         self.showIntentSheetSubject.send(ProgressTrackerIntent.allCases)
+    }
+
+    @objc func presentOrientationSheet() {
+        self.showOrientationSheetSubject.send(ProgressTrackerOrientation.allCases)
     }
 
     @objc func presentSizeSheet() {
@@ -190,11 +256,42 @@ extension ProgressTrackerComponentUIViewModel {
         self.isDisabled = isTrue(selected)
     }
 
-    @objc func touchableChanged(_ selected: Any?) {
-        self.isTouchable = isTrue(selected)
+    @objc func labelChanged(_ textField: UITextField) {
+        if textField.text?.isEmpty == false {
+            self.title = textField.text
+        } else  {
+            self.title = nil
+        }
     }
 
-    @objc func selectedChanged(_ selected: Any?) {
-        self.isSelected = isTrue(selected)
+    @objc func showLabelsChanged(_ selected: Any?) {
+        self.showLabels = isTrue(selected)
+    }
+
+    @objc func selectedPageChanged(_ control: NumberSelector) {
+        self.selectedPageIndex = control.selectedValue
+    }
+
+    @objc func numberOfPagesChanged(_ control: NumberSelector) {
+        self.numberOfPages = control.selectedValue
+    }
+
+    @objc func useCompletedPageIndicatorChanged(_ selected: Any?) {
+        self.useCompletedPageIndicator = isTrue(selected)
+    }
+
+    @objc func useCurrentPageIndicatorImageChanged(_ selected: Any?) {
+        self.useCurrentPageIndicatorImage = isTrue(selected)
+    }
+
+}
+
+extension String {
+    func character(at index: Int) -> Character {
+        self.characters[index]
+    }
+
+    var characters: [Character] {
+        return Array(self)
     }
 }

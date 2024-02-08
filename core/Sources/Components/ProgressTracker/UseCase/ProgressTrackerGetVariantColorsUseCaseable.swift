@@ -15,4 +15,3 @@ protocol ProgressTrackerGetVariantColorsUseCaseable {
                  state: ProgressTrackerState
     ) -> ProgressTrackerColors
 }
-

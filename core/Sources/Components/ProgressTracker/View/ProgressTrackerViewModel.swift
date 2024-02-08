@@ -10,29 +10,51 @@ import Foundation
 import SwiftUI
 
 /// A view model for a Progress Tracker.
-final class ProgressTrackerViewModel: ObservableObject {
+final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentIndicating>: ObservableObject {
 
     var theme: Theme {
         didSet {
-            self.updateTrackColor()
             self.updateSpacings()
+            self.updateFont()
+            self.updateLabelColor()
         }
     }
 
-    var intent: ProgressTrackerIntent {
-        didSet {
-            guard self.intent != oldValue else { return }
-            self.updateTrackColor()
+    var showDefaultPageNumber: Bool {
+        get {
+            return self.content.showDefaultPageNumber
+        }
+        set {
+            guard self.content.showDefaultPageNumber != newValue else { return }
+            self.content.showDefaultPageNumber = newValue
         }
     }
 
     var isEnabled: Bool = true {
         didSet {
-            guard self.isEnabled != oldValue else { return }
-            self.updateTrackColor()
+            self.updateLabelColor()
         }
     }
 
+    var numberOfPages: Int {
+        set {
+            self.content.numberOfPages = newValue
+        }
+        get {
+            return self.content.numberOfPages
+        }
+    }
+
+    var currentPageIndex: Int {
+        set {
+            self.content.currentPageIndex = min(max(0, newValue), self.content.numberOfPages - 1)
+        }
+        get {
+            return self.content.currentPageIndex
+        }
+    }
+
+    // MARK: Published properties
     @Published var orientation: ProgressTrackerOrientation {
         didSet {
             guard self.orientation != oldValue else { return }
@@ -40,34 +62,45 @@ final class ProgressTrackerViewModel: ObservableObject {
         }
     }
 
-    @Published var trackColor: any ColorToken
-    @Published var spacings: ProgressTrackerSpacing
+    @Published var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent>
 
-    private var colorUseCase: ProgressTrackerGetTrackColorUseCaseable
+    @Published var spacings: ProgressTrackerSpacing
+    @Published var font: TypographyFontToken
+    @Published var labelColor: any ColorToken
+
+    // MARK: Private properties
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
 
     // MARK: - Initialization
     init(theme: Theme,
-         intent: ProgressTrackerIntent,
          orientation: ProgressTrackerOrientation,
-         colorUseCase: ProgressTrackerGetTrackColorUseCaseable = ProgressTrackerGetTrackColorUseCase(),
+         content:  ProgressTrackerContent<ProgressTrackerUIIndicatorContent>,
          spacingUseCase: ProgressTrackerGetSpacingsUseCaseable = ProgressTrackerGetSpacingsUseCase()
     ) {
         self.orientation = orientation
         self.theme = theme
-        self.intent = intent
-        self.colorUseCase = colorUseCase
+        self.content = content
         self.spacingUseCase = spacingUseCase
 
         self.spacings = spacingUseCase.execute(spacing: theme.layout.spacing, orientation: orientation)
-        self.trackColor = colorUseCase.execute(theme: theme, intent: intent, isEnabled: true)
-    }
 
-    private func updateTrackColor() {
-        self.trackColor = colorUseCase.execute(theme: self.theme, intent: self.intent, isEnabled: self.isEnabled)
+        self.font = theme.typography.body2Highlight
+        self.labelColor = theme.colors.base.onSurface
     }
 
     private func updateSpacings() {
         self.spacings = spacingUseCase.execute(spacing: self.theme.layout.spacing, orientation: self.orientation)
+    }
+
+    private func updateFont() {
+        self.font = self.theme.typography.body2Highlight
+    }
+
+    private func updateLabelColor() {
+        var color = self.theme.colors.base.onSurface
+        if !self.isEnabled {
+            color = color.opacity(self.theme.dims.dim1)
+        }
+        self.labelColor = color
     }
 }

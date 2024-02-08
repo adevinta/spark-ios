@@ -8,9 +8,10 @@
 
 import Foundation
 
-/// A use case to calculate the outlined colors of the progress tracker
+/// A use case to calculate the outlined colors of the progress tracker indicator
 struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsUseCaseable {
 
+    /// Return the colors of the progress tracker indicator
     func execute(theme: Theme,
                  intent: ProgressTrackerIntent,
                  state: ProgressTrackerState
@@ -18,10 +19,10 @@ struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsU
         let intentColors: ProgressTrackerColors = {
             if state.isDisabled {
                 return self.disabledColors(colors: theme.colors, dims: theme.dims, intent: intent)
+            } else if state.isSelected {
+                    return self.selectedColors(colors: theme.colors, intent: intent)
             } else if state.isPressed {
                 return self.pressedColors(colors: theme.colors, intent: intent)
-            } else if state.isSelected {
-                return self.selectedColors(colors: theme.colors, intent: intent)
             } else {
                 return self.enabledColors(colors: theme.colors, intent: intent)
             }

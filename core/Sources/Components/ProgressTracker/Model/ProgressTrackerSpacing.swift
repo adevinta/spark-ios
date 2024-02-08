@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Spacings defined in the progress tracker
 struct ProgressTrackerSpacing: Updateable, Equatable {
     var trackIndicatorSpacing: CGFloat
     var minLabelSpacing: CGFloat

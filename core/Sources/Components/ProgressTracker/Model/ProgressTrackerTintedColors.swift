@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+/// Colors defined by a tinted progress tracker indicator
 struct ProgressTrackerTintedColors {
     let background: any ColorToken
     let content: any ColorToken
