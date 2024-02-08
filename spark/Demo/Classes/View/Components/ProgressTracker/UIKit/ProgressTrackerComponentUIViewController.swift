@@ -77,6 +77,10 @@ final class ProgressTrackerComponentUIViewController: UIViewController {
             self.presentSizeActionSheet(sizes)
         }
 
+        self.viewModel.showInteractionSheet.subscribe(in: &self.cancellables) { variants in
+            self.presentInteractionActionSheet(variants)
+        }
+
         self.viewModel.showVariantSheet.subscribe(in: &self.cancellables) { variant in
             self.presentVariantActionSheet(variant)
         }
@@ -132,6 +136,15 @@ extension ProgressTrackerComponentUIViewController {
             values: sizes,
             texts: sizes.map{ $0.name }) { size in
                 self.viewModel.size = size
+            }
+            self.present(actionSheet, isAnimated: true)
+    }
+
+    private func presentInteractionActionSheet(_ variants: [ProgressTrackerInteractionState]) {
+        let actionSheet = SparkActionSheet<ProgressTrackerInteractionState>.init(
+            values: variants,
+            texts: variants.map{ $0.name }) { interaction in
+                self.viewModel.interaction = interaction
             }
             self.present(actionSheet, isAnimated: true)
     }

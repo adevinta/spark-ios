@@ -59,6 +59,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
                 orientation: viewModel.orientation
             )
         }
+        view.interactionState = viewModel.interaction
         view.showDefaultPageNumber = viewModel.contentType == .page
         return view
     }
@@ -79,6 +80,12 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.viewModel.sizeConfigurationItemViewModel.buttonTitle = size.name
             self.componentView.size = size
+        }
+
+        self.viewModel.$interaction.subscribe(in: &self.cancellables) { [weak self] interaction in
+            guard let self = self else { return }
+            self.viewModel.interactionConfigurationItemViewModel.buttonTitle = interaction.name
+            self.componentView.interactionState = interaction
         }
 
         self.viewModel.$variant.subscribe(in: &self.cancellables) { [weak self] variant in
