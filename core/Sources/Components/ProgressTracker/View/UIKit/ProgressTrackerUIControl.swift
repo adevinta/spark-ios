@@ -144,7 +144,16 @@ public final class ProgressTrackerUIControl: UIControl {
         return self.viewModel.spacings.minLabelSpacing * self.scaleFactor
     }
 
-    private var trackingPageIndex: Int?
+    private var trackingPageIndex: Int? {
+        didSet {
+            if let formerPageIndex = oldValue {
+                self.indicatorViews[formerPageIndex].isHighlighted = false
+            }
+            if let newIndex = self.trackingPageIndex {
+                self.indicatorViews[newIndex].isHighlighted = true
+            }
+        }
+    }
 
     // MARK: Initialization
     /// Initializer
@@ -244,25 +253,13 @@ public final class ProgressTrackerUIControl: UIControl {
 
     //MARK: - Handle touch events
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        print("TOUCH BEGIN")
-
         let location = touch.location(in: self)
 
         if let index = self.trackingIndex(closestTo: location) {
             self.trackingPageIndex = index
-            self.indicatorViews[index].isHighlighted = true
         }
 
         return true
-    }
-
-    private func trackingIndex(closestTo location: CGPoint) -> Int? {
-        if let index = self.indicatorViews.index(closestTo: location), index != self.currentPageIndex {
-            let trackingPageIndex = index < self.currentPageIndex ? max(0, self.currentPageIndex - 1) : min(self.numberOfPages - 1, self.currentPageIndex + 1)
-            return trackingPageIndex
-        }
-
-        return nil
     }
 
     public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
@@ -272,13 +269,15 @@ public final class ProgressTrackerUIControl: UIControl {
         } else {
             let location = touch.location(in: self)
             if self.indicatorViews.index(closestTo: location) == self.currentPageIndex {
-                self.cancelHighlighted()
                 self.trackingPageIndex = nil
-                return true
             } else if self.trackingPageIndex == nil, let index = self.trackingIndex(closestTo: location) {
                 self.trackingPageIndex = index
-                self.indicatorViews[index].isHighlighted = true
-                return true
+            } else if self.interactionState == .continuous {
+                if let trackingPageIndex = self.trackingPageIndex,
+                   let nextIndex = self.nextTrackingIndex(closestTo: location) {
+                    self.updateCurrentPageTrackingIndex(trackingPageIndex)
+                    self.trackingPageIndex = nextIndex
+                }
             }
         }
 
@@ -302,6 +301,27 @@ public final class ProgressTrackerUIControl: UIControl {
 
         self.trackingPageIndex = nil
 
+    }
+
+
+    private func trackingIndex(closestTo location: CGPoint) -> Int? {
+        if let index = self.indicatorViews.index(closestTo: location), index != self.currentPageIndex {
+            let trackingPageIndex = index < self.currentPageIndex ? max(0, self.currentPageIndex - 1) : min(self.numberOfPages - 1, self.currentPageIndex + 1)
+            return trackingPageIndex
+        }
+        return nil
+    }
+
+    private func nextTrackingIndex(closestTo location: CGPoint) -> Int? {
+        guard let trackingPageIndex = self.trackingPageIndex else { return nil }
+
+        guard let index = self.indicatorViews.index(closestTo: location), index != self.currentPageIndex,
+              index != trackingPageIndex else
+        { return nil }
+
+        let nextTrackingPageIndex = index < trackingPageIndex ? max(0, trackingPageIndex - 1) : min(self.numberOfPages - 1, trackingPageIndex + 1)
+
+        return nextTrackingPageIndex
     }
 
     private func updateCurrentPageTrackingIndex(_ index: Int) {
