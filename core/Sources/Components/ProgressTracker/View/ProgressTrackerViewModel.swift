@@ -95,11 +95,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     }
 
     func labelColor(forIndex index: Int) -> any ColorToken {
-        var color = self.theme.colors.base.onSurface
-        if self.disabledIndices.contains(index) {
-            color = color.opacity(self.theme.dims.dim1)
-        }
-        return color
+        return self.labelColor(isDisabled: self.disabledIndices.contains(index))
     }
 
     func labelColor(isDisabled: Bool) -> any ColorToken {
