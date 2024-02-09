@@ -86,9 +86,6 @@ struct TabApportionsSizeView: View {
                 Spacer()
             }
         }
-        .onChange(of: self.viewModel.content) { _ in
-            self.apportionsContentWidth = 0
-        }
     }
 
     @ViewBuilder
@@ -99,8 +96,7 @@ struct TabApportionsSizeView: View {
             content: content,
             proxy: proxy,
             selectedIndex: self.$selectedIndex,
-            index: index)        
-        .background {
+            index: index)        .background {
                 GeometryReader { geometry in
                     Color.clear
                         .onAppear {
@@ -114,7 +110,11 @@ struct TabApportionsSizeView: View {
     }
 
     private func updateApportionsContentWidth(_ width: CGFloat, index: Int) {
-        self.apportionsContentWidth += width
+        if index == self.viewModel.content.count - 1 {
+            self.apportionsContentWidth = width
+        } else {
+            self.apportionsContentWidth += width
+        }
         self.updateAxis()
     }
 
