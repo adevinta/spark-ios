@@ -204,13 +204,13 @@ public class ButtonMainUIView: UIControl {
         self.setupImageViewConstraints()
     }
 
-    private func setupViewConstraints() {
+    /// Setup the size constraints for this view.
+    /// This method is internal because it can be overriden by the view that inherits from this class.
+    internal func setupViewConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
         self.heightConstraint?.isActive = true
-
-        self.widthAnchor.constraint(greaterThanOrEqualTo: self.heightAnchor).isActive = true
     }
 
     /// Setup the imageView constraints.

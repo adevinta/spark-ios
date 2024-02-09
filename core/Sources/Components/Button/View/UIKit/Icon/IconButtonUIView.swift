@@ -56,6 +56,12 @@ public final class IconButtonUIView: ButtonMainUIView {
 
     // MARK: - Constraints
 
+    internal override func setupViewConstraints() {
+        super.setupViewConstraints()
+
+        self.widthAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+    }
+
     internal override func setupImageViewConstraints() {
         super.setupImageViewConstraints()
 
