@@ -69,23 +69,6 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-    func test_enabled_status_changed() {
-        // GIVEN
-        let sut = self.sut(orientation: . vertical)
-        let expectation = expectation(description: "Wait for color change")
-        expectation.expectedFulfillmentCount = 2
-
-        sut.$labelColor.sink { _ in
-            expectation.fulfill()
-        }.store(in: &self.cancellables)
-
-        // WHEN
-        sut.isEnabled = false
-
-        // THEN
-        wait(for: [expectation], timeout: 1)
-    }
-
     func test_orientation_is_changed_spacings_updated() {
         // GIVEN
         let sut = self.sut(orientation: . vertical)
@@ -162,6 +145,75 @@ final class ProgressTrackerViewModelTests: XCTestCase {
             XCTAssertEqual(sut.currentPageIndex, givenExpected.expected, "Expected current page index when set to \(givenExpected.given) to be \(givenExpected.expected)")
 
         }
+    }
+
+    func test_set_disabled() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // WHEN
+        sut.isEnabled = false
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices.count, 4)
+    }
+
+    func test_set_enabled_single_item() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // WHEN
+        sut.isEnabled = false
+        sut.setIsEnabled(isEnabled: true, forIndex: 0)
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices, Set(arrayLiteral: 1,2,3))
+    }
+
+    func test_set_disabled_single_item() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // WHEN
+        sut.setIsEnabled(isEnabled: false, forIndex: 0)
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices, Set(arrayLiteral: 0))
+    }
+
+    func test_set_enabled_after_disabled() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // WHEN
+        sut.isEnabled = false
+        sut.isEnabled = true
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices.count, 0)
+    }
+
+    func test_enabled_color() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices.count, 0)
+    }
+
+    func test_disabled_color() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // WHEN
+        sut.setIsEnabled(isEnabled: false, forIndex: 0)
+        let disabledColor = sut.labelColor(forIndex: 0)
+        let enabledColor = sut.labelColor(forIndex: 1)
+
+        // THEN
+        XCTAssertEqual(disabledColor.uiColor, self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1).uiColor, "Wrong disabled color")
+
+        XCTAssertEqual(enabledColor.uiColor, self.theme.colors.base.onSurface.uiColor, "Wrong enabled color")
     }
 
     // MARK: - Private helper functions
