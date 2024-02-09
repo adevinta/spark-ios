@@ -60,7 +60,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
     lazy var interactionConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Interaction* (Size Large)",
+            name: "Interaction",
             type: .button,
             target: (source: self, action: #selector(self.presentInteractionSheet))
         )
