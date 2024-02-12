@@ -144,16 +144,7 @@ public final class ProgressTrackerUIControl: UIControl {
         return self.viewModel.spacings.minLabelSpacing * self.scaleFactor
     }
 
-    private var trackingPageIndex: Int? {
-        didSet {
-            if let formerPageIndex = oldValue {
-                self.indicatorViews[formerPageIndex].isHighlighted = false
-            }
-            if let newIndex = self.trackingPageIndex {
-                self.indicatorViews[newIndex].isHighlighted = true
-            }
-        }
-    }
+    private var touchHandler: ProgressTrackerUITouchHandling?
 
     // MARK: Initialization
     /// Initializer
@@ -253,13 +244,16 @@ public final class ProgressTrackerUIControl: UIControl {
 
     //MARK: - Handle touch events
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        let location = touch.location(in: self)
+        let touchHandler = self.interactionState.touchHandler(
+            currentPageIndex: self.currentPageIndex,
+            indicatorViews: self.indicatorViews)
 
-        if self.interactionState == .independent, let index = self.indicatorViews.index(closestTo: location) {
-            self.trackingPageIndex = index
-        } else if let index = self.trackingIndex(closestTo: location) {
-            self.trackingPageIndex = index
+        self.touchHandler = touchHandler
+        touchHandler.currentPagePublisher.subscribe(in: &self.cancellables) { [weak self] index in
+            self?.updateCurrentPageTrackingIndex(index)
         }
+
+        touchHandler.beginTracking(location: touch.location(in: self))
 
         return true
     }
@@ -269,24 +263,7 @@ public final class ProgressTrackerUIControl: UIControl {
         if !self.isHighlighted {
             self.cancelHighlighted()
         } else {
-            let location = touch.location(in: self)
-            if self.interactionState == .independent {
-                if let index = self.trackingPageIndex {
-                    self.indicatorViews[index].isHighlighted = true
-                }
-            } else if self.indicatorViews.index(closestTo: location) == self.currentPageIndex {
-                self.trackingPageIndex = nil
-            } else if self.trackingPageIndex == nil, let index = self.trackingIndex(closestTo: location) {
-                self.trackingPageIndex = index
-            } else if self.interactionState == .continuous {
-                if let trackingPageIndex = self.trackingPageIndex,
-                   let nextIndex = self.nextTrackingIndex(closestTo: location) {
-                    self.updateCurrentPageTrackingIndex(trackingPageIndex)
-                    self.trackingPageIndex = nextIndex
-                }
-            } else if let index = self.trackingPageIndex {
-                self.indicatorViews[index].isHighlighted = true
-            }
+            self.touchHandler?.continueTracking(location: touch.location(in: self))
         }
 
         return true
@@ -299,39 +276,12 @@ public final class ProgressTrackerUIControl: UIControl {
             return
         }
 
-        if self.indicatorViews.index(closestTo: location) == self.currentPageIndex {
-            return
-        }
+        self.touchHandler?.endTracking(location: location)
 
-        if let index = self.trackingPageIndex {
-            self.updateCurrentPageTrackingIndex(index)
-        }
-
-        self.trackingPageIndex = nil
-
+        self.touchHandler = nil
     }
 
-
-    private func trackingIndex(closestTo location: CGPoint) -> Int? {
-        if let index = self.indicatorViews.index(closestTo: location), index != self.currentPageIndex {
-            let trackingPageIndex = index < self.currentPageIndex ? max(0, self.currentPageIndex - 1) : min(self.numberOfPages - 1, self.currentPageIndex + 1)
-            return trackingPageIndex
-        }
-        return nil
-    }
-
-    private func nextTrackingIndex(closestTo location: CGPoint) -> Int? {
-        guard let trackingPageIndex = self.trackingPageIndex else { return nil }
-
-        guard let index = self.indicatorViews.index(closestTo: location), index != self.currentPageIndex,
-              index != trackingPageIndex else
-        { return nil }
-
-        let nextTrackingPageIndex = index < trackingPageIndex ? max(0, trackingPageIndex - 1) : min(self.numberOfPages - 1, trackingPageIndex + 1)
-
-        return nextTrackingPageIndex
-    }
-
+    //MARK: Touch handling actions
     private func updateCurrentPageTrackingIndex(_ index: Int) {
         self.cancelHighlighted()
 
@@ -342,7 +292,7 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     private func cancelHighlighted() {
-        guard let index = self.trackingPageIndex else { return }
+        guard let index = self.touchHandler?.trackingPageIndex else { return }
         self.indicatorViews[safe: index]?.isHighlighted = false
     }
 
@@ -366,6 +316,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    //MARK: - View creation
     private func createLabels(content: Content) ->
     [UILabel] {
         guard content.hasLabel else { return [] }
@@ -411,6 +362,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    //MARK: - View setup
     private func setupIndicatorsAndLabels(content: Content, orientation: ProgressTrackerOrientation) {
         NSLayoutConstraint.deactivate(self.labelSpacingConstraints)
         NSLayoutConstraint.deactivate(self.trackSpacingConstraints)
@@ -458,6 +410,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.accessibilityLabel = "\(self.currentPageIndex)"
     }
 
+    // MARK: Setup supscriptions
     private func setupSubscriptions() {
         self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] content in
             self?.didUpdate(content: content)
@@ -590,6 +543,7 @@ public final class ProgressTrackerUIControl: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
+    //MARK: - Private view modifiers
     private func updateView(content: ProgressTrackerUIControl.Content) {
         self.accessibilityValue = "\(content.currentPageIndex)"
         for i in 0..<content.numberOfPages {
