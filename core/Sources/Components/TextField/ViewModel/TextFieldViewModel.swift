@@ -79,6 +79,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
             guard oldValue != self.isEnabled else { return }
             self.setColors()
             self.setDim()
+            self.setStatusImage()
         }
     }
 
@@ -190,14 +191,18 @@ final class TextFieldViewModel: ObservableObject, Updateable {
 
     private func setStatusImage() {
         let image: ImageEither?
-        switch self.intent {
-        case .alert:
-            image = self.alertImage
-        case .error:
-            image = self.errorImage
-        case .success:
-            image = self.successImage
-        default:
+        if self.isEnabled {
+            switch self.intent {
+            case .alert:
+                image = self.alertImage
+            case .error:
+                image = self.errorImage
+            case .success:
+                image = self.successImage
+            default:
+                image = nil
+            }
+        } else {
             image = nil
         }
         guard self.statusImage != image else { return }
