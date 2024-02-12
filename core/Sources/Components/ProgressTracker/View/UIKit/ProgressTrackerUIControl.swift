@@ -236,9 +236,9 @@ public final class ProgressTrackerUIControl: UIControl {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        self._scaleFactor.update(traitCollection: self.traitCollection)
-
-        self.didUpdate(spacings: self.viewModel.spacings)
+        if self.traitCollection.hasDifferentSizeCategory(comparedTo: previousTraitCollection) {        self._scaleFactor.update(traitCollection: self.traitCollection)
+            self.didUpdate(spacings: self.viewModel.spacings)
+        }
     }
 
     //MARK: - Handle touch events
@@ -366,7 +366,7 @@ public final class ProgressTrackerUIControl: UIControl {
     private func setupIndicatorsAndLabels(content: Content, orientation: ProgressTrackerOrientation) {
         NSLayoutConstraint.deactivate(self.labelSpacingConstraints)
         NSLayoutConstraint.deactivate(self.trackSpacingConstraints)
-        
+
         self.indicatorViews.removeAllFromSuperView()
         self.trackViews.removeAllFromSuperView()
         self.labels.removeAllFromSuperView()
@@ -541,7 +541,7 @@ public final class ProgressTrackerUIControl: UIControl {
         } else {
             constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
             constraints.append(self.indicatorViews [lastIndex].bottomAnchor.constraint(equalTo: self.bottomAnchor))
-      }
+        }
 
         NSLayoutConstraint.activate(constraints)
     }
@@ -702,6 +702,26 @@ public final class ProgressTrackerUIControl: UIControl {
         guard index < self.indicatorViews.count else { return }
 
         self.viewModel.setIsEnabled(isEnabled: isEnabled, forIndex: index)
+    }
+
+    /// Set the default preferred indicator image
+    public func setPreferredIndicatorImage(_ image: UIImage?) {
+        self.viewModel.content.preferredIndicatorImage = image
+    }
+
+    /// Return the default preferred indicator image
+    public func getPreferredIndicatorImage() -> UIImage? {
+        return self.viewModel.content.preferredIndicatorImage
+    }
+
+    /// Set the default image for the current page indicator
+    public func setPreferredCurrentPageIndicatorImage(_ image: UIImage?) {
+        self.viewModel.content.preferredCurrentPageIndicatorImage = image
+    }
+
+    /// Return the default image for the current page indicator
+    public func getPreferredCurrentPageIndicatorImage() -> UIImage? {
+        return self.viewModel.content.preferredCurrentPageIndicatorImage
     }
 }
 
