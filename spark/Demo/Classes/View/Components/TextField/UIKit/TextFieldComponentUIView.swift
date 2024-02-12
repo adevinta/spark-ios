@@ -81,6 +81,57 @@ final class TextFieldComponentUIView: ComponentUIView {
             self.viewModel.rightViewModeConfigurationItemViewModel.buttonTitle = viewMode.name
             self.textField.rightViewMode = viewMode
         }
+
+        self.viewModel.$leftViewContent.subscribe(in: &self.cancellables) { [weak self] content in
+            guard let self else { return }
+            self.viewModel.leftViewContentConfigurationItemViewModel.buttonTitle = content.name
+            self.textField.leftView = self.getContentView(from: content, side: .left)
+        }
+
+        self.viewModel.$rightViewContent.subscribe(in: &self.cancellables) { [weak self] content in
+            guard let self else { return }
+            self.viewModel.rightViewContentConfigurationItemViewModel.buttonTitle = content.name
+            self.textField.rightView = self.getContentView(from: content, side: .right)
+        }
+    }
+
+    private func getContentView(from content: TextFieldSideViewContent, side: TextFieldContentSide) -> UIView? {
+        switch content {
+        case .button:
+            return self.createButton(side: side)
+        case .image:
+            return self.createImage(side: side)
+        case .text:
+            return self.createText(side: side)
+        case .all:
+            let stackView = UIStackView(arrangedSubviews: [
+                self.createButton(side: side),
+                self.createImage(side: side),
+                self.createText(side: side)
+            ])
+            stackView.spacing = 4
+            stackView.axis = .horizontal
+            return stackView
+        case .none: return nil
+        }
+    }
+
+    private func createButton(side: TextFieldContentSide) -> UIButton {
+        let button = UIButton(configuration: .filled())
+        button.setTitle(side.rawValue, for: .normal)
+        return button
+    }
+
+    private func createImage(side: TextFieldContentSide) -> UIImageView {
+        let imageView = UIImageView(image: .init(systemName: side == .left ? "power" : "eject.circle.fill"))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }
+
+    private func createText(side: TextFieldContentSide) -> UILabel {
+        let label = UILabel()
+        label.text = side.rawValue
+        return label
     }
 
     required init?(coder: NSCoder) {
