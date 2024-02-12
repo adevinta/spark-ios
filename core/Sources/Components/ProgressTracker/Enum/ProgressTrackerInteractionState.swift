@@ -13,4 +13,5 @@ public enum ProgressTrackerInteractionState: CaseIterable {
     case none
     case discrete
     case continuous
+    case independent
 }

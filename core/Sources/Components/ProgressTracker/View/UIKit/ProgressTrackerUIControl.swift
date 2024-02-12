@@ -255,7 +255,9 @@ public final class ProgressTrackerUIControl: UIControl {
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let location = touch.location(in: self)
 
-        if let index = self.trackingIndex(closestTo: location) {
+        if self.interactionState == .independent, let index = self.indicatorViews.index(closestTo: location) {
+            self.trackingPageIndex = index
+        } else if let index = self.trackingIndex(closestTo: location) {
             self.trackingPageIndex = index
         }
 
@@ -268,7 +270,11 @@ public final class ProgressTrackerUIControl: UIControl {
             self.cancelHighlighted()
         } else {
             let location = touch.location(in: self)
-            if self.indicatorViews.index(closestTo: location) == self.currentPageIndex {
+            if self.interactionState == .independent {
+                if let index = self.trackingPageIndex {
+                    self.indicatorViews[index].isHighlighted = true
+                }
+            } else if self.indicatorViews.index(closestTo: location) == self.currentPageIndex {
                 self.trackingPageIndex = nil
             } else if self.trackingPageIndex == nil, let index = self.trackingIndex(closestTo: location) {
                 self.trackingPageIndex = index
@@ -278,6 +284,8 @@ public final class ProgressTrackerUIControl: UIControl {
                     self.updateCurrentPageTrackingIndex(trackingPageIndex)
                     self.trackingPageIndex = nextIndex
                 }
+            } else if let index = self.trackingPageIndex {
+                self.indicatorViews[index].isHighlighted = true
             }
         }
 
