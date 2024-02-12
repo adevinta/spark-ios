@@ -53,6 +53,7 @@ public final class TextFieldUIView: UITextField {
         set {
             if let userRightView {
                 self.rightStackView.removeArrangedSubview(userRightView)
+                userRightView.removeFromSuperview()
             }
             if let newValue {
                 self.rightStackView.addArrangedSubview(newValue)
@@ -267,6 +268,7 @@ public final class TextFieldUIView: UITextField {
         } else {
             super.rightView = self.rightStackView
         }
+        self.setNeedsLayout()
     }
 
     public override func becomeFirstResponder() -> Bool {

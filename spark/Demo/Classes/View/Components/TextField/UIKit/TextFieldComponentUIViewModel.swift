@@ -16,16 +16,17 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
     @Published var intent: TextFieldIntent
     @Published var isEnabled: Bool = true
     @Published var isUserInteractionEnabled: Bool = true
-    @Published var leftViewMode: UITextField.ViewMode = .never
-    @Published var rightViewMode: UITextField.ViewMode = .never
-    @Published var clearButtonMode: UITextField.ViewMode = .never
+    @Published var leftViewMode: UITextField.ViewMode = .always
+    @Published var rightViewMode: UITextField.ViewMode = .always
+    @Published var leftViewContent: TextFieldSideViewContent = .none
+    @Published var rightViewContent: TextFieldSideViewContent = .none
+    @Published var clearButtonMode: UITextField.ViewMode = .always
 
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         self.showThemeSheetSubject
             .eraseToAnyPublisher()
     }
-
     var showIntentSheet: AnyPublisher<[TextFieldIntent], Never> {
         self.showIntentSheetSubject
             .eraseToAnyPublisher()
@@ -40,6 +41,14 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
     }
     var showRightViewModeSheet: AnyPublisher<[UITextField.ViewMode], Never> {
         self.showRightViewModeSheetSubject
+            .eraseToAnyPublisher()
+    }
+    var showLeftViewContentSheet: AnyPublisher<[TextFieldSideViewContent], Never> {
+        self.showLeftViewContentSheetSubject
+            .eraseToAnyPublisher()
+    }
+    var showRightViewContentSheet: AnyPublisher<[TextFieldSideViewContent], Never> {
+        self.showRightViewContentSheetSubject
             .eraseToAnyPublisher()
     }
 
@@ -92,7 +101,6 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
             target: (source: self, action: #selector(self.presentLeftViewMode))
         )
     }()
-
     lazy var rightViewModeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "RightViewMode",
@@ -101,11 +109,28 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
         )
     }()
 
+    lazy var leftViewContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "LeftViewContent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentLeftViewContent))
+        )
+    }()
+    lazy var rightViewContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "RightViewContent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentRightViewContent))
+        )
+    }()
+
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[TextFieldIntent], Never> = .init()
     private var showClearButtonModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
     private var showLeftViewModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
     private var showRightViewModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
+    private var showLeftViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
+    private var showRightViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
 
     init(
         theme: Theme,
@@ -124,7 +149,9 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
             self.isUserInteractionEnabledConfigurationItemViewModel,
             self.clearButtonModeConfigurationItemViewModel,
             self.leftViewModeConfigurationItemViewModel,
-            self.rightViewModeConfigurationItemViewModel
+            self.rightViewModeConfigurationItemViewModel,
+            self.leftViewContentConfigurationItemViewModel,
+            self.rightViewContentConfigurationItemViewModel
         ]
     }
 
@@ -154,6 +181,14 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
 
     @objc func presentRightViewMode() {
         self.showRightViewModeSheetSubject.send(UITextField.ViewMode.allCases)
+    }
+
+    @objc func presentLeftViewContent() {
+        self.showLeftViewContentSheetSubject.send(TextFieldSideViewContent.allCases)
+    }
+
+    @objc func presentRightViewContent() {
+        self.showRightViewContentSheetSubject.send(TextFieldSideViewContent.allCases)
     }
 }
 

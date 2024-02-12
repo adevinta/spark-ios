@@ -46,7 +46,6 @@ final class TextFieldComponentUIViewController: UIViewController {
         self.setupSubscriptions()
     }
 
-
     private func setupSubscriptions() {
         self.themePublisher
             .$theme
@@ -82,6 +81,18 @@ final class TextFieldComponentUIViewController: UIViewController {
                 self.viewModel.rightViewMode = viewMode
             }
         }
+
+        self.viewModel.showLeftViewContentSheet.subscribe(in: &self.cancellables) { contents in
+            self.presentSideViewContentActionSheet(contents) { content in
+                self.viewModel.leftViewContent = content
+            }
+        }
+
+        self.viewModel.showRightViewContentSheet.subscribe(in: &self.cancellables) { contents in
+            self.presentSideViewContentActionSheet(contents) { content in
+                self.viewModel.rightViewContent = content
+            }
+        }
     }
 
     private func presentThemeActionSheet(_ themes: [ThemeCellModel]) {
@@ -106,6 +117,14 @@ final class TextFieldComponentUIViewController: UIViewController {
         let actionSheet = SparkActionSheet<UITextField.ViewMode>.init(
             values: viewModes,
             texts: viewModes.map { $0.description },
+            completion: completion)
+        self.present(actionSheet, animated: true)
+    }
+
+    private func presentSideViewContentActionSheet(_ contents: [TextFieldSideViewContent], completion: @escaping (TextFieldSideViewContent) -> Void) {
+        let actionSheet = SparkActionSheet<TextFieldSideViewContent>.init(
+            values: contents,
+            texts: contents.map { $0.name },
             completion: completion)
         self.present(actionSheet, animated: true)
     }
