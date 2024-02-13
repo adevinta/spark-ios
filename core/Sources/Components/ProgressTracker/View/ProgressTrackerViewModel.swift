@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 /// A view model for a Progress Tracker.
-final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentIndicating>: ObservableObject {
+final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentIndicating>: ObservableObject where ComponentContent: Equatable {
 
     var theme: Theme {
         didSet {
@@ -60,7 +60,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         }
     }
 
-    @Published var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent>
+    @Published var content: ProgressTrackerContent<ComponentContent>
     @Published var disabledIndices = Set<Int>()
 
     @Published var spacings: ProgressTrackerSpacing
@@ -73,7 +73,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     // MARK: - Initialization
     init(theme: Theme,
          orientation: ProgressTrackerOrientation,
-         content:  ProgressTrackerContent<ProgressTrackerUIIndicatorContent>,
+         content:  ProgressTrackerContent<ComponentContent>,
          spacingUseCase: ProgressTrackerGetSpacingsUseCaseable = ProgressTrackerGetSpacingsUseCase()
     ) {
         self.orientation = orientation
@@ -119,6 +119,14 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         } else {
             self.disabledIndices.insert(index)
         }
+    }
+
+    func isEnabled(at index: Int) -> Bool {
+        return self.disabledIndices.contains(index)
+    }
+
+    func isSelected(at index: Int) -> Bool {
+        return self.content.currentPageIndex == index
     }
 
     private func updateEnabledIndices() {
