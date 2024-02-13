@@ -45,7 +45,7 @@ public final class TextFieldUIView: UITextField {
         get { return .init(self.viewModel.borderStyle) }
     }
 
-    private lazy var statusImageView = UIImageView(frame: .init(origin: .zero, size: .init(width: self.defaultStatusImageSize, height: self.defaultStatusImageSize)))
+    private lazy var statusImageView = UIImageView(frame: .init(origin: .zero, size: .init(width: self.defaultStatusImageSize * self.scaleFactor, height: self.defaultStatusImageSize * self.scaleFactor)))
     private lazy var rightStackView: UIStackView = UIStackView(arrangedSubviews: [self.statusImageView])
     private var userRightView: UIView?
     public override var rightView: UIView? {
@@ -106,11 +106,11 @@ public final class TextFieldUIView: UITextField {
         super.init(frame: .init(origin: .zero, size: .init(width: 100, height: 44)))
         self.adjustsFontForContentSizeCategory = true
         self.adjustsFontSizeToFitWidth = false
-        self.statusImageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
         self.statusImageView.contentMode = .scaleAspectFit
         self.statusImageView.clipsToBounds = true
         self.subscribeToViewModel()
         self.setRightView()
+        self.resizeImage()
     }
 
     internal convenience init(
@@ -151,9 +151,9 @@ public final class TextFieldUIView: UITextField {
             theme: theme,
             intent: intent,
             borderStyle: .roundedRect,
-            successImage: successImage.copy(newSize: .init(width: 16, height: 16)),
-            alertImage: alertImage.copy(newSize: .init(width: 16, height: 16)),
-            errorImage: errorImage.copy(newSize: .init(width: 16, height: 16))
+            successImage: successImage,
+            alertImage: alertImage,
+            errorImage: errorImage
         )
     }
 
@@ -164,6 +164,7 @@ public final class TextFieldUIView: UITextField {
     public override func layoutSubviews() {
         super.layoutSubviews()
         self.rightStackView.spacing = self.viewModel.contentSpacing
+        self.statusImageView.frame.size = .init(width: self.defaultStatusImageSize * self.scaleFactor, height: self.defaultStatusImageSize * scaleFactor)
     }
 
     private func setBorders(_ borders: TextFieldBorderLayout) {
@@ -236,7 +237,8 @@ public final class TextFieldUIView: UITextField {
 
         self.viewModel.$statusImage.subscribe(in: &self.cancellables) { [weak self] statusImage in
             guard let self else { return }
-            self.statusImageView.image = statusImage?.leftValue.withRenderingMode(.alwaysTemplate)
+            self.statusImageView.image = statusImage?.leftValue
+            self.resizeImage()
             self.statusImageView.isHidden = self.statusImageView.image == nil
             self.setRightView()
             self.setNeedsLayout()
@@ -348,7 +350,7 @@ public final class TextFieldUIView: UITextField {
         self._height.update(traitCollection: self.traitCollection)
         self._scaleFactor.update(traitCollection: self.traitCollection)
         self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
-
+        self.resizeImage()
         self.invalidateIntrinsicContentSize()
     }
 
@@ -357,5 +359,9 @@ public final class TextFieldUIView: UITextField {
             width: super.intrinsicContentSize.width,
             height: self.height
         )
+    }
+
+    private func resizeImage() {
+        self.statusImageView.image = self.statusImageView.image?.copy(newSize: .init(width: self.defaultStatusImageSize * self.scaleFactor, height: self.defaultStatusImageSize * self.scaleFactor)).withRenderingMode(.alwaysTemplate)
     }
 }
