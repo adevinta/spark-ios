@@ -287,6 +287,7 @@ final class TextFieldViewModelTests: XCTestCase {
 
     func test_intent_didSet_notEqual_differentPublishedValues() throws {
         // GIVEN - Inits from setUp()
+        self.viewModel.intent = .alert
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
@@ -414,7 +415,7 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage not should have been called")
+        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     func test_borderStyle_didSet_notEqual_differentPublishedValues() throws {
@@ -551,7 +552,7 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage not should have been called")
+        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     func test_isFocused_didSet_notEqual_differentPublishedValues() throws {
@@ -654,17 +655,19 @@ final class TextFieldViewModelTests: XCTestCase {
 
     func test_isEnabled_didSet_notEqual_samePublishedValues() throws {
         // GIVEN - Inits from setUp()
+        self.viewModel.intent = .neutral
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
         // WHEN
         self.viewModel.isEnabled = false
 
+        XCTAssertNil(self.viewModel.statusImage, "statusImage should be nil when isEnabled is false")
         // Then - Colors
         XCTAssertEqual(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledCallsCount, 1, "getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabled should have been called once")
         let getColorsReceivedArguments = try XCTUnwrap(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReceivedArguments, "Couldn't unwrap getColorsReceivedArguments")
         XCTAssertIdentical(getColorsReceivedArguments.theme as? ThemeGeneratedMock, self.theme, "Wrong getColorsReceivedArguments.theme")
-        XCTAssertEqual(getColorsReceivedArguments.intent, self.intent, "Wrong getColorsReceivedArguments.intent")
+        XCTAssertEqual(getColorsReceivedArguments.intent, .neutral, "Wrong getColorsReceivedArguments.intent")
         XCTAssertFalse(getColorsReceivedArguments.isEnabled, "Wrong getColorsReceivedArguments.isEnabled")
         XCTAssertTrue(self.viewModel.textColor.equals(self.expectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(self.expectedColors.placeholder), "Wrong placeholderColor")
@@ -694,11 +697,12 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertEqual(self.publishers.dim.sinkCount, 1, "$dim should have been called once")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage not should have been called")
+        XCTAssertFalse(self.publishers.statusImage.sinkCalled,"$statusImage should not have been called")
     }
 
     func test_isEnabled_didSet_notEqual_differentPublishedValues() throws {
         // GIVEN - Inits from setUp()
+        self.viewModel.isEnabled = false
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
@@ -712,14 +716,15 @@ final class TextFieldViewModelTests: XCTestCase {
         self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReturnValue = newExpectedColors
 
         // WHEN
-        self.viewModel.isEnabled = false
+        self.viewModel.isEnabled = true
 
+        XCTAssertEqual(self.viewModel.statusImage, .left(self.successImage), "Wrong statusImage")
         // THEN - Colors
         XCTAssertEqual(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledCallsCount, 1, "getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabled should have been called once")
         let getColorsReceivedArguments = try XCTUnwrap(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReceivedArguments, "Couldn't unwrap getColorsReceivedArguments")
         XCTAssertIdentical(getColorsReceivedArguments.theme as? ThemeGeneratedMock, self.theme, "Wrong getColorsReceivedArguments.theme")
         XCTAssertEqual(getColorsReceivedArguments.intent, self.intent, "Wrong getColorsReceivedArguments.intent")
-        XCTAssertFalse(getColorsReceivedArguments.isEnabled, "Wrong getColorsReceivedArguments.isEnabledd")
+        XCTAssertTrue(getColorsReceivedArguments.isEnabled, "Wrong getColorsReceivedArguments.isEnabledd")
         XCTAssertTrue(self.viewModel.textColor.equals(newExpectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(newExpectedColors.placeholder), "Wrong placeholderColor")
         XCTAssertTrue(self.viewModel.borderColor.equals(newExpectedColors.border), "Wrong borderColor")
@@ -748,7 +753,7 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertEqual(self.publishers.dim.sinkCount, 1, "$dim should have been called once")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled,"$statusImage should npt have been called")
+        XCTAssertEqual(self.publishers.statusImage.sinkCount, 1,"$statusImage should have been called once")
     }
 
     // MARK: - Is User Interaction Enabled
@@ -830,7 +835,7 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage not should have been called")
+        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     func test_isUserInteractionEnabled_didSet_notEqual_differentPublishedValues() throws {
