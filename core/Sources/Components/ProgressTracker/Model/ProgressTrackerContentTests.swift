@@ -49,6 +49,18 @@ final class ProgressTrackerContentTests: XCTestCase {
         XCTAssertEqual(sut.pageContent(atIndex: 1).label, "B", "Expected label 2 to be B")
     }
 
+    func test_indicator_label_max_length()  {
+        // GIVEN
+        var sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 2, currentPageIndex: 1, showDefaultPageNumber: false)
+
+        // WHEN
+        sut.setIndicatorLabel("XXX", atIndex: 0)
+
+        // THEN
+        XCTAssertEqual(sut.getIndicatorLabel(atIndex: 0), "XX", "Expected indicator label to be XX")
+
+    }
+
     func test_uses_set_label()  {
         // GIVEN
         var sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 4, currentPageIndex: 1, showDefaultPageNumber: false)

@@ -51,21 +51,45 @@ final class ProgressTrackerUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 switch configuration.contentType {
                 case .icon: view.setPreferredIndicatorImage(UIImage(systemName: "lock.circle"))
                 case .text:
-                    view.showDefaultPageNumber = true
+                    for i in 0..<5 {
+                        view.setIndicatorLabel("A\(i+1)", forIndex: i)
+                    }
                 case .empty:
                     view.showDefaultPageNumber = false
                 }
 
-                view.translatesAutoresizingMaskIntoConstraints = false
-                view.sizeToFit()
-                view.backgroundColor = .systemBackground
+                switch configuration.state {
+                case .disabled: view.isEnabled = false
+                case .selected: view.currentPageIndex = 1
+                case .pressed: view.indicatorViews[1].isHighlighted = true
+                default: break
+                }
 
-                self.assertSnapshot(
-                    matching: view,
-                    modes: configuration.modes,
-                    sizes: configuration.sizes,
-                    testName: configuration.testName()
-                )
+                view.backgroundColor = .systemBackground
+                view.translatesAutoresizingMaskIntoConstraints = false
+
+                if let frame = configuration.frame {
+                    let containerView = UIView(frame: frame)
+                    containerView.translatesAutoresizingMaskIntoConstraints = false
+                    containerView.widthAnchor.constraint(equalToConstant: frame.width).isActive = true
+                    containerView.heightAnchor.constraint(equalToConstant: frame.height).isActive = true
+                    containerView.addSubviewSizedEqually(view)
+
+                    self.assertSnapshot(
+                        matching: containerView,
+                        modes: configuration.modes,
+                        sizes: configuration.sizes,
+                        testName: configuration.testName()
+                    )
+                } else {
+                    self.assertSnapshot(
+                        matching: view,
+                        modes: configuration.modes,
+                        sizes: configuration.sizes,
+                        testName: configuration.testName()
+                    )
+                }
+
             }
         }
     }
