@@ -124,7 +124,7 @@ public final class ProgressTrackerUIControl: UIControl {
     // MARK: - Private variables
     private let viewModel: ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>
 
-    private lazy var indicatorViews = [ProgressTrackerIndicatorUIControl]()
+    lazy var indicatorViews = [ProgressTrackerIndicatorUIControl]()
     private lazy var labels = [UILabel]()
     private lazy var hiddenLabels = [UILabel]()
     private lazy var trackViews = [ProgressTrackerTrackUIView]()
@@ -531,15 +531,17 @@ public final class ProgressTrackerUIControl: UIControl {
                 constraints.append(self.labels[i].trailingAnchor.constraint(equalTo: self.trailingAnchor))
             }
             for i in 1..<numberOfPages {
-                let labelTrailingConstraint = self.labels[i].topAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].bottomAnchor, constant: self.labelSpacing)
-                self.labelSpacingConstraints.append(labelTrailingConstraint)
-                constraints.append(labelTrailingConstraint)
+                let labelBottomConstraint = self.labels[i].topAnchor.constraint(lessThanOrEqualTo: self.labels[i-1].bottomAnchor, constant: self.labelSpacing)
+                labelBottomConstraint.priority = .defaultLow
+                self.labelSpacingConstraints.append(labelBottomConstraint)
+                constraints.append(labelBottomConstraint)
             }
             constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
             constraints.append(self.labels[lastIndex].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
             constraints.append(self.indicatorViews[lastIndex].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
         } else {
             constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
+            constraints.append(self.indicatorViews[0].trailingAnchor.constraint(equalTo: self.trailingAnchor))
             constraints.append(self.indicatorViews [lastIndex].bottomAnchor.constraint(equalTo: self.bottomAnchor))
         }
 
@@ -678,12 +680,12 @@ public final class ProgressTrackerUIControl: UIControl {
     /// - Parameters:
     ///   - label: An optional character for the indicator label
     ///   - forIndex: The index of the indicator
-    public func setIndicatorLabel(_ label: Character?, forIndex index: Int) {
+    public func setIndicatorLabel(_ label: String?, forIndex index: Int) {
         self.viewModel.content.setIndicatorLabel(label, atIndex: index)
     }
 
     /// Return the current indicator label at the given index.
-    public func getIndicatorLabel(forIndex index: Int) -> Character? {
+    public func getIndicatorLabel(forIndex index: Int) -> String? {
         self.viewModel.content.getIndicatorLabel(atIndex: index)
     }
 

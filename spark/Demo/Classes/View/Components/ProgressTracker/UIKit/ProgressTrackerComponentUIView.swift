@@ -206,7 +206,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         case .text:
             for i in 0..<numberOfPages {
                 self.componentView.setIndicatorImage(nil, forIndex: i)
-                self.componentView.setIndicatorLabel("ABCDEFGH".character(at: i), forIndex: i)
+                self.componentView.setIndicatorLabel(String("ABCDEFGH".character(at: i)), forIndex: i)
             }
         case .none, .page:
             for i in 0..<numberOfPages {

@@ -15,7 +15,7 @@ protocol ProgressTrackerContentIndicating {
     associatedtype ImageType
     associatedtype TextType
     var indicatorImage: ImageType? { get set }
-    var label: Character? { get set }
+    var label: String? { get set }
 
     init()
 }
@@ -25,7 +25,7 @@ struct ProgressTrackerUIIndicatorContent: ProgressTrackerContentIndicating, Equa
     typealias TextType = NSAttributedString
 
     var indicatorImage: UIImage?
-    var label: Character?
+    var label: String?
 }
 
 /// The content model of tje SwiftUI progress tracker indicator
@@ -33,7 +33,7 @@ struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating, Equata
     typealias TextType = AttributedString
 
     var indicatorImage: Image?
-    var label: Character?
+    var label: String?
 }
 
 /// A model representing the content of a progress tracker.
@@ -109,7 +109,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
         }
 
         if content.label == nil && self.showDefaultPageNumber {
-            content.label = "\(index + 1)".first
+            content.label = "\(index + 1)"
         }
 
         if index == self.currentPageIndex {
@@ -159,20 +159,26 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     }
 
     /// Set the indicator label at the given index
-    mutating func setIndicatorLabel(_ label: Character?, atIndex index: Int) {
+    mutating func setIndicatorLabel(_ label: String?, atIndex index: Int) {
         var content: ComponentContent
+
+        var indicatorLabel: String?
+
+        if let label = label {
+            indicatorLabel = String(label.prefix(2))
+        }
 
         if let pageContent = self.content[index] {
             content = pageContent
         } else {
             content = .init()
         }
-        content.label = label
+        content.label = indicatorLabel
         self.content[index] = content
     }
 
     /// Return the indicator label at the given index
-    func getIndicatorLabel(atIndex index:  Int) -> Character? {
+    func getIndicatorLabel(atIndex index:  Int) -> String? {
         return self.content[index]?.label
     }
 }
