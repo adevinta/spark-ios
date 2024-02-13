@@ -18,7 +18,10 @@ public final class TextFieldUIView: UITextField {
     @ScaledUIMetric private var height: CGFloat = 44
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
-    private let defaultStatusImageSize: CGFloat = 16
+    private var statusImageSize: CGFloat {
+        return 16 * self.scaleFactor
+    }
+
     private let defaultClearButtonRightSpacing = 5.0
 
     public override var placeholder: String? {
@@ -45,8 +48,11 @@ public final class TextFieldUIView: UITextField {
         get { return .init(self.viewModel.borderStyle) }
     }
 
-    private lazy var statusImageView = UIImageView(frame: .init(origin: .zero, size: .init(width: self.defaultStatusImageSize * self.scaleFactor, height: self.defaultStatusImageSize * self.scaleFactor)))
-    private lazy var rightStackView: UIStackView = UIStackView(arrangedSubviews: [self.statusImageView])
+    private var statusImageView = UIImageView()
+    private var statusImageHeightConstraint: NSLayoutConstraint = NSLayoutConstraint()
+    private var statusImageWidthConstraint: NSLayoutConstraint = NSLayoutConstraint()
+    private var statusImageContainerView = UIView()
+    private lazy var rightStackView: UIStackView = UIStackView()
     private var userRightView: UIView?
     public override var rightView: UIView? {
         get { return self.userRightView }
@@ -100,17 +106,14 @@ public final class TextFieldUIView: UITextField {
         }
     }
 
-
     internal init(viewModel: TextFieldViewModel) {
         self.viewModel = viewModel
         super.init(frame: .init(origin: .zero, size: .init(width: 100, height: 44)))
         self.adjustsFontForContentSizeCategory = true
         self.adjustsFontSizeToFitWidth = false
-        self.statusImageView.contentMode = .scaleAspectFit
-        self.statusImageView.clipsToBounds = true
+        self.setupRightStackView()
         self.subscribeToViewModel()
         self.setRightView()
-        self.resizeImage()
     }
 
     internal convenience init(
@@ -164,7 +167,28 @@ public final class TextFieldUIView: UITextField {
     public override func layoutSubviews() {
         super.layoutSubviews()
         self.rightStackView.spacing = self.viewModel.contentSpacing
-        self.statusImageView.frame.size = .init(width: self.defaultStatusImageSize * self.scaleFactor, height: self.defaultStatusImageSize * scaleFactor)
+    }
+
+    private func setupRightStackView() {
+        self.statusImageView.contentMode = .scaleAspectFit
+        self.statusImageView.clipsToBounds = true
+        self.statusImageContainerView.addSubview(self.statusImageView)
+        self.statusImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.statusImageHeightConstraint = self.statusImageView.heightAnchor.constraint(equalToConstant: self.statusImageSize)
+        self.statusImageWidthConstraint = self.statusImageView.widthAnchor.constraint(equalToConstant: self.statusImageSize)
+        self.statusImageWidthConstraint.priority = UILayoutPriority.defaultHigh
+        self.statusImageHeightConstraint.priority = UILayoutPriority.defaultHigh
+        NSLayoutConstraint.activate([
+            self.statusImageWidthConstraint,
+            self.statusImageHeightConstraint,
+            self.statusImageView.topAnchor.constraint(greaterThanOrEqualTo: self.statusImageContainerView.topAnchor),
+            self.statusImageView.leadingAnchor.constraint(equalTo: self.statusImageContainerView.leadingAnchor),
+            self.statusImageView.centerXAnchor.constraint(equalTo: self.statusImageContainerView.centerXAnchor),
+            self.statusImageView.centerYAnchor.constraint(equalTo: self.statusImageContainerView.centerYAnchor),
+        ])
+        self.rightStackView.addArrangedSubview(self.statusImageContainerView)
+        self.rightStackView.alignment = .center
+        self.rightStackView.distribution = .fill
     }
 
     private func setBorders(_ borders: TextFieldBorderLayout) {
@@ -238,8 +262,7 @@ public final class TextFieldUIView: UITextField {
         self.viewModel.$statusImage.subscribe(in: &self.cancellables) { [weak self] statusImage in
             guard let self else { return }
             self.statusImageView.image = statusImage?.leftValue
-            self.resizeImage()
-            self.statusImageView.isHidden = self.statusImageView.image == nil
+            self.statusImageContainerView.isHidden = self.statusImageView.image == nil
             self.setRightView()
             self.setNeedsLayout()
         }
@@ -264,7 +287,7 @@ public final class TextFieldUIView: UITextField {
     }
 
     private func setRightView() {
-        if self.statusImageView.isHidden,
+        if self.statusImageContainerView.isHidden,
            self.userRightView == nil {
             super.rightView = nil
         } else {
@@ -349,8 +372,9 @@ public final class TextFieldUIView: UITextField {
 
         self._height.update(traitCollection: self.traitCollection)
         self._scaleFactor.update(traitCollection: self.traitCollection)
+        self.statusImageWidthConstraint.constant = self.statusImageSize
+        self.statusImageHeightConstraint.constant = self.statusImageSize
         self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
-        self.resizeImage()
         self.invalidateIntrinsicContentSize()
     }
 
@@ -359,9 +383,5 @@ public final class TextFieldUIView: UITextField {
             width: super.intrinsicContentSize.width,
             height: self.height
         )
-    }
-
-    private func resizeImage() {
-        self.statusImageView.image = self.statusImageView.image?.copy(newSize: .init(width: self.defaultStatusImageSize * self.scaleFactor, height: self.defaultStatusImageSize * self.scaleFactor)).withRenderingMode(.alwaysTemplate)
     }
 }
