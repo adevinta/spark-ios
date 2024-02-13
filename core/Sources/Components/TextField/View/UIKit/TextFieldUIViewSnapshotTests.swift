@@ -67,7 +67,7 @@ final class TextFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                             textField.placeholder = text.placeholder
                             textField.clearButtonMode = .always
                             textField.leftViewMode = .always
-                            textField.rightViewMode = .always
+                            textField.rightViewMode = states.isFocused ? .never : .always
                             textField.leftView = self.getContentViews(from: leftContent)
                             textField.rightView = self.getContentViews(from: rightContent)
 
