@@ -531,8 +531,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 constraints.append(self.labels[i].trailingAnchor.constraint(equalTo: self.trailingAnchor))
             }
             for i in 1..<numberOfPages {
-                let labelBottomConstraint = self.labels[i].topAnchor.constraint(lessThanOrEqualTo: self.labels[i-1].bottomAnchor, constant: self.labelSpacing)
-                labelBottomConstraint.priority = .defaultLow
+                let labelBottomConstraint = self.labels[i].topAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].bottomAnchor, constant: self.labelSpacing)
                 self.labelSpacingConstraints.append(labelBottomConstraint)
                 constraints.append(labelBottomConstraint)
             }

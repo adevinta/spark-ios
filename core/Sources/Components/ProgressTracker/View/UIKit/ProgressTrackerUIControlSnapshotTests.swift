@@ -73,7 +73,14 @@ final class ProgressTrackerUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     containerView.translatesAutoresizingMaskIntoConstraints = false
                     containerView.widthAnchor.constraint(equalToConstant: frame.width).isActive = true
                     containerView.heightAnchor.constraint(equalToConstant: frame.height).isActive = true
-                    containerView.addSubviewSizedEqually(view)
+                    containerView.addSubview(view)
+
+                    NSLayoutConstraint.activate([
+                        containerView.topAnchor.constraint(equalTo: view.topAnchor),
+                        containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                        containerView.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor),
+                        containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+                    ])
 
                     self.assertSnapshot(
                         matching: containerView,
