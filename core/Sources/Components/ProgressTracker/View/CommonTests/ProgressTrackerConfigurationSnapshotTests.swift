@@ -26,6 +26,32 @@ struct ProgressTrackerConfigurationSnapshotTests {
     let modes: [ComponentSnapshotTestMode]
     let sizes: [UIContentSizeCategory]
 
+    let frame: CGRect?
+
+
+    init(scenario: ProgressTrackerScenarioSnapshotTests,
+         intent: ProgressTrackerIntent,
+         variant: ProgressTrackerVariant,
+         state: ProgressTrackerState,
+         contentType: ProgressTrackerContentType,
+         size: ProgressTrackerSize,
+         orientation: ProgressTrackerOrientation,
+         labels: [String],
+         modes: [ComponentSnapshotTestMode],
+         sizes: [UIContentSizeCategory],
+         frame: CGRect? = nil) {
+        self.scenario = scenario
+        self.intent = intent
+        self.variant = variant
+        self.state = state
+        self.contentType = contentType
+        self.size = size
+        self.orientation = orientation
+        self.labels = labels
+        self.modes = modes
+        self.sizes = sizes
+        self.frame = frame
+    }
     // MARK: - Getter
 
     func testName() -> String {
@@ -33,7 +59,7 @@ struct ProgressTrackerConfigurationSnapshotTests {
             "\(self.scenario.rawValue)",
             "\(self.intent)",
             "\(self.variant)",
-            "\(self.variant)",
+            "\(self.state)",
             "\(self.contentType)",
             "\(self.size)",
             "\(self.orientation)",
