@@ -239,9 +239,9 @@ enum ProgressTrackerScenarioSnapshotTests: String, CaseIterable {
     private func test6(isSwiftUIComponent: Bool) -> [ProgressTrackerConfigurationSnapshotTests] {
 
         let longLabels = [
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-            "Lorem ipsum dolor sit amet",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "Lorem ipsum dolor sit amet",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
             "Ut enim ad minim veniam",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit"]
 
