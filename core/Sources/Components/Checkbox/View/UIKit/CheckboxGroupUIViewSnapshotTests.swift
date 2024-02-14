@@ -37,7 +37,6 @@ final class CheckboxGroupUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 )
                 view.translatesAutoresizingMaskIntoConstraints = false
 
-
                 let containerView = UIView()
                 containerView.backgroundColor = UIColor.systemBackground
                 containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +54,6 @@ final class CheckboxGroupUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                     matching: containerView,
                     modes: configuration.modes,
                     sizes: configuration.sizes,
-                    record: true,
                     testName: configuration.testName()
                 )
             }

@@ -61,7 +61,6 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                     matching: view,
                     modes: configuration.modes,
                     sizes: configuration.sizes,
-                    record: true,
                     testName: configuration.testName()
                 )
             }
