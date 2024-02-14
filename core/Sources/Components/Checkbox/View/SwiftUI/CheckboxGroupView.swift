@@ -94,7 +94,7 @@ public struct CheckboxGroupView: View {
         .onChange(of: self.itemContents) { newValue in
             self.isScrollableHStack = true
         }
-        .accessibilityIdentifier("\(self.accessibilityIdentifierPrefix).\(CheckboxAccessibilityIdentifier.checkboxGroup)")
+        .accessibilityIdentifier("\(self.viewModel.accessibilityIdentifierPrefix).\(CheckboxAccessibilityIdentifier.checkboxGroup)")
     }
 
     private func makeHStackView() -> some View {
