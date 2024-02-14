@@ -24,7 +24,7 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         self.colorsUseCase = ProgressTrackerGetColorsUseCaseableGeneratedMock()
 
         self.colorsUseCase
-            .executeWithThemeAndIntentAndVariantAndStateReturnValue = .init(
+            .executeWithColorsAndIntentAndVariantAndStateReturnValue = .init(
                 background: self.theme.colors.basic.basicContainer,
                 outline: self.theme.colors.basic.onBasic,
                 content: self.theme.colors.basic.basic
@@ -43,7 +43,7 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         XCTAssertEqual(sut.size, .small, "Expected size to be small")
         XCTAssertIdentical(sut.theme as? ThemeGeneratedMock, self.theme, "Expected theme to be identical")
 
-        XCTAssertEqual(self.colorsUseCase.executeWithThemeAndIntentAndVariantAndStateCallsCount, 1)
+        XCTAssertEqual(self.colorsUseCase.executeWithColorsAndIntentAndVariantAndStateCallsCount, 1)
     }
 
     func test_update_theme() {

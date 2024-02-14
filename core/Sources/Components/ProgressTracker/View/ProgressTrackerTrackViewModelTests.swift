@@ -13,6 +13,7 @@ import XCTest
 
 final class ProgressTrackerTrackViewModelTests: XCTestCase {
 
+    var colors: ColorsGeneratedMock!
     var theme: ThemeGeneratedMock!
     var useCase: ProgressTrackerGetTrackColorUseCaseableGeneratedMock!
     var cancellables = Set<AnyCancellable>()
@@ -20,10 +21,11 @@ final class ProgressTrackerTrackViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        self.colors = ColorsGeneratedMock.mocked()
         self.theme = ThemeGeneratedMock.mocked()
         self.useCase = ProgressTrackerGetTrackColorUseCaseableGeneratedMock()
 
-        self.useCase.executeWithThemeAndIntentAndIsEnabledReturnValue = ColorTokenGeneratedMock.random()
+        self.useCase.executeWithColorsAndIntentReturnValue = ColorTokenGeneratedMock.random()
     }
 
     func test_theme_updates_line_color_updates() {
@@ -35,17 +37,17 @@ final class ProgressTrackerTrackViewModelTests: XCTestCase {
         sut.theme = ThemeGeneratedMock.mocked()
 
         sut.$lineColor.subscribe(in: &self.cancellables) { color in
-            XCTAssertEqual(self.useCase.executeWithThemeAndIntentAndIsEnabledReturnValue.uiColor, color.uiColor, "Expected color to have only been set once")
+            XCTAssertEqual(self.useCase.executeWithColorsAndIntentReturnValue.uiColor, color.uiColor, "Expected color to have only been set once")
             expect.fulfill()
         }
 
         // THEN
         wait(for: [expect], timeout: 1)
-        XCTAssertEqual(self.useCase.executeWithThemeAndIntentAndIsEnabledCallsCount, 2, "Expected use case to have been executed twice")
-        
-        let arguments = self.useCase.executeWithThemeAndIntentAndIsEnabledReceivedArguments
+        XCTAssertEqual(self.useCase.executeWithColorsAndIntentCallsCount, 2, "Expected use case to have been executed twice")
 
-        XCTAssertNotIdentical(arguments?.theme as? ThemeGeneratedMock, self.theme, "Expected theme to have changed")
+        let arguments = self.useCase.executeWithColorsAndIntentReceivedArguments
+
+        XCTAssertNotIdentical(arguments?.colors as? ColorsGeneratedMock, self.colors, "Expected theme to have changed")
     }
 
     func test_intent_updates_line_color_updates() {
@@ -56,26 +58,33 @@ final class ProgressTrackerTrackViewModelTests: XCTestCase {
         sut.intent = .main
 
         // THEN
-        XCTAssertEqual(self.useCase.executeWithThemeAndIntentAndIsEnabledCallsCount, 2, "Expected use case to have been called twice")
+        XCTAssertEqual(self.useCase.executeWithColorsAndIntentCallsCount, 2, "Expected use case to have been called twice")
 
-        let arguments = self.useCase.executeWithThemeAndIntentAndIsEnabledReceivedArguments
+        let arguments = self.useCase.executeWithColorsAndIntentReceivedArguments
 
         XCTAssertEqual(arguments?.intent, .main, "Expected argument of use case to be main")
     }
 
-    func test_is_enabled_updates_line_color_updates() {
+    func test_is_enabled_updates_opacity_updates() {
         // GIVEN
         let sut = self.sut(isEnabled: true)
+
+        let expect = expectation(description: "Expected opacity to have changed")
+        expect.expectedFulfillmentCount = 2
+
+        var opacities = [CGFloat]()
+        sut.$opacity.subscribe(in: &self.cancellables) { opacity in
+            opacities.append(opacity)
+            expect.fulfill()
+        }
 
         // WHEN
         sut.isEnabled = false
 
+        wait(for: [expect], timeout: 0.01)
+
         // THEN
-        XCTAssertEqual(self.useCase.executeWithThemeAndIntentAndIsEnabledCallsCount, 2, "Expected use case to have been called twice")
-
-        let arguments = self.useCase.executeWithThemeAndIntentAndIsEnabledReceivedArguments
-
-        XCTAssertEqual(arguments?.isEnabled, false, "Expected isEnabled argument of use case to be false")
+        XCTAssertEqual(opacities, [1.0, self.theme.dims.dim3])
     }
 
     func test_intent_the_same_no_color_updates() {
@@ -86,9 +95,9 @@ final class ProgressTrackerTrackViewModelTests: XCTestCase {
         sut.intent = .basic
 
         // THEN
-        XCTAssertEqual(self.useCase.executeWithThemeAndIntentAndIsEnabledCallsCount, 1, "Expected use case to only have been called once")
+        XCTAssertEqual(self.useCase.executeWithColorsAndIntentCallsCount, 1, "Expected use case to only have been called once")
 
-        let arguments = self.useCase.executeWithThemeAndIntentAndIsEnabledReceivedArguments
+        let arguments = self.useCase.executeWithColorsAndIntentReceivedArguments
 
         XCTAssertEqual(arguments?.intent, .basic, "Expected argument of use case to be basic")
     }
@@ -97,22 +106,24 @@ final class ProgressTrackerTrackViewModelTests: XCTestCase {
         // GIVEN
         let sut = self.sut(isEnabled: true)
 
+        let expect = expectation(description: "Expected opacity to have changed")
+        expect.isInverted = true
+
+        sut.$opacity.dropFirst().subscribe(in: &self.cancellables) { opacity in
+            expect.fulfill()
+        }
+
         // WHEN
         sut.isEnabled = true
 
-        // THEN
-        XCTAssertEqual(self.useCase.executeWithThemeAndIntentAndIsEnabledCallsCount, 1, "Only expected use case to have been called once")
-
-        let arguments = self.useCase.executeWithThemeAndIntentAndIsEnabledReceivedArguments
-
-        XCTAssertEqual(arguments?.isEnabled, true, "Argument of use case expected to be true")
+        wait(for: [expect], timeout: 0.01)
     }
 
     func test_theme_produces_different_line_color() {
 
         // GIVEN
         let colors = [UIColor.red, .blue]
-        self.useCase.executeWithThemeAndIntentAndIsEnabledReturnValue = ColorTokenGeneratedMock.init(uiColor: colors[0])
+        self.useCase.executeWithColorsAndIntentReturnValue = ColorTokenGeneratedMock.init(uiColor: colors[0])
         let sut = self.sut()
 
         let expect = expectation(description: "Expect line color to have been published")
@@ -126,7 +137,7 @@ final class ProgressTrackerTrackViewModelTests: XCTestCase {
             calls += 1
         }
 
-        self.useCase.executeWithThemeAndIntentAndIsEnabledReturnValue = ColorTokenGeneratedMock.init(uiColor: colors[1])
+        self.useCase.executeWithColorsAndIntentReturnValue = ColorTokenGeneratedMock.init(uiColor: colors[1])
         sut.theme = ThemeGeneratedMock.mocked()
 
         // THEN
