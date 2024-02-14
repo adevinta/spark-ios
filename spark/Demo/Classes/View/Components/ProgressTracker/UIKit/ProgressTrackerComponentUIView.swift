@@ -158,6 +158,9 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] isDisabled in
             guard let self else { return }
             self.componentView.isEnabled = !isDisabled
+            if !isDisabled && self.viewModel.disabledPageIndex > -1 {
+                self.componentView.setIsEnabled(false, forIndex: self.viewModel.disabledPageIndex)
+            }
         }
 
         self.viewModel.$useCompletedPageIndicator.subscribe(in: &self.cancellables) { useImage in
