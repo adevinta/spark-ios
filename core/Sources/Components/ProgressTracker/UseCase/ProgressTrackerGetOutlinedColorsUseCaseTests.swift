@@ -13,13 +13,13 @@ import XCTest
 final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
 
     var sut: ProgressTrackerGetOutlinedColorsUseCase!
-    var theme: ThemeGeneratedMock!
+    var colors: ColorsGeneratedMock!
 
     // MARK: - Setup
     override func setUp()  {
         super.setUp()
 
-        self.theme = ThemeGeneratedMock.mocked()
+        self.colors = ColorsGeneratedMock.mocked()
         self.sut = ProgressTrackerGetOutlinedColorsUseCase()
     }
 
@@ -29,10 +29,10 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
 
         for intent in ProgressTrackerIntent.allCases {
             // WHEN
-            let colors = self.sut.execute(theme: self.theme, intent: intent, state: .selected)
+            let colors = self.sut.execute(colors: self.colors, intent: intent, state: .selected)
 
             // THEN
-            XCTAssertEqual(colors, intent.selectedColors(self.theme.colors), "Selected colors for intent \(intent) not as expected")
+            XCTAssertEqual(colors, intent.selectedColors(self.colors), "Selected colors for intent \(intent) not as expected")
         }
     }
 
@@ -42,10 +42,10 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
         for intent in ProgressTrackerIntent.allCases {
             // WHEN
 
-            let colors = self.sut.execute(theme: self.theme, intent: intent, state: .normal)
+            let colors = self.sut.execute(colors: self.colors, intent: intent, state: .normal)
 
             // THEN
-            XCTAssertEqual(colors, intent.enabledColors(self.theme.colors), "Enabled colors for intent \(intent) not as expected")
+            XCTAssertEqual(colors, intent.enabledColors(self.colors), "Enabled colors for intent \(intent) not as expected")
         }
     }
 
@@ -55,10 +55,10 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
         for intent in ProgressTrackerIntent.allCases {
             // WHEN
 
-            let colors = self.sut.execute(theme: self.theme, intent: intent, state: .pressed)
+            let colors = self.sut.execute(colors: self.colors, intent: intent, state: .pressed)
 
             // THEN
-            XCTAssertEqual(colors, intent.pressedColors(self.theme.colors), "Pressed colors for intent \(intent) not as expected")
+            XCTAssertEqual(colors, intent.pressedColors(self.colors), "Pressed colors for intent \(intent) not as expected")
         }
     }
 
@@ -68,9 +68,9 @@ final class ProgressTrackerGetOutlinedColorsUseCaseTests: XCTestCase {
         for intent in ProgressTrackerIntent.allCases {
             // WHEN
 
-            let colors = self.sut.execute(theme: self.theme, intent: intent, state: .disabled)
+            let colors = self.sut.execute(colors: self.colors, intent: intent, state: .disabled)
 
-            let expectedColors = intent.disabledColors(self.theme.colors, dims: self.theme.dims)
+            let expectedColors = intent.enabledColors(self.colors)
 
             // THEN
             XCTAssertEqual(colors, expectedColors, "Disabled colors for intent \(intent) not as expected")
@@ -129,14 +129,6 @@ private extension ProgressTrackerIntent {
                 outline: colors.support.support,
                 content: colors.support.onSupportContainer)
         }
-    }
-
-    func disabledColors(_ colors: Colors, dims: Dims) -> ProgressTrackerColors {
-        let variantColors = self.enabledColors(colors)
-        return ProgressTrackerColors(
-            background: variantColors.background,
-            outline: variantColors.outline.opacity(dims.dim2),
-            content: variantColors.content.opacity(dims.dim2))
     }
 
     func enabledColors(_ colors: Colors) -> ProgressTrackerColors {

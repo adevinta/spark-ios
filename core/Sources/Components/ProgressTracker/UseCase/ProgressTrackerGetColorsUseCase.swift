@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol ProgressTrackerGetColorsUseCaseable {
-    func execute(theme: Theme,
+    func execute(colors: Colors,
                  intent: ProgressTrackerIntent,
                  variant: ProgressTrackerVariant,
                  state: ProgressTrackerState) -> ProgressTrackerColors
@@ -34,13 +34,13 @@ struct ProgressTrackerGetColorsUseCase: ProgressTrackerGetColorsUseCaseable {
     // MARK: Execute
     /// Returns the colors of the progress tracker indicator
     func execute(
-        theme: Theme,
+        colors: Colors,
         intent: ProgressTrackerIntent,
         variant: ProgressTrackerVariant,
         state: ProgressTrackerState) -> ProgressTrackerColors {
             switch variant {
-            case .outlined: return self.getOutlinedColorsUseCase.execute(theme: theme, intent: intent, state: state)
-            case .tinted: return self.getTintedColorsUseCase.execute(theme: theme, intent: intent, state: state)
+            case .outlined: return self.getOutlinedColorsUseCase.execute(colors: colors, intent: intent, state: state)
+            case .tinted: return self.getTintedColorsUseCase.execute(colors: colors, intent: intent, state: state)
             }
     }
 }
