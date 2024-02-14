@@ -11,19 +11,17 @@ import Foundation
 /// A use case to calculate the tinted colors of the progress tracker
 struct ProgressTrackerGetTintedColorsUseCase: ProgressTrackerGetVariantColorsUseCaseable {
 
-    func execute(theme: Theme,
+    func execute(colors: Colors,
                  intent: ProgressTrackerIntent,
                  state: ProgressTrackerState
     ) -> ProgressTrackerColors {
         let intentColors: ProgressTrackerTintedColors = {
-            if state.isDisabled {
-                return self.disabledColors(colors: theme.colors, dims: theme.dims, intent: intent)
-            } else if state.isSelected {
-                return self.selectedColors(colors: theme.colors, intent: intent)
+            if state.isSelected {
+                return self.selectedColors(colors: colors, intent: intent)
             } else if state.isPressed {
-                return self.pressedColors(colors: theme.colors, intent: intent)
+                return self.pressedColors(colors: colors, intent: intent)
             } else {
-                return self.enabledColors(colors: theme.colors, intent: intent)
+                return self.enabledColors(colors: colors, intent: intent)
             }
         }()
 
@@ -34,15 +32,6 @@ struct ProgressTrackerGetTintedColorsUseCase: ProgressTrackerGetVariantColorsUse
     }
 
     // MARK: - Private functions
-    private func disabledColors(colors: Colors, dims: Dims, intent: ProgressTrackerIntent) -> ProgressTrackerTintedColors {
-        let variantColors = self.enabledColors(colors: colors, intent: intent)
-
-        return ProgressTrackerTintedColors(
-            background: variantColors.background.opacity(dims.dim2),
-            content: variantColors.content.opacity(dims.dim2)
-        )
-    }
-
     private func pressedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerTintedColors {
         switch intent {
         case .accent:

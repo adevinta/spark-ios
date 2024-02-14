@@ -69,23 +69,6 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-    func test_enabled_status_changed() {
-        // GIVEN
-        let sut = self.sut(orientation: . vertical)
-        let expectation = expectation(description: "Wait for color change")
-        expectation.expectedFulfillmentCount = 2
-
-        sut.$labelColor.sink { _ in
-            expectation.fulfill()
-        }.store(in: &self.cancellables)
-
-        // WHEN
-        sut.isEnabled = false
-
-        // THEN
-        wait(for: [expectation], timeout: 1)
-    }
-
     func test_orientation_is_changed_spacings_updated() {
         // GIVEN
         let sut = self.sut(orientation: . vertical)
@@ -160,8 +143,93 @@ final class ProgressTrackerViewModelTests: XCTestCase {
 
             // THEN
             XCTAssertEqual(sut.currentPageIndex, givenExpected.expected, "Expected current page index when set to \(givenExpected.given) to be \(givenExpected.expected)")
-
         }
+    }
+
+    func test_set_disabled() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        for i in 0..<4 {
+            XCTAssertEqual(sut.labelOpacity(forIndex: i), 1.0, "Expected opacity of label at \(i) to be 1.0")
+        }
+
+        // WHEN
+        sut.isEnabled = false
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices.count, 4, "Expected all indices to be disabled")
+
+        for i in 0..<4 {
+            XCTAssertEqual(sut.labelOpacity(forIndex: i), self.theme.dims.dim1, "Expected opacity of label at \(i) to be dim3")
+        }
+    }
+
+    func test_set_enabled_single_item() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // WHEN
+        sut.isEnabled = false
+        sut.setIsEnabled(isEnabled: true, forIndex: 0)
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices, Set(arrayLiteral: 1,2,3))
+    }
+
+    func test_set_disabled_single_item() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // WHEN
+        sut.setIsEnabled(isEnabled: false, forIndex: 0)
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices, Set(arrayLiteral: 0))
+    }
+
+    func test_set_enabled_after_disabled() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // WHEN
+        sut.isEnabled = false
+        sut.isEnabled = true
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices.count, 0)
+    }
+
+    func test_enabled_color() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        // THEN
+        XCTAssertEqual(sut.disabledIndices.count, 0)
+    }
+
+    func test_disabled_opacity_published() {
+        // GIVEN
+        let sut = sut(orientation: .vertical, numberOfPages: 4)
+
+        let expect = expectation(description: "disabled index should be published")
+        expect.expectedFulfillmentCount = 2
+
+        var publishedCount = 0
+
+        sut.$disabledIndices.subscribe(in: &self.cancellables) { disabledIndices in
+            if publishedCount == 1 {
+                XCTAssertEqual(disabledIndices, Set([0]))
+            }
+            publishedCount += 1
+            expect.fulfill()
+        }
+
+        // WHEN
+        sut.setIsEnabled(isEnabled: false, forIndex: 0)
+
+        // THEN
+        wait(for: [expect], timeout: 0.01)
     }
 
     // MARK: - Private helper functions

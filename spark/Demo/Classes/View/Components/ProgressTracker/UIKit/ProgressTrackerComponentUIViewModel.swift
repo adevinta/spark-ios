@@ -58,6 +58,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var interactionConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Interaction",
+            type: .button,
+            target: (source: self, action: #selector(self.presentInteractionSheet))
+        )
+    }()
+
     lazy var contentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Content",
@@ -119,6 +127,16 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.selectedPageChanged(_:))))
     }()
 
+    lazy var disabledPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Disabled Page",
+            type: .rangeSelector(
+                selected: self.disabledPageIndex,
+                range: -1...7
+            ),
+            target: (source: self, action: #selector(self.disabledPageChanged(_:))))
+    }()
+
     lazy var numberOfPagesPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Number of Pages",
@@ -150,6 +168,11 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
+    var showInteractionSheet: AnyPublisher<[ProgressTrackerInteractionState], Never> {
+        self.showInteractionSheetSubject
+            .eraseToAnyPublisher()
+    }
+
     var showVariantSheet: AnyPublisher<[ProgressTrackerVariant], Never> {
         self.showVariantSheetSubject
             .eraseToAnyPublisher()
@@ -167,6 +190,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     private var showIntentSheetSubject: PassthroughSubject<[ProgressTrackerIntent], Never> = .init()
     private var showOrientationSheetSubject: PassthroughSubject<[ProgressTrackerOrientation], Never> = .init()
     private var showSizeSheetSubject: PassthroughSubject<[ProgressTrackerSize], Never> = .init()
+    private var showInteractionSheetSubject: PassthroughSubject<[ProgressTrackerInteractionState], Never> = .init()
     private var showVariantSheetSubject: PassthroughSubject<[ProgressTrackerVariant], Never> = .init()
     private var showContentSheetSubject: PassthroughSubject<[ContentType], Never> = .init()
 
@@ -175,12 +199,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.themeConfigurationItemViewModel,
             self.intentConfigurationItemViewModel,
             self.sizeConfigurationItemViewModel,
+            self.interactionConfigurationItemViewModel,
             self.variantConfigurationItemViewModel,
             self.orientationConfigurationItemViewModel,
             self.contentConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.completedPageIndicatorConfigurationItemViewModel,
             self.currentPageIndicatorImageConfigurationItemViewModel,
+            self.disabledPageIndexConfigurationItemViewModel,
             self.currentPageIndexConfigurationItemViewModel,
             self.numberOfPagesPageIndexConfigurationItemViewModel,
             self.labelContentConfigurationItemViewModel,
@@ -192,10 +218,11 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Initialization
     @Published var theme: Theme
-    @Published var intent: ProgressTrackerIntent
+    @Published var intent: ProgressTrackerIntent = .basic
     @Published var orientation: ProgressTrackerOrientation = .horizontal
-    @Published var variant: ProgressTrackerVariant
+    @Published var variant: ProgressTrackerVariant = .outlined
     @Published var size: ProgressTrackerSize
+    @Published var interaction: ProgressTrackerInteractionState
     @Published var contentType: ContentType
     @Published var showPageNumber = true
     @Published var isDisabled = false
@@ -204,12 +231,13 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var showLabels = true
     @Published var title: String? = "Lore"
     @Published var selectedPageIndex: Int = 0
+    @Published var disabledPageIndex: Int = -1
     @Published var numberOfPages = Constants.numberOfPages
 
     init(
         theme: Theme,
-        intent: ProgressTrackerIntent = .main,
-        variant: ProgressTrackerVariant = .tinted,
+        intent: ProgressTrackerIntent = .basic,
+        variant: ProgressTrackerVariant = .outlined,
         size: ProgressTrackerSize = .medium
     ) {
         self.theme = theme
@@ -217,6 +245,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         self.size = size
         self.contentType = .none
         self.variant = variant
+        self.interaction = size.interaction
         super.init(identifier: "Progress Tracker")
     }
 
@@ -242,6 +271,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func presentSizeSheet() {
         self.showSizeSheetSubject.send(ProgressTrackerSize.allCases)
+    }
+
+    @objc func presentInteractionSheet() {
+        self.showInteractionSheetSubject.send(ProgressTrackerInteractionState.allCases)
     }
 
     @objc func presentVariantSheet() {
@@ -272,6 +305,10 @@ extension ProgressTrackerComponentUIViewModel {
         self.selectedPageIndex = control.selectedValue
     }
 
+    @objc func disabledPageChanged(_ control: NumberSelector) {
+        self.disabledPageIndex = control.selectedValue
+    }
+
     @objc func numberOfPagesChanged(_ control: NumberSelector) {
         self.numberOfPages = control.selectedValue
     }
@@ -283,7 +320,6 @@ extension ProgressTrackerComponentUIViewModel {
     @objc func useCurrentPageIndicatorImageChanged(_ selected: Any?) {
         self.useCurrentPageIndicatorImage = isTrue(selected)
     }
-
 }
 
 extension String {
@@ -293,5 +329,14 @@ extension String {
 
     var characters: [Character] {
         return Array(self)
+    }
+}
+
+private extension ProgressTrackerSize {
+    var interaction: ProgressTrackerInteractionState {
+        switch self {
+        case .large: return .discrete
+        default: return .none
+        }
     }
 }

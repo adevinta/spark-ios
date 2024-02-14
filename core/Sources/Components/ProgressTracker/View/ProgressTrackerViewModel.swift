@@ -14,9 +14,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     var theme: Theme {
         didSet {
-            self.updateSpacings()
-            self.updateFont()
-            self.updateLabelColor()
+            self.themeDidUpdate()
         }
     }
 
@@ -32,7 +30,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     var isEnabled: Bool = true {
         didSet {
-            self.updateLabelColor()
+            self.updateEnabledIndices()
         }
     }
 
@@ -63,6 +61,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     }
 
     @Published var content: ProgressTrackerContent<ProgressTrackerUIIndicatorContent>
+    @Published var disabledIndices = Set<Int>()
 
     @Published var spacings: ProgressTrackerSpacing
     @Published var font: TypographyFontToken
@@ -88,6 +87,12 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         self.labelColor = theme.colors.base.onSurface
     }
 
+    private func themeDidUpdate() {
+        self.updateSpacings()
+        self.updateFont()
+        self.updateLabelColor()
+    }
+
     private func updateSpacings() {
         self.spacings = spacingUseCase.execute(spacing: self.theme.layout.spacing, orientation: self.orientation)
     }
@@ -97,10 +102,32 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     }
 
     private func updateLabelColor() {
-        var color = self.theme.colors.base.onSurface
-        if !self.isEnabled {
-            color = color.opacity(self.theme.dims.dim1)
+        self.labelColor = self.theme.colors.base.onSurface
+    }
+
+    func labelOpacity(forIndex index: Int) -> CGFloat {
+        return self.labelOpacity(isDisabled: self.disabledIndices.contains(index))
+    }
+
+    func labelOpacity(isDisabled: Bool) -> CGFloat {
+        return isDisabled ? self.theme.dims.dim1 : 1.0
+    }
+
+    func setIsEnabled(isEnabled: Bool, forIndex index: Int) {
+        if isEnabled {
+            self.disabledIndices.remove(index)
+        } else {
+            self.disabledIndices.insert(index)
         }
-        self.labelColor = color
+    }
+
+    private func updateEnabledIndices() {
+        if !self.isEnabled {
+            for i in (0..<self.numberOfPages) {
+                self.disabledIndices.insert(i)
+            }
+        } else {
+            self.disabledIndices.removeAll()
+        }
     }
 }

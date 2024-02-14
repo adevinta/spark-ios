@@ -14,6 +14,7 @@ import UIKit
 public final class ProgressTrackerUIControl: UIControl {
 
     typealias Content = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>
+    typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
 
     /// The general theme
     public var theme: Theme {
@@ -65,7 +66,6 @@ public final class ProgressTrackerUIControl: UIControl {
         }
         set {
             self.viewModel.isEnabled = newValue
-            self.didUpdate(isEnabled: newValue)
         }
     }
 
@@ -79,10 +79,15 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
+    private var subject = PassthroughSubject<Int, Never>()
+    public var publisher: some Publisher<Int, Never> {
+        return self.subject
+    }
+
     /// The type of interaction enabled for the Progress Tracker
-    public var interactionState: ProgressTrackerInteractionState {
+    public var interactionState: ProgressTrackerInteractionState = .none {
         didSet {
-            // needs to be implemented
+            self.didUpdate(interactionState: self.interactionState)
         }
     }
 
@@ -137,6 +142,8 @@ public final class ProgressTrackerUIControl: UIControl {
     private var labelSpacing: CGFloat {
         return self.viewModel.spacings.minLabelSpacing * self.scaleFactor
     }
+
+    private var touchHandler: ProgressTrackerUITouchHandling?
 
     // MARK: Initialization
     /// Initializer
@@ -217,13 +224,13 @@ public final class ProgressTrackerUIControl: UIControl {
         self.viewModel = viewModel
         self.variant = variant
         self.size = size
-        self.interactionState = .discrete
         self.intent = intent
 
         super.init(frame: .zero)
 
         self.setupView(content: content, orientation: orientation)
         self.setupSubscriptions()
+        self.isUserInteractionEnabled = false
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -232,6 +239,60 @@ public final class ProgressTrackerUIControl: UIControl {
         self._scaleFactor.update(traitCollection: self.traitCollection)
 
         self.didUpdate(spacings: self.viewModel.spacings)
+    }
+
+    //MARK: - Handle touch events
+    public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        let touchHandler = self.interactionState.touchHandler(
+            currentPageIndex: self.currentPageIndex,
+            indicatorViews: self.indicatorViews)
+
+        self.touchHandler = touchHandler
+        touchHandler.currentPagePublisher.subscribe(in: &self.cancellables) { [weak self] index in
+            self?.updateCurrentPageTrackingIndex(index)
+        }
+
+        touchHandler.beginTracking(location: touch.location(in: self))
+
+        return true
+    }
+
+    public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+
+        if !self.isHighlighted {
+            self.cancelHighlighted()
+        } else {
+            self.touchHandler?.continueTracking(location: touch.location(in: self))
+        }
+
+        return true
+    }
+
+    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+        self.cancelHighlighted()
+
+        guard let location = touch?.location(in: self), self.isHighlighted else {
+            return
+        }
+
+        self.touchHandler?.endTracking(location: location)
+
+        self.touchHandler = nil
+    }
+
+    //MARK: Touch handling actions
+    private func updateCurrentPageTrackingIndex(_ index: Int) {
+        self.cancelHighlighted()
+
+        self.currentPageIndex = index
+
+        self.subject.send(index)
+        self.sendActions(for: .valueChanged)
+    }
+
+    private func cancelHighlighted() {
+        guard let index = self.touchHandler?.trackingPageIndex else { return }
+        self.indicatorViews[safe: index]?.isHighlighted = false
     }
 
     // MARK: Private functions
@@ -246,11 +307,15 @@ public final class ProgressTrackerUIControl: UIControl {
                 size: self.size,
                 content: content.pageContent(atIndex: index))
             indicator.translatesAutoresizingMaskIntoConstraints = false
-            indicator.isEnabled = self.isEnabled
+            indicator.isEnabled = !self.viewModel.disabledIndices.contains(index)
+            indicator.isUserInteractionEnabled = false
+            indicator.accessibilityLabel = AccessibilityIdentifier.indicator(forIndex: index)
+            indicator.accessibilityValue = "\(index)"
             return indicator
         }
     }
 
+    //MARK: - View creation
     private func createLabels(content: Content) ->
     [UILabel] {
         guard content.hasLabel else { return [] }
@@ -261,9 +326,23 @@ public final class ProgressTrackerUIControl: UIControl {
             label.attributedText = content.getAttributedLabel(atIndex: index)
             label.font = self.viewModel.font.uiFont
             label.textColor = self.viewModel.labelColor.uiColor
+            label.alpha = self.viewModel.labelOpacity(forIndex: index)
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.allowsDefaultTighteningForTruncation = true
+            label.isUserInteractionEnabled = false
+            label.accessibilityIdentifier = AccessibilityIdentifier.label(forIndex: index)
+            return label
+        }
+    }
+
+    private func createHiddenLabels(content: Content) -> [UILabel] {
+        guard content.hasLabel else { return [] }
+        return (0..<content.numberOfPages).map{ index in
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.numberOfLines = 1
+            label.isUserInteractionEnabled = false
             return label
         }
     }
@@ -271,17 +350,19 @@ public final class ProgressTrackerUIControl: UIControl {
     private func createTrackView(numberOfPages: Int, orientation: ProgressTrackerOrientation) -> [ProgressTrackerTrackUIView] {
         guard numberOfPages > 1 else { return [] }
 
-        return (0..<numberOfPages - 1).map { _ in
+        return (0..<numberOfPages - 1).map { index in
             let view = ProgressTrackerTrackUIView(
                 theme: self.theme,
                 intent: self.intent,
                 orientation: orientation)
-            view.isEnabled = self.isEnabled
+            view.isEnabled = !self.viewModel.disabledIndices.contains(index+1)
+            view.isUserInteractionEnabled = false
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }
     }
 
+    //MARK: - View setup
     private func setupIndicatorsAndLabels(content: Content, orientation: ProgressTrackerOrientation) {
         NSLayoutConstraint.deactivate(self.labelSpacingConstraints)
         NSLayoutConstraint.deactivate(self.trackSpacingConstraints)
@@ -306,7 +387,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.labels.addToSuperView(self)
 
         if orientation == .vertical {
-            self.hiddenLabels = self.createLabels(content: content)
+            self.hiddenLabels = self.createHiddenLabels(content: content)
             for hiddenLabel in hiddenLabels {
                 hiddenLabel.text = " "
             }
@@ -324,8 +405,12 @@ public final class ProgressTrackerUIControl: UIControl {
         } else {
             self.setupVerticalViewConstraints(content: content)
         }
+
+        self.accessibilityLabel = AccessibilityIdentifier.identifier
+        self.accessibilityLabel = "\(self.currentPageIndex)"
     }
 
+    // MARK: Setup supscriptions
     private func setupSubscriptions() {
         self.viewModel.$content.subscribe(in: &self.cancellables) { [weak self] content in
             self?.didUpdate(content: content)
@@ -343,15 +428,19 @@ public final class ProgressTrackerUIControl: UIControl {
             }
         }
 
-        self.viewModel.$labelColor.removeDuplicates(by: {$0.uiColor == $1.uiColor}).subscribe(in: &self.cancellables) { [weak self] color in
+        self.viewModel.$labelColor.removeDuplicates(by: {$0.uiColor == $1.uiColor}).subscribe(in: &self.cancellables) { [weak self] labelColor in
             guard let self = self else { return }
             for label in self.labels {
-                label.textColor = color.uiColor
+                label.textColor = labelColor.uiColor
             }
         }
 
         self.viewModel.$spacings.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] spacings in
             self?.didUpdate(spacings: spacings)
+        }
+
+        self.viewModel.$disabledIndices.removeDuplicates().subscribe(in: &self.cancellables) { disabledIndices in
+            self.didUpdateDisabledStatus(for: disabledIndices)
         }
     }
 
@@ -461,19 +550,25 @@ public final class ProgressTrackerUIControl: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
+    //MARK: - Private view modifiers
+    private func updateView(content: ProgressTrackerUIControl.Content) {
+        self.accessibilityValue = "\(content.currentPageIndex)"
+        for i in 0..<content.numberOfPages {
+            self.indicatorViews[i].content = content.pageContent(atIndex: i)
+            self.indicatorViews[i].isSelected = (i == content.currentPageIndex)
+        }
+        if content.hasLabel {
+            for i in 0..<content.numberOfPages {
+                self.labels[i].attributedText = content.getAttributedLabel(atIndex: i)
+            }
+        }
+    }
+    
     private func didUpdate(content: Content) {
         if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
             self.setupView(content: content, orientation: self.viewModel.orientation)
         } else if content.numberOfPages > 0 {
-            for i in 0..<content.numberOfPages {
-                self.indicatorViews[i].content = content.pageContent(atIndex: i)
-                self.indicatorViews[i].isSelected = (i == content.currentPageIndex)
-            }
-            if content.hasLabel {
-                for i in 0..<content.numberOfPages {
-                    self.labels[i].attributedText = content.getAttributedLabel(atIndex: i)
-                }
-            }
+            self.updateView(content: content)
         }
     }
 
@@ -518,12 +613,20 @@ public final class ProgressTrackerUIControl: UIControl {
 
     }
 
-    private func didUpdate(isEnabled: Bool) {
-        for indicatorView in self.indicatorViews {
-            indicatorView.isEnabled = isEnabled
+    private func didUpdate(interactionState: ProgressTrackerInteractionState) {
+        self.isUserInteractionEnabled = interactionState != .none
+    }
+
+    private func didUpdateDisabledStatus(for disabledIndices: Set<Int>) {
+        for (index, view) in self.labels.enumerated() {
+            let isDisabled = disabledIndices.contains(index)
+            view.alpha = self.viewModel.labelOpacity(isDisabled: isDisabled)
         }
-        for trackView in self.trackViews {
-            trackView.isEnabled = isEnabled
+        for (index, view) in self.indicatorViews.enumerated() {
+            view.isEnabled = !disabledIndices.contains(index)
+        }
+        for (index, view) in self.trackViews.enumerated() {
+            view.isEnabled = !disabledIndices.contains(index+1)
         }
     }
 
@@ -592,6 +695,13 @@ public final class ProgressTrackerUIControl: UIControl {
     /// Return the indicator image of the pages already visited
     public func getCompletedIndicatorImage() -> UIImage? {
         return self.viewModel.content.completedPageIndicatorImage
+    }
+
+    /// Set the indicator at
+    public func setIsEnabled(_ isEnabled: Bool, forIndex index: Int) {
+        guard index < self.indicatorViews.count else { return }
+
+        self.viewModel.setIsEnabled(isEnabled: isEnabled, forIndex: index)
     }
 }
 
