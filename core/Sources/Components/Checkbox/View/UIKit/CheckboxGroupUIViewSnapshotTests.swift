@@ -37,7 +37,6 @@ final class CheckboxGroupUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 )
                 view.translatesAutoresizingMaskIntoConstraints = false
 
-
                 let containerView = UIView()
                 containerView.backgroundColor = UIColor.systemBackground
                 containerView.translatesAutoresizingMaskIntoConstraints = false

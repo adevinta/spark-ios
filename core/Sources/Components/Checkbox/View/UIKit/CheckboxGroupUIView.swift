@@ -169,6 +169,7 @@ public final class CheckboxGroupUIView: UIControl {
     private func commonInit() {
         self.setupItemsStackView()
         self.setupView()
+        self.updateTitle()
     }
 
     // MARK: - Methods
