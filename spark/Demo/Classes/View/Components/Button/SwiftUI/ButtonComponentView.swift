@@ -14,21 +14,24 @@ struct ButtonComponentView: View {
 
     // MARK: - Properties
 
-    private let viewModel = ButtonComponentViewModel()
-
-    @State private var uiKitViewHeight: CGFloat = .zero
-
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: ButtonIntent = .main
     @State private var variant: ButtonVariant = .filled
     @State private var size: ButtonSize = .medium
     @State private var shape: ButtonShape = .rounded
-    @State private var alignment: ButtonAlignment = .leadingIcon
-    @State private var content: ButtonContentDefault = .text
+    @State private var alignment: ButtonAlignment = .leadingImage
+    @State private var contentNormal: ButtonContentDefault = .text
+    @State private var contentHighlighted: ButtonContentDefault = .text
+    @State private var contentDisabled: ButtonContentDefault = .text
+    @State private var contentSelected: ButtonContentDefault = .text
     @State private var isEnabled: CheckboxSelectionState = .selected
-    @State private var isAnimated: CheckboxSelectionState = .selected
+    @State private var isSelected: CheckboxSelectionState = .unselected
+    @State private var isToggle: CheckboxSelectionState = .unselected
+    @State private var isFullWidth: CheckboxSelectionState = .unselected
 
     @State private var shouldShowReverseBackgroundColor: Bool = false
+
+    @State private var showingActionAlert = false
 
     // MARK: - View
 
@@ -77,10 +80,31 @@ struct ButtonComponentView: View {
                 )
 
                 EnumSelector(
-                    title: "Content",
-                    dialogTitle: "Select an content",
+                    title: "Content (normal state)",
+                    dialogTitle: "Select a normal content",
+                    values: ButtonContentDefault.allCasesExceptNone,
+                    value: self.$contentNormal
+                )
+
+                EnumSelector(
+                    title: "Content (highlighted state)",
+                    dialogTitle: "Select a highlighted content",
                     values: ButtonContentDefault.allCases,
-                    value: self.$content
+                    value: self.$contentHighlighted
+                )
+
+                EnumSelector(
+                    title: "Content (disabled state)",
+                    dialogTitle: "Select a disabled content",
+                    values: ButtonContentDefault.allCases,
+                    value: self.$contentDisabled
+                )
+
+                EnumSelector(
+                    title: "Content (selected state)",
+                    dialogTitle: "Select a selected content",
+                    values: ButtonContentDefault.allCases,
+                    value: self.$contentSelected
                 )
 
                 CheckboxView(
@@ -96,34 +120,121 @@ struct ButtonComponentView: View {
                     checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
-                    selectionState: self.$isAnimated
+                    selectionState: self.$isSelected
+                )
+
+                CheckboxView(
+                    text: "Is toggle",
+                    checkedImage: DemoIconography.shared.checkmark.image,
+                    theme: self.theme,
+                    isEnabled: false,
+                    selectionState: self.$isToggle
+                )
+
+                CheckboxView(
+                    text: "Is full width",
+                    checkedImage: DemoIconography.shared.checkmark.image,
+                    theme: self.theme,
+                    isEnabled: false,
+                    selectionState: self.$isFullWidth
                 )
             },
             integration: {
-                GeometryReader { geometry in
-                    ButtonComponentItemsUIView(
-                        viewModel: self.viewModel,
-                        width: geometry.size.width,
-                        height: self.$uiKitViewHeight,
-                        intent: self.$intent.wrappedValue,
-                        variant: self.$variant.wrappedValue,
-                        size: self.$size.wrappedValue,
-                        shape: self.$shape.wrappedValue,
-                        alignment: self.$alignment.wrappedValue,
-                        content: self.$content.wrappedValue,
-                        isEnabled: self.$isEnabled.wrappedValue == .selected,
-                        isAnimated: self.$isAnimated.wrappedValue == .selected
-                    )
-                    .frame(width: geometry.size.width, height: self.uiKitViewHeight, alignment: .center)
-                    .padding(.horizontal, self.shouldShowReverseBackgroundColor ? 4 : 0)
-                    .padding(.vertical, self.shouldShowReverseBackgroundColor ? 4 : 0)
-                    .background(self.shouldShowReverseBackgroundColor ? Color.gray : Color.clear)
+                ButtonView(
+                    theme: self.theme,
+                    intent: self.intent,
+                    variant: self.variant,
+                    size: self.size,
+                    shape: self.shape,
+                    alignment: self.alignment,
+                    action: {
+                        if self.isToggle == .selected {
+                            self.isSelected = (self.isSelected == .selected) ? .unselected : .selected
+                        } else {
+                            self.showingActionAlert = true
+                        }
+                    })
+                .disabled(self.isEnabled == .unselected)
+                .selected(self.isSelected == .selected)
+                // Images
+                .addImage(self.contentNormal, state: .normal)
+                .addImage(self.contentHighlighted, state: .highlighted)
+                .addImage(self.contentDisabled, state: .disabled)
+                .addImage(self.contentSelected, state: .selected)
+                // Attributed Titles or Titles
+                .addContent(self.contentNormal, state: .normal)
+                .addContent(self.contentHighlighted, state: .highlighted)
+                .addContent(self.contentDisabled, state: .disabled)
+                .addContent(self.contentSelected, state: .selected)
+                .frame(maxWidth: self.isFullWidth == .selected ? .infinity : nil)
+                .padding(.horizontal, self.shouldShowReverseBackgroundColor ? 4 : 0)
+                .padding(.vertical, self.shouldShowReverseBackgroundColor ? 4 : 0)
+                .background(self.shouldShowReverseBackgroundColor ? Color.gray : Color.clear)
+                .alert("Button tap", isPresented: $showingActionAlert) {
+                    Button("OK", role: .cancel) { }
                 }
-                Spacer()
             }
         )
     }
 }
+
+// MARK: - Extension
+
+private extension ButtonView {
+
+    // MARK: - UI
+
+    func addImage(
+        _ content: ButtonContentDefault,
+        state: ControlState) -> Self {
+            var image: Image?
+            if content.containsImage {
+                switch state {
+                case .normal: image = Image("arrow")
+                case .highlighted: image = Image("close")
+                case .disabled: image = Image("check")
+                case .selected: image = Image("alert")
+                @unknown default: break
+                }
+            }
+
+            return self.image(image, for: state)
+    }
+
+    func addContent(
+        _ content: ButtonContentDefault,
+        state: ControlState) -> Self {
+
+            func attributedText(_ text: String) -> AttributedString {
+                var string = AttributedString(text)
+                string.font = .largeTitle
+                string.foregroundColor = .purple
+                string.font = .italicSystemFont(ofSize: 20)
+                string.underlineStyle = .single
+                string.underlineColor = .purple
+                return string
+            }
+
+            var title: String?
+            switch state {
+            case .normal: title = "My Title"
+            case .highlighted: title = "My Highlighted"
+            case .disabled: title = "My Disabled"
+            case .selected: title = "My Selected"
+            @unknown default: break
+            }
+
+            if content.containsAttributedText, let title {
+                return self.attributedTitle(attributedText(title), for: state)
+            } else if content.containsText {
+                return self.title(title, for: state)
+            } else {
+                return self.title(nil, for: state)
+            }
+    }
+}
+
+// MARK: - Preview
 
 struct ButtonComponentView_Previews: PreviewProvider {
     static var previews: some View {

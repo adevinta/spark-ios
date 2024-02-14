@@ -45,8 +45,28 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showContentSheet: AnyPublisher<[ButtonContentDefault], Never> {
-        showContentSheetSubject
+    var showContentNormalSheet: AnyPublisher<[ButtonContentDefault], Never> {
+        showContentNormalSheetSubject
+            .eraseToAnyPublisher()
+    }
+
+    var showContentHighlightedSheet: AnyPublisher<[ButtonContentDefault], Never> {
+        showContentHighlightedSheetSubject
+            .eraseToAnyPublisher()
+    }
+
+    var showContentDisabledSheet: AnyPublisher<[ButtonContentDefault], Never> {
+        showContentDisabledSheetSubject
+            .eraseToAnyPublisher()
+    }
+
+    var showContentSelectedSheet: AnyPublisher<[ButtonContentDefault], Never> {
+        showContentSelectedSheetSubject
+            .eraseToAnyPublisher()
+    }
+
+    var showControlType: AnyPublisher<[ButtonControlType], Never> {
+        showControlTypeSheetSubject
             .eraseToAnyPublisher()
     }
 
@@ -58,9 +78,15 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     @Published var size: ButtonSize
     @Published var shape: ButtonShape
     @Published var alignment: ButtonAlignment
-    @Published var content: ButtonContentDefault
+    @Published var contentNormal: ButtonContentDefault
+    @Published var contentHighlighted: ButtonContentDefault
+    @Published var contentDisabled: ButtonContentDefault
+    @Published var contentSelected: ButtonContentDefault
     @Published var isEnabled: Bool
+    @Published var isSelected: Bool
     @Published var isAnimated: Bool
+    @Published var controlType: ButtonControlType
+    @Published var isCustomAccessibilityLabel: Bool
 
     // MARK: - Items Properties
 
@@ -112,11 +138,35 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var contentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var contentNormalConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Content",
+            name: "Content (normal state)",
             type: .button,
-            target: (source: self, action: #selector(self.presentContentSheet))
+            target: (source: self, action: #selector(self.presentContentNormalSheet))
+        )
+    }()
+
+    lazy var contentHighlightedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Content (highlighted state)",
+            type: .button,
+            target: (source: self, action: #selector(self.presentContentHighlightedCSheet))
+        )
+    }()
+
+    lazy var contentDisabledConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Content (disabled state)",
+            type: .button,
+            target: (source: self, action: #selector(self.presentContentDisabledSheet))
+        )
+    }()
+
+    lazy var contentSelectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Content (selected state)",
+            type: .button,
+            target: (source: self, action: #selector(self.presentContentSelectedSheet))
         )
     }()
 
@@ -128,11 +178,35 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var isSelectedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is Selected",
+            type: .toggle(isOn: self.isSelected),
+            target: (source: self, action: #selector(self.isSelectedChanged))
+        )
+    }()
+
     lazy var isAnimatedConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Is Animated",
             type: .toggle(isOn: self.isAnimated),
             target: (source: self, action: #selector(self.isAnimatedChanged))
+        )
+    }()
+
+    lazy var controlTypeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Control Type",
+            type: .button,
+            target: (source: self, action: #selector(self.presentControlTypeSheet))
+        )
+    }()
+
+    lazy var isCustomAccessibilityLabelConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "is Custom AccessibilityLabel",
+            type: .toggle(isOn: self.isCustomAccessibilityLabel),
+            target: (source: self, action: #selector(self.isCustomAccessibilityLabelChanged))
         )
     }()
 
@@ -152,9 +226,15 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
             self.sizeConfigurationItemViewModel,
             self.shapeConfigurationItemViewModel,
             self.alignmentConfigurationItemViewModel,
-            self.contentConfigurationItemViewModel,
+            self.contentNormalConfigurationItemViewModel,
+            self.contentHighlightedConfigurationItemViewModel,
+            self.contentDisabledConfigurationItemViewModel,
+            self.contentSelectedConfigurationItemViewModel,
             self.isEnabledConfigurationItemViewModel,
-            self.isAnimatedConfigurationItemViewModel
+            self.isSelectedConfigurationItemViewModel,
+            self.isAnimatedConfigurationItemViewModel,
+            self.controlTypeConfigurationItemViewModel,
+            self.isCustomAccessibilityLabelConfigurationItemViewModel
         ]
     }
 
@@ -166,7 +246,11 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
     private var showSizeSheetSubject: PassthroughSubject<[ButtonSize], Never> = .init()
     private var showShapeSheetSubject: PassthroughSubject<[ButtonShape], Never> = .init()
     private var showAlignmentSheetSubject: PassthroughSubject<[ButtonAlignment], Never> = .init()
-    private var showContentSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
+    private var showContentNormalSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
+    private var showContentHighlightedSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
+    private var showContentDisabledSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
+    private var showContentSelectedSheetSubject: PassthroughSubject<[ButtonContentDefault], Never> = .init()
+    private var showControlTypeSheetSubject: PassthroughSubject<[ButtonControlType], Never> = .init()
 
     // MARK: - Initialization
 
@@ -178,10 +262,16 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         variant: ButtonVariant = .filled,
         size: ButtonSize = .medium,
         shape: ButtonShape = .rounded,
-        alignment: ButtonAlignment = .leadingIcon,
-        content: ButtonContentDefault = .text,
+        alignment: ButtonAlignment = .leadingImage,
+        contentNormal: ButtonContentDefault = .text,
+        contentHighlighted: ButtonContentDefault = .text,
+        contentDisabled: ButtonContentDefault = .text,
+        contentSelected: ButtonContentDefault = .text,
         isEnabled: Bool = true,
-        isAnimated: Bool = true
+        isSelected: Bool = false,
+        isAnimated: Bool = true,
+        controlType: ButtonControlType = .action,
+        isCustomAccessibilityLabel: Bool = false
     ) {
         self.text = text
         self.iconImage = .init(named: iconImageNamed) ?? UIImage()
@@ -198,9 +288,15 @@ final class ButtonComponentUIViewModel: ComponentUIViewModel {
         self.size = size
         self.shape = shape
         self.alignment = alignment
-        self.content = content
+        self.contentNormal = contentNormal
+        self.contentHighlighted = contentHighlighted
+        self.contentDisabled = contentDisabled
+        self.contentSelected = contentSelected
         self.isEnabled = isEnabled
+        self.isSelected = isSelected
         self.isAnimated = isAnimated
+        self.controlType = controlType
+        self.isCustomAccessibilityLabel = isCustomAccessibilityLabel
 
         super.init(identifier: "Button")
     }
@@ -234,15 +330,39 @@ extension ButtonComponentUIViewModel {
         self.showAlignmentSheetSubject.send(ButtonAlignment.allCases)
     }
 
-    @objc func presentContentSheet() {
-        self.showContentSheetSubject.send(ButtonContentDefault.allCases)
+    @objc func presentContentNormalSheet() {
+        self.showContentNormalSheetSubject.send(ButtonContentDefault.allCasesExceptNone)
+    }
+
+    @objc func presentContentHighlightedCSheet() {
+        self.showContentHighlightedSheetSubject.send(ButtonContentDefault.allCases)
+    }
+
+    @objc func presentContentDisabledSheet() {
+        self.showContentDisabledSheetSubject.send(ButtonContentDefault.allCases)
+    }
+
+    @objc func presentContentSelectedSheet() {
+        self.showContentSelectedSheetSubject.send(ButtonContentDefault.allCases)
     }
 
     @objc func isEnabledChanged() {
         self.isEnabled.toggle()
     }
 
+    @objc func isSelectedChanged() {
+        self.isSelected.toggle()
+    }
+
     @objc func isAnimatedChanged() {
         self.isAnimated.toggle()
+    }
+
+    @objc func presentControlTypeSheet() {
+        self.showControlTypeSheetSubject.send(ButtonControlType.allCases)
+    }
+
+    @objc func isCustomAccessibilityLabelChanged() {
+        self.isCustomAccessibilityLabel.toggle()
     }
 }

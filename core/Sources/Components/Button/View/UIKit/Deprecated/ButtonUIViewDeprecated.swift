@@ -1,5 +1,5 @@
 //
-//  ButtonUIView.swift
+//  ButtonUIViewDeprecated.swift
 //  Spark
 //
 //  Created by janniklas.freundt.ext on 02.05.23.
@@ -10,7 +10,8 @@ import Combine
 import UIKit
 
 /// The UIKit version for the button.
-public final class ButtonUIView: UIView {
+@available(*, deprecated, message: "Use ButtonUIView or IconButtonUIView instead")
+public final class ButtonUIViewDeprecated: UIControl {
 
     // MARK: - Type alias
 
@@ -23,35 +24,46 @@ public final class ButtonUIView: UIView {
         let stackView = UIStackView(
             arrangedSubviews:
                 [
-                    self.iconView,
+                    self.imageContentView,
                     self.titleLabel
                 ]
         )
         stackView.axis = .horizontal
         stackView.accessibilityIdentifier = AccessibilityIdentifier.contentStackView
+        stackView.isUserInteractionEnabled = false
         return stackView
     }()
 
-    private lazy var iconView: UIView = {
+    private lazy var imageContentView: UIView = {
         let view = UIView()
-        view.addSubview(self.iconImageView)
+        view.addSubview(self.imageView)
         view.accessibilityIdentifier = AccessibilityIdentifier.icon
         view.setContentCompressionResistancePriority(.required,
                                                      for: .vertical)
         view.setContentCompressionResistancePriority(.required,
                                                      for: .horizontal)
+        view.backgroundColor = .yellow
         return view
     }()
 
-    private var iconImageView: UIImageView = {
-        let imageView = UIImageView()
+    public var imageView: UIImageView {
+        return self.imageStateView
+    }
+
+    private var imageStateView: UIControlStateImageView = {
+        let imageView = UIControlStateImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = AccessibilityIdentifier.iconImage
+        imageView.backgroundColor = .orange
         return imageView
     }()
 
-    private var titleLabel: UILabel = {
-        let label = UILabel()
+    public var titleLabel: UILabel {
+        return self.titleStateLabel
+    }
+
+    private var titleStateLabel: UIControlStateLabel = {
+        let label = UIControlStateLabel()
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .left
@@ -61,41 +73,31 @@ public final class ButtonUIView: UIView {
         return label
     }()
 
-    private lazy var clearButton: UIButton = {
-        let button = UIButton()
-        button.isAccessibilityElement = false
-        button.addTarget(self, action: #selector(self.touchUpInsideAction), for: .touchUpInside)
-        button.addTarget(self, action: #selector(self.touchDownAction), for: .touchDown)
-        button.addTarget(self, action: #selector(self.touchUpOutsideAction), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(self.touchCancelAction), for: .touchCancel)
-        button.accessibilityIdentifier = AccessibilityIdentifier.clearButton
-        return button
-    }()
-
     // MARK: - Public Properties
 
     /// The delegate used to notify about some changed on button.
+    @available(*, deprecated, message: "Use native **action** or **target** on UIControl or publisher instead")
     public weak var delegate: ButtonUIViewDelegate?
 
-    /// The tap publisher. Alternatively, you can set a delegate.
+    /// The tap publisher. Alternatively, you can use the native **action** (addAction) or **target** (addTarget).
     public var tapPublisher: UIControl.EventPublisher {
-        return self.clearButton.publisher(for: .touchUpInside)
+        return self.publisher(for: .touchUpInside)
     }
 
     /// Publishes when a touch was cancelled (e.g. by the system).
     public var touchCancelPublisher: UIControl.EventPublisher {
-        return self.clearButton.publisher(for: .touchCancel)
+        return self.publisher(for: .touchCancel)
     }
 
     /// Publishes when a touch was started but the touch ended outside of the button view bounds.
     public var touchUpOutsidePublisher: UIControl.EventPublisher {
-        return self.clearButton.publisher(for: .touchUpOutside)
+        return self.publisher(for: .touchUpOutside)
     }
 
     /// Publishes instantly when the button is touched down.
     /// - warning: This should not trigger a user action and should only be used for things like tracking.
     public var touchDownPublisher: UIControl.EventPublisher {
-        return self.clearButton.publisher(for: .touchDown)
+        return self.publisher(for: .touchDown)
     }
 
     /// The spark theme of the button.
@@ -149,7 +151,7 @@ public final class ButtonUIView: UIView {
     }
 
     /// The alignment of the button.
-    public var alignment: ButtonAlignment {
+    public var alignment: ButtonAlignmentDeprecated {
         get {
             return self.viewModel.alignment
         }
@@ -159,12 +161,13 @@ public final class ButtonUIView: UIView {
     }
 
     /// The icon image of the button.
+    @available(*, deprecated, message: "Use setImage(_:, for:) and image(for:) instead")
     public var iconImage: UIImage? {
         get {
-            return self.viewModel.iconImage?.leftValue
+            return self.image(for: .normal)
         }
         set {
-            self.viewModel.set(iconImage: newValue.map { .left($0) })
+            self.setImage(newValue, for: .normal)
         }
     }
 
@@ -172,11 +175,10 @@ public final class ButtonUIView: UIView {
     @available(*, deprecated, message: "Use setTitle(_:, for:) and title(for:) instead")
     public var text: String? {
         get {
-            return self.titleLabel.text
+            return self.title(for: .normal)
         }
         set {
-            self.titleLabel.text = newValue
-            self.viewModel.set(title: newValue)
+            self.setTitle(newValue, for: .normal)
         }
     }
 
@@ -184,11 +186,10 @@ public final class ButtonUIView: UIView {
     @available(*, deprecated, message: "Use setAttributedTitle(_:, for:) and attributedTitle(for:) instead")
     public var attributedText: NSAttributedString? {
         get {
-            return self.titleLabel.attributedText
+            return self.attributedTitle(for: .normal)
         }
         set {
-            self.titleLabel.attributedText = newValue
-            self.viewModel.set(attributedTitle: newValue.map { .left($0) })
+            self.setAttributedTitle(newValue, for: .normal)
         }
     }
 
@@ -203,13 +204,38 @@ public final class ButtonUIView: UIView {
         }
     }
 
-    /// The state of the button: enabled or not.
-    public var isEnabled: Bool {
+    /// A Boolean value indicating whether the button is in the enabled state.
+    public override var isEnabled: Bool {
         get {
             return self.viewModel.isEnabled
         }
         set {
+            super.isEnabled = newValue
             self.viewModel.set(isEnabled: newValue)
+            self.titleStateLabel.updateContent(from: self)
+            self.imageStateView.updateContent(from: self)
+        }
+    }
+
+    /// A Boolean value indicating whether the button is in the selected state.
+    public override var isSelected: Bool {
+        didSet {
+            self.titleStateLabel.updateContent(from: self)
+            self.imageStateView.updateContent(from: self)
+        }
+    }
+
+    /// A Boolean value indicating whether the button draws a highlight.
+    public override var isHighlighted: Bool {
+        didSet {
+            self.titleStateLabel.updateContent(from: self)
+            self.imageStateView.updateContent(from: self)
+
+            if self.isHighlighted {
+                self.viewModel.pressedAction()
+            } else {
+                self.viewModel.unpressedAction()
+            }
         }
     }
 
@@ -218,7 +244,7 @@ public final class ButtonUIView: UIView {
 
     // MARK: - Internal Properties
 
-    internal let viewModel: ButtonViewModel
+    internal let viewModel: ButtonViewModelDeprecated
 
     // MARK: - Private Properties
 
@@ -228,7 +254,7 @@ public final class ButtonUIView: UIView {
     private var contentStackViewTopConstraint: NSLayoutConstraint?
     private var contentStackViewBottomConstraint: NSLayoutConstraint?
 
-    private var iconImageViewHeightConstraint: NSLayoutConstraint?
+    private var imageViewHeightConstraint: NSLayoutConstraint?
 
     @ScaledUIMetric private var height: CGFloat = 0
     @ScaledUIMetric private var verticalSpacing: CGFloat = 0
@@ -244,6 +270,38 @@ public final class ButtonUIView: UIView {
 
     // MARK: - Initialization
 
+    /// Initialize a new button view.
+    /// - Parameters:
+    ///   - theme: The spark theme of the button.
+    ///   - intent: The intent of the button.
+    ///   - variant: The variant of the button.
+    ///   - size: The size of the button.
+    ///   - shape: The shape of the button.
+    ///   - alignment: The alignment of the button.
+    ///   - isEnabled: The state of the button: enabled or not.
+    public convenience init(
+        theme: Theme,
+        intent: ButtonIntent,
+        variant: ButtonVariant,
+        size: ButtonSize,
+        shape: ButtonShape,
+        alignment: ButtonAlignmentDeprecated,
+        isEnabled: Bool
+    ) {
+        self.init(
+            theme,
+            intent: intent,
+            variant: variant,
+            size: size,
+            shape: shape,
+            alignment: alignment,
+            iconImage: nil,
+            text: nil,
+            attributedText: nil,
+            isEnabled: isEnabled
+        )
+    }
+
     /// Initialize a new button view with a text.
     /// - Parameters:
     ///   - theme: The spark theme of the button.
@@ -254,13 +312,14 @@ public final class ButtonUIView: UIView {
     ///   - alignment: The alignment of the button.
     ///   - text: The text of the button.
     ///   - isEnabled: The state of the button: enabled or not.
+    @available(*, deprecated, message: "Use init(theme: , intent: , variant: , size: , shape: , alignment: , isEnabled) instead")
     public convenience init(
         theme: Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         text: String,
         isEnabled: Bool
     ) {
@@ -288,13 +347,14 @@ public final class ButtonUIView: UIView {
     ///   - alignment: The alignment of the button.
     ///   - attributedText: The attributed text of the button.
     ///   - isEnabled: The state of the button: enabled or not.
+    @available(*, deprecated, message: "Use init(theme: , intent: , variant: , size: , shape: , alignment: , isEnabled) instead")
     public convenience init(
         theme: Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         attributedText: NSAttributedString,
         isEnabled: Bool
     ) {
@@ -322,13 +382,14 @@ public final class ButtonUIView: UIView {
     ///   - alignment: The alignment of the button.
     ///   - iconImage: The icon image of the button.
     ///   - isEnabled: The state of the button: enabled or not.
+    @available(*, deprecated, message: "Use init(theme: , intent: , variant: , size: , shape: , alignment: , isEnabled) instead")
     public convenience init(
         theme: Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: UIImage,
         isEnabled: Bool
     ) {
@@ -357,13 +418,14 @@ public final class ButtonUIView: UIView {
     ///   - iconImage: The icon image of the button.
     ///   - text: The text of the button.
     ///   - isEnabled: The state of the button: enabled or not.
+    @available(*, deprecated, message: "Use init(theme: , intent: , variant: , size: , shape: , alignment: , isEnabled) instead")
     public convenience init(
         theme: Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: UIImage,
         text: String,
         isEnabled: Bool
@@ -393,13 +455,14 @@ public final class ButtonUIView: UIView {
     ///   - iconImage: The icon image of the button.
     ///   - attributedText: The attributed text of the button.
     ///   - isEnabled: The state of the button: enabled or not.
+    @available(*, deprecated, message: "Use init(theme: , intent: , variant: , size: , shape: , alignment: , isEnabled) instead")
     public convenience init(
         theme: Theme,
         intent: ButtonIntent,
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: UIImage,
         attributedText: NSAttributedString,
         isEnabled: Bool
@@ -424,7 +487,7 @@ public final class ButtonUIView: UIView {
         variant: ButtonVariant,
         size: ButtonSize,
         shape: ButtonShape,
-        alignment: ButtonAlignment,
+        alignment: ButtonAlignmentDeprecated,
         iconImage: UIImage?,
         text: String?,
         attributedText: NSAttributedString?,
@@ -460,7 +523,6 @@ public final class ButtonUIView: UIView {
         self.accessibilityTraits = [.button]
         // Add subviews
         self.addSubview(self.contentStackView)
-        self.addSubview(self.clearButton)
 
         // Needed values from viewModel (important for superview)
         self.height = self.viewModel.sizes?.height ?? 0
@@ -470,6 +532,9 @@ public final class ButtonUIView: UIView {
 
         // Setup publisher subcriptions
         self.setupSubscriptions()
+
+        // Setup actions
+        self.setupActions()
 
         // Load view model
         self.viewModel.load()
@@ -506,7 +571,6 @@ public final class ButtonUIView: UIView {
         self.setupContentStackViewConstraints()
         self.setupIconViewConstraints()
         self.setupIconImageViewConstraints()
-        self.setupClearButtonConstraints()
     }
 
     private func setupViewConstraints() {
@@ -535,24 +599,74 @@ public final class ButtonUIView: UIView {
     }
 
     private func setupIconViewConstraints() {
-        self.iconView.translatesAutoresizingMaskIntoConstraints = false
-        self.iconView.widthAnchor.constraint(greaterThanOrEqualTo: self.iconImageView.widthAnchor).isActive = true
+        self.imageContentView.translatesAutoresizingMaskIntoConstraints = false
+        self.imageContentView.widthAnchor.constraint(greaterThanOrEqualTo: self.imageView.widthAnchor).isActive = true
     }
 
     private func setupIconImageViewConstraints() {
-        self.iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.imageView.translatesAutoresizingMaskIntoConstraints = false
 
-        self.iconImageViewHeightConstraint = self.iconImageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
-        self.iconImageViewHeightConstraint?.isActive = true
+        self.imageViewHeightConstraint = self.imageView.heightAnchor.constraint(equalToConstant: self.iconHeight)
+        self.imageViewHeightConstraint?.isActive = true
 
-        self.iconImageView.widthAnchor.constraint(equalTo: self.iconImageView.heightAnchor).isActive = true
-        self.iconImageView.centerXAnchor.constraint(equalTo: self.iconView.centerXAnchor).isActive = true
-        self.iconImageView.centerYAnchor.constraint(equalTo: self.iconView.centerYAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor),
+            self.imageView.centerXAnchor.constraint(equalTo: self.imageContentView.centerXAnchor),
+            self.imageView.centerYAnchor.constraint(equalTo: self.imageContentView.centerYAnchor)
+        ])
     }
 
-    private func setupClearButtonConstraints() {
-        self.clearButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.stickEdges(from: self.clearButton, to: self)
+    // MARK: - Setter & Getter
+
+    /// The image of the button for a state.
+    /// - parameter state: state of the image
+    public func image(for state: ControlState) -> UIImage? {
+        return self.imageStateView.image(for: state)
+    }
+
+    /// Set the image of the button for a state.
+    /// - parameter image: new image of the button
+    /// - parameter state: state of the image
+    public func setImage(_ image: UIImage?, for state: ControlState) {
+        if state == .normal {
+            self.viewModel.set(iconImage: image.map { .left($0) })
+        }
+
+        self.imageStateView.setImage(image, for: state, on: self)
+    }
+
+    /// The title of the button for a state.
+    /// - parameter state: state of the title
+    public func title(for state: ControlState) -> String? {
+        return self.titleStateLabel.text(for: state)
+    }
+
+    /// Set the title of the button for a state.
+    /// - parameter title: new title of the button
+    /// - parameter state: state of the title
+    public func setTitle(_ title: String?, for state: ControlState) {
+        if state == .normal {
+            self.viewModel.set(title: title)
+        }
+
+        self.titleStateLabel.setText(title, for: state, on: self)
+    }
+
+    /// The title of the button for a state.
+    /// - parameter state: state of the title
+    public func attributedTitle(for state: ControlState) -> NSAttributedString? {
+        return self.titleStateLabel.attributedText(for: state)
+    }
+
+    /// Set the attributedTitle of the button for a state.
+    /// - parameter attributedTitle: new attributedTitle of the button
+    /// - parameter state: state of the attributedTitle
+    public func setAttributedTitle(_ attributedTitle: NSAttributedString?, for state: ControlState) {
+        if state == .normal {
+            self.viewModel.set(attributedTitle: attributedTitle.map { .left($0) })
+        }
+
+        self.titleStateLabel.setAttributedText(attributedTitle, for: state, on: self)
     }
 
     // MARK: - Update UI
@@ -599,9 +713,9 @@ public final class ButtonUIView: UIView {
 
     private func updateIconHeight() {
         // Reload height only if value changed
-        if self.iconImageViewHeightConstraint?.constant != self.iconHeight {
-            self.iconImageViewHeightConstraint?.constant = self.iconHeight
-            self.iconImageView.updateConstraintsIfNeeded()
+        if self.imageViewHeightConstraint?.constant != self.iconHeight {
+            self.imageViewHeightConstraint?.constant = self.iconHeight
+            self.imageView.updateConstraintsIfNeeded()
         }
     }
 
@@ -614,7 +728,7 @@ public final class ButtonUIView: UIView {
             guard let self, let state else { return }
 
             // Update the user interaction enabled
-            self.clearButton.isUserInteractionEnabled = state.isUserInteractionEnabled
+            self.isUserInteractionEnabled = state.isUserInteractionEnabled
             if !state.isUserInteractionEnabled {
                 self.accessibilityTraits.insert(.notEnabled)
             } else {
@@ -641,7 +755,7 @@ public final class ButtonUIView: UIView {
             // Background Color
             let isAnimated = self.isAnimated && self.backgroundColor != colors.backgroundColor.uiColor
             let animationType: UIExecuteAnimationType = isAnimated ? .animated(duration: Animation.fastDuration) : .unanimated
-            
+
             UIView.execute(animationType: animationType) { [weak self] in
                 self?.backgroundColor = colors.backgroundColor.uiColor
             }
@@ -650,7 +764,7 @@ public final class ButtonUIView: UIView {
             self.setBorderColor(from: colors.borderColor)
 
             // Foreground Color
-            self.iconImageView.tintColor = colors.iconTintColor.uiColor
+            self.imageView.tintColor = colors.imageTintColor.uiColor
             if let titleColor = colors.titleColor {
                 self.titleLabel.textColor = titleColor.uiColor
             }
@@ -667,7 +781,7 @@ public final class ButtonUIView: UIView {
             self.updateHeight()
 
             // Icon size
-            self.iconHeight = sizes.iconSize
+            self.iconHeight = sizes.imageSize
             self._iconHeight.update(traitCollection: self.traitCollection)
             self.updateIconHeight()
         }
@@ -711,7 +825,7 @@ public final class ButtonUIView: UIView {
             guard let self, let content else { return }
 
             // Icon ImageView
-            self.iconImageView.image = content.iconImage?.leftValue
+            self.imageView.image = content.iconImage?.leftValue
 
             // Subviews positions and visibilities
             let isAnimated = self.isAnimated && !self.firstContentStackViewSubviewAnimation
@@ -722,8 +836,8 @@ public final class ButtonUIView: UIView {
 
                 self.firstContentStackViewSubviewAnimation = false
 
-                if self.iconView.isHidden == content.shouldShowIconImage {
-                    self.iconView.isHidden = !content.shouldShowIconImage
+                if self.imageContentView.isHidden == content.shouldShowIconImage {
+                    self.imageContentView.isHidden = !content.shouldShowIconImage
                 }
 
                 if self.titleLabel.isHidden == content.shouldShowTitle {
@@ -745,36 +859,50 @@ public final class ButtonUIView: UIView {
             self.titleLabel.font = titleFontToken.uiFont
         }
         // **
+
+        // **
+        // Is Image ?
+        self.imageStateView.$isImage.subscribe(in: &self.subscriptions) { [weak self] isImage in
+            guard let self else { return }
+
+            self.imageContentView.isHidden = !isImage
+        }
+
+        // **
+        // Is Text ?
+        self.titleStateLabel.$isText.subscribe(in: &self.subscriptions) { [weak self] isText in
+            guard let self else { return }
+            self.titleLabel.isHidden = !isText
+        }
     }
 
     // MARK: - Actions
 
-    @objc private func touchUpInsideAction() {
-        self.unpressedAction()
+    private func setupActions() {
+        // Touch down
+        self.addAction(.init(handler: { [weak self] _ in
+            guard let self else { return }
+            self.delegate?.button(self, didReceive: .touchDown)
+        }), for: .touchDown)
 
-        self.delegate?.button(self, didReceive: .touchUpInside)
-        self.delegate?.buttonWasTapped(self)
-    }
+        // Touch Up Inside
+        self.addAction(.init(handler: { [weak self] _ in
+            guard let self else { return }
+            self.delegate?.button(self, didReceive: .touchUpInside)
+            self.delegate?.buttonWasTapped(self)
+        }), for: .touchUpInside)
 
-    @objc private func touchDownAction() {
-        self.viewModel.pressedAction()
-        self.delegate?.button(self, didReceive: .touchDown)
-    }
+        // Touch Up Outside
+        self.addAction(.init(handler: { [weak self] _ in
+            guard let self else { return }
+            self.delegate?.button(self, didReceive: .touchUpOutside)
+        }), for: .touchUpOutside)
 
-    @objc private func touchUpOutsideAction() {
-        self.unpressedAction()
-        self.delegate?.button(self, didReceive: .touchUpOutside)
-    }
-
-    @objc private func touchCancelAction() {
-        self.unpressedAction()
-        self.delegate?.button(self, didReceive: .touchCancel)
-    }
-
-    private func unpressedAction() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Animation.fastDuration, execute: { [weak self] in
-            self?.viewModel.unpressedAction()
-        })
+        // Touch Cancel
+        self.addAction(.init(handler: { [weak self] _ in
+            guard let self else { return }
+            self.delegate?.button(self, didReceive: .touchCancel)
+        }), for: .touchCancel)
     }
 
     // MARK: - Trait Collection

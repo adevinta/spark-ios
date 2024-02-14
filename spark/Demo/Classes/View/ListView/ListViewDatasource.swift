@@ -267,9 +267,9 @@ extension ListViewDataSource {
 
     /// Button
     func createButtonConfigurations() -> [ButtonConfiguration] {
-        [ButtonConfiguration(theme: SparkTheme.shared, intent: .main, variant: .filled, size: .medium, shape: .rounded, alignment: .leadingIcon, content: .text, isEnabled: false),
-         ButtonConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, size: .large, shape: .square, alignment: .trailingIcon, content: .iconAndText, isEnabled: true),
-         ButtonConfiguration(theme: SparkTheme.shared, intent: .success, variant: .ghost, size: .small, shape: .pill, alignment: .leadingIcon, content: .attributedText, isEnabled: true)
+        [ButtonConfiguration(theme: SparkTheme.shared, intent: .main, variant: .filled, size: .medium, shape: .rounded, alignment: .leadingImage, content: .text, isEnabled: false),
+         ButtonConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, size: .large, shape: .square, alignment: .trailingImage, content: .imageAndText, isEnabled: true),
+         ButtonConfiguration(theme: SparkTheme.shared, intent: .success, variant: .ghost, size: .small, shape: .pill, alignment: .leadingImage, content: .attributedText, isEnabled: true)
         ]
     }
 

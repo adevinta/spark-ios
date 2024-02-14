@@ -6,11 +6,15 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-// sourcery: AutoMockable
+// sourcery: AutoMockable, AutoMockTest
 protocol ButtonGetCurrentColorsUseCaseable {
+    @available(*, deprecated, message: "Use the execute function without the displayedTitleType parameter instead. Must be removed when ButtonViewModelDeprecated is deleted")
     func execute(colors: ButtonColors,
                  isPressed: Bool,
                  displayedTitleType: DisplayedTextType) -> ButtonCurrentColors
+
+    func execute(colors: ButtonColors,
+                 isPressed: Bool) -> ButtonCurrentColors
 }
 
 struct ButtonGetCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable {
@@ -28,15 +32,36 @@ struct ButtonGetCurrentColorsUseCase: ButtonGetCurrentColorsUseCaseable {
 
         if isPressed {
             return .init(
-                iconTintColor: colors.foregroundColor,
+                imageTintColor: colors.foregroundColor,
                 titleColor: titleColor,
                 backgroundColor: colors.pressedBackgroundColor,
                 borderColor: colors.pressedBorderColor
             )
         } else {
             return .init(
-                iconTintColor: colors.foregroundColor,
+                imageTintColor: colors.foregroundColor,
                 titleColor: titleColor,
+                backgroundColor: colors.backgroundColor,
+                borderColor: colors.borderColor
+            )
+        }
+    }
+
+    func execute(
+        colors: ButtonColors,
+        isPressed: Bool
+    ) -> ButtonCurrentColors {
+        if isPressed {
+            return .init(
+                imageTintColor: colors.foregroundColor,
+                titleColor: colors.foregroundColor,
+                backgroundColor: colors.pressedBackgroundColor,
+                borderColor: colors.pressedBorderColor
+            )
+        } else {
+            return .init(
+                imageTintColor: colors.foregroundColor,
+                titleColor: colors.foregroundColor,
                 backgroundColor: colors.backgroundColor,
                 borderColor: colors.borderColor
             )

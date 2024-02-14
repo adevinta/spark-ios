@@ -21,9 +21,7 @@ final class ButtonCell: UITableViewCell, Configurable {
             variant: .filled,
             size: .medium,
             shape: .rounded,
-            alignment: .leadingIcon,
-            text: "Button",
-            isEnabled: true
+            alignment: .leadingImage
         )
         return view
     }()
@@ -65,14 +63,14 @@ final class ButtonCell: UITableViewCell, Configurable {
 
         switch configuration.content {
         case .text:
-            self.component.text = "Button"
-            self.component.iconImage = nil
-        case .iconAndText:
-            self.component.text = "Hello World"
-            self.component.iconImage = UIImage(systemName: "book.circle")
+            self.component.setTitle("Button", for: .normal)
+            self.component.setImage(nil, for: .normal)
+        case .imageAndText:
+            self.component.setTitle("Hello World", for: .normal)
+            self.component.setImage(UIImage(systemName: "book.circle"), for: .normal)
         case .attributedText:
-            self.component.attributedText = self.attributeString
-            self.component.iconImage = nil
+            self.component.setAttributedTitle(self.attributeString, for: .normal)
+            self.component.setImage(nil, for: .normal)
         default:
             break
         }
