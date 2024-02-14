@@ -75,6 +75,7 @@ public struct CheckboxGroupView: View {
                     .foregroundColor(self.viewModel.titleColor.color)
                     .font(self.viewModel.titleFont.font)
                     .padding(.bottom, self.spacingLarge - self.spacingSmall)
+                    .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkboxGroupTitle)
             }
             switch self.viewModel.layout {
             case .horizontal:
@@ -93,6 +94,7 @@ public struct CheckboxGroupView: View {
         .onChange(of: self.itemContents) { newValue in
             self.isScrollableHStack = true
         }
+        .accessibilityIdentifier("\(self.accessibilityIdentifierPrefix).\(CheckboxAccessibilityIdentifier.checkboxGroup)")
     }
 
     private func makeHStackView() -> some View {
