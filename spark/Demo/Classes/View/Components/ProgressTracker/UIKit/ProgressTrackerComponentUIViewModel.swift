@@ -127,6 +127,16 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.selectedPageChanged(_:))))
     }()
 
+    lazy var disabledPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Disabled Page",
+            type: .rangeSelector(
+                selected: self.disabledPageIndex,
+                range: -1...7
+            ),
+            target: (source: self, action: #selector(self.disabledPageChanged(_:))))
+    }()
+
     lazy var numberOfPagesPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Number of Pages",
@@ -196,6 +206,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.disableConfigurationItemViewModel,
             self.completedPageIndicatorConfigurationItemViewModel,
             self.currentPageIndicatorImageConfigurationItemViewModel,
+            self.disabledPageIndexConfigurationItemViewModel,
             self.currentPageIndexConfigurationItemViewModel,
             self.numberOfPagesPageIndexConfigurationItemViewModel,
             self.labelContentConfigurationItemViewModel,
@@ -207,9 +218,9 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Initialization
     @Published var theme: Theme
-    @Published var intent: ProgressTrackerIntent
+    @Published var intent: ProgressTrackerIntent = .basic
     @Published var orientation: ProgressTrackerOrientation = .horizontal
-    @Published var variant: ProgressTrackerVariant
+    @Published var variant: ProgressTrackerVariant = .outlined
     @Published var size: ProgressTrackerSize
     @Published var interaction: ProgressTrackerInteractionState
     @Published var contentType: ContentType
@@ -220,13 +231,14 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var showLabels = true
     @Published var title: String? = "Lore"
     @Published var selectedPageIndex: Int = 0
+    @Published var disabledPageIndex: Int = -1
     @Published var numberOfPages = Constants.numberOfPages
 
     init(
         theme: Theme,
-        intent: ProgressTrackerIntent = .main,
-        variant: ProgressTrackerVariant = .tinted,
-        size: ProgressTrackerSize = .large
+        intent: ProgressTrackerIntent = .basic,
+        variant: ProgressTrackerVariant = .outlined,
+        size: ProgressTrackerSize = .medium
     ) {
         self.theme = theme
         self.intent = intent
@@ -291,6 +303,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func selectedPageChanged(_ control: NumberSelector) {
         self.selectedPageIndex = control.selectedValue
+    }
+
+    @objc func disabledPageChanged(_ control: NumberSelector) {
+        self.disabledPageIndex = control.selectedValue
     }
 
     @objc func numberOfPagesChanged(_ control: NumberSelector) {

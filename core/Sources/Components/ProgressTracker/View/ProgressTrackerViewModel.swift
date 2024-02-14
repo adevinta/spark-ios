@@ -14,8 +14,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     var theme: Theme {
         didSet {
-            self.updateSpacings()
-            self.updateFont()
+            self.themeDidUpdate()
         }
     }
 
@@ -66,6 +65,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     @Published var spacings: ProgressTrackerSpacing
     @Published var font: TypographyFontToken
+    @Published var labelColor: any ColorToken
 
     // MARK: Private properties
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
@@ -84,6 +84,13 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         self.spacings = spacingUseCase.execute(spacing: theme.layout.spacing, orientation: orientation)
 
         self.font = theme.typography.body2Highlight
+        self.labelColor = theme.colors.base.onSurface
+    }
+
+    private func themeDidUpdate() {
+        self.updateSpacings()
+        self.updateFont()
+        self.updateLabelColor()
     }
 
     private func updateSpacings() {
@@ -94,16 +101,16 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         self.font = self.theme.typography.body2Highlight
     }
 
-    func labelColor(forIndex index: Int) -> any ColorToken {
-        return self.labelColor(isDisabled: self.disabledIndices.contains(index))
+    private func updateLabelColor() {
+        self.labelColor = self.theme.colors.base.onSurface
     }
 
-    func labelColor(isDisabled: Bool) -> any ColorToken {
-        var color = self.theme.colors.base.onSurface
-        if isDisabled {
-            color = color.opacity(self.theme.dims.dim1)
-        }
-        return color
+    func labelOpacity(forIndex index: Int) -> CGFloat {
+        return self.labelOpacity(isDisabled: self.disabledIndices.contains(index))
+    }
+
+    func labelOpacity(isDisabled: Bool) -> CGFloat {
+        return isDisabled ? self.theme.dims.dim1 : 1.0
     }
 
     func setIsEnabled(isEnabled: Bool, forIndex index: Int) {

@@ -91,7 +91,11 @@ class ProgressTrackerUITouchHandler: ProgressTrackerUITouchHandling {
     }
 
     func beginTracking(location: CGPoint) {
-        self.trackingPageIndex = self.trackingIndex(closestTo: location)
+        let index = self.trackingIndex(closestTo: location)
+
+        guard let selectedIndex = index, self.indicatorViews[safe: selectedIndex]?.isEnabled == true else { return }
+
+        self.trackingPageIndex = index
     }
 
     /// Continue tracking is handled in each tracker seperately
@@ -99,7 +103,10 @@ class ProgressTrackerUITouchHandler: ProgressTrackerUITouchHandling {
 
     /// Tracking has finished.
     func endTracking(location: CGPoint) {
-        if self.indicatorViews.index(closestTo: location) != self.currentPageIndex, let index = self.trackingPageIndex {
+        if self.indicatorViews.index(closestTo: location) != self.currentPageIndex, 
+            let index = self.trackingPageIndex,
+           self.indicatorViews[safe: index]?.isEnabled == true
+        {
             self.updateCurrentPageTrackingIndex(index)
         }
 
@@ -142,6 +149,8 @@ final class ProgressTrackerIndependentUITouchHandler: ProgressTrackerUITouchHand
 
     override func beginTracking(location: CGPoint) {
         let index = self.indicatorViews.index(closestTo: location)
+        guard let selectedIndex = index, self.indicatorViews[safe: selectedIndex]?.isEnabled == true else { return }
+
         if index != self.currentPageIndex {
             self.trackingPageIndex = index
         }
@@ -155,7 +164,7 @@ final class ProgressTrackerIndependentUITouchHandler: ProgressTrackerUITouchHand
 }
 
 /// With the `discrete` touch handler, only those steps next to the current selected index may be selected.
-class ProgressTrackerDiscreteUITouchHandler: ProgressTrackerUITouchHandler  {
+final class ProgressTrackerDiscreteUITouchHandler: ProgressTrackerUITouchHandler  {
 
     override func continueTracking(location: CGPoint) {
         if self.indicatorViews.index(closestTo: location) == self.currentPageIndex {
@@ -169,22 +178,34 @@ class ProgressTrackerDiscreteUITouchHandler: ProgressTrackerUITouchHandler  {
 }
 
 /// With the `continuous` touch handler, multipe steps can be published by dragging across the view. Each single step will be published.
-final class ProgressTrackerContinuousUITouchHandler: ProgressTrackerDiscreteUITouchHandler {
+final class ProgressTrackerContinuousUITouchHandler: ProgressTrackerUITouchHandler {
 
     override func continueTracking(location: CGPoint) {
 
-        if self.indicatorViews.index(closestTo: location) == self.currentPageIndex {
+        guard let index = self.indicatorViews.index(closestTo: location) else { return }
+
+        if index == self.currentPageIndex {
             self.trackingPageIndex = nil
-        } else if let trackingPageIndex = self.trackingPageIndex {
-            if let nextIndex = self.nextTrackingIndex(closestTo: location) {
+            return
+        }
+
+        if let trackingPageIndex = self.trackingPageIndex {
+            if let nextIndex = self.nextTrackingIndex(closestTo: location), self.isValidIndex(nextIndex) {
                 self.updateCurrentPageTrackingIndex(trackingPageIndex)
                 self.trackingPageIndex = nextIndex
             } else {
                 self.indicatorViews[trackingPageIndex].isHighlighted = true
             }
-        } else {
-            super.continueTracking(location: location)
+        } else if let index = self.trackingIndex(closestTo: location), self.isValidIndex(index){
+            self.trackingPageIndex = index
         }
+    }
+
+    private func isValidIndex(_ index: Int) -> Bool {
+        if index == self.currentPageIndex || self.indicatorViews[safe: index]?.isEnabled == false {
+            return false
+        }
+        return true
     }
 
     private func nextTrackingIndex(closestTo location: CGPoint) -> Int? {

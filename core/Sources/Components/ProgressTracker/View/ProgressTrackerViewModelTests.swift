@@ -143,7 +143,6 @@ final class ProgressTrackerViewModelTests: XCTestCase {
 
             // THEN
             XCTAssertEqual(sut.currentPageIndex, givenExpected.expected, "Expected current page index when set to \(givenExpected.given) to be \(givenExpected.expected)")
-
         }
     }
 
@@ -151,11 +150,19 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         // GIVEN
         let sut = sut(orientation: .vertical, numberOfPages: 4)
 
+        for i in 0..<4 {
+            XCTAssertEqual(sut.labelOpacity(forIndex: i), 1.0, "Expected opacity of label at \(i) to be 1.0")
+        }
+
         // WHEN
         sut.isEnabled = false
 
         // THEN
-        XCTAssertEqual(sut.disabledIndices.count, 4)
+        XCTAssertEqual(sut.disabledIndices.count, 4, "Expected all indices to be disabled")
+
+        for i in 0..<4 {
+            XCTAssertEqual(sut.labelOpacity(forIndex: i), self.theme.dims.dim1, "Expected opacity of label at \(i) to be dim3")
+        }
     }
 
     func test_set_enabled_single_item() {
@@ -201,19 +208,28 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         XCTAssertEqual(sut.disabledIndices.count, 0)
     }
 
-    func test_disabled_color() {
+    func test_disabled_opacity_published() {
         // GIVEN
         let sut = sut(orientation: .vertical, numberOfPages: 4)
 
+        let expect = expectation(description: "disabled index should be published")
+        expect.expectedFulfillmentCount = 2
+
+        var publishedCount = 0
+
+        sut.$disabledIndices.subscribe(in: &self.cancellables) { disabledIndices in
+            if publishedCount == 1 {
+                XCTAssertEqual(disabledIndices, Set([0]))
+            }
+            publishedCount += 1
+            expect.fulfill()
+        }
+
         // WHEN
         sut.setIsEnabled(isEnabled: false, forIndex: 0)
-        let disabledColor = sut.labelColor(forIndex: 0)
-        let enabledColor = sut.labelColor(forIndex: 1)
 
         // THEN
-        XCTAssertEqual(disabledColor.uiColor, self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1).uiColor, "Wrong disabled color")
-
-        XCTAssertEqual(enabledColor.uiColor, self.theme.colors.base.onSurface.uiColor, "Wrong enabled color")
+        wait(for: [expect], timeout: 0.01)
     }
 
     // MARK: - Private helper functions

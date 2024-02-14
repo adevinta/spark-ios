@@ -41,11 +41,11 @@ final class ProgressTrackerGetColorsUseCaseTests: XCTestCase {
             outline: colors.main.mainContainer,
             content: colors.main.onMainContainer)
 
-        self.tintedUseCase.executeWithThemeAndIntentAndStateReturnValue = expectedColors
+        self.tintedUseCase.executeWithColorsAndIntentAndStateReturnValue = expectedColors
 
         // WHEN
         let tabColors = self.sut.execute(
-            theme: self.theme,
+            colors: colors,
             intent: .basic,
             variant: .tinted,
             state: .normal)
@@ -62,11 +62,11 @@ final class ProgressTrackerGetColorsUseCaseTests: XCTestCase {
             outline: colors.main.main,
             content: colors.main.main)
 
-        self.outlinedUseCase.executeWithThemeAndIntentAndStateReturnValue = expectedColors
+        self.outlinedUseCase.executeWithColorsAndIntentAndStateReturnValue = expectedColors
 
         // WHEN
         let tabColors = self.sut.execute(
-            theme: self.theme,
+            colors: colors,
             intent: .basic,
             variant: .outlined,
             state: .normal)
