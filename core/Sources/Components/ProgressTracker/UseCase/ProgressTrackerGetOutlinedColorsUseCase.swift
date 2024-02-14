@@ -12,19 +12,17 @@ import Foundation
 struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsUseCaseable {
 
     /// Return the colors of the progress tracker indicator
-    func execute(theme: Theme,
+    func execute(colors: Colors,
                  intent: ProgressTrackerIntent,
                  state: ProgressTrackerState
     ) -> ProgressTrackerColors {
         let intentColors: ProgressTrackerColors = {
-            if state.isDisabled {
-                return self.disabledColors(colors: theme.colors, dims: theme.dims, intent: intent)
-            } else if state.isSelected {
-                    return self.selectedColors(colors: theme.colors, intent: intent)
+            if state.isSelected {
+                    return self.selectedColors(colors: colors, intent: intent)
             } else if state.isPressed {
-                return self.pressedColors(colors: theme.colors, intent: intent)
+                return self.pressedColors(colors: colors, intent: intent)
             } else {
-                return self.enabledColors(colors: theme.colors, intent: intent)
+                return self.enabledColors(colors: colors, intent: intent)
             }
         }()
 
@@ -32,15 +30,6 @@ struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsU
             background: intentColors.background,
             outline: intentColors.outline,
             content: intentColors.content)
-    }
-
-    private func disabledColors(colors: Colors, dims: Dims, intent: ProgressTrackerIntent) -> ProgressTrackerColors {
-        let variantColors = self.enabledColors(colors: colors, intent: intent)
-        return .init(
-            background: variantColors.background,
-            outline: variantColors.outline.opacity(dims.dim2),
-            content: variantColors.content.opacity(dims.dim2)
-            )
     }
 
     private func pressedColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerColors {

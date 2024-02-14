@@ -65,6 +65,11 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
     }
 
     private func setupSubscriptions() {
+        // swiftlint:disable:next force_unwrapping
+        self.componentView!.publisher.subscribe(in: &self.cancellables) { selectedIndex in
+            Console.log("published \(selectedIndex)")
+        }
+
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in
             guard let self = self else { return }
             let themes = self.viewModel.themes
@@ -137,6 +142,19 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             self.componentView.currentPageIndex = pageIndex
         }
 
+        self.viewModel.$disabledPageIndex.dropFirst().subscribe(in: &self.cancellables) { pageIndex in
+            guard !self.viewModel.isDisabled else { return }
+
+            let oldPageIndex = self.viewModel.disabledPageIndex
+
+            if oldPageIndex != -1 {
+                self.componentView.setIsEnabled(true, forIndex: oldPageIndex)
+            }
+            if pageIndex != -1 {
+                self.componentView.setIsEnabled(false, forIndex: pageIndex)
+            }
+        }
+
         self.viewModel.$isDisabled.subscribe(in: &self.cancellables) { [weak self] isDisabled in
             guard let self else { return }
             self.componentView.isEnabled = !isDisabled
@@ -196,6 +214,10 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
         for i in 0..<numberOfPages {
             self.componentView.setCurrentPageIndicatorImage(useCurrentPageIndicatorImage ? UIImage.selectedImage(at: i) : nil, forIndex: i)
+        }
+
+        if self.viewModel.disabledPageIndex != -1 {
+            self.componentView.setIsEnabled(false, forIndex: self.viewModel.disabledPageIndex)
         }
     }
 }
