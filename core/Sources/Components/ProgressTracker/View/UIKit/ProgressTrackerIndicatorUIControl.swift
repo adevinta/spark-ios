@@ -181,7 +181,7 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         self.indicatorView.addSubviewCentered(self.label)
 
         self.indicatorView.layer.cornerRadius = (self.viewModel.size.rawValue * self.scaleFactor) / 2
-        self.layer.opacity = Float(self.viewModel.opacity)
+        self.alpha = self.viewModel.opacity
 
         let heightConstraint = self.indicatorView.heightAnchor.constraint(equalToConstant: self.viewModel.size.rawValue * self.scaleFactor)
 
@@ -211,7 +211,7 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
             self?.update(font: font)
         }
         self.viewModel.$opacity.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] opacity in
-            self?.layer.opacity = Float(opacity)
+            self?.alpha = opacity
         }
     }
 
