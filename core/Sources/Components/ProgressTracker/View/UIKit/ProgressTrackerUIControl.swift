@@ -326,7 +326,7 @@ public final class ProgressTrackerUIControl: UIControl {
             label.attributedText = content.getAttributedLabel(atIndex: index)
             label.font = self.viewModel.font.uiFont
             label.textColor = self.viewModel.labelColor.uiColor
-            label.layer.opacity = Float(self.viewModel.labelOpacity(forIndex: index))
+            label.alpha = self.viewModel.labelOpacity(forIndex: index)
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.allowsDefaultTighteningForTruncation = true
@@ -620,7 +620,7 @@ public final class ProgressTrackerUIControl: UIControl {
     private func didUpdateDisabledStatus(for disabledIndices: Set<Int>) {
         for (index, view) in self.labels.enumerated() {
             let isDisabled = disabledIndices.contains(index)
-            view.layer.opacity = Float(self.viewModel.labelOpacity(isDisabled: isDisabled))
+            view.alpha = self.viewModel.labelOpacity(isDisabled: isDisabled)
         }
         for (index, view) in self.indicatorViews.enumerated() {
             view.isEnabled = !disabledIndices.contains(index)
@@ -702,8 +702,6 @@ public final class ProgressTrackerUIControl: UIControl {
         guard index < self.indicatorViews.count else { return }
 
         self.viewModel.setIsEnabled(isEnabled: isEnabled, forIndex: index)
-//        self.indicatorViews[index].isEnabled = isEnabled
-//        self.trackViews[safe: index-1]?.isEnabled = isEnabled
     }
 }
 

@@ -90,7 +90,7 @@ final class ProgressTrackerTrackUIView: UIView {
         }
 
         self.viewModel.$opacity.subscribe(in: &self.cancellables) { [weak self] opacity in
-            self?.lineView.layer.opacity = Float(opacity)
+            self?.lineView.alpha = opacity
         }
     }
 
@@ -118,7 +118,7 @@ final class ProgressTrackerTrackUIView: UIView {
 
         NSLayoutConstraint.activate(self.sizeConstraints)
         self.lineView.backgroundColor = self.viewModel.lineColor.uiColor
-        self.layer.opacity = Float(self.viewModel.opacity)
+        self.alpha = self.viewModel.opacity
     }
 
     private func updateSizeConstraints() {
