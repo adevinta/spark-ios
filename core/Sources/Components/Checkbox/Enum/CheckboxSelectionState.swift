@@ -9,6 +9,7 @@
 import Foundation
 
 /// Enum describing Checkbox selection states.
+@frozen
 public enum CheckboxSelectionState: CaseIterable {
     /// Checkbox is selected.
     case selected
