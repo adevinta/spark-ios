@@ -22,6 +22,7 @@ public final class CheckboxGroupUIView: UIControl {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = self.theme.colors.base.onSurface.uiColor
         label.font = self.theme.typography.subhead.uiFont
+        label.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkboxGroupTitle
         return label
     }()
 
@@ -228,6 +229,8 @@ public final class CheckboxGroupUIView: UIControl {
     }
 
     private func setupView() {
+
+        self.accessibilityIdentifier =  "\(self.accessibilityIdentifierPrefix).\(CheckboxAccessibilityIdentifier.checkboxGroup)"
 
         self.addSubview(self.titleStackView)
         self.scrollView.addSubview(self.itemsStackView)
