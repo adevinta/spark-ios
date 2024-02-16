@@ -164,7 +164,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
 
         var indicatorLabel: String?
 
-        if let label = label {
+        if let label {
             indicatorLabel = String(label.prefix(2))
         }
 

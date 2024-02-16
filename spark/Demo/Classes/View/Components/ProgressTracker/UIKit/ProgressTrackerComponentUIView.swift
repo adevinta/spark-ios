@@ -77,7 +77,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in
-            guard let self = self else { return }
+            guard let self else { return }
             let themes = self.viewModel.themes
             let themeTitle: String? = theme is SparkTheme ? themes.first?.title : themes.last?.title
 
@@ -88,31 +88,31 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$size.subscribe(in: &self.cancellables) { [weak self] size in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.sizeConfigurationItemViewModel.buttonTitle = size.name
             self.componentView.size = size
         }
 
         self.viewModel.$interaction.subscribe(in: &self.cancellables) { [weak self] interaction in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.interactionConfigurationItemViewModel.buttonTitle = interaction.name
             self.componentView.interactionState = interaction
         }
 
         self.viewModel.$variant.subscribe(in: &self.cancellables) { [weak self] variant in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.variantConfigurationItemViewModel.buttonTitle = variant.name
             self.componentView.variant = variant
         }
 
         self.viewModel.$intent.subscribe(in: &self.cancellables) { [weak self] intent in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.intentConfigurationItemViewModel.buttonTitle = intent.name
             self.componentView.intent = intent
         }
 
         self.viewModel.$orientation.subscribe(in: &self.cancellables) { [weak self] orientation in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.orientationConfigurationItemViewModel.buttonTitle = orientation.name
             self.componentView.orientation = orientation
 
@@ -120,7 +120,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$contentType.subscribe(in: &self.cancellables) { [weak self] contentType in
-            guard let self = self else { return }
+            guard let self else { return }
             self.updateContent(
                 contentType,
                 numberOfPages: self.viewModel.numberOfPages,
@@ -185,7 +185,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$width.subscribe(in: &self.cancellables) { [weak self] width in
-            guard let self = self else { return }
+            guard let self else { return }
             self.updateWidthHeight(size: width, orientation: self.viewModel.orientation)
         }
     }
