@@ -465,18 +465,27 @@ public final class ProgressTrackerUIControl: UIControl {
             precedingView = self.indicatorViews[i]
         }
 
+        for i in 1..<self.trackViews.count {
+            let trackWidthConstraint = self.trackViews[i].widthAnchor.constraint(equalTo: self.trackViews[i-1].widthAnchor)
+            trackWidthConstraint.priority = .init(rawValue: 200)
+            constraints.append(trackWidthConstraint)
+        }
+
         let lastIndex = numberOfPages - 1
         if content.hasLabel {
             for i in 0..<numberOfPages {
-                constraints.append(self.indicatorViews[i].centerXAnchor.constraint(equalTo: self.labels[i].centerXAnchor))
+                self.labels[i].textAlignment = .center
+                let centerXConstraint = self.indicatorViews[i].centerXAnchor.constraint(equalTo: self.labels[i].centerXAnchor)
+                centerXConstraint.priority = .required
+                constraints.append(centerXConstraint)
 
-                let labelLeadingConstraint = self.labels[i].topAnchor.constraint(equalTo: self.indicatorViews[i].bottomAnchor, constant: self.labelSpacing)
-                constraints.append(labelLeadingConstraint)
-                self.labelSpacingConstraints.append(labelLeadingConstraint)
+                let labelTopConstraint = self.labels[i].topAnchor.constraint(equalTo: self.indicatorViews[i].bottomAnchor, constant: self.labelSpacing)
+                constraints.append(labelTopConstraint)
+                self.labelSpacingConstraints.append(labelTopConstraint)
                 constraints.append(self.labels[i].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
             }
             for i in 1..<numberOfPages {
-                let labelTrailingConstraint = self.labels[i].leadingAnchor.constraint(equalTo: self.labels[i-1].trailingAnchor, constant: self.labelSpacing)
+                let labelTrailingConstraint = self.labels[i].leadingAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].trailingAnchor, constant: self.labelSpacing)
                 self.labelSpacingConstraints.append(labelTrailingConstraint)
                 constraints.append(labelTrailingConstraint)
 
@@ -518,9 +527,16 @@ public final class ProgressTrackerUIControl: UIControl {
             precedingView = self.indicatorViews[i]
         }
 
+        for i in 1..<self.trackViews.count {
+            let trackHeightConstraint = self.trackViews[i].heightAnchor.constraint(equalTo: self.trackViews[i-1].heightAnchor)
+            trackHeightConstraint.priority = .init(rawValue: 200)
+            constraints.append(trackHeightConstraint)
+        }
+
         let lastIndex = numberOfPages - 1
         if content.hasLabel {
             for i in 0..<numberOfPages {
+                self.labels[i].textAlignment = .left
                 constraints.append(self.indicatorViews[i].centerYAnchor.constraint(equalTo: self.hiddenLabels[i].centerYAnchor))
                 constraints.append(self.indicatorViews[i].trailingAnchor.constraint(equalTo: self.hiddenLabels[i].leadingAnchor))
                 constraints.append(self.labels[i].topAnchor.constraint(equalTo:  self.hiddenLabels[i].topAnchor))
