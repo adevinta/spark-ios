@@ -139,4 +139,5 @@ extension RatingDisplayComponentUIViewModel {
     @objc func ratingChanged(_ control: NumberSelector) {
         self.rating = CGFloat(control.selectedValue) / 2.0
     }
+    
 }

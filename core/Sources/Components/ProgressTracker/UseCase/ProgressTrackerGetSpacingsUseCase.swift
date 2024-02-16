@@ -24,7 +24,7 @@ struct ProgressTrackerGetSpacingsUseCase: ProgressTrackerGetSpacingsUseCaseable 
             trackIndicatorSpacing: spacing.small,
             minLabelSpacing: spacing.medium)
         case .vertical: return ProgressTrackerSpacing(
-            trackIndicatorSpacing: spacing.medium,
+            trackIndicatorSpacing: spacing.small,
             minLabelSpacing: spacing.medium)
         }
 
