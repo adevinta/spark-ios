@@ -18,12 +18,18 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
     // MARK: - Properties
     private let viewModel: ProgressTrackerComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
-    private var sizeConstraints = [NSLayoutConstraint]()
+    private let widthConstraint: NSLayoutConstraint
+    private let heightConstraint: NSLayoutConstraint
+
 
     // MARK: - Initializer
     init(viewModel: ProgressTrackerComponentUIViewModel) {
         self.viewModel = viewModel
         self.componentView = Self.makeProgressTrackerView(viewModel: viewModel)
+        self.widthConstraint = self.componentView.widthAnchor.constraint(equalToConstant: viewModel.width)
+        self.heightConstraint = self.componentView.heightAnchor.constraint(equalToConstant: viewModel.width)
+        self.widthConstraint.isActive = viewModel.width > 0 && self.viewModel.orientation == .horizontal
+        self.heightConstraint.isActive = viewModel.width > 0 && self.viewModel.orientation == .vertical
 
         super.init(viewModel: viewModel, componentView: componentView)
 
@@ -71,7 +77,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in
-            guard let self = self else { return }
+            guard let self else { return }
             let themes = self.viewModel.themes
             let themeTitle: String? = theme is SparkTheme ? themes.first?.title : themes.last?.title
 
@@ -82,37 +88,39 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$size.subscribe(in: &self.cancellables) { [weak self] size in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.sizeConfigurationItemViewModel.buttonTitle = size.name
             self.componentView.size = size
         }
 
         self.viewModel.$interaction.subscribe(in: &self.cancellables) { [weak self] interaction in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.interactionConfigurationItemViewModel.buttonTitle = interaction.name
             self.componentView.interactionState = interaction
         }
 
         self.viewModel.$variant.subscribe(in: &self.cancellables) { [weak self] variant in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.variantConfigurationItemViewModel.buttonTitle = variant.name
             self.componentView.variant = variant
         }
 
         self.viewModel.$intent.subscribe(in: &self.cancellables) { [weak self] intent in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.intentConfigurationItemViewModel.buttonTitle = intent.name
             self.componentView.intent = intent
         }
 
         self.viewModel.$orientation.subscribe(in: &self.cancellables) { [weak self] orientation in
-            guard let self = self else { return }
+            guard let self else { return }
             self.viewModel.orientationConfigurationItemViewModel.buttonTitle = orientation.name
             self.componentView.orientation = orientation
+
+            self.updateWidthHeight(size: self.viewModel.width, orientation: orientation)
         }
 
         self.viewModel.$contentType.subscribe(in: &self.cancellables) { [weak self] contentType in
-            guard let self = self else { return }
+            guard let self else { return }
             self.updateContent(
                 contentType,
                 numberOfPages: self.viewModel.numberOfPages,
@@ -132,7 +140,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
 
         self.viewModel.$title.dropFirst().subscribe(in: &self.cancellables) { title in
             for i in 0..<self.viewModel.numberOfPages {
-                let label: String? = self.viewModel.showLabels ? title.map{"\($0)-\(i)"} : nil
+                let label: String? = self.viewModel.showLabels ? title.map{i % 2 == 0 ? "\($0)-\(i)" : "Lore-\(i)"} : nil
                 self.componentView.setLabel(label, forIndex: i)
             }
         }
@@ -175,6 +183,25 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
             self.updateLabels(showLabels: self.viewModel.showLabels, numberOfPages: numberOfPages)
             self.componentView.currentPageIndex = self.viewModel.selectedPageIndex
         }
+
+        self.viewModel.$width.subscribe(in: &self.cancellables) { [weak self] width in
+            guard let self else { return }
+            self.updateWidthHeight(size: width, orientation: self.viewModel.orientation)
+        }
+    }
+
+    private func updateWidthHeight(size: CGFloat, orientation: ProgressTrackerOrientation) {
+        self.widthConstraint.constant = size
+        self.widthConstraint.isActive = size > 0 && orientation == .horizontal
+        self.heightConstraint.constant = size
+        self.heightConstraint.isActive = size > 0 && orientation == .vertical
+
+        var showLabels = self.viewModel.showLabels
+        showLabels.toggle()
+        self.updateLabels(showLabels: showLabels, numberOfPages: self.viewModel.numberOfPages)
+        showLabels.toggle()
+        self.updateLabels(showLabels: showLabels, numberOfPages: self.viewModel.numberOfPages)
+
     }
 
     private func updateLabels(showLabels: Bool, numberOfPages: Int) {
@@ -206,7 +233,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         case .text:
             for i in 0..<numberOfPages {
                 self.componentView.setIndicatorImage(nil, forIndex: i)
-                self.componentView.setIndicatorLabel("ABCDEFGH".character(at: i), forIndex: i)
+                self.componentView.setIndicatorLabel("A\(i)", forIndex: i)
             }
         case .none, .page:
             for i in 0..<numberOfPages {

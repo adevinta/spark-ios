@@ -124,7 +124,7 @@ public final class ProgressTrackerUIControl: UIControl {
     // MARK: - Private variables
     private let viewModel: ProgressTrackerViewModel<ProgressTrackerUIIndicatorContent>
 
-    private lazy var indicatorViews = [ProgressTrackerIndicatorUIControl]()
+    lazy var indicatorViews = [ProgressTrackerIndicatorUIControl]()
     private lazy var labels = [UILabel]()
     private lazy var hiddenLabels = [UILabel]()
     private lazy var trackViews = [ProgressTrackerTrackUIView]()
@@ -236,9 +236,9 @@ public final class ProgressTrackerUIControl: UIControl {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        self._scaleFactor.update(traitCollection: self.traitCollection)
-
-        self.didUpdate(spacings: self.viewModel.spacings)
+        if self.traitCollection.hasDifferentSizeCategory(comparedTo: previousTraitCollection) {        self._scaleFactor.update(traitCollection: self.traitCollection)
+            self.didUpdate(spacings: self.viewModel.spacings)
+        }
     }
 
     //MARK: - Handle touch events
@@ -366,7 +366,7 @@ public final class ProgressTrackerUIControl: UIControl {
     private func setupIndicatorsAndLabels(content: Content, orientation: ProgressTrackerOrientation) {
         NSLayoutConstraint.deactivate(self.labelSpacingConstraints)
         NSLayoutConstraint.deactivate(self.trackSpacingConstraints)
-        
+
         self.indicatorViews.removeAllFromSuperView()
         self.trackViews.removeAllFromSuperView()
         self.labels.removeAllFromSuperView()
@@ -465,18 +465,27 @@ public final class ProgressTrackerUIControl: UIControl {
             precedingView = self.indicatorViews[i]
         }
 
+        for i in 1..<self.trackViews.count {
+            let trackWidthConstraint = self.trackViews[i].widthAnchor.constraint(equalTo: self.trackViews[i-1].widthAnchor)
+            trackWidthConstraint.priority = .init(rawValue: 200)
+            constraints.append(trackWidthConstraint)
+        }
+
         let lastIndex = numberOfPages - 1
         if content.hasLabel {
             for i in 0..<numberOfPages {
-                constraints.append(self.indicatorViews[i].centerXAnchor.constraint(equalTo: self.labels[i].centerXAnchor))
+                self.labels[i].textAlignment = .center
+                let centerXConstraint = self.indicatorViews[i].centerXAnchor.constraint(equalTo: self.labels[i].centerXAnchor)
+                centerXConstraint.priority = .required
+                constraints.append(centerXConstraint)
 
-                let labelLeadingConstraint = self.labels[i].topAnchor.constraint(equalTo: self.indicatorViews[i].bottomAnchor, constant: self.labelSpacing)
-                constraints.append(labelLeadingConstraint)
-                self.labelSpacingConstraints.append(labelLeadingConstraint)
+                let labelTopConstraint = self.labels[i].topAnchor.constraint(equalTo: self.indicatorViews[i].bottomAnchor, constant: self.labelSpacing)
+                constraints.append(labelTopConstraint)
+                self.labelSpacingConstraints.append(labelTopConstraint)
                 constraints.append(self.labels[i].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
             }
             for i in 1..<numberOfPages {
-                let labelTrailingConstraint = self.labels[i].leadingAnchor.constraint(equalTo: self.labels[i-1].trailingAnchor, constant: self.labelSpacing)
+                let labelTrailingConstraint = self.labels[i].leadingAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].trailingAnchor, constant: self.labelSpacing)
                 self.labelSpacingConstraints.append(labelTrailingConstraint)
                 constraints.append(labelTrailingConstraint)
 
@@ -518,9 +527,16 @@ public final class ProgressTrackerUIControl: UIControl {
             precedingView = self.indicatorViews[i]
         }
 
+        for i in 1..<self.trackViews.count {
+            let trackHeightConstraint = self.trackViews[i].heightAnchor.constraint(equalTo: self.trackViews[i-1].heightAnchor)
+            trackHeightConstraint.priority = .init(rawValue: 200)
+            constraints.append(trackHeightConstraint)
+        }
+
         let lastIndex = numberOfPages - 1
         if content.hasLabel {
             for i in 0..<numberOfPages {
+                self.labels[i].textAlignment = .left
                 constraints.append(self.indicatorViews[i].centerYAnchor.constraint(equalTo: self.hiddenLabels[i].centerYAnchor))
                 constraints.append(self.indicatorViews[i].trailingAnchor.constraint(equalTo: self.hiddenLabels[i].leadingAnchor))
                 constraints.append(self.labels[i].topAnchor.constraint(equalTo:  self.hiddenLabels[i].topAnchor))
@@ -531,17 +547,18 @@ public final class ProgressTrackerUIControl: UIControl {
                 constraints.append(self.labels[i].trailingAnchor.constraint(equalTo: self.trailingAnchor))
             }
             for i in 1..<numberOfPages {
-                let labelTrailingConstraint = self.labels[i].topAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].bottomAnchor, constant: self.labelSpacing)
-                self.labelSpacingConstraints.append(labelTrailingConstraint)
-                constraints.append(labelTrailingConstraint)
+                let labelBottomConstraint = self.labels[i].topAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].bottomAnchor, constant: self.labelSpacing)
+                self.labelSpacingConstraints.append(labelBottomConstraint)
+                constraints.append(labelBottomConstraint)
             }
             constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
             constraints.append(self.labels[lastIndex].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
             constraints.append(self.indicatorViews[lastIndex].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
         } else {
             constraints.append(self.indicatorViews[0].topAnchor.constraint(equalTo: self.topAnchor))
+            constraints.append(self.indicatorViews[0].trailingAnchor.constraint(equalTo: self.trailingAnchor))
             constraints.append(self.indicatorViews [lastIndex].bottomAnchor.constraint(equalTo: self.bottomAnchor))
-      }
+        }
 
         NSLayoutConstraint.activate(constraints)
     }
@@ -678,12 +695,12 @@ public final class ProgressTrackerUIControl: UIControl {
     /// - Parameters:
     ///   - label: An optional character for the indicator label
     ///   - forIndex: The index of the indicator
-    public func setIndicatorLabel(_ label: Character?, forIndex index: Int) {
+    public func setIndicatorLabel(_ label: String?, forIndex index: Int) {
         self.viewModel.content.setIndicatorLabel(label, atIndex: index)
     }
 
     /// Return the current indicator label at the given index.
-    public func getIndicatorLabel(forIndex index: Int) -> Character? {
+    public func getIndicatorLabel(forIndex index: Int) -> String? {
         self.viewModel.content.getIndicatorLabel(atIndex: index)
     }
 
@@ -702,6 +719,26 @@ public final class ProgressTrackerUIControl: UIControl {
         guard index < self.indicatorViews.count else { return }
 
         self.viewModel.setIsEnabled(isEnabled: isEnabled, forIndex: index)
+    }
+
+    /// Set the default preferred indicator image
+    public func setPreferredIndicatorImage(_ image: UIImage?) {
+        self.viewModel.content.preferredIndicatorImage = image
+    }
+
+    /// Return the default preferred indicator image
+    public func getPreferredIndicatorImage() -> UIImage? {
+        return self.viewModel.content.preferredIndicatorImage
+    }
+
+    /// Set the default image for the current page indicator
+    public func setPreferredCurrentPageIndicatorImage(_ image: UIImage?) {
+        self.viewModel.content.preferredCurrentPageIndicatorImage = image
+    }
+
+    /// Return the default image for the current page indicator
+    public func getPreferredCurrentPageIndicatorImage() -> UIImage? {
+        return self.viewModel.content.preferredCurrentPageIndicatorImage
     }
 }
 
