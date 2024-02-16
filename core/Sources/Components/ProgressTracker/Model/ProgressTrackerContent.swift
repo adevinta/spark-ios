@@ -12,8 +12,8 @@ import SwiftUI
 
 /// A model representing the content of a single Progress Tracker Indicator
 protocol ProgressTrackerContentIndicating {
-    associatedtype ImageType
-    associatedtype TextType
+    associatedtype ImageType: Equatable
+    associatedtype TextType: Equatable
     var indicatorImage: ImageType? { get set }
     var label: String? { get set }
 
@@ -37,7 +37,21 @@ struct ProgressTrackerIndicatorContent: ProgressTrackerContentIndicating, Equata
 }
 
 /// A model representing the content of a progress tracker.
-struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating> where ComponentContent: Equatable {
+struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating>: Equatable where ComponentContent: Equatable {
+
+//    static func == (lhs: ProgressTrackerContent<ComponentContent>, rhs: ProgressTrackerContent<ComponentContent>) -> Bool {
+//        return lhs.numberOfPages == rhs.numberOfPages &&
+//        lhs.currentPageIndex == rhs.currentPageIndex &&
+//        lhs.content == rhs.content &&
+//        lhs.showDefaultPageNumber == rhs.showDefaultPageNumber &&
+//        lhs.labels == rhs.labels &&
+//        lhs.preferredIndicatorImage == rhs.preferredIndicatorImage &&
+//        lhs.preferredCurrentPageIndicatorImage == rhs.preferredCurrentPageIndicatorImage &&
+//        lhs.completedPageIndicatorImage == rhs.completedPageIndicatorImage &&
+//        lhs.completedPageIndicatorImage == rhs.completedPageIndicatorImage
+//
+//    }
+
     var numberOfPages: Int {
         didSet {
             self.currentPageIndex = min(self.currentPageIndex, self.numberOfPages - 1)

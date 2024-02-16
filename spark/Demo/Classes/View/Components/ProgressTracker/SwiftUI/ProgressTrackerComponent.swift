@@ -15,7 +15,7 @@ struct ProgressTrackerComponent: View {
     @State var variant = ProgressTrackerVariant.outlined
     @State var size = ProgressTrackerSize.medium
     @State var numberOfPages: Int = 4
-    @State var orientation = ProgressTrackerOrientation.horizontal
+    @State var orientation = ProgressTrackerOrientation.vertical
     @State private var showLabel = CheckboxSelectionState.selected
     @State private var label: String = "Lore"
     @State private var currentPageIndex: Int = 1
