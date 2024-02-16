@@ -137,6 +137,20 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.disabledPageChanged(_:))))
     }()
 
+    lazy var widthConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "H-Width or V-Height",
+            type: .rangeSelectorWithConfig(
+                selected: Int(self.width),
+                range: 0...3,
+                stepper: 1,
+                numberFormatter: NumberFormatter()
+                    .multipling(150)
+                    .maximizingFractionDigits(0)
+            ),
+            target: (source: self, action: #selector(self.widthChanged)))
+    }()
+
     lazy var numberOfPagesPageIndexConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Number of Pages",
@@ -210,7 +224,8 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
             self.currentPageIndexConfigurationItemViewModel,
             self.numberOfPagesPageIndexConfigurationItemViewModel,
             self.labelContentConfigurationItemViewModel,
-            self.labelsConfigurationItemViewModel
+            self.labelsConfigurationItemViewModel,
+            self.widthConfigurationItemViewModel
         ]
     }
 
@@ -233,6 +248,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     @Published var selectedPageIndex: Int = 0
     @Published var disabledPageIndex: Int = -1
     @Published var numberOfPages = Constants.numberOfPages
+    @Published var width: CGFloat = 0.0
 
     init(
         theme: Theme,
@@ -250,7 +266,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     }
 
     func title(at index: Int) -> String? {
-        return self.title.map{"\($0)-\(index)"}
+        return self.title.map{ index % 2 == 0 ? "\($0)-\(index)" : "Lore-\(index)"}
     }
 }
 
@@ -319,6 +335,10 @@ extension ProgressTrackerComponentUIViewModel {
 
     @objc func useCurrentPageIndicatorImageChanged(_ selected: Any?) {
         self.useCurrentPageIndicatorImage = isTrue(selected)
+    }
+
+    @objc func widthChanged(_ control: NumberSelector) {
+        self.width = CGFloat(control.selectedValue * 150)
     }
 }
 

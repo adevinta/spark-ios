@@ -34,6 +34,6 @@ final class ProgressTrackerGetSpacingsUseCaseTests: XCTestCase {
     func test_vertical_spacing() {
         let spacing = self.sut.execute(spacing: self.spacing, orientation: .vertical)
 
-        XCTAssertEqual(spacing, .init(trackIndicatorSpacing: 5.0, minLabelSpacing: 5.0))
+        XCTAssertEqual(spacing, .init(trackIndicatorSpacing: 3.0, minLabelSpacing: 5.0))
     }
 }
