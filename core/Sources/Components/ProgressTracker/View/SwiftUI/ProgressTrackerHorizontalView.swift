@@ -63,7 +63,7 @@ struct ProgressTrackerHorizontalView: View {
 
     @ViewBuilder
     private func horizontalLayout() -> some View {
-        HStack(alignment: .top, spacing: self.spacing ) {
+        HStack(alignment: .top, spacing: self.spacing) {
             ForEach((0..<self.viewModel.content.numberOfPages), id: \.self) { index in
                 VStack(alignment: .center) {
                     self.content(at: index)
@@ -71,6 +71,7 @@ struct ProgressTrackerHorizontalView: View {
                 .onAppear{
                     print("VSTACK ON APPEAR")
                 }
+                .frame(maxWidth: .infinity)
             }
             .onAppear{
                 print("FOREACH ON APPEAR")
@@ -80,7 +81,8 @@ struct ProgressTrackerHorizontalView: View {
         .onAppear{
             print("HORIZONTAL ON APPEAR")
         }
-        .background(alignment: .topLeading) {
+        .overlay(alignment: .topLeading) {
+            let _ = print("DRAW BACKGROUND")
             self.dashedHorizontalLines()
         }
     }
@@ -125,6 +127,7 @@ struct ProgressTrackerHorizontalView: View {
     @ViewBuilder
     private func label(_ label: AttributedString, at index: Int) -> some View {
         Text(label)
+            .multilineTextAlignment(.center)
             .font(self.viewModel.font.font)
             .foregroundStyle(self.viewModel.labelColor.color)
             .opacity(self.viewModel.labelOpacity(forIndex: index))
@@ -132,20 +135,29 @@ struct ProgressTrackerHorizontalView: View {
 
     @ViewBuilder
     private func indicator(at index: Int) -> some View {
-        ProgressTrackerIndicatorView(
-            theme: self.viewModel.theme,
-            intent: self.intent,
-            variant: self.variant,
-            size: self.size,
-            content: self.viewModel.content.pageContent(atIndex: index))
-        .selected(self.viewModel.isSelected(at: index))
-        .onAppear{ print("INDICATOR ON APPEAR") }
-        .overlay {
-            GeometryReader { geo in
-                let _ = self.indicatorPositions.setNormalized(geo.frame(in: .named(AccessibilityIdentifier.identifier)), for: index)
-                Color.clear.onAppear()
+            ProgressTrackerIndicatorView(
+                theme: self.viewModel.theme,
+                intent: self.intent,
+                variant: self.variant,
+                size: self.size,
+                content: self.viewModel.content.pageContent(atIndex: index))
+            .selected(self.viewModel.isSelected(at: index))
+            .onAppear{ print("INDICATOR ON APPEAR") }
+            .overlay {
+                GeometryReader { geo in
+//                    let _ = self.indicatorPositions.setNormalized(geo.frame(in: .named(AccessibilityIdentifier.identifier)), for: index)
+                    Color.clear
+                        .onAppear {
+                            self.indicatorPositions.setNormalized(geo.frame(in: .named(AccessibilityIdentifier.identifier)), for: index)
+                            print("CLEAR ON APPEAR")
+                        }
+                        .onChange(of: geo.frame(in: .named(AccessibilityIdentifier.identifier))) { frame in
+                            self.indicatorPositions.updateNormalized(frame, for: index)
+
+                            print("CLEAR ON CHANGE \(frame)")
+                        }
+                }
             }
-        }
     }
 }
 

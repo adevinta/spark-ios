@@ -70,29 +70,34 @@ struct ProgressTrackerVerticalView: View {
     private func verticalLayout() -> some View {
         VStack(alignment: .leading, spacing: self.verticalStackSpacing) {
             ForEach((0..<self.viewModel.content.numberOfPages), id: \.self) { index in
-                HStack(alignment: .xAlignment) {
-                    self.indicator(at: index)
-                        .alignmentGuide(.xAlignment) { $0.height / 2 }
-                    if let label = self.viewModel.content.getAttributedLabel(atIndex: index)  {
-                        self.label(label, at: index)
-                            .alignmentGuide(.xAlignment) { ($0.height - ($0[.lastTextBaseline] - $0[.firstTextBaseline])) / 2 }
-                    }
-                }
+                    self.pageContent(at: index)
+                    .frame(maxHeight: .infinity)
                 .onAppear{
                     print("HSTACK ON APPEAR")
                 }
-
             }
             .onAppear{
                 print("FOREACH ON APPEAR")
             }
-
         }
+//        .frame(maxHeight: .infinity)
         .onAppear{
             print("VERTICAL ON APPEAR")
         }
         .background(alignment: .topLeading) {
             self.dashedVerticalLines()
+        }
+    }
+
+    @ViewBuilder
+    private func pageContent(at index: Int) -> some View {
+        HStack(alignment: .xAlignment) {
+            self.indicator(at: index)
+                .alignmentGuide(.xAlignment) { $0.height / 2 }
+            if let label = self.viewModel.content.getAttributedLabel(atIndex: index)  {
+                self.label(label, at: index)
+                    .alignmentGuide(.xAlignment) { ($0.height - ($0[.lastTextBaseline] - $0[.firstTextBaseline])) / 2 }
+            }
         }
     }
 
@@ -153,8 +158,15 @@ struct ProgressTrackerVerticalView: View {
         .onAppear{ print("INDICATOR ON APPEAR") }
         .overlay {
             GeometryReader { geo in
-                let _ = self.indicatorPositions.setNormalized(geo.frame(in: .named(AccessibilityIdentifier.identifier)), for: index)
-                Color.clear.onAppear()
+                Color.clear
+                    .onAppear{
+                        self.indicatorPositions.setNormalized(geo.frame(in: .named(AccessibilityIdentifier.identifier)), for: index)
+                    }
+                    .onChange(of: geo.frame(in: .named(AccessibilityIdentifier.identifier))) { frame in
+                        self.indicatorPositions.updateNormalized(frame, for: index)
+
+                        print("CLEAR ON CHANGE \(frame)")
+                    }
             }
         }
     }
