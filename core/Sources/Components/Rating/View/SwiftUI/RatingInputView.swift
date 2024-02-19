@@ -16,6 +16,10 @@ public struct RatingInputView: View {
     @State private var displayRating: CGFloat
     @Binding private var rating: CGFloat
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
+    private var accessibleRating: String {
+        return rating.description
+    }
+
     private let configuration: StarConfiguration
 
     // MARK: - Initialization
@@ -75,7 +79,21 @@ public struct RatingInputView: View {
         .gesture(self.dragGesture(viewRect: viewRect))
         .frame(width: width, height: size)
         .accessibilityIdentifier(RatingInputAccessibilityIdentifier.identifier)
-        .accessibilityValue("\(self.displayRating)")
+        .accessibilityElement()
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                guard self.displayRating <= CGFloat(self.viewModel.count.maxIndex) else { break }
+                self.displayRating += 1
+            case .decrement:
+                guard self.displayRating > 1 else { break }
+                self.displayRating -= 1
+            @unknown default:
+                break
+            }
+            self.rating = self.displayRating
+        }
+        .accessibilityValue(self.displayRating.description)
     }
 
     // MARK: - Internal functions
