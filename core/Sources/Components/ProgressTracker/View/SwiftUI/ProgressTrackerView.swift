@@ -85,6 +85,7 @@ public struct ProgressTrackerView: View {
 class IndicatorPositions: ObservableObject {
     var positions = [Int: CGRect]()
 
+    private var updateCount = 0
     @Published var pageCount: Int = 0
 
     func setNormalized(_ rect: CGRect, for index: Int) {
@@ -92,5 +93,18 @@ class IndicatorPositions: ObservableObject {
 
         print("SET x: \(normalizedRect.origin.x), y: \(normalizedRect.origin.y)")
         positions[index] = normalizedRect
+    }
+
+    func updateNormalized(_ rect: CGRect, for index: Int) {
+        let normalizedRect = CGRect(x: max(rect.origin.x, 0), y: max(rect.origin.y, 0), width: rect.width, height: rect.height)
+
+        print("SET x: \(normalizedRect.origin.x), y: \(normalizedRect.origin.y)")
+        positions[index] = normalizedRect
+
+        self.updateCount += 1
+        if self.pageCount > 0 && self.updateCount == self.pageCount {
+            self.pageCount = self.updateCount
+            self.updateCount = 0
+        }
     }
 }
