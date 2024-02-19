@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ProgressTrackerIndicatorView: View {
 
+    typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
+
     @ObservedObject private var viewModel: ProgressTrackerIndicatorViewModel<ProgressTrackerIndicatorContent>
 
     @ScaledMetric var scaleFactor: CGFloat = 1.0
@@ -39,24 +41,30 @@ struct ProgressTrackerIndicatorView: View {
     
     var body: some View {
 
-        ZStack(alignment: .center) {
+        GeometryReader { geo in
 
-            Circle()
-                .fill(self.viewModel.colors.background.color)
+            ZStack(alignment: .center) {
 
-            if let image = self.viewModel.content.indicatorImage {
-                image
-            } else if let label = self.viewModel.content.label {
-                Text(String(label))
-                    .font(self.viewModel.font.font)
-                    .foregroundStyle(self.viewModel.colors.content.color)
+                Circle()
+                    .fill(self.viewModel.colors.background.color)
+
+                if let image = self.viewModel.content.indicatorImage {
+                    image
+                } else if let label = self.viewModel.content.label {
+                    Text(String(label))
+                        .font(self.viewModel.font.font)
+                        .foregroundStyle(self.viewModel.colors.content.color)
+                }
+
+                Circle()
+                    .strokeBorder(
+                        self.viewModel.colors.outline.color,
+                        lineWidth: self.borderWidth
+                    )
             }
-
-            Circle()
-                .strokeBorder(
-                    self.viewModel.colors.outline.color,
-                    lineWidth: self.borderWidth
-                )
+            .onAppear {
+                print("INDICATOR GEO ON APPEAR \(geo.frame(in: .named(AccessibilityIdentifier.identifier)))")
+            }
         }
         .frame(width: self.viewModel.size.rawValue * self.scaleFactor, height: self.viewModel.size.rawValue * self.scaleFactor)
         .compositingGroup()

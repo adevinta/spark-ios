@@ -15,10 +15,18 @@ struct ProgressTrackerComponent: View {
     @State var variant = ProgressTrackerVariant.outlined
     @State var size = ProgressTrackerSize.medium
     @State var numberOfPages: Int = 4
-    @State var orientation = ProgressTrackerOrientation.vertical
+    @State var orientation = ProgressTrackerOrientation.horizontal
     @State private var showLabel = CheckboxSelectionState.selected
     @State private var label: String = "Lore"
     @State private var currentPageIndex: Int = 1
+    @State private var frame = 0
+
+    private var numberFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.multiplier = 150
+        numberFormatter.maximumFractionDigits = 0
+        return numberFormatter
+    }()
 
     var body: some View {
         Component(
@@ -62,6 +70,14 @@ struct ProgressTrackerComponent: View {
                     selectionState: self.$showLabel
                 )
 
+                RangeSelector(
+                    title: "Frame width/height",
+                    range: 0...3,
+                    selectedValue: self.$frame,
+                    numberFormatter: self.numberFormatter
+                )
+
+
                 HStack() {
                     Text("Label ").bold()
                     TextField(
@@ -72,30 +88,44 @@ struct ProgressTrackerComponent: View {
             },
 
             integration: {
-                if self.showLabel == .selected {
-                    ProgressTrackerView(
-                        theme: self.theme,
-                        intent: self.intent,
-                        variant: self.variant,
-                        size: self.size,
-                        labels: (0..<self.numberOfPages).map(self.label(_:)),
-                        orientation: self.orientation, 
-                        currentPageIndex: self.$currentPageIndex
-                    )
-
+                let view = self.progressTrackerView()
+                if self.frame == 0 {
+                    view
+                } else if self.orientation == .horizontal {
+                    view.frame(width: CGFloat(self.frame) * 150.0)
+                        .background(.yellow)
                 } else {
-                    ProgressTrackerView(
-                        theme: self.theme,
-                        intent: self.intent,
-                        variant: self.variant,
-                        size: self.size,
-                        numberOfPages: self.numberOfPages,
-                        orientation: self.orientation, 
-                        currentPageIndex: self.$currentPageIndex
-                    )
+                    view.frame(height: CGFloat(self.frame) * 150.0)
+                        .background(.green)
                 }
             }
         )
+    }
+
+    private func progressTrackerView() -> ProgressTrackerView {
+        if self.showLabel == .selected {
+            ProgressTrackerView(
+                theme: self.theme,
+                intent: self.intent,
+                variant: self.variant,
+                size: self.size,
+                labels: (0..<self.numberOfPages).map(self.label(_:)),
+                orientation: self.orientation,
+                currentPageIndex: self.$currentPageIndex
+            )
+
+        } else {
+            ProgressTrackerView(
+                theme: self.theme,
+                intent: self.intent,
+                variant: self.variant,
+                size: self.size,
+                numberOfPages: self.numberOfPages,
+                orientation: self.orientation,
+                currentPageIndex: self.$currentPageIndex
+            )
+        }
+
     }
 
     private func label(_ index: Int) -> String {
