@@ -60,6 +60,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         }
     }
 
+    @Published var useFullWidth = false
     @Published var content: ProgressTrackerContent<ComponentContent>
     @Published var disabledIndices = Set<Int>()
 
