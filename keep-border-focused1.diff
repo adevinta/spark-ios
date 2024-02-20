@@ -1,0 +1,42 @@
+diff --git a/core/Sources/Components/TextField/View/SwiftUI/TextFieldView.swift b/core/Sources/Components/TextField/View/SwiftUI/TextFieldView.swift
+index 78331554..3c721c7d 100644
+--- a/core/Sources/Components/TextField/View/SwiftUI/TextFieldView.swift
++++ b/core/Sources/Components/TextField/View/SwiftUI/TextFieldView.swift
+@@ -113,7 +113,8 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
+         .onChange(of: isFocused) { newValue in
+             self.viewModel.isFocused = newValue
+         }
+-        .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.borderColor)
++        .border(width: self.viewModel.borderWidth(isFocused: isFocused) * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.borderColor(isFocused: isFocused))
++//        .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.borderColor)
+         .frame(height: self.height)
+         .opacity(self.viewModel.dim)
+     }
+diff --git a/core/Sources/Components/TextField/ViewModel/TextFieldViewModel.swift b/core/Sources/Components/TextField/ViewModel/TextFieldViewModel.swift
+index 87540df9..5b19c0a7 100644
+--- a/core/Sources/Components/TextField/ViewModel/TextFieldViewModel.swift
++++ b/core/Sources/Components/TextField/ViewModel/TextFieldViewModel.swift
+@@ -208,4 +208,23 @@ final class TextFieldViewModel: ObservableObject, Updateable {
+         guard self.statusImage != image else { return }
+         self.statusImage = image
+     }
++
++    func borderWidth(isFocused: Bool) -> CGFloat {
++        let borderLayout = getBorderLayoutUseCase.execute(
++            theme: self.theme,
++            borderStyle:
++                self.borderStyle,
++            isFocused: isFocused)
++        return borderLayout.width
++    }
++
++    func borderColor(isFocused: Bool) -> any ColorToken {
++        return self.getColorsUseCase.execute(
++            theme: theme,
++            intent: intent,
++            isFocused: isFocused,
++            isEnabled: self.isEnabled,
++            isUserInteractionEnabled: self.isUserInteractionEnabled
++        ).border
++    }
+ }

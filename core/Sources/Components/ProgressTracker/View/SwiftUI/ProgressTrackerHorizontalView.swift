@@ -12,12 +12,11 @@ struct ProgressTrackerHorizontalView: View {
     typealias Content = ProgressTrackerContent<ProgressTrackerIndicatorContent>
     typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
 
-    private let viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
+    @ObservedObject private var viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
     private let intent: ProgressTrackerIntent
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
     @ScaledMetric private var scaleFactor = 1.0
-    @StateObject private var indicatorPositions = IndicatorPositions()
     @Binding var currentPageIndex: Int
 
     private var spacing: CGFloat {
@@ -48,17 +47,13 @@ struct ProgressTrackerHorizontalView: View {
     }
 
     var body: some View {
-        self.horizontalLayout()
-            .coordinateSpace(name: AccessibilityIdentifier.identifier)
-            .onAppear {
-                print("BODY ON APPEAR")
-                self.indicatorPositions.pageCount = self.viewModel.numberOfPages
-            }
-            .onChange(of: self.viewModel.content) { viewModel in
-                print("BODY ON CHANGE")
-                self.indicatorPositions.pageCount = viewModel.numberOfPages
-            }
-
+        ZStack(alignment: .topLeading) {
+            self.horizontalLayout()
+                .coordinateSpace(name: AccessibilityIdentifier.identifier)
+        }
+        .overlayPreferenceValue(ProgressTrackerSizePreferences.self) { preferences in
+            self.horizontalTracks(preferences: preferences)
+        }
     }
 
     @ViewBuilder
@@ -68,43 +63,33 @@ struct ProgressTrackerHorizontalView: View {
                 VStack(alignment: .center) {
                     self.content(at: index)
                 }
-                .onAppear{
-                    print("VSTACK ON APPEAR")
-                }
                 .frame(maxWidth: .infinity)
             }
-            .onAppear{
-                print("FOREACH ON APPEAR")
-            }
-
-        }
-        .onAppear{
-            print("HORIZONTAL ON APPEAR")
-        }
-        .overlay(alignment: .topLeading) {
-            let _ = print("DRAW BACKGROUND")
-            self.dashedHorizontalLines()
         }
     }
 
     @ViewBuilder
-    private func dashedHorizontalLines() -> some View {
-        ZStack(alignment: .topLeading) {
-            let interval: Range<Int> = (0..<max(self.indicatorPositions.pageCount-1, 0))
-
-            ForEach(interval, id: \.self) { index in
-                if let position = self.indicatorPositions.positions[index],
-                   let nextPosition = self.indicatorPositions.positions[index+1]
-                {
+    private func horizontalTracks(preferences: [Int: CGRect]) -> some View {
+        let trackSpacing = self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
+        GeometryReader { geometry in
+            ForEach((1..<self.viewModel.numberOfPages), id: \.self) { key in
+                if let rect = preferences[key], let previousRect = preferences[key - 1] {
+                    let width = previousRect.xDistance(to: rect, offset: trackSpacing)
                     self.track()
-                        .frame(width: nextPosition.minX - (position.maxX + self.trackIndicatorSpacing * 2))
-                        .padding(.leading, position.maxX + self.trackIndicatorSpacing)
-                        .padding(.top, position.midY)
+                        .frame(
+                            width: width
+                        )
+                        .offset(
+                            x: previousRect.maxX + trackSpacing,
+                            y: (rect.height/2) + rect.minY
+                        )
                 } else {
                     EmptyView()
                 }
+
             }
         }
+
     }
 
     @ViewBuilder
@@ -135,29 +120,25 @@ struct ProgressTrackerHorizontalView: View {
 
     @ViewBuilder
     private func indicator(at index: Int) -> some View {
-            ProgressTrackerIndicatorView(
-                theme: self.viewModel.theme,
-                intent: self.intent,
-                variant: self.variant,
-                size: self.size,
-                content: self.viewModel.content.pageContent(atIndex: index))
-            .selected(self.viewModel.isSelected(at: index))
-            .onAppear{ print("INDICATOR ON APPEAR") }
-            .overlay {
-                GeometryReader { geo in
-//                    let _ = self.indicatorPositions.setNormalized(geo.frame(in: .named(AccessibilityIdentifier.identifier)), for: index)
-                    Color.clear
-                        .onAppear {
-                            self.indicatorPositions.setNormalized(geo.frame(in: .named(AccessibilityIdentifier.identifier)), for: index)
-                            print("CLEAR ON APPEAR")
-                        }
-                        .onChange(of: geo.frame(in: .named(AccessibilityIdentifier.identifier))) { frame in
-                            self.indicatorPositions.updateNormalized(frame, for: index)
-
-                            print("CLEAR ON CHANGE \(frame)")
-                        }
+        ProgressTrackerIndicatorView(
+            theme: self.viewModel.theme,
+            intent: self.intent,
+            variant: self.variant,
+            size: self.size,
+            content: self.viewModel.content.pageContent(atIndex: index))
+        .selected(self.viewModel.isSelected(at: index))
+        .overlay {
+            GeometryReader { geo in
+                Color.clear.anchorPreference(key: ProgressTrackerSizePreferences.self, value: .bounds) { anchor in
+                    [index: geo.frame(in: .named(AccessibilityIdentifier.identifier)).normalized]
                 }
             }
+        }
     }
 }
 
+private extension CGRect {
+    func xDistance(to other: CGRect, offset: CGFloat = 0) -> CGFloat {
+        return max((other.minX - self.maxX) - (offset * 2.0), 0)
+    }
+}

@@ -41,30 +41,24 @@ struct ProgressTrackerIndicatorView: View {
     
     var body: some View {
 
-        GeometryReader { geo in
-
-            ZStack(alignment: .center) {
-
-                Circle()
-                    .fill(self.viewModel.colors.background.color)
-
-                if let image = self.viewModel.content.indicatorImage {
-                    image
-                } else if let label = self.viewModel.content.label {
-                    Text(String(label))
-                        .font(self.viewModel.font.font)
-                        .foregroundStyle(self.viewModel.colors.content.color)
-                }
-
-                Circle()
-                    .strokeBorder(
-                        self.viewModel.colors.outline.color,
-                        lineWidth: self.borderWidth
-                    )
+        ZStack(alignment: .center) {
+            
+            Circle()
+                .fill(self.viewModel.colors.background.color)
+            
+            if let image = self.viewModel.content.indicatorImage {
+                image
+            } else if let label = self.viewModel.content.label {
+                Text(String(label))
+                    .font(self.viewModel.font.font)
+                    .foregroundStyle(self.viewModel.colors.content.color)
             }
-            .onAppear {
-                print("INDICATOR GEO ON APPEAR \(geo.frame(in: .named(AccessibilityIdentifier.identifier)))")
-            }
+            
+            Circle()
+                .strokeBorder(
+                    self.viewModel.colors.outline.color,
+                    lineWidth: self.borderWidth
+                )
         }
         .frame(width: self.viewModel.size.rawValue * self.scaleFactor, height: self.viewModel.size.rawValue * self.scaleFactor)
         .compositingGroup()
