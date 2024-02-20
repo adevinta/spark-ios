@@ -85,15 +85,13 @@ struct ProgressTrackerVerticalView: View {
 
     @ViewBuilder
     private func verticalTracks(preferences: [Int: CGRect]) -> some View {
-        let trackSpacing = self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
+        let trackSpacing = self.trackIndicatorSpacing
         GeometryReader { geometry in
             ForEach((1..<self.viewModel.numberOfPages), id: \.self) { key in
                 if let rect = preferences[key], let previousRect = preferences[key - 1] {
                     let height = previousRect.yDistance(to: rect, offset: trackSpacing)
                     self.track()
-                        .frame(
-                            height: height
-                        )
+                        .frame(height: height)
                         .offset(
                             x: rect.width/2,
                             y: previousRect.maxY + trackSpacing
