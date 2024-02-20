@@ -17,7 +17,6 @@ struct ProgressTrackerVerticalView: View {
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
     @ScaledMetric private var scaleFactor = 1.0
-    @StateObject private var indicatorPositions = IndicatorPositions()
     @Binding var currentPageIndex: Int
 
     private var spacing: CGFloat {
@@ -53,17 +52,13 @@ struct ProgressTrackerVerticalView: View {
     }
 
     var body: some View {
-        self.verticalLayout()
-            .coordinateSpace(name: AccessibilityIdentifier.identifier)
-            .onAppear {
-                print("BODY ON APPEAR")
-                self.indicatorPositions.pageCount = self.viewModel.numberOfPages
-            }
-            .onChange(of: self.viewModel.content) { viewModel in
-                print("BODY ON CHANGE")
-                self.indicatorPositions.pageCount = viewModel.numberOfPages
-            }
-
+        ZStack(alignment: .topLeading) {
+            self.verticalLayout()
+                .coordinateSpace(name: AccessibilityIdentifier.identifier)
+        }
+        .overlayPreferenceValue(ProgressTrackerSizePreferences.self) { preferences in
+            self.verticalTracks(preferences: preferences)
+        }
     }
 
     @ViewBuilder
@@ -72,20 +67,7 @@ struct ProgressTrackerVerticalView: View {
             ForEach((0..<self.viewModel.content.numberOfPages), id: \.self) { index in
                     self.pageContent(at: index)
                     .frame(maxHeight: .infinity)
-                .onAppear{
-                    print("HSTACK ON APPEAR")
-                }
             }
-            .onAppear{
-                print("FOREACH ON APPEAR")
-            }
-        }
-//        .frame(maxHeight: .infinity)
-        .onAppear{
-            print("VERTICAL ON APPEAR")
-        }
-        .background(alignment: .topLeading) {
-            self.dashedVerticalLines()
         }
     }
 
@@ -102,19 +84,20 @@ struct ProgressTrackerVerticalView: View {
     }
 
     @ViewBuilder
-    private func dashedVerticalLines() -> some View {
-        ZStack(alignment: .topLeading) {
-            let interval: Range<Int> = (0..<max(self.indicatorPositions.pageCount-1, 0))
-
-            ForEach(interval, id: \.self) { index in
-                if let position = self.indicatorPositions.positions[index],
-                   let nextPosition = self.indicatorPositions.positions[index+1]
-                {
+    private func verticalTracks(preferences: [Int: CGRect]) -> some View {
+        let trackSpacing = self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
+        GeometryReader { geometry in
+            ForEach((1..<self.viewModel.numberOfPages), id: \.self) { key in
+                if let rect = preferences[key], let previousRect = preferences[key - 1] {
+                    let height = previousRect.yDistance(to: rect, offset: trackSpacing)
                     self.track()
-                        .frame(width: self.trackSize)
-                        .frame(height: max(self.trackSize, (nextPosition.minY - position.maxY) - self.trackIndicatorSpacing * 2))
-                        .padding(.leading, position.midX)
-                        .padding(.top, position.maxY + self.trackIndicatorSpacing - self.trackSize)
+                        .frame(
+                            height: height
+                        )
+                        .offset(
+                            x: rect.width/2,
+                            y: previousRect.maxY + trackSpacing
+                        )
                 } else {
                     EmptyView()
                 }
@@ -155,18 +138,11 @@ struct ProgressTrackerVerticalView: View {
             size: self.size,
             content: self.viewModel.content.pageContent(atIndex: index))
         .selected(self.viewModel.isSelected(at: index))
-        .onAppear{ print("INDICATOR ON APPEAR") }
         .overlay {
             GeometryReader { geo in
-                Color.clear
-                    .onAppear{
-                        self.indicatorPositions.setNormalized(geo.frame(in: .named(AccessibilityIdentifier.identifier)), for: index)
-                    }
-                    .onChange(of: geo.frame(in: .named(AccessibilityIdentifier.identifier))) { frame in
-                        self.indicatorPositions.updateNormalized(frame, for: index)
-
-                        print("CLEAR ON CHANGE \(frame)")
-                    }
+                Color.clear.anchorPreference(key: ProgressTrackerSizePreferences.self, value: .bounds) { anchor in
+                    [index: geo.frame(in: .named(AccessibilityIdentifier.identifier)).normalized]
+                }
             }
         }
     }
@@ -179,4 +155,10 @@ private extension VerticalAlignment {
         }
     }
     static let xAlignment = VerticalAlignment(XAlignment.self)
+}
+
+private extension CGRect {
+    func yDistance(to other: CGRect, offset: CGFloat = 0) -> CGFloat {
+        return max((other.minY - self.maxY) - (offset * 2.0), 0)
+    }
 }
