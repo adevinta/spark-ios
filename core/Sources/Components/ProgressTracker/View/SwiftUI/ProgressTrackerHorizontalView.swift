@@ -59,26 +59,30 @@ struct ProgressTrackerHorizontalView: View {
     @ViewBuilder
     private func horizontalLayout() -> some View {
         HStack(alignment: .top, spacing: self.spacing) {
-            ForEach((0..<self.viewModel.content.numberOfPages), id: \.self) { index in
-                VStack(alignment: .center) {
+            ForEach((0..<self.viewModel.numberOfPages), id: \.self) { index in
+                let content = VStack(alignment: .center) {
                     self.content(at: index)
                 }
-                .frame(maxWidth: .infinity)
+
+                if self.viewModel.useFullWidth {
+                    content
+                        .frame(maxWidth: .infinity)
+                } else {
+                    content
+                }
             }
         }
     }
 
     @ViewBuilder
     private func horizontalTracks(preferences: [Int: CGRect]) -> some View {
-        let trackSpacing = self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
+        let trackSpacing = self.trackIndicatorSpacing
         GeometryReader { geometry in
             ForEach((1..<self.viewModel.numberOfPages), id: \.self) { key in
                 if let rect = preferences[key], let previousRect = preferences[key - 1] {
                     let width = previousRect.xDistance(to: rect, offset: trackSpacing)
                     self.track()
-                        .frame(
-                            width: width
-                        )
+                        .frame(width: width)
                         .offset(
                             x: previousRect.maxX + trackSpacing,
                             y: (rect.height/2) + rect.minY
@@ -97,7 +101,6 @@ struct ProgressTrackerHorizontalView: View {
             intent: self.intent,
             orientation: self.viewModel.orientation)
     }
-
 
     @ViewBuilder
     private func content(at index: Int) -> some View {

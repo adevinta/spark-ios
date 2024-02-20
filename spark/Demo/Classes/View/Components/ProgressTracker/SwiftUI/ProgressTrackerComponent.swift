@@ -90,13 +90,13 @@ struct ProgressTrackerComponent: View {
             integration: {
                 let view = self.progressTrackerView()
                 if self.frame == 0 {
-                    view
+                    view.useFullWidth(false)
                 } else if self.orientation == .horizontal {
-                    view.frame(width: CGFloat(self.frame) * 150.0)
-                        .background(.yellow)
+                    view.useFullWidth(true)
+                        .frame(width: CGFloat(self.frame) * 150.0)
                 } else {
-                    view.frame(height: CGFloat(self.frame) * 150.0)
-                        .background(.green)
+                    view.useFullWidth(true)
+                        .frame(height: CGFloat(self.frame) * 150.0)
                 }
             }
         )
@@ -104,7 +104,7 @@ struct ProgressTrackerComponent: View {
 
     private func progressTrackerView() -> ProgressTrackerView {
         if self.showLabel == .selected {
-            ProgressTrackerView(
+            return ProgressTrackerView(
                 theme: self.theme,
                 intent: self.intent,
                 variant: self.variant,
@@ -113,9 +113,8 @@ struct ProgressTrackerComponent: View {
                 orientation: self.orientation,
                 currentPageIndex: self.$currentPageIndex
             )
-
         } else {
-            ProgressTrackerView(
+            return ProgressTrackerView(
                 theme: self.theme,
                 intent: self.intent,
                 variant: self.variant,

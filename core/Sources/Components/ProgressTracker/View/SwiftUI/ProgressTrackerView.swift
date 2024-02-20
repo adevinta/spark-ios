@@ -79,6 +79,11 @@ public struct ProgressTrackerView: View {
             ProgressTrackerVerticalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: self.viewModel)
         }
     }
+
+    public func useFullWidth(_ fullWidth: Bool) -> Self {
+        self.viewModel.useFullWidth = fullWidth
+        return self
+    }
 }
 
 extension CGRect {
