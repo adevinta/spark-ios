@@ -111,9 +111,7 @@ public final class TextFieldUIView: UITextField {
         super.init(frame: .init(origin: .zero, size: .init(width: 100, height: 44)))
         self.adjustsFontForContentSizeCategory = true
         self.adjustsFontSizeToFitWidth = false
-        self.setupRightStackView()
-        self.subscribeToViewModel()
-        self.setRightView()
+        self.setupView()
     }
 
     internal convenience init(
@@ -169,97 +167,76 @@ public final class TextFieldUIView: UITextField {
         self.rightStackView.spacing = self.viewModel.contentSpacing
     }
 
-    private func setupRightStackView() {
-        self.statusImageView.contentMode = .scaleAspectFit
-        self.statusImageView.clipsToBounds = true
-        self.statusImageContainerView.addSubview(self.statusImageView)
-        self.statusImageView.translatesAutoresizingMaskIntoConstraints = false
-        self.statusImageHeightConstraint = self.statusImageView.heightAnchor.constraint(equalToConstant: self.statusImageSize)
-        self.statusImageWidthConstraint = self.statusImageView.widthAnchor.constraint(equalToConstant: self.statusImageSize)
-        self.statusImageWidthConstraint.priority = UILayoutPriority.defaultHigh
-        self.statusImageHeightConstraint.priority = UILayoutPriority.defaultHigh
-        NSLayoutConstraint.activate([
-            self.statusImageWidthConstraint,
-            self.statusImageHeightConstraint,
-            self.statusImageView.topAnchor.constraint(greaterThanOrEqualTo: self.statusImageContainerView.topAnchor),
-            self.statusImageView.leadingAnchor.constraint(equalTo: self.statusImageContainerView.leadingAnchor),
-            self.statusImageView.centerXAnchor.constraint(equalTo: self.statusImageContainerView.centerXAnchor),
-            self.statusImageView.centerYAnchor.constraint(equalTo: self.statusImageContainerView.centerYAnchor),
-        ])
-        self.rightStackView.addArrangedSubview(self.statusImageContainerView)
-        self.rightStackView.alignment = .center
-        self.rightStackView.distribution = .fill
-    }
-
-    private func setBorders(_ borders: TextFieldBorderLayout) {
-        self.setBorderWidth(borders.width)
-        self.setCornerRadius(borders.radius)
+    private func setupView() {
+        self.setupRightStackView()
+        self.subscribeToViewModel()
+        self.setRightView()
     }
 
     private func subscribeToViewModel() {
-        self.viewModel.$textColor.subscribe(in: &self.cancellables) { [weak self] textColor in
+        self.viewModel.textColorSubject.subscribe(in: &self.cancellables) { [weak self] textColor in
             guard let self else { return }
             self.textColor = textColor.uiColor
             self.tintColor = textColor.uiColor
         }
 
-        self.viewModel.$backgroundColor.subscribe(in: &self.cancellables) { [weak self] backgroundColor in
+        self.viewModel.backgroundColorSubject.subscribe(in: &self.cancellables) { [weak self] backgroundColor in
             guard let self else { return }
             self.backgroundColor = backgroundColor.uiColor
         }
 
-        self.viewModel.$borderColor.subscribe(in: &self.cancellables) { [weak self] borderColor in
+        self.viewModel.borderColorSubject.subscribe(in: &self.cancellables) { [weak self] borderColor in
             guard let self else { return }
             self.setBorderColor(from: borderColor)
         }
 
-        self.viewModel.$statusIconColor.subscribe(in: &self.cancellables) { [weak self] statusIconColor in
+        self.viewModel.statusIconColorSubject.subscribe(in: &self.cancellables) { [weak self] statusIconColor in
             guard let self else { return }
             self.statusImageView.tintColor = statusIconColor.uiColor
         }
 
-        self.viewModel.$placeholderColor.subscribe(in: &self.cancellables) { [weak self] placeholderColor in
+        self.viewModel.placeholderColorSubject.subscribe(in: &self.cancellables) { [weak self] placeholderColor in
             guard let self else { return }
             self.setPlaceholder(self.placeholder, foregroundColor: placeholderColor, font: self.viewModel.font)
         }
 
-        self.viewModel.$borderWidth.subscribe(in: &self.cancellables) { [weak self] borderWidth in
+        self.viewModel.borderWidthSubject.subscribe(in: &self.cancellables) { [weak self] borderWidth in
             guard let self else { return }
             self.setBorderWidth(borderWidth * self.scaleFactor)
         }
 
-        self.viewModel.$borderRadius.subscribe(in: &self.cancellables) { [weak self] borderRadius in
+        self.viewModel.borderRadiusSubject.subscribe(in: &self.cancellables) { [weak self] borderRadius in
             guard let self else { return }
             self.setCornerRadius(borderRadius)
         }
 
-        self.viewModel.$leftSpacing.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.leftSpacingSubject.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.setNeedsLayout()
         }
 
-        self.viewModel.$rightSpacing.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.rightSpacingSubject.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.setNeedsLayout()
         }
 
-        self.viewModel.$contentSpacing.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.contentSpacingSubject.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.setNeedsLayout()
         }
 
-        self.viewModel.$dim.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.dimSubject.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.alpha = dim
         }
 
-        self.viewModel.$font.subscribe(in: &self.cancellables) { [weak self] font in
+        self.viewModel.fontSubject.subscribe(in: &self.cancellables) { [weak self] font in
             guard let self else { return }
             self.font = font.uiFont
             self.setPlaceholder(self.placeholder, foregroundColor: self.viewModel.placeholderColor, font: font)
         }
 
-        self.viewModel.$statusImage.subscribe(in: &self.cancellables) { [weak self] statusImage in
+        self.viewModel.statusImageSubject.subscribe(in: &self.cancellables) { [weak self] statusImage in
             guard let self else { return }
             self.statusImageView.image = statusImage?.leftValue
             self.statusImageContainerView.isHidden = self.statusImageView.image == nil
@@ -284,6 +261,28 @@ public final class TextFieldUIView: UITextField {
         } else {
             self.attributedPlaceholder = nil
         }
+    }
+
+    private func setupRightStackView() {
+        self.statusImageView.contentMode = .scaleAspectFit
+        self.statusImageView.clipsToBounds = true
+        self.statusImageContainerView.addSubview(self.statusImageView)
+        self.statusImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.statusImageHeightConstraint = self.statusImageView.heightAnchor.constraint(equalToConstant: self.statusImageSize)
+        self.statusImageWidthConstraint = self.statusImageView.widthAnchor.constraint(equalToConstant: self.statusImageSize)
+        self.statusImageWidthConstraint.priority = UILayoutPriority.defaultHigh
+        self.statusImageHeightConstraint.priority = UILayoutPriority.defaultHigh
+        NSLayoutConstraint.activate([
+            self.statusImageWidthConstraint,
+            self.statusImageHeightConstraint,
+            self.statusImageView.topAnchor.constraint(greaterThanOrEqualTo: self.statusImageContainerView.topAnchor),
+            self.statusImageView.leadingAnchor.constraint(equalTo: self.statusImageContainerView.leadingAnchor),
+            self.statusImageView.centerXAnchor.constraint(equalTo: self.statusImageContainerView.centerXAnchor),
+            self.statusImageView.centerYAnchor.constraint(equalTo: self.statusImageContainerView.centerYAnchor),
+        ])
+        self.rightStackView.addArrangedSubview(self.statusImageContainerView)
+        self.rightStackView.alignment = .center
+        self.rightStackView.distribution = .fill
     }
 
     private func setRightView() {

@@ -895,19 +895,19 @@ final class TextFieldViewModelTests: XCTestCase {
     // MARK: - Utils
     private func setupPublishers() {
         self.publishers = .init(
-            textColor: PublisherMock(publisher: self.viewModel.$textColor),
-            placeholderColor: PublisherMock(publisher: self.viewModel.$placeholderColor),
-            borderColor: PublisherMock(publisher: self.viewModel.$borderColor),
-            statusIconColor: PublisherMock(publisher: self.viewModel.$statusIconColor),
-            backgroundColor: PublisherMock(publisher: self.viewModel.$backgroundColor),
-            borderRadius: PublisherMock(publisher: self.viewModel.$borderRadius),
-            borderWidth: PublisherMock(publisher: self.viewModel.$borderWidth),
-            leftSpacing: PublisherMock(publisher: self.viewModel.$leftSpacing),
-            contentSpacing: PublisherMock(publisher: self.viewModel.$contentSpacing),
-            rightSpacing: PublisherMock(publisher: self.viewModel.$rightSpacing),
-            dim: PublisherMock(publisher: self.viewModel.$dim),
-            font: PublisherMock(publisher: self.viewModel.$font),
-            statusImage: PublisherMock(publisher: self.viewModel.$statusImage)
+            textColor: PublisherMock(publisher: self.viewModel.textColorSubject),
+            placeholderColor: PublisherMock(publisher: self.viewModel.placeholderColorSubject),
+            borderColor: PublisherMock(publisher: self.viewModel.borderColorSubject),
+            statusIconColor: PublisherMock(publisher: self.viewModel.statusIconColorSubject),
+            backgroundColor: PublisherMock(publisher: self.viewModel.backgroundColorSubject),
+            borderRadius: PublisherMock(publisher: self.viewModel.borderRadiusSubject),
+            borderWidth: PublisherMock(publisher: self.viewModel.borderWidthSubject),
+            leftSpacing: PublisherMock(publisher: self.viewModel.leftSpacingSubject),
+            contentSpacing: PublisherMock(publisher: self.viewModel.contentSpacingSubject),
+            rightSpacing: PublisherMock(publisher: self.viewModel.rightSpacingSubject),
+            dim: PublisherMock(publisher: self.viewModel.dimSubject),
+            font: PublisherMock(publisher: self.viewModel.fontSubject),
+            statusImage: PublisherMock(publisher: self.viewModel.statusImageSubject)
         )
         self.publishers.load()
     }
@@ -922,39 +922,39 @@ final class TextFieldViewModelTests: XCTestCase {
 final class TextFieldPublishers {
     var cancellables = Set<AnyCancellable>()
 
-    var textColor: PublisherMock<Published<any ColorToken>.Publisher>
-    var placeholderColor: PublisherMock<Published<any ColorToken>.Publisher>
-    var borderColor: PublisherMock<Published<any ColorToken>.Publisher>
-    var statusIconColor: PublisherMock<Published<any ColorToken>.Publisher>
-    var backgroundColor: PublisherMock<Published<any ColorToken>.Publisher>
+    var textColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>
+    var placeholderColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>
+    var borderColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>
+    var statusIconColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>
+    var backgroundColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>
 
-    var borderRadius: PublisherMock<Published<CGFloat>.Publisher>
-    var borderWidth: PublisherMock<Published<CGFloat>.Publisher>
+    var borderRadius: PublisherMock<CurrentValueSubject<CGFloat, Never>>
+    var borderWidth: PublisherMock<CurrentValueSubject<CGFloat, Never>>
 
-    var leftSpacing: PublisherMock<Published<CGFloat>.Publisher>
-    var contentSpacing: PublisherMock<Published<CGFloat>.Publisher>
-    var rightSpacing: PublisherMock<Published<CGFloat>.Publisher>
+    var leftSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>
+    var contentSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>
+    var rightSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>
 
-    var dim: PublisherMock<Published<CGFloat>.Publisher>
+    var dim: PublisherMock<CurrentValueSubject<CGFloat, Never>>
 
-    var font: PublisherMock<Published<any TypographyFontToken>.Publisher>
+    var font: PublisherMock<CurrentValueSubject<any TypographyFontToken, Never>>
 
-    var statusImage: PublisherMock<Published<ImageEither?>.Publisher>
+    var statusImage: PublisherMock<CurrentValueSubject<ImageEither?, Never>>
 
     init(
-        textColor: PublisherMock<Published<ColorToken>.Publisher>,
-        placeholderColor: PublisherMock<Published<ColorToken>.Publisher>,
-        borderColor: PublisherMock<Published<ColorToken>.Publisher>,
-        statusIconColor: PublisherMock<Published<ColorToken>.Publisher>,
-        backgroundColor: PublisherMock<Published<ColorToken>.Publisher>,
-        borderRadius: PublisherMock<Published<CGFloat>.Publisher>,
-        borderWidth: PublisherMock<Published<CGFloat>.Publisher>,
-        leftSpacing: PublisherMock<Published<CGFloat>.Publisher>,
-        contentSpacing: PublisherMock<Published<CGFloat>.Publisher>,
-        rightSpacing: PublisherMock<Published<CGFloat>.Publisher>,
-        dim: PublisherMock<Published<CGFloat>.Publisher>,
-        font: PublisherMock<Published<TypographyFontToken>.Publisher>,
-        statusImage: PublisherMock<Published<ImageEither?>.Publisher>
+        textColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>,
+        placeholderColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>,
+        borderColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>,
+        statusIconColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>,
+        backgroundColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>,
+        borderRadius: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
+        borderWidth: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
+        leftSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
+        contentSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
+        rightSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
+        dim: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
+        font: PublisherMock<CurrentValueSubject<TypographyFontToken, Never>>,
+        statusImage: PublisherMock<CurrentValueSubject<ImageEither?, Never>>
     ) {
         self.textColor = textColor
         self.placeholderColor = placeholderColor
