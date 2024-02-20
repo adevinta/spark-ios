@@ -86,10 +86,8 @@ struct ProgressTrackerHorizontalView: View {
                 } else {
                     EmptyView()
                 }
-
             }
         }
-
     }
 
     @ViewBuilder
