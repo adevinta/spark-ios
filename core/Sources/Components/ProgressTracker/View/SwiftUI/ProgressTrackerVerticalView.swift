@@ -12,7 +12,7 @@ struct ProgressTrackerVerticalView: View {
     typealias Content = ProgressTrackerContent<ProgressTrackerIndicatorContent>
     typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
 
-    private let viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
+    @ObservedObject private var viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
     private let intent: ProgressTrackerIntent
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
