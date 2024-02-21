@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// A progress tracker with a horizontal layout
 struct ProgressTrackerVerticalView: View {
     typealias Content = ProgressTrackerContent<ProgressTrackerIndicatorContent>
     typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
@@ -35,7 +36,7 @@ struct ProgressTrackerVerticalView: View {
         return self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
     }
 
-
+    //MARK: - Initialization
     init(
         intent: ProgressTrackerIntent,
         variant: ProgressTrackerVariant,
@@ -43,7 +44,6 @@ struct ProgressTrackerVerticalView: View {
         currentPageIndex: Binding<Int>,
         viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
     ) {
-
         self.viewModel = viewModel
         self.variant = variant
         self.size = size
@@ -51,6 +51,7 @@ struct ProgressTrackerVerticalView: View {
         self._currentPageIndex = currentPageIndex
     }
 
+    //MARK: - Body
     var body: some View {
         ZStack(alignment: .topLeading) {
             self.verticalLayout()
@@ -61,6 +62,7 @@ struct ProgressTrackerVerticalView: View {
         }
     }
 
+    //MARK: - Private functions
     @ViewBuilder
     private func verticalLayout() -> some View {
         VStack(alignment: .leading, spacing: self.verticalStackSpacing) {
@@ -91,6 +93,7 @@ struct ProgressTrackerVerticalView: View {
                 if let rect = preferences[key], let previousRect = preferences[key - 1] {
                     let height = previousRect.yDistance(to: rect, offset: trackSpacing)
                     self.track()
+                        .disabled(!self.viewModel.isEnabled(at: key))
                         .frame(height: height)
                         .offset(
                             x: rect.width/2,
@@ -136,6 +139,7 @@ struct ProgressTrackerVerticalView: View {
             size: self.size,
             content: self.viewModel.content.pageContent(atIndex: index))
         .selected(self.viewModel.isSelected(at: index))
+        .disabled(!self.viewModel.isEnabled(at: index))
         .overlay {
             GeometryReader { geo in
                 Color.clear.anchorPreference(key: ProgressTrackerSizePreferences.self, value: .bounds) { anchor in
@@ -146,6 +150,7 @@ struct ProgressTrackerVerticalView: View {
     }
 }
 
+/// Alignment guide for the label and the indicator. The first line of the label is to be aligned centrally with the indicator.
 private extension VerticalAlignment {
     private enum XAlignment : AlignmentID {
         static func defaultValue(in dimension: ViewDimensions) -> CGFloat {
@@ -155,6 +160,7 @@ private extension VerticalAlignment {
     static let xAlignment = VerticalAlignment(XAlignment.self)
 }
 
+/// Vertical distance from one point to the next including an offset.
 private extension CGRect {
     func yDistance(to other: CGRect, offset: CGFloat = 0) -> CGFloat {
         return max((other.minY - self.maxY) - (offset * 2.0), 0)

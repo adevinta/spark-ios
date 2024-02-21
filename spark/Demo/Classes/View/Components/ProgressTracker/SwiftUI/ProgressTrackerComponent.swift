@@ -21,7 +21,6 @@ struct ProgressTrackerComponent: View {
     @State private var currentPageIndex: Int = 0
     @State private var disabledPageIndex: Int = -1
     @State private var frame = 0
-    @State private var useCompletedPageImage = false
     @State private var contentType: ProgressTrackerComponentUIViewModel.ContentType = .none
     @State private var isDisabled = CheckboxSelectionState.unselected
     @State private var completedPageIndicator = CheckboxSelectionState.unselected
@@ -183,6 +182,37 @@ struct ProgressTrackerComponent: View {
 
         if self.disabledPageIndex >= 0 {
             view = view.disable(true, forIndex: self.disabledPageIndex)
+        }
+
+        if self.completedPageIndicator == .selected {
+            view = view.completedIndicatorImage(Image(systemName: "checkmark"))
+        } else {
+            view = view.completedIndicatorImage(nil)
+        }
+
+        if self.currentPageIndicator == .selected {
+            for i in 0..<self.numberOfPages {
+                let image = Image(uiImage: UIImage.selectedImage(at: i))
+                view = view.currentPageIndicatorImage(image, forIndex: i)
+            }
+        }
+
+        switch self.contentType {
+        case .none:
+            view = view.showDefaultPageNumber(false)
+        case .page:
+            view = view.showDefaultPageNumber(true)
+        case .text:
+            for i in 0..<self.numberOfPages {
+                let text = "A\(i)"
+                view = view.indicatorLabel(text, forIndex: i)
+            }
+        case .icon:
+            for i in 0..<self.numberOfPages {
+                let image = Image(uiImage: UIImage.image(at: i))
+                view = view.indicatorImage(image, forIndex: i)
+            }
+
         }
 
         return view

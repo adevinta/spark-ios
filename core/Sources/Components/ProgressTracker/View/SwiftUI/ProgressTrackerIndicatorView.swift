@@ -8,18 +8,21 @@
 
 import SwiftUI
 
+/// The indicator view is the round indicator which may contain text (max 2 characters) or an image.
 struct ProgressTrackerIndicatorView: View {
-
-    typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
-
     @ObservedObject private var viewModel: ProgressTrackerIndicatorViewModel<ProgressTrackerIndicatorContent>
 
     @ScaledMetric var scaleFactor: CGFloat = 1.0
+
+    private var imageHeight: CGFloat {
+        return self.scaleFactor * ProgressTrackerConstants.iconHeight
+    }
 
     private var borderWidth: CGFloat {
         return self.scaleFactor * ProgressTrackerConstants.borderWidth
     }
 
+    //MARK: - Initialization
     init(
         theme: Theme,
         intent: ProgressTrackerIntent,
@@ -39,15 +42,22 @@ struct ProgressTrackerIndicatorView: View {
             self.viewModel = viewModel
     }
     
+    //MARK: - Body
     var body: some View {
-
         ZStack(alignment: .center) {
 
             Circle()
                 .fill(self.viewModel.colors.background.color)
 
             if let image = self.viewModel.content.indicatorImage {
-                image
+                image.resizable()
+                    .renderingMode(.template)
+                    .foregroundStyle(self.viewModel.colors.content.color)
+                    .scaledToFit()
+                    .frame(
+                        width: self.imageHeight,
+                        height: self.imageHeight
+                    )
             } else if let label = self.viewModel.content.label {
                 Text(String(label))
                     .font(self.viewModel.font.font)
@@ -63,13 +73,9 @@ struct ProgressTrackerIndicatorView: View {
         .frame(width: self.viewModel.size.rawValue * self.scaleFactor, height: self.viewModel.size.rawValue * self.scaleFactor)
         .compositingGroup()
         .opacity(self.viewModel.opacity)
-//        .isEnabledChanged{ isEnabled in
-//            print("INDICATOR IS ENABLED \(isEnabled)")
-//            self.viewModel.set(enabled: isEnabled)
-//        }
-
     }
 
+    //MARK: Modifiers
     func highlighted(_ isHighlighted: Bool) -> Self {
         self.viewModel.set(highlighted: isHighlighted)
         return self
