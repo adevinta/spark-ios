@@ -170,6 +170,7 @@ public final class CheckboxGroupUIView: UIControl {
     private func commonInit() {
         self.setupItemsStackView()
         self.setupView()
+        self.setupGestureRecognizer()
         self.updateTitle()
     }
 
@@ -265,6 +266,16 @@ public final class CheckboxGroupUIView: UIControl {
             self.scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: self.padding),
             self.scrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: self.padding),
         ])
+    }
+
+    /// Add a default tap gesture recognizer without any action to detect the action/publisher/target action
+    /// even if the parent view has a gesture recognizer
+    /// Why ? UIControl action/publisher/target doesn't work if the parent contains a gesture recognizer.
+    /// *Note*: Native UIButton add the same default recognizer to manage this use case.
+    private func setupGestureRecognizer() {
+        let gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.cancelsTouchesInView = false
+        self.addGestureRecognizer(gestureRecognizer)
     }
 }
 
