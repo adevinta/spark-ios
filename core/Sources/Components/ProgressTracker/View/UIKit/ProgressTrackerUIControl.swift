@@ -343,6 +343,8 @@ public final class ProgressTrackerUIControl: UIControl {
             label.translatesAutoresizingMaskIntoConstraints = false
             label.numberOfLines = 1
             label.isUserInteractionEnabled = false
+            label.adjustsFontForContentSizeCategory = true
+            label.font = self.viewModel.font.uiFont
             return label
         }
     }
