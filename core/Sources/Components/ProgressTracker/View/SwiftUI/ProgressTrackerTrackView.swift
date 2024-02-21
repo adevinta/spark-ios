@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// The track view is the small divider line between the indicators
 struct ProgressTrackerTrackView: View {
     @ObservedObject private var viewModel: ProgressTrackerTrackViewModel
     private let orientation: ProgressTrackerOrientation
@@ -18,6 +19,7 @@ struct ProgressTrackerTrackView: View {
         return self.scaleFactor * ProgressTrackerConstants.trackSize
     }
 
+    //MARK: - Initialization
     init(theme: Theme,
          intent: ProgressTrackerIntent,
          orientation: ProgressTrackerOrientation) {
@@ -25,6 +27,7 @@ struct ProgressTrackerTrackView: View {
         self.viewModel = ProgressTrackerTrackViewModel(theme: theme, intent: intent)
     }
 
+    //MARK: - Body
     var body: some View {
         if self.orientation == .horizontal {
             self.line()
@@ -42,11 +45,9 @@ struct ProgressTrackerTrackView: View {
         Rectangle()
             .fill(self.viewModel.lineColor.color)
             .opacity(self.viewModel.opacity)
-//            .isEnabledChanged { isEnabled in
-//                self.viewModel.isEnabled = isEnabled
-//            }
     }
 
+    //MARK: - View Modifiers
     func disabled(_ isDisabled: Bool) -> some View {
         self.viewModel.isEnabled = !isDisabled
         return self

@@ -8,16 +8,27 @@
 
 import SwiftUI
 
+/// A progress tracker, similar to the UIPageControl
 public struct ProgressTrackerView: View {
     typealias Content = ProgressTrackerContent<ProgressTrackerIndicatorContent>
-    typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
 
+    //MARK: - Private properties
     @ObservedObject private var viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
     private let intent: ProgressTrackerIntent
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
     @Binding var currentPageIndex: Int
 
+    //MARK: - Initialization
+    /// Initializer
+    /// - Parameters:
+    ///  - theme: the general theme
+    ///  - intent: The intent defining the colors
+    ///  - variant: Tinted or outlined
+    ///  - size: The default is `medium`
+    ///  - labels: The labels under each indicator
+    ///  - orienation: The default is `horizontal`
+    ///  - currentPageIndex: A binding representing the current page
     public init(
         theme: Theme,
         intent: ProgressTrackerIntent,
@@ -36,6 +47,15 @@ public struct ProgressTrackerView: View {
         self.init(theme: theme, intent: intent, variant: variant, size: size, orientation: orientation, currentPageIndex: currentPageIndex, content: content)
     }
 
+    /// Initializer
+    /// - Parameters:
+    ///  - theme: the general theme
+    ///  - intent: The intent defining the colors
+    ///  - variant: Tinted or outlined
+    ///  - size: The default is `medium`
+    ///  - numberOfPages: The number of track indicators (pages)
+    ///  - orienation: The default is `horizontal`
+    ///  - currentPageIndex: A binding representing the current page
     public init(
         theme: Theme,
         intent: ProgressTrackerIntent,
@@ -72,6 +92,7 @@ public struct ProgressTrackerView: View {
         self._currentPageIndex = currentPageIndex
     }
 
+    //MARK: - Body
     public var body: some View {
         self.progressTrackerView
             .isEnabledChanged { isEnabled in
@@ -79,6 +100,7 @@ public struct ProgressTrackerView: View {
             }
     }
 
+    //MARK: - Private functions
     @ViewBuilder
     private var progressTrackerView: some View {
         if self.viewModel.orientation == .horizontal {
@@ -89,6 +111,7 @@ public struct ProgressTrackerView: View {
     }
 
     // MARK: - Public modifiers
+    /// If use full width is set to true, the horizontal view will try and scale as wide as possible. If it is not true, it will only use as little space as required.
     public func useFullWidth(_ fullWidth: Bool) -> Self {
         self.viewModel.useFullWidth = fullWidth
         return self
@@ -164,6 +187,12 @@ public struct ProgressTrackerView: View {
     /// Set the default image for the current page indicator
     public func preferredCurrentPageIndicatorImage(_ image: Image?) -> Self {
         self.viewModel.content.preferredCurrentPageIndicatorImage = image
+        return self
+    }
+
+    /// Set if the default page number should be shown
+    public func showDefaultPageNumber(_ showPageNumber: Bool) -> Self {
+        self.viewModel.showDefaultPageNumber = showPageNumber
         return self
     }
 }
