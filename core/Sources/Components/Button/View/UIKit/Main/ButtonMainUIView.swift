@@ -180,6 +180,9 @@ public class ButtonMainUIView: UIControl {
         // Setup constraints
         self.setupConstraints()
 
+        // Setup gesture
+        self.setupGestureRecognizer()
+
         // Setup publisher subcriptions
         self.setupSubscriptions()
 
@@ -222,6 +225,18 @@ public class ButtonMainUIView: UIControl {
         self.imageViewHeightConstraint?.isActive = true
 
         self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor).isActive = true
+    }
+
+    // MARK: - Gesture Recognizer
+
+    /// Add a default tap gesture recognizer without any action to detect the action/publisher/target action
+    /// even if the parent view has a gesture recognizer
+    /// Why ? UIControl action/publisher/target doesn't work if the parent contains a gesture recognizer.
+    /// *Note*: Native UIButton add the same default recognizer to manage this use case.
+    private func setupGestureRecognizer() {
+        let gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.cancelsTouchesInView = false
+        self.addGestureRecognizer(gestureRecognizer)
     }
 
     // MARK: - Setter & Getter
