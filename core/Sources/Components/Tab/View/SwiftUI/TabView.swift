@@ -120,9 +120,3 @@ public struct TabView: View {
         return self
     }
 }
-
-extension CGFloat {
-    var des: String {
-        String(format: "%.2f", self)
-    }
-}

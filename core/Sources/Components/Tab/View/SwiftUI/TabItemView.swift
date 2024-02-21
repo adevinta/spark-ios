@@ -74,13 +74,7 @@ public struct TabItemView: View {
     ) {
         self.viewModel = viewModel
         self.tapAction = tapAction
-
-//        self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.separatorLineHeight)
-//        self._itemHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.itemHeight)
-//        self._iconHeight = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.heights.iconHeight)
-//        self._spacing = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.content)
-//        self._paddingHorizontal = ScaledMetric(wrappedValue: viewModel.tabStateAttributes.spacings.horizontalEdge)
-    }
+   }
 
     // MARK: - View
     public var body: some View {

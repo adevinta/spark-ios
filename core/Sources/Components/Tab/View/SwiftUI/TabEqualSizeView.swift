@@ -18,7 +18,7 @@ struct TabEqualSizeView: View {
     @Binding private var selectedIndex: Int
     @ScaledMetric private var factor: CGFloat = 1.0
     @State private var minItemWidth: CGFloat = 40.0
-    @State private var screenWidth: CGFloat = UIScreen.main.bounds.width
+    @State private var screenWidth: CGFloat = 0
     @State private var axis: Axis.Set = .horizontal
 
     private var tabsWidth: CGFloat {
