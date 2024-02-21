@@ -18,8 +18,14 @@ struct ProgressTrackerComponent: View {
     @State var orientation = ProgressTrackerOrientation.horizontal
     @State private var showLabel = CheckboxSelectionState.selected
     @State private var label: String = "Lore"
-    @State private var currentPageIndex: Int = 1
+    @State private var currentPageIndex: Int = 0
+    @State private var disabledPageIndex: Int = -1
     @State private var frame = 0
+    @State private var useCompletedPageImage = false
+    @State private var contentType: ProgressTrackerComponentUIViewModel.ContentType = .none
+    @State private var isDisabled = CheckboxSelectionState.unselected
+    @State private var completedPageIndicator = CheckboxSelectionState.unselected
+    @State private var currentPageIndicator = CheckboxSelectionState.unselected
 
     private var numberFormatter: NumberFormatter = {
         let numberFormatter = NumberFormatter()
@@ -42,17 +48,17 @@ struct ProgressTrackerComponent: View {
                 )
 
                 EnumSelector(
-                    title: "Variant",
-                    dialogTitle: "Select a variant",
-                    values: ProgressTrackerVariant.allCases,
-                    value: self.$variant
-                )
-
-                EnumSelector(
                     title: "Size",
                     dialogTitle: "Select a size",
                     values: ProgressTrackerSize.allCases,
                     value: self.$size
+                )
+
+                EnumSelector(
+                    title: "Variant",
+                    dialogTitle: "Select a variant",
+                    values: ProgressTrackerVariant.allCases,
+                    value: self.$variant
                 )
 
                 EnumSelector(
@@ -61,6 +67,53 @@ struct ProgressTrackerComponent: View {
                     values: ProgressTrackerOrientation.allCases,
                     value: self.$orientation
                 )
+
+                EnumSelector(
+                    title: "Content",
+                    dialogTitle: "Content Type",
+                    values: ProgressTrackerComponentUIViewModel.ContentType.allCases,
+                    value: self.$contentType)
+
+                CheckboxView(
+                    text: "Disable",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$isDisabled
+                )
+
+                CheckboxView(
+                    text: "Completed Page Indicator",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$completedPageIndicator
+                )
+
+                CheckboxView(
+                    text: "Current Page Indicator",
+                    checkedImage: DemoIconography.shared.checkmark,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$currentPageIndicator
+                )
+
+                RangeSelector(
+                    title: "Disabled Page", range: -1...7, selectedValue: self.$disabledPageIndex)
+
+                RangeSelector(
+                    title: "Current Page", range: 0...7, selectedValue: self.$currentPageIndex)
+
+                RangeSelector(
+                    title: "Number of Pages", range: 2...8, selectedValue: self.$numberOfPages)
+
+                HStack() {
+                    Text("Label ").bold()
+                    TextField(
+                        "Value",
+                        text: self.$label
+                    )
+                }
 
                 CheckboxView(
                     text: "With Label",
@@ -77,53 +130,58 @@ struct ProgressTrackerComponent: View {
                     numberFormatter: self.numberFormatter
                 )
 
-
-                HStack() {
-                    Text("Label ").bold()
-                    TextField(
-                        "Value",
-                        text: self.$label
-                    )
-                }
             },
 
             integration: {
                 let view = self.progressTrackerView()
+
                 if self.frame == 0 {
-                    view.useFullWidth(false)
+                    view.disabled(self.isDisabled == .selected)
                 } else if self.orientation == .horizontal {
-                    view.useFullWidth(true)
-                        .frame(width: CGFloat(self.frame) * 150.0)
+                    view.frame(width: CGFloat(self.frame) * 150.0)
+                        .disabled(self.isDisabled == .selected)
                 } else {
-                    view.useFullWidth(true)
-                        .frame(height: CGFloat(self.frame) * 150.0)
+                    view.frame(height: CGFloat(self.frame) * 150.0)
+                        .disabled(self.isDisabled == .selected)
                 }
             }
         )
     }
 
     private func progressTrackerView() -> ProgressTrackerView {
-        if self.showLabel == .selected {
-            return ProgressTrackerView(
-                theme: self.theme,
-                intent: self.intent,
-                variant: self.variant,
-                size: self.size,
-                labels: (0..<self.numberOfPages).map(self.label(_:)),
-                orientation: self.orientation,
-                currentPageIndex: self.$currentPageIndex
-            )
+        var view: ProgressTrackerView = {
+            if self.showLabel == .selected {
+                return ProgressTrackerView(
+                    theme: self.theme,
+                    intent: self.intent,
+                    variant: self.variant,
+                    size: self.size,
+                    labels: (0..<self.numberOfPages).map(self.label(_:)),
+                    orientation: self.orientation,
+                    currentPageIndex: self.$currentPageIndex
+                )
+            } else {
+                return ProgressTrackerView(
+                    theme: self.theme,
+                    intent: self.intent,
+                    variant: self.variant,
+                    size: self.size,
+                    numberOfPages: self.numberOfPages,
+                    orientation: self.orientation,
+                    currentPageIndex: self.$currentPageIndex
+                )
+            }
+        }()
+
+        if self.frame == 0 {
+            view = view.useFullWidth(false)
+        } else if self.orientation == .horizontal {
+            view = view.useFullWidth(true)
         } else {
-            return ProgressTrackerView(
-                theme: self.theme,
-                intent: self.intent,
-                variant: self.variant,
-                size: self.size,
-                numberOfPages: self.numberOfPages,
-                orientation: self.orientation,
-                currentPageIndex: self.$currentPageIndex
-            )
+            view = view.useFullWidth(true)
         }
+
+        return view
 
     }
 
