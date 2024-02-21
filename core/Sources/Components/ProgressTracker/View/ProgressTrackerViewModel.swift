@@ -124,7 +124,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     }
 
     func isEnabled(at index: Int) -> Bool {
-        return self.disabledIndices.contains(index)
+        return !self.disabledIndices.contains(index)
     }
 
     func isSelected(at index: Int) -> Bool {

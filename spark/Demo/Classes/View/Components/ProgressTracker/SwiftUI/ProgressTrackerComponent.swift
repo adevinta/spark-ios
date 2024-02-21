@@ -181,6 +181,10 @@ struct ProgressTrackerComponent: View {
             view = view.useFullWidth(true)
         }
 
+        if self.disabledPageIndex >= 0 {
+            view = view.disable(true, forIndex: self.disabledPageIndex)
+        }
+
         return view
 
     }

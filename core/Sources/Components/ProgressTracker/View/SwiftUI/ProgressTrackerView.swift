@@ -75,7 +75,6 @@ public struct ProgressTrackerView: View {
     public var body: some View {
         self.progressTrackerView
             .isEnabledChanged { isEnabled in
-                print("PT IS ENABLED \(isEnabled)")
                 self.viewModel.isEnabled = isEnabled
             }
     }
