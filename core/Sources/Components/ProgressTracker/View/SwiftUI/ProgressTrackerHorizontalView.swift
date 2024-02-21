@@ -82,6 +82,7 @@ struct ProgressTrackerHorizontalView: View {
                 if let rect = preferences[key], let previousRect = preferences[key - 1] {
                     let width = previousRect.xDistance(to: rect, offset: trackSpacing)
                     self.track()
+                        .disabled(!self.viewModel.isEnabled(at: key))
                         .frame(width: width)
                         .offset(
                             x: previousRect.maxX + trackSpacing,
@@ -128,6 +129,7 @@ struct ProgressTrackerHorizontalView: View {
             size: self.size,
             content: self.viewModel.content.pageContent(atIndex: index))
         .selected(self.viewModel.isSelected(at: index))
+        .disabled(!self.viewModel.isEnabled(at: index))
         .overlay {
             GeometryReader { geo in
                 Color.clear.anchorPreference(key: ProgressTrackerSizePreferences.self, value: .bounds) { anchor in
