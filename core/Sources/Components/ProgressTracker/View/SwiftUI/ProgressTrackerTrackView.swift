@@ -42,8 +42,13 @@ struct ProgressTrackerTrackView: View {
         Rectangle()
             .fill(self.viewModel.lineColor.color)
             .opacity(self.viewModel.opacity)
-            .isEnabledChanged { isEnabled in
-                self.viewModel.isEnabled = isEnabled
-            }
+//            .isEnabledChanged { isEnabled in
+//                self.viewModel.isEnabled = isEnabled
+//            }
+    }
+
+    func disabled(_ isDisabled: Bool) -> some View {
+        self.viewModel.isEnabled = !isDisabled
+        return self
     }
 }

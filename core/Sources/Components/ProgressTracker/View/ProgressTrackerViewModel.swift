@@ -30,6 +30,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     var isEnabled: Bool = true {
         didSet {
+            guard self.isEnabled != oldValue else { return }
             self.updateEnabledIndices()
         }
     }

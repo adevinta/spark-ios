@@ -42,10 +42,10 @@ struct ProgressTrackerIndicatorView: View {
     var body: some View {
 
         ZStack(alignment: .center) {
-            
+
             Circle()
                 .fill(self.viewModel.colors.background.color)
-            
+
             if let image = self.viewModel.content.indicatorImage {
                 image
             } else if let label = self.viewModel.content.label {
@@ -53,7 +53,7 @@ struct ProgressTrackerIndicatorView: View {
                     .font(self.viewModel.font.font)
                     .foregroundStyle(self.viewModel.colors.content.color)
             }
-            
+
             Circle()
                 .strokeBorder(
                     self.viewModel.colors.outline.color,
@@ -63,9 +63,10 @@ struct ProgressTrackerIndicatorView: View {
         .frame(width: self.viewModel.size.rawValue * self.scaleFactor, height: self.viewModel.size.rawValue * self.scaleFactor)
         .compositingGroup()
         .opacity(self.viewModel.opacity)
-        .isEnabledChanged{ isEnabled in
-            self.viewModel.set(enabled: isEnabled)
-        }
+//        .isEnabledChanged{ isEnabled in
+//            print("INDICATOR IS ENABLED \(isEnabled)")
+//            self.viewModel.set(enabled: isEnabled)
+//        }
 
     }
 
@@ -76,6 +77,11 @@ struct ProgressTrackerIndicatorView: View {
 
     func selected(_ isSelected: Bool) -> Self {
         self.viewModel.set(selected: isSelected)
+        return self
+    }
+
+    func disabled(_ isDisabled: Bool) -> some View {
+        self.viewModel.set(enabled: !isDisabled)
         return self
     }
 
