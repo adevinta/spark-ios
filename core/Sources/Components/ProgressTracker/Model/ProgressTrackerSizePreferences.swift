@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// Preference keys used by the SwiftUI layout of the progress tracker.
 struct ProgressTrackerSizePreferences: PreferenceKey {
     typealias Value = [Int: CGRect]
 

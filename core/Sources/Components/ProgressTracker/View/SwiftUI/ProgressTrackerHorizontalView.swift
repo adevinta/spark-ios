@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// A progress tracker with a horizontal layout
 struct ProgressTrackerHorizontalView: View {
     typealias Content = ProgressTrackerContent<ProgressTrackerIndicatorContent>
     typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
@@ -31,6 +32,7 @@ struct ProgressTrackerHorizontalView: View {
         return self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
     }
 
+    //MARK: - Initialization
     init(
         intent: ProgressTrackerIntent,
         variant: ProgressTrackerVariant,
@@ -38,7 +40,6 @@ struct ProgressTrackerHorizontalView: View {
         currentPageIndex: Binding<Int>,
         viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
     ) {
-
         self.viewModel = viewModel
         self.variant = variant
         self.size = size
@@ -46,6 +47,7 @@ struct ProgressTrackerHorizontalView: View {
         self._currentPageIndex = currentPageIndex
     }
 
+    //MARK: - Body
     var body: some View {
         ZStack(alignment: .topLeading) {
             self.horizontalLayout()
@@ -56,6 +58,7 @@ struct ProgressTrackerHorizontalView: View {
         }
     }
 
+    //MARK: - Private functions
     @ViewBuilder
     private func horizontalLayout() -> some View {
         HStack(alignment: .top, spacing: self.spacing) {
@@ -140,6 +143,7 @@ struct ProgressTrackerHorizontalView: View {
     }
 }
 
+/// Horizontal distance from one point to the other including an offset.
 private extension CGRect {
     func xDistance(to other: CGRect, offset: CGFloat = 0) -> CGFloat {
         return max((other.minX - self.maxX) - (offset * 2.0), 0)
