@@ -102,7 +102,7 @@ public final class RatingInputUIView: UIControl {
         self.rating = rating
         super.init(frame: .zero)
         self.setupView()
-        self.setupGestureRecognizer()
+        self.enableTouch()
     }
     
     required init?(coder: NSCoder) {
@@ -145,12 +145,6 @@ public final class RatingInputUIView: UIControl {
         self.ratingDisplay.isUserInteractionEnabled = false
         self.addSubviewSizedEqually(self.ratingDisplay)
         self.accessibilityIdentifier = RatingInputAccessibilityIdentifier.identifier
-    }
-
-    private func setupGestureRecognizer() {
-        let gestureRecognizer = UITapGestureRecognizer()
-        gestureRecognizer.cancelsTouchesInView = false
-        self.addGestureRecognizer(gestureRecognizer)
     }
 
     // MARK: - Handling touch actions
