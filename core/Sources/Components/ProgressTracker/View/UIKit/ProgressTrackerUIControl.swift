@@ -66,6 +66,11 @@ public final class ProgressTrackerUIControl: UIControl {
         }
         set {
             self.viewModel.isEnabled = newValue
+            if newValue {
+                self.accessibilityTraits.remove(.notEnabled)
+            } else {
+                self.accessibilityTraits.insert(.notEnabled)
+            }
         }
     }
 
@@ -311,7 +316,7 @@ public final class ProgressTrackerUIControl: UIControl {
             indicator.translatesAutoresizingMaskIntoConstraints = false
             indicator.isEnabled = !self.viewModel.disabledIndices.contains(index)
             indicator.isUserInteractionEnabled = false
-            indicator.accessibilityLabel = AccessibilityIdentifier.indicator(forIndex: index)
+            indicator.accessibilityIdentifier = AccessibilityIdentifier.indicator(forIndex: index)
             indicator.accessibilityValue = "\(index)"
             return indicator
         }
@@ -334,7 +339,41 @@ public final class ProgressTrackerUIControl: UIControl {
             label.allowsDefaultTighteningForTruncation = true
             label.isUserInteractionEnabled = false
             label.accessibilityIdentifier = AccessibilityIdentifier.label(forIndex: index)
+            label.accessibilityValue = "\(index)"
+
             return label
+        }
+    }
+
+    private func setItemsAccessibilityTraits(disabledIndices: Set<Int>, currentPageIndex: Int) {
+        for (index, label) in self.labels.enumerated() {
+            self.setItemAccessibilityTraits(view: label, index: index, disabledIndices: disabledIndices, currentPageIndex: currentPageIndex)
+        }
+
+        for (index, indicator) in self.indicatorViews.enumerated() {
+            self.setItemAccessibilityTraits(view: indicator, index: index, disabledIndices: disabledIndices, currentPageIndex: currentPageIndex)
+        }
+    }
+
+    private func setItemAccessibilityTraits(view: UIView, index: Int, disabledIndices: Set<Int>, currentPageIndex: Int) {
+
+        if self.interactionState == .none {
+            view.accessibilityTraits.remove(.button)
+            view.accessibilityRespondsToUserInteraction = false
+        } else {
+            view.accessibilityTraits.insert(.button)
+            view.accessibilityRespondsToUserInteraction = true
+        }
+
+        if disabledIndices.contains(index) {
+            view.accessibilityTraits.insert(.notEnabled)
+        } else {
+            view.accessibilityTraits.remove(.notEnabled)
+        }
+        if index == currentPageIndex {
+            view.accessibilityTraits.insert(.selected)
+        } else {
+            view.accessibilityTraits.remove(.selected)
         }
     }
 
@@ -410,8 +449,20 @@ public final class ProgressTrackerUIControl: UIControl {
             self.setupVerticalViewConstraints(content: content)
         }
 
-        self.accessibilityLabel = AccessibilityIdentifier.identifier
-        self.accessibilityLabel = "\(self.currentPageIndex)"
+        self.accessibilityIdentifier = AccessibilityIdentifier.identifier
+        self.accessibilityValue = "\(self.currentPageIndex)"
+        if !self.viewModel.isEnabled {
+            self.accessibilityTraits.insert(.notEnabled)
+        } else {
+            self.accessibilityTraits.remove(.notEnabled)
+        }
+        if self.interactionState == .none {
+            self.accessibilityTraits.remove(.allowsDirectInteraction)
+        } else {
+            self.accessibilityTraits.insert(.allowsDirectInteraction)
+        }
+
+        self.setItemsAccessibilityTraits(disabledIndices: self.viewModel.disabledIndices, currentPageIndex: self.viewModel.currentPageIndex)
     }
 
     // MARK: Setup supscriptions
@@ -583,6 +634,8 @@ public final class ProgressTrackerUIControl: UIControl {
                 self.labels[i].attributedText = content.getAttributedLabel(atIndex: i)
             }
         }
+
+        self.setItemsAccessibilityTraits(disabledIndices: self.viewModel.disabledIndices, currentPageIndex: content.currentPageIndex)
     }
     
     private func didUpdate(content: Content) {
@@ -636,6 +689,13 @@ public final class ProgressTrackerUIControl: UIControl {
 
     private func didUpdate(interactionState: ProgressTrackerInteractionState) {
         self.isUserInteractionEnabled = interactionState != .none
+        if self.interactionState == .none {
+            self.accessibilityTraits.remove(.allowsDirectInteraction)
+        } else {
+            self.accessibilityTraits.insert(.allowsDirectInteraction)
+        }
+
+        self.setItemsAccessibilityTraits(disabledIndices: self.viewModel.disabledIndices, currentPageIndex: self.viewModel.currentPageIndex)
     }
 
     private func didUpdateDisabledStatus(for disabledIndices: Set<Int>) {
@@ -649,6 +709,8 @@ public final class ProgressTrackerUIControl: UIControl {
         for (index, view) in self.trackViews.enumerated() {
             view.isEnabled = !disabledIndices.contains(index+1)
         }
+
+        self.setItemsAccessibilityTraits(disabledIndices: disabledIndices, currentPageIndex: self.viewModel.currentPageIndex)
     }
 
     // MARK: - Public modifiers
