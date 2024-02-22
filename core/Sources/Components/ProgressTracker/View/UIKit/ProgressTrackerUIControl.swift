@@ -230,6 +230,7 @@ public final class ProgressTrackerUIControl: UIControl {
 
         self.setupView(content: content, orientation: orientation)
         self.setupSubscriptions()
+        self.enableTouch()
         self.isUserInteractionEnabled = false
     }
 
@@ -290,6 +291,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.sendActions(for: .valueChanged)
     }
 
+    //MARK: - Private functions
     private func cancelHighlighted() {
         guard let index = self.touchHandler?.trackingPageIndex else { return }
         self.indicatorViews[safe: index]?.isHighlighted = false
@@ -343,6 +345,8 @@ public final class ProgressTrackerUIControl: UIControl {
             label.translatesAutoresizingMaskIntoConstraints = false
             label.numberOfLines = 1
             label.isUserInteractionEnabled = false
+            label.adjustsFontForContentSizeCategory = true
+            label.font = self.viewModel.font.uiFont
             return label
         }
     }

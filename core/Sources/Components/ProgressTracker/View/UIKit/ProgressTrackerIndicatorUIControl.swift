@@ -191,6 +191,8 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         NSLayoutConstraint.activate([
             heightConstraint,
             imageHeightConstraint,
+            self.imageView.widthAnchor
+                .constraint(equalTo: self.imageView.heightAnchor),
             self.indicatorView.widthAnchor.constraint(equalTo: self.indicatorView.heightAnchor)
         ])
         self.imageHeightConstraint = imageHeightConstraint
