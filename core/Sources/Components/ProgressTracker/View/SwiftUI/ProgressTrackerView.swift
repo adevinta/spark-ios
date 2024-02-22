@@ -11,6 +11,7 @@ import SwiftUI
 /// A progress tracker, similar to the UIPageControl
 public struct ProgressTrackerView: View {
     typealias Content = ProgressTrackerContent<ProgressTrackerIndicatorContent>
+    typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
 
     //MARK: - Private properties
     @ObservedObject private var viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
@@ -18,6 +19,7 @@ public struct ProgressTrackerView: View {
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
     @Binding var currentPageIndex: Int
+//    @State private var indicatorPositions = [Int: CGRect]()
 
     //MARK: - Initialization
     /// Initializer
@@ -98,9 +100,34 @@ public struct ProgressTrackerView: View {
             .isEnabledChanged { isEnabled in
                 self.viewModel.isEnabled = isEnabled
             }
+            .backgroundPreferenceValue(ProgressTrackerSizePreferences.self) { preferences in
+                GeometryReader { geometry in
+                    Color.black.opacity(0.000001)
+                        .gesture(self.dragGesture(bounds: geometry.frame(in: .local), preferences: preferences))
+                }
+            }
     }
 
     //MARK: - Private functions
+    private func dragGesture(bounds: CGRect?, preferences: [Int: CGRect]) -> some Gesture {
+
+        let indicators = preferences.sorted { $0.key < $1.key }.map(\.value)
+        let frame = bounds ?? .zero
+
+        return DragGesture(minimumDistance: .zero)
+            .onChanged({ value in
+                guard frame.contains(value.location) else { return }
+                let index = indicators.index(closestTo: value.location)
+                print("ON CHANGED \(String(describing: index)) \(value.location)")
+            })
+            .onEnded({ value in
+                guard frame.contains(value.location) else {
+                    return }
+                let index = indicators.index(closestTo: value.location)
+                print("ON ENDED \(String(describing: index))")
+            })
+    }
+
     @ViewBuilder
     private var progressTrackerView: some View {
         if self.viewModel.orientation == .horizontal {
