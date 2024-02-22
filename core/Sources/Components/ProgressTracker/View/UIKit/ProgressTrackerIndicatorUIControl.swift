@@ -117,12 +117,22 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
     override var isEnabled: Bool {
         didSet {
             self.viewModel.set(enabled: self.isEnabled)
+            if self.isEnabled {
+                self.accessibilityTraits.remove(.notEnabled)
+            } else {
+                self.accessibilityTraits.insert(.notEnabled)
+            }
         }
     }
 
     override var isSelected: Bool {
         didSet {
             self.viewModel.set(selected: self.isSelected)
+            if self.isSelected {
+                self.accessibilityTraits.insert(.selected)
+            } else {
+                self.accessibilityTraits.remove(.selected)
+            }
         }
     }
 
