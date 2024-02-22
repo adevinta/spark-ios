@@ -2,8 +2,9 @@ name: Spark
 include:
   - xcodegen/spark-shared.yml
   - xcodegen/spark-core.yml
-  - xcodegen/spark-core-unit-tests.yml
   - xcodegen/spark-core-snapshot-tests.yml
+  - xcodegen/spark-core-unit-tests.yml
+  - xcodegen/spark-demo-ui-tests.yml
   - xcodegen/spark.yml
 
 targetTemplates:

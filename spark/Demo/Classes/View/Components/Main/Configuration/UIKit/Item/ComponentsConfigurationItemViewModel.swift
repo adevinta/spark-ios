@@ -15,7 +15,7 @@ final class ComponentsConfigurationItemUIViewModel {
     // MARK: - Properties
 
     var identifier: String {
-        return self.name.lowercased() + "Item"
+        return self.name.snakecased() + "-Item-"
     }
     let name: String
     let type: ComponentsConfigurationItemUIType

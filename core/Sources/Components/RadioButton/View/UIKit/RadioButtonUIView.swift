@@ -358,6 +358,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
     private func arrangeViews() {
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonIdentifier(index: 0)
 
         self.addSubview(self.toggleView)
         self.addSubview(self.textLabel)

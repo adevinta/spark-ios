@@ -161,6 +161,7 @@ final class RadioButtonComponentUIView: ComponentUIView {
                 guard let self = self else { return }
                 self.singleRadioButtonValuePublished = selected
                 Console.log("Single: published \(selected)")
+                self.viewModel.selectedChanged(selected)
             }
 
         let touchAction = UIAction { [weak self] action in
@@ -206,11 +207,14 @@ final class RadioButtonComponentUIView: ComponentUIView {
     }
 
     static private func makeSingleRadioButtonView(_ viewModel: RadioButtonComponentUIViewModel) -> RadioButtonUIView<Int> {
-        return RadioButtonUIView(
+        let view = RadioButtonUIView(
             theme: viewModel.theme,
             intent: viewModel.intent,
             id: 99,
             label: NSAttributedString(string: "Sample of toggle on radio button"),
             isSelected: false)
+
+        view.accessibilityIdentifier = "radio-button-single"
+        return view
     }
 }

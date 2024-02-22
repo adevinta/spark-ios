@@ -1,0 +1,25 @@
+name: Spark
+include:
+  - spark-core.yml
+
+targetTemplates:
+  SparkDemoUITestsTemplate:
+    type: bundle.ui-testing
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo.ui-tests"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    sources:
+      - path: ../spark/UI-Tests
+
+    dependencies:
+      - target: SparkDemo
+
+targets:
+  SparkDemoUITests:
+    templates:
+      - SparkDemoUITestsTemplate
+

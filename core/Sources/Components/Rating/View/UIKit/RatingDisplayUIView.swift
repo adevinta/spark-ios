@@ -173,6 +173,7 @@ public class RatingDisplayUIView: UIView {
     // MARK: - Private functions
     private func setupView() {
         self.accessibilityIdentifier = RatingDisplayAccessibilityIdentifier.identifier
+        self.accessibilityValue = "\(self.rating)"
         var currentRating = self.viewModel.ratingValue
         for i in 0..<count.rawValue {
             let star = StarUIView(
@@ -220,6 +221,7 @@ public class RatingDisplayUIView: UIView {
 
     private func didUpdate(rating: CGFloat) {
         var currentRating = rating
+        self.accessibilityValue = "\(self.rating)"
         for view in self.ratingStarViews {
             view.rating = currentRating
             currentRating -= 1
