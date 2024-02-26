@@ -28,6 +28,10 @@ public class ButtonMainUIView: UIControl {
         imageView.contentMode = .scaleAspectFit
         imageView.tintAdjustmentMode = .normal
         imageView.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageView
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        imageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return imageView
     }()
 
