@@ -136,8 +136,8 @@ public class ButtonMainUIView: UIControl {
         }
     }
 
-    /// Button modifications should be animated or not. **True** by default.
-    public var isAnimated: Bool = true
+    /// Button modifications should be animated or not. **False** by default.
+    public var isAnimated: Bool = false
 
     // MARK: - Internal Properties
 
