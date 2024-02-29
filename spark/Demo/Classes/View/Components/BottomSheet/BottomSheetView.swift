@@ -43,7 +43,7 @@ struct BottomSheetView: View {
                                 self.bottomSheetHeight = $0 ?? 0
                             }
                             .presentationDetents([.height(self.bottomSheetHeight)])
-                            .presentationDragIndicator(.visible)
+                            .presentationDragIndicator(.hidden)
 //                            .presentationCornerRadius(21) available over 16.4
                         }
                     }

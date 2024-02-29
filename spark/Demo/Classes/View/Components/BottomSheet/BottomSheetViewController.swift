@@ -39,25 +39,24 @@ final class BottomSheetViewController: UIViewController {
 
     @objc func didButtonTapped(_: UIButton) {
         let controller = ContainerUIViewController()
-        let navigationController = UINavigationController(rootViewController: controller)
 
-        if let sheet = navigationController.sheetPresentationController {
-            sheet.prefersGrabberVisible = true
-
+        if let sheet = controller.sheetPresentationController {
+            sheet.prefersGrabberVisible = false
+            sheet.preferredCornerRadius = 0
 //            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-//            sheet.preferredCornerRadius = 50
+
 
             if #available(iOS 16, *) {
-                let smallIdentifier = UISheetPresentationController.Detent.Identifier("small")
-                let detent = UISheetPresentationController.Detent.custom(identifier: smallIdentifier) { context in
-                    return 500
+                let customIdentifier = UISheetPresentationController.Detent.Identifier("custom")
+                let detent = UISheetPresentationController.Detent.custom(identifier: customIdentifier) { context in
+                    return controller.view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
                 }
                 sheet.detents = [detent]
 //                sheet.largestUndimmedDetentIdentifier = smallIdentifier
             } else {
                 sheet.detents = [.medium()]
             }
-            self.navigationController?.present(navigationController, animated: true)
+            self.navigationController?.present(controller, animated: true)
         }
     }
 }
@@ -75,17 +74,17 @@ final class ContainerUIViewController: UIViewController {
 
     private lazy var backgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+        view.backgroundColor = UIColor.yellow
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    private lazy var scrollView: UIView = {
-        let view = UIScrollView()
-        view.layer.borderColor = UIColor.black.cgColor
-        view.layer.borderWidth = 1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private lazy var label: UILabel = {
+        let label = UILabel()
+        label.text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        return label
     }()
 
     // MARK: - ViewDidLoad
@@ -98,18 +97,19 @@ final class ContainerUIViewController: UIViewController {
     }
 
     private func setupView() {
-        self.view.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.backgroundView)
-
-        NSLayoutConstraint.stickEdges(from: self.backgroundView, to: self.scrollView)
+        self.view.addSubview(self.backgroundView)
+        self.backgroundView.addSubview(label)
 
         NSLayoutConstraint.activate([
-            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 20),
-            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -20),
-            self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.backgroundView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.backgroundView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            self.backgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.backgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
 
-            self.backgroundView.heightAnchor.constraint(equalToConstant: 1000)
+            self.label.topAnchor.constraint(equalTo: self.backgroundView.topAnchor, constant: 20),
+            self.label.bottomAnchor.constraint(equalTo: self.backgroundView.bottomAnchor, constant: -20),
+            self.label.centerXAnchor.constraint(equalTo: self.backgroundView.centerXAnchor),
+            self.label.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 40)
         ])
     }
 }
