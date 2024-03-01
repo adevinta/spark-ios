@@ -37,10 +37,6 @@ public final class ButtonUIView: ButtonMainUIView {
         let view = UIView()
         view.addSubview(self.imageView)
         view.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageContentView
-        view.setContentCompressionResistancePriority(.required,
-                                                     for: .vertical)
-        view.setContentCompressionResistancePriority(.required,
-                                                     for: .horizontal)
         return view
     }()
 
@@ -56,6 +52,10 @@ public final class ButtonUIView: ButtonMainUIView {
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = ButtonAccessibilityIdentifier.text
         label.lineBreakMode = .byTruncatingMiddle
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        label.setContentHuggingPriority(.defaultLow, for: .vertical)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
     }()
 
