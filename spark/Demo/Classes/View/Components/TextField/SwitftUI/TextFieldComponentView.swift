@@ -113,7 +113,7 @@ struct TextFieldComponentView: View {
 
                 CheckboxView(
                     text: "With Border",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     selectionState: self.$isBorderVisible
                 )

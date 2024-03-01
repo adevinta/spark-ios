@@ -26,7 +26,7 @@ struct RatingInputComponent: View {
 
                 CheckboxView(
                     text: "Is Enabled",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$isEnabled

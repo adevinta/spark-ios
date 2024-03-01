@@ -84,7 +84,7 @@ final class TextFieldComponentUIView: UIView {
         let view = CheckboxUIView(
             theme: viewModel.theme,
             text: "Display right view",
-            checkedImage: DemoIconography.shared.checkmark,
+            checkedImage: DemoIconography.shared.checkmark.uiImage,
             selectionState: .selected,
             alignment: .left
         )
@@ -96,7 +96,7 @@ final class TextFieldComponentUIView: UIView {
         let view = CheckboxUIView(
             theme: viewModel.theme,
             text: "Display left view",
-            checkedImage: DemoIconography.shared.checkmark,
+            checkedImage: DemoIconography.shared.checkmark.uiImage,
             selectionState: .selected,
             alignment: .left
         )
