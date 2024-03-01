@@ -122,8 +122,6 @@ extension CheckboxGroupComponentUIView: CheckboxGroupUIViewDelegate {
                 selectionState = "Indeterminate"
             case .unselected:
                 selectionState = "Unselected"
-            default:
-                break
             }
             text += state.id + " " + selectionState + (index == states.count - 1 ? "" : "\n")
         }

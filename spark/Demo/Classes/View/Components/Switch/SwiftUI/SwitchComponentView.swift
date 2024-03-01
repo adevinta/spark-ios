@@ -55,7 +55,7 @@ struct SwitchComponentView: View {
 
                 CheckboxView(
                     text: "Is on",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
                     selectionState: Binding(
@@ -66,7 +66,7 @@ struct SwitchComponentView: View {
 
                 CheckboxView(
                     text: "Is enabled",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
                     selectionState: self.$isEnabled
@@ -74,7 +74,7 @@ struct SwitchComponentView: View {
 
                 CheckboxView(
                     text: "Has images",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
                     selectionState: self.$hasImages
