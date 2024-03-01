@@ -28,6 +28,10 @@ public class ButtonMainUIView: UIControl {
         imageView.contentMode = .scaleAspectFit
         imageView.tintAdjustmentMode = .normal
         imageView.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageView
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        imageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return imageView
     }()
 
@@ -132,8 +136,8 @@ public class ButtonMainUIView: UIControl {
         }
     }
 
-    /// Button modifications should be animated or not. **True** by default.
-    public var isAnimated: Bool = true
+    /// Button modifications should be animated or not. **False** by default.
+    public var isAnimated: Bool = false
 
     // MARK: - Internal Properties
 
@@ -180,6 +184,9 @@ public class ButtonMainUIView: UIControl {
         // Setup constraints
         self.setupConstraints()
 
+        // Setup gesture
+        self.setupGestureRecognizer()
+
         // Setup publisher subcriptions
         self.setupSubscriptions()
 
@@ -222,6 +229,18 @@ public class ButtonMainUIView: UIControl {
         self.imageViewHeightConstraint?.isActive = true
 
         self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor).isActive = true
+    }
+
+    // MARK: - Gesture Recognizer
+
+    /// Add a default tap gesture recognizer without any action to detect the action/publisher/target action
+    /// even if the parent view has a gesture recognizer
+    /// Why ? UIControl action/publisher/target doesn't work if the parent contains a gesture recognizer.
+    /// *Note*: Native UIButton add the same default recognizer to manage this use case.
+    private func setupGestureRecognizer() {
+        let gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.cancelsTouchesInView = false
+        self.addGestureRecognizer(gestureRecognizer)
     }
 
     // MARK: - Setter & Getter

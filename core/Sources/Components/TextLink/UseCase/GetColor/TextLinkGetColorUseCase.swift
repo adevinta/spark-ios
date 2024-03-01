@@ -39,6 +39,8 @@ struct TextLinkGetColorUseCase: TextLinkGetColorUseCaseable {
             return isHighlighted ? colors.states.mainPressed: colors.main.main
         case .neutral:
             return isHighlighted ? colors.states.neutralPressed: colors.feedback.neutral
+        case .onSurface:
+            return colors.base.onSurface
         case .success:
             return isHighlighted ? colors.states.successPressed: colors.feedback.success
         case .support:
