@@ -64,7 +64,7 @@ public final class RatingInputUIView: UIControl {
     }
 
     /// Changes to the rating by user interactions will be published. Only changed values will be published
-    public var publisher: any Publisher<CGFloat, Never> {
+    public var publisher: some Publisher<CGFloat, Never> {
         return self.subject
     }
 
