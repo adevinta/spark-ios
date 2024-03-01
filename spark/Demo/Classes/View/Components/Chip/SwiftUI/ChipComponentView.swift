@@ -59,7 +59,7 @@ struct ChipComponentView: View {
 
                 CheckboxView(
                     text: "With Label",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$showLabel
@@ -67,7 +67,7 @@ struct ChipComponentView: View {
 
                 CheckboxView(
                     text: "With Icon",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$showIcon
@@ -75,7 +75,7 @@ struct ChipComponentView: View {
 
                 CheckboxView(
                     text: "With Action",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$withAction
@@ -83,7 +83,7 @@ struct ChipComponentView: View {
 
                 CheckboxView(
                     text: "With Extra Component",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$withComponent
@@ -91,7 +91,7 @@ struct ChipComponentView: View {
 
                 CheckboxView(
                     text: "Is Enabled",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$isEnabled
@@ -99,7 +99,7 @@ struct ChipComponentView: View {
 
                 CheckboxView(
                     text: "Is Selected",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     selectionState: self.$isSelected
                 )
