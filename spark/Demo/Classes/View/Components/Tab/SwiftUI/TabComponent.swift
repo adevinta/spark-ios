@@ -20,9 +20,9 @@ struct TabComponent: View {
     @State var isDisabled = CheckboxSelectionState.unselected
     @State var allDisabled = CheckboxSelectionState.unselected
     @State var equalSize = CheckboxSelectionState.selected
-    @State var longLabel = CheckboxSelectionState.unselected
+    @State var longLabel = CheckboxSelectionState.selected
     @State var tabSize: TabSize = .md
-    @State var numberOfTabs = 2
+    @State var numberOfTabs = 4
     @State var selectedTab = 0
     @State var height = CGFloat(50)
     @State var badgePosition = 0
@@ -203,7 +203,6 @@ private extension CheckboxSelectionState {
 
 private extension Image {
     static let names = [
-        "fleuron",
         "trash",
         "folder",
         "paperplane",
