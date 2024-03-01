@@ -28,6 +28,10 @@ public class ButtonMainUIView: UIControl {
         imageView.contentMode = .scaleAspectFit
         imageView.tintAdjustmentMode = .normal
         imageView.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageView
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        imageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return imageView
     }()
 
@@ -132,8 +136,8 @@ public class ButtonMainUIView: UIControl {
         }
     }
 
-    /// Button modifications should be animated or not. **True** by default.
-    public var isAnimated: Bool = true
+    /// Button modifications should be animated or not. **False** by default.
+    public var isAnimated: Bool = false
 
     // MARK: - Internal Properties
 

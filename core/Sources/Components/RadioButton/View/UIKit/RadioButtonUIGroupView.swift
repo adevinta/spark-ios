@@ -376,6 +376,8 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                 selectedID: self.backingSelectedID,
                 labelAlignment: self.labelAlignment
             )
+            radioButtonView.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: $0.id)
+
             radioButtonView.translatesAutoresizingMaskIntoConstraints = false
 
             let action = UIAction { [weak self] _ in
