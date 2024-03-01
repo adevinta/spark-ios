@@ -131,7 +131,7 @@ private extension CGFloat {
     static let fontXs: CGFloat = 12
 }
 
-private extension TabSize {
+extension TabSize {
     var itemHeight: CGFloat {
         switch self {
         case .md: return .medium
@@ -139,7 +139,9 @@ private extension TabSize {
         case .xs: return .extraSmall
         }
     }
+}
 
+private extension TabSize {
     var iconHeight: CGFloat {
         switch self {
         case .md: return .fontMd
