@@ -48,6 +48,11 @@ public final class SwitchUIView: UIView {
 
     private lazy var toggleView: UIView = {
         let view = UIView()
+        view.accessibilityTraits = [.button]
+        if #available(iOS 17.0, *) {
+            view.accessibilityTraits.insert(.toggleButton)
+        }
+        view.isAccessibilityElement = true
         view.accessibilityIdentifier = AccessibilityIdentifier.toggleView
         view.addSubview(self.toggleContentStackView)
         view.isUserInteractionEnabled = true
@@ -458,6 +463,9 @@ public final class SwitchUIView: UIView {
         // Load view model
         self.viewModel.load()
 
+        // Accessibility value
+        self.setupAccessibilityValue(isOn: self.isOn)
+
         // Updates
         self.updateToggleContentViewSpacings()
         self.updateToggleViewSize()
@@ -476,6 +484,10 @@ public final class SwitchUIView: UIView {
         } else if let attributedText {
             self.textLabel.attributedText = attributedText
         }
+    }
+
+    private func setupAccessibilityValue(isOn: Bool) {
+        self.toggleView.accessibilityValue = isOn ? "1" : "0"
     }
 
     // MARK: - Layout
@@ -713,7 +725,7 @@ public final class SwitchUIView: UIView {
         // Is On
         self.viewModel.$isOnChanged.subscribe(in: &self.subscriptions) { [weak self] isOn in
             guard let self, let isOn else { return }
-
+            self.setupAccessibilityValue(isOn: isOn)
             self.delegate?.switchDidChange(self, isOn: isOn)
             self.isOnChangedSubject.send(isOn)
         }

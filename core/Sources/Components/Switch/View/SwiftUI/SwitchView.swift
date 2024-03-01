@@ -184,12 +184,23 @@ public struct SwitchView: View {
             width: self.toggleWidth,
             height: self.toggleHeight
         )
+        .accessibilityAddTraits(self.getAccessibilityTraits())
         .accessibilityIdentifier(AccessibilityIdentifier.toggleView)
+        .accessibilityValue(isOn ? "1" : "0")
         .onTapGesture {
             withAnimation(.custom) {
                 self.viewModel.toggle()
             }
         }
+    }
+
+    private func getAccessibilityTraits() -> AccessibilityTraits {
+        var traits: AccessibilityTraits = [.isButton]
+        if #available(iOS 17, *) {
+            _ = traits.insert(.isToggle)
+        }
+        print(traits)
+        return traits
     }
 
     // MARK: - Modifier
