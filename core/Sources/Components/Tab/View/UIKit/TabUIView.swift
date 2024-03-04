@@ -209,6 +209,7 @@ public final class TabUIView: UIControl {
 
         self.setupViews(items: content)
         self.setupConstraints()
+        self.enableTouch()
         self.setupSubscriptions()
     }
 

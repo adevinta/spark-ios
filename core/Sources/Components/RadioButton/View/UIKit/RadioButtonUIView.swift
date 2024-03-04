@@ -291,6 +291,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         self.arrangeViews()
         self.setupButtonActions()
         self.updateViewAttributes()
+        self.enableTouch()
         self.setupSubscriptions()
     }
 
@@ -327,6 +328,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
 
 
     // MARK: - Private Functions
+
     private func setupSubscriptions() {
 
         self.viewModel.$opacity.subscribe(in: &self.subscriptions) { [weak self] opacity in

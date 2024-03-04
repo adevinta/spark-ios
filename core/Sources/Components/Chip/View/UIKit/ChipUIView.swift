@@ -396,6 +396,7 @@ public final class ChipUIView: UIControl {
 
         self.setupConstraints()
         self.setChipColors(self.viewModel.colors)
+        self.enableTouch()
         self.setupSubscriptions()
 
         self.accessibilityIdentifier = ChipAccessibilityIdentifier.identifier
