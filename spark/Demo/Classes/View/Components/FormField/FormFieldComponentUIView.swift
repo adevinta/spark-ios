@@ -184,7 +184,7 @@ final class FormFieldComponentUIView: ComponentUIView {
         let view = CheckboxUIView(
             theme: SparkTheme.shared,
             text: "Hello World",
-            checkedImage: DemoIconography.shared.checkmark,
+            checkedImage: DemoIconography.shared.checkmark.uiImage,
             selectionState: .unselected,
             alignment: .left
         )
@@ -193,7 +193,7 @@ final class FormFieldComponentUIView: ComponentUIView {
 
     static func makeVerticalCheckbox() -> UIControl {
         let view = CheckboxGroupUIView(
-            checkedImage: DemoIconography.shared.checkmark,
+            checkedImage: DemoIconography.shared.checkmark.uiImage,
             items: [
                 CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
                 CheckboxGroupItemDefault(title: "Checkbox 2", id: "2", selectionState: .selected, isEnabled: true),
@@ -208,7 +208,7 @@ final class FormFieldComponentUIView: ComponentUIView {
 
     static func makeHorizontalCheckbox() -> UIControl {
         let view = CheckboxGroupUIView(
-            checkedImage: DemoIconography.shared.checkmark,
+            checkedImage: DemoIconography.shared.checkmark.uiImage,
             items: [
                 CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
                 CheckboxGroupItemDefault(title: "Checkbox 2", id: "2", selectionState: .selected, isEnabled: true),
@@ -223,7 +223,7 @@ final class FormFieldComponentUIView: ComponentUIView {
 
     static func makeHorizontalScrollableCheckbox() -> UIControl {
         let view = CheckboxGroupUIView(
-            checkedImage: DemoIconography.shared.checkmark,
+            checkedImage: DemoIconography.shared.checkmark.uiImage,
             items: [
                 CheckboxGroupItemDefault(title: "Hello World", id: "1", selectionState: .unselected, isEnabled: true),
                 CheckboxGroupItemDefault(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", id: "2", selectionState: .selected, isEnabled: true),
