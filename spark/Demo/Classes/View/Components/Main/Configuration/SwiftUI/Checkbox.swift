@@ -21,7 +21,7 @@ struct Checkbox: View {
     var body: some View {
         CheckboxView(
             text: self.title,
-            checkedImage: DemoIconography.shared.checkmark,
+            checkedImage: DemoIconography.shared.checkmark.image,
             theme: self.theme,
             isEnabled: true,
             selectionState: self.selectionState

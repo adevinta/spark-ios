@@ -16,7 +16,7 @@ final class TabViewModel<Content>: ObservableObject {
     // MARK: - Internal variables
     var theme: Theme {
         didSet {
-            self.tabsAttributes = self.useCase.execute(theme: theme, isEnabled: self.isEnabled)
+            self.tabsAttributes = self.useCase.execute(theme: theme, size: self.tabSize, isEnabled: self.isEnabled)
         }
     }
 
@@ -29,8 +29,15 @@ final class TabViewModel<Content>: ObservableObject {
             return self.disabledTabs.reduce(true) { return $0 && !$1 }
         }
         set {
-            self.tabsAttributes = self.useCase.execute(theme: theme, isEnabled: newValue)
+            self.tabsAttributes = self.useCase.execute(theme: theme, size: self.tabSize, isEnabled: newValue)
             self.disabledTabs = self.disabledTabs.map { _ in return !newValue }
+        }
+    }
+
+    var tabSize: TabSize {
+        didSet {
+            guard self.tabSize != oldValue else { return }
+            self.tabsAttributes = self.useCase.execute(theme: theme, size: self.tabSize, isEnabled: self.isEnabled)
         }
     }
 
@@ -43,19 +50,22 @@ final class TabViewModel<Content>: ObservableObject {
     @Published var apportionsSegmentWidthsByContent: Bool = false
     @Published var tabsAttributes: TabsAttributes
     @Published var content: [Content]
+    @Published var isScrollable = false
 
     // MARK: - Initializer
     init(theme: some Theme,
          apportionsSegmentWidthsByContent: Bool = false,
          content: [Content],
+         tabSize: TabSize,
          useCase: some TabsGetAttributesUseCaseable = TabsGetAttributesUseCase()
     ) {
         self.theme = theme
+        self.tabSize = tabSize
         self.apportionsSegmentWidthsByContent = apportionsSegmentWidthsByContent
         self.useCase = useCase
         self.content = content
         self.disabledTabs = content.map{ _ in return false }
-        self.tabsAttributes = useCase.execute(theme: theme, isEnabled: true)
+        self.tabsAttributes = useCase.execute(theme: theme, size: tabSize, isEnabled: true)
     }
 
     // Disable or enable a single tab.

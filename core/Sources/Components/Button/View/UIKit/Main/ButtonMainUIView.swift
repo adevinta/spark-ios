@@ -28,6 +28,10 @@ public class ButtonMainUIView: UIControl {
         imageView.contentMode = .scaleAspectFit
         imageView.tintAdjustmentMode = .normal
         imageView.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageView
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        imageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return imageView
     }()
 
@@ -132,8 +136,8 @@ public class ButtonMainUIView: UIControl {
         }
     }
 
-    /// Button modifications should be animated or not. **True** by default.
-    public var isAnimated: Bool = true
+    /// Button modifications should be animated or not. **False** by default.
+    public var isAnimated: Bool = false
 
     // MARK: - Internal Properties
 
@@ -180,6 +184,9 @@ public class ButtonMainUIView: UIControl {
         // Setup constraints
         self.setupConstraints()
 
+        // Setup gesture
+        self.enableTouch()
+
         // Setup publisher subcriptions
         self.setupSubscriptions()
 
@@ -204,13 +211,13 @@ public class ButtonMainUIView: UIControl {
         self.setupImageViewConstraints()
     }
 
-    private func setupViewConstraints() {
+    /// Setup the size constraints for this view.
+    /// This method is internal because it can be overriden by the view that inherits from this class.
+    internal func setupViewConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
         self.heightConstraint?.isActive = true
-
-        self.widthAnchor.constraint(greaterThanOrEqualTo: self.heightAnchor).isActive = true
     }
 
     /// Setup the imageView constraints.

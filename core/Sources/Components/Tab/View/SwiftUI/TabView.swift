@@ -10,15 +10,9 @@ import SwiftUI
 
 /// TabView is the similar to a SegmentControl
 public struct TabView: View {
-    private let theme: Theme
     private let intent: TabIntent
-    private let tabSize: TabSize
-
     @ObservedObject private var viewModel: TabViewModel<TabItemContent>
     @Binding private var selectedIndex: Int
-    @ScaledMetric private var lineHeight: CGFloat
-    @State private var minWidth: CGFloat = 0
-    @State private var appeared: Bool = false
 
     // MARK: - Initialization
     /// Initializer
@@ -72,91 +66,23 @@ public struct TabView: View {
                 content: [TabItemContent] = [],
                 selectedIndex: Binding<Int>
     ) {
-        self.theme = theme
         self.intent = intent
-        self.tabSize = tabSize
         self._selectedIndex = selectedIndex
         let viewModel = TabViewModel(
             theme: theme,
             apportionsSegmentWidthsByContent: false,
-            content: content
+            content: content, 
+            tabSize: tabSize
         )
-        self._lineHeight = ScaledMetric(wrappedValue: viewModel.tabsAttributes.lineHeight)
         self.viewModel = viewModel
     }
 
     // MARK: - View
     public var body: some View {
-        self.tabItems()
-            .background(
-                Rectangle()
-                    .frame(width: nil, height: self.lineHeight, alignment: .bottom)
-                    .foregroundColor(self.viewModel.tabsAttributes.lineColor.color),
-                alignment: .bottom)
-            .scrollOnOverflow(value: self.$viewModel.content)
-            .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
-            .onChange(of: self.viewModel.content) { _ in
-                self.minWidth = 0
-            }
-    }
-
-    // MARK: - Private functions
-    @ViewBuilder
-    private func tabItems() -> some View {
-        ScrollViewReader { proxy in
-            HStack(spacing: 0) {
-                ForEach(Array(self.viewModel.content.enumerated()), id: \.element.id) { (index, content) in
-                    self.tabContent(index: index, content: content, proxy: proxy)
-                }
-                if self.viewModel.apportionsSegmentWidthsByContent {
-                    Spacer()
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func tabContent(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
         if self.viewModel.apportionsSegmentWidthsByContent {
-            tabItem(index: index, content: content, proxy: proxy)
+            TabApportionsSizeView(viewModel: self.viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
         } else {
-            tabItem(index: index, content: content, proxy: proxy)
-                .frame(minWidth: self.minWidth)
-        }
-    }
-
-    private func updateMinWidth(_ width: CGFloat, index: Int) {
-        self.minWidth = max(self.minWidth,width)
-    }
-
-    @ViewBuilder
-    private func tabItem(index: Int, content: TabItemContent, proxy: ScrollViewProxy) -> some View {
-        TabItemView(
-            theme: self.theme,
-            intent: self.intent,
-            size: self.tabSize,
-            content: content,
-            apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
-            isSelected: self.selectedIndex == index
-        ) {
-            self.selectedIndex = index
-            withAnimation{
-                proxy.scrollTo(content.id)
-            }
-        }
-        .disabled(self.viewModel.disabledTabs[index])
-        .id(content.id)
-        .accessibilityIdentifier("\(TabAccessibilityIdentifier.tabItem)_\(index)")
-        .background {
-            GeometryReader { geometry in
-                Color.clear
-                    .onAppear {
-                        self.updateMinWidth(geometry.size.width, index: index)
-                    }
-                    .onChange(of: self.viewModel.content) { _ in
-                        self.updateMinWidth(geometry.size.width, index: index)
-                    }
-            }
+            TabEqualSizeView(viewModel: self.viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
         }
     }
 

@@ -76,9 +76,13 @@ public final class TabUIView: UIControl {
 
     /// The current tab size
     public var tabSize: TabSize {
-        didSet {
+        get {
+            return self.viewModel.tabSize
+        }
+        set {
+            self.viewModel.tabSize = newValue
             self.segments.forEach { tab in
-                tab.tabSize = tabSize
+                tab.tabSize = newValue
             }
             self.invalidateIntrinsicContentSize()
         }
@@ -195,16 +199,17 @@ public final class TabUIView: UIControl {
 
         self.theme = theme
         self.intent = intent
-        self.tabSize = tabSize
         self.viewModel = TabViewModel(
             theme: theme,
             apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent,
-            content: content)
+            content: content, 
+            tabSize: tabSize)
 
         super.init(frame: .zero)
 
         self.setupViews(items: content)
         self.setupConstraints()
+        self.enableTouch()
         self.setupSubscriptions()
     }
 

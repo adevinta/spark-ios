@@ -81,7 +81,7 @@ struct TextLinkComponentView: View {
 
                 CheckboxView(
                     text: "With Line limit",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$isLineLimit

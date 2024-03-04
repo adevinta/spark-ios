@@ -92,6 +92,11 @@ public struct ButtonView: View {
                 self.title()
             }
         }
+        .frame(
+            maxWidth: self.viewModel.maxWidth,
+            alignment: self.viewModel.frameAlignment
+        )
+        .contentShape(Rectangle())
         .animation(nil, value: UUID())
     }
 
@@ -114,6 +119,21 @@ public struct ButtonView: View {
     }
 
     // MARK: - Modifier
+
+    /// Update the frame of the button for a state.
+    /// - Parameters:
+    ///   - maxWidth: The maximum width of the resulting frame.
+    ///   - alignment: The alignment of this view inside the resulting frame.
+    ///     Note that most alignment values have no apparent effect when the
+    ///     size of the frame happens to match that of this view.
+    ///
+    /// - Returns: A view with flexible dimensions given by the call's non-`nil`
+    ///   parameters.
+    public func frame(maxWidth: CGFloat? = nil, alignment: Alignment = .center) -> Self {
+        self.viewModel.maxWidth = maxWidth
+        self.viewModel.frameAlignment = alignment
+        return self
+    }
 
     /// Set the image of the button for a state.
     /// - parameter image: new image of the button

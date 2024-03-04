@@ -90,6 +90,7 @@ public final class TextLinkUIView: UIControl {
         }
         set {
             self.viewModel.text = newValue
+            self.accessibilityLabelManager.internalValue = newValue
         }
     }
 
@@ -182,6 +183,15 @@ public final class TextLinkUIView: UIControl {
         }
     }
 
+    public override var accessibilityLabel: String? {
+        get {
+            return self.accessibilityLabelManager.value
+        }
+        set {
+            self.accessibilityLabelManager.value = newValue
+        }
+    }
+
     // MARK: - Private Properties
 
     private let viewModel: TextLinkViewModel
@@ -190,6 +200,8 @@ public final class TextLinkUIView: UIControl {
     private var imageViewHeightConstraint: NSLayoutConstraint?
 
     @ScaledUIMetric private var contentStackViewSpacing: CGFloat = 0
+
+    private var accessibilityLabelManager = AccessibilityLabelManager()
 
     private var subscriptions = Set<AnyCancellable>()
 
@@ -242,8 +254,10 @@ public final class TextLinkUIView: UIControl {
         // Add subviews
         self.addSubview(self.contentStackView)
 
-        // Identifiers
+        // Accessibility
+        self.accessibilityTraits = [.button]
         self.accessibilityIdentifier = TextLinkAccessibilityIdentifier.view
+        self.isAccessibilityElement = true
 
         // View properties
         self.backgroundColor = .clear
@@ -251,6 +265,9 @@ public final class TextLinkUIView: UIControl {
 
         // Setup constraints
         self.setupConstraints()
+
+        // Setup gesture
+        self.enableTouch()
 
         // Setup subscriptions
         self.setupSubscriptions()

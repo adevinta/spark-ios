@@ -89,10 +89,10 @@ public final class CheckboxUIView: UIControl {
     /// The checkedImage displayed in the checkbox when status is selected.
     public var checkedImage: UIImage {
         get {
-            return self.viewModel.checkedImage
+            return self.viewModel.checkedImage.leftValue
         }
         set {
-            self.viewModel.checkedImage = newValue
+            self.viewModel.checkedImage = .left(newValue)
         }
     }
 
@@ -198,7 +198,7 @@ public final class CheckboxUIView: UIControl {
             theme: theme,
             intent: intent,
             content: .left(NSAttributedString(string: text)),
-            checkedImage: checkedImage,
+            checkedImage: .left(checkedImage),
             isEnabled: isEnabled,
             selectionState: selectionState,
             alignment: alignment
@@ -227,7 +227,7 @@ public final class CheckboxUIView: UIControl {
             theme: theme,
             intent: intent,
             content: .left(attributedText),
-            checkedImage: checkedImage,
+            checkedImage: .left(checkedImage),
             isEnabled: isEnabled,
             selectionState: selectionState,
             alignment: alignment
@@ -238,7 +238,7 @@ public final class CheckboxUIView: UIControl {
         theme: Theme,
         intent: CheckboxIntent = .main,
         content: Either<NSAttributedString?, String?>,
-        checkedImage: UIImage,
+        checkedImage: Either<UIImage, Image>,
         isEnabled: Bool = true,
         selectionState: CheckboxSelectionState,
         alignment: CheckboxAlignment
@@ -262,6 +262,7 @@ public final class CheckboxUIView: UIControl {
         self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkbox
         
         self.setupViews()
+        self.enableTouch()
         self.subscribe()
         self.updateAccessibility()
         self.addActions()
@@ -361,7 +362,7 @@ public final class CheckboxUIView: UIControl {
 
         self.viewModel.$checkedImage.subscribe(in: &self.cancellables) { [weak self] icon in
             guard let self else { return }
-            self.controlView.selectionIcon = icon
+            self.controlView.selectionIcon = icon.leftValue
         }
         
         self.viewModel.$spacing.subscribe(in: &self.cancellables) { [weak self] spacing in

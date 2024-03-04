@@ -27,6 +27,7 @@ struct ButtonComponentView: View {
     @State private var isEnabled: CheckboxSelectionState = .selected
     @State private var isSelected: CheckboxSelectionState = .unselected
     @State private var isToggle: CheckboxSelectionState = .unselected
+    @State private var isFullWidth: CheckboxSelectionState = .unselected
 
     @State private var shouldShowReverseBackgroundColor: Bool = false
 
@@ -108,15 +109,15 @@ struct ButtonComponentView: View {
 
                 CheckboxView(
                     text: "Is enabled",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
                     selectionState: self.$isEnabled
                 )
 
                 CheckboxView(
-                    text: "Is selected",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    text: "Is animated",
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
                     selectionState: self.$isSelected
@@ -124,10 +125,18 @@ struct ButtonComponentView: View {
 
                 CheckboxView(
                     text: "Is toggle",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: false,
                     selectionState: self.$isToggle
+                )
+
+                CheckboxView(
+                    text: "Is full width",
+                    checkedImage: DemoIconography.shared.checkmark.image,
+                    theme: self.theme,
+                    isEnabled: false,
+                    selectionState: self.$isFullWidth
                 )
             },
             integration: {
@@ -157,6 +166,7 @@ struct ButtonComponentView: View {
                 .addContent(self.contentHighlighted, state: .highlighted)
                 .addContent(self.contentDisabled, state: .disabled)
                 .addContent(self.contentSelected, state: .selected)
+                .frame(maxWidth: self.isFullWidth == .selected ? .infinity : nil)
                 .padding(.horizontal, self.shouldShowReverseBackgroundColor ? 4 : 0)
                 .padding(.vertical, self.shouldShowReverseBackgroundColor ? 4 : 0)
                 .background(self.shouldShowReverseBackgroundColor ? Color.gray : Color.clear)
