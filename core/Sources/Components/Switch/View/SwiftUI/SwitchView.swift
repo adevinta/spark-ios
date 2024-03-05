@@ -199,7 +199,6 @@ public struct SwitchView: View {
         if #available(iOS 17, *) {
             _ = traits.insert(.isToggle)
         }
-        print(traits)
         return traits
     }
 

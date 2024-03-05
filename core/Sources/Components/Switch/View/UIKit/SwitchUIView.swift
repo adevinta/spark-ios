@@ -736,6 +736,11 @@ public final class SwitchUIView: UIView {
             guard let self, let isEnabled else { return }
 
             self.toggleView.isUserInteractionEnabled = isEnabled
+            if !isEnabled {
+                self.toggleView.accessibilityTraits.insert(.notEnabled)
+            } else {
+                self.toggleView.accessibilityTraits.remove(.notEnabled)
+            }
         }
         self.viewModel.$toggleOpacity.subscribe(in: &self.subscriptions) { [weak self] toggleOpacity in
             guard let self, let toggleOpacity else { return }
