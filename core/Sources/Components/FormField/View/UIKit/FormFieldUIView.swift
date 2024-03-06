@@ -11,7 +11,7 @@ import SwiftUI
 import UIKit
 
 /// The `FormFieldUIView`renders a component with title and subtitle using UIKit.
-public final class FormFieldUIView: UIControl {
+public final class FormFieldUIView<Component: UIControl>: UIControl {
 
     // MARK: - Private Properties.
 
@@ -139,7 +139,7 @@ public final class FormFieldUIView: UIControl {
     }
 
     /// The component of formfield.
-    public var component: UIControl {
+    public var component: Component {
         didSet {
             self.componentContainerStackView.removeArrangedSubviews()
             self.componentContainerStackView.addArrangedSubview(self.component)
@@ -172,7 +172,7 @@ public final class FormFieldUIView: UIControl {
         attributedTitle: NSAttributedString? = nil,
         description: String? = nil,
         attributedDescription: NSAttributedString? = nil,
-        component: UIControl
+        component: Component
     ) {
         let titleValue: NSAttributedString?
         let descriptionValue: NSAttributedString?
@@ -240,7 +240,7 @@ public final class FormFieldUIView: UIControl {
             self.titleLabel.font = font?.leftValue
             self.titleLabel.textColor = color?.leftValue
             self.titleLabel.attributedText = title?.leftValue
-            self.titleLabel.layer.opacity = Float(opacity ?? 1.0)
+            self.titleLabel.layer.opacity = Float(opacity)
         }
 
         Publishers.CombineLatest4(
@@ -255,7 +255,7 @@ public final class FormFieldUIView: UIControl {
             self.descriptionLabel.font = font?.leftValue
             self.descriptionLabel.textColor = color?.leftValue
             self.descriptionLabel.attributedText = title?.leftValue
-            self.descriptionLabel.layer.opacity = Float(opacity ?? 1.0)
+            self.descriptionLabel.layer.opacity = Float(opacity)
         }
 
         self.viewModel.$spacing.subscribe(in: &self.cancellables) { [weak self] spacing in

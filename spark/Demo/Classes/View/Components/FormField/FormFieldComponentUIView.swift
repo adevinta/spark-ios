@@ -14,7 +14,7 @@ import UIKit
 final class FormFieldComponentUIView: ComponentUIView {
 
     // MARK: - Components
-    private let componentView: FormFieldUIView
+    private let componentView: FormFieldUIView<UIControl>
 
     // MARK: - Properties
 
@@ -135,7 +135,7 @@ final class FormFieldComponentUIView: ComponentUIView {
     }
 
     // MARK: - Create View
-    static func makeFormField(_ viewModel: FormFieldComponentUIViewModel) -> FormFieldUIView {
+    static func makeFormField(_ viewModel: FormFieldComponentUIViewModel) -> FormFieldUIView<UIControl> {
         let component: UIControl!
 
         switch viewModel.componentStyle {

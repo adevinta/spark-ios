@@ -16,11 +16,11 @@ final class FormFieldViewModel: ObservableObject {
     @Published var title: Either<NSAttributedString?, AttributedString?>?
     @Published var titleFont: Either<UIFont, Font>?
     @Published var titleColor: Either<UIColor?, Color?>?
-    @Published var titleOpacity: CGFloat?
+    @Published var titleOpacity: CGFloat
     @Published var description: Either<NSAttributedString?, AttributedString?>?
     @Published var descriptionFont: Either<UIFont, Font>?
     @Published var descriptionColor: Either<UIColor?, Color?>?
-    @Published var descriptionOpacity: CGFloat?
+    @Published var descriptionOpacity: CGFloat
     @Published var spacing: CGFloat
 
     var theme: Theme {
@@ -34,17 +34,19 @@ final class FormFieldViewModel: ObservableObject {
 
     var intent: FormFieldIntent {
         didSet {
+            guard intent != oldValue else { return }
             self.updateColors()
         }
     }
 
     var isEnabled: Bool {
         didSet {
+            guard isEnabled != oldValue else { return }
             self.updateOpacity()
         }
     }
 
-    var colorUseCase: FormFieldColorsUseCase
+    var colorUseCase: FormFieldColorsUseCaseable
 
     // MARK: - Init
 
@@ -54,7 +56,7 @@ final class FormFieldViewModel: ObservableObject {
         isEnabled: Bool,
         title: Either<NSAttributedString?, AttributedString?>?,
         description: Either<NSAttributedString?, AttributedString?>?,
-        colorUseCase: FormFieldColorsUseCase = .init()
+        colorUseCase: FormFieldColorsUseCaseable = FormFieldColorsUseCase()
     ) {
         self.theme = theme
         self.intent = intent
@@ -63,6 +65,8 @@ final class FormFieldViewModel: ObservableObject {
         self.description = description
         self.colorUseCase = colorUseCase
         self.spacing = self.theme.layout.spacing.small
+        self.titleOpacity = self.theme.dims.none
+        self.descriptionOpacity = self.theme.dims.none
     }
 
     private func updateColors() {
@@ -82,6 +86,7 @@ final class FormFieldViewModel: ObservableObject {
     }
 
     private func updateFonts() {
+
         if self.title?.leftValue != nil {
             self.titleFont = .left(self.theme.typography.subhead.uiFont)
         } else {
@@ -100,7 +105,7 @@ final class FormFieldViewModel: ObservableObject {
     }
 
     private func updateOpacity() {
-        self.titleOpacity = isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-        self.descriptionOpacity = isEnabled ? self.theme.dims.none : self.theme.dims.dim1
+        self.titleOpacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
+        self.descriptionOpacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim1
     }
 }
