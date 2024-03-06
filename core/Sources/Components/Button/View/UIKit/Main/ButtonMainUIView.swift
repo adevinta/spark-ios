@@ -148,8 +148,8 @@ public class ButtonMainUIView: UIControl {
     private var heightConstraint: NSLayoutConstraint?
     private var imageViewHeightConstraint: NSLayoutConstraint?
 
-    @ScaledUIMetric private var height: CGFloat = 0
-    @ScaledUIMetric private var imageHeight: CGFloat = 0
+    @ScaledUIMetric var height: CGFloat = 0
+    @ScaledUIMetric var imageHeight: CGFloat = 0
 
     @ScaledUIMetric private var cornerRadius: CGFloat = 0
     @ScaledUIMetric private var borderWidth: CGFloat = 0
