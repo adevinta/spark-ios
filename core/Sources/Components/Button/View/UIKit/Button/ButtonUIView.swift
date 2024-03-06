@@ -224,6 +224,30 @@ public final class ButtonUIView: ButtonMainUIView {
         ])
     }
 
+    // MARK: - Instrinsic Content Size
+
+    public override var intrinsicContentSize: CGSize {
+        var width: CGFloat = self.horizontalSpacing * 2
+
+        let isTitle = !self.titleLabel.isHidden
+        let isImage = !self.imageContentView.isHidden
+
+        if isTitle {
+            width += self.titleLabel.intrinsicContentSize.width
+        }
+        if isImage {
+            width += self.imageHeight // It is always a square
+        }
+        if isTitle && isImage {
+            width += self.contentStackView.spacing
+        }
+
+        return CGSize(
+            width: width,
+            height: self.height
+        )
+    }
+
     // MARK: - Setter & Getter
 
     /// The title of the button for a state.
