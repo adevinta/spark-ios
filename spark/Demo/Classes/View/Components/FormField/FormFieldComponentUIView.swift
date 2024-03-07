@@ -124,6 +124,7 @@ final class FormFieldComponentUIView: ComponentUIView {
             case .ratingInput:
                 component = Self.makeRatingInput()
             }
+            component.isEnabled = viewModel.isEnabled
 
             self.componentView.component = component
         }
