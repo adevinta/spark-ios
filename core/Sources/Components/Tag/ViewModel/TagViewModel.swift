@@ -19,6 +19,7 @@ final class TagViewModel: ObservableObject {
 
     @Published var iconImage: Image?
     @Published var text: String?
+    @Published var attributedText: AttributedString?
 
     // MARK: - Private properties
 
@@ -44,6 +45,7 @@ final class TagViewModel: ObservableObject {
         variant: TagVariant = .filled,
         iconImage: Image? = nil,
         text: String? = nil,
+        attributedText: AttributedString? = nil,
         getColorsUseCase: any TagGetColorsUseCaseable = TagGetColorsUseCase()
     ) {
         self.colors = Self.getColors(
@@ -58,6 +60,7 @@ final class TagViewModel: ObservableObject {
 
         self.iconImage = iconImage
         self.text = text
+        self.attributedText = attributedText
 
         self.theme = theme
         self.intent = intent
@@ -92,7 +95,13 @@ final class TagViewModel: ObservableObject {
     }
 
     func setText(_ text: String?) {
+        self.attributedText = nil
         self.text = text
+    }
+
+    func setAttributedText(_ attributedText: AttributedString?) {
+        self.text = nil
+        self.attributedText = attributedText
     }
 
     // MARK: - Getter
