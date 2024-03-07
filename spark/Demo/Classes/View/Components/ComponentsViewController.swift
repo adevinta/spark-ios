@@ -84,6 +84,8 @@ extension ComponentsViewController {
             viewController = ChipComponentViewController.build()
         case .icon:
             viewController = IconComponentUIViewController.build()
+        case .popover:
+            viewController = PopoverDemoViewController()
         case .progressBarIndeterminate:
             viewController = ProgressBarIndeterminateComponentUIViewController.build()
         case .progressBarSingle:
