@@ -58,9 +58,10 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
                 scenario: self,
                 intent: $0,
                 variant: .tinted,
-                iconImage: .mock(isSwiftUIComponent: isSwiftUIComponent),
-                text: "Text",
-                isLongText: false,
+                content: .iconAndText(
+                    TagContentType.Constants.icon(isSwiftUIComponent: isSwiftUIComponent),
+                    TagContentType.Constants.text
+                ),
                 modes: Constants.Modes.all,
                 sizes: Constants.Sizes.default
             )
@@ -85,9 +86,7 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
                 scenario: self,
                 intent: .main,
                 variant: $0,
-                iconImage: nil,
-                text: "Text",
-                isLongText: false,
+                content: .text(TagContentType.Constants.text),
                 modes: Constants.Modes.all,
                 sizes: Constants.Sizes.default
             )
@@ -112,9 +111,10 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
                 scenario: self,
                 intent: $0,
                 variant: .filled,
-                iconImage: .mock(isSwiftUIComponent: isSwiftUIComponent),
-                text: "Text",
-                isLongText: false,
+                content: .iconAndText(
+                    TagContentType.Constants.icon(isSwiftUIComponent: isSwiftUIComponent),
+                    TagContentType.Constants.text
+                ),
                 modes: Constants.Modes.default,
                 sizes: Constants.Sizes.default
             )
@@ -128,24 +128,18 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
     /// Content:
     ///  - intent: neutral
     ///  - variant: tinted
-    ///  - content: all (icon only / long text/ long text + icon)
+    ///  - content: all (icon only / long text / long text + icon / attributed text / attributed text + icon)
     ///  - mode: default
     ///  - size: default
     private func test4(isSwiftUIComponent: Bool) -> [TagConfigurationSnapshotTests] {
-        let contents: [(isIconImage: Bool, isLongText: Bool)] = [
-            (isIconImage: true, isLongText: false), // Only Icon
-            (isIconImage: false, isLongText: true), // Only long text
-            (isIconImage: true, isLongText: true) // Icon + Long text
-        ]
+        let contents = TagContentType.allCasesExceptText(isSwiftUIComponent: isSwiftUIComponent)
 
         return contents.map {
             .init(
                 scenario: self,
                 intent: .neutral,
                 variant: .tinted,
-                iconImage: $0.isIconImage ? .mock(isSwiftUIComponent: isSwiftUIComponent) : nil,
-                text: $0.isLongText ? "Very very long long text" : nil,
-                isLongText: $0.isLongText,
+                content: $0,
                 modes: Constants.Modes.default,
                 sizes: Constants.Sizes.default
             )
@@ -168,9 +162,10 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
                 scenario: self,
                 intent: .main,
                 variant: .tinted,
-                iconImage: .mock(isSwiftUIComponent: isSwiftUIComponent),
-                text: "Text",
-                isLongText: false,
+                content: .iconAndText(
+                    TagContentType.Constants.icon(isSwiftUIComponent: isSwiftUIComponent),
+                    TagContentType.Constants.text
+                ),
                 modes: Constants.Modes.default,
                 sizes: Constants.Sizes.all
             )
