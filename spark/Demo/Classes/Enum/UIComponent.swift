@@ -17,6 +17,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
         .checkbox,
         .chip,
         .icon,
+        .popover,
         .progressBarIndeterminate,
         .progressBarSingle,
         .radioButton,
@@ -40,6 +41,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static let chip = UIComponent(rawValue: "Chip")
     static let icon = UIComponent(rawValue: "Icon")
     static let iconButton = UIComponent(rawValue: "Icon Button")
+    static let popover = UIComponent(rawValue: "Popover")
     static let progressBarIndeterminate = UIComponent(rawValue: "Progress Bar Indeterminate")
     static let progressBarSingle = UIComponent(rawValue: "Progress Bar Single")
     static let radioButton = UIComponent(rawValue: "Radio Button")
