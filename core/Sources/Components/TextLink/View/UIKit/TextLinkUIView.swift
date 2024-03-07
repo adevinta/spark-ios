@@ -266,6 +266,9 @@ public final class TextLinkUIView: UIControl {
         // Setup constraints
         self.setupConstraints()
 
+        // Setup gesture
+        self.enableTouch()
+
         // Setup subscriptions
         self.setupSubscriptions()
 

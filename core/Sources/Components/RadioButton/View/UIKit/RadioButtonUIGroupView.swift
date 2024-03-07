@@ -273,6 +273,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
         self.setupView()
         self.setupConstraints()
+        self.enableTouch()
         self.setupSubscriptions()
     }
 
@@ -347,7 +348,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                        font: self.viewModel.sublabelFont.uiFont,
                        color: self.viewModel.sublabelColor.uiColor)
     }
-
 
     private func updateLayout(items: [RadioButtonUIItem<ID>]) {
         NSLayoutConstraint.deactivate(self.allConstraints)

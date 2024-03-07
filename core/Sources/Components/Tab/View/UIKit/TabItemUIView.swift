@@ -338,6 +338,7 @@ public final class TabItemUIView: UIControl {
 
         self.setupView()
         self.setupConstraints()
+        self.enableTouch()
         self.setupSubscriptions()
     }
 

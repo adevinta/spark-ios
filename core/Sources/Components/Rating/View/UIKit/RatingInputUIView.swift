@@ -102,6 +102,7 @@ public final class RatingInputUIView: UIControl {
         self.rating = rating
         super.init(frame: .zero)
         self.setupView()
+        self.enableTouch()
     }
     
     required init?(coder: NSCoder) {

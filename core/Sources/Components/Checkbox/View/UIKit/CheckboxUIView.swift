@@ -262,6 +262,7 @@ public final class CheckboxUIView: UIControl {
         self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkbox
         
         self.setupViews()
+        self.enableTouch()
         self.subscribe()
         self.updateAccessibility()
         self.addActions()
