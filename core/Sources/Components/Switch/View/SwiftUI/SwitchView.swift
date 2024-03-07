@@ -187,6 +187,9 @@ public struct SwitchView: View {
         .accessibilityAddTraits(self.getAccessibilityTraits())
         .accessibilityIdentifier(AccessibilityIdentifier.toggleView)
         .accessibilityValue(isOn ? "1" : "0")
+        .accessibilityRepresentation {
+            Toggle(isOn: $isOn) { }
+        }
         .onTapGesture {
             withAnimation(.custom) {
                 self.viewModel.toggle()
