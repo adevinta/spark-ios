@@ -12,30 +12,44 @@ import UIKit
 
 extension AttributedStringEither {
 
-    static func mock(isSwiftUIComponent: Bool) -> Self {
-        return isSwiftUIComponent ? .right(.mock) : .left(.mock)
+    static func mock(
+        isSwiftUIComponent: Bool,
+        text: String = "My AT Title",
+        fontSize: CGFloat = 20
+    ) -> Self {
+        return isSwiftUIComponent ? .right(
+            .mock(text: text, fontSize: fontSize)
+        ) : .left(
+            .mock(text: text, fontSize: fontSize)
+        )
     }
 }
 
 private extension NSAttributedString {
-    static let mock = NSAttributedString(
-        string: "My AT Title",
-        attributes: [
-            .foregroundColor: UIColor.purple,
-            .font: UIFont.italicSystemFont(ofSize: 20),
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ]
-    )
+    static func mock(
+        text: String,
+        fontSize: CGFloat
+    ) -> NSAttributedString {
+        return .init(string: text,
+                     attributes: [
+                        .foregroundColor: UIColor.purple,
+                        .font: UIFont.italicSystemFont(ofSize: fontSize),
+                        .underlineStyle: NSUnderlineStyle.single.rawValue
+                     ]
+        )
+    }
 }
 
 private extension AttributedString {
-    static var mock: AttributedString = {
-        var attributedString = AttributedString("My AT Title")
-        attributedString.font = .largeTitle
-        attributedString.foregroundColor = .purple
-        attributedString.font = .italicSystemFont(ofSize: 20)
+    static func mock(
+        text: String,
+        fontSize: CGFloat
+    ) -> AttributedString {
+        var attributedString = AttributedString(text)
+        attributedString.font = .italicSystemFont(ofSize: fontSize)
         attributedString.underlineStyle = .single
         attributedString.underlineColor = .purple
+        attributedString.foregroundColor = .purple
         return attributedString
-    }()
+    }
 }
