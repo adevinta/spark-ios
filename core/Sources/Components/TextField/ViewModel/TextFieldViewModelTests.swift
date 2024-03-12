@@ -14,23 +14,23 @@ import SwiftUI
 
 final class TextFieldViewModelTests: XCTestCase {
 
-    private var theme: ThemeGeneratedMock!
-    private var publishers: TextFieldPublishers!
-    private var getColorsUseCase: TextFieldGetColorsUseCasableGeneratedMock!
-    private var getBorderLayoutUseCase: TextFieldGetBorderLayoutUseCasableGeneratedMock!
-    private var getSpacingsUseCase: TextFieldGetSpacingsUseCasableGeneratedMock!
+    var theme: ThemeGeneratedMock!
+    var publishers: TextFieldPublishers!
+    var getColorsUseCase: TextFieldGetColorsUseCasableGeneratedMock!
+    var getBorderLayoutUseCase: TextFieldGetBorderLayoutUseCasableGeneratedMock!
+    var getSpacingsUseCase: TextFieldGetSpacingsUseCasableGeneratedMock!
     private var viewModel: TextFieldViewModel!
 
-    private let intent = TextFieldIntent.success
-    private let borderStyle = TextFieldBorderStyle.roundedRect
+    let intent = TextFieldIntent.success
+    let borderStyle = TextFieldBorderStyle.roundedRect
 
-    private var expectedColors: TextFieldColors!
-    private var expectedBorderLayout: TextFieldBorderLayout!
-    private var expectedSpacings: TextFieldSpacings!
+    var expectedColors: TextFieldColors!
+    var expectedBorderLayout: TextFieldBorderLayout!
+    var expectedSpacings: TextFieldSpacings!
 
-    private let successImage = UIImage(systemName: "square.and.arrow.up.fill")!
-    private let alertImage = Image(systemName: "rectangle.portrait.and.arrow.right.fill")
-    private let errorImage = UIImage(systemName: "eraser.fill")!
+    let successImage: ImageEither = .left(UIImage(systemName: "square.and.arrow.up.fill")!)
+    let alertImage: ImageEither = .right(Image(systemName: "rectangle.portrait.and.arrow.right.fill"))
+    let errorImage: ImageEither = .left(UIImage(systemName: "eraser.fill")!)
 
     override func setUp() {
         super.setUp()
@@ -53,9 +53,9 @@ final class TextFieldViewModelTests: XCTestCase {
             theme: self.theme,
             intent: self.intent,
             borderStyle: self.borderStyle,
-            successImage: .left(self.successImage),
-            alertImage: .right(self.alertImage),
-            errorImage: .left(self.errorImage),
+            successImage: self.successImage,
+            alertImage: self.alertImage,
+            errorImage: self.errorImage,
             getColorsUseCase: self.getColorsUseCase,
             getBorderLayoutUseCase: self.getBorderLayoutUseCase,
             getSpacingsUseCase: self.getSpacingsUseCase
@@ -74,11 +74,11 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.isEnabled, "Wrong isEnabled")
         XCTAssertTrue(self.viewModel.isUserInteractionEnabled, "Wrong isUserInteractionEnabled")
         XCTAssertFalse(self.viewModel.isFocused, "Wrong isFocused")
-        XCTAssertEqual(self.viewModel.successImage, .left(self.successImage), "Wrong successImage")
-        XCTAssertEqual(self.viewModel.alertImage, .right(self.alertImage), "Wrong alertImage")
-        XCTAssertEqual(self.viewModel.errorImage, .left(self.errorImage), "Wrong errorImage")
+        XCTAssertEqual(self.viewModel.successImage, self.successImage, "Wrong successImage")
+        XCTAssertEqual(self.viewModel.alertImage, self.alertImage, "Wrong alertImage")
+        XCTAssertEqual(self.viewModel.errorImage, self.errorImage, "Wrong errorImage")
         XCTAssertEqual(self.viewModel.dim, self.theme.dims.none, "Wrong dim")
-        XCTAssertEqual(self.viewModel.statusImage, .left(self.successImage), "Wrong statusImage")
+        XCTAssertEqual(self.viewModel.statusImage, self.successImage, "Wrong statusImage")
         XCTAssertIdentical(self.viewModel.font as? TypographyFontTokenGeneratedMock, self.theme.typography.body1 as? TypographyFontTokenGeneratedMock, "Wrong font")
 
         // THEN - Colors
@@ -253,7 +253,7 @@ final class TextFieldViewModelTests: XCTestCase {
         self.viewModel.intent = .error
 
         // THEN
-        XCTAssertEqual(self.viewModel.statusImage, .left(self.errorImage), "Wrong statusImage")
+        XCTAssertEqual(self.viewModel.statusImage, self.errorImage, "Wrong statusImage")
 
         // Then - Colors
         XCTAssertEqual(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledCallsCount, 1, "getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabled should have been called once")
@@ -718,7 +718,7 @@ final class TextFieldViewModelTests: XCTestCase {
         // WHEN
         self.viewModel.isEnabled = true
 
-        XCTAssertEqual(self.viewModel.statusImage, .left(self.successImage), "Wrong statusImage")
+        XCTAssertEqual(self.viewModel.statusImage, self.successImage, "Wrong statusImage")
         // THEN - Colors
         XCTAssertEqual(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledCallsCount, 1, "getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabled should have been called once")
         let getColorsReceivedArguments = try XCTUnwrap(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReceivedArguments, "Couldn't unwrap getColorsReceivedArguments")
@@ -893,7 +893,7 @@ final class TextFieldViewModelTests: XCTestCase {
     }
 
     // MARK: - Utils
-    private func setupPublishers() {
+    func setupPublishers() {
         self.publishers = .init(
             textColor: PublisherMock(publisher: self.viewModel.textColorSubject),
             placeholderColor: PublisherMock(publisher: self.viewModel.placeholderColorSubject),
@@ -912,7 +912,7 @@ final class TextFieldViewModelTests: XCTestCase {
         self.publishers.load()
     }
 
-    private func resetUseCases() {
+    func resetUseCases() {
         self.getColorsUseCase.reset()
         self.getBorderLayoutUseCase.reset()
         self.getSpacingsUseCase.reset()

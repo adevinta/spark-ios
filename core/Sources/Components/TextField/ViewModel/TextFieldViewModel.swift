@@ -10,13 +10,14 @@ import UIKit
 import SwiftUI
 import Combine
 
-final class TextFieldViewModel: ObservableObject, Updateable {
+class TextFieldViewModel: ObservableObject, Updateable {
 
     // Colors
     private(set) var textColorSubject: CurrentValueSubject<any ColorToken, Never>
     private(set) var textColor: any ColorToken {
         get { return self.textColorSubject.value }
         set {
+            guard newValue.equals(self.textColor) == false else { return }
             self.textColorSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -25,6 +26,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var placeholderColor: any ColorToken {
         get { return self.placeholderColorSubject.value }
         set {
+            guard newValue.equals(self.placeholderColor) == false else { return }
             self.placeholderColorSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -33,6 +35,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var borderColor: any ColorToken {
         get { return self.borderColorSubject.value }
         set {
+            guard newValue.equals(self.borderColor) == false else { return }
             self.borderColorSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -41,14 +44,16 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var statusIconColor: any ColorToken {
         get { return self.statusIconColorSubject.value }
         set {
+            guard newValue.equals(self.statusIconColor) == false else { return }
             self.statusIconColorSubject.send(newValue)
             self.objectWillChange.send()
         }
     }
     private(set) var backgroundColorSubject: CurrentValueSubject<any ColorToken, Never>
-    private(set) var backgroundColor: any ColorToken {
+    var backgroundColor: any ColorToken {
         get { return self.backgroundColorSubject.value }
         set {
+            guard newValue.equals(self.backgroundColor) == false else { return }
             self.backgroundColorSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -59,6 +64,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var borderRadius: CGFloat {
         get { return self.borderRadiusSubject.value }
         set {
+            guard newValue != self.borderRadius else { return }
             self.borderRadiusSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -67,6 +73,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var borderWidth: CGFloat {
         get { return self.borderWidthSubject.value }
         set {
+            guard newValue != self.borderWidth else { return }
             self.borderWidthSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -77,6 +84,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var leftSpacing: CGFloat {
         get { return self.leftSpacingSubject.value }
         set {
+            guard newValue != self.leftSpacing else { return }
             self.leftSpacingSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -85,6 +93,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var contentSpacing: CGFloat {
         get { return self.contentSpacingSubject.value }
         set {
+            guard newValue != self.contentSpacing else { return }
             self.contentSpacingSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -93,15 +102,17 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var rightSpacing: CGFloat {
         get { return self.rightSpacingSubject.value }
         set {
+            guard newValue != self.rightSpacing else { return }
             self.rightSpacingSubject.send(newValue)
             self.objectWillChange.send()
         }
     }
 
     private(set) var dimSubject: CurrentValueSubject<CGFloat, Never>
-    private(set) var dim: CGFloat {
+    var dim: CGFloat {
         get { return self.dimSubject.value }
         set {
+            guard newValue != self.dim else { return }
             self.dimSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -120,6 +131,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     private(set) var statusImage: Either<UIImage, Image>? {
         get { return self.statusImageSubject.value }
         set {
+            guard newValue != self.statusImage else { return }
             self.statusImageSubject.send(newValue)
             self.objectWillChange.send()
         }
@@ -129,9 +141,9 @@ final class TextFieldViewModel: ObservableObject, Updateable {
     var alertImage: ImageEither //TODO: Add get/set in views
     var errorImage: ImageEither //TODO: Add get/set in views
 
-    private let getColorsUseCase: any TextFieldGetColorsUseCasable
-    private let getBorderLayoutUseCase: any TextFieldGetBorderLayoutUseCasable
-    private let getSpacingsUseCase: any TextFieldGetSpacingsUseCasable
+    let getColorsUseCase: any TextFieldGetColorsUseCasable
+    let getBorderLayoutUseCase: any TextFieldGetBorderLayoutUseCasable
+    let getSpacingsUseCase: any TextFieldGetSpacingsUseCasable
 
     var theme: Theme {
         didSet {
@@ -239,7 +251,7 @@ final class TextFieldViewModel: ObservableObject, Updateable {
         self.setStatusImage()
     }
 
-    private func setColors() {
+    func setColors() {
         // Colors
         let colors = self.getColorsUseCase.execute(
             theme: self.theme,
@@ -248,33 +260,32 @@ final class TextFieldViewModel: ObservableObject, Updateable {
             isEnabled: self.isEnabled,
             isUserInteractionEnabled: self.isUserInteractionEnabled
         )
-        self.updateIfNeeded(keyPath: \.textColor, newValue: colors.text)
-        self.updateIfNeeded(keyPath: \.placeholderColor, newValue: colors.placeholder)
-        self.updateIfNeeded(keyPath: \.borderColor, newValue: colors.border)
-        self.updateIfNeeded(keyPath: \.statusIconColor, newValue: colors.statusIcon)
-        self.updateIfNeeded(keyPath: \.backgroundColor, newValue: colors.background)
+        self.textColor = colors.text
+        self.placeholderColor = colors.placeholder
+        self.borderColor = colors.border
+        self.statusIconColor = colors.statusIcon
+        self.backgroundColor = colors.background
     }
 
-    private func setBorderLayout() {
+    func setBorderLayout() {
         let borderLayout = self.getBorderLayoutUseCase.execute(
             theme: self.theme,
-            borderStyle: self.borderStyle,
+            borderStyle: self.borderStyle, //.none
             isFocused: self.isFocused
         )
-        self.updateIfNeeded(keyPath: \.borderWidth, newValue: borderLayout.width)
-        self.updateIfNeeded(keyPath: \.borderRadius, newValue: borderLayout.radius)
+        self.borderWidth = borderLayout.width
+        self.borderRadius = borderLayout.radius
     }
 
-    private func setSpacings() {
+    func setSpacings() {
         let spacings = self.getSpacingsUseCase.execute(theme: self.theme, borderStyle: self.borderStyle)
-        self.updateIfNeeded(keyPath: \.leftSpacing, newValue: spacings.left)
-        self.updateIfNeeded(keyPath: \.contentSpacing, newValue: spacings.content)
-        self.updateIfNeeded(keyPath: \.rightSpacing, newValue: spacings.right)
+        self.leftSpacing = spacings.left
+        self.contentSpacing = spacings.content
+        self.rightSpacing = spacings.right
     }
 
-    private func setDim() {
-        let dim = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-        self.updateIfNeeded(keyPath: \.dim, newValue: dim)
+    func setDim() {
+        self.dim = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
     }
 
     private func setFont() {

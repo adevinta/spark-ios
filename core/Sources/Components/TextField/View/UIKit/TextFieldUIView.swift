@@ -88,27 +88,9 @@ public final class TextFieldUIView: UITextField {
         }
     }
 
-    public override var leftViewMode: UITextField.ViewMode {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-        }
-    }
-
-    public override var rightViewMode: UITextField.ViewMode {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-        }
-    }
-
-    public override var clearButtonMode: UITextField.ViewMode {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-        }
-    }
-
     internal init(viewModel: TextFieldViewModel) {
         self.viewModel = viewModel
-        super.init(frame: .init(origin: .zero, size: .init(width: 100, height: 44)))
+        super.init(frame: .init(origin: .zero, size: .init(width: 0, height: 44)))
         self.adjustsFontForContentSizeCategory = true
         self.adjustsFontSizeToFitWidth = false
         self.setupView()
@@ -171,6 +153,7 @@ public final class TextFieldUIView: UITextField {
         self.setupRightStackView()
         self.subscribeToViewModel()
         self.setRightView()
+        self.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private func subscribeToViewModel() {
@@ -292,7 +275,6 @@ public final class TextFieldUIView: UITextField {
         } else {
             super.rightView = self.rightStackView
         }
-        self.setNeedsLayout()
     }
 
     public override func becomeFirstResponder() -> Bool {

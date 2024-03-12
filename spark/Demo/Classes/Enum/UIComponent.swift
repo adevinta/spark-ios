@@ -30,6 +30,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
         .tab,
         .tag,
         .textField,
+        .textFieldAddons,
         .textLink
     ]
 
@@ -55,4 +56,5 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static let tag = UIComponent(rawValue: "Tag")
     static let textLink = UIComponent(rawValue: "TextLink")
     static let textField = UIComponent(rawValue: "TextField")
+    static let textFieldAddons = UIComponent(rawValue: "TextFieldAddons")
 }

@@ -30,7 +30,7 @@ final class TextFieldComponentUIView: ComponentUIView {
 
         super.init(viewModel: viewModel, componentView: self.textField)
 
-        self.textField.placeholder = "Hello there how are you doing"
+        self.textField.placeholder = "Placeholder"
         self.textField.delegate = self
         self.setupSubscriptions()
     }
@@ -116,9 +116,19 @@ final class TextFieldComponentUIView: ComponentUIView {
         }
     }
 
-    private func createButton(side: TextFieldContentSide) -> UIButton {
-        let button = UIButton(configuration: .filled())
-        button.setTitle(side.rawValue, for: .normal)
+    private func createButton(side: TextFieldContentSide) -> UIView {
+        let button = ButtonUIView(
+            theme: self.viewModel.theme,
+            intent: side == .right ? .info : .alert,
+            variant: .tinted,
+            size: .small,
+            shape: .pill,
+            alignment: .trailingImage)
+        if side == .left {
+            button.setImage(.init(systemName: "pencil"), for: .normal)
+        } else {
+            button.setTitle("This is a long text", for: .normal)
+        }
         return button
     }
 

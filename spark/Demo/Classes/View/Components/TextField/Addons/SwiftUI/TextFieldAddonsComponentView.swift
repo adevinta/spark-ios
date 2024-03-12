@@ -1,8 +1,8 @@
 //
-//  TextFieldComponentView.swift
+//  TextFieldAddonsComponentView.swift
 //  Spark
 //
-//  Created by louis.borlee on 08/02/2024.
+//  Created by louis.borlee on 21/02/2024.
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import SwiftUI
 import SparkCore
 
 // swiftlint:disable no_debugging_method
-struct TextFieldComponentView: View {
+struct TextFieldAddonsComponentView: View {
 
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: TextFieldIntent = .neutral
@@ -18,9 +18,13 @@ struct TextFieldComponentView: View {
     @State private var isEnabledState: CheckboxSelectionState = .selected
     @State private var isSecureState: CheckboxSelectionState = .unselected
     @State private var isReadOnlyState: CheckboxSelectionState = .unselected
+    @State private var withPaddingState: CheckboxSelectionState = .unselected
 
     @State private var leftViewContent: TextFieldSideViewContent = .none
     @State private var rightViewContent: TextFieldSideViewContent = .none
+
+    @State private var leftAddonContent: TextFieldSideViewContent = .button
+    @State private var rightAddonContent: TextFieldSideViewContent = .text
 
     @FocusState private var isFocusedState: Bool
 
@@ -31,7 +35,7 @@ struct TextFieldComponentView: View {
 
     var body: some View {
         Component(
-            name: "TextField",
+            name: "TextFieldAddons",
             configuration: {
                 ThemeSelector(theme: self.$theme)
                 EnumSelector(
@@ -52,12 +56,25 @@ struct TextFieldComponentView: View {
                     values: TextFieldSideViewContent.allCases,
                     value: self.$rightViewContent
                 )
+                EnumSelector(
+                    title: "LeftAddon",
+                    dialogTitle: "Select LeftAddon content",
+                    values: TextFieldSideViewContent.allCases,
+                    value: self.$leftAddonContent
+                )
+                EnumSelector(
+                    title: "RightAddon",
+                    dialogTitle: "Select RightAddon content",
+                    values: TextFieldSideViewContent.allCases,
+                    value: self.$rightAddonContent
+                )
                 Checkbox(title: "IsEnabled", selectionState: $isEnabledState)
                 Checkbox(title: "IsSecure", selectionState: $isSecureState)
                 Checkbox(title: "IsReadOnly", selectionState: $isReadOnlyState)
+                Checkbox(title: "WithPadding", selectionState: $withPaddingState)
             },
             integration: {
-                SparkCore.TextFieldView(
+                SparkCore.TextFieldAddons(
                     "Placeholder",
                     text: $text,
                     theme: self.theme,
@@ -72,9 +89,18 @@ struct TextFieldComponentView: View {
                     },
                     rightView: {
                         self.view(side: .right)
+                    },
+                    leftAddon: {
+                        TextFieldAddon(withPadding: withPaddingState == .selected) {
+                            self.addon(side: .left)
+                        }
+                    },
+                    rightAddon: {
+                        TextFieldAddon(withPadding: withPaddingState == .selected) {
+                            self.addon(side: .right)
+                        }
                     }
                 )
-                .frame(maxWidth: .infinity)
                 .disabled(self.isEnabledState == .unselected)
                 .focused($isFocusedState)
                 .onSubmit {
@@ -91,25 +117,44 @@ struct TextFieldComponentView: View {
 
     @ViewBuilder
     private func view(side: ContentSide) -> some View {
-        Group {
-            let content = side == .left ? self.leftViewContent : self.rightViewContent
-            switch content {
-            case .none: EmptyView()
-            case .button:
+        let content = side == .left ? self.leftViewContent : self.rightViewContent
+        switch content {
+        case .none: EmptyView()
+        case .button:
+            createButton(side: side)
+        case .text:
+            createText(side: side)
+        case .image:
+            createImage(side: side)
+        case .all:
+            HStack(spacing: 6) {
                 createButton(side: side)
-            case .text:
-                createText(side: side)
-            case .image:
                 createImage(side: side)
-            case .all:
-                HStack(spacing: 6) {
-                    createButton(side: side)
-                    createImage(side: side)
-                    createText(side: side)
-                }
+                createText(side: side)
             }
         }
     }
+
+    @ViewBuilder
+    private func addon(side: ContentSide) -> some View {
+        let content = side == .left ? self.leftAddonContent : self.rightAddonContent
+        switch content {
+        case .none: EmptyView()
+        case .button:
+            createSparkButton(side: side)
+        case .text:
+            createText(side: side)
+        case .image:
+            createImage(side: side)
+        case .all:
+            HStack(spacing: 6) {
+                createSparkButton(side: side)
+                createImage(side: side)
+                createText(side: side)
+            }
+        }
+    }
+
 
     @ViewBuilder
     private func createImage(side: ContentSide) -> some View {
@@ -125,14 +170,14 @@ struct TextFieldComponentView: View {
     }
 
     @ViewBuilder
-    private func createButton(side: ContentSide) -> some View {
+    private func createSparkButton(side: ContentSide) -> some View {
         ButtonView(
             theme: self.theme,
-            intent: side == .left ? .danger : .alert,
-            variant: .filled,
-            size: .small,
-            shape: .pill,
-            alignment: .leadingImage) {
+            intent: side == .left ? .danger : .info,
+            variant: .tinted,
+            size: .large,
+            shape: .square,
+            alignment: .trailingImage) {
                 switch side {
                 case .left:
                     self.isShowingLeftAlert = true
@@ -141,8 +186,27 @@ struct TextFieldComponentView: View {
                 }
             }
             .title("This is the \(side.rawValue) button", for: .normal)
+            .alert(isPresented: side == .left ? self.$isShowingLeftAlert : self.$isShowingRightAlert) {
+                Alert(title: Text("\(side.rawValue) button has been pressed"), message: nil, dismissButton: Alert.Button.cancel())
+            }
+    }
+
+    @ViewBuilder
+    private func createButton(side: ContentSide) -> some View {
+        Button {
+            switch side {
+            case .left:
+                self.isShowingLeftAlert = true
+            case .right:
+                self.isShowingRightAlert = true
+            }
+        } label: {
+            Text("This is the \(side.rawValue) button")
+        }
+        .buttonStyle(.bordered)
         .alert(isPresented: side == .left ? self.$isShowingLeftAlert : self.$isShowingRightAlert) {
             Alert(title: Text("\(side.rawValue) button has been pressed"), message: nil, dismissButton: Alert.Button.cancel())
         }
+        .tint(side == .left ? .red : .blue)
     }
 }

@@ -10,12 +10,12 @@ import SwiftUI
 
 public struct TextFieldView<LeftView: View, RightView: View>: View {
 
-    @ScaledMetric private var height: CGFloat = 44
+    @ScaledMetric var height: CGFloat = 44
     @ScaledMetric private var imageSize: CGFloat = 16
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
 
     @FocusState private var isFocused: Bool
-    @ObservedObject private var viewModel: TextFieldViewModel
+    @ObservedObject var viewModel: TextFieldViewModel
 
     private let titleKey: LocalizedStringKey
     @Binding private var text: String
