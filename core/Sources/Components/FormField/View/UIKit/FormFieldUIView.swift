@@ -19,6 +19,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         let label = UILabel()
         label.backgroundColor = .clear
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
 
@@ -26,6 +27,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         let label = UILabel()
         label.backgroundColor = .clear
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
 
@@ -67,6 +69,16 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             self.viewModel.title = .left(newValue)
         }
     }
+
+    public var isRequiredTitle: Bool {
+        get {
+            return self.viewModel.isRequiredTitle
+        }
+        set {
+            self.viewModel.isRequiredTitle = newValue
+        }
+    }
+
 
     /// The description of formfield.
     public var descriptionString: String? {
@@ -111,10 +123,9 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     /// The current state of the component.
     public override var isEnabled: Bool {
         get {
-            return self.viewModel.isEnabled
+            return self.component.isEnabled
         }
         set {
-            self.viewModel.isEnabled = newValue
             self.component.isEnabled = newValue
         }
     }
@@ -166,8 +177,10 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     ///   - component: The formfield component.
     public init(
         theme: Theme,
-        intent: FormFieldIntent,
+        feedbackState: FormFieldFeedbackState,
+        isRequiredTitle: Bool = false,
         isEnabled: Bool = true,
+        isSelected: Bool = false,
         title: String? = nil,
         attributedTitle: NSAttributedString? = nil,
         description: String? = nil,
@@ -191,10 +204,10 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
 
         let viewModel = FormFieldViewModel(
             theme: theme,
-            intent: intent,
-            isEnabled: isEnabled,
+            feedbackState: feedbackState,
             title: .left(titleValue),
-            description: .left(descriptionValue)
+            description: .left(descriptionValue),
+            isRequiredTitle: isRequiredTitle
         )
 
         self.viewModel = viewModel
@@ -202,6 +215,9 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         self.component = component
 
         super.init(frame: .zero)
+
+        self.isEnabled = isEnabled
+        self.isSelected = isSelected
         self.commonInit()
     }
 
@@ -232,30 +248,27 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             self.viewModel.$title,
             self.viewModel.$titleFont,
             self.viewModel.$titleColor,
-            self.viewModel.$titleOpacity
-        ).subscribe(in: &self.cancellables) { [weak self] title, font, color, opacity in
+            self.viewModel.$asteriskText
+        ).subscribe(in: &self.cancellables) { [weak self] title, font, color, asteriskText in
             guard let self else { return }
             let labelHidden: Bool = (title?.leftValue?.string ?? "").isEmpty
             self.titleLabel.isHidden = labelHidden
             self.titleLabel.font = font?.leftValue
             self.titleLabel.textColor = color?.leftValue
-            self.titleLabel.attributedText = title?.leftValue
-            self.titleLabel.layer.opacity = Float(opacity)
+            self.titleLabel.attributedText = asteriskText?.leftValue != nil ? asteriskText?.leftValue : title?.leftValue
         }
 
-        Publishers.CombineLatest4(
+        Publishers.CombineLatest3(
             self.viewModel.$description,
             self.viewModel.$descriptionFont,
-            self.viewModel.$descriptionColor,
-            self.viewModel.$descriptionOpacity
-        ).subscribe(in: &self.cancellables) { [weak self] title, font, color, opacity in
+            self.viewModel.$descriptionColor
+        ).subscribe(in: &self.cancellables) { [weak self] title, font, color in
             guard let self else { return }
             let labelHidden: Bool = (title?.leftValue?.string ?? "").isEmpty
             self.descriptionLabel.isHidden = labelHidden
             self.descriptionLabel.font = font?.leftValue
             self.descriptionLabel.textColor = color?.leftValue
             self.descriptionLabel.attributedText = title?.leftValue
-            self.descriptionLabel.layer.opacity = Float(opacity)
         }
 
         self.viewModel.$spacing.subscribe(in: &self.cancellables) { [weak self] spacing in

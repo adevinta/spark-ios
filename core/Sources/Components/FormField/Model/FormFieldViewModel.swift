@@ -13,14 +13,19 @@ import UIKit
 final class FormFieldViewModel: ObservableObject {
 
     // MARK: - Internal properties
-    @Published var title: Either<NSAttributedString?, AttributedString?>?
+    @Published var title: Either<NSAttributedString?, AttributedString?>? {
+        didSet {
+            if isRequiredTitle {
+                self.updateAsterix()
+            }
+        }
+    }
     @Published var titleFont: Either<UIFont, Font>?
     @Published var titleColor: Either<UIColor?, Color?>?
-    @Published var titleOpacity: CGFloat
     @Published var description: Either<NSAttributedString?, AttributedString?>?
     @Published var descriptionFont: Either<UIFont, Font>?
     @Published var descriptionColor: Either<UIColor?, Color?>?
-    @Published var descriptionOpacity: CGFloat
+    @Published var asteriskText: Either<NSAttributedString?, AttributedString?>?
     @Published var spacing: CGFloat
 
     var theme: Theme {
@@ -38,73 +43,95 @@ final class FormFieldViewModel: ObservableObject {
         }
     }
 
-    var isEnabled: Bool {
+    var isRequiredTitle: Bool {
         didSet {
-            guard isEnabled != oldValue else { return }
-            self.updateOpacity()
+            guard isRequiredTitle != oldValue else { return }
+            self.updateAsterix()
         }
     }
 
     var colorUseCase: FormFieldColorsUseCaseable
 
     // MARK: - Init
-
     init(
         theme: Theme,
-        intent: FormFieldIntent,
-        isEnabled: Bool,
+        feedbackState: FormFieldFeedbackState,
         title: Either<NSAttributedString?, AttributedString?>?,
         description: Either<NSAttributedString?, AttributedString?>?,
+        isRequiredTitle: Bool = false,
         colorUseCase: FormFieldColorsUseCaseable = FormFieldColorsUseCase()
     ) {
         self.theme = theme
-        self.intent = intent
-        self.isEnabled = isEnabled
+        self.feedbackState = feedbackState
         self.title = title
         self.description = description
+        self.isRequiredTitle = isRequiredTitle
         self.colorUseCase = colorUseCase
         self.spacing = self.theme.layout.spacing.small
-        self.titleOpacity = self.theme.dims.none
-        self.descriptionOpacity = self.theme.dims.none
+    }
+
+    private func updateAsterix() {
+        let colors = colorUseCase.execute(from: self.theme, feedback: self.feedbackState)
+        let asterix =  NSAttributedString(
+            string: " *",
+            attributes: [
+                NSAttributedString.Key.foregroundColor: colors.asteriskColor.uiColor,
+                NSAttributedString.Key.font : self.theme.typography.caption.uiFont
+            ]
+        )
+
+        if let attributedString = self.title?.optinalLeftValue as? NSAttributedString {
+            let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
+            mutableAttributedString.append(asterix)
+            self.asteriskText = self.isRequiredTitle ? .left(NSAttributedString(attributedString: mutableAttributedString)) : nil
+        }
+
+        if var attributedString = self.title?.optinalRightValue as? AttributedString {
+            attributedString.append(AttributedString(asterix))
+            self.asteriskText = self.isRequiredTitle ? .right(attributedString) : nil
+        }
     }
 
     private func updateColors() {
-        let colors = colorUseCase.execute(from: self.theme.colors, intent: self.intent)
+        let colors = colorUseCase.execute(from: self.theme, feedback: self.feedbackState)
 
-        if self.title?.leftValue != nil {
+        if self.title?.optinalLeftValue != nil {
             self.titleColor = .left(colors.titleColor.uiColor)
-        } else {
+        } 
+
+        if self.title?.optinalRightValue != nil {
             self.titleColor = .right(colors.titleColor.color)
         }
 
-        if self.description?.leftValue != nil {
+        if self.description?.optinalLeftValue != nil {
             self.descriptionColor = .left(colors.descriptionColor.uiColor)
-        } else {
+        } 
+
+        if self.description?.optinalRightValue != nil {
             self.descriptionColor = .right(colors.descriptionColor.color)
         }
     }
 
     private func updateFonts() {
 
-        if self.title?.leftValue != nil {
-            self.titleFont = .left(self.theme.typography.subhead.uiFont)
-        } else {
-            self.titleFont = .right(self.theme.typography.subhead.font)
+        if self.title?.optinalLeftValue != nil {
+            self.titleFont = .left(self.theme.typography.body2.uiFont)
         }
 
-        if self.description?.leftValue != nil {
+        if self.title?.optinalRightValue != nil {
+            self.titleFont = .right(self.theme.typography.body2.font)
+        }
+
+        if self.description?.optinalLeftValue != nil {
             self.descriptionFont = .left(self.theme.typography.caption.uiFont)
-        } else {
+        } 
+
+        if self.description?.optinalRightValue != nil {
             self.descriptionFont = .right(self.theme.typography.caption.font)
         }
     }
 
     private func updateSpacing() {
         self.spacing = self.theme.layout.spacing.small
-    }
-
-    private func updateOpacity() {
-        self.titleOpacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-        self.descriptionOpacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim1
     }
 }
