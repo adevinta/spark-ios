@@ -77,11 +77,11 @@ struct TabEqualSizeView: View {
                     .frame(height: self.itemHeight)
                     .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
             }
-            .frame(height: self.itemHeight)
             .onChange(of: self.viewModel.content) { content in
                 self.minItemWidth = self.screenWidth / CGFloat(content.count)
             }
         }
+        .frame(height: self.itemHeight)
     }
 
     // MARK: - Private functions

@@ -71,8 +71,8 @@ struct TabApportionsSizeView: View {
                     .frame(height: self.itemHeight)
                     .accessibilityIdentifier(TabAccessibilityIdentifier.tab)
             }
-            .frame(height: self.itemHeight)
         }
+        .frame(height: self.itemHeight)
     }
 
     // MARK: - Private functions
