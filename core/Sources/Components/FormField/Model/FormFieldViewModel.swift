@@ -28,13 +28,12 @@ final class FormFieldViewModel: ObservableObject {
             self.updateColors()
             self.updateFonts()
             self.updateSpacing()
-            self.updateOpacity()
         }
     }
 
-    var intent: FormFieldIntent {
+    var feedbackState: FormFieldFeedbackState {
         didSet {
-            guard intent != oldValue else { return }
+            guard feedbackState != oldValue else { return }
             self.updateColors()
         }
     }

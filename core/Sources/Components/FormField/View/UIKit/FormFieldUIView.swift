@@ -99,12 +99,12 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     }
 
     /// Returns the theme of the formfield.
-    public var intent: FormFieldIntent {
+    public var feedbackState: FormFieldFeedbackState {
         get {
-            return self.viewModel.intent
+            return self.viewModel.feedbackState
         }
         set {
-            self.viewModel.intent = newValue
+            self.viewModel.feedbackState = newValue
         }
     }
 

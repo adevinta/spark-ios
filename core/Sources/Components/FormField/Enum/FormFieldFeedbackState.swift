@@ -1,5 +1,5 @@
 //
-//  FormFieldIntent.swift
+//  FormFieldFeedbackState.swift
 //  SparkCore
 //
 //  Created by alican.aycil on 31.01.24.
@@ -9,10 +9,7 @@
 import Foundation
 
 /// The various intent color a formfield may have.
-public enum FormFieldIntent: CaseIterable {
-    case base
-    case support
+public enum FormFieldFeedbackState: CaseIterable {
+    case `default`
     case error
-    case success
-    case alert
 }
