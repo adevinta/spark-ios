@@ -34,6 +34,20 @@ extension Either {
         case .right: fatalError("No value for left part")
         }
     }
+
+    var optinalLeftValue: Left? {
+        switch self {
+        case let .left(value): return value
+        case .right: return nil
+        }
+    }
+
+    var optinalRightValue: Right? {
+        switch self {
+        case let .right(value): return value
+        case .left: return nil
+        }
+    }
 }
 
 extension Either {
