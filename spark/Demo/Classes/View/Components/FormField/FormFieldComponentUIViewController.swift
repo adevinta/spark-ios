@@ -62,8 +62,8 @@ final class FormFieldComponentUIViewController: UIViewController {
             self.presentThemeActionSheet(intents)
         }
 
-        self.viewModel.showIntentSheet.subscribe(in: &self.cancellables) { intents in
-            self.presentIntentActionSheet(intents)
+        self.viewModel.showFeedbackStateSheet.subscribe(in: &self.cancellables) { feedbackStates in
+            self.presentIntentActionSheet(feedbackStates)
         }
 
         self.viewModel.showTitleSheet.subscribe(in: &self.cancellables) { titles in
@@ -102,11 +102,11 @@ extension FormFieldComponentUIViewController {
         self.present(actionSheet, animated: true)
     }
 
-    private func presentIntentActionSheet(_ intents: [FormFieldIntent]) {
-        let actionSheet = SparkActionSheet<FormFieldIntent>.init(
+    private func presentIntentActionSheet(_ intents: [FormFieldFeedbackState]) {
+        let actionSheet = SparkActionSheet<FormFieldFeedbackState>.init(
             values: intents,
-            texts: intents.map { $0.name }) { intent in
-                self.viewModel.intent = intent
+            texts: intents.map { $0.name }) { feedbackState in
+                self.viewModel.feedbackState = feedbackState
             }
         self.present(actionSheet, isAnimated: true)
     }

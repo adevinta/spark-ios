@@ -50,10 +50,10 @@ final class FormFieldComponentUIView: ComponentUIView {
             self.componentView.theme = theme
         }
 
-        self.viewModel.$intent.subscribe(in: &self.cancellables) { [weak self] intent in
+        self.viewModel.$feedbackState.subscribe(in: &self.cancellables) { [weak self] feedbackState in
             guard let self = self else { return }
-            self.viewModel.intentConfigurationItemViewModel.buttonTitle = intent.name
-            self.componentView.intent = intent
+            self.viewModel.feedbackStateConfigurationItemViewModel.buttonTitle = feedbackState.name
+            self.componentView.feedbackState = feedbackState
         }
 
         self.viewModel.$titleStyle.subscribe(in: &self.cancellables) { [weak self] textStyle in
@@ -62,10 +62,6 @@ final class FormFieldComponentUIView: ComponentUIView {
             switch textStyle {
             case .text:
                 self.componentView.title = self.viewModel.text
-            case .asterixText:
-                self.componentView.attributedTitle = self.viewModel.textWithAsterix
-            case .opacityText:
-                self.componentView.attributedTitle = self.viewModel.textWithOpacity
             case .multilineText:
                 self.componentView.title = self.viewModel.multilineText
             case .attributeText:
@@ -81,10 +77,6 @@ final class FormFieldComponentUIView: ComponentUIView {
             switch textStyle {
             case .text:
                 self.componentView.descriptionString = self.viewModel.descriptionText
-            case .asterixText:
-                self.componentView.attributedDescription = self.viewModel.textWithAsterix
-            case .opacityText:
-                self.componentView.attributedDescription = self.viewModel.textWithOpacity
             case .multilineText:
                 self.componentView.descriptionString = self.viewModel.multilineText
             case .attributeText:
@@ -133,6 +125,11 @@ final class FormFieldComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.componentView.isEnabled = isEnabled
         }
+
+        self.viewModel.$isRequiredTitle.subscribe(in: &self.cancellables) {  [weak self] isRequiredTitle in
+            guard let self = self else { return }
+            self.componentView.isRequiredTitle = isRequiredTitle
+        }
     }
 
     // MARK: - Create View
@@ -166,7 +163,7 @@ final class FormFieldComponentUIView: ComponentUIView {
 
         return .init(
             theme: viewModel.theme,
-            intent: .support,
+            feedbackState: .default,
             title: "Agreement",
             description: "Your agreement is important to us.",
             component: component

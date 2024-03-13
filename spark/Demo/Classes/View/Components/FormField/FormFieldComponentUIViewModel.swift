@@ -19,8 +19,8 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showIntentSheet: AnyPublisher<[FormFieldIntent], Never> {
-        showIntentSheetSubject
+    var showFeedbackStateSheet: AnyPublisher<[FormFieldFeedbackState], Never> {
+        showFeedbackStateSheetSubject
             .eraseToAnyPublisher()
     }
 
@@ -41,7 +41,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Private Properties
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
-    private var showIntentSheetSubject: PassthroughSubject<[FormFieldIntent], Never> = .init()
+    private var showFeedbackStateSheetSubject: PassthroughSubject<[FormFieldFeedbackState], Never> = .init()
     private var showTitleStyleSheetSubject: PassthroughSubject<[FormFieldTextStyle], Never> = .init()
     private var showDescriptionStyleSheetSubject: PassthroughSubject<[FormFieldTextStyle], Never> = .init()
     private var showComponentStyleSheetSubject: PassthroughSubject<[FormFieldComponentStyle], Never> = .init()
@@ -55,9 +55,9 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var intentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var feedbackStateConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Intent",
+            name: "Feedback State",
             type: .button,
             target: (source: self, action: #selector(self.presentIntentSheet))
         )
@@ -94,6 +94,13 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.enabledChanged(_:))))
     }()
 
+    lazy var isRequiredConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is Required Title",
+            type: .checkbox(title: "", isOn: self.isRequiredTitle),
+            target: (source: self, action: #selector(self.isRequiredChanged(_:))))
+    }()
+
     // MARK: - Default Properties
     var themes = ThemeCellModel.themes
     let text: String = "Agreement"
@@ -114,60 +121,42 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
         attributeString.setAttributes(attributes, range: NSRange(location: 0, length: 11))
         return attributeString
     }
-    var textWithOpacity: NSAttributedString {
-        let attributeString = NSMutableAttributedString(
-            string: "Your agreement is important to us.",
-            attributes: [
-                .font: self.theme.typography.caption.uiFont,
-                .foregroundColor: self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1).uiColor
-            ]
-        )
-        return attributeString
-    }
-    var textWithAsterix: NSAttributedString {
-        let attributeString = NSMutableAttributedString(
-            string: "Label *",
-            attributes: [.font: self.theme.typography.body2.uiFont]
-        )
-        let attributes: [NSMutableAttributedString.Key: Any] = [
-            .font: self.theme.typography.caption.uiFont,
-            .foregroundColor: self.theme.colors.base.onSurface.opacity(self.theme.dims.dim3).uiColor
-        ]
-        attributeString.setAttributes(attributes, range: NSRange(location: 6, length: 1))
-        return attributeString
-    }
 
     // MARK: - Initialization
     @Published var theme: Theme
-    @Published var intent: FormFieldIntent
+    @Published var feedbackState: FormFieldFeedbackState
     @Published var titleStyle: FormFieldTextStyle
     @Published var descriptionStyle: FormFieldTextStyle
     @Published var componentStyle: FormFieldComponentStyle
     @Published var isEnabled: Bool
+    @Published var isRequiredTitle: Bool
 
     init(
         theme: Theme,
-        intent: FormFieldIntent = .support,
+        feedbackState: FormFieldFeedbackState = .default,
         titleStyle: FormFieldTextStyle = .text,
         descriptionStyle: FormFieldTextStyle = .text,
         componentStyle: FormFieldComponentStyle = .singleCheckbox,
-        isEnabled: Bool = true
+        isEnabled: Bool = true,
+        isRequiredTitle: Bool = false
     ) {
         self.theme = theme
-        self.intent = intent
+        self.feedbackState = feedbackState
         self.titleStyle = titleStyle
         self.descriptionStyle = descriptionStyle
         self.componentStyle = componentStyle
         self.isEnabled = isEnabled
+        self.isRequiredTitle = isRequiredTitle
         super.init(identifier: "FormField")
 
         self.configurationViewModel = .init(itemsViewModel: [
             self.themeConfigurationItemViewModel,
-            self.intentConfigurationItemViewModel,
+            self.feedbackStateConfigurationItemViewModel,
             self.titleStyleConfigurationItemViewModel,
             self.descriptionStyleConfigurationItemViewModel,
             self.componentStyleConfigurationItemViewModel,
-            self.disableConfigurationItemViewModel
+            self.disableConfigurationItemViewModel,
+            self.isRequiredConfigurationItemViewModel
         ])
     }
 }
@@ -180,7 +169,7 @@ extension FormFieldComponentUIViewModel {
     }
 
     @objc func presentIntentSheet() {
-        self.showIntentSheetSubject.send(FormFieldIntent.allCases)
+        self.showFeedbackStateSheetSubject.send(FormFieldFeedbackState.allCases)
     }
 
     @objc func presentTextStyleSheet() {
@@ -198,13 +187,15 @@ extension FormFieldComponentUIViewModel {
     @objc func enabledChanged(_ isSelected: Any?) {
         self.isEnabled = isTrue(isSelected)
     }
+
+    @objc func isRequiredChanged(_ isSelected: Any?) {
+        self.isRequiredTitle = isTrue(isSelected)
+    }
 }
 
 // MARK: - Enum
 enum FormFieldTextStyle: CaseIterable {
     case text
-    case asterixText
-    case opacityText
     case multilineText
     case attributeText
     case none
