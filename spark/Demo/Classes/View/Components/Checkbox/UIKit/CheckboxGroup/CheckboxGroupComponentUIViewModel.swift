@@ -81,6 +81,14 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var isEnableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Is Enable",
+            type: .toggle(isOn: self.isEnabled),
+            target: (source: self, action: #selector(self.toggleIsEnable))
+        )
+    }()
+
     lazy var iconConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Icons",
@@ -142,6 +150,7 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
     @Published var isAlignmentLeft: Bool
     @Published var isLayoutVertical: Bool
     @Published var showGroupTitle: Bool
+    @Published var isEnabled: Bool
     @Published var icon: [String: UIImage]
     @Published var groupType: CheckboxGroupType
 
@@ -151,6 +160,7 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         isAlignmentLeft: Bool = true,
         isLayoutVertical: Bool = false,
         showGroupTitle: Bool = false,
+        isEnabled: Bool = true,
         icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark.uiImage],
         groupType: CheckboxGroupType = .doubleMix
     ) {
@@ -159,6 +169,7 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         self.isAlignmentLeft = isAlignmentLeft
         self.isLayoutVertical = isLayoutVertical
         self.showGroupTitle = showGroupTitle
+        self.isEnabled = isEnabled
         self.icon = icon
         self.groupType = groupType
         super.init(identifier: "Checkbox Group")
@@ -169,6 +180,7 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
             self.alignmentConfigurationItemViewModel,
             self.layoutConfigurationItemViewModel,
             self.titleConfigurationItemViewModel,
+            self.isEnableConfigurationItemViewModel,
             self.iconConfigurationItemViewModel,
             self.groupTypeConfigurationItemViewModel,
             self.itemsSelectionStateConfigurationItemViewModel
@@ -197,6 +209,10 @@ extension CheckboxGroupComponentUIViewModel {
 
     @objc func toggleShowGroupTitle() {
         self.showGroupTitle.toggle()
+    }
+
+    @objc func toggleIsEnable() {
+        self.isEnabled.toggle()
     }
 
     @objc func presentIconSheet() {
