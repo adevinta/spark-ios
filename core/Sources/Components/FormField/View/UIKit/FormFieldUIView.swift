@@ -51,7 +51,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             return self.titleLabel.text
         }
         set {
-            self.viewModel.title = .left(newValue.map(NSAttributedString.init))
+            self.viewModel.setTitle(.left(newValue.map(NSAttributedString.init)))
         }
     }
 
@@ -61,7 +61,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             return self.titleLabel.attributedText
         }
         set {
-            self.viewModel.title = .left(newValue)
+            self.viewModel.setTitle(.left(newValue))
         }
     }
 
@@ -73,7 +73,6 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             self.viewModel.isTitleRequired = newValue
         }
     }
-
 
     /// The description of formfield.
     public var descriptionString: String? {
@@ -257,18 +256,17 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
 
     private func subscribe() {
 
-        Publishers.CombineLatest4(
+        Publishers.CombineLatest3(
             self.viewModel.$title,
             self.viewModel.$titleFont,
-            self.viewModel.$titleColor,
-            self.viewModel.$asteriskText
-        ).subscribe(in: &self.cancellables) { [weak self] title, font, color, asteriskText in
+            self.viewModel.$titleColor
+        ).subscribe(in: &self.cancellables) { [weak self] title, font, color in
             guard let self else { return }
             let labelHidden: Bool = (title?.leftValue?.string ?? "").isEmpty
             self.titleLabel.isHidden = labelHidden
             self.titleLabel.font = font.uiFont
             self.titleLabel.textColor = color.uiColor
-            self.titleLabel.attributedText = asteriskText?.leftValue != nil ? asteriskText?.leftValue : title?.leftValue
+            self.titleLabel.attributedText = title?.leftValue
         }
 
         Publishers.CombineLatest3(

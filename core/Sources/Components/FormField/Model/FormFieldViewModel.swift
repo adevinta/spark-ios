@@ -13,13 +13,7 @@ import UIKit
 final class FormFieldViewModel: ObservableObject {
 
     // MARK: - Internal properties
-    @Published var title: Either<NSAttributedString?, AttributedString?>? {
-        didSet {
-            if isTitleRequired {
-                self.updateAsterix()
-            }
-        }
-    }
+    @Published private(set) var title: Either<NSAttributedString?, AttributedString?>?
     @Published var description: Either<NSAttributedString?, AttributedString?>?
     @Published var asteriskText: Either<NSAttributedString?, AttributedString?>?
     @Published var titleFont: any TypographyFontToken
@@ -33,6 +27,7 @@ final class FormFieldViewModel: ObservableObject {
             self.updateColors()
             self.updateFonts()
             self.updateSpacing()
+            self.updateAsterisk()
         }
     }
 
@@ -46,13 +41,14 @@ final class FormFieldViewModel: ObservableObject {
     var isTitleRequired: Bool {
         didSet {
             guard isTitleRequired != oldValue else { return }
-            self.updateAsterix()
+            self.title = self.getTitleWithAsteriskIfNeeded()
         }
     }
 
     private var colorUseCase: FormFieldColorsUseCaseable
-
     private var colors: FormFieldColors
+    private var userDefinedTitle: Either<NSAttributedString?, AttributedString?>?
+    private var asterisk: NSAttributedString = NSAttributedString()
 
     // MARK: - Init
     init(
@@ -77,33 +73,6 @@ final class FormFieldViewModel: ObservableObject {
         self.descriptionColor = self.colors.descriptionColor
     }
 
-    private func updateAsterix() {
-        let asterisk =  NSAttributedString(
-            string: " *",
-            attributes: [
-                NSAttributedString.Key.foregroundColor: self.colors.asteriskColor.uiColor,
-                NSAttributedString.Key.font : self.theme.typography.caption.uiFont
-            ]
-        )
-
-        switch self.title {
-        case let .left(text):
-            if let text = text {
-                let mutableAttributedString = NSMutableAttributedString(attributedString: text)
-                mutableAttributedString.append(asterisk)
-                self.asteriskText = self.isTitleRequired ? .left(NSAttributedString(attributedString: mutableAttributedString)) : nil
-            }
-
-        case let .right(text):
-            if var text = text {
-                text.append(AttributedString(asterisk))
-                self.asteriskText = self.isTitleRequired ? .right(text) : nil
-            }
-        case .none:
-            self.asteriskText = nil
-        }
-    }
-
     private func updateColors() {
         self.colors = colorUseCase.execute(from: self.theme, feedback: self.feedbackState)
         self.titleColor = self.colors.titleColor
@@ -117,5 +86,43 @@ final class FormFieldViewModel: ObservableObject {
 
     private func updateSpacing() {
         self.spacing = self.theme.layout.spacing.small
+    }
+
+    private func updateAsterisk() {
+        self.asterisk = NSAttributedString(
+            string: " *",
+            attributes: [
+                NSAttributedString.Key.foregroundColor: self.colors.asteriskColor.uiColor,
+                NSAttributedString.Key.font : self.theme.typography.caption.uiFont
+            ]
+        )
+    }
+
+    func setTitle(_ title: Either<NSAttributedString?, AttributedString?>?) {
+        self.userDefinedTitle = title
+        self.title = self.getTitleWithAsteriskIfNeeded()
+    }
+
+    private func getTitleWithAsteriskIfNeeded() -> Either<NSAttributedString?, AttributedString?>? {
+        switch self.userDefinedTitle {
+        case .left(let attributedString):
+            guard let attributedString else { return nil }
+
+            let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
+            if self.isTitleRequired {
+                mutableAttributedString.append(self.asterisk)
+            }
+            return .left(mutableAttributedString)
+
+        case .right(let attributedString):
+            guard var attributedString else { return nil }
+
+            if self.isTitleRequired {
+                attributedString.append(AttributedString(self.asterisk))
+            }
+            return .right(attributedString)
+
+        case .none: return nil
+        }
     }
 }
