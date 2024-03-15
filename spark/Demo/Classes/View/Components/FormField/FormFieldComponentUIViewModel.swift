@@ -97,7 +97,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
     lazy var isRequiredConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Is Required Title",
-            type: .checkbox(title: "", isOn: self.isRequiredTitle),
+            type: .checkbox(title: "", isOn: self.isTitleRequired),
             target: (source: self, action: #selector(self.isRequiredChanged(_:))))
     }()
 
@@ -129,7 +129,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
     @Published var descriptionStyle: FormFieldTextStyle
     @Published var componentStyle: FormFieldComponentStyle
     @Published var isEnabled: Bool
-    @Published var isRequiredTitle: Bool
+    @Published var isTitleRequired: Bool
 
     init(
         theme: Theme,
@@ -138,7 +138,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
         descriptionStyle: FormFieldTextStyle = .text,
         componentStyle: FormFieldComponentStyle = .singleCheckbox,
         isEnabled: Bool = true,
-        isRequiredTitle: Bool = false
+        isTitleRequired: Bool = false
     ) {
         self.theme = theme
         self.feedbackState = feedbackState
@@ -146,7 +146,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
         self.descriptionStyle = descriptionStyle
         self.componentStyle = componentStyle
         self.isEnabled = isEnabled
-        self.isRequiredTitle = isRequiredTitle
+        self.isTitleRequired = isTitleRequired
         super.init(identifier: "FormField")
 
         self.configurationViewModel = .init(itemsViewModel: [
@@ -189,7 +189,7 @@ extension FormFieldComponentUIViewModel {
     }
 
     @objc func isRequiredChanged(_ isSelected: Any?) {
-        self.isRequiredTitle = isTrue(isSelected)
+        self.isTitleRequired = isTrue(isSelected)
     }
 }
 
