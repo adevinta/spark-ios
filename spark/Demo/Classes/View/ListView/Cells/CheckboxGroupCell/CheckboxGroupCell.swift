@@ -49,11 +49,5 @@ final class CheckboxGroupCell: UITableViewCell, Configurable {
         self.component.intent = configuration.intent
         self.component.alignment = configuration.alignment
         self.component.layout = configuration.layout
-
-        if configuration.showGroupTitle {
-            self.component.title = "Checkbox group title"
-        } else {
-            self.component.title = nil
-        }
     }
 }

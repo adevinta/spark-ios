@@ -73,14 +73,6 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var titleConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Show Group Title",
-            type: .toggle(isOn: self.showGroupTitle),
-            target: (source: self, action: #selector(self.toggleShowGroupTitle))
-        )
-    }()
-
     lazy var isEnableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "Is Enable",
@@ -179,7 +171,6 @@ final class CheckboxGroupComponentUIViewModel: ComponentUIViewModel {
             self.intentConfigurationItemViewModel,
             self.alignmentConfigurationItemViewModel,
             self.layoutConfigurationItemViewModel,
-            self.titleConfigurationItemViewModel,
             self.isEnableConfigurationItemViewModel,
             self.iconConfigurationItemViewModel,
             self.groupTypeConfigurationItemViewModel,
@@ -205,10 +196,6 @@ extension CheckboxGroupComponentUIViewModel {
 
     @objc func toggleIsLayoutVertical() {
         self.isLayoutVertical.toggle()
-    }
-
-    @objc func toggleShowGroupTitle() {
-        self.showGroupTitle.toggle()
     }
 
     @objc func toggleIsEnable() {
