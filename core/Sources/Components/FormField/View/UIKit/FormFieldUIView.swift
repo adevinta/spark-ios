@@ -31,13 +31,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         return label
     }()
 
-    private lazy var componentContainerStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [self.component])
-        return stackView
-    }()
-
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, componentContainerStackView, descriptionLabel])
+        let stackView = UIStackView(arrangedSubviews: [self.titleLabel, self.descriptionLabel])
         stackView.axis = .vertical
         stackView.spacing = self.spacing
         stackView.alignment = .leading
@@ -70,12 +65,12 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         }
     }
 
-    public var isRequiredTitle: Bool {
+    public var isTitleRequired: Bool {
         get {
-            return self.viewModel.isRequiredTitle
+            return self.viewModel.isTitleRequired
         }
         set {
-            self.viewModel.isRequiredTitle = newValue
+            self.viewModel.isTitleRequired = newValue
         }
     }
 
@@ -152,8 +147,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     /// The component of formfield.
     public var component: Component {
         didSet {
-            self.componentContainerStackView.removeArrangedSubviews()
-            self.componentContainerStackView.addArrangedSubview(self.component)
+            oldValue.removeFromSuperview()
+            self.stackView.insertArrangedSubview(self.component, at: 1)
         }
     }
 
@@ -178,7 +173,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     public init(
         theme: Theme,
         feedbackState: FormFieldFeedbackState,
-        isRequiredTitle: Bool = false,
+        isTitleRequired: Bool = false,
         isEnabled: Bool = true,
         isSelected: Bool = false,
         title: String? = nil,
@@ -207,7 +202,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             feedbackState: feedbackState,
             title: .left(titleValue),
             description: .left(descriptionValue),
-            isRequiredTitle: isRequiredTitle
+            isTitleRequired: isTitleRequired
         )
 
         self.viewModel = viewModel
@@ -228,7 +223,6 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     }
 
     private func setupViews() {
-        self.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.stackView)
         NSLayoutConstraint.stickEdges(from: self.stackView, to: self)
     }
@@ -253,8 +247,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             guard let self else { return }
             let labelHidden: Bool = (title?.leftValue?.string ?? "").isEmpty
             self.titleLabel.isHidden = labelHidden
-            self.titleLabel.font = font?.leftValue
-            self.titleLabel.textColor = color?.leftValue
+            self.titleLabel.font = font.uiFont
+            self.titleLabel.textColor = color.uiColor
             self.titleLabel.attributedText = asteriskText?.leftValue != nil ? asteriskText?.leftValue : title?.leftValue
         }
 
@@ -266,8 +260,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             guard let self else { return }
             let labelHidden: Bool = (title?.leftValue?.string ?? "").isEmpty
             self.descriptionLabel.isHidden = labelHidden
-            self.descriptionLabel.font = font?.leftValue
-            self.descriptionLabel.textColor = color?.leftValue
+            self.descriptionLabel.font = font.uiFont
+            self.descriptionLabel.textColor = color.uiColor
             self.descriptionLabel.attributedText = title?.leftValue
         }
 

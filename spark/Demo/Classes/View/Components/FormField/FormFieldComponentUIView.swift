@@ -126,9 +126,9 @@ final class FormFieldComponentUIView: ComponentUIView {
             self.componentView.isEnabled = isEnabled
         }
 
-        self.viewModel.$isRequiredTitle.subscribe(in: &self.cancellables) {  [weak self] isRequiredTitle in
+        self.viewModel.$isTitleRequired.subscribe(in: &self.cancellables) {  [weak self] isTitleRequired in
             guard let self = self else { return }
-            self.componentView.isRequiredTitle = isRequiredTitle
+            self.componentView.isTitleRequired = isTitleRequired
         }
     }
 
