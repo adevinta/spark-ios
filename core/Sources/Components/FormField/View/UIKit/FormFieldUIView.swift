@@ -165,43 +165,62 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     /// Initialize a new checkbox UIKit-view.
     /// - Parameters:
     ///   - theme: The current Spark-Theme.
+    ///   - component: The component is covered by formfield.
+    ///   - feedbackState: The formfield feedback state. 'Default' or 'Error'.
     ///   - title: The formfield title.
-    ///   - attributedTitle: The formfield attributedTitle.
-    ///   - description: The formfield description.
-    ///   - attributedDescription: The formfield attributedDescription.
-    ///   - component: The formfield component.
-    public init(
+    ///   - description: The formfield helper message.
+    ///   - isTitleRequired: The asterisk symbol at the end of title.
+    ///   - isEnabled: The formfield's component isEnabled value.
+    ///   - isSelected: The formfield's component isSelected state.
+    public convenience init(
         theme: Theme,
-        feedbackState: FormFieldFeedbackState,
+        component: Component,
+        feedbackState: FormFieldFeedbackState = .default,
+        title: String? = nil,
+        description: String? = nil,
         isTitleRequired: Bool = false,
         isEnabled: Bool = true,
-        isSelected: Bool = false,
-        title: String? = nil,
-        attributedTitle: NSAttributedString? = nil,
-        description: String? = nil,
-        attributedDescription: NSAttributedString? = nil,
-        component: Component
+        isSelected: Bool = false
     ) {
-        let titleValue: NSAttributedString?
-        let descriptionValue: NSAttributedString?
-        
-        if let title = title {
-            titleValue = NSAttributedString(string: title)
-        } else {
-            titleValue = attributedTitle
-        }
+        let attributedTitle: NSAttributedString? = title.map(NSAttributedString.init)
+        let attributedDescription: NSAttributedString? = description.map(NSAttributedString.init)
+        self.init(
+            theme: theme,
+            component: component,
+            feedbackState: feedbackState,
+            attributedTitle: attributedTitle,
+            attributedDescription: attributedDescription,
+            isTitleRequired: isTitleRequired,
+            isEnabled: isEnabled,
+            isSelected: isSelected
+        )
+    }
 
-        if let description = description {
-            descriptionValue = NSAttributedString(string: description)
-        } else {
-            descriptionValue = attributedDescription
-        }
-
+    /// Initialize a new checkbox UIKit-view.
+    /// - Parameters:
+    ///   - theme: The current Spark-Theme.
+    ///   - component: The component is covered by formfield.
+    ///   - feedbackState: The formfield feedback state. 'Default' or 'Error'.
+    ///   - attributedTitle: The formfield attributedTitle.
+    ///   - attributedDescription: The formfield attributed helper message.
+    ///   - isTitleRequired: The asterisk symbol at the end of title.
+    ///   - isEnabled: The formfield's component isEnabled value.
+    ///   - isSelected: The formfield's component isSelected state.
+    public init(
+        theme: Theme,
+        component: Component,
+        feedbackState: FormFieldFeedbackState = .default,
+        attributedTitle: NSAttributedString? = nil,
+        attributedDescription: NSAttributedString? = nil,
+        isTitleRequired: Bool = false,
+        isEnabled: Bool = true,
+        isSelected: Bool = false
+    ) {
         let viewModel = FormFieldViewModel(
             theme: theme,
             feedbackState: feedbackState,
-            title: .left(titleValue),
-            description: .left(descriptionValue),
+            title: .left(attributedTitle),
+            description: .left(attributedDescription),
             isTitleRequired: isTitleRequired
         )
 

@@ -163,10 +163,10 @@ final class FormFieldComponentUIView: ComponentUIView {
 
         return .init(
             theme: viewModel.theme,
+            component: component,
             feedbackState: .default,
             title: "Agreement",
-            description: "Your agreement is important to us.",
-            component: component
+            description: "Your agreement is important to us."
         )
     }
 
