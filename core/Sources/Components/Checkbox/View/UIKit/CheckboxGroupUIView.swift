@@ -191,7 +191,6 @@ public final class CheckboxGroupUIView: UIControl {
     ///   - theme: The Spark-Theme.
     ///   - intent: Current intent of checkbox group
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    @available(*, deprecated, message: "Formfield will be used to show title of component. Please use init without title.")
     public init(
         checkedImage: UIImage,
         items: [any CheckboxGroupItemProtocol],
