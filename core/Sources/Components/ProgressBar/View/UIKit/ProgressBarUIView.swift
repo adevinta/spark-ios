@@ -54,6 +54,7 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
                 multiplier: self.value,
                 view: self.indicatorView
             )
+            self.accessibilityValue = "\(Int(100 * self.value)) %"
         }
     }
 
@@ -95,6 +96,9 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
         // Setup subscriptions
         self.setupSubscriptions()
 
+        // Setup accessibility
+        self.setupAccessibility()
+
         // Load view model
         self.viewModel.load()
     }
@@ -129,5 +133,11 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
         }
 
         super.updateWidthConstraints(&constraint, multiplier: multiplier, view: view)
+    }
+
+    // MARK: - Accessibility
+
+    private func setupAccessibility() {
+        self.isAccessibilityElement = true
     }
 }
