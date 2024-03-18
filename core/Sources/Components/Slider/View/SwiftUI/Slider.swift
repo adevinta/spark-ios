@@ -108,9 +108,10 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
-        .accessibilityElement()
         .accessibilityIdentifier(SliderAccessibilityIdentifier.slider)
-        .accessibilityValue(self.getAccessibilityValue())
+        .accessibilityRepresentation {
+            SwiftUI.Slider(value: $value, in: self.viewModel.bounds, step: self.viewModel.step ?? V.Stride(abs(self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) / 10))
+        }
     }
 
     private func moveHandle(to: CGFloat, width: CGFloat) {
