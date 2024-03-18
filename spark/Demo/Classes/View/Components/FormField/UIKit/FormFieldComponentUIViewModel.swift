@@ -96,7 +96,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
 
     lazy var isRequiredConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Is Required Title",
+            name: "Is Title Required",
             type: .checkbox(title: "", isOn: self.isTitleRequired),
             target: (source: self, action: #selector(self.isRequiredChanged(_:))))
     }()
