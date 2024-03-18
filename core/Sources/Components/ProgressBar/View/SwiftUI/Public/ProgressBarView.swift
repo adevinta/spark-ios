@@ -59,5 +59,6 @@ public struct ProgressBarView: View {
                     .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
             }
         )
+        .accessibilityValue("\(Int(self.value * 100)) %")
     }
 }
