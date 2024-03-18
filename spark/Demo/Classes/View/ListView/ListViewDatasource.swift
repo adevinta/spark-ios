@@ -378,7 +378,7 @@ extension ListViewDataSource {
     func createTagConfigurations() -> [TagConfiguration] {
         [TagConfiguration(theme: SparkTheme.shared, intent: .main, variant: .filled, content: .text),
          TagConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, content: .icon),
-         TagConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, content: .all)]
+         TagConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, content: .iconAndText)]
     }
 
     /// Text Field

@@ -52,7 +52,8 @@ final class TagViewModelTests: XCTestCase {
             expectedIntent: .main,
             expectedVariant: .filled,
             expectedIconImage: nil,
-            expectedText: nil
+            expectedText: nil,
+            expectedAttributedText: nil
         )
     }
 
@@ -62,6 +63,7 @@ final class TagViewModelTests: XCTestCase {
         let variantMock: TagVariant = .outlined
         let iconImageMock = Image(systemName: "square.and.arrow.up")
         let textMock = "Text"
+        let attributedTextMock = AttributedString("AT Text")
 
         let viewModel = TagViewModel(
             theme: self.themeMock,
@@ -69,6 +71,7 @@ final class TagViewModelTests: XCTestCase {
             variant: variantMock,
             iconImage: iconImageMock,
             text: textMock,
+            attributedText: attributedTextMock,
             getColorsUseCase: self.getColorsUseCaseMock
         )
 
@@ -78,7 +81,8 @@ final class TagViewModelTests: XCTestCase {
             expectedIntent: intentMock,
             expectedVariant: variantMock,
             expectedIconImage: iconImageMock,
-            expectedText: textMock
+            expectedText: textMock,
+            expectedAttributedText: attributedTextMock
         )
     }
 
@@ -87,7 +91,8 @@ final class TagViewModelTests: XCTestCase {
         expectedIntent: TagIntent,
         expectedVariant: TagVariant,
         expectedIconImage: Image?,
-        expectedText: String?
+        expectedText: String?,
+        expectedAttributedText: AttributedString?
     ) {
         XCTAssertEqual(givenViewModel.colors,
                        self.tagColorsMock,
@@ -107,6 +112,9 @@ final class TagViewModelTests: XCTestCase {
         XCTAssertEqual(givenViewModel.text,
                        expectedText,
                        "Wrong text value")
+        XCTAssertEqual(givenViewModel.attributedText,
+                       expectedAttributedText,
+                       "Wrong attributedText value")
 
         // **
         // GetColorsUseCase
@@ -237,11 +245,35 @@ final class TagViewModelTests: XCTestCase {
         )
 
         // WHEN
+        viewModel.setAttributedText(.init("AT Text"))
         viewModel.setText(newText)
 
         // THEN
         XCTAssertEqual(viewModel.text,
                        newText,
+                       "Wrong text value")
+        XCTAssertNil(viewModel.attributedText,
+                       "Wrong attributedText value")
+    }
+
+    func test_setAttributedText() {
+        // GIVEN
+        let newAttributedText = AttributedString("AT Text")
+
+        let viewModel = TagViewModel(
+            theme: self.themeMock,
+            getColorsUseCase: self.getColorsUseCaseMock
+        )
+
+        // WHEN
+        viewModel.setText("My Text")
+        viewModel.setAttributedText(newAttributedText)
+
+        // THEN
+        XCTAssertEqual(viewModel.attributedText,
+                       newAttributedText,
+                       "Wrong attributedText value")
+        XCTAssertNil(viewModel.text,
                        "Wrong text value")
     }
 }

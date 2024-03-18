@@ -187,6 +187,9 @@ public struct SwitchView: View {
         .accessibilityAddTraits(self.getAccessibilityTraits())
         .accessibilityIdentifier(AccessibilityIdentifier.toggleView)
         .accessibilityValue(isOn ? "1" : "0")
+        .accessibilityRepresentation {
+            Toggle(isOn: $isOn) { }
+        }
         .onTapGesture {
             withAnimation(.custom) {
                 self.viewModel.toggle()
@@ -199,7 +202,6 @@ public struct SwitchView: View {
         if #available(iOS 17, *) {
             _ = traits.insert(.isToggle)
         }
-        print(traits)
         return traits
     }
 
