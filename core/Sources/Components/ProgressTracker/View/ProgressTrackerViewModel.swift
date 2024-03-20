@@ -68,6 +68,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     @Published var spacings: ProgressTrackerSpacing
     @Published var font: TypographyFontToken
     @Published var labelColor: any ColorToken
+    @Published var interactionState: ProgressTrackerInteractionState = .none
 
     // MARK: Private properties
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
