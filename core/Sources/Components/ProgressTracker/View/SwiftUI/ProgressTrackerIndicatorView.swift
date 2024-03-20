@@ -49,19 +49,21 @@ struct ProgressTrackerIndicatorView: View {
             Circle()
                 .fill(self.viewModel.colors.background.color)
 
-            if let image = self.viewModel.content.indicatorImage {
-                image.resizable()
-                    .renderingMode(.template)
-                    .foregroundStyle(self.viewModel.colors.content.color)
-                    .scaledToFit()
-                    .frame(
-                        width: self.imageHeight,
-                        height: self.imageHeight
-                    )
-            } else if let label = self.viewModel.content.label {
-                Text(String(label))
-                    .font(self.viewModel.font.font)
-                    .foregroundStyle(self.viewModel.colors.content.color)
+            if self.viewModel.size != .small {
+                if let image = self.viewModel.content.indicatorImage {
+                    image.resizable()
+                        .renderingMode(.template)
+                        .foregroundStyle(self.viewModel.colors.content.color)
+                        .scaledToFit()
+                        .frame(
+                            width: self.imageHeight,
+                            height: self.imageHeight
+                        )
+                } else if let label = self.viewModel.content.label {
+                    Text(String(label))
+                        .font(self.viewModel.font.font)
+                        .foregroundStyle(self.viewModel.colors.content.color)
+                }
             }
 
             Circle()

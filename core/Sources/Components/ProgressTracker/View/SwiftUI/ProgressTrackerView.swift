@@ -19,6 +19,7 @@ public struct ProgressTrackerView: View {
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
     @Binding var currentPageIndex: Int
+    @State private var currentTouchedPageIndex: Int = -1
 //    @State private var indicatorPositions = [Int: CGRect]()
 
     //MARK: - Initialization
@@ -101,9 +102,11 @@ public struct ProgressTrackerView: View {
                 self.viewModel.isEnabled = isEnabled
             }
             .backgroundPreferenceValue(ProgressTrackerSizePreferences.self) { preferences in
-                GeometryReader { geometry in
-                    Color.black.opacity(0.000001)
-                        .gesture(self.dragGesture(bounds: geometry.frame(in: .local), preferences: preferences))
+                if self.viewModel.interactionState != .none {
+                    GeometryReader { geometry in
+                        Color.black.opacity(0.000001)
+                            .gesture(self.dragGesture(bounds: geometry.frame(in: .local), preferences: preferences))
+                    }
                 }
             }
     }
@@ -118,11 +121,29 @@ public struct ProgressTrackerView: View {
             .onChanged({ value in
                 guard frame.contains(value.location) else { return }
                 let index = indicators.index(closestTo: value.location)
+                if let index, self.currentTouchedPageIndex == -1 {
+                    switch self.viewModel.interactionState {
+                    case .none: ()
+                    case .discrete: ()
+                    case .continuous: ()
+                    case .independent:
+                        self.currentTouchedPageIndex = index
+                    }
+                }
                 print("ON CHANGED \(String(describing: index)) \(value.location)")
             })
             .onEnded({ value in
-                guard frame.contains(value.location) else {
+                guard frame.contains(value.location), self.currentTouchedPageIndex > -1 else {
+                    self.currentTouchedPageIndex = -1
                     return }
+                switch self.viewModel.interactionState {
+                case .none: ()
+                case .discrete: ()
+                case .continuous: ()
+                case .independent: self.currentPageIndex = self.currentTouchedPageIndex
+                    self.currentTouchedPageIndex = -1
+
+                }
                 let index = indicators.index(closestTo: value.location)
                 print("ON ENDED \(String(describing: index))")
             })
@@ -220,6 +241,12 @@ public struct ProgressTrackerView: View {
     /// Set if the default page number should be shown
     public func showDefaultPageNumber(_ showPageNumber: Bool) -> Self {
         self.viewModel.showDefaultPageNumber = showPageNumber
+        return self
+    }
+
+    /// Set the current interaction state
+    public func interactionState(_ interactionState: ProgressTrackerInteractionState) -> Self {
+        self.viewModel.interactionState = interactionState
         return self
     }
 }
