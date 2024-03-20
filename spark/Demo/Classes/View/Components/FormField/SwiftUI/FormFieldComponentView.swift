@@ -22,6 +22,18 @@ struct FormFieldComponentView: View {
     @State private var isEnabled = CheckboxSelectionState.selected
     @State private var isTitleRequired = CheckboxSelectionState.unselected
 
+    @State private var checkboxGroupItems: [any CheckboxGroupItemProtocol] = [
+        CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
+        CheckboxGroupItemDefault(title: "Checkbox 2", id: "2", selectionState: .selected, isEnabled: true),
+    ]
+    @State private var scrollableCheckboxGroupItems: [any CheckboxGroupItemProtocol] = [
+        CheckboxGroupItemDefault(title: "Hello World", id: "1", selectionState: .unselected, isEnabled: true),
+        CheckboxGroupItemDefault(title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", id: "2", selectionState: .selected, isEnabled: true),
+    ]
+    @State private var texfieldText: String = ""
+    @State private var selectedID: Int? = 0
+    @State private var rating: CGFloat = 2
+
     // MARK: - View
 
     var body: some View {
@@ -75,14 +87,14 @@ struct FormFieldComponentView: View {
                 FormFieldView(
                     theme: self.theme,
                     component: {
-                        self.setComponent(style: self.componentStyle)
+                        self.component
                     },
                     feedbackState: self.feedbackState,
                     attributedTitle: self.setText(isTitle: true, textStyle: self.titleStyle),
                     attributedDescription: self.setText(isTitle: false, textStyle: self.descriptionStyle),
-//                    isTitleRequired: self.isTitleRequired == .selected ? true : false
-                    isTitleRequired: true
+                    isTitleRequired: self.isTitleRequired == .selected ? true : false
                 )
+                .disabled(self.isEnabled == .selected ? false : true)
             }
         )
     }
@@ -116,37 +128,101 @@ struct FormFieldComponentView: View {
         return attributeString
     }
 
-    private func setComponent(style: FormFieldComponentStyle) -> some View {
+    @ViewBuilder
+    var component: some View {
 
-        Rectangle()
-            .foregroundColor(Color.gray)
-            .frame(width: 50, height: 100)
+        switch self.componentStyle {
+        case .basic:
+            Rectangle()
+                .foregroundColor(Color.gray)
+                .frame(width: 50, height: 100)
 
-//        switch style {
-//        case .basic:
-//            return Rectangle()
-//                .background(Color.gray)
-//                    .frame(width: 50, height: 100)
-//        case .singleCheckbox:
-//            break
-//        case .verticalCheckbox:
-//            break
-//        case .horizontalCheckbox:
-//            break
-//        case .horizontalScrollableCheckbox:
-//            break
-//        case .singleRadioButton:
-//            break
-//        case .verticalRadioButton:
-//            break
-//        case .horizontalRadioButton:
-//            break
-//        case .textField:
-//            break
-//        case .addOnTextField:
-//            break
-//        case .ratingInput:
-//            break
-//        }
+        case .singleCheckbox:
+            // Single checkbox might be fixed
+            CheckboxView(
+                text: "Hello World",
+                checkedImage: DemoIconography.shared.checkmark.image,
+                theme: self.theme,
+                intent: .success,
+                selectionState: .constant(.selected)
+            )
+            .fixedSize(horizontal: false, vertical: true)
+
+        case .verticalCheckbox:
+            CheckboxGroupView(
+                checkedImage: DemoIconography.shared.checkmark.image,
+                items: self.$checkboxGroupItems,
+                alignment: .left,
+                theme: self.theme,
+                accessibilityIdentifierPrefix: "checkbox-group"
+            )
+
+        case .horizontalCheckbox:
+            CheckboxGroupView(
+                checkedImage: DemoIconography.shared.checkmark.image,
+                items: self.$checkboxGroupItems,
+                layout: .horizontal,
+                alignment: .left,
+                theme: self.theme,
+                intent: .support,
+                accessibilityIdentifierPrefix: "checkbox-group"
+            )
+
+        case .horizontalScrollableCheckbox:
+            CheckboxGroupView(
+                checkedImage: DemoIconography.shared.checkmark.image,
+                items: self.$scrollableCheckboxGroupItems,
+                layout: .horizontal,
+                alignment: .left,
+                theme: self.theme,
+                intent: .support,
+                accessibilityIdentifierPrefix: "checkbox-group"
+            )
+            case .singleRadioButton:
+                RadioButtonGroupView(
+                    theme: self.theme,
+                    intent: .accent,
+                    selectedID: self.$selectedID,
+                    items: [
+                        RadioButtonItem(id: 0, label: "Radio Button 1")
+                    ],
+                    labelAlignment: .trailing
+                )
+            case .verticalRadioButton:
+                RadioButtonGroupView(
+                    theme: self.theme,
+                    intent: .danger,
+                    selectedID: self.$selectedID,
+                    items: [
+                        RadioButtonItem(id: 0, label: "Radio Button 1"),
+                        RadioButtonItem(id: 1, label: "Radio Button 2"),
+                    ],
+                    labelAlignment: .leading
+                )
+            case .horizontalRadioButton:
+                RadioButtonGroupView(
+                    theme: self.theme,
+                    intent: .danger,
+                    selectedID: self.$selectedID,
+                    items: [
+                        RadioButtonItem(id: 0, label: "Radio Button 1"),
+                        RadioButtonItem(id: 1, label: "Radio Button 2"),
+                    ],
+                    labelAlignment: .trailing,
+                    groupLayout: .horizontal
+                )
+            case .textField:
+                TextField("Component is not ready yet", text: self.$texfieldText)
+                    .textFieldStyle(.roundedBorder)
+            case .addOnTextField:
+                TextField("Component is not ready yet", text: self.$texfieldText)
+                    .textFieldStyle(.roundedBorder)
+            case .ratingInput:
+                RatingInputView(
+                    theme: self.theme,
+                    intent: .main,
+                    rating: self.$rating
+                )
+        }
     }
 }

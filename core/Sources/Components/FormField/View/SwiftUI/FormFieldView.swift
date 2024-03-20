@@ -10,9 +10,9 @@ import SwiftUI
 
 public struct FormFieldView<Component: View>: View {
 
-    private let component: Component
     @ObservedObject private var viewModel: FormFieldViewModel
     @ScaledMetric private var spacing: CGFloat
+    private let component: Component
 
     /// Initialize a new checkbox UIKit-view.
     /// - Parameters:
@@ -23,7 +23,6 @@ public struct FormFieldView<Component: View>: View {
     ///   - description: The formfield helper message.
     ///   - isTitleRequired: The asterisk symbol at the end of title.
     ///   - isEnabled: The formfield's component isEnabled value.
-    ///   - isSelected: The formfield's component isSelected state.
     public init(
         theme: Theme,
         @ViewBuilder component: @escaping () -> Component,
@@ -42,9 +41,7 @@ public struct FormFieldView<Component: View>: View {
             feedbackState: feedbackState,
             attributedTitle: attributedTitle,
             attributedDescription: attributedDescription,
-            isTitleRequired: isTitleRequired,
-            isEnabled: isEnabled,
-            isSelected: isSelected
+            isTitleRequired: isTitleRequired
         )
     }
 
@@ -56,17 +53,13 @@ public struct FormFieldView<Component: View>: View {
     ///   - attributedTitle: The formfield attributedTitle.
     ///   - attributedDescription: The formfield attributed helper message.
     ///   - isTitleRequired: The asterisk symbol at the end of title.
-    ///   - isEnabled: The formfield's component isEnabled value.
-    ///   - isSelected: The formfield's component isSelected state.
     public init(
         theme: Theme,
         @ViewBuilder component: @escaping () -> Component,
         feedbackState: FormFieldFeedbackState = .default,
         attributedTitle: AttributedString? = nil,
         attributedDescription: AttributedString? = nil,
-        isTitleRequired: Bool = false,
-        isEnabled: Bool = true,
-        isSelected: Bool = false
+        isTitleRequired: Bool = false
     ) {
         let viewModel = FormFieldViewModel(
             theme: theme,
@@ -79,10 +72,6 @@ public struct FormFieldView<Component: View>: View {
         self.viewModel = viewModel
         self._spacing = ScaledMetric(wrappedValue: viewModel.spacing)
         self.component = component()
-
-
-//        self.isEnabled = isEnabled
-//        self.isSelected = isSelected
     }
 
     public var body: some View {
@@ -93,7 +82,6 @@ public struct FormFieldView<Component: View>: View {
                     .font(self.viewModel.titleFont.font)
                     .foregroundStyle(self.viewModel.titleColor.color)
             }
-            
             self.component
 
             if let description = self.viewModel.description?.rightValue {
@@ -102,7 +90,6 @@ public struct FormFieldView<Component: View>: View {
                     .foregroundStyle(self.viewModel.descriptionColor.color)
             }
         }
+        .accessibilityIdentifier(FormFieldAccessibilityIdentifier.formField)
     }
-
-
 }

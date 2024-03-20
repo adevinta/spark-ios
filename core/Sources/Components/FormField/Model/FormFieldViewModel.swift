@@ -15,7 +15,6 @@ final class FormFieldViewModel: ObservableObject {
     // MARK: - Internal properties
     @Published private(set) var title: Either<NSAttributedString?, AttributedString?>?
     @Published var description: Either<NSAttributedString?, AttributedString?>?
-    @Published var asteriskText: Either<NSAttributedString?, AttributedString?>?
     @Published var titleFont: any TypographyFontToken
     @Published var descriptionFont: any TypographyFontToken
     @Published var titleColor: any ColorToken
@@ -61,7 +60,7 @@ final class FormFieldViewModel: ObservableObject {
     ) {
         self.theme = theme
         self.feedbackState = feedbackState
-        self.title = title
+        self.userDefinedTitle = title
         self.description = description
         self.isTitleRequired = isTitleRequired
         self.colorUseCase = colorUseCase
@@ -71,6 +70,9 @@ final class FormFieldViewModel: ObservableObject {
         self.descriptionFont = self.theme.typography.caption
         self.titleColor = self.colors.titleColor
         self.descriptionColor = self.colors.descriptionColor
+
+        self.updateAsterisk()
+        self.setTitle(title)
     }
 
     private func updateColors() {
