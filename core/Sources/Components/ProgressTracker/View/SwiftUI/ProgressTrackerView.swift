@@ -19,8 +19,6 @@ public struct ProgressTrackerView: View {
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
     @Binding var currentPageIndex: Int
-    @State private var currentTouchedPageIndex: Int = -1
-//    @State private var indicatorPositions = [Int: CGRect]()
 
     //MARK: - Initialization
     /// Initializer
@@ -117,35 +115,15 @@ public struct ProgressTrackerView: View {
         let indicators = preferences.sorted { $0.key < $1.key }.map(\.value)
         let frame = bounds ?? .zero
 
+        let gestureHandler = self.gestureHandler(frame: frame, indicators: indicators)
+
         return DragGesture(minimumDistance: .zero)
             .onChanged({ value in
-                guard frame.contains(value.location) else { return }
-                let index = indicators.index(closestTo: value.location)
-                if let index, self.currentTouchedPageIndex == -1 {
-                    switch self.viewModel.interactionState {
-                    case .none: ()
-                    case .discrete: ()
-                    case .continuous: ()
-                    case .independent:
-                        self.currentTouchedPageIndex = index
-                    }
-                }
-                print("ON CHANGED \(String(describing: index)) \(value.location)")
+                gestureHandler.onChanged(location: value.location)
             })
             .onEnded({ value in
-                guard frame.contains(value.location), self.currentTouchedPageIndex > -1 else {
-                    self.currentTouchedPageIndex = -1
-                    return }
-                switch self.viewModel.interactionState {
-                case .none: ()
-                case .discrete: ()
-                case .continuous: ()
-                case .independent: self.currentPageIndex = self.currentTouchedPageIndex
-                    self.currentTouchedPageIndex = -1
-
-                }
+                gestureHandler.onEnded(location: value.location)
                 let index = indicators.index(closestTo: value.location)
-                print("ON ENDED \(String(describing: index))")
             })
     }
 
@@ -155,6 +133,38 @@ public struct ProgressTrackerView: View {
             ProgressTrackerHorizontalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: self.viewModel)
         } else {
             ProgressTrackerVerticalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: self.viewModel)
+        }
+    }
+
+    private func gestureHandler(frame: CGRect, indicators: [CGRect]) -> any ProgressTrackerGestureHandling {
+
+        switch self.viewModel.interactionState {
+        case .none:
+            return ProgressTrackerNoneGestureHandler()
+        case .discrete:
+            return ProgressTrackerDiscreteGestureHandler(
+                currentPageIndex: self._currentPageIndex,
+                currentTouchedPageIndex: self.$viewModel.currentPressedIndicator,
+                indicators: indicators, 
+                frame: frame,
+                disabledIndices: self.viewModel.disabledIndices
+            )
+        case .continuous:
+            return ProgressTrackerContinuousGestureHandler(
+                currentPageIndex: self._currentPageIndex,
+                currentTouchedPageIndex: self.$viewModel.currentPressedIndicator,
+                indicators: indicators, 
+                frame: frame,
+                disabledIndices: self.viewModel.disabledIndices
+            )
+        case .independent:
+            return ProgressTrackerIndependentGestureHandler(
+                currentPageIndex: self._currentPageIndex,
+                currentTouchedPageIndex: self.$viewModel.currentPressedIndicator,
+                indicators: indicators,
+                frame: frame,
+                disabledIndices: self.viewModel.disabledIndices
+            )
         }
     }
 
