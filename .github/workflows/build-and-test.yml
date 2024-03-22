@@ -24,6 +24,9 @@ jobs:
     name: core_unit_tests
     needs: [ core_build ]
     runs-on: macos-13
+    env:
+      MINT_PATH: .mint/lib
+      MINT_LINK_PATH: .mint/bin
     steps:
       - name: Select Xcode Version
         uses: maxim-lobanov/setup-xcode@v1.6.0
@@ -31,10 +34,17 @@ jobs:
           xcode-version: '15.0.1'
       - name: Checkout actions
         uses: actions/checkout@v3
+      - name: Mint cache
+        uses: actions/cache@v3
+        with:
+          path: .mint
+          key: ${{ runner.os }}-mint-${{ hashFiles('**/Mintfile') }}
+          restore-keys: |
+            ${{ runner.os }}-mint-
+      - name: Mint bootstrap
+        run: brew install mint && mint bootstrap
       - name: Run sourcery
-        run: |
-          brew install sourcery
-          sourcery
+        run: mint run krzysztofzablocki/Sourcery
       - name: Run xcodegen
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
