@@ -75,7 +75,7 @@ struct ProgressTrackerComponent: View {
 
                 CheckboxView(
                     text: "Disable",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$isDisabled
@@ -83,7 +83,7 @@ struct ProgressTrackerComponent: View {
 
                 CheckboxView(
                     text: "Completed Page Indicator",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$completedPageIndicator
@@ -91,7 +91,7 @@ struct ProgressTrackerComponent: View {
 
                 CheckboxView(
                     text: "Current Page Indicator",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$currentPageIndicator
@@ -116,7 +116,7 @@ struct ProgressTrackerComponent: View {
 
                 CheckboxView(
                     text: "With Label",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$showLabel
