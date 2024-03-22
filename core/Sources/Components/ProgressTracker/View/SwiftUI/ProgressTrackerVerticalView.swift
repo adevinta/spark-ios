@@ -139,6 +139,7 @@ struct ProgressTrackerVerticalView: View {
             size: self.size,
             content: self.viewModel.content.pageContent(atIndex: index))
         .selected(self.viewModel.isSelected(at: index))
+        .highlighted(self.viewModel.isHighlighted(at: index))
         .disabled(!self.viewModel.isEnabled(at: index))
         .overlay {
             GeometryReader { geo in
