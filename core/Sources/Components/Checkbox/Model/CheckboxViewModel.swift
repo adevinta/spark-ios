@@ -14,7 +14,7 @@ final class CheckboxViewModel: ObservableObject {
     
     // MARK: - Internal properties
     @Published var text: Either<NSAttributedString?, String?>
-    @Published var checkedImage: UIImage
+    @Published var checkedImage: Either<UIImage, Image>
     @Published var colors: CheckboxColors
     @Published var alignment: CheckboxAlignment {
         didSet {
@@ -58,7 +58,7 @@ final class CheckboxViewModel: ObservableObject {
 
     init(
         text: Either<NSAttributedString?, String?>,
-        checkedImage: UIImage,
+        checkedImage: Either<UIImage, Image>,
         theme: Theme,
         intent: CheckboxIntent = .main,
         colorsUseCase: CheckboxColorsUseCaseable = CheckboxColorsUseCase(),

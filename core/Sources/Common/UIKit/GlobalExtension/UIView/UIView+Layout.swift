@@ -10,6 +10,13 @@ import UIKit
 
 extension UIView {
 
+    func addSubviewCentered(_ subview: UIView) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        subview.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(subview)
+
+        NSLayoutConstraint.center(from: subview, to: self)
+    }
     /// Adds a subview with the same size as the view.
     /// - Parameter subview: subview to be added
     func addSubviewSizedEqually(_ subview: UIView) {

@@ -62,6 +62,10 @@ struct ComponentsView: View {
                 }
             }
 
+            Button("Progress Tracker") {
+                self.navigateToView(ProgressTrackerComponent())
+            }
+
             Button("Radio Button") {
                 self.navigateToView(RadioButtonComponent())
             }
@@ -95,6 +99,14 @@ struct ComponentsView: View {
 
                 Button("Tag") {
                     self.navigateToView(TagComponentView())
+                }
+
+                Button("TextField") {
+                    self.navigateToView(TextFieldComponentView())
+                }
+
+                Button("TextFieldAddons") {
+                    self.navigateToView(TextFieldAddonsComponentView())
                 }
 
                 Button("TextLink") {

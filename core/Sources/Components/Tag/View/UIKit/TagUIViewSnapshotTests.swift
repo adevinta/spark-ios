@@ -26,37 +26,49 @@ final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
             let configurations = scenario.configuration(isSwiftUIComponent: false)
             for configuration in configurations {
 
-                var view: TagUIView?
-                switch (configuration.iconImage, configuration.text) {
-                case (nil, nil):
-                    XCTFail("Icon or text should be set")
-
-                case (let iconImage?, nil):
-                    view = TagUIView(
-                        theme: self.theme,
-                        intent: configuration.intent,
-                        variant: configuration.variant,
-                        iconImage: iconImage.leftValue
-                    )
-                case (nil, let text?):
+                var view: TagUIView
+                switch configuration.content {
+                case .text(let text), .longText(let text):
                     view = TagUIView(
                         theme: self.theme,
                         intent: configuration.intent,
                         variant: configuration.variant,
                         text: text
                     )
-                case let (iconImage?, text?):
+
+                case .attributedText(let attributedText):
                     view = TagUIView(
                         theme: self.theme,
                         intent: configuration.intent,
                         variant: configuration.variant,
-                        iconImage: iconImage.leftValue,
+                        attributedText: attributedText.leftValue
+                    )
+
+                case .icon(let image):
+                    view = TagUIView(
+                        theme: self.theme,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
+                        iconImage: image.leftValue
+                    )
+
+                case let .iconAndText(image, text), let .iconAndLongText(image, text):
+                    view = TagUIView(
+                        theme: self.theme,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
+                        iconImage: image.leftValue,
                         text: text
                     )
-                }
 
-                guard let view else {
-                    return
+                case let .iconAndAttributedText(image, attributedText):
+                    view = TagUIView(
+                        theme: self.theme,
+                        intent: configuration.intent,
+                        variant: configuration.variant,
+                        iconImage: image.leftValue,
+                        attributedText: attributedText.leftValue
+                    )
                 }
 
                 view.translatesAutoresizingMaskIntoConstraints = false

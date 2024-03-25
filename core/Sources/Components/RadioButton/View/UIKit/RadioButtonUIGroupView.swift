@@ -273,6 +273,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
         self.setupView()
         self.setupConstraints()
+        self.enableTouch()
         self.setupSubscriptions()
     }
 
@@ -348,7 +349,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                        color: self.viewModel.sublabelColor.uiColor)
     }
 
-
     private func updateLayout(items: [RadioButtonUIItem<ID>]) {
         NSLayoutConstraint.deactivate(self.allConstraints)
         for view in self.radioButtonViews {
@@ -376,6 +376,8 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
                 selectedID: self.backingSelectedID,
                 labelAlignment: self.labelAlignment
             )
+            radioButtonView.accessibilityIdentifier = RadioButtonAccessibilityIdentifier.radioButtonIdentifier(id: $0.id)
+
             radioButtonView.translatesAutoresizingMaskIntoConstraints = false
 
             let action = UIAction { [weak self] _ in

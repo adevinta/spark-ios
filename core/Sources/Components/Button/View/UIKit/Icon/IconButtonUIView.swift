@@ -70,4 +70,13 @@ public final class IconButtonUIView: ButtonMainUIView {
             self.imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         ])
     }
+
+    // MARK: - Instrinsic Content Size
+
+    public override var intrinsicContentSize: CGSize {
+        return CGSize(
+            width: self.height, // It is always a square
+            height: self.height
+        )
+    }
 }

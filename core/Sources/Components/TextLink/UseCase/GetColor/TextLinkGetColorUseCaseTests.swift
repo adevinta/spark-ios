@@ -91,6 +91,8 @@ private extension TextLinkIntent {
             return colorsMock.states.mainPressed
         case .neutral:
             return colorsMock.states.neutralPressed
+        case .onSurface:
+            return colorsMock.base.onSurface
         case .success:
             return colorsMock.states.successPressed
         case .support:
@@ -114,6 +116,8 @@ private extension TextLinkIntent {
             return colorsMock.main.main
         case .neutral:
             return colorsMock.feedback.neutral
+        case .onSurface:
+            return colorsMock.base.onSurface
         case .success:
             return colorsMock.feedback.success
         case .support:

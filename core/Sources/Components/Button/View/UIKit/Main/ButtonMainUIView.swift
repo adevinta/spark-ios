@@ -28,6 +28,10 @@ public class ButtonMainUIView: UIControl {
         imageView.contentMode = .scaleAspectFit
         imageView.tintAdjustmentMode = .normal
         imageView.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageView
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        imageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return imageView
     }()
 
@@ -132,8 +136,8 @@ public class ButtonMainUIView: UIControl {
         }
     }
 
-    /// Button modifications should be animated or not. **True** by default.
-    public var isAnimated: Bool = true
+    /// Button modifications should be animated or not. **False** by default.
+    public var isAnimated: Bool = false
 
     // MARK: - Internal Properties
 
@@ -144,8 +148,8 @@ public class ButtonMainUIView: UIControl {
     private var heightConstraint: NSLayoutConstraint?
     private var imageViewHeightConstraint: NSLayoutConstraint?
 
-    @ScaledUIMetric private var height: CGFloat = 0
-    @ScaledUIMetric private var imageHeight: CGFloat = 0
+    @ScaledUIMetric var height: CGFloat = 0
+    @ScaledUIMetric var imageHeight: CGFloat = 0
 
     @ScaledUIMetric private var cornerRadius: CGFloat = 0
     @ScaledUIMetric private var borderWidth: CGFloat = 0
@@ -179,6 +183,9 @@ public class ButtonMainUIView: UIControl {
 
         // Setup constraints
         self.setupConstraints()
+
+        // Setup gesture
+        self.enableTouch()
 
         // Setup publisher subcriptions
         self.setupSubscriptions()

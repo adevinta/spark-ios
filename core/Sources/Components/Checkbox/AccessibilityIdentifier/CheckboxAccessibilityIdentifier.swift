@@ -12,4 +12,8 @@ import Foundation
 public enum CheckboxAccessibilityIdentifier {
     /// The default accessibility identifier. Can be changed by the consumer
     public static let checkbox = "spark-check-box"
+    /// The default accessibility identifier. Can be changed by the consumer
+    public static let checkboxGroup = "spark-check-box-group"
+    /// The identifier of checkbox group ui view title
+    public static let checkboxGroupTitle = "spark-check-box-group-title"
 }

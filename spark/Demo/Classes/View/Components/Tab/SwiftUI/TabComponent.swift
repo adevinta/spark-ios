@@ -20,9 +20,9 @@ struct TabComponent: View {
     @State var isDisabled = CheckboxSelectionState.unselected
     @State var allDisabled = CheckboxSelectionState.unselected
     @State var equalSize = CheckboxSelectionState.selected
-    @State var longLabel = CheckboxSelectionState.unselected
+    @State var longLabel = CheckboxSelectionState.selected
     @State var tabSize: TabSize = .md
-    @State var numberOfTabs = 2
+    @State var numberOfTabs = 4
     @State var selectedTab = 0
     @State var height = CGFloat(50)
     @State var badgePosition = 0
@@ -62,14 +62,14 @@ struct TabComponent: View {
                 HStack {
                     CheckboxView(
                         text: "With Label",
-                        checkedImage: DemoIconography.shared.checkmark,
+                        checkedImage: DemoIconography.shared.checkmark.image,
                         theme: theme,
                         isEnabled: true,
                         selectionState: self.$showText
                     )
                     CheckboxView(
                         text: "Long",
-                        checkedImage: DemoIconography.shared.checkmark,
+                        checkedImage: DemoIconography.shared.checkmark.image,
                         theme: theme,
                         isEnabled: true,
                         selectionState: self.$longLabel
@@ -79,7 +79,7 @@ struct TabComponent: View {
                 HStack {
                     CheckboxView(
                         text: "With Icon",
-                        checkedImage: DemoIconography.shared.checkmark,
+                        checkedImage: DemoIconography.shared.checkmark.image,
                         theme: theme,
                         isEnabled: true,
                         selectionState: self.$showIcon
@@ -87,7 +87,7 @@ struct TabComponent: View {
 
                     CheckboxView(
                         text: "Show Badge",
-                        checkedImage: DemoIconography.shared.checkmark,
+                        checkedImage: DemoIconography.shared.checkmark.image,
                         theme: theme,
                         isEnabled: true,
                         selectionState: self.$showBadge
@@ -99,7 +99,7 @@ struct TabComponent: View {
 
                 CheckboxView(
                     text: "Disable Random Tab",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$isDisabled
@@ -114,7 +114,7 @@ struct TabComponent: View {
 
                 CheckboxView(
                     text: "Disable All Tabs",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$allDisabled
@@ -122,7 +122,7 @@ struct TabComponent: View {
 
                 CheckboxView(
                     text: "Equal sized",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: theme,
                     isEnabled: true,
                     selectionState: self.$equalSize
@@ -203,7 +203,6 @@ private extension CheckboxSelectionState {
 
 private extension Image {
     static let names = [
-        "fleuron",
         "trash",
         "folder",
         "paperplane",

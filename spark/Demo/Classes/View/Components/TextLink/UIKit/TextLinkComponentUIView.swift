@@ -149,6 +149,11 @@ final class TextLinkComponentUIView: ComponentUIView {
             self.viewModel.controlTypeConfigurationItemViewModel.buttonTitle = controlType.name
             self.setControl(from: controlType)
         }
+
+        self.viewModel.$isCustomAccessibilityLabel.subscribe(in: &self.subcriptions) { [weak self] isCustomAccessibilityLabel in
+            guard let self = self else { return }
+            self.componentView.accessibilityLabel = isCustomAccessibilityLabel ? "My Textlink Label" : nil
+        }
     }
 
     private func setControl(from controlType: TextLinkControlType) {

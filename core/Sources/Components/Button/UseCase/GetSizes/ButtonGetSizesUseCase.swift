@@ -10,10 +10,6 @@ import Foundation
 
 // sourcery: AutoMockable, AutoMockTest
 protocol ButtonGetSizesUseCaseable {
-    @available(*, deprecated, message: "Use the execute function with the type parameter instead. Must be removed when ButtonViewModelDeprecated is deleted")
-    func execute(size: ButtonSize,
-                 isOnlyIcon: Bool) -> ButtonSizes
-
     func execute(size: ButtonSize,
                  type: ButtonType) -> ButtonSizes
 }
@@ -36,24 +32,6 @@ struct ButtonGetSizesUseCase: ButtonGetSizesUseCaseable {
     }
 
     // MARK: - Methods
-
-    func execute(size: ButtonSize,
-                 isOnlyIcon: Bool) -> ButtonSizes {
-        let height: CGFloat
-        switch size {
-        case .small:
-            height = Constants.Height.small
-        case .medium:
-            height = Constants.Height.medium
-        case .large:
-            height = Constants.Height.large
-        }
-
-        // The value is differente only when there is only an image and the size is large
-        let imageSize: CGFloat = (isOnlyIcon && size == .large) ? Constants.ImageSize.large : Constants.ImageSize.medium
-
-        return .init(height: height, imageSize: imageSize)
-    }
 
     func execute(
         size: ButtonSize,

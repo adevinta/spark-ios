@@ -10,7 +10,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol TabsGetAttributesUseCaseable {
-    func execute(theme: Theme, isEnabled: Bool) -> TabsAttributes
+    func execute(theme: Theme, size: TabSize, isEnabled: Bool) -> TabsAttributes
 }
 
 /// TabGetColorUseCase
@@ -25,10 +25,11 @@ struct TabsGetAttributesUseCase: TabsGetAttributesUseCaseable {
     ///
     /// - Parameters:
     ///    - theme: The theme
+    ///    - size: The tab size
     ///    - isEnabled: Bool.
     ///
     /// - Returns: ``TabsAttributes`` containing colors and line hight of the tab control.
-    func execute(theme: Theme, isEnabled: Bool) -> TabsAttributes {
+    func execute(theme: Theme, size: TabSize, isEnabled: Bool) -> TabsAttributes {
 
         var lineColor = theme.colors.base.outline
         if !isEnabled {
@@ -37,6 +38,7 @@ struct TabsGetAttributesUseCase: TabsGetAttributesUseCaseable {
 
         return TabsAttributes(
             lineHeight: theme.border.width.small,
+            itemHeight: size.itemHeight,
             lineColor: lineColor,
             backgroundColor: ColorTokenDefault.clear
         )

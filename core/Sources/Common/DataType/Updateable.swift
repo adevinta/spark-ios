@@ -9,9 +9,10 @@
 import Foundation
 
 protocol Updateable {
-    func update<Value>(_ keyPath: WritableKeyPath<Self, Value>, value: Value) -> Self
-    func updateIfNeeded<Value: Equatable>(keyPath: ReferenceWritableKeyPath<Self, Value>, newValue: Value)
-    func updateIfNeeded(keyPath: ReferenceWritableKeyPath<Self, any ColorToken>, newValue: any ColorToken)
+    associatedtype T
+    func update<Value>(_ keyPath: WritableKeyPath<T, Value>, value: Value) -> T
+    func updateIfNeeded<Value: Equatable>(keyPath: ReferenceWritableKeyPath<T, Value>, newValue: Value)
+    func updateIfNeeded(keyPath: ReferenceWritableKeyPath<T, any ColorToken>, newValue: any ColorToken)
 }
 
 extension Updateable {
@@ -28,7 +29,7 @@ extension Updateable {
     }
 
     func updateIfNeeded(keyPath: ReferenceWritableKeyPath<Self, any ColorToken>, newValue: any ColorToken) {
-        guard self[keyPath: keyPath].equals(newValue) == false else { return }
+        guard self[keyPath: keyPath].equals(newValue) == false else { return }	
         self[keyPath: keyPath] = newValue
     }
 }

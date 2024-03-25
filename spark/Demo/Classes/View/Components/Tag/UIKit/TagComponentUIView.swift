@@ -68,18 +68,14 @@ final class TagComponentUIView: ComponentUIView {
             guard let self = self else { return }
 
             self.viewModel.contentConfigurationItemViewModel.buttonTitle = content.name
+            self.componentView.iconImage = content.shouldShowIcon ? self.viewModel.image : nil
 
-            switch content {
-            case .text:
-                self.componentView.iconImage = nil
-                self.componentView.text = self.viewModel.text
-            case .icon:
+            if content.shouldShowText {
+                self.componentView.text = content.text
+            } else if content.shouldShowAttributedText {
+                self.componentView.attributedText = self.viewModel.attributeText(content.text)
+            } else {
                 self.componentView.text = nil
-                self.componentView.iconImage = self.viewModel.image
-
-            case .all:
-                self.componentView.text = self.viewModel.text
-                self.componentView.iconImage = self.viewModel.image
             }
         }
     }
@@ -96,21 +92,39 @@ final class TagComponentUIView: ComponentUIView {
                 iconImage: viewModel.image
             )
 
-        case .text:
+        case .text, .longText:
             tagView = TagUIView(
                 theme: viewModel.theme,
                 intent: viewModel.intent,
                 variant: viewModel.variant,
-                text: viewModel.text
+                text: viewModel.content.text
             )
 
-        case .all:
+        case .attributedText, .longAttributedText:
             tagView = TagUIView(
                 theme: viewModel.theme,
                 intent: viewModel.intent,
                 variant: viewModel.variant,
                 iconImage: viewModel.image,
-                text: viewModel.text
+                attributedText: viewModel.attributeText(viewModel.content.text)
+            )
+
+        case .iconAndText, .iconAndLongText:
+            tagView = TagUIView(
+                theme: viewModel.theme,
+                intent: viewModel.intent,
+                variant: viewModel.variant,
+                iconImage: viewModel.image,
+                text: viewModel.content.text
+            )
+
+        case .iconAndAttributedText, .iconAndLongAttributedText:
+            tagView = TagUIView(
+                theme: viewModel.theme,
+                intent: viewModel.intent,
+                variant: viewModel.variant,
+                iconImage: viewModel.image,
+                attributedText: viewModel.attributeText(viewModel.content.text)
             )
         }
         return tagView

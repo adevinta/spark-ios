@@ -81,7 +81,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
             let checkbox = CheckboxUIView(
                 theme: viewModel.theme,
                 text: title,
-                checkedImage: DemoIconography.shared.checkmark,
+                checkedImage: DemoIconography.shared.checkmark.uiImage,
                 selectionState: isOn ? .selected : .unselected,
                 alignment: .left)
             checkbox.accessibilityIdentifier = self.viewModel.identifier + "Checkbox"

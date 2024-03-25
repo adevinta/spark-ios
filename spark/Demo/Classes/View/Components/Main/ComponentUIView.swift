@@ -166,6 +166,13 @@ class ComponentUIView: UIView {
         self.backgroundColor = .systemBackground
         self.accessibilityIdentifier = self.viewModel.identifier
 
+        // Gesture
+        let tapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(self.tagGestureRecognizerAction)
+        )
+        self.addGestureRecognizer(tapGestureRecognizer)
+
         // Subviews
         self.addSubview(self.scrollView)
 
@@ -228,6 +235,8 @@ class ComponentUIView: UIView {
 
         self.componentView.setNeedsLayout()
         self.componentView.layoutIfNeeded()
+        self.componentView.contentMode = .scaleToFill
+        self.componentView.sizeToFit()
     }
 
     // MARK: - Subscribe
@@ -257,6 +266,13 @@ class ComponentUIView: UIView {
                 self.viewModel.spaceContainerType = type
             }
         viewController.present(actionSheet, animated: true)
+    }
+
+    // MARK: - Action
+
+    @objc
+    func tagGestureRecognizerAction() {
+        Console.log("View tapped from gesture")
     }
 }
 

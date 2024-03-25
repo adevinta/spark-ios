@@ -55,7 +55,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     textColor: theme.colors.base.onSurface,
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.error,
-                    iconColor: theme.colors.main.onMain,
+                    iconColor: theme.colors.feedback.onError,
                     pressedBorderColor: theme.colors.feedback.errorContainer
                 )
             case .success:
@@ -63,7 +63,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     textColor: theme.colors.base.onSurface,
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.success,
-                    iconColor: theme.colors.main.onMain,
+                    iconColor: theme.colors.feedback.onSuccess,
                     pressedBorderColor: theme.colors.feedback.successContainer
                 )
             case .alert:
@@ -71,7 +71,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     textColor: theme.colors.base.onSurface,
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.alert,
-                    iconColor: theme.colors.main.onMain,
+                    iconColor: theme.colors.feedback.onAlert,
                     pressedBorderColor: theme.colors.feedback.alertContainer
                 )
             case .info:
@@ -79,7 +79,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     textColor: theme.colors.base.onSurface,
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.info,
-                    iconColor: theme.colors.main.onMain,
+                    iconColor: theme.colors.feedback.onInfo,
                     pressedBorderColor: theme.colors.feedback.infoContainer
                 )
             case .neutral:
@@ -87,7 +87,7 @@ final class CheckboxColorsUseCaseTests: XCTestCase {
                     textColor: theme.colors.base.onSurface,
                     borderColor: theme.colors.base.outline,
                     tintColor: theme.colors.feedback.neutral,
-                    iconColor: theme.colors.main.onMain,
+                    iconColor: theme.colors.feedback.onNeutral,
                     pressedBorderColor: theme.colors.feedback.neutralContainer
                 )
             case .support:

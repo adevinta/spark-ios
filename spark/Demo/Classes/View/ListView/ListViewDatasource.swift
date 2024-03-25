@@ -255,7 +255,7 @@ extension ListViewDataSource {
     func createCheckboxConfigurations() -> [CheckboxConfiguration] {
         [CheckboxConfiguration(theme: SparkTheme.shared, intent: .main, isEnabled: true, alignment: .left, text: "Hello World", selectionState: .indeterminate),
          CheckboxConfiguration(theme: SparkTheme.shared, intent: .basic, isEnabled: true, alignment: .right, text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", selectionState: .unselected),
-         CheckboxConfiguration(theme: SparkTheme.shared, intent: .success, isEnabled: false, alignment: .left, text: "Hello World", icon: DemoIconography.shared.close, selectionState: .selected)
+         CheckboxConfiguration(theme: SparkTheme.shared, intent: .success, isEnabled: false, alignment: .left, text: "Hello World", icon: DemoIconography.shared.close.uiImage, selectionState: .selected)
         ]
     }
 
@@ -356,6 +356,6 @@ extension ListViewDataSource {
     func createTagConfigurations() -> [TagConfiguration] {
         [TagConfiguration(theme: SparkTheme.shared, intent: .main, variant: .filled, content: .text),
          TagConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, content: .icon),
-         TagConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, content: .all)]
+         TagConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, content: .iconAndText)]
     }
 }

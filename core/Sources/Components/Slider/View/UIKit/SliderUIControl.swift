@@ -43,7 +43,10 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
     /// The bounds of the slider.
     public var range: ClosedRange<V> {
         get { return self.viewModel.bounds }
-        set { self.viewModel.bounds = newValue }
+        set {
+            self.viewModel.bounds = newValue
+            self.setAccessibilityValue(with: self.value)
+        }
     }
 
     /// The distance between each valid value.
@@ -113,7 +116,8 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
             guard let self else { return }
             self.valueSubject.send(self.value)
         }), for: .valueChanged)
-        self.accessibilityIdentifier = SliderAccessibilityIdentifier.slider
+
+        self.setupAccessibility()
     }
 
     required init?(coder: NSCoder) {
@@ -212,12 +216,24 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
             guard let self,
                   self.value != newValue else { return }
             self.value = newValue
+            self.setAccessibilityValue(with: newValue)
         }
 
         // Dim
         self.viewModel.$dim.subscribe(in: &self.cancellables) { [weak self] newDim in
             self?.alpha = newDim
         }
+    }
+
+    private func setupAccessibility() {
+        self.isAccessibilityElement = true
+        self.accessibilityIdentifier = SliderAccessibilityIdentifier.slider
+        self.setAccessibilityValue(with: self.value)
+    }
+
+    private func setAccessibilityValue(with value: V) {
+        let percentage = ((self.value - self.range.lowerBound) * 100) / (self.range.upperBound - self.range.lowerBound)
+        self.accessibilityValue = "\(Int(round(percentage)))%"
     }
 
     // MARK: - Tracking

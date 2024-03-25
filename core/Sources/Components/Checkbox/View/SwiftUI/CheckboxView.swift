@@ -70,7 +70,7 @@ public struct CheckboxView: View {
     ///   - selectionState: `CheckboxSelectionState` is either selected, unselected or indeterminate.
     public init(
         text: String?,
-        checkedImage: UIImage,
+        checkedImage: Image,
         alignment: CheckboxAlignment = .left,
         theme: Theme,
         intent: CheckboxIntent = .main,
@@ -80,7 +80,7 @@ public struct CheckboxView: View {
         self._selectionState = selectionState
         let viewModel = CheckboxViewModel(
             text: .right(text),
-            checkedImage: checkedImage,
+            checkedImage: .right(checkedImage),
             theme: theme,
             intent: intent,
             isEnabled: isEnabled,
@@ -134,7 +134,7 @@ public struct CheckboxView: View {
 
             switch self.selectionState {
             case .selected:
-                Image(uiImage: self.viewModel.checkedImage)
+                self.viewModel.checkedImage.rightValue
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(iconColor)

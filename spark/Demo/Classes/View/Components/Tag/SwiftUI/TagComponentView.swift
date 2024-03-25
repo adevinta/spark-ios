@@ -19,7 +19,7 @@ struct TagComponentView: View {
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: TagIntent = .main
     @State private var variant: TagVariant = .filled
-    @State private var content: TagContent = .all
+    @State private var content: TagContent = .iconAndText
 
     // MARK: - View
 
@@ -54,13 +54,28 @@ struct TagComponentView: View {
                     variant: self.variant
                 )
                 .iconImage(self.content.shouldShowIcon ? Image(self.viewModel.imageNamed) : nil)
-                .text(self.content.shouldShowText ? self.viewModel.text : nil)
-                .accessibility(identifier: "MyTag1",
-                               label: "It's my first tag")
+                .text(self.content, viewModel: self.viewModel)
+//                .accessibility(identifier: "MyTag1",
+//                               label: "It's my first tag")
             }
         )
     }
 }
+
+// MARK: - TagView Extension
+
+extension TagView {
+
+    func text(_ content: TagContent, viewModel: TagComponentViewModel) -> Self {
+        if content.shouldShowAttributedText {
+            return self.attributedText(viewModel.attributedText(content.text))
+        } else {
+            return self.text(content.shouldShowText ? content.text : nil)
+        }
+    }
+}
+
+// MARK: - Preview
 
 struct TagComponentView_Previews: PreviewProvider {
     static var previews: some View {

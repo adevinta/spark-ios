@@ -95,19 +95,42 @@ public final class TagUIView: UIView {
 
     /// The icon image of the tag.
     /// Image can be nil, in this case, no image is displayed.
-    /// If image is nil, **you must add a text**.
+    /// If image is nil, **you must add a text or an attributedText**.
     public var iconImage: UIImage? {
         didSet {
             self.reloadIconImageView()
         }
     }
 
+    private var _text: String?
+
     /// The text of the tag.
     /// Text can be nil, in this case, no text is displayed.
-    /// If text is nil, **you must add a iconImage**.
+    /// If text is nil, **you must add a iconImage or an attributedText**.
     public var text: String? {
-        didSet {
+        set {
+            self._text = newValue
+            self._attributedText = nil
             self.reloadTextLabel()
+        }
+        get {
+            self._text
+        }
+    }
+
+    private var _attributedText: NSAttributedString?
+
+    /// The attributedText of the tag.
+    /// Text can be nil, in this case, no text is displayed.
+    /// If attributedText is nil, **you must add a iconImage or a text**.
+    public var attributedText: NSAttributedString? {
+        set {
+            self._attributedText = newValue
+            self._text = nil
+            self.reloadTextLabel()
+        }
+        get {
+            self._attributedText
         }
     }
 
@@ -150,15 +173,18 @@ public final class TagUIView: UIView {
     ///   - intent: The intent of the tag.
     ///   - variant: The variant of the tag.
     ///   - iconImage: The icon image of the tag.
-    public convenience init(theme: Theme,
-                            intent: TagIntent,
-                            variant: TagVariant,
-                            iconImage: UIImage) {
-        self.init(theme,
-                  intent: intent,
-                  variant: variant,
-                  iconImage: iconImage,
-                  text: nil)
+    public convenience init(
+        theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant,
+        iconImage: UIImage
+    ) {
+        self.init(
+            theme,
+            intent: intent,
+            variant: variant,
+            iconImage: iconImage
+        )
     }
 
     /// Initialize a new tag view with text.
@@ -167,15 +193,38 @@ public final class TagUIView: UIView {
     ///   - intent: The intent of the tag.
     ///   - variant: The variant of the tag.
     ///   - text: The text of the tag.
-    public convenience init(theme: Theme,
-                            intent: TagIntent,
-                            variant: TagVariant,
-                            text: String) {
-        self.init(theme,
-                  intent: intent,
-                  variant: variant,
-                  iconImage: nil,
-                  text: text)
+    public convenience init(
+        theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant,
+        text: String
+    ) {
+        self.init(
+            theme,
+            intent: intent,
+            variant: variant,
+            text: text
+        )
+    }
+
+    /// Initialize a new tag view with attributedText.
+    /// - Parameters:
+    ///   - theme: The spark theme of the tag.
+    ///   - intent: The intent of the tag.
+    ///   - variant: The variant of the tag.
+    ///   - attributedText: The attributedText of the tag.
+    public convenience init(
+        theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant,
+        attributedText: NSAttributedString
+    ) {
+        self.init(
+            theme,
+            intent: intent,
+            variant: variant,
+            text: attributedText
+        )
     }
 
     /// Initialize a new tag view with icon image and text.
@@ -185,32 +234,66 @@ public final class TagUIView: UIView {
     ///   - variant: The variant of the tag.
     ///   - iconImage: The icon image of the tag.
     ///   - text: The text of the tag.
-    public convenience init(theme: Theme,
-                            intent: TagIntent,
-                            variant: TagVariant,
-                            iconImage: UIImage,
-                            text: String) {
-        self.init(theme,
-                  intent: intent,
-                  variant: variant,
-                  iconImage: iconImage,
-                  text: text)
+    public convenience init(
+        theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant,
+        iconImage: UIImage,
+        text: String
+    ) {
+        self.init(
+            theme,
+            intent: intent,
+            variant: variant,
+            iconImage: iconImage,
+            text: text
+        )
     }
 
-    private init(_ theme: Theme,
-                 intent: TagIntent,
-                 variant: TagVariant,
-                 iconImage: UIImage?,
-                 text: String?,
-                 getColorsUseCase: any TagGetColorsUseCaseable = TagGetColorsUseCase()) {
+    /// Initialize a new tag view with icon image and text.
+    /// - Parameters:
+    ///   - theme: The spark theme of the tag.
+    ///   - intent: The intent of the tag.
+    ///   - variant: The variant of the tag.
+    ///   - iconImage: The icon image of the tag.
+    ///   - attributedText: The attributedText of the tag.
+    public convenience init(
+        theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant,
+        iconImage: UIImage,
+        attributedText: NSAttributedString
+    ) {
+        self.init(
+            theme,
+            intent: intent,
+            variant: variant,
+            iconImage: iconImage,
+            text: attributedText
+        )
+    }
+
+    private init(
+        _ theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant,
+        iconImage: UIImage? = nil,
+        text: Any? = nil,
+        getColorsUseCase: any TagGetColorsUseCaseable = TagGetColorsUseCase()
+    ) {
         self.theme = theme
         self.intent = intent
         self.variant = variant
         self.iconImage = iconImage
-        self.text = text
         self.getColorsUseCase = getColorsUseCase
 
         super.init(frame: .zero)
+
+        if let text = text as? String {
+            self.text = text
+        } else if let attributedText = text as? NSAttributedString {
+            self.attributedText = attributedText
+        }
 
         self.setupView()
         self.loadUI()
@@ -252,8 +335,21 @@ public final class TagUIView: UIView {
     }
 
     private func reloadTextLabel() {
-        self.textLabel.text = self.text
-        self.textLabel.isHidden = (self.text == nil)
+        if let attributedText = self.attributedText {
+            self.textLabel.attributedText = attributedText
+        } else {
+            self.textLabel.text = self.text
+            self.reloadTextStyle()
+        }
+        self.textLabel.isHidden = (self.text == nil && self.attributedText == nil)
+    }
+
+    private func reloadTextStyle() {
+        // Change the style only if the text is displayed and not the attributedText
+        if self._attributedText == nil {
+            self.textLabel.font = self.theme.typography.captionHighlight.uiFont
+            self.textLabel.textColor = self.colors.foregroundColor.uiColor
+        }
     }
 
     private func reloadUIFromTheme() {
@@ -268,7 +364,7 @@ public final class TagUIView: UIView {
         self.setMasksToBounds(true)
 
         // Subviews
-        self.textLabel.font = self.theme.typography.captionHighlight.uiFont
+        self.reloadTextStyle()
     }
 
     private func reloadUIFromColors() {
@@ -278,7 +374,7 @@ public final class TagUIView: UIView {
 
         // Subviews
         self.iconImageView.tintColor = self.colors.foregroundColor.uiColor
-        self.textLabel.textColor = self.colors.foregroundColor.uiColor
+        self.reloadTextStyle()
     }
 
     private func reloadUIFromSize() {

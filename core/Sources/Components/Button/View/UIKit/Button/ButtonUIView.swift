@@ -22,6 +22,7 @@ public final class ButtonUIView: ButtonMainUIView {
         let stackView = UIStackView(
             arrangedSubviews:
                 [
+                    
                     self.imageContentView,
                     self.titleLabel
                 ]
@@ -36,10 +37,6 @@ public final class ButtonUIView: ButtonMainUIView {
         let view = UIView()
         view.addSubview(self.imageView)
         view.accessibilityIdentifier = ButtonAccessibilityIdentifier.imageContentView
-        view.setContentCompressionResistancePriority(.required,
-                                                     for: .vertical)
-        view.setContentCompressionResistancePriority(.required,
-                                                     for: .horizontal)
         return view
     }()
 
@@ -55,6 +52,10 @@ public final class ButtonUIView: ButtonMainUIView {
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = ButtonAccessibilityIdentifier.text
         label.lineBreakMode = .byTruncatingMiddle
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        label.setContentHuggingPriority(.defaultLow, for: .vertical)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
     }()
 
@@ -222,6 +223,30 @@ public final class ButtonUIView: ButtonMainUIView {
             self.imageView.centerXAnchor.constraint(equalTo: self.imageContentView.centerXAnchor),
             self.imageView.centerYAnchor.constraint(equalTo: self.imageContentView.centerYAnchor)
         ])
+    }
+
+    // MARK: - Instrinsic Content Size
+
+    public override var intrinsicContentSize: CGSize {
+        var width: CGFloat = self.horizontalSpacing * 2
+
+        let isTitle = !self.titleLabel.isHidden
+        let isImage = !self.imageContentView.isHidden
+
+        if isTitle {
+            width += self.titleLabel.intrinsicContentSize.width
+        }
+        if isImage {
+            width += self.imageHeight // It is always a square
+        }
+        if isTitle && isImage {
+            width += self.contentStackView.spacing
+        }
+
+        return CGSize(
+            width: width,
+            height: self.height
+        )
     }
 
     // MARK: - Setter & Getter

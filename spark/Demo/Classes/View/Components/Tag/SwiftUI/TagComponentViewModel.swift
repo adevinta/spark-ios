@@ -7,11 +7,19 @@
 //
 
 import SparkCore
+import SwiftUI
 
 struct TagComponentViewModel: Hashable {
 
     // MARK: - Properties
 
     let imageNamed: String = "alert"
-    let text: String = "This is a Tag"
+
+    func attributedText(_ text: String) -> AttributedString {
+        var attributedText = AttributedString(text)
+        attributedText.font = SparkTheme.shared.typography.body2.font
+        attributedText.foregroundColor = SparkTheme.shared.colors.main.main.color
+        attributedText.backgroundColor = SparkTheme.shared.colors.main.onMain.color
+        return attributedText
+    }
 }

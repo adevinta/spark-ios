@@ -158,6 +158,14 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
+    lazy var isCustomAccessibilityLabelConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "is Custom AccessibilityLabel",
+            type: .toggle(isOn: self.isCustomAccessibilityLabel),
+            target: (source: self, action: #selector(self.isCustomAccessibilityLabelChanged))
+        )
+    }()
+
     // MARK: - Methods
 
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
@@ -171,7 +179,8 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
             self.textAlignmentConfigurationItemViewModel,
             self.lineBreakModeConfigurationItemViewModel,
             self.isLineLimitConfigurationItemViewModel,
-            self.controlTypeConfigurationItemViewModel
+            self.controlTypeConfigurationItemViewModel,
+            self.isCustomAccessibilityLabelConfigurationItemViewModel
         ]
     }
 
@@ -189,6 +198,7 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
     @Published var lineBreakMode: NSLineBreakMode
     @Published var isLineLimit: Bool
     @Published var controlType: TextLinkControlType
+    @Published var isCustomAccessibilityLabel: Bool
 
     // MARK: - Initialization
 
@@ -202,7 +212,8 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
         textAlignment: NSTextAlignment = .natural,
         lineBreakMode: NSLineBreakMode = .byWordWrapping,
         isLineLimit: Bool = false,
-        controlType: TextLinkControlType = .action
+        controlType: TextLinkControlType = .action,
+        isCustomAccessibilityLabel: Bool = false
     ) {
         self.theme = theme
         self.intent = intent
@@ -214,6 +225,7 @@ final class TextLinkComponentUIViewModel: ComponentUIViewModel {
         self.lineBreakMode = lineBreakMode
         self.isLineLimit = isLineLimit
         self.controlType = controlType
+        self.isCustomAccessibilityLabel = isCustomAccessibilityLabel
 
         super.init(identifier: "TextLink")
     }
@@ -261,6 +273,10 @@ extension TextLinkComponentUIViewModel {
 
     @objc func presentControlTypeSheet() {
         self.showControlTypeSheetSubject.send(TextLinkControlType.allCases)
+    }
+
+    @objc func isCustomAccessibilityLabelChanged() {
+        self.isCustomAccessibilityLabel.toggle()
     }
 }
 

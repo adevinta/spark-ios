@@ -36,7 +36,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 textColor: colors.base.onSurface,
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.error,
-                iconColor: colors.main.onMain,
+                iconColor: colors.feedback.onError,
                 pressedBorderColor: colors.feedback.errorContainer
             )
         case .success:
@@ -44,7 +44,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 textColor: colors.base.onSurface,
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.success,
-                iconColor: colors.main.onMain,
+                iconColor: colors.feedback.onSuccess,
                 pressedBorderColor: colors.feedback.successContainer
             )
         case .alert:
@@ -52,7 +52,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 textColor: colors.base.onSurface,
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.alert,
-                iconColor: colors.main.onMain,
+                iconColor: colors.feedback.onAlert,
                 pressedBorderColor: colors.feedback.alertContainer
             )
         case .info:
@@ -60,7 +60,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 textColor: colors.base.onSurface,
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.info,
-                iconColor: colors.main.onMain,
+                iconColor: colors.feedback.onInfo,
                 pressedBorderColor: colors.feedback.infoContainer
             )
         case .neutral:
@@ -68,7 +68,7 @@ struct CheckboxColorsUseCase: CheckboxColorsUseCaseable {
                 textColor: colors.base.onSurface,
                 borderColor: colors.base.outline,
                 tintColor: colors.feedback.neutral,
-                iconColor: colors.main.onMain,
+                iconColor: colors.feedback.onNeutral,
                 pressedBorderColor: colors.feedback.neutralContainer
             )
         case .support:

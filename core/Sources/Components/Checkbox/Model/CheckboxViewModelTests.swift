@@ -44,7 +44,7 @@ final class CheckboxViewModelTests: XCTestCase {
                                "Wrong typography value")
 
             XCTAssertEqual(viewModel.text.leftValue?.string, "Text", "text does not match")
-            XCTAssertEqual(viewModel.checkedImage, self.checkedImage, "Checked image does not match")
+            XCTAssertEqual(viewModel.checkedImage.leftValue, self.checkedImage, "Checked image does not match")
             XCTAssertEqual(viewModel.alignment, .left, "Alignment does not match")
             XCTAssertEqual(viewModel.intent, .main, "Intent does not match")
             XCTAssertEqual(viewModel.selectionState, .unselected, "Selection state does not match")
@@ -122,7 +122,7 @@ final class CheckboxViewModelTests: XCTestCase {
     private func sut(isEnabled: Bool, attributeText: NSAttributedString? = nil) -> CheckboxViewModel {
         return CheckboxViewModel(
             text: attributeText == nil ? .left(NSAttributedString("Text")) : .left(attributeText!),
-            checkedImage: self.checkedImage,
+            checkedImage: .left(self.checkedImage),
             theme: self.theme, isEnabled: isEnabled,
             selectionState: .unselected
         )

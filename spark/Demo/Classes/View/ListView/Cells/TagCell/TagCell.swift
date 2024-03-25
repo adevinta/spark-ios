@@ -39,14 +39,19 @@ final class TagCell: UITableViewCell, Configurable {
         self.component.variant = configuration.variant
 
         switch configuration.content {
-        case .text:
-            self.component.text = "Tag 1"
-            self.component.iconImage = nil
         case .icon:
             self.component.iconImage = UIImage(systemName: "pencil.tip.crop.circle")
             self.component.text = nil
-        case .all:
+        case .text, .longText:
+            self.component.text = "Tag 1"
+            self.component.iconImage = nil
+        case .attributedText, .longAttributedText:
+            self.component.attributedText = NSAttributedString(string: "Tag 3")
+        case .iconAndText, .iconAndLongText:
             self.component.text = "Tag 2"
+            self.component.iconImage = UIImage(systemName: "pencil.tip.crop.circle")
+        case .iconAndAttributedText, .iconAndLongAttributedText:
+            self.component.attributedText = NSAttributedString(string: "Tag 4")
             self.component.iconImage = UIImage(systemName: "pencil.tip.crop.circle")
         }
     }

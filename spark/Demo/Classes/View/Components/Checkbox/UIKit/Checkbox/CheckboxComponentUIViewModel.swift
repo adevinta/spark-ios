@@ -115,8 +115,8 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Default Value Properties
     let icons: [String: UIImage] = [
-        "Checkmark": DemoIconography.shared.checkmark,
-        "Close": DemoIconography.shared.close
+        "Checkmark": DemoIconography.shared.checkmark.uiImage,
+        "Close": DemoIconography.shared.close.uiImage
     ]
 
     let text: String = "Hello World"
@@ -158,7 +158,7 @@ final class CheckboxComponentUIViewModel: ComponentUIViewModel {
         alignment: CheckboxAlignment = .left,
         containerViewAlignment: Bool = false,
         textStyle: CheckboxTextStyle = .text,
-        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark],
+        icon: [String: UIImage] = ["Checkmark": DemoIconography.shared.checkmark.uiImage],
         isIndeterminate: Bool = false
     ) {
         self.theme = theme

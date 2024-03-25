@@ -90,7 +90,17 @@ final class TagComponentUIViewModel: ComponentUIViewModel {
 
     // MARK: - Default Value Properties
     let image: UIImage = UIImage(named: "alert") ?? UIImage()
-    let text: String = "This is a Tag"
+
+    func attributeText(_ text: String) -> NSAttributedString {
+        let attributeString = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: UIFont.boldSystemFont(ofSize: 14),
+                .foregroundColor: UIColor.red
+            ]
+        )
+        return attributeString
+    }
 
     // MARK: - Initialization
     @Published var theme: Theme
@@ -102,7 +112,7 @@ final class TagComponentUIViewModel: ComponentUIViewModel {
         theme: Theme,
         intent: TagIntent = .main,
         variant: TagVariant = .filled,
-        content: TagContent = .all
+        content: TagContent = .iconAndText
     ) {
         self.theme = theme
         self.intent = intent

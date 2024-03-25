@@ -59,14 +59,10 @@ public struct TagView: View {
                 .accessibilityIdentifier(AccessibilityIdentifier.iconImage)
 
             // Optional Text
-            if let text = self.viewModel.text {
-                Text(text)
-                    .lineLimit(1)
-                    .font(self.viewModel.typography.captionHighlight.font)
-                    .truncationMode(.tail)
-                    .foregroundColor(self.viewModel.colors.foregroundColor.color)
-                    .accessibilityIdentifier(AccessibilityIdentifier.text)
-            }
+            self.text()
+                .lineLimit(1)
+                .truncationMode(.tail)
+                .accessibilityIdentifier(AccessibilityIdentifier.text)
         }
         .padding(.init(vertical: self.smallSpacing,
                        horizontal: self.mediumSpacing))
@@ -75,6 +71,19 @@ public struct TagView: View {
         .border(width: self.viewModel.border.width.small,
                 radius: self.viewModel.border.radius.full,
                 colorToken: self.viewModel.colors.borderColor)
+    }
+
+    // MARK: - View Builder
+
+    @ViewBuilder
+    private func text() -> some View {
+        if let text = self.viewModel.text {
+            Text(text)
+                .font(self.viewModel.typography.captionHighlight.font)
+                .foregroundColor(self.viewModel.colors.foregroundColor.color)
+        } else if let attributedText = self.viewModel.attributedText { // Optional AttributedText
+            Text(attributedText)
+        }
     }
 
     // MARK: - Modifier
@@ -127,10 +136,22 @@ public struct TagView: View {
     ///   - text: The text of the tag. Can be nil.
     /// - Nullability:
     ///   - The text can be nil, in this case, no text is displayed.
-    ///   - If the text is nil, **an iconImage must be added**.
+    ///   - If the text is nil, **an iconImage or attributedText must be added**.
     /// - Returns: Current Tag View.
     public func text(_ text: String?) -> Self {
         self.viewModel.setText(text)
+        return self
+    }
+
+    /// Set the attributedText of the tag.
+    /// - Parameters:
+    ///   - attributedText: The attributedText of the tag. Can be nil.
+    /// - Nullability:
+    ///   - The attributedText can be nil, in this case, no text is displayed.
+    ///   - If the attributedText is nil, **an iconImage or text must be added**.
+    /// - Returns: Current Tag View.
+    public func attributedText(_ attributedText: AttributedString?) -> Self {
+        self.viewModel.setAttributedText(attributedText)
         return self
     }
 }

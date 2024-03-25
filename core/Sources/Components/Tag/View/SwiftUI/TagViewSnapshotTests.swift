@@ -31,8 +31,7 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                     intent: configuration.intent,
                     variant: configuration.variant
                 )
-                    .iconImage(configuration.iconImage?.rightValue)
-                    .text(configuration.text)
+                    .content(configuration)
                     .frame(width: configuration.width)
                     .fixedSize()
 
@@ -46,3 +45,31 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
         }
     }
 }
+
+// MARK: - Extension
+
+private extension TagView {
+
+    @ViewBuilder
+    func content(_ configuration: TagConfigurationSnapshotTests) -> some View {
+        switch configuration.content {
+        case .text(let text), .longText(let text):
+            self.text(text)
+
+        case .attributedText(let attributedText):
+            self.attributedText(attributedText.rightValue)
+
+        case .icon(let image):
+            self.iconImage(image.rightValue)
+
+        case let .iconAndText(image, text), let .iconAndLongText(image, text):
+            self.iconImage(image.rightValue)
+                .text(text)
+
+        case let .iconAndAttributedText(image, attributedText):
+            self.iconImage(image.rightValue)
+                .attributedText(attributedText.rightValue)
+        }
+    }
+}
+

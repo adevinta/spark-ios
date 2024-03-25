@@ -47,7 +47,7 @@ struct ProgressBarIndeterminateComponentView: View {
 
                 CheckboxView(
                     text: "Is animated",
-                    checkedImage: DemoIconography.shared.checkmark,
+                    checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
                     selectionState: self.$isAnimating

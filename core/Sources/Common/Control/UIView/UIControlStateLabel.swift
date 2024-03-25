@@ -181,13 +181,10 @@ final class UIControlStateLabel: UILabel {
         let textType = self.textTypesStates.value(for: status)
         let textTypeContainsText = textType?.containsText ?? false
 
-        // Reset attributedText & text
-        self.storedAttributedText = nil
-        self.storedText = nil
-
         // Set the text or the attributedText from textType and states
         if let text = self.textStates.value(for: status),
            textType == .text || !textTypeContainsText {
+            self.storedAttributedText = nil
             self.storedText = text
 
         } else if let attributedText = self.attributedTextStates.value(for: status),
@@ -195,7 +192,7 @@ final class UIControlStateLabel: UILabel {
             self.storedAttributedText = attributedText
 
         } else { // No text to displayed
-            self.text = nil
+            self.storedText = nil
         }
     }
 

@@ -22,7 +22,7 @@ struct CheckboxGroupListView: View {
     @State private var textStyle: CheckboxTextStyle = .text
     @State private var selectedIcon = CheckboxListView.Icons.checkedImage
     @State private var groupType: CheckboxGroupType = .doubleMix
-    @State private var items: [any CheckboxGroupItemProtocol] = CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: .doubleMix)
+    @State private var items: [any CheckboxGroupItemProtocol] = CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: .doubleMix, isSwiftUI: true)
     @State private var selectedItems: String = ""
 
     var selectedItemsText: String {
@@ -120,7 +120,7 @@ struct CheckboxGroupListView: View {
     }
 
     private func setItems(groupType: CheckboxGroupType) -> [any CheckboxGroupItemProtocol] {
-        CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: self.groupType)
+        CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: self.groupType, isSwiftUI: true)
     }
 }
 

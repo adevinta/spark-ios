@@ -88,6 +88,8 @@ extension ComponentsViewController {
             viewController = ProgressBarIndeterminateComponentUIViewController.build()
         case .progressBarSingle:
             viewController = ProgressBarComponentUIViewController.build()
+        case .progressTracker:
+            viewController = ProgressTrackerComponentUIViewController.build()
         case .radioButton:
             viewController = RadioButtonComponentUIViewController.build()
         case .ratingDisplay:
@@ -108,6 +110,8 @@ extension ComponentsViewController {
             viewController = TagComponentUIViewController.build()
         case .textField:
             viewController = TextFieldComponentUIViewController.build()
+        case .textFieldAddons:
+            viewController = TextFieldAddonsComponentUIViewController.build()
         case .textLink:
             viewController = TextLinkComponentUIViewController.build()
         default:

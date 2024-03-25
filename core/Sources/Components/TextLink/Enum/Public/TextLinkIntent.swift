@@ -15,6 +15,7 @@ public enum TextLinkIntent: CaseIterable {
     case info
     case main
     case neutral
+    case onSurface
     case success
     case support
 }

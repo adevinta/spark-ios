@@ -108,10 +108,12 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
+        .accessibilityElement()
         .accessibilityIdentifier(SliderAccessibilityIdentifier.slider)
+        .accessibilityValue(self.getAccessibilityValue())
     }
 
-    func moveHandle(to: CGFloat, width: CGFloat) {
+    private func moveHandle(to: CGFloat, width: CGFloat) {
         let absoluteX = max(SliderConstants.handleSize.width / 2, min(to, width - SliderConstants.handleSize.width / 2))
         let relativeX = (absoluteX - SliderConstants.handleSize.width / 2) / (width - SliderConstants.handleSize.width)
         let newValue = V(relativeX) * (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) + self.viewModel.bounds.lowerBound
@@ -119,11 +121,16 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
         self.value = self.viewModel.value
     }
 
-    func getHandleXPosition(frameWidth: CGFloat) -> CGFloat {
+    private func getHandleXPosition(frameWidth: CGFloat) -> CGFloat {
         guard self.viewModel.bounds.lowerBound != self.viewModel.bounds.upperBound else {
             return SliderConstants.handleSize.width / 2
         }
         let value = (max(self.viewModel.bounds.lowerBound, self.viewModel.value) - self.viewModel.bounds.lowerBound) / (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound)
         return (frameWidth - SliderConstants.handleSize.width) * CGFloat(value) + SliderConstants.handleSize.width / 2
+    }
+
+    private func getAccessibilityValue() -> String {
+        let percentage = ((self.value - self.viewModel.bounds.lowerBound) * 100) / (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound)
+        return "\(Int(round(percentage)))%"
     }
 }
