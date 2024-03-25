@@ -124,6 +124,20 @@ public final class CheckboxGroupUIView: UIControl {
         self.itemsStackView.arrangedSubviews.compactMap { $0 as? CheckboxUIView }
     }
 
+    /// A Boolean value indicating whether the component is in the enabled state.
+    public override var isEnabled: Bool {
+        didSet{
+            guard isEnabled != oldValue else { return }
+            if isEnabled {
+                self.checkboxes.enumerated().forEach { index, item in
+                    item.isEnabled = self.items.indices.contains(index) ? self.items[index].isEnabled : true
+                }
+            } else {
+                self.checkboxes.forEach { $0.isEnabled = false }
+            }
+        }
+    }
+
     // MARK: - Initialization
 
     /// Not implemented. Please use another init.
