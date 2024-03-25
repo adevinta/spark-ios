@@ -108,6 +108,7 @@ public struct CheckboxView: View {
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder 
