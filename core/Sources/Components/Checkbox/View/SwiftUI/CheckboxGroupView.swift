@@ -166,6 +166,7 @@ public struct CheckboxGroupView: View {
             isEnabled: item.isEnabled.wrappedValue,
             selectionState: item.selectionState
         )
+        .disabled(!item.isEnabled.wrappedValue)
         .accessibilityIdentifier(identifier)
     }
 }
