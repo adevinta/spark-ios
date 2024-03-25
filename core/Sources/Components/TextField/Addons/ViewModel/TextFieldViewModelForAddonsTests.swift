@@ -35,15 +35,13 @@ final class TextFieldViewModelForAddonsTests: XCTestCase {
 
     func test_init_borderStyle() {
         XCTAssertEqual(self.viewModel.borderStyle, .none, "Wrong borderStyle")
-        XCTAssertNil(self.viewModel.delegate, "Delegate should be nil")
+        XCTAssertTrue(self.viewModel.backgroundColor.equals(ColorTokenDefault.clear), "Wrong backgroundColor")
+        XCTAssertEqual(self.viewModel.dim, 1, "Wrong dim")
     }
 
     func test_backgroundColor() {
         self.superTests.publishers.reset()
         self.superTests.resetUseCases()
-
-        let delegate = TextFieldViewModelForAddonsDelegateGeneratedMock()
-        self.viewModel.delegate = delegate
 
         XCTAssertTrue(self.viewModel.backgroundColor.equals(ColorTokenDefault.clear), "Wrong viewModel.backgroundColor before set")
 
@@ -51,7 +49,7 @@ final class TextFieldViewModelForAddonsTests: XCTestCase {
         self.viewModel.backgroundColor = newColor
 
         XCTAssertTrue(self.viewModel.backgroundColor.equals(ColorTokenDefault.clear), "Wrong viewModel.backgroundColor after set")
-        XCTAssertTrue(delegate.backgroundColor.equals(newColor), "Wrong delegate.backgroundColor")
+        XCTAssertTrue(self.viewModel.addonsBackgroundColor.equals(newColor), "Wrong delegate.backgroundColor")
 
         XCTAssertFalse(self.superTests.publishers.backgroundColor.sinkCalled, "backgroundColor should not have sinked")
     }
@@ -60,16 +58,13 @@ final class TextFieldViewModelForAddonsTests: XCTestCase {
         self.superTests.publishers.reset()
         self.superTests.resetUseCases()
 
-        let delegate = TextFieldViewModelForAddonsDelegateGeneratedMock()
-        self.viewModel.delegate = delegate
-
         XCTAssertEqual(self.viewModel.dim, 1.0, "Wrong viewModel.dim before set")
 
         let newDim = 0.2
         self.viewModel.dim = newDim
 
         XCTAssertEqual(self.viewModel.dim, 1.0, "Wrong viewModel.dim after set")
-        XCTAssertEqual(delegate.dim, newDim, "Wrong delegate.dim")
+        XCTAssertEqual(self.viewModel.addonsDim, newDim, "Wrong delegate.dim")
 
         XCTAssertFalse(self.superTests.publishers.dim.sinkCalled, "dim should not have sinked")
     }
@@ -80,15 +75,13 @@ final class TextFieldViewModelForAddonsTests: XCTestCase {
 
         let newExpectedBorderLayout: TextFieldBorderLayout = .mocked(radius: 40, width: 40)
         self.superTests.getBorderLayoutUseCase.executeWithThemeAndBorderStyleAndIsFocusedReturnValue = newExpectedBorderLayout
-        let delegate = TextFieldViewModelForAddonsDelegateGeneratedMock()
-        self.viewModel.delegate = delegate
 
         // WHEN
         self.viewModel.setBorderLayout()
 
         // THEN
-        XCTAssertEqual(delegate.borderWidth, newExpectedBorderLayout.width, "Wrong delegate.boderWidth")
-        XCTAssertEqual(delegate.borderRadius, newExpectedBorderLayout.radius, "Wrong delegate.boderRadius")
+        XCTAssertEqual(self.viewModel.addonsBorderWidth, newExpectedBorderLayout.width, "Wrong delegate.boderWidth")
+        XCTAssertEqual(self.viewModel.addonsBorderRadius, newExpectedBorderLayout.radius, "Wrong delegate.boderRadius")
         // Border with & Radius shouldn't change, the delegate takes charge
         XCTAssertEqual(self.viewModel.borderWidth, self.superTests.expectedBorderLayout.width, "Wrong viewModel.borderRadius")
         XCTAssertEqual(self.viewModel.borderRadius, self.superTests.expectedBorderLayout.radius, "Wrong viewModel.borderWidth")
@@ -107,9 +100,6 @@ final class TextFieldViewModelForAddonsTests: XCTestCase {
         self.superTests.publishers.reset()
         self.superTests.resetUseCases()
 
-        let delegate = TextFieldViewModelForAddonsDelegateGeneratedMock()
-        self.viewModel.delegate = delegate
-
         let newExpectedSpacings = TextFieldSpacings.mocked(left: 2, content: 4, right: 3)
         self.superTests.getSpacingsUseCase.executeWithThemeAndBorderStyleReturnValue = newExpectedSpacings
 
@@ -117,9 +107,9 @@ final class TextFieldViewModelForAddonsTests: XCTestCase {
         self.viewModel.setSpacings()
 
         // THEN
-        XCTAssertEqual(delegate.leftSpacing, newExpectedSpacings.left)
-        XCTAssertEqual(delegate.contentSpacing, newExpectedSpacings.content)
-        XCTAssertEqual(delegate.rightSpacing, newExpectedSpacings.right)
+        XCTAssertEqual(self.viewModel.addonsLeftSpacing, newExpectedSpacings.left)
+        XCTAssertEqual(self.viewModel.addonsContentSpacing, newExpectedSpacings.content)
+        XCTAssertEqual(self.viewModel.addonsRightSpacing, newExpectedSpacings.right)
 
         // Spacings shouldn't change, the delegate takes charge
         XCTAssertEqual(self.viewModel.leftSpacing, self.superTests.expectedSpacings.left)

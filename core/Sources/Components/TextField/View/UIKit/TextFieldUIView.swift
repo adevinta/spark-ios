@@ -157,69 +157,69 @@ public final class TextFieldUIView: UITextField {
     }
 
     private func subscribeToViewModel() {
-        self.viewModel.textColorSubject.subscribe(in: &self.cancellables) { [weak self] textColor in
+        self.viewModel.$textColor.subscribe(in: &self.cancellables) { [weak self] textColor in
             guard let self else { return }
             self.textColor = textColor.uiColor
             self.tintColor = textColor.uiColor
         }
 
-        self.viewModel.backgroundColorSubject.subscribe(in: &self.cancellables) { [weak self] backgroundColor in
+        self.viewModel.$backgroundColor.subscribe(in: &self.cancellables) { [weak self] backgroundColor in
             guard let self else { return }
             self.backgroundColor = backgroundColor.uiColor
         }
 
-        self.viewModel.borderColorSubject.subscribe(in: &self.cancellables) { [weak self] borderColor in
+        self.viewModel.$borderColor.subscribe(in: &self.cancellables) { [weak self] borderColor in
             guard let self else { return }
             self.setBorderColor(from: borderColor)
         }
 
-        self.viewModel.statusIconColorSubject.subscribe(in: &self.cancellables) { [weak self] statusIconColor in
+        self.viewModel.$statusIconColor.subscribe(in: &self.cancellables) { [weak self] statusIconColor in
             guard let self else { return }
             self.statusImageView.tintColor = statusIconColor.uiColor
         }
 
-        self.viewModel.placeholderColorSubject.subscribe(in: &self.cancellables) { [weak self] placeholderColor in
+        self.viewModel.$placeholderColor.subscribe(in: &self.cancellables) { [weak self] placeholderColor in
             guard let self else { return }
             self.setPlaceholder(self.placeholder, foregroundColor: placeholderColor, font: self.viewModel.font)
         }
 
-        self.viewModel.borderWidthSubject.subscribe(in: &self.cancellables) { [weak self] borderWidth in
+        self.viewModel.$borderWidth.subscribe(in: &self.cancellables) { [weak self] borderWidth in
             guard let self else { return }
             self.setBorderWidth(borderWidth * self.scaleFactor)
         }
 
-        self.viewModel.borderRadiusSubject.subscribe(in: &self.cancellables) { [weak self] borderRadius in
+        self.viewModel.$borderRadius.subscribe(in: &self.cancellables) { [weak self] borderRadius in
             guard let self else { return }
             self.setCornerRadius(borderRadius)
         }
 
-        self.viewModel.leftSpacingSubject.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.$leftSpacing.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.setNeedsLayout()
         }
 
-        self.viewModel.rightSpacingSubject.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.$rightSpacing.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.setNeedsLayout()
         }
 
-        self.viewModel.contentSpacingSubject.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.$contentSpacing.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.setNeedsLayout()
         }
 
-        self.viewModel.dimSubject.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.$dim.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.alpha = dim
         }
 
-        self.viewModel.fontSubject.subscribe(in: &self.cancellables) { [weak self] font in
+        self.viewModel.$font.subscribe(in: &self.cancellables) { [weak self] font in
             guard let self else { return }
             self.font = font.uiFont
             self.setPlaceholder(self.placeholder, foregroundColor: self.viewModel.placeholderColor, font: font)
         }
 
-        self.viewModel.statusImageSubject.subscribe(in: &self.cancellables) { [weak self] statusImage in
+        self.viewModel.$statusImage.subscribe(in: &self.cancellables) { [weak self] statusImage in
             guard let self else { return }
             self.statusImageView.image = statusImage?.leftValue
             self.statusImageContainerView.isHidden = self.statusImageView.image == nil

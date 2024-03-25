@@ -11,74 +11,20 @@ import Combine
 
 final class TextFieldAddonsViewModel: ObservableObject, Updateable {
 
-    private(set) var backgroundColorSubject: CurrentValueSubject<any ColorToken, Never>
-    var backgroundColor: any ColorToken {
-        get { return self.backgroundColorSubject.value }
-        set {
-            guard newValue.equals(self.backgroundColor) == false else { return }
-            self.backgroundColorSubject.send(newValue)
-            self.objectWillChange.send()
-        }
-    }
+    private var cancellables = Set<AnyCancellable>()
+
+    @Published private(set) var backgroundColor: any ColorToken
 
     // BorderLayout
-    private(set) var borderRadiusSubject: CurrentValueSubject<CGFloat, Never>
-    var borderRadius: CGFloat {
-        get { return self.borderRadiusSubject.value }
-        set {
-            guard newValue != self.borderRadius else { return }
-            self.borderRadiusSubject.send(newValue)
-            self.objectWillChange.send()
-        }
-    }
-    private(set) var borderWidthSubject: CurrentValueSubject<CGFloat, Never>
-    var borderWidth: CGFloat {
-        get { return self.borderWidthSubject.value }
-        set {
-            guard newValue != self.borderWidth else { return }
-            self.borderWidthSubject.send(newValue)
-            self.objectWillChange.send()
-        }
-    }
+    @Published private(set) var borderRadius: CGFloat
+    @Published private(set) var borderWidth: CGFloat
 
     // Spacings
-    private(set) var leftSpacingSubject: CurrentValueSubject<CGFloat, Never>
-    var leftSpacing: CGFloat {
-        get { return self.leftSpacingSubject.value }
-        set {
-            guard newValue != self.leftSpacing else { return }
-            self.leftSpacingSubject.send(newValue)
-            self.objectWillChange.send()
-        }
-    }
-    private(set) var contentSpacingSubject: CurrentValueSubject<CGFloat, Never>
-    var contentSpacing: CGFloat {
-        get { return self.contentSpacingSubject.value }
-        set {
-            guard newValue != self.contentSpacing else { return }
-            self.contentSpacingSubject.send(newValue)
-            self.objectWillChange.send()
-        }
-    }
-    private(set) var rightSpacingSubject: CurrentValueSubject<CGFloat, Never>
-    var rightSpacing: CGFloat {
-        get { return self.rightSpacingSubject.value }
-        set {
-            guard newValue != self.rightSpacing else { return }
-            self.rightSpacingSubject.send(newValue)
-            self.objectWillChange.send()
-        }
-    }
+    @Published private(set) var leftSpacing: CGFloat
+    @Published private(set) var contentSpacing: CGFloat
+    @Published private(set) var rightSpacing: CGFloat
 
-    private(set) var dimSubject: CurrentValueSubject<CGFloat, Never>
-    var dim: CGFloat {
-        get { return self.dimSubject.value }
-        set {
-            guard newValue != self.dim else { return }
-            self.dimSubject.send(newValue)
-            self.objectWillChange.send()
-        }
-    }
+    @Published private(set) var dim: CGFloat
 
     var textFieldViewModel: TextFieldViewModelForAddons
 
@@ -90,7 +36,7 @@ final class TextFieldAddonsViewModel: ObservableObject, Updateable {
          getColorsUseCase: TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase(),
          getBorderLayoutUseCase: TextFieldGetBorderLayoutUseCasable = TextFieldGetBorderLayoutUseCase(),
          getSpacingsUseCase: TextFieldGetSpacingsUseCasable = TextFieldGetSpacingsUseCase()) {
-        self.textFieldViewModel = .init(
+        let viewModel = TextFieldViewModelForAddons(
             theme: theme,
             intent: intent,
             successImage: successImage,
@@ -100,18 +46,54 @@ final class TextFieldAddonsViewModel: ObservableObject, Updateable {
             getBorderLayoutUseCase: getBorderLayoutUseCase,
             getSpacingsUseCase: getSpacingsUseCase
         )
+        self.backgroundColor = viewModel.addonsBackgroundColor
+        self.borderRadius = viewModel.addonsBorderWidth
+        self.borderWidth = viewModel.addonsBorderWidth
+        self.leftSpacing = viewModel.addonsLeftSpacing
+        self.contentSpacing = viewModel.addonsContentSpacing
+        self.rightSpacing = viewModel.addonsRightSpacing
+        self.dim = viewModel.addonsDim
 
-        // Will be set by delegation
-        self.backgroundColorSubject = .init(ColorTokenDefault.clear)
-        self.borderWidthSubject = .init(0)
-        self.borderRadiusSubject = .init(0)
-        self.leftSpacingSubject = .init(0)
-        self.contentSpacingSubject = .init(0)
-        self.rightSpacingSubject = .init(0)
-        self.dimSubject = .init(1.0)
+        self.textFieldViewModel = viewModel
 
-        self.textFieldViewModel.delegate = self
+        self.subscribe()
+    }
+
+    private func subscribe() {
+        self.textFieldViewModel.$addonsBackgroundColor.subscribe(in: &self.cancellables) { [weak self] backgroundColor in
+            guard let self else { return }
+            self.updateIfNeeded(keyPath: \.backgroundColor, newValue: backgroundColor)
+        }
+
+        self.textFieldViewModel.$addonsLeftSpacing.subscribe(in: &self.cancellables) { [weak self] leftSpacing in
+            guard let self else { return }
+            self.updateIfNeeded(keyPath: \.leftSpacing, newValue: leftSpacing)
+        }
+
+        self.textFieldViewModel.$addonsContentSpacing.subscribe(in: &self.cancellables) { [weak self] contentSpacing in
+            guard let self else { return }
+            self.updateIfNeeded(keyPath: \.contentSpacing, newValue: contentSpacing)
+        }
+
+        self.textFieldViewModel.$addonsRightSpacing.subscribe(in: &self.cancellables) { [weak self] rightSpacing in
+            guard let self else { return }
+            self.updateIfNeeded(keyPath: \.rightSpacing, newValue: rightSpacing)
+        }
+
+        self.textFieldViewModel.$addonsBorderWidth.subscribe(in: &self.cancellables) { [weak self] borderWidth in
+            guard let self else { return }
+            self.updateIfNeeded(keyPath: \.borderWidth, newValue: borderWidth)
+        }
+
+        self.textFieldViewModel.$addonsBorderRadius.subscribe(in: &self.cancellables) { [weak self] borderRadius in
+            guard let self else { return }
+            self.updateIfNeeded(keyPath: \.borderRadius, newValue: borderRadius)
+        }
+
+        self.textFieldViewModel.$addonsDim.subscribe(in: &self.cancellables) { [weak self] dim in
+            guard let self else { return }
+            self.updateIfNeeded(keyPath: \.dim, newValue: dim)
+        }
+
     }
 }
-
-extension TextFieldAddonsViewModel: TextFieldViewModelForAddonsDelegate {}

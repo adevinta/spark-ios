@@ -17,9 +17,6 @@ public final class TextFieldAddonsUIView: UIControl {
     private(set) public var leftAddon: UIView?
     private(set) public var rightAddon: UIView?
 
-    public var leftAddonHasPadding: Bool = false
-    public var rightAddonHasPadding: Bool = false
-
     private var leftAddonContainer = UIView()
     private var leftSeparatorView = UIView()
     private var leftSeparatorWidthConstraint = NSLayoutConstraint()
@@ -122,20 +119,20 @@ public final class TextFieldAddonsUIView: UIControl {
     }
 
     private func subscribeToViewModel() {
-        self.viewModel.backgroundColorSubject.subscribe(in: &self.cancellables) { [weak self] backgroundColor in
+        self.viewModel.$backgroundColor.subscribe(in: &self.cancellables) { [weak self] backgroundColor in
             guard let self else { return }
             self.backgroundColor = backgroundColor.uiColor
             self.textField.backgroundColor = .clear
         }
 
-        self.viewModel.textFieldViewModel.borderColorSubject.subscribe(in: &self.cancellables) { [weak self] borderColor in
+        self.viewModel.textFieldViewModel.$borderColor.subscribe(in: &self.cancellables) { [weak self] borderColor in
             guard let self else { return }
             self.setBorderColor(from: borderColor)
             self.leftSeparatorView.backgroundColor = borderColor.uiColor
             self.rightSeparatorView.backgroundColor = borderColor.uiColor
         }
 
-        self.viewModel.borderWidthSubject.subscribe(in: &self.cancellables) { [weak self] borderWidth in
+        self.viewModel.$borderWidth.subscribe(in: &self.cancellables) { [weak self] borderWidth in
             guard let self else { return }
             let width = borderWidth * self.scaleFactor
             self.setBorderWidth(width)
@@ -143,30 +140,30 @@ public final class TextFieldAddonsUIView: UIControl {
             self.rightSeparatorWidthConstraint.constant = width
         }
 
-        self.viewModel.borderRadiusSubject.subscribe(in: &self.cancellables) { [weak self] borderRadius in
+        self.viewModel.$borderRadius.subscribe(in: &self.cancellables) { [weak self] borderRadius in
             guard let self else { return }
             self.setCornerRadius(borderRadius)
         }
 
-        self.viewModel.leftSpacingSubject.subscribe(in: &self.cancellables) { [weak self] leftSpacing in
+        self.viewModel.$leftSpacing.subscribe(in: &self.cancellables) { [weak self] leftSpacing in
             guard let self else { return }
             self.leadingConstraint.constant = self.leftAddonContainer.isHidden ? leftSpacing : .zero
             self.setNeedsLayout()
         }
 
-        self.viewModel.rightSpacingSubject.subscribe(in: &self.cancellables) { [weak self] rightSpacing in
+        self.viewModel.$rightSpacing.subscribe(in: &self.cancellables) { [weak self] rightSpacing in
             guard let self else { return }
             self.trailingConstraint.constant = self.rightAddonContainer.isHidden ? -rightSpacing : .zero
             self.setNeedsLayout()
         }
 
-        self.viewModel.contentSpacingSubject.subscribe(in: &self.cancellables) { [weak self] contentSpacing in
+        self.viewModel.$contentSpacing.subscribe(in: &self.cancellables) { [weak self] contentSpacing in
             guard let self else { return }
             self.stackView.spacing = contentSpacing
             self.setNeedsLayout()
         }
 
-        self.viewModel.dimSubject.subscribe(in: &self.cancellables) { [weak self] dim in
+        self.viewModel.$dim.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
             self.alpha = dim
         }

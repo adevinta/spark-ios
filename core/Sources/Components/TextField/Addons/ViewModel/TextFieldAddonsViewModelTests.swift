@@ -115,7 +115,7 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         let newBackgroundColor = self.expectedColors.background
 
         // WHEN
-        self.viewModel.backgroundColor = newBackgroundColor
+        self.viewModel.textFieldViewModel.backgroundColor = newBackgroundColor
 
         // THEN
         XCTAssertFalse(self.publishers.backgroundColor.sinkCalled)
@@ -129,7 +129,7 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         let newBackgroundColor = ColorTokenDefault.clear
 
         // WHEN
-        self.viewModel.backgroundColor = newBackgroundColor
+        self.viewModel.textFieldViewModel.backgroundColor = newBackgroundColor
 
         // THEN
         XCTAssertEqual(self.publishers.backgroundColor.sinkCount, 1, "backgroundColor should have been called once")
@@ -140,11 +140,8 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
-        // GIVEN
-        let newBorderWidth = self.expectedBorderLayout.width
-
         // WHEN
-        self.viewModel.borderWidth = newBorderWidth
+        self.viewModel.textFieldViewModel.setBorderLayout()
 
         // THEN
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled)
@@ -155,25 +152,23 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         self.publishers.reset() // Removes publishes from init
 
         // GIVEN
-        let newBorderWidth = self.expectedBorderLayout.width - 1
+        let newValue = TextFieldBorderLayout(radius: -1, width: -2)
+        self.getBorderLayoutUseCase.executeWithThemeAndBorderStyleAndIsFocusedReturnValue = newValue
 
         // WHEN
-        self.viewModel.borderWidth = newBorderWidth
+        self.viewModel.textFieldViewModel.setBorderLayout()
 
         // THEN
         XCTAssertEqual(self.publishers.borderWidth.sinkCount, 1, "borderWidth should have been called once")
-        XCTAssertEqual(self.viewModel.borderWidth, newBorderWidth, "Wrong borderWidth")
+        XCTAssertEqual(self.viewModel.borderWidth, newValue.width, "Wrong borderWidth")
     }
 
     func test_borderRadius_set_equal() {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
-        // GIVEN
-        let newBorderRadius = self.expectedBorderLayout.radius
-
         // WHEN
-        self.viewModel.borderRadius = newBorderRadius
+        self.viewModel.textFieldViewModel.setBorderLayout()
 
         // THEN
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled)
@@ -184,25 +179,23 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         self.publishers.reset() // Removes publishes from init
 
         // GIVEN
-        let newBorderRadius = self.expectedBorderLayout.radius - 1
+        let newValue = TextFieldBorderLayout(radius: -1, width: -2)
+        self.getBorderLayoutUseCase.executeWithThemeAndBorderStyleAndIsFocusedReturnValue = newValue
 
         // WHEN
-        self.viewModel.borderRadius = newBorderRadius
+        self.viewModel.textFieldViewModel.setBorderLayout()
 
         // THEN
         XCTAssertEqual(self.publishers.borderRadius.sinkCount, 1, "borderRadius should have been called once")
-        XCTAssertEqual(self.viewModel.borderRadius, newBorderRadius, "Wrong borderRadius")
+        XCTAssertEqual(self.viewModel.borderRadius, newValue.radius, "Wrong borderRadius")
     }
 
     func test_spacingLeft_set_equal() {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
-        // GIVEN
-        let newLeftSpacing = self.expectedSpacings.left
-
         // WHEN
-        self.viewModel.leftSpacing = newLeftSpacing
+        self.viewModel.textFieldViewModel.setSpacings()
 
         // THEN
         XCTAssertFalse(self.publishers.leftSpacing.sinkCalled)
@@ -213,25 +206,23 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         self.publishers.reset() // Removes publishes from init
 
         // GIVEN
-        let newLeftSpacing = self.expectedSpacings.left - 1
+        let newValue = TextFieldSpacings(left: -1, content: -2, right: -3)
+        self.getSpacingsUseCase.executeWithThemeAndBorderStyleReturnValue = newValue
 
         // WHEN
-        self.viewModel.leftSpacing = newLeftSpacing
+        self.viewModel.textFieldViewModel.setSpacings()
 
         // THEN
         XCTAssertEqual(self.publishers.leftSpacing.sinkCount, 1, "leftSpacing should have been called once")
-        XCTAssertEqual(self.viewModel.leftSpacing, newLeftSpacing, "Wrong leftSpacing")
+        XCTAssertEqual(self.viewModel.leftSpacing, newValue.left, "Wrong leftSpacing")
     }
 
     func test_spacingContent_set_equal() {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
-        // GIVEN
-        let newContentSpacing = self.expectedSpacings.content
-
         // WHEN
-        self.viewModel.contentSpacing = newContentSpacing
+        self.viewModel.textFieldViewModel.setSpacings()
 
         // THEN
         XCTAssertFalse(self.publishers.contentSpacing.sinkCalled)
@@ -242,25 +233,23 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         self.publishers.reset() // Removes publishes from init
 
         // GIVEN
-        let newContentSpacing = self.expectedSpacings.content - 1
+        let newValue = TextFieldSpacings(left: -1, content: -2, right: -3)
+        self.getSpacingsUseCase.executeWithThemeAndBorderStyleReturnValue = newValue
 
         // WHEN
-        self.viewModel.contentSpacing = newContentSpacing
+        self.viewModel.textFieldViewModel.setSpacings()
 
         // THEN
         XCTAssertEqual(self.publishers.contentSpacing.sinkCount, 1, "contentSpacing should have been called once")
-        XCTAssertEqual(self.viewModel.contentSpacing, newContentSpacing, "Wrong contentSpacing")
+        XCTAssertEqual(self.viewModel.contentSpacing, newValue.content, "Wrong contentSpacing")
     }
 
     func test_spacingRight_set_equal() {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
-        // GIVEN
-        let newRightSpacing = self.expectedSpacings.right
-
         // WHEN
-        self.viewModel.rightSpacing = newRightSpacing
+        self.viewModel.textFieldViewModel.setSpacings()
 
         // THEN
         XCTAssertFalse(self.publishers.rightSpacing.sinkCalled)
@@ -271,14 +260,15 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         self.publishers.reset() // Removes publishes from init
 
         // GIVEN
-        let newRightSpacing = self.expectedSpacings.right - 1
+        let newValue = TextFieldSpacings(left: -1, content: -2, right: -3)
+        self.getSpacingsUseCase.executeWithThemeAndBorderStyleReturnValue = newValue
 
         // WHEN
-        self.viewModel.rightSpacing = newRightSpacing
+        self.viewModel.textFieldViewModel.setSpacings()
 
         // THEN
         XCTAssertEqual(self.publishers.rightSpacing.sinkCount, 1, "rightSpacing should have been called once")
-        XCTAssertEqual(self.viewModel.rightSpacing, newRightSpacing, "Wrong rightSpacing")
+        XCTAssertEqual(self.viewModel.rightSpacing, newValue.right, "Wrong rightSpacing")
     }
 
     func test_dim_set_equal() {
@@ -289,7 +279,7 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         let newDim = self.theme.dims.none
 
         // WHEN
-        self.viewModel.dim = newDim
+        self.viewModel.textFieldViewModel.dim = newDim
 
         // THEN
         XCTAssertFalse(self.publishers.dim.sinkCalled)
@@ -303,7 +293,7 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         let newDim = self.theme.dims.none + 1
 
         // WHEN
-        self.viewModel.dim = newDim
+        self.viewModel.textFieldViewModel.dim = newDim
 
         // THEN
         XCTAssertEqual(self.publishers.dim.sinkCount, 1, "dim should have been called once")
@@ -313,13 +303,13 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
     // MARK: - Utils
     private func setupPublishers() {
         self.publishers = .init(
-            backgroundColor: PublisherMock(publisher: self.viewModel.backgroundColorSubject),
-            borderRadius: PublisherMock(publisher: self.viewModel.borderRadiusSubject),
-            borderWidth: PublisherMock(publisher: self.viewModel.borderWidthSubject),
-            leftSpacing: PublisherMock(publisher: self.viewModel.leftSpacingSubject),
-            contentSpacing: PublisherMock(publisher: self.viewModel.contentSpacingSubject),
-            rightSpacing: PublisherMock(publisher: self.viewModel.rightSpacingSubject),
-            dim: PublisherMock(publisher: self.viewModel.dimSubject)
+            backgroundColor: PublisherMock(publisher: self.viewModel.$backgroundColor),
+            borderRadius: PublisherMock(publisher: self.viewModel.$borderRadius),
+            borderWidth: PublisherMock(publisher: self.viewModel.$borderWidth),
+            leftSpacing: PublisherMock(publisher: self.viewModel.$leftSpacing),
+            contentSpacing: PublisherMock(publisher: self.viewModel.$contentSpacing),
+            rightSpacing: PublisherMock(publisher: self.viewModel.$rightSpacing),
+            dim: PublisherMock(publisher: self.viewModel.$dim)
         )
         self.publishers.load()
     }
@@ -334,25 +324,25 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
 final class TextFieldAddonsPublishers {
     var cancellables = Set<AnyCancellable>()
 
-    var backgroundColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>
+    var backgroundColor: PublisherMock<Published<any ColorToken>.Publisher>
 
-    var borderRadius: PublisherMock<CurrentValueSubject<CGFloat, Never>>
-    var borderWidth: PublisherMock<CurrentValueSubject<CGFloat, Never>>
+    var borderRadius: PublisherMock<Published<CGFloat>.Publisher>
+    var borderWidth: PublisherMock<Published<CGFloat>.Publisher>
 
-    var leftSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>
-    var contentSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>
-    var rightSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>
+    var leftSpacing: PublisherMock<Published<CGFloat>.Publisher>
+    var contentSpacing: PublisherMock<Published<CGFloat>.Publisher>
+    var rightSpacing: PublisherMock<Published<CGFloat>.Publisher>
 
-    var dim: PublisherMock<CurrentValueSubject<CGFloat, Never>>
+    var dim: PublisherMock<Published<CGFloat>.Publisher>
 
     init(
-        backgroundColor: PublisherMock<CurrentValueSubject<any ColorToken, Never>>,
-        borderRadius: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
-        borderWidth: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
-        leftSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
-        contentSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
-        rightSpacing: PublisherMock<CurrentValueSubject<CGFloat, Never>>,
-        dim: PublisherMock<CurrentValueSubject<CGFloat, Never>>
+        backgroundColor: PublisherMock<Published<any ColorToken>.Publisher>,
+        borderRadius: PublisherMock<Published<CGFloat>.Publisher>,
+        borderWidth: PublisherMock<Published<CGFloat>.Publisher>,
+        leftSpacing: PublisherMock<Published<CGFloat>.Publisher>,
+        contentSpacing: PublisherMock<Published<CGFloat>.Publisher>,
+        rightSpacing: PublisherMock<Published<CGFloat>.Publisher>,
+        dim: PublisherMock<Published<CGFloat>.Publisher>
     ) {
         self.backgroundColor = backgroundColor
         self.borderRadius = borderRadius
