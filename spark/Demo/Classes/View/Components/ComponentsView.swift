@@ -62,6 +62,10 @@ struct ComponentsView: View {
                 }
             }
 
+            Button("Progress Tracker") {
+                self.navigateToView(ProgressTrackerComponent())
+            }
+
             Button("Radio Button") {
                 self.navigateToView(RadioButtonComponent())
             }
