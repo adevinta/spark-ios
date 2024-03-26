@@ -235,6 +235,8 @@ class ComponentUIView: UIView {
 
         self.componentView.setNeedsLayout()
         self.componentView.layoutIfNeeded()
+        self.componentView.contentMode = .scaleToFill
+        self.componentView.sizeToFit()
     }
 
     // MARK: - Subscribe

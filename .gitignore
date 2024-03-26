@@ -110,6 +110,8 @@ spark-ios-snapshots
 
 #sourcery
 *Generated/
+sourcery-bin
+sourcery.zip
 
 vendor/
 *.lock

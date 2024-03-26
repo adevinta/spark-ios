@@ -20,6 +20,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
         .icon,
         .progressBarIndeterminate,
         .progressBarSingle,
+        .progressTracker,
         .radioButton,
         .ratingDisplay,
         .ratingInput,
@@ -44,6 +45,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static let iconButton = UIComponent(rawValue: "Icon Button")
     static let progressBarIndeterminate = UIComponent(rawValue: "Progress Bar Indeterminate")
     static let progressBarSingle = UIComponent(rawValue: "Progress Bar Single")
+    static let progressTracker = UIComponent(rawValue: "Progress Tracker")
     static let radioButton = UIComponent(rawValue: "Radio Button")
     static let ratingDisplay = UIComponent(rawValue: "Rating Display")
     static let ratingInput = UIComponent(rawValue: "Rating Input")
