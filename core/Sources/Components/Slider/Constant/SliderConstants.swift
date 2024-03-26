@@ -9,7 +9,7 @@
 import Foundation
 
 enum SliderConstants {
-    static let handleSize = CGSize(width: 24, height: 24)
-    static let activeIndicatorSize = CGSize(width: 32, height: 32)
+    static let handleSize = CGSize(width: 32, height: 32)
+    static let activeIndicatorSize = CGSize(width: 40, height: 40)
     static let barHeight: CGFloat = 4.0
 }

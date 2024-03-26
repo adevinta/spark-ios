@@ -54,8 +54,9 @@ final class ListComponentsViewController: UICollectionViewController {
     private func setupData() {
         /// CollectionView append sections and items
         var snapShot = SnapShot()
-        snapShot.appendSections([.all])
-        snapShot.appendItems(uiComponentAllCases.map{ $0.rawValue }, toSection: .all)
+        snapShot.appendSections([.list, .random])
+        snapShot.appendItems(uiComponentAllCases.map{ $0.rawValue }, toSection: .list)
+        snapShot.appendItems(Row.allCases.map{ $0.name }, toSection: .random)
         collectionViewDataSource.apply(snapShot)
     }
 }
@@ -76,58 +77,86 @@ extension ListComponentsViewController {
 
         var viewController: UIViewController!
 
-        switch uiComponentAllCases[indexPath.row] {
-        case .badge:
-            viewController = ListViewController<BadgeCell, BadgeConfiguration>()
-        case .button:
-            viewController = ListViewController<ButtonCell, ButtonConfiguration>()
-        case .checkbox:
-            viewController = ListViewController<CheckboxCell, CheckboxConfiguration>()
-        case .checkboxGroup:
-            viewController = ListViewController<CheckboxGroupCell, CheckboxGroupConfiguration>()
-        case .chip:
-            viewController = ListViewController<ChipCell, ChipConfiguration>()
-        case .icon:
-            viewController = ListViewController<IconCell, IconConfiguration>()
-        case .progressBarIndeterminate:
-            viewController = ListViewController<ProgressBarIndeterminateCell, ProgressBarIndeterminateConfiguration>()
-        case .progressBarSingle:
-            viewController = ListViewController<ProgressBarSingleCell, ProgressBarSingleConfiguration>()
-        case .radioButton:
-            viewController = ListViewController<RadioButtonCell, RadioButtonConfiguration>()
-        case .radioButtonGroup:
-            viewController = ListViewController<RadioButtonGroupCell, RadioButtonGroupConfiguration>()
-        case .ratingDisplay:
-            viewController = ListViewController<RatingDisplayCell, RatingDisplayConfiguration>()
-        case .ratingInput:
-            viewController = ListViewController<RatingInputCell, RatingInputConfiguration>()
-        case .spinner:
-            viewController = ListViewController<SpinnerCell, SpinnerConfiguration>()
-        case .star:
-            viewController = ListViewController<StarCell, StarCellConfiguration>()
-        case .switchButton:
-            viewController = ListViewController<SwitchButtonCell, SwitchButtonConfiguration>()
-        case .tab:
-            viewController = ListViewController<TabCell, TabConfiguration>()
-        case .tag:
-            viewController = ListViewController<TagCell, TagConfiguration>()
-        case .textField:
-            viewController = ListViewController<TextFieldCell, TextFieldConfiguration>()
-        case .addOnTextField:
-            viewController = ListViewController<AddOnTextFieldCell, AddOnTextFieldConfiguration>()
-        default:
-            break
+        switch Section.allCases[indexPath.section] {
+        case .list:
+            viewController = self.listSectionControllers(index: indexPath.row)
+        case .random:
+            viewController = self.randomSectionControllers(index: indexPath.row)
         }
+
         guard viewController != nil else { return }
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    private func listSectionControllers(index: Int) -> UIViewController? {
+
+        switch uiComponentAllCases[index] {
+        case .badge:
+            return ListViewController<BadgeCell, BadgeConfiguration>()
+        case .button:
+            return ListViewController<ButtonCell, ButtonConfiguration>()
+        case .checkbox:
+            return ListViewController<CheckboxCell, CheckboxConfiguration>()
+        case .checkboxGroup:
+            return ListViewController<CheckboxGroupCell, CheckboxGroupConfiguration>()
+        case .chip:
+            return ListViewController<ChipCell, ChipConfiguration>()
+        case .icon:
+            return ListViewController<IconCell, IconConfiguration>()
+        case .progressBarIndeterminate:
+            return ListViewController<ProgressBarIndeterminateCell, ProgressBarIndeterminateConfiguration>()
+        case .progressBarSingle:
+            return ListViewController<ProgressBarSingleCell, ProgressBarSingleConfiguration>()
+        case .radioButton:
+            return ListViewController<RadioButtonCell, RadioButtonConfiguration>()
+        case .radioButtonGroup:
+            return ListViewController<RadioButtonGroupCell, RadioButtonGroupConfiguration>()
+        case .ratingDisplay:
+            return ListViewController<RatingDisplayCell, RatingDisplayConfiguration>()
+        case .ratingInput:
+            return ListViewController<RatingInputCell, RatingInputConfiguration>()
+        case .spinner:
+            return ListViewController<SpinnerCell, SpinnerConfiguration>()
+        case .star:
+            return ListViewController<StarCell, StarCellConfiguration>()
+        case .switchButton:
+            return ListViewController<SwitchButtonCell, SwitchButtonConfiguration>()
+        case .tab:
+            return ListViewController<TabCell, TabConfiguration>()
+        case .tag:
+            return ListViewController<TagCell, TagConfiguration>()
+        case .textField:
+            return ListViewController<TextFieldCell, TextFieldConfiguration>()
+        case .addOnTextField:
+            return ListViewController<AddOnTextFieldCell, AddOnTextFieldConfiguration>()
+        default:
+            return nil
+        }
+    }
+
+    private func randomSectionControllers(index: Int) -> UIViewController? {
+        switch Row.allCases[index] {
+        case .radioCheckboxSwiftui:
+            return UIHostingController(
+                rootView: RadioCheckboxView().environment(\.navigationController, self.navigationController)
+            )
+        case .radioCheckboxUikit:
+            return RadioCheckboxUIViewController()
+        }
     }
 }
 
 // MARK: - Enums
 private extension ListComponentsViewController {
 
-    enum Section {
-        case all
+    enum Section: CaseIterable {
+        case list
+        case random
+    }
+
+    enum Row: CaseIterable {
+        case radioCheckboxSwiftui
+        case radioCheckboxUikit
     }
 }
 
