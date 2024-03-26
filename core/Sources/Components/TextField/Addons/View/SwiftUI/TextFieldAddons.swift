@@ -100,6 +100,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
                             .padding(getLeftAddonPadding(withPadding: leftAddon.withPadding))
                         separator()
                     }
+                    .layoutPriority(1)
                 }
                 textField()
                 if RightAddon.self is EmptyView.Type == false {
@@ -108,6 +109,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
                         rightAddonContent
                             .padding(getRightAddonPadding(withPadding: rightAddon.withPadding))
                     }
+                    .layoutPriority(1)
                 }
             }
             .padding(getContentPadding())
