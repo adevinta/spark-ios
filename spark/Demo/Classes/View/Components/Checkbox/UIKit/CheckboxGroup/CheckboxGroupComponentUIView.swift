@@ -76,6 +76,11 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             self.componentView.layout = isLayoutVertical ? .vertical : .horizontal
         }
 
+        self.viewModel.$showGroupTitle.subscribe(in: &self.cancellables) { [weak self] showGroupTitle in
+            guard let self = self else { return }
+            self.componentView.title = showGroupTitle ? viewModel.title : ""
+        }
+
         self.viewModel.$groupType.subscribe(in: &self.cancellables) { [weak self] type in
             guard let self = self else { return }
             self.viewModel.groupTypeConfigurationItemViewModel.buttonTitle = type.name
