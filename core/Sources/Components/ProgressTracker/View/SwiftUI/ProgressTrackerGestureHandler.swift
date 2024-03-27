@@ -8,18 +8,22 @@
 
 import SwiftUI
 
+// MARK: - Protocol
+/// Touch handlers of the swiftui progress tracker
 protocol ProgressTrackerGestureHandling {
     func onChanged(location: CGPoint)
     func onEnded(location: CGPoint)
     func onCancelled()
 }
 
-class ProgressTrackerNoneGestureHandler: ProgressTrackerGestureHandling {
+/// A gesture handler that has no actions.
+final class ProgressTrackerNoneGestureHandler: ProgressTrackerGestureHandling {
     func onChanged(location: CGPoint) {}
     func onEnded(location: CGPoint) {}
     func onCancelled() {}
 }
 
+/// An `abstract` gesture  handler.
 class ProgressTrackerGestureHandler: ProgressTrackerGestureHandling {
 
     @Binding var currentPageIndex: Int
@@ -45,7 +49,8 @@ class ProgressTrackerGestureHandler: ProgressTrackerGestureHandling {
     func onCancelled() {}
 }
 
-class ProgressTrackerIndependentGestureHandler: ProgressTrackerGestureHandler {
+/// A gesture handler, that let's the user access any page of the page tracker
+final class ProgressTrackerIndependentGestureHandler: ProgressTrackerGestureHandler {
 
     override func onChanged(location: CGPoint) {
         guard self.frame.contains(location) else {
@@ -80,7 +85,8 @@ class ProgressTrackerIndependentGestureHandler: ProgressTrackerGestureHandler {
     }
 }
 
-class ProgressTrackerDiscreteGestureHandler: ProgressTrackerGestureHandler {
+/// A gesture handler that only allows access to the direct neighboring pages and one one page change is allowed during one touch handling.
+final class ProgressTrackerDiscreteGestureHandler: ProgressTrackerGestureHandler {
 
     override func onChanged(location: CGPoint) {
         guard self.frame.contains(location) else {
@@ -127,7 +133,8 @@ class ProgressTrackerDiscreteGestureHandler: ProgressTrackerGestureHandler {
 
 }
 
-class ProgressTrackerContinuousGestureHandler: ProgressTrackerGestureHandler {
+/// A gesture handler, that allows the user to swipe across all indicators of the progress tracker and switch from one page to the next in one `drag` gesture.
+final class ProgressTrackerContinuousGestureHandler: ProgressTrackerGestureHandler {
 
     override func onChanged(location: CGPoint) {
         guard self.frame.contains(location) else {
@@ -188,5 +195,4 @@ class ProgressTrackerContinuousGestureHandler: ProgressTrackerGestureHandler {
     override func onCancelled() {
         self.currentTouchedPageIndex = nil
     }
-
 }
