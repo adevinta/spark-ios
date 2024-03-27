@@ -147,6 +147,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     public var component: Component {
         didSet {
             oldValue.removeFromSuperview()
+            self.component.isAccessibilityElement = true
             self.stackView.insertArrangedSubview(self.component, at: 1)
         }
     }
