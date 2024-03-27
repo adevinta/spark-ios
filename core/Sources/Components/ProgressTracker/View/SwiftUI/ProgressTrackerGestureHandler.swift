@@ -138,13 +138,22 @@ class ProgressTrackerContinuousGestureHandler: ProgressTrackerGestureHandler {
         guard let index = self.indicators.index(closestTo: location) else { return }
 
         if let currentTouchedPageIndex {
+            let nextPageIndex: Int?
             if index > currentTouchedPageIndex {
-                self.currentPageIndex = currentTouchedPageIndex
-                self.currentTouchedPageIndex = currentTouchedPageIndex + 1
+                nextPageIndex = currentTouchedPageIndex + 1
             } else if index < currentTouchedPageIndex {
-                self.currentPageIndex = currentTouchedPageIndex
-                self.currentTouchedPageIndex = currentTouchedPageIndex - 1
+                nextPageIndex = currentTouchedPageIndex - 1
+            } else {
+                nextPageIndex = nil
             }
+
+            if let nextPageIndex, self.disabledIndeces.contains(nextPageIndex) {
+                return
+            } else if let nextPageIndex {
+                self.currentPageIndex = currentTouchedPageIndex
+                self.currentTouchedPageIndex = nextPageIndex
+            }
+
         } else {
             let currentPressedPageIndex: Int?
 
@@ -156,7 +165,9 @@ class ProgressTrackerContinuousGestureHandler: ProgressTrackerGestureHandler {
                 currentPressedPageIndex = nil
             }
 
-            if self.currentTouchedPageIndex != currentPressedPageIndex {
+            if let currentPressedPageIndex, self.disabledIndeces.contains(currentPressedPageIndex) {
+                return
+            } else if self.currentTouchedPageIndex != currentPressedPageIndex {
                 self.currentTouchedPageIndex = currentPressedPageIndex
             }
         }
