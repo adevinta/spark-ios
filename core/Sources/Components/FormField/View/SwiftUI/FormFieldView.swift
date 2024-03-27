@@ -22,16 +22,13 @@ public struct FormFieldView<Component: View>: View {
     ///   - title: The formfield title.
     ///   - description: The formfield helper message.
     ///   - isTitleRequired: The asterisk symbol at the end of title.
-    ///   - isEnabled: The formfield's component isEnabled value.
     public init(
         theme: Theme,
         @ViewBuilder component: @escaping () -> Component,
         feedbackState: FormFieldFeedbackState = .default,
         title: String? = nil,
         description: String? = nil,
-        isTitleRequired: Bool = false,
-        isEnabled: Bool = true,
-        isSelected: Bool = false
+        isTitleRequired: Bool = false
     ) {
         let attributedTitle: AttributedString? = title.map(AttributedString.init)
         let attributedDescription: AttributedString? = description.map(AttributedString.init)
