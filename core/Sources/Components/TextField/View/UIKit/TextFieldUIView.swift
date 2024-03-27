@@ -154,6 +154,7 @@ public final class TextFieldUIView: UITextField {
         self.subscribeToViewModel()
         self.setRightView()
         self.setContentCompressionResistancePriority(.required, for: .vertical)
+        self.accessibilityIdentifier = TextFieldAccessibilityIdentifier.view
     }
 
     private func subscribeToViewModel() {

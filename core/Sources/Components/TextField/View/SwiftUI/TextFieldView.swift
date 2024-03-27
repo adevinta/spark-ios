@@ -155,5 +155,6 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
             }
             rightView()
         }
+        .accessibilityIdentifier(TextFieldAccessibilityIdentifier.view)
     }
 }

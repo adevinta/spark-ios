@@ -13,7 +13,7 @@ import Combine
 public final class TextFieldAddonsUIView: UIControl {
 
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
-    
+
     /// Embbeded textField
     public let textField: TextFieldUIView
     /// Current leftAddon, set using setLeftAddon(_:, _withPadding:)
@@ -55,7 +55,7 @@ public final class TextFieldAddonsUIView: UIControl {
             self.textField.isUserInteractionEnabled = self.isUserInteractionEnabled
         }
     }
-    
+
     /// TextFieldAddonsUIView  initializer
     /// - Parameters:
     ///   - theme: The textfield's current theme
@@ -68,7 +68,8 @@ public final class TextFieldAddonsUIView: UIControl {
         intent: TextFieldIntent,
         successImage: UIImage,
         alertImage: UIImage,
-        errorImage: UIImage) {
+        errorImage: UIImage
+    ) {
         let viewModel = TextFieldAddonsViewModel(
             theme: theme,
             intent: intent,
@@ -84,6 +85,9 @@ public final class TextFieldAddonsUIView: UIControl {
         self.setupViews()
         self.subscribeToViewModel()
         self.textField.backgroundColor = .clear
+
+        self.accessibilityContainerType = .semanticGroup
+        self.accessibilityIdentifier = TextFieldAddonsAccessibilityIdentifier.view
     }
 
     required init?(coder: NSCoder) {
@@ -196,7 +200,7 @@ public final class TextFieldAddonsUIView: UIControl {
         self.rightSeparatorWidthConstraint.constant = width
         self.invalidateIntrinsicContentSize()
     }
-    
+
     /// Set the textfield's left addon
     /// - Parameters:
     ///   - leftAddon: the view to be set as leftAddon

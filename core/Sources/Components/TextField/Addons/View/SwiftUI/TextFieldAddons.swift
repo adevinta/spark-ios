@@ -132,6 +132,8 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
         .allowsHitTesting(self.viewModel.textFieldViewModel.isUserInteractionEnabled)
         .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.textFieldViewModel.borderColor)
         .opacity(self.viewModel.dim)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(TextFieldAddonsAccessibilityIdentifier.view)
     }
 
     @ViewBuilder
