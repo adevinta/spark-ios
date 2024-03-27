@@ -87,6 +87,7 @@ public struct FormFieldView<Component: View>: View {
                     .foregroundStyle(self.viewModel.descriptionColor.color)
             }
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(FormFieldAccessibilityIdentifier.formField)
     }
 }
