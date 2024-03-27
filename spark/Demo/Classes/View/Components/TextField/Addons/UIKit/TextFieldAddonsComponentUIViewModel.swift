@@ -1,8 +1,8 @@
 //
-//  TextFieldComponentUIViewModel.swift
+//  TextFieldAddonsComponentUIViewModel.swift
 //  SparkDemo
 //
-//  Created by louis.borlee on 24/01/2024.
+//  Created by louis.borlee on 14/02/2024.
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
@@ -10,17 +10,17 @@ import UIKit
 import Combine
 import SparkCore
 
-final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObject {
+final class TextFieldAddonsComponentUIViewModel: ComponentUIViewModel, ObservableObject {
 
     @Published var theme: Theme
     @Published var intent: TextFieldIntent
     @Published var isEnabled: Bool = true
     @Published var isUserInteractionEnabled: Bool = true
-    @Published var leftViewMode: UITextField.ViewMode = .always
-    @Published var rightViewMode: UITextField.ViewMode = .always
     @Published var leftViewContent: TextFieldSideViewContent = .none
     @Published var rightViewContent: TextFieldSideViewContent = .none
-    @Published var clearButtonMode: UITextField.ViewMode = .always
+    @Published var leftAddonContent: TextFieldAddonContent = .buttonFull
+    @Published var rightAddonContent: TextFieldAddonContent = .icon
+    @Published var addonPadding: Bool = false
 
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
@@ -31,18 +31,6 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
         self.showIntentSheetSubject
             .eraseToAnyPublisher()
     }
-    var showClearButtonModeSheet: AnyPublisher<[UITextField.ViewMode], Never> {
-        self.showClearButtonModeSheetSubject
-            .eraseToAnyPublisher()
-    }
-    var showLeftViewModeSheet: AnyPublisher<[UITextField.ViewMode], Never> {
-        self.showLeftViewModeSheetSubject
-            .eraseToAnyPublisher()
-    }
-    var showRightViewModeSheet: AnyPublisher<[UITextField.ViewMode], Never> {
-        self.showRightViewModeSheetSubject
-            .eraseToAnyPublisher()
-    }
     var showLeftViewContentSheet: AnyPublisher<[TextFieldSideViewContent], Never> {
         self.showLeftViewContentSheetSubject
             .eraseToAnyPublisher()
@@ -51,8 +39,14 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
         self.showRightViewContentSheetSubject
             .eraseToAnyPublisher()
     }
-
-    let themes = ThemeCellModel.themes
+    var showLeftAddonContentSheet: AnyPublisher<[TextFieldAddonContent], Never> {
+        self.showLeftAddonContentSheetSubject
+            .eraseToAnyPublisher()
+    }
+    var showRightAddonContentSheet: AnyPublisher<[TextFieldAddonContent], Never> {
+        self.showRightAddonContentSheetSubject
+            .eraseToAnyPublisher()
+    }
 
     lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
@@ -85,30 +79,6 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
             target: (source: self, action: #selector(self.toggleIsUserInteractionEnabled))
         )
     }()
-
-    lazy var clearButtonModeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "ClearButtonMode",
-            type: .button,
-            target: (source: self, action: #selector(self.presentClearButtonMode))
-        )
-    }()
-
-    lazy var leftViewModeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "LeftViewMode",
-            type: .button,
-            target: (source: self, action: #selector(self.presentLeftViewMode))
-        )
-    }()
-    lazy var rightViewModeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "RightViewMode",
-            type: .button,
-            target: (source: self, action: #selector(self.presentRightViewMode))
-        )
-    }()
-
     lazy var leftViewContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "LeftViewContent",
@@ -123,14 +93,37 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
             target: (source: self, action: #selector(self.presentRightViewContent))
         )
     }()
+    lazy var leftAddonContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "LeftAddonContent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentLeftAddonContent))
+        )
+    }()
+    lazy var rightAddonContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "RightAddonContent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentRightAddonContent))
+        )
+    }()
+
+    lazy var addonPaddingConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "With addon padding",
+            type: .toggle(isOn: self.addonPadding),
+            target: (source: self, action: #selector(self.toggleAddonPadding))
+        )
+    }()
 
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[TextFieldIntent], Never> = .init()
-    private var showClearButtonModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
-    private var showLeftViewModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
-    private var showRightViewModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
     private var showLeftViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
     private var showRightViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
+    private var showLeftAddonContentSheetSubject: PassthroughSubject<[TextFieldAddonContent], Never> = .init()
+    private var showRightAddonContentSheetSubject: PassthroughSubject<[TextFieldAddonContent], Never> = .init()
+
+    let themes = ThemeCellModel.themes
 
     init(
         theme: Theme,
@@ -138,7 +131,7 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
     ) {
         self.theme = theme
         self.intent = intent
-        super.init(identifier: "TextField")
+        super.init(identifier: "TextFieldAddons")
     }
 
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
@@ -147,11 +140,11 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
             self.intentConfigurationItemViewModel,
             self.isEnabledConfigurationItemViewModel,
             self.isUserInteractionEnabledConfigurationItemViewModel,
-            self.clearButtonModeConfigurationItemViewModel,
-            self.leftViewModeConfigurationItemViewModel,
-            self.rightViewModeConfigurationItemViewModel,
             self.leftViewContentConfigurationItemViewModel,
-            self.rightViewContentConfigurationItemViewModel
+            self.rightViewContentConfigurationItemViewModel,
+            self.leftAddonContentConfigurationItemViewModel,
+            self.rightAddonContentConfigurationItemViewModel,
+            self.addonPaddingConfigurationItemViewModel
         ]
     }
 
@@ -171,18 +164,6 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
         self.isUserInteractionEnabled.toggle()
     }
 
-    @objc func presentClearButtonMode() {
-        self.showClearButtonModeSheetSubject.send(UITextField.ViewMode.allCases)
-    }
-
-    @objc func presentLeftViewMode() {
-        self.showLeftViewModeSheetSubject.send(UITextField.ViewMode.allCases)
-    }
-
-    @objc func presentRightViewMode() {
-        self.showRightViewModeSheetSubject.send(UITextField.ViewMode.allCases)
-    }
-
     @objc func presentLeftViewContent() {
         self.showLeftViewContentSheetSubject.send(TextFieldSideViewContent.allCases)
     }
@@ -190,13 +171,16 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
     @objc func presentRightViewContent() {
         self.showRightViewContentSheetSubject.send(TextFieldSideViewContent.allCases)
     }
-}
 
-extension UITextField.ViewMode: CaseIterable {
-    public static var allCases: [UITextField.ViewMode] = [
-        .never,
-        .whileEditing,
-        .unlessEditing,
-        .always
-    ]
+    @objc func presentLeftAddonContent() {
+        self.showLeftAddonContentSheetSubject.send(TextFieldAddonContent.allCases)
+    }
+
+    @objc func presentRightAddonContent() {
+        self.showRightAddonContentSheetSubject.send(TextFieldAddonContent.allCases)
+    }
+
+    @objc func toggleAddonPadding() {
+        self.addonPadding.toggle()
+    }
 }

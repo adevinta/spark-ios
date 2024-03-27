@@ -83,12 +83,6 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
         case is TagCell.Type:
             self.tableView.register(TagCell.self, forCellReuseIdentifier: TagCell.reuseIdentifier)
 
-        case is TextFieldCell.Type:
-            self.tableView.register(TextFieldCell.self, forCellReuseIdentifier: TextFieldCell.reuseIdentifier)
-
-        case is AddOnTextFieldCell.Type:
-            self.tableView.register(AddOnTextFieldCell.self, forCellReuseIdentifier: AddOnTextFieldCell.reuseIdentifier)
-
         default:
             break
         }

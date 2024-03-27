@@ -101,6 +101,14 @@ struct ComponentsView: View {
                     self.navigateToView(TagComponentView())
                 }
 
+                Button("TextField") {
+                    self.navigateToView(TextFieldComponentView())
+                }
+
+                Button("TextFieldAddons") {
+                    self.navigateToView(TextFieldAddonsComponentView())
+                }
+
                 Button("TextLink") {
                     self.navigateToView(TextLinkComponentView())
                 }
