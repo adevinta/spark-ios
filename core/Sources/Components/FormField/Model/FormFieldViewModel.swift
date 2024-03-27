@@ -45,8 +45,9 @@ final class FormFieldViewModel: ObservableObject {
         }
     }
 
+    var colors: FormFieldColors
+
     private var colorUseCase: FormFieldColorsUseCaseable
-    private var colors: FormFieldColors
     private var userDefinedTitle: Either<NSAttributedString?, AttributedString?>?
     private var asterisk: NSAttributedString = NSAttributedString()
 
@@ -61,7 +62,7 @@ final class FormFieldViewModel: ObservableObject {
     ) {
         self.theme = theme
         self.feedbackState = feedbackState
-        self.title = title
+        self.userDefinedTitle = title
         self.description = description
         self.isTitleRequired = isTitleRequired
         self.colorUseCase = colorUseCase
@@ -71,6 +72,9 @@ final class FormFieldViewModel: ObservableObject {
         self.descriptionFont = self.theme.typography.caption
         self.titleColor = self.colors.titleColor
         self.descriptionColor = self.colors.descriptionColor
+
+        self.updateAsterisk()
+        self.setTitle(title)
     }
 
     private func updateColors() {
