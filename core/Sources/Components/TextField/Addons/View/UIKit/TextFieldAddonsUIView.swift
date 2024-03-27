@@ -9,12 +9,16 @@
 import UIKit
 import Combine
 
+/// A Spark TextField that can be surrounded by left and/or right addons
 public final class TextFieldAddonsUIView: UIControl {
 
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
-
+    
+    /// Embbeded textField
     public let textField: TextFieldUIView
+    /// Current leftAddon, set using setLeftAddon(_:, _withPadding:)
     private(set) public var leftAddon: UIView?
+    /// Current rightAddon, set using setRightAddon(_:, _withPadding:)
     private(set) public var rightAddon: UIView?
 
     private var leftAddonContainer = UIView()
@@ -51,7 +55,14 @@ public final class TextFieldAddonsUIView: UIControl {
             self.textField.isUserInteractionEnabled = self.isUserInteractionEnabled
         }
     }
-
+    
+    /// TextFieldAddonsUIView  initializer
+    /// - Parameters:
+    ///   - theme: The textfield's current theme
+    ///   - intent: The textfield's current intent
+    ///   - successImage: Success image, will be shown in the rightView when intent = .success
+    ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
+    ///   - errorImage: Error image, will be shown in the rightView when intent = .error
     public init(
         theme: Theme,
         intent: TextFieldIntent,
@@ -185,7 +196,11 @@ public final class TextFieldAddonsUIView: UIControl {
         self.rightSeparatorWidthConstraint.constant = width
         self.invalidateIntrinsicContentSize()
     }
-
+    
+    /// Set the textfield's left addon
+    /// - Parameters:
+    ///   - leftAddon: the view to be set as leftAddon
+    ///   - withPadding: adds a padding on the addon if `true`, default is `false`
     public func setLeftAddon(_ leftAddon: UIView?, withPadding: Bool = false) {
         if let oldValue = self.leftAddon, oldValue.isDescendant(of: self.leftAddonContainer) {
             oldValue.removeFromSuperview()
@@ -204,6 +219,10 @@ public final class TextFieldAddonsUIView: UIControl {
         self.leadingConstraint.constant = self.leftAddonContainer.isHidden ? self.viewModel.leftSpacing : .zero
     }
 
+    /// Set the textfield's right addon
+    /// - Parameters:
+    ///   - leftAddon: the view to be set as rightAddon
+    ///   - withPadding: adds a padding on the addon if `true`, default is `false`
     public func setRightAddon(_ rightAddon: UIView? = nil, withPadding: Bool = false) {
         if let oldValue = self.rightAddon, oldValue.isDescendant(of: self.rightAddonContainer) {
             oldValue.removeFromSuperview()

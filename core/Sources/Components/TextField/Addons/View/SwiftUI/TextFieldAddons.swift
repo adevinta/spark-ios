@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// A Spark TextField that can be surrounded by left and/or right addons
 public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, RightAddon: View>: View {
 
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
@@ -22,6 +23,21 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
     private let leftView: () -> LeftView
     private let rightView: () -> RightView
 
+    /// TextFieldAddons initializer
+    /// - Parameters:
+    ///   - titleKey: The textfield's current placeholder
+    ///   - text: The textfield's text binding
+    ///   - theme: The textfield's current theme
+    ///   - intent: The textfield's current intent
+    ///   - successImage: Success image, will be shown in the rightView when intent = .success
+    ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
+    ///   - errorImage: Error image, will be shown in the rightView when intent = .error
+    ///   - isSecure: Set this to true if you want a SecureField, default is `false`
+    ///   - isReadOnly: Set this to true if you want the textfield to be readOnly, default is `false`
+    ///   - leftView: The TextField's left view, default is `EmptyView`
+    ///   - rightView: The TextField's right view, default is `EmptyView`
+    ///   - leftAddon: The TextField's left addon, default is `EmptyView`
+    ///   - rightAddon: The TextField's right addon, default is `EmptyView`
     public init(
         _ titleKey: LocalizedStringKey,
         text: Binding<String>,
@@ -125,7 +141,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
     }
 
     @ViewBuilder
-    func textField() -> TextFieldView<LeftView, RightView> {
+    private func textField() -> TextFieldView<LeftView, RightView> {
         TextFieldView(titleKey: titleKey, text: $text, viewModel: viewModel.textFieldViewModel, isSecure: isSecure, leftView: leftView, rightView: rightView)
     }
 }
