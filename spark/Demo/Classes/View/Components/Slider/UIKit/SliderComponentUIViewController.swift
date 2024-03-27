@@ -48,7 +48,7 @@ final class SliderComponentUIViewController: UIViewController {
         self.addPublisher()
 
         self.componentView.slider.addAction(UIAction(handler: { [weak self] _ in
-            guard let self else { return }
+            guard self != nil else { return }
         }), for: .valueChanged)
     }
 
