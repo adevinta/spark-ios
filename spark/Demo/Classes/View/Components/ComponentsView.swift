@@ -48,6 +48,10 @@ struct ComponentsView: View {
                 }
             }
 
+            Button("FormField") {
+                self.navigateToView(FormFieldComponentView())
+            }
+
             Button("Icon") {
                 self.navigateToView(IconComponentView())
             }
