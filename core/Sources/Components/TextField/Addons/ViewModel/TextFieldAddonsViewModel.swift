@@ -62,38 +62,37 @@ final class TextFieldAddonsViewModel: ObservableObject, Updateable {
     private func subscribe() {
         self.textFieldViewModel.$addonsBackgroundColor.subscribe(in: &self.cancellables) { [weak self] backgroundColor in
             guard let self else { return }
-            self.updateIfNeeded(keyPath: \.backgroundColor, newValue: backgroundColor)
+            self.backgroundColor = backgroundColor
         }
 
         self.textFieldViewModel.$addonsLeftSpacing.subscribe(in: &self.cancellables) { [weak self] leftSpacing in
             guard let self else { return }
-            self.updateIfNeeded(keyPath: \.leftSpacing, newValue: leftSpacing)
+            self.leftSpacing = leftSpacing
         }
 
         self.textFieldViewModel.$addonsContentSpacing.subscribe(in: &self.cancellables) { [weak self] contentSpacing in
             guard let self else { return }
-            self.updateIfNeeded(keyPath: \.contentSpacing, newValue: contentSpacing)
+            self.contentSpacing = contentSpacing
         }
 
         self.textFieldViewModel.$addonsRightSpacing.subscribe(in: &self.cancellables) { [weak self] rightSpacing in
             guard let self else { return }
-            self.updateIfNeeded(keyPath: \.rightSpacing, newValue: rightSpacing)
+            self.rightSpacing = rightSpacing
         }
 
         self.textFieldViewModel.$addonsBorderWidth.subscribe(in: &self.cancellables) { [weak self] borderWidth in
             guard let self else { return }
-            self.updateIfNeeded(keyPath: \.borderWidth, newValue: borderWidth)
+            self.borderWidth = borderWidth
         }
 
         self.textFieldViewModel.$addonsBorderRadius.subscribe(in: &self.cancellables) { [weak self] borderRadius in
             guard let self else { return }
-            self.updateIfNeeded(keyPath: \.borderRadius, newValue: borderRadius)
+            self.borderRadius = borderRadius
         }
 
         self.textFieldViewModel.$addonsDim.subscribe(in: &self.cancellables) { [weak self] dim in
             guard let self else { return }
-            self.updateIfNeeded(keyPath: \.dim, newValue: dim)
+            self.dim = dim
         }
-
     }
 }

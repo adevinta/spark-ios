@@ -107,21 +107,7 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         XCTAssertEqual(self.publishers.dim.sinkCount, 1, "$dim should have been called once")
     }
 
-    func test_backgroundColor_set_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // GIVEN
-        let newBackgroundColor = self.expectedColors.background
-
-        // WHEN
-        self.viewModel.textFieldViewModel.backgroundColor = newBackgroundColor
-
-        // THEN
-        XCTAssertFalse(self.publishers.backgroundColor.sinkCalled)
-    }
-
-    func test_backgroundColor_set_not_equal() {
+    func test_set_backgroundColor() {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
@@ -136,18 +122,7 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.backgroundColor.equals(newBackgroundColor), "Wrong backgroundColor")
     }
 
-    func test_borderWidth_set_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // WHEN
-        self.viewModel.textFieldViewModel.setBorderLayout()
-
-        // THEN
-        XCTAssertFalse(self.publishers.borderWidth.sinkCalled)
-    }
-
-    func test_borderWidth_set_not_equal() {
+    func test_setBorderLayout() {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
@@ -161,47 +136,11 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         // THEN
         XCTAssertEqual(self.publishers.borderWidth.sinkCount, 1, "borderWidth should have been called once")
         XCTAssertEqual(self.viewModel.borderWidth, newValue.width, "Wrong borderWidth")
-    }
-
-    func test_borderRadius_set_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // WHEN
-        self.viewModel.textFieldViewModel.setBorderLayout()
-
-        // THEN
-        XCTAssertFalse(self.publishers.borderRadius.sinkCalled)
-    }
-
-    func test_borderRadius_set_not_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // GIVEN
-        let newValue = TextFieldBorderLayout(radius: -1, width: -2)
-        self.getBorderLayoutUseCase.executeWithThemeAndBorderStyleAndIsFocusedReturnValue = newValue
-
-        // WHEN
-        self.viewModel.textFieldViewModel.setBorderLayout()
-
-        // THEN
         XCTAssertEqual(self.publishers.borderRadius.sinkCount, 1, "borderRadius should have been called once")
         XCTAssertEqual(self.viewModel.borderRadius, newValue.radius, "Wrong borderRadius")
     }
 
-    func test_spacingLeft_set_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // WHEN
-        self.viewModel.textFieldViewModel.setSpacings()
-
-        // THEN
-        XCTAssertFalse(self.publishers.leftSpacing.sinkCalled)
-    }
-
-    func test_leftSpacing_set_not_equal() {
+    func test_setSpacings() {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
@@ -215,77 +154,13 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         // THEN
         XCTAssertEqual(self.publishers.leftSpacing.sinkCount, 1, "leftSpacing should have been called once")
         XCTAssertEqual(self.viewModel.leftSpacing, newValue.left, "Wrong leftSpacing")
-    }
-
-    func test_spacingContent_set_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // WHEN
-        self.viewModel.textFieldViewModel.setSpacings()
-
-        // THEN
-        XCTAssertFalse(self.publishers.contentSpacing.sinkCalled)
-    }
-
-    func test_contentSpacing_set_not_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // GIVEN
-        let newValue = TextFieldSpacings(left: -1, content: -2, right: -3)
-        self.getSpacingsUseCase.executeWithThemeAndBorderStyleReturnValue = newValue
-
-        // WHEN
-        self.viewModel.textFieldViewModel.setSpacings()
-
-        // THEN
         XCTAssertEqual(self.publishers.contentSpacing.sinkCount, 1, "contentSpacing should have been called once")
         XCTAssertEqual(self.viewModel.contentSpacing, newValue.content, "Wrong contentSpacing")
-    }
-
-    func test_spacingRight_set_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // WHEN
-        self.viewModel.textFieldViewModel.setSpacings()
-
-        // THEN
-        XCTAssertFalse(self.publishers.rightSpacing.sinkCalled)
-    }
-
-    func test_rightSpacing_set_not_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // GIVEN
-        let newValue = TextFieldSpacings(left: -1, content: -2, right: -3)
-        self.getSpacingsUseCase.executeWithThemeAndBorderStyleReturnValue = newValue
-
-        // WHEN
-        self.viewModel.textFieldViewModel.setSpacings()
-
-        // THEN
         XCTAssertEqual(self.publishers.rightSpacing.sinkCount, 1, "rightSpacing should have been called once")
         XCTAssertEqual(self.viewModel.rightSpacing, newValue.right, "Wrong rightSpacing")
     }
 
-    func test_dim_set_equal() {
-        self.resetUseCases() // Removes execute from init
-        self.publishers.reset() // Removes publishes from init
-
-        // GIVEN
-        let newDim = self.theme.dims.none
-
-        // WHEN
-        self.viewModel.textFieldViewModel.dim = newDim
-
-        // THEN
-        XCTAssertFalse(self.publishers.dim.sinkCalled)
-    }
-
-    func test_dim_set_not_equal() {
+    func test_set_dim() {
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 

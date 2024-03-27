@@ -157,11 +157,11 @@ class TextFieldViewModel: ObservableObject, Updateable {
             isEnabled: self.isEnabled,
             isUserInteractionEnabled: self.isUserInteractionEnabled
         )
-        self.updateIfNeeded(keyPath: \.textColor, newValue: colors.text)
-        self.updateIfNeeded(keyPath: \.placeholderColor, newValue: colors.placeholder)
-        self.updateIfNeeded(keyPath: \.borderColor, newValue: colors.border)
-        self.updateIfNeeded(keyPath: \.statusIconColor, newValue: colors.statusIcon)
-        self.updateIfNeeded(keyPath: \.backgroundColor, newValue: colors.background)
+        self.textColor = colors.text
+        self.placeholderColor = colors.placeholder
+        self.borderColor = colors.border
+        self.statusIconColor = colors.statusIcon
+        self.backgroundColor = colors.background
     }
 
     func setBorderLayout() {
@@ -170,20 +170,19 @@ class TextFieldViewModel: ObservableObject, Updateable {
             borderStyle: self.borderStyle, //.none
             isFocused: self.isFocused
         )
-        self.updateIfNeeded(keyPath: \.borderWidth, newValue: borderLayout.width)
-        self.updateIfNeeded(keyPath: \.borderRadius, newValue: borderLayout.radius)
+        self.borderWidth = borderLayout.width
+        self.borderRadius = borderLayout.radius
     }
 
     func setSpacings() {
         let spacings = self.getSpacingsUseCase.execute(theme: self.theme, borderStyle: self.borderStyle)
-        self.updateIfNeeded(keyPath: \.leftSpacing, newValue: spacings.left)
-        self.updateIfNeeded(keyPath: \.contentSpacing, newValue: spacings.content)
-        self.updateIfNeeded(keyPath: \.rightSpacing, newValue: spacings.right)
+        self.leftSpacing = spacings.left
+        self.contentSpacing = spacings.content
+        self.rightSpacing = spacings.right
     }
 
     func setDim() {
-        let dim = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
-        self.updateIfNeeded(keyPath: \.dim, newValue: dim)
+        self.dim = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
     }
 
     private func setFont() {
