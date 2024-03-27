@@ -196,7 +196,7 @@ struct ProgressTrackerComponent: View {
         }
 
         if self.completedPageIndicator == .selected {
-            let image: Image? = Image(uiImage: DemoIconography.shared.checkmark)
+            let image: Image? = Image(uiImage: DemoIconography.shared.checkmark.uiImage)
             view = view.completedIndicatorImage(image)
         } else {
             view = view.completedIndicatorImage(nil)
