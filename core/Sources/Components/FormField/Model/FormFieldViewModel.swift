@@ -44,8 +44,9 @@ final class FormFieldViewModel: ObservableObject {
         }
     }
 
+    var colors: FormFieldColors
+
     private var colorUseCase: FormFieldColorsUseCaseable
-    private var colors: FormFieldColors
     private var userDefinedTitle: Either<NSAttributedString?, AttributedString?>?
     private var asterisk: NSAttributedString = NSAttributedString()
 

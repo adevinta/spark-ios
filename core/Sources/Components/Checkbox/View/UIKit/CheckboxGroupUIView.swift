@@ -79,7 +79,6 @@ public final class CheckboxGroupUIView: UIControl {
     }
 
     /// The title of the checkbox group displayed on top of the group.
-    @available(*, deprecated, message: "Formfield will be used to show title of component")
     public var title: String? {
         didSet {
             self.updateTitle()
@@ -125,19 +124,6 @@ public final class CheckboxGroupUIView: UIControl {
         self.itemsStackView.arrangedSubviews.compactMap { $0 as? CheckboxUIView }
     }
 
-    public override var isEnabled: Bool {
-        didSet{
-            guard isEnabled != oldValue else { return }
-            if isEnabled {
-                self.checkboxes.enumerated().forEach { index, item in
-                    item.isEnabled = self.items.indices.contains(index) ? self.items[index].isEnabled : true
-                }
-            } else {
-                self.checkboxes.forEach { $0.isEnabled = false }
-            }
-        }
-    }
-
     // MARK: - Initialization
 
     /// Not implemented. Please use another init.
@@ -156,7 +142,6 @@ public final class CheckboxGroupUIView: UIControl {
     ///   - theme: The Spark-Theme.
     ///   - intent: Current intent of checkbox group
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    @available(*, deprecated, message: "Formfield will be used to show title of component. Please use init without title.")
     public init(
         title: String? = nil,
         checkedImage: UIImage,
@@ -168,38 +153,6 @@ public final class CheckboxGroupUIView: UIControl {
         accessibilityIdentifierPrefix: String
     ) {
         self.title = title
-        self.checkedImage = checkedImage
-        self.items = items
-        self.layout = layout
-        self.alignment = alignment
-        self.checkboxAlignment = alignment
-        self.theme = theme
-        self.intent = intent
-        self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
-        self.spacingLarge = theme.layout.spacing.large
-        self.spacingSmall = theme.layout.spacing.small
-        super.init(frame: .zero)
-        self.commonInit()
-    }
-
-    /// Initialize a group of one or multiple checkboxes.
-    /// - Parameters:
-    ///   - checkedImage: The tick-checkbox image for checked-state.
-    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
-    ///   - layout: The layout of the group can be horizontal or vertical.
-    ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
-    ///   - theme: The Spark-Theme.
-    ///   - intent: Current intent of checkbox group
-    ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    public init(
-        checkedImage: UIImage,
-        items: [any CheckboxGroupItemProtocol],
-        layout: CheckboxGroupLayout = .vertical,
-        alignment: CheckboxAlignment = .left,
-        theme: Theme,
-        intent: CheckboxIntent = .main,
-        accessibilityIdentifierPrefix: String
-    ) {
         self.checkedImage = checkedImage
         self.items = items
         self.layout = layout

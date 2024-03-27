@@ -12,9 +12,8 @@ import UIKit
 
 // MARK: - Constants
 private enum Constants {
-    static let toggleViewHeight: CGFloat = 28
-    static let toggleViewSpacing: CGFloat = 4
-    static let textLabelTopSpacing: CGFloat = 3
+    static let toggleViewHeight: CGFloat = 32
+    static let textLabelTopSpacing: CGFloat = 5
     static let haloWidth: CGFloat = 4
 }
 
