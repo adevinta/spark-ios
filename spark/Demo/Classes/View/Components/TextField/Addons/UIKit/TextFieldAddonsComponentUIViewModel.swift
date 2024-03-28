@@ -47,6 +47,10 @@ final class TextFieldAddonsComponentUIViewModel: ComponentUIViewModel, Observabl
         self.showRightAddonContentSheetSubject
             .eraseToAnyPublisher()
     }
+    var refreshLayout: AnyPublisher<Void, Never> {
+        self.refreshLayoutSubject
+            .eraseToAnyPublisher()
+    }
 
     lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
@@ -115,6 +119,13 @@ final class TextFieldAddonsComponentUIViewModel: ComponentUIViewModel, Observabl
             target: (source: self, action: #selector(self.toggleAddonPadding))
         )
     }()
+    lazy var refreshLayoutConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "RefreshLayout",
+            type: .button,
+            target: (source: self, #selector(self.triggerLayoutRefresh))
+        )
+    }()
 
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[TextFieldIntent], Never> = .init()
@@ -122,6 +133,7 @@ final class TextFieldAddonsComponentUIViewModel: ComponentUIViewModel, Observabl
     private var showRightViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
     private var showLeftAddonContentSheetSubject: PassthroughSubject<[TextFieldAddonContent], Never> = .init()
     private var showRightAddonContentSheetSubject: PassthroughSubject<[TextFieldAddonContent], Never> = .init()
+    private var refreshLayoutSubject: PassthroughSubject<Void, Never> = .init()
 
     let themes = ThemeCellModel.themes
 
@@ -132,6 +144,7 @@ final class TextFieldAddonsComponentUIViewModel: ComponentUIViewModel, Observabl
         self.theme = theme
         self.intent = intent
         super.init(identifier: "TextFieldAddons")
+        self.refreshLayoutConfigurationItemViewModel.buttonTitle = "Refresh layout"
     }
 
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
@@ -144,7 +157,8 @@ final class TextFieldAddonsComponentUIViewModel: ComponentUIViewModel, Observabl
             self.rightViewContentConfigurationItemViewModel,
             self.leftAddonContentConfigurationItemViewModel,
             self.rightAddonContentConfigurationItemViewModel,
-            self.addonPaddingConfigurationItemViewModel
+            self.addonPaddingConfigurationItemViewModel,
+            self.refreshLayoutConfigurationItemViewModel
         ]
     }
 
@@ -182,5 +196,9 @@ final class TextFieldAddonsComponentUIViewModel: ComponentUIViewModel, Observabl
 
     @objc func toggleAddonPadding() {
         self.addonPadding.toggle()
+    }
+
+    @objc func triggerLayoutRefresh() {
+        self.refreshLayoutSubject.send()
     }
 }

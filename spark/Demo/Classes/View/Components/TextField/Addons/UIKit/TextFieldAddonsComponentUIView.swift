@@ -94,6 +94,13 @@ final class TextFieldAddonsComponentUIView: ComponentUIView {
             self.textFieldAddons.setLeftAddon(self.textFieldAddons.leftAddon, withPadding: addonPadding)
             self.textFieldAddons.setRightAddon(self.textFieldAddons.rightAddon, withPadding: addonPadding)
         }
+
+        self.viewModel.refreshLayout.subscribe(in: &self.cancellables) { [weak self] in
+            guard let self else { return }
+            self.textFieldAddons.textField.invalidateIntrinsicContentSize()
+            self.textFieldAddons.textField.setNeedsLayout()
+            self.textFieldAddons.textField.layoutIfNeeded()
+        }
     }
 
     private func getContentView(from content: TextFieldSideViewContent, side: TextFieldContentSide) -> UIView? {

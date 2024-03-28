@@ -51,6 +51,10 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
         self.showRightViewContentSheetSubject
             .eraseToAnyPublisher()
     }
+    var refreshLayout: AnyPublisher<Void, Never> {
+        self.refreshLayoutSubject
+            .eraseToAnyPublisher()
+    }
 
     let themes = ThemeCellModel.themes
 
@@ -123,6 +127,13 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
             target: (source: self, action: #selector(self.presentRightViewContent))
         )
     }()
+    lazy var refreshLayoutConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "RefreshLayout",
+            type: .button,
+            target: (source: self, #selector(self.triggerLayoutRefresh))
+        )
+    }()
 
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[TextFieldIntent], Never> = .init()
@@ -131,6 +142,7 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
     private var showRightViewModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
     private var showLeftViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
     private var showRightViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
+    private var refreshLayoutSubject: PassthroughSubject<Void, Never> = .init()
 
     init(
         theme: Theme,
@@ -139,6 +151,7 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
         self.theme = theme
         self.intent = intent
         super.init(identifier: "TextField")
+        self.refreshLayoutConfigurationItemViewModel.buttonTitle = "Refresh layout"
     }
 
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
@@ -151,7 +164,8 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
             self.leftViewModeConfigurationItemViewModel,
             self.rightViewModeConfigurationItemViewModel,
             self.leftViewContentConfigurationItemViewModel,
-            self.rightViewContentConfigurationItemViewModel
+            self.rightViewContentConfigurationItemViewModel,
+            self.refreshLayoutConfigurationItemViewModel
         ]
     }
 
@@ -189,6 +203,10 @@ final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObjec
 
     @objc func presentRightViewContent() {
         self.showRightViewContentSheetSubject.send(TextFieldSideViewContent.allCases)
+    }
+
+    @objc func triggerLayoutRefresh() {
+        self.refreshLayoutSubject.send()
     }
 }
 

@@ -93,6 +93,13 @@ final class TextFieldComponentUIView: ComponentUIView {
             self.viewModel.rightViewContentConfigurationItemViewModel.buttonTitle = content.name
             self.textField.rightView = self.getContentView(from: content, side: .right)
         }
+
+        self.viewModel.refreshLayout.subscribe(in: &self.cancellables) { [weak self] in
+            guard let self else { return }
+            self.textField.invalidateIntrinsicContentSize()
+            self.textField.setNeedsLayout()
+            self.textField.layoutIfNeeded()
+        }
     }
 
     private func getContentView(from content: TextFieldSideViewContent, side: TextFieldContentSide) -> UIView? {
