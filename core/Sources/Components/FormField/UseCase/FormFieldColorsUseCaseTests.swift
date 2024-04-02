@@ -36,21 +36,21 @@ final class FormFieldColorsUseCaseTests: XCTestCase {
             switch $0 {
             case .default:
                 expectedFormfieldColor = FormFieldColors(
-                    titleColor: theme.colors.base.onSurface,
-                    descriptionColor: theme.colors.base.onSurface.opacity(theme.dims.dim1),
-                    asteriskColor: theme.colors.base.onSurface.opacity(theme.dims.dim3)
+                    title: theme.colors.base.onSurface,
+                    description: theme.colors.base.onSurface.opacity(theme.dims.dim1),
+                    asterisk: theme.colors.base.onSurface.opacity(theme.dims.dim3)
                 )
             case .error:
                 expectedFormfieldColor = FormFieldColors(
-                    titleColor: theme.colors.base.onSurface,
-                    descriptionColor: theme.colors.feedback.error,
-                    asteriskColor: theme.colors.base.onSurface.opacity(theme.dims.dim3)
+                    title: theme.colors.base.onSurface,
+                    description: theme.colors.feedback.error,
+                    asterisk: theme.colors.base.onSurface.opacity(theme.dims.dim3)
                 )
             }
 
-            XCTAssertEqual(formfieldColors.titleColor.uiColor, expectedFormfieldColor.titleColor.uiColor)
-            XCTAssertEqual(formfieldColors.descriptionColor.uiColor, expectedFormfieldColor.descriptionColor.uiColor)
-            XCTAssertEqual(formfieldColors.asteriskColor.uiColor, expectedFormfieldColor.asteriskColor.uiColor)
+            XCTAssertEqual(formfieldColors.title.uiColor, expectedFormfieldColor.title.uiColor)
+            XCTAssertEqual(formfieldColors.description.uiColor, expectedFormfieldColor.description.uiColor)
+            XCTAssertEqual(formfieldColors.asterisk.uiColor, expectedFormfieldColor.asterisk.uiColor)
         }
     }
 }

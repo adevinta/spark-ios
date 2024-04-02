@@ -19,15 +19,15 @@ struct FormFieldColorsUseCase: FormFieldColorsUseCaseable {
         switch state {
         case .default:
             return FormFieldColors(
-                titleColor: theme.colors.base.onSurface,
-                descriptionColor: theme.colors.base.onSurface.opacity(theme.dims.dim1), 
-                asteriskColor: theme.colors.base.onSurface.opacity(theme.dims.dim3)
+                title: theme.colors.base.onSurface,
+                description: theme.colors.base.onSurface.opacity(theme.dims.dim1),
+                asterisk: theme.colors.base.onSurface.opacity(theme.dims.dim3)
             )
         case .error:
             return FormFieldColors(
-                titleColor: theme.colors.base.onSurface,
-                descriptionColor: theme.colors.feedback.error, 
-                asteriskColor: theme.colors.base.onSurface.opacity(theme.dims.dim3)
+                title: theme.colors.base.onSurface,
+                description: theme.colors.feedback.error,
+                asterisk: theme.colors.base.onSurface.opacity(theme.dims.dim3)
             )
         }
     }

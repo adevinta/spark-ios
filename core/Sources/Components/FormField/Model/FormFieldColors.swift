@@ -9,7 +9,7 @@
 import Foundation
 
 struct FormFieldColors {
-    let titleColor: any ColorToken
-    let descriptionColor: any ColorToken
-    let asteriskColor: any ColorToken
+    let title: any ColorToken
+    let description: any ColorToken
+    let asterisk: any ColorToken
 }
