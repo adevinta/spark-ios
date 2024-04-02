@@ -20,7 +20,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
 
     private let titleKey: LocalizedStringKey
     @Binding private var text: String
-    private var isSecure: Bool
+    private var type: TextFieldViewType
 
     private let leftView: () -> LeftView
     private let rightView: () -> RightView
@@ -28,13 +28,13 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
     init(titleKey: LocalizedStringKey,
          text: Binding<String>,
          viewModel: TextFieldViewModel,
-         isSecure: Bool,
+         type: TextFieldViewType,
          leftView: @escaping (() -> LeftView),
          rightView: @escaping (() -> RightView)) {
         self.titleKey = titleKey
         self._text = text
         self.viewModel = viewModel
-        self.isSecure = isSecure
+        self.type = type
         self.leftView = leftView
         self.rightView = rightView
     }
@@ -48,7 +48,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
         successImage: Image,
         alertImage: Image,
         errorImage: Image,
-        isSecure: Bool,
+        type: TextFieldViewType,
         isReadOnly: Bool,
         leftView: @escaping (() -> LeftView),
         rightView: @escaping (() -> RightView)
@@ -66,7 +66,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
             titleKey: titleKey,
             text: text,
             viewModel: viewModel,
-            isSecure: isSecure,
+            type: type,
             leftView: leftView,
             rightView: rightView
         )
@@ -81,7 +81,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
     ///   - successImage: Success image, will be shown in the rightView when intent = .success
     ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
     ///   - errorImage: Error image, will be shown in the rightView when intent = .error
-    ///   - isSecure: Set this to true if you want a SecureField, default is `false`
+    ///   - type: The type of field with its associated callback(s), default is `.standard()`
     ///   - isReadOnly: Set this to true if you want the textfield to be readOnly, default is `false`
     ///   - leftView: The TextField's left view, default is `EmptyView`
     ///   - rightView: The TextField's right view, default is `EmptyView`
@@ -92,7 +92,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
                 successImage: Image,
                 alertImage: Image,
                 errorImage: Image,
-                isSecure: Bool = false,
+                type: TextFieldViewType = .standard(),
                 isReadOnly: Bool = false,
                 leftView: @escaping () -> LeftView = { EmptyView() },
                 rightView: @escaping () -> RightView = { EmptyView() }) {
@@ -105,7 +105,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
             successImage: successImage,
             alertImage: alertImage,
             errorImage: errorImage,
-            isSecure: isSecure,
+            type: type,
             isReadOnly: isReadOnly,
             leftView: leftView,
             rightView: rightView
@@ -138,11 +138,12 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
         HStack(spacing: self.viewModel.contentSpacing) {
             leftView()
             Group {
-                if isSecure {
-                    SecureField(titleKey, text: $text)
+                switch type {
+                case .secure(let onCommit):
+                    SecureField(titleKey, text: $text, onCommit: onCommit)
                         .font(self.viewModel.font.font)
-                } else {
-                    TextField(titleKey, text: $text)
+                case .standard(let onEditingChanged, let onCommit):
+                    TextField(titleKey, text: $text, onEditingChanged: onEditingChanged, onCommit: onCommit)
                         .font(self.viewModel.font.font)
                 }
             }

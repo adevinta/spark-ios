@@ -82,7 +82,7 @@ struct TextFieldAddonsComponentView: View {
                     successImage: Image("check"),
                     alertImage: Image("alert"),
                     errorImage: Image("alert-circle"),
-                    isSecure: self.isSecureState == .selected,
+                    type: self.getTypeFromIsSecure(),
                     isReadOnly: self.isReadOnlyState == .selected,
                     leftView: {
                         self.view(side: .left)
@@ -108,6 +108,21 @@ struct TextFieldAddonsComponentView: View {
                 }
             }
         )
+    }
+
+    private func getTypeFromIsSecure() -> TextFieldViewType {
+        switch isSecureState {
+        case .selected:
+            return .secure {
+                print("Secure: On commit called")
+            }
+        case .indeterminate, .unselected:
+            return .standard { isEditing in
+                print("Standard: On editing changed called with isEditing \(isEditing)")
+            } onCommit: {
+                print("Standard: On commit called")
+            }
+        }
     }
 
     enum ContentSide: String {

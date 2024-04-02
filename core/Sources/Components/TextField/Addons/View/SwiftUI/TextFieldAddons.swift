@@ -19,7 +19,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
 
     private let titleKey: LocalizedStringKey
     @Binding private var text: String
-    private var isSecure: Bool
+    private var type: TextFieldViewType
     private let leftView: () -> LeftView
     private let rightView: () -> RightView
 
@@ -32,7 +32,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
     ///   - successImage: Success image, will be shown in the rightView when intent = .success
     ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
     ///   - errorImage: Error image, will be shown in the rightView when intent = .error
-    ///   - isSecure: Set this to true if you want a SecureField, default is `false`
+    ///   - type: The type of field with its associated callback(s), default is `.standard()`
     ///   - isReadOnly: Set this to true if you want the textfield to be readOnly, default is `false`
     ///   - leftView: The TextField's left view, default is `EmptyView`
     ///   - rightView: The TextField's right view, default is `EmptyView`
@@ -46,7 +46,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
         successImage: Image,
         alertImage: Image,
         errorImage: Image,
-        isSecure: Bool,
+        type: TextFieldViewType = .standard(),
         isReadOnly: Bool,
         leftView: @escaping (() -> LeftView) = { EmptyView() },
         rightView: @escaping (() -> RightView) = { EmptyView() },
@@ -64,7 +64,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
 
         self.titleKey = titleKey
         self._text = text
-        self.isSecure = isSecure
+        self.type = type
         self.leftView = leftView
         self.rightView = rightView
         self.leftAddon = leftAddon
@@ -144,6 +144,6 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
 
     @ViewBuilder
     private func textField() -> TextFieldView<LeftView, RightView> {
-        TextFieldView(titleKey: titleKey, text: $text, viewModel: viewModel.textFieldViewModel, isSecure: isSecure, leftView: leftView, rightView: rightView)
+        TextFieldView(titleKey: titleKey, text: $text, viewModel: viewModel.textFieldViewModel, type: type, leftView: leftView, rightView: rightView)
     }
 }
