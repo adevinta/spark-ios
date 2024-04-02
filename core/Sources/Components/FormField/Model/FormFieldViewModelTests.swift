@@ -28,11 +28,11 @@ final class FormFieldViewModelTests: XCTestCase {
     func test_init() throws {
 
         // Given
-        let viewModel = FormFieldViewModel(
+        let viewModel = FormFieldViewModel<NSAttributedString>(
             theme: self.theme,
             feedbackState: .default,
-            title: .left(NSAttributedString(string: "Title")),
-            description: .left(NSAttributedString(string: "Description")),
+            title: NSAttributedString(string: "Title"),
+            description: NSAttributedString(string: "Description"),
             isTitleRequired: true
         )
 
@@ -40,38 +40,38 @@ final class FormFieldViewModelTests: XCTestCase {
         XCTAssertNotNil(viewModel.theme, "No theme set")
         XCTAssertNotNil(viewModel.feedbackState, "No feedback state set")
         XCTAssertNotNil(viewModel.isTitleRequired, "No title required set")
-        XCTAssertTrue(viewModel.title?.leftValue?.string.contains("*") ?? false)
-        XCTAssertEqual(viewModel.title?.leftValue?.string, "Title *")
-        XCTAssertEqual(viewModel.description?.leftValue?.string, "Description")
+        XCTAssertTrue(viewModel.title?.string.contains("*") ?? false)
+        XCTAssertEqual(viewModel.title?.string, "Title *")
+        XCTAssertEqual(viewModel.description?.string, "Description")
         XCTAssertEqual(viewModel.spacing, self.theme.layout.spacing.small)
         XCTAssertEqual(viewModel.titleFont.uiFont, self.theme.typography.body2.uiFont)
         XCTAssertEqual(viewModel.descriptionFont.uiFont, self.theme.typography.caption.uiFont)
-        XCTAssertEqual(viewModel.titleColor.uiColor, viewModel.colors.titleColor.uiColor)
-        XCTAssertEqual(viewModel.descriptionColor.uiColor, viewModel.colors.descriptionColor.uiColor)
+        XCTAssertEqual(viewModel.titleColor.uiColor, viewModel.colors.title.uiColor)
+        XCTAssertEqual(viewModel.descriptionColor.uiColor, viewModel.colors.description.uiColor)
     }
 
     func test_texts_right_value() {
         // Given
-        let viewModel = FormFieldViewModel(
+        let viewModel = FormFieldViewModel<AttributedString>(
             theme: self.theme,
             feedbackState: .default,
-            title: .right(AttributedString("Title")),
-            description: .right(AttributedString("Description")),
+            title: AttributedString("Title"),
+            description: AttributedString("Description"),
             isTitleRequired: false
         )
 
         // Then
-        XCTAssertEqual(viewModel.title?.rightValue, AttributedString("Title"))
-        XCTAssertEqual(viewModel.description?.rightValue, AttributedString("Description"))
+        XCTAssertEqual(viewModel.title, AttributedString("Title"))
+        XCTAssertEqual(viewModel.description, AttributedString("Description"))
     }
 
     func test_isTitleRequired() async {
         // Given
-        let viewModel = FormFieldViewModel(
+        let viewModel = FormFieldViewModel<NSAttributedString>(
             theme: self.theme,
             feedbackState: .default,
-            title: .left(NSAttributedString("Title")),
-            description: .left(NSAttributedString("Description")),
+            title: NSAttributedString("Title"),
+            description: NSAttributedString("Description"),
             isTitleRequired: false
         )
 
@@ -81,7 +81,7 @@ final class FormFieldViewModelTests: XCTestCase {
 
 
         viewModel.$title.sink { title in
-            isTitleUpdated = title?.leftValue?.string.contains("*") ?? false
+            isTitleUpdated = title?.string.contains("*") ?? false
             expectation.fulfill()
         }.store(in: &cancellable)
 
@@ -96,28 +96,28 @@ final class FormFieldViewModelTests: XCTestCase {
 
     func test_set_title() {
         // Given
-        let viewModel = FormFieldViewModel(
+        let viewModel = FormFieldViewModel<NSAttributedString>(
             theme: self.theme,
             feedbackState: .default,
-            title: .left(NSAttributedString("Title")),
-            description: .left(NSAttributedString("Description")),
+            title: NSAttributedString("Title"),
+            description: NSAttributedString("Description"),
             isTitleRequired: true
         )
 
         // When
-        viewModel.setTitle(.left(NSAttributedString("Title2")))
+        viewModel.setTitle(NSAttributedString("Title2"))
 
         // Then
-        XCTAssertEqual(viewModel.title?.leftValue?.string, "Title2 *")
+        XCTAssertEqual(viewModel.title?.string, "Title2 *")
     }
 
     func test_set_feedback_state() {
         // Given
-        let viewModel = FormFieldViewModel(
+        let viewModel = FormFieldViewModel<NSAttributedString>(
             theme: self.theme,
             feedbackState: .default,
-            title: .left(NSAttributedString("Title")),
-            description: .left(NSAttributedString("Description")),
+            title: NSAttributedString("Title"),
+            description: NSAttributedString("Description"),
             isTitleRequired: false
         )
         

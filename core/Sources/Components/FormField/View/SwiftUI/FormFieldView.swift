@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct FormFieldView<Component: View>: View {
 
-    @ObservedObject private var viewModel: FormFieldViewModel
+    @ObservedObject private var viewModel: FormFieldViewModel<AttributedString>
     @ScaledMetric private var spacing: CGFloat
     private let component: Component
 
@@ -58,11 +58,11 @@ public struct FormFieldView<Component: View>: View {
         attributedDescription: AttributedString? = nil,
         isTitleRequired: Bool = false
     ) {
-        let viewModel = FormFieldViewModel(
+        let viewModel = FormFieldViewModel<AttributedString>(
             theme: theme,
             feedbackState: feedbackState,
-            title: .right(attributedTitle),
-            description: .right(attributedDescription),
+            title: attributedTitle,
+            description: attributedDescription,
             isTitleRequired: isTitleRequired
         )
 
@@ -74,14 +74,14 @@ public struct FormFieldView<Component: View>: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: self.spacing) {
 
-            if let title = self.viewModel.title?.rightValue {
+            if let title = self.viewModel.title {
                 Text(title)
                     .font(self.viewModel.titleFont.font)
                     .foregroundStyle(self.viewModel.titleColor.color)
             }
             self.component
 
-            if let description = self.viewModel.description?.rightValue {
+            if let description = self.viewModel.description {
                 Text(description)
                     .font(self.viewModel.descriptionFont.font)
                     .foregroundStyle(self.viewModel.descriptionColor.color)

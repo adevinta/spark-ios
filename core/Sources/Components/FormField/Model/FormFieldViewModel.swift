@@ -10,11 +10,11 @@ import Combine
 import SwiftUI
 import UIKit
 
-final class FormFieldViewModel: ObservableObject {
+final class FormFieldViewModel<AS: SparkAttributedString>: ObservableObject {
 
     // MARK: - Internal properties
-    @Published private(set) var title: Either<NSAttributedString?, AttributedString?>?
-    @Published var description: Either<NSAttributedString?, AttributedString?>?
+    @Published private(set) var title: AS?
+    @Published var description: AS?
     @Published var titleFont: any TypographyFontToken
     @Published var descriptionFont: any TypographyFontToken
     @Published var titleColor: any ColorToken
@@ -47,15 +47,15 @@ final class FormFieldViewModel: ObservableObject {
     var colors: FormFieldColors
 
     private var colorUseCase: FormFieldColorsUseCaseable
-    private var userDefinedTitle: Either<NSAttributedString?, AttributedString?>?
+    private var userDefinedTitle: AS?
     private var asterisk: NSAttributedString = NSAttributedString()
 
     // MARK: - Init
     init(
         theme: Theme,
         feedbackState: FormFieldFeedbackState,
-        title: Either<NSAttributedString?, AttributedString?>?,
-        description: Either<NSAttributedString?, AttributedString?>?,
+        title: AS?,
+        description: AS?,
         isTitleRequired: Bool = false,
         colorUseCase: FormFieldColorsUseCaseable = FormFieldColorsUseCase()
     ) {
@@ -69,8 +69,8 @@ final class FormFieldViewModel: ObservableObject {
         self.spacing = self.theme.layout.spacing.small
         self.titleFont = self.theme.typography.body2
         self.descriptionFont = self.theme.typography.caption
-        self.titleColor = self.colors.titleColor
-        self.descriptionColor = self.colors.descriptionColor
+        self.titleColor = self.colors.title
+        self.descriptionColor = self.colors.description
 
         self.updateAsterisk()
         self.setTitle(title)
@@ -78,8 +78,8 @@ final class FormFieldViewModel: ObservableObject {
 
     private func updateColors() {
         self.colors = colorUseCase.execute(from: self.theme, feedback: self.feedbackState)
-        self.titleColor = self.colors.titleColor
-        self.descriptionColor = self.colors.descriptionColor
+        self.titleColor = self.colors.title
+        self.descriptionColor = self.colors.description
     }
 
     private func updateFonts() {
@@ -95,37 +95,32 @@ final class FormFieldViewModel: ObservableObject {
         self.asterisk = NSAttributedString(
             string: " *",
             attributes: [
-                NSAttributedString.Key.foregroundColor: self.colors.asteriskColor.uiColor,
+                NSAttributedString.Key.foregroundColor: self.colors.asterisk.uiColor,
                 NSAttributedString.Key.font : self.theme.typography.caption.uiFont
             ]
         )
     }
 
-    func setTitle(_ title: Either<NSAttributedString?, AttributedString?>?) {
+    func setTitle(_ title: AS?) {
         self.userDefinedTitle = title
         self.title = self.getTitleWithAsteriskIfNeeded()
     }
 
-    private func getTitleWithAsteriskIfNeeded() -> Either<NSAttributedString?, AttributedString?>? {
-        switch self.userDefinedTitle {
-        case .left(let attributedString):
-            guard let attributedString else { return nil }
+    private func getTitleWithAsteriskIfNeeded() -> AS? {
 
+        if let attributedString = self.userDefinedTitle as? NSAttributedString {
             let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
             if self.isTitleRequired {
                 mutableAttributedString.append(self.asterisk)
             }
-            return .left(mutableAttributedString)
+            return mutableAttributedString as? AS
 
-        case .right(let attributedString):
-            guard var attributedString else { return nil }
-
+        } else if var attributedString = self.userDefinedTitle as? AttributedString {
             if self.isTitleRequired {
                 attributedString.append(AttributedString(self.asterisk))
             }
-            return .right(attributedString)
-
-        case .none: return nil
+            return attributedString as? AS
         }
+        return nil
     }
 }

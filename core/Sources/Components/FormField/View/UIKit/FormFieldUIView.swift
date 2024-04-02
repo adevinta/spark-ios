@@ -51,7 +51,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             return self.titleLabel.text
         }
         set {
-            self.viewModel.setTitle(.left(newValue.map(NSAttributedString.init)))
+            self.viewModel.setTitle(newValue.map(NSAttributedString.init))
         }
     }
 
@@ -61,7 +61,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             return self.titleLabel.attributedText
         }
         set {
-            self.viewModel.setTitle(.left(newValue))
+            self.viewModel.setTitle(newValue)
         }
     }
 
@@ -80,7 +80,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             return self.descriptionLabel.text
         }
         set {
-            self.viewModel.description = .left(newValue.map(NSAttributedString.init))
+            self.viewModel.description = newValue.map(NSAttributedString.init)
         }
     }
 
@@ -90,7 +90,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             return self.descriptionLabel.attributedText
         }
         set {
-            self.viewModel.description = .left(newValue)
+            self.viewModel.description = newValue
         }
     }
 
@@ -152,7 +152,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         }
     }
 
-    var viewModel: FormFieldViewModel
+    var viewModel: FormFieldViewModel<NSAttributedString>
 
     // MARK: - Initialization
 
@@ -216,11 +216,11 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         isEnabled: Bool = true,
         isSelected: Bool = false
     ) {
-        let viewModel = FormFieldViewModel(
+        let viewModel = FormFieldViewModel<NSAttributedString>(
             theme: theme,
             feedbackState: feedbackState,
-            title: .left(attributedTitle),
-            description: .left(attributedDescription),
+            title: attributedTitle,
+            description: attributedDescription,
             isTitleRequired: isTitleRequired
         )
 
@@ -263,11 +263,11 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             self.viewModel.$titleColor
         ).subscribe(in: &self.cancellables) { [weak self] title, font, color in
             guard let self else { return }
-            let labelHidden: Bool = (title?.leftValue?.string ?? "").isEmpty
+            let labelHidden: Bool = (title?.string ?? "").isEmpty
             self.titleLabel.isHidden = labelHidden
             self.titleLabel.font = font.uiFont
             self.titleLabel.textColor = color.uiColor
-            self.titleLabel.attributedText = title?.leftValue
+            self.titleLabel.attributedText = title
         }
 
         Publishers.CombineLatest3(
@@ -276,11 +276,11 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             self.viewModel.$descriptionColor
         ).subscribe(in: &self.cancellables) { [weak self] title, font, color in
             guard let self else { return }
-            let labelHidden: Bool = (title?.leftValue?.string ?? "").isEmpty
+            let labelHidden: Bool = (title?.string ?? "").isEmpty
             self.descriptionLabel.isHidden = labelHidden
             self.descriptionLabel.font = font.uiFont
             self.descriptionLabel.textColor = color.uiColor
-            self.descriptionLabel.attributedText = title?.leftValue
+            self.descriptionLabel.attributedText = title
         }
 
         self.viewModel.$spacing.subscribe(in: &self.cancellables) { [weak self] spacing in
