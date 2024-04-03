@@ -28,10 +28,6 @@ final class TextFieldViewModelTests: XCTestCase {
     var expectedBorderLayout: TextFieldBorderLayout!
     var expectedSpacings: TextFieldSpacings!
 
-    let successImage: ImageEither = .left(UIImage(systemName: "square.and.arrow.up.fill")!)
-    let alertImage: ImageEither = .right(Image(systemName: "rectangle.portrait.and.arrow.right.fill"))
-    let errorImage: ImageEither = .left(UIImage(systemName: "eraser.fill")!)
-
     override func setUp() {
         super.setUp()
         self.theme = ThemeGeneratedMock.mocked()
@@ -40,7 +36,6 @@ final class TextFieldViewModelTests: XCTestCase {
             text: .blue(),
             placeholder: .green(),
             border: .yellow(),
-            statusIcon: .red(),
             background: .purple()
         )
         self.expectedBorderLayout = .mocked(radius: 1, width: 2)
@@ -53,9 +48,6 @@ final class TextFieldViewModelTests: XCTestCase {
             theme: self.theme,
             intent: self.intent,
             borderStyle: self.borderStyle,
-            successImage: self.successImage,
-            alertImage: self.alertImage,
-            errorImage: self.errorImage,
             getColorsUseCase: self.getColorsUseCase,
             getBorderLayoutUseCase: self.getBorderLayoutUseCase,
             getSpacingsUseCase: self.getSpacingsUseCase
@@ -74,11 +66,7 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.isEnabled, "Wrong isEnabled")
         XCTAssertTrue(self.viewModel.isUserInteractionEnabled, "Wrong isUserInteractionEnabled")
         XCTAssertFalse(self.viewModel.isFocused, "Wrong isFocused")
-        XCTAssertEqual(self.viewModel.successImage, self.successImage, "Wrong successImage")
-        XCTAssertEqual(self.viewModel.alertImage, self.alertImage, "Wrong alertImage")
-        XCTAssertEqual(self.viewModel.errorImage, self.errorImage, "Wrong errorImage")
         XCTAssertEqual(self.viewModel.dim, self.theme.dims.none, "Wrong dim")
-        XCTAssertEqual(self.viewModel.statusImage, self.successImage, "Wrong statusImage")
         XCTAssertIdentical(self.viewModel.font as? TypographyFontTokenGeneratedMock, self.theme.typography.body1 as? TypographyFontTokenGeneratedMock, "Wrong font")
 
         // THEN - Colors
@@ -92,7 +80,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.textColor.equals(self.expectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(self.expectedColors.placeholder), "Wrong placeholderColor")
         XCTAssertTrue(self.viewModel.borderColor.equals(self.expectedColors.border), "Wrong borderColor")
-        XCTAssertTrue(self.viewModel.statusIconColor.equals(self.expectedColors.statusIcon), "Wrong statusColor")
         XCTAssertTrue(self.viewModel.backgroundColor.equals(self.expectedColors.background), "Wrong backgroundColor")
 
         // THEN - Border Layout
@@ -118,7 +105,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertEqual(self.publishers.borderColor.sinkCount, 1, "$borderColorIndicatorColor should have been called once")
         XCTAssertEqual(self.publishers.backgroundColor.sinkCount, 1, "$backgroundColor should have been called once")
         XCTAssertEqual(self.publishers.placeholderColor.sinkCount, 1, "$placeholderColor should have been called once")
-        XCTAssertEqual(self.publishers.statusIconColor.sinkCount, 1, "$statusIconColor should have been called once")
 
         XCTAssertEqual(self.publishers.borderWidth.sinkCount, 1, "$borderWidth should have been called once")
         XCTAssertEqual(self.publishers.borderRadius.sinkCount, 1, "$borderRadius should have been called once")
@@ -129,7 +115,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertEqual(self.publishers.dim.sinkCount, 1, "$dim should have been called once")
         XCTAssertEqual(self.publishers.font.sinkCount, 1, "$font should have been called once")
-        XCTAssertEqual(self.publishers.statusImage.sinkCount, 1, "$statusImage should have been called once")
     }
 
     // MARK: Theme
@@ -146,7 +131,6 @@ final class TextFieldViewModelTests: XCTestCase {
             text: .red(),
             placeholder: .blue(),
             border: .green(),
-            statusIcon: .purple(),
             background: .red()
         )
         self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReturnValue = newExpectedColors
@@ -170,7 +154,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.textColor.equals(newExpectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(newExpectedColors.placeholder), "Wrong placeholderColor")
         XCTAssertTrue(self.viewModel.borderColor.equals(newExpectedColors.border), "Wrong borderColor")
-        XCTAssertTrue(self.viewModel.statusIconColor.equals(newExpectedColors.statusIcon), "Wrong statusColor")
         XCTAssertTrue(self.viewModel.backgroundColor.equals(newExpectedColors.background), "Wrong backgroundColor")
 
         // THEN - Border Layout
@@ -193,7 +176,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertEqual(self.publishers.borderColor.sinkCount, 1, "$borderColorIndicatorColor should have been called once")
         XCTAssertEqual(self.publishers.backgroundColor.sinkCount, 1, "$backgroundColor should have been called once")
         XCTAssertEqual(self.publishers.placeholderColor.sinkCount, 1, "$placeholderColor should have been called once")
-        XCTAssertEqual(self.publishers.statusIconColor.sinkCount, 1, "$statusIconColor should have been called once")
 
         XCTAssertEqual(self.publishers.borderWidth.sinkCount, 1, "$borderWidth should have been called once")
         XCTAssertEqual(self.publishers.borderRadius.sinkCount, 1, "$borderRadius should have been called once")
@@ -204,7 +186,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertEqual(self.publishers.dim.sinkCount, 1, "$dim should have been called once")
         XCTAssertEqual(self.publishers.font.sinkCount, 1, "$font should have been called once")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     // MARK: - Intent
@@ -230,7 +211,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertFalse(self.publishers.borderColor.sinkCalled, "$borderColorIndicatorColor should not have been called")
         XCTAssertFalse(self.publishers.backgroundColor.sinkCalled, "$backgroundColor should not have been called")
         XCTAssertFalse(self.publishers.placeholderColor.sinkCalled, "$placeholderColor should not have been called")
-        XCTAssertFalse(self.publishers.statusIconColor.sinkCalled, "$statusIconColor should not have been called")
 
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled, "$borderWidth should not have been called")
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled, "$borderRadius should not have been called")
@@ -241,7 +221,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     func test_intent_didSet_notEqual() throws {
@@ -254,16 +233,12 @@ final class TextFieldViewModelTests: XCTestCase {
             text: .red(),
             placeholder: .blue(),
             border: .green(),
-            statusIcon: .purple(),
             background: .red()
         )
         self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReturnValue = newExpectedColors
 
         // WHEN
         self.viewModel.intent = .neutral
-
-        // THEN
-        XCTAssertNil(self.viewModel.statusImage, "Wrong statusImage")
 
         // THEN - Colors
         XCTAssertEqual(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledCallsCount, 1, "getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabled should have been called once")
@@ -272,7 +247,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.textColor.equals(newExpectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(newExpectedColors.placeholder), "Wrong placeholderColor")
         XCTAssertTrue(self.viewModel.borderColor.equals(newExpectedColors.border), "Wrong borderColor")
-        XCTAssertTrue(self.viewModel.statusIconColor.equals(newExpectedColors.statusIcon), "Wrong statusColor")
         XCTAssertTrue(self.viewModel.backgroundColor.equals(newExpectedColors.background), "Wrong backgroundColor")
 
         // THEN - Border Layout
@@ -286,7 +260,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertEqual(self.publishers.borderColor.sinkCount, 1, "$borderColorIndicatorColor should have been called once")
         XCTAssertEqual(self.publishers.backgroundColor.sinkCount, 1, "$backgroundColor should have been called once")
         XCTAssertEqual(self.publishers.placeholderColor.sinkCount, 1, "$placeholderColor should have been called once")
-        XCTAssertEqual(self.publishers.statusIconColor.sinkCount, 1, "$statusIconColor should have been called once")
 
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled, "$borderWidth should not have been called")
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled, "$borderRadius should not have been called")
@@ -297,7 +270,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertEqual(self.publishers.statusImage.sinkCount, 1,"$statusImage should have been called once")
     }
 
     // MARK: - Border Style
@@ -323,7 +295,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertFalse(self.publishers.borderColor.sinkCalled, "$borderColorIndicatorColor should not have been called")
         XCTAssertFalse(self.publishers.backgroundColor.sinkCalled, "$backgroundColor should not have been called")
         XCTAssertFalse(self.publishers.placeholderColor.sinkCalled, "$placeholderColor should not have been called")
-        XCTAssertFalse(self.publishers.statusIconColor.sinkCalled, "$statusIconColor should not have been called")
 
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled, "$borderWidth should not have been called")
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled, "$borderRadius should not have been called")
@@ -334,7 +305,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     func test_borderStyle_didSet_notEqual() throws {
@@ -374,7 +344,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertFalse(self.publishers.borderColor.sinkCalled, "$borderColorIndicatorColor should not have been called")
         XCTAssertFalse(self.publishers.backgroundColor.sinkCalled, "$backgroundColor should not have been called")
         XCTAssertFalse(self.publishers.placeholderColor.sinkCalled, "$placeholderColor should not have been called")
-        XCTAssertFalse(self.publishers.statusIconColor.sinkCalled, "$statusIconColor should not have been called")
 
         XCTAssertEqual(self.publishers.borderWidth.sinkCount, 1, "$borderWidth should have been called once")
         XCTAssertEqual(self.publishers.borderRadius.sinkCount, 1, "$borderRadius should have been called once")
@@ -385,7 +354,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled,"$statusImage should npt have been called")
     }
 
     // MARK: - Is Focused
@@ -411,7 +379,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertFalse(self.publishers.borderColor.sinkCalled, "$borderColorIndicatorColor should not have been called")
         XCTAssertFalse(self.publishers.backgroundColor.sinkCalled, "$backgroundColor should not have been called")
         XCTAssertFalse(self.publishers.placeholderColor.sinkCalled, "$placeholderColor should not have been called")
-        XCTAssertFalse(self.publishers.statusIconColor.sinkCalled, "$statusIconColor should not have been called")
 
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled, "$borderWidth should not have been called")
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled, "$borderRadius should not have been called")
@@ -422,7 +389,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     func test_isFocused_didSet_notEqual() throws {
@@ -434,7 +400,6 @@ final class TextFieldViewModelTests: XCTestCase {
             text: .red(),
             placeholder: .blue(),
             border: .green(),
-            statusIcon: .purple(),
             background: .red()
         )
         self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReturnValue = newExpectedColors
@@ -454,7 +419,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.textColor.equals(newExpectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(newExpectedColors.placeholder), "Wrong placeholderColor")
         XCTAssertTrue(self.viewModel.borderColor.equals(newExpectedColors.border), "Wrong borderColor")
-        XCTAssertTrue(self.viewModel.statusIconColor.equals(newExpectedColors.statusIcon), "Wrong statusColor")
         XCTAssertTrue(self.viewModel.backgroundColor.equals(newExpectedColors.background), "Wrong backgroundColor")
 
         // THEN - Border Layout
@@ -472,7 +436,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertEqual(self.publishers.borderColor.sinkCount, 1, "$borderColorIndicatorColor should have been called once")
         XCTAssertEqual(self.publishers.backgroundColor.sinkCount, 1, "$backgroundColor should have been called once")
         XCTAssertEqual(self.publishers.placeholderColor.sinkCount, 1, "$placeholderColor should have been called once")
-        XCTAssertEqual(self.publishers.statusIconColor.sinkCount, 1, "$statusIconColor should have been called once")
 
         XCTAssertEqual(self.publishers.borderWidth.sinkCount, 1, "$borderWidth should have been called once")
         XCTAssertEqual(self.publishers.borderRadius.sinkCount, 1, "$borderRadius should have been called once")
@@ -483,7 +446,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled,"$statusImage should npt have been called")
     }
 
     // MARK: - Is Enabled
@@ -509,7 +471,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertFalse(self.publishers.borderColor.sinkCalled, "$borderColorIndicatorColor should not have been called")
         XCTAssertFalse(self.publishers.backgroundColor.sinkCalled, "$backgroundColor should not have been called")
         XCTAssertFalse(self.publishers.placeholderColor.sinkCalled, "$placeholderColor should not have been called")
-        XCTAssertFalse(self.publishers.statusIconColor.sinkCalled, "$statusIconColor should not have been called")
 
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled, "$borderWidth should not have been called")
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled, "$borderRadius should not have been called")
@@ -520,7 +481,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     func test_isEnabled_didSet_notEqual() throws {
@@ -533,7 +493,6 @@ final class TextFieldViewModelTests: XCTestCase {
             text: .red(),
             placeholder: .blue(),
             border: .green(),
-            statusIcon: .purple(),
             background: .red()
         )
         self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReturnValue = newExpectedColors
@@ -541,7 +500,6 @@ final class TextFieldViewModelTests: XCTestCase {
         // WHEN
         self.viewModel.isEnabled = true
 
-        XCTAssertEqual(self.viewModel.statusImage, self.successImage, "Wrong statusImage")
         // THEN - Colors
         XCTAssertEqual(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledCallsCount, 1, "getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabled should have been called once")
         let getColorsReceivedArguments = try XCTUnwrap(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReceivedArguments, "Couldn't unwrap getColorsReceivedArguments")
@@ -551,7 +509,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.textColor.equals(newExpectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(newExpectedColors.placeholder), "Wrong placeholderColor")
         XCTAssertTrue(self.viewModel.borderColor.equals(newExpectedColors.border), "Wrong borderColor")
-        XCTAssertTrue(self.viewModel.statusIconColor.equals(newExpectedColors.statusIcon), "Wrong statusColor")
         XCTAssertTrue(self.viewModel.backgroundColor.equals(newExpectedColors.background), "Wrong backgroundColor")
 
         // THEN - Border Layout
@@ -565,7 +522,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertEqual(self.publishers.borderColor.sinkCount, 1, "$borderColorIndicatorColor should have been called once")
         XCTAssertEqual(self.publishers.backgroundColor.sinkCount, 1, "$backgroundColor should have been called once")
         XCTAssertEqual(self.publishers.placeholderColor.sinkCount, 1, "$placeholderColor should have been called once")
-        XCTAssertEqual(self.publishers.statusIconColor.sinkCount, 1, "$statusIconColor should have been called once")
 
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled, "$borderWidth should not have been called")
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled, "$borderRadius should not have been called")
@@ -576,7 +532,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertEqual(self.publishers.dim.sinkCount, 1, "$dim should have been called once")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertEqual(self.publishers.statusImage.sinkCount, 1,"$statusImage should have been called once")
     }
 
     // MARK: - Is User Interaction Enabled
@@ -602,7 +557,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertFalse(self.publishers.borderColor.sinkCalled, "$borderColorIndicatorColor should not have been called")
         XCTAssertFalse(self.publishers.backgroundColor.sinkCalled, "$backgroundColor should not have been called")
         XCTAssertFalse(self.publishers.placeholderColor.sinkCalled, "$placeholderColor should not have been called")
-        XCTAssertFalse(self.publishers.statusIconColor.sinkCalled, "$statusIconColor should not have been called")
 
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled, "$borderWidth should not have been called")
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled, "$borderRadius should not have been called")
@@ -613,7 +567,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled, "$statusImage should not have been called")
     }
 
     func test_isUserInteractionEnabled_didSet_notEqual() throws {
@@ -625,7 +578,6 @@ final class TextFieldViewModelTests: XCTestCase {
             text: .red(),
             placeholder: .blue(),
             border: .green(),
-            statusIcon: .purple(),
             background: .red()
         )
         self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReturnValue = newExpectedColors
@@ -642,7 +594,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertTrue(self.viewModel.textColor.equals(newExpectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(newExpectedColors.placeholder), "Wrong placeholderColor")
         XCTAssertTrue(self.viewModel.borderColor.equals(newExpectedColors.border), "Wrong borderColor")
-        XCTAssertTrue(self.viewModel.statusIconColor.equals(newExpectedColors.statusIcon), "Wrong statusColor")
         XCTAssertTrue(self.viewModel.backgroundColor.equals(newExpectedColors.background), "Wrong backgroundColor")
 
         // THEN - Border Layout
@@ -656,7 +607,6 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertEqual(self.publishers.borderColor.sinkCount, 1, "$borderColorIndicatorColor should have been called once")
         XCTAssertEqual(self.publishers.backgroundColor.sinkCount, 1, "$backgroundColor should have been called once")
         XCTAssertEqual(self.publishers.placeholderColor.sinkCount, 1, "$placeholderColor should have been called once")
-        XCTAssertEqual(self.publishers.statusIconColor.sinkCount, 1, "$statusIconColor should have been called once")
 
         XCTAssertFalse(self.publishers.borderWidth.sinkCalled, "$borderWidth should not have been called")
         XCTAssertFalse(self.publishers.borderRadius.sinkCalled, "$borderRadius should not have been called")
@@ -667,7 +617,6 @@ final class TextFieldViewModelTests: XCTestCase {
 
         XCTAssertFalse(self.publishers.dim.sinkCalled, "$dim should not have been called")
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
-        XCTAssertFalse(self.publishers.statusImage.sinkCalled,"$statusImage should npt have been called")
     }
 
     // MARK: - Utils
@@ -676,7 +625,6 @@ final class TextFieldViewModelTests: XCTestCase {
             textColor: PublisherMock(publisher: self.viewModel.$textColor),
             placeholderColor: PublisherMock(publisher: self.viewModel.$placeholderColor),
             borderColor: PublisherMock(publisher: self.viewModel.$borderColor),
-            statusIconColor: PublisherMock(publisher: self.viewModel.$statusIconColor),
             backgroundColor: PublisherMock(publisher: self.viewModel.$backgroundColor),
             borderRadius: PublisherMock(publisher: self.viewModel.$borderRadius),
             borderWidth: PublisherMock(publisher: self.viewModel.$borderWidth),
@@ -684,8 +632,7 @@ final class TextFieldViewModelTests: XCTestCase {
             contentSpacing: PublisherMock(publisher: self.viewModel.$contentSpacing),
             rightSpacing: PublisherMock(publisher: self.viewModel.$rightSpacing),
             dim: PublisherMock(publisher: self.viewModel.$dim),
-            font: PublisherMock(publisher: self.viewModel.$font),
-            statusImage: PublisherMock(publisher: self.viewModel.$statusImage)
+            font: PublisherMock(publisher: self.viewModel.$font)
         )
         self.publishers.load()
     }
@@ -703,7 +650,6 @@ final class TextFieldPublishers {
     var textColor: PublisherMock<Published<any ColorToken>.Publisher>
     var placeholderColor: PublisherMock<Published<any ColorToken>.Publisher>
     var borderColor: PublisherMock<Published<any ColorToken>.Publisher>
-    var statusIconColor: PublisherMock<Published<any ColorToken>.Publisher>
     var backgroundColor: PublisherMock<Published<any ColorToken>.Publisher>
 
     var borderRadius: PublisherMock<Published<CGFloat>.Publisher>
@@ -717,13 +663,10 @@ final class TextFieldPublishers {
 
     var font: PublisherMock<Published<any TypographyFontToken>.Publisher>
 
-    var statusImage: PublisherMock<Published<ImageEither?>.Publisher>
-
     init(
         textColor: PublisherMock<Published<any ColorToken>.Publisher>,
         placeholderColor: PublisherMock<Published<any ColorToken>.Publisher>,
         borderColor: PublisherMock<Published<any ColorToken>.Publisher>,
-        statusIconColor: PublisherMock<Published<any ColorToken>.Publisher>,
         backgroundColor: PublisherMock<Published<any ColorToken>.Publisher>,
         borderRadius: PublisherMock<Published<CGFloat>.Publisher>,
         borderWidth: PublisherMock<Published<CGFloat>.Publisher>,
@@ -731,13 +674,11 @@ final class TextFieldPublishers {
         contentSpacing: PublisherMock<Published<CGFloat>.Publisher>,
         rightSpacing: PublisherMock<Published<CGFloat>.Publisher>,
         dim: PublisherMock<Published<CGFloat>.Publisher>,
-        font: PublisherMock<Published<any TypographyFontToken>.Publisher>,
-        statusImage: PublisherMock<Published<ImageEither?>.Publisher>
+        font: PublisherMock<Published<any TypographyFontToken>.Publisher>
     ) {
         self.textColor = textColor
         self.placeholderColor = placeholderColor
         self.borderColor = borderColor
-        self.statusIconColor = statusIconColor
         self.backgroundColor = backgroundColor
         self.borderRadius = borderRadius
         self.borderWidth = borderWidth
@@ -746,13 +687,12 @@ final class TextFieldPublishers {
         self.rightSpacing = rightSpacing
         self.dim = dim
         self.font = font
-        self.statusImage = statusImage
     }
 
     func load() {
         self.cancellables = Set<AnyCancellable>()
 
-        [self.textColor, self.placeholderColor, self.borderColor, self.statusIconColor, self.backgroundColor].forEach {
+        [self.textColor, self.placeholderColor, self.borderColor, self.backgroundColor].forEach {
             $0.loadTesting(on: &self.cancellables)
         }
 
@@ -761,12 +701,10 @@ final class TextFieldPublishers {
         }
 
         self.font.loadTesting(on: &self.cancellables)
-
-        self.statusImage.loadTesting(on: &self.cancellables)
     }
 
     func reset() {
-        [self.textColor, self.placeholderColor, self.borderColor, self.statusIconColor, self.backgroundColor].forEach {
+        [self.textColor, self.placeholderColor, self.borderColor, self.backgroundColor].forEach {
             $0.reset()
         }
 
@@ -775,7 +713,5 @@ final class TextFieldPublishers {
         }
 
         self.font.reset()
-
-        self.statusImage.reset()
     }
 }

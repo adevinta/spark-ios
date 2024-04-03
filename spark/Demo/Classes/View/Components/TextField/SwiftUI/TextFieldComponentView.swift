@@ -62,9 +62,6 @@ struct TextFieldComponentView: View {
                     text: $text,
                     theme: self.theme,
                     intent: self.intent,
-                    successImage: Image("check"),
-                    alertImage: Image("alert"),
-                    errorImage: Image("alert-circle"),
                     type: self.getTypeFromIsSecure(),
                     isReadOnly: self.isReadOnlyState == .selected,
                     leftView: {

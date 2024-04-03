@@ -26,10 +26,6 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
     private var expectedBorderLayout: TextFieldBorderLayout!
     private var expectedSpacings: TextFieldSpacings!
 
-    private let successImage: ImageEither = .left(UIImage(systemName: "square.and.arrow.up.fill")!)
-    private let alertImage: ImageEither = .right(Image(systemName: "rectangle.portrait.and.arrow.right.fill"))
-    private let errorImage: ImageEither = .left(UIImage(systemName: "eraser.fill")!)
-
     override func setUp() {
         super.setUp()
         self.theme = ThemeGeneratedMock.mocked()
@@ -38,7 +34,6 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
             text: .blue(),
             placeholder: .green(),
             border: .yellow(),
-            statusIcon: .red(),
             background: .purple()
         )
         self.expectedBorderLayout = .mocked(radius: 1, width: 2)
@@ -50,9 +45,6 @@ final class TextFieldAddonsViewModelTests: XCTestCase {
         self.viewModel = .init(
             theme: self.theme,
             intent: self.intent,
-            successImage: self.successImage,
-            alertImage: self.alertImage,
-            errorImage: self.errorImage,
             getColorsUseCase: self.getColorsUseCase,
             getBorderLayoutUseCase: self.getBorderLayoutUseCase,
             getSpacingsUseCase: self.getSpacingsUseCase

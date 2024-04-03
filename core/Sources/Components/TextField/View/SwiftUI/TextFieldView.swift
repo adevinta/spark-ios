@@ -12,7 +12,6 @@ import SwiftUI
 public struct TextFieldView<LeftView: View, RightView: View>: View {
 
     @ScaledMetric private var height: CGFloat = 44
-    @ScaledMetric private var imageSize: CGFloat = 16
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
 
     @FocusState private var isFocused: Bool
@@ -45,9 +44,6 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
         theme: Theme,
         intent: TextFieldIntent,
         borderStyle: TextFieldBorderStyle,
-        successImage: Image,
-        alertImage: Image,
-        errorImage: Image,
         type: TextFieldViewType,
         isReadOnly: Bool,
         leftView: @escaping (() -> LeftView),
@@ -56,10 +52,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
         let viewModel = TextFieldViewModel(
             theme: theme,
             intent: intent,
-            borderStyle: borderStyle,
-            successImage: .right(successImage),
-            alertImage: .right(alertImage),
-            errorImage: .right(errorImage)
+            borderStyle: borderStyle
         )
         viewModel.isUserInteractionEnabled = isReadOnly != true
         self.init(
@@ -78,9 +71,6 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
     ///   - text: The textfield's text binding
     ///   - theme: The textfield's current theme
     ///   - intent: The textfield's current intent
-    ///   - successImage: Success image, will be shown in the rightView when intent = .success
-    ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
-    ///   - errorImage: Error image, will be shown in the rightView when intent = .error
     ///   - type: The type of field with its associated callback(s), default is `.standard()`
     ///   - isReadOnly: Set this to true if you want the textfield to be readOnly, default is `false`
     ///   - leftView: The TextField's left view, default is `EmptyView`
@@ -89,9 +79,6 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
                 text: Binding<String>,
                 theme: Theme,
                 intent: TextFieldIntent,
-                successImage: Image,
-                alertImage: Image,
-                errorImage: Image,
                 type: TextFieldViewType = .standard(),
                 isReadOnly: Bool = false,
                 leftView: @escaping () -> LeftView = { EmptyView() },
@@ -102,9 +89,6 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
             theme: theme,
             intent: intent,
             borderStyle: .roundedRect,
-            successImage: successImage,
-            alertImage: alertImage,
-            errorImage: errorImage,
             type: type,
             isReadOnly: isReadOnly,
             leftView: leftView,
@@ -149,11 +133,6 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
             }
             .textFieldStyle(.plain)
             .foregroundStyle(self.viewModel.textColor.color)
-            if let statusImage = viewModel.statusImage {
-                statusImage.rightValue
-                    .resizable()
-                    .frame(width: imageSize, height: imageSize)
-            }
             rightView()
         }
         .accessibilityElement(children: .contain)

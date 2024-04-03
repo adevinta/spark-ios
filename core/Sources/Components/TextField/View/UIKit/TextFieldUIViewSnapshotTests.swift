@@ -13,9 +13,6 @@ import UIKit
 final class TextFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
     private let theme = SparkTheme.shared
-    private let successImage = UIImage(systemName: "checkmark") ?? UIImage()
-    private let alertImage = UIImage(systemName: "exclamationmark.triangle") ?? UIImage()
-    private let errorImage = UIImage(systemName: "exclamationmark.circle") ?? UIImage()
 
     private func _test(scenario: TextFieldScenario) {
         let configurations = self.createConfigurations(from: scenario)
@@ -54,10 +51,7 @@ final class TextFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                             let viewModel = TextFieldViewModel(
                                 theme: self.theme,
                                 intent: intent,
-                                borderStyle: .roundedRect,
-                                successImage: .left(self.successImage),
-                                alertImage: .left(self.alertImage),
-                                errorImage: .left(self.errorImage)
+                                borderStyle: .roundedRect
                             )
                             viewModel.isEnabled = states.isEnabled
                             viewModel.isUserInteractionEnabled = states.isReadOnly != true
@@ -65,9 +59,9 @@ final class TextFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                             let textField = TextFieldUIView(viewModel: viewModel)
                             textField.text = text.text
                             textField.placeholder = text.placeholder
-                            textField.clearButtonMode = .always
+                            textField.clearButtonMode = states.isFocused ? .always : .never
                             textField.leftViewMode = .always
-                            textField.rightViewMode = states.isFocused ? .never : .always
+                            textField.rightViewMode = .always
                             textField.leftView = self.getContentViews(from: leftContent)
                             textField.rightView = self.getContentViews(from: rightContent)
 
@@ -80,6 +74,9 @@ final class TextFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
                             backgroundView.addSubview(textField)
                             textField.translatesAutoresizingMaskIntoConstraints = false
+                            textField.invalidateIntrinsicContentSize()
+                            textField.setNeedsLayout()
+                            textField.layoutIfNeeded()
                             NSLayoutConstraint.stickEdges(from: textField, to: backgroundView, insets: .init(all: 12))
 
                             let testName = scenario.getTestName(

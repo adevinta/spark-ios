@@ -16,7 +16,6 @@ class TextFieldViewModel: ObservableObject, Updateable {
     @Published private(set) var textColor: any ColorToken
     @Published private(set) var placeholderColor: any ColorToken
     @Published var borderColor: any ColorToken
-    @Published private(set) var statusIconColor: any ColorToken
     @Published var backgroundColor: any ColorToken
 
     // BorderLayout
@@ -31,12 +30,6 @@ class TextFieldViewModel: ObservableObject, Updateable {
     @Published var dim: CGFloat
 
     @Published private(set) var font: any TypographyFontToken
-
-    @Published private(set) var statusImage: Either<UIImage, Image>?
-
-    var successImage: ImageEither //TODO: Add get/set in views
-    var alertImage: ImageEither //TODO: Add get/set in views
-    var errorImage: ImageEither //TODO: Add get/set in views
 
     let getColorsUseCase: any TextFieldGetColorsUseCasable
     let getBorderLayoutUseCase: any TextFieldGetBorderLayoutUseCasable
@@ -55,7 +48,6 @@ class TextFieldViewModel: ObservableObject, Updateable {
         didSet {
             guard oldValue != self.intent else { return }
             self.setColors()
-            self.setStatusImage()
         }
     }
     var borderStyle: TextFieldBorderStyle {
@@ -79,7 +71,6 @@ class TextFieldViewModel: ObservableObject, Updateable {
             guard oldValue != self.isEnabled else { return }
             self.setColors()
             self.setDim()
-            self.setStatusImage()
         }
     }
 
@@ -93,19 +84,12 @@ class TextFieldViewModel: ObservableObject, Updateable {
     init(theme: Theme,
          intent: TextFieldIntent,
          borderStyle: TextFieldBorderStyle,
-         successImage: ImageEither,
-         alertImage: ImageEither,
-         errorImage: ImageEither,
          getColorsUseCase: any TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase(),
          getBorderLayoutUseCase: any TextFieldGetBorderLayoutUseCasable = TextFieldGetBorderLayoutUseCase(),
          getSpacingsUseCase: any TextFieldGetSpacingsUseCasable = TextFieldGetSpacingsUseCase()) {
         self.theme = theme
         self.intent = intent
         self.borderStyle = borderStyle
-
-        self.successImage = successImage
-        self.alertImage = alertImage
-        self.errorImage = errorImage
 
         self.getColorsUseCase = getColorsUseCase
         self.getBorderLayoutUseCase = getBorderLayoutUseCase
@@ -122,7 +106,6 @@ class TextFieldViewModel: ObservableObject, Updateable {
         self.textColor = colors.text
         self.placeholderColor = colors.placeholder
         self.borderColor = colors.border
-        self.statusIconColor = colors.statusIcon
         self.backgroundColor = colors.background
 
         // BorderLayout
@@ -143,9 +126,6 @@ class TextFieldViewModel: ObservableObject, Updateable {
         self.dim = theme.dims.none
 
         self.font = theme.typography.body1
-
-        self.statusImage = nil
-        self.setStatusImage()
     }
 
     func setColors() {
@@ -160,7 +140,6 @@ class TextFieldViewModel: ObservableObject, Updateable {
         self.textColor = colors.text
         self.placeholderColor = colors.placeholder
         self.borderColor = colors.border
-        self.statusIconColor = colors.statusIcon
         self.backgroundColor = colors.background
     }
 
@@ -187,25 +166,5 @@ class TextFieldViewModel: ObservableObject, Updateable {
 
     private func setFont() {
         self.font = self.theme.typography.body1
-    }
-
-    private func setStatusImage() {
-        let image: ImageEither?
-        if self.isEnabled {
-            switch self.intent {
-            case .alert:
-                image = self.alertImage
-            case .error:
-                image = self.errorImage
-            case .success:
-                image = self.successImage
-            default:
-                image = nil
-            }
-        } else {
-            image = nil
-        }
-        guard self.statusImage != image else { return }
-        self.statusImage = image
     }
 }

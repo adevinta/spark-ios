@@ -24,9 +24,6 @@ final class TextFieldViewModelForAddonsTests: XCTestCase {
         self.viewModel = .init(
             theme: self.superTests.theme,
             intent: self.superTests.intent,
-            successImage: self.superTests.successImage,
-            alertImage: self.superTests.alertImage,
-            errorImage: self.superTests.errorImage,
             getColorsUseCase: self.superTests.getColorsUseCase,
             getBorderLayoutUseCase: self.superTests.getBorderLayoutUseCase,
             getSpacingsUseCase: self.superTests.getSpacingsUseCase

@@ -40,9 +40,6 @@ final class TextFieldViewModelForAddons: TextFieldViewModel {
     init(
         theme: Theme,
         intent: TextFieldIntent,
-        successImage: ImageEither,
-        alertImage: ImageEither,
-        errorImage: ImageEither,
         getColorsUseCase: TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase(),
         getBorderLayoutUseCase: TextFieldGetBorderLayoutUseCasable = TextFieldGetBorderLayoutUseCase(),
         getSpacingsUseCase: TextFieldGetSpacingsUseCasable = TextFieldGetSpacingsUseCase()
@@ -51,9 +48,6 @@ final class TextFieldViewModelForAddons: TextFieldViewModel {
             theme: theme,
             intent: intent,
             borderStyle: .none,
-            successImage: successImage,
-            alertImage: alertImage,
-            errorImage: errorImage,
             getColorsUseCase: getColorsUseCase,
             getBorderLayoutUseCase: getBorderLayoutUseCase,
             getSpacingsUseCase: getSpacingsUseCase)

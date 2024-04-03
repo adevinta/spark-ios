@@ -18,10 +18,6 @@ public final class TextFieldUIView: UITextField {
     @ScaledUIMetric private var height: CGFloat = 44
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
-    private var statusImageSize: CGFloat {
-        return 16 * self.scaleFactor
-    }
-
     private let defaultClearButtonRightSpacing = 5.0
 
     public override var placeholder: String? {
@@ -46,27 +42,6 @@ public final class TextFieldUIView: UITextField {
         @available(*, unavailable)
         set {}
         get { return .init(self.viewModel.borderStyle) }
-    }
-
-    private var statusImageView = UIImageView()
-    private var statusImageHeightConstraint: NSLayoutConstraint = NSLayoutConstraint()
-    private var statusImageWidthConstraint: NSLayoutConstraint = NSLayoutConstraint()
-    private var statusImageContainerView = UIView()
-    private lazy var rightStackView: UIStackView = UIStackView()
-    private var userRightView: UIView?
-    public override var rightView: UIView? {
-        get { return self.userRightView }
-        set {
-            if let userRightView {
-                self.rightStackView.removeArrangedSubview(userRightView)
-                userRightView.removeFromSuperview()
-            }
-            if let newValue {
-                self.rightStackView.addArrangedSubview(newValue)
-            }
-            self.userRightView = newValue
-            self.setRightView()
-        }
     }
 
     /// The textfield's current theme.
@@ -99,19 +74,13 @@ public final class TextFieldUIView: UITextField {
     internal convenience init(
         theme: Theme,
         intent: TextFieldIntent,
-        borderStyle: TextFieldBorderStyle,
-        successImage: UIImage,
-        alertImage: UIImage,
-        errorImage: UIImage
+        borderStyle: TextFieldBorderStyle
     ) {
         self.init(
             viewModel: .init(
                 theme: theme,
                 intent: intent,
-                borderStyle: borderStyle,
-                successImage: .left(successImage),
-                alertImage: .left(alertImage),
-                errorImage: .left(errorImage)
+                borderStyle: borderStyle
             )
         )
     }
@@ -120,23 +89,14 @@ public final class TextFieldUIView: UITextField {
     /// - Parameters:
     ///   - theme: The textfield's current theme
     ///   - intent: The textfield's current intent
-    ///   - successImage: Success image, will be shown in the rightView when intent = .success
-    ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
-    ///   - errorImage: Error image, will be shown in the rightView when intent = .error
     public convenience init(
         theme: Theme,
-        intent: TextFieldIntent,
-        successImage: UIImage,
-        alertImage: UIImage,
-        errorImage: UIImage
+        intent: TextFieldIntent
     ) {
         self.init(
             theme: theme,
             intent: intent,
-            borderStyle: .roundedRect,
-            successImage: successImage,
-            alertImage: alertImage,
-            errorImage: errorImage
+            borderStyle: .roundedRect
         )
     }
 
@@ -144,15 +104,8 @@ public final class TextFieldUIView: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        self.rightStackView.spacing = self.viewModel.contentSpacing
-    }
-
     private func setupView() {
-        self.setupRightStackView()
         self.subscribeToViewModel()
-        self.setRightView()
         self.setContentCompressionResistancePriority(.required, for: .vertical)
         self.accessibilityIdentifier = TextFieldAccessibilityIdentifier.view
     }
@@ -178,13 +131,6 @@ public final class TextFieldUIView: UITextField {
         }).subscribe(in: &self.cancellables) { [weak self] borderColor in
             guard let self else { return }
             self.setBorderColor(from: borderColor)
-        }
-
-        self.viewModel.$statusIconColor.removeDuplicates(by: { lhs, rhs in
-            lhs.equals(rhs)
-        }).subscribe(in: &self.cancellables) { [weak self] statusIconColor in
-            guard let self else { return }
-            self.statusImageView.tintColor = statusIconColor.uiColor
         }
 
         self.viewModel.$placeholderColor.removeDuplicates(by: { lhs, rhs in
@@ -229,14 +175,6 @@ public final class TextFieldUIView: UITextField {
             self.font = font.uiFont
             self.setPlaceholder(self.placeholder, foregroundColor: self.viewModel.placeholderColor, font: font)
         }
-
-        self.viewModel.$statusImage.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] statusImage in
-            guard let self else { return }
-            self.statusImageView.image = statusImage?.leftValue
-            self.statusImageContainerView.isHidden = self.statusImageView.image == nil
-            self.setRightView()
-            self.setNeedsLayout()
-        }
     }
 
     private func setAttributedPlaceholder(string: String, foregroundColor: UIColor, font: UIFont) {
@@ -254,37 +192,6 @@ public final class TextFieldUIView: UITextField {
             self.setAttributedPlaceholder(string: placeholder, foregroundColor: foregroundColor.uiColor, font: font.uiFont)
         } else {
             self.attributedPlaceholder = nil
-        }
-    }
-
-    private func setupRightStackView() {
-        self.statusImageView.contentMode = .scaleAspectFit
-        self.statusImageView.clipsToBounds = true
-        self.statusImageContainerView.addSubview(self.statusImageView)
-        self.statusImageView.translatesAutoresizingMaskIntoConstraints = false
-        self.statusImageHeightConstraint = self.statusImageView.heightAnchor.constraint(equalToConstant: self.statusImageSize)
-        self.statusImageWidthConstraint = self.statusImageView.widthAnchor.constraint(equalToConstant: self.statusImageSize)
-        self.statusImageWidthConstraint.priority = UILayoutPriority.defaultHigh
-        self.statusImageHeightConstraint.priority = UILayoutPriority.defaultHigh
-        NSLayoutConstraint.activate([
-            self.statusImageWidthConstraint,
-            self.statusImageHeightConstraint,
-            self.statusImageView.topAnchor.constraint(greaterThanOrEqualTo: self.statusImageContainerView.topAnchor),
-            self.statusImageView.leadingAnchor.constraint(equalTo: self.statusImageContainerView.leadingAnchor),
-            self.statusImageView.centerXAnchor.constraint(equalTo: self.statusImageContainerView.centerXAnchor),
-            self.statusImageView.centerYAnchor.constraint(equalTo: self.statusImageContainerView.centerYAnchor),
-        ])
-        self.rightStackView.addArrangedSubview(self.statusImageContainerView)
-        self.rightStackView.alignment = .center
-        self.rightStackView.distribution = .fill
-    }
-
-    private func setRightView() {
-        if self.statusImageContainerView.isHidden,
-           self.userRightView == nil {
-            super.rightView = nil
-        } else {
-            super.rightView = self.rightStackView
         }
     }
 
@@ -313,8 +220,9 @@ public final class TextFieldUIView: UITextField {
            leftView.isDescendant(of: self) {
             totalInsets.left += leftView.bounds.size.width + contentSpacing
         }
-        if self.rightStackView.isDescendant(of: self) {
-            totalInsets.right += self.rightStackView.bounds.size.width + contentSpacing
+        if let rightView,
+           rightView.isDescendant(of: self) {
+            totalInsets.right += rightView.bounds.size.width + contentSpacing
         }
         if let clearButton = self.value(forKeyPath: "_clearButton") as? UIButton,
            clearButton.isDescendant(of: self) {
@@ -364,8 +272,6 @@ public final class TextFieldUIView: UITextField {
 
         self._height.update(traitCollection: self.traitCollection)
         self._scaleFactor.update(traitCollection: self.traitCollection)
-        self.statusImageWidthConstraint.constant = self.statusImageSize
-        self.statusImageHeightConstraint.constant = self.statusImageSize
         self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
         self.invalidateIntrinsicContentSize()
     }

@@ -50,7 +50,6 @@ final class TextFieldGetColorsUseCaseTests: XCTestCase {
         XCTAssertTrue(colors.text.equals(self.theme.colors.base.onSurface), "Wrong text color for intent: \(intent)")
         XCTAssertTrue(colors.placeholder.equals(self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1)), "Wrong placeholder color for intent: \(intent)")
         XCTAssertTrue(colors.border.equals(expectedBorderColor), "Wrong border color for intent: \(intent)")
-        XCTAssertTrue(colors.statusIcon.equals(theme.colors.feedback.neutral), "Wrong statusIcon color for intent: \(intent)")
         XCTAssertTrue(colors.background.equals(self.theme.colors.base.surface), "Wrong background color for intent: \(intent)")
     }
 
@@ -91,7 +90,6 @@ final class TextFieldGetColorsUseCaseTests: XCTestCase {
         XCTAssertTrue(colors.text.equals(self.theme.colors.base.onSurface), "Wrong text color for intent: \(intent)")
         XCTAssertTrue(colors.placeholder.equals(self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1)), "Wrong placeholder color for intent: \(intent)")
         XCTAssertTrue(colors.border.equals(expectedBorderColor), "Wrong border color for intent: \(intent)")
-        XCTAssertTrue(colors.statusIcon.equals(theme.colors.feedback.neutral), "Wrong statusIcon color for intent: \(intent)")
         XCTAssertTrue(colors.background.equals(self.theme.colors.base.surface), "Wrong background color for intent: \(intent)")
     }
 
@@ -132,7 +130,6 @@ final class TextFieldGetColorsUseCaseTests: XCTestCase {
         XCTAssertTrue(colors.text.equals(self.theme.colors.base.onSurface), "Wrong text color for intent: \(intent)")
         XCTAssertTrue(colors.placeholder.equals(self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1)), "Wrong placeholder color for intent: \(intent)")
         XCTAssertTrue(colors.border.equals(expectedBorderColor), "Wrong border color for intent: \(intent)")
-        XCTAssertTrue(colors.statusIcon.equals(theme.colors.feedback.neutral), "Wrong statusIcon color for intent: \(intent)")
         XCTAssertTrue(colors.background.equals(self.theme.colors.base.onSurface.opacity(theme.dims.dim5)), "Wrong background color for intent: \(intent)")
     }
 
@@ -173,7 +170,6 @@ final class TextFieldGetColorsUseCaseTests: XCTestCase {
         XCTAssertTrue(colors.text.equals(self.theme.colors.base.onSurface), "Wrong text color for intent: \(intent)")
         XCTAssertTrue(colors.placeholder.equals(self.theme.colors.base.onSurface.opacity(self.theme.dims.dim1)), "Wrong placeholder color for intent: \(intent)")
         XCTAssertTrue(colors.border.equals(expectedBorderColor), "Wrong border color for intent: \(intent)")
-        XCTAssertTrue(colors.statusIcon.equals(theme.colors.feedback.neutral), "Wrong statusIcon color for intent: \(intent)")
         XCTAssertTrue(colors.background.equals(self.theme.colors.base.onSurface.opacity(theme.dims.dim5)), "Wrong background color for intent: \(intent)")
     }
 }

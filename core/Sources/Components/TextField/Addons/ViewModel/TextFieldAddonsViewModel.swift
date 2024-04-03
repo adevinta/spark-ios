@@ -30,18 +30,12 @@ final class TextFieldAddonsViewModel: ObservableObject, Updateable {
 
     init(theme: Theme,
          intent: TextFieldIntent,
-         successImage: ImageEither,
-         alertImage: ImageEither,
-         errorImage: ImageEither,
          getColorsUseCase: TextFieldGetColorsUseCasable = TextFieldGetColorsUseCase(),
          getBorderLayoutUseCase: TextFieldGetBorderLayoutUseCasable = TextFieldGetBorderLayoutUseCase(),
          getSpacingsUseCase: TextFieldGetSpacingsUseCasable = TextFieldGetSpacingsUseCase()) {
         let viewModel = TextFieldViewModelForAddons(
             theme: theme,
             intent: intent,
-            successImage: successImage,
-            alertImage: alertImage,
-            errorImage: errorImage,
             getColorsUseCase: getColorsUseCase,
             getBorderLayoutUseCase: getBorderLayoutUseCase,
             getSpacingsUseCase: getSpacingsUseCase

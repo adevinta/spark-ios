@@ -45,13 +45,10 @@ struct TextFieldGetColorsUseCase: TextFieldGetColorsUseCasable {
             background = theme.colors.base.onSurface.opacity(theme.dims.dim5)
         }
 
-        let statusIcon = theme.colors.feedback.neutral
-
         return .init(
             text: text,
             placeholder: placeholder,
             border: border,
-            statusIcon: statusIcon,
             background: background
         )
     }

@@ -20,10 +20,7 @@ final class TextFieldAddonsComponentUIView: ComponentUIView {
         self.viewModel = viewModel
         self.textFieldAddons = .init(
             theme: viewModel.theme,
-            intent: viewModel.intent,
-            successImage: .init(named: "check") ?? UIImage(),
-            alertImage: .init(named: "alert") ?? UIImage(),
-            errorImage: .init(named: "alert-circle") ?? UIImage()
+            intent: viewModel.intent
         )
         self.textFieldAddons.textField.leftViewMode = .always
         self.textFieldAddons.textField.rightViewMode = .always

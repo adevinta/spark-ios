@@ -14,14 +14,12 @@ extension TextFieldColors {
         text: ColorTokenGeneratedMock,
         placeholder: ColorTokenGeneratedMock,
         border: ColorTokenGeneratedMock,
-        statusIcon: ColorTokenGeneratedMock,
         background: ColorTokenGeneratedMock
     ) -> TextFieldColors {
         return .init(
             text: text,
             placeholder: placeholder,
             border: border,
-            statusIcon: statusIcon,
             background: background
         )
     }

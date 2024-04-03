@@ -60,22 +60,14 @@ public final class TextFieldAddonsUIView: UIControl {
     /// - Parameters:
     ///   - theme: The textfield's current theme
     ///   - intent: The textfield's current intent
-    ///   - successImage: Success image, will be shown in the rightView when intent = .success
-    ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
-    ///   - errorImage: Error image, will be shown in the rightView when intent = .error
     public init(
         theme: Theme,
-        intent: TextFieldIntent,
-        successImage: UIImage,
-        alertImage: UIImage,
-        errorImage: UIImage
+        intent: TextFieldIntent
     ) {
         let viewModel = TextFieldAddonsViewModel(
             theme: theme,
-            intent: intent,
-            successImage: .left(successImage),
-            alertImage: .left(alertImage),
-            errorImage: .left(errorImage))
+            intent: intent
+        )
         self.viewModel = viewModel
         self.textField = TextFieldUIView(viewModel: viewModel.textFieldViewModel)
         self.leftAddon = nil

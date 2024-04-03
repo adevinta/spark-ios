@@ -29,9 +29,6 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
     ///   - text: The textfield's text binding
     ///   - theme: The textfield's current theme
     ///   - intent: The textfield's current intent
-    ///   - successImage: Success image, will be shown in the rightView when intent = .success
-    ///   - alertImage: Alert image, will be shown in the rightView when intent = .alert
-    ///   - errorImage: Error image, will be shown in the rightView when intent = .error
     ///   - type: The type of field with its associated callback(s), default is `.standard()`
     ///   - isReadOnly: Set this to true if you want the textfield to be readOnly, default is `false`
     ///   - leftView: The TextField's left view, default is `EmptyView`
@@ -43,9 +40,6 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
         text: Binding<String>,
         theme: Theme,
         intent: TextFieldIntent,
-        successImage: Image,
-        alertImage: Image,
-        errorImage: Image,
         type: TextFieldViewType = .standard(),
         isReadOnly: Bool,
         leftView: @escaping (() -> LeftView) = { EmptyView() },
@@ -55,10 +49,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
     ) {
         let viewModel = TextFieldAddonsViewModel(
             theme: theme,
-            intent: intent,
-            successImage: .right(successImage),
-            alertImage: .right(alertImage),
-            errorImage: .right(errorImage)
+            intent: intent
         )
         self.viewModel = viewModel
 
