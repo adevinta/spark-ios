@@ -104,10 +104,12 @@ public struct CheckboxView: View {
             }
         )
         .buttonStyle(PressedButtonStyle(isPressed: self.$isPressed))
-        .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
+        .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
+        .accessibilityValue(self.viewModel.selectionState == .selected ? CheckboxAccessibilityValue.ticked : CheckboxAccessibilityValue.unticked)
+        .accessibilityRemoveTraits(.isButton)
     }
 
     @ViewBuilder 
@@ -147,9 +149,6 @@ public struct CheckboxView: View {
                     .fill(iconColor)
                     .frame(width: self.checkboxIndeterminateWidth, height: self.checkboxIndeterminateHeight)
             }
-        }
-        .if(self.selectionState == .selected) {
-            $0.accessibilityAddTraits(.isSelected)
         }
         .id(Identifier.checkbox.rawValue)
         .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: self.namespace)
