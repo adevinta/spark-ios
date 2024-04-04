@@ -17,3 +17,8 @@ public enum CheckboxAccessibilityIdentifier {
     /// The identifier of checkbox group ui view title
     public static let checkboxGroupTitle = "spark-check-box-group-title"
 }
+
+public enum CheckboxAccessibilityValue {
+    public static let ticked = "1"
+    public static let unticked = "0"
+}

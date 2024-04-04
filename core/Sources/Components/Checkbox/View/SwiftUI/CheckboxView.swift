@@ -104,11 +104,13 @@ public struct CheckboxView: View {
             }
         )
         .buttonStyle(PressedButtonStyle(isPressed: self.$isPressed))
-        .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
         .fixedSize(horizontal: false, vertical: true)
+        .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
+        .accessibilityValue(self.viewModel.selectionState == .selected ? CheckboxAccessibilityValue.ticked : CheckboxAccessibilityValue.unticked)
+        .accessibilityRemoveTraits(.isButton)
     }
 
     @ViewBuilder 
