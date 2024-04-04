@@ -115,6 +115,8 @@ struct CheckboxGroupListView: View {
                     self.items = self.setItems(groupType: newValue)
                 }
                 .disabled(self.isEnabled == .unselected)
+//                .accessibilityLabel("I am checkbox group")
+                /// If you want to modifiy component accessibility, open the above command lines. First It will read checkbox group labels then start to read single checkbox items.
             }
         )
     }
