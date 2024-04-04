@@ -29,8 +29,11 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             viewModel: viewModel,
             componentView: self.componentView
         )
-
         self.componentView.delegate = self
+
+        /// If you want to modifiy component accessibility, open the command lines. First It will read checkbox group labels then start to read single checkbox items.
+//        self.updateCheckboxGroupAccessibility()
+
         // Setup
         self.setupSubscriptions()
 
@@ -39,6 +42,10 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func updateCheckboxGroupAccessibility() {
+        self.componentView.accessibilityLabel = "I am checkbox group"
     }
 
     // MARK: - Subscribe
