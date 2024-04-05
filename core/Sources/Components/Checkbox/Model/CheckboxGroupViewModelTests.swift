@@ -25,7 +25,6 @@ final class CheckboxGroupViewModelTests: XCTestCase {
         self.sut = CheckboxGroupViewModel(
             title: "Title",
             checkedImage: Image(uiImage: self.checkedImage),
-            accessibilityIdentifierPrefix: "id",
             theme: self.theme
         )
     }
@@ -45,7 +44,6 @@ final class CheckboxGroupViewModelTests: XCTestCase {
             XCTAssertEqual(sut.intent, .main, "Intent does not match")
             XCTAssertEqual(sut.titleFont.uiFont, self.theme.typography.subhead.uiFont, "Title font does not match" )
             XCTAssertEqual(sut.titleColor.uiColor, self.theme.colors.base.onSurface.uiColor, "Title color does not match" )
-            XCTAssertEqual(sut.accessibilityIdentifierPrefix, "id", "Accessibility identifier does not match" )
     }
 
     func test_singleCheckbox_width() throws {
