@@ -243,6 +243,7 @@ public final class CheckboxGroupUIView: UIControl {
                 selectionState: item.selectionState,
                 alignment: self.alignment
             )
+            checkbox.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkboxGroupItem(item.id)
 
             checkbox.publisher.sink { [weak self] in
                 guard
