@@ -109,8 +109,19 @@ public struct CheckboxView: View {
         }
         .fixedSize(horizontal: false, vertical: true)
         .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
-        .accessibilityValue(self.viewModel.selectionState == .selected ? CheckboxAccessibilityValue.ticked : CheckboxAccessibilityValue.unticked)
-        .accessibilityRemoveTraits(.isButton)
+        .accessibilityValue(setAccessibilityValue(selectionState: self.viewModel.selectionState))
+        .accessibilityRemoveTraits(.isSelected)
+    }
+
+    private func setAccessibilityValue(selectionState: CheckboxSelectionState) -> String {
+        switch selectionState {
+        case .selected:
+            CheckboxAccessibilityValue.checked
+        case .indeterminate:
+            CheckboxAccessibilityValue.indeterminate
+        case .unselected:
+            CheckboxAccessibilityValue.unchecked
+        }
     }
 
     @ViewBuilder 

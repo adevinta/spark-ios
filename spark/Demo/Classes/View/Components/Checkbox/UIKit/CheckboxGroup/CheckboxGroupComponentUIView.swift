@@ -32,7 +32,7 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
         self.componentView.delegate = self
 
         /// If you want to modifiy component accessibility, open the command lines. First It will read checkbox group labels then start to read single checkbox items.
-//        self.updateCheckboxGroupAccessibility()
+        self.updateCheckboxGroupAccessibility()
 
         // Setup
         self.setupSubscriptions()

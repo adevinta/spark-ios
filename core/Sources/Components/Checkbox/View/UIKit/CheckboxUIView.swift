@@ -344,7 +344,7 @@ public final class CheckboxUIView: UIControl {
         self.viewModel.$selectionState.subscribe(in: &self.cancellables) { [weak self] selectionState in
             guard let self else { return }
             self.controlView.selectionState = selectionState
-            self.setAccessibilityValue(isSelected: selectionState == .selected)
+            self.setAccessibilityValue(selectionState: selectionState)
         }
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
@@ -385,8 +385,10 @@ private extension CheckboxUIView {
     private func updateAccessibility() {
         self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkbox
         self.isAccessibilityElement = true
+        self.accessibilityTraits.insert(.button)
+        self.accessibilityTraits.remove(.selected)
         self.setAccessibilityLabel(self.textLabel.text)
-        self.setAccessibilityValue(isSelected: self.isSelected)
+        self.setAccessibilityValue(selectionState: self.selectionState)
         self.setAccessibilityEnable()
     }
 
@@ -394,12 +396,23 @@ private extension CheckboxUIView {
         self.accessibilityLabel = label
     }
 
-    private func setAccessibilityValue(isSelected: Bool) {
-        self.accessibilityValue = isSelected ? CheckboxAccessibilityValue.ticked : CheckboxAccessibilityValue.unticked
+    private func setAccessibilityValue(selectionState: CheckboxSelectionState) {
+        switch selectionState {
+        case .selected:
+            self.accessibilityValue = CheckboxAccessibilityValue.checked
+        case .indeterminate:
+            self.accessibilityValue = CheckboxAccessibilityValue.indeterminate
+        case .unselected:
+            self.accessibilityValue = CheckboxAccessibilityValue.unchecked
+        }
     }
 
     private func setAccessibilityEnable() {
-        self.accessibilityTraits = self.isEnabled ? [.none] : [.notEnabled]
+        if self.isEnabled {
+            self.accessibilityTraits.remove(.notEnabled)
+        } else {
+            self.accessibilityTraits.insert(.notEnabled)
+        }
     }
 
     private func updateTheme(colors: CheckboxColors) {
