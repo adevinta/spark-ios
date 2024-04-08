@@ -68,6 +68,9 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     @Published var spacings: ProgressTrackerSpacing
     @Published var font: TypographyFontToken
     @Published var labelColor: any ColorToken
+    @Published var interactionState: ProgressTrackerInteractionState = .none
+
+    @Published var currentPressedIndicator: Int? = nil
 
     // MARK: Private properties
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
@@ -129,6 +132,10 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     func isSelected(at index: Int) -> Bool {
         return self.content.currentPageIndex == index
+    }
+
+    func isHighlighted(at index: Int) -> Bool {
+        return self.currentPressedIndicator == index
     }
 
     private func updateEnabledIndices() {
