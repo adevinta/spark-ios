@@ -344,7 +344,7 @@ public final class CheckboxUIView: UIControl {
         self.viewModel.$selectionState.subscribe(in: &self.cancellables) { [weak self] selectionState in
             guard let self else { return }
             self.controlView.selectionState = selectionState
-            self.setAccessibilityValue(selectionState: selectionState)
+            self.setAccessibilityValue()
         }
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
@@ -388,7 +388,7 @@ private extension CheckboxUIView {
         self.accessibilityTraits.insert(.button)
         self.accessibilityTraits.remove(.selected)
         self.setAccessibilityLabel(self.textLabel.text)
-        self.setAccessibilityValue(selectionState: self.selectionState)
+        self.setAccessibilityValue()
         self.setAccessibilityEnable()
     }
 
@@ -396,8 +396,8 @@ private extension CheckboxUIView {
         self.accessibilityLabel = label
     }
 
-    private func setAccessibilityValue(selectionState: CheckboxSelectionState) {
-        switch selectionState {
+    private func setAccessibilityValue() {
+        switch self.selectionState {
         case .selected:
             self.accessibilityValue = CheckboxAccessibilityValue.checked
         case .indeterminate:
