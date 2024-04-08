@@ -105,12 +105,39 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
         .onChange(of: self.isEditing, perform: { value in
             self.onEditingChanged(value)
         })
+        .onChange(of: self.viewModel.value, perform: { value in
+            self.value = value
+        })
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
         .accessibilityElement()
         .accessibilityIdentifier(SliderAccessibilityIdentifier.slider)
         .accessibilityValue(self.getAccessibilityValue())
+        .accessibilityAdjustableAction(self.adjustableAction(direction:))
+    }
+
+    private func adjustableAction(direction: AccessibilityAdjustmentDirection) -> Void {
+        if let step = self.viewModel.step {
+            switch direction {
+            case .increment:
+                self.viewModel.setValue(self.value.advanced(by: step))
+            case .decrement:
+                self.viewModel.setValue(self.value.advanced(by: -step))
+            @unknown default:
+                break
+            }
+        } else {
+            let onePercent = (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) / 100.0
+            switch direction {
+            case .increment:
+                self.viewModel.setValue(self.value + onePercent)
+            case .decrement:
+                self.viewModel.setValue(self.value - onePercent)
+            @unknown default:
+                break
+            }
+        }
     }
 
     private func moveHandle(to: CGFloat, width: CGFloat) {
@@ -118,14 +145,13 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
         let relativeX = (absoluteX - SliderConstants.handleSize.width / 2) / (width - SliderConstants.handleSize.width)
         let newValue = V(relativeX) * (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) + self.viewModel.bounds.lowerBound
         self.viewModel.setValue(newValue)
-        self.value = self.viewModel.value
     }
 
     private func getHandleXPosition(frameWidth: CGFloat) -> CGFloat {
         guard self.viewModel.bounds.lowerBound != self.viewModel.bounds.upperBound else {
             return SliderConstants.handleSize.width / 2
         }
-        let value = (max(self.viewModel.bounds.lowerBound, self.viewModel.value) - self.viewModel.bounds.lowerBound) / (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound)
+        let value = (max(self.viewModel.bounds.lowerBound, self.value) - self.viewModel.bounds.lowerBound) / (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound)
         return (frameWidth - SliderConstants.handleSize.width) * CGFloat(value) + SliderConstants.handleSize.width / 2
     }
 
