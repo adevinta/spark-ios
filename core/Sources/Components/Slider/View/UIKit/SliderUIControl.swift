@@ -228,6 +228,7 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
     private func setupAccessibility() {
         self.isAccessibilityElement = true
         self.accessibilityIdentifier = SliderAccessibilityIdentifier.slider
+        self.accessibilityTraits.insert(.adjustable)
         self.setAccessibilityValue(with: self.value)
     }
 
@@ -273,5 +274,13 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
         self.setValue(
             V(relativeX) * (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) + self.viewModel.bounds.lowerBound
         )
+    }
+
+    public override func accessibilityIncrement() {
+        self.viewModel.incrementValue()
+    }
+
+    public override func accessibilityDecrement() {
+        self.viewModel.decrementValue()
     }
 }
