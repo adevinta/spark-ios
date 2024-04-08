@@ -58,7 +58,6 @@ public struct ProgressBarIndeterminateView: View {
                         .frame(width: self.viewModel.animatedData?.indicatorWidth ?? 0)
                         .offset(x: self.viewModel.animatedData?.leadingSpaceWidth ?? 0)
                         .opacity(self.viewModel.indicatorOpacity ?? 0)
-                        .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
                         .onAppear {
                             self.width = geometryReader.size.width
                         }

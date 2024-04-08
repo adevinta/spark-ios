@@ -56,8 +56,8 @@ public struct ProgressBarView: View {
                     .if(self.viewModel.isValidIndicatorValue(self.value)) { view in
                         view.proportionalWidth(from: self.value)
                     }
-                    .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
             }
         )
+        .accessibilityValue("\(Int(round(self.value * 100)))%")
     }
 }

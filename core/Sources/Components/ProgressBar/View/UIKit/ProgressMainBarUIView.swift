@@ -54,9 +54,9 @@ public class ProgressBarMainUIView: UIView {
         self.addSubview(self.trackView)
         self.addSubview(self.indicatorView)
 
-        // Identifiers
-        self.trackView.accessibilityIdentifier = AccessibilityIdentifier.trackView
-        self.indicatorView.accessibilityIdentifier = AccessibilityIdentifier.indicatorView
+        // Accessibility
+        self.isAccessibilityElement = true
+        self.accessibilityIdentifier = AccessibilityIdentifier.progressBar
 
         // View properties
         self.backgroundColor = .clear

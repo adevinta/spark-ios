@@ -69,7 +69,6 @@ public struct ProgressBarDoubleView: View {
                     .if(self.viewModel.isValidIndicatorValue(self.topValue)) { view in
                         view.proportionalWidth(from: self.topValue)
                     }
-                    .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
             }
         )
     }
