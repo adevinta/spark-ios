@@ -116,11 +116,11 @@ public struct CheckboxView: View {
     private func setAccessibilityValue(selectionState: CheckboxSelectionState) -> String {
         switch selectionState {
         case .selected:
-            CheckboxAccessibilityValue.checked
+            return CheckboxAccessibilityValue.checked
         case .indeterminate:
-            CheckboxAccessibilityValue.indeterminate
+            return CheckboxAccessibilityValue.indeterminate
         case .unselected:
-            CheckboxAccessibilityValue.unchecked
+            return CheckboxAccessibilityValue.unchecked
         }
     }
 
