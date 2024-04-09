@@ -26,7 +26,7 @@ final class FormFieldViewModel<AS: SparkAttributedString>: ObservableObject {
             self.updateColors()
             self.updateFonts()
             self.updateSpacing()
-            self.updateAsterisk()
+            self.updateTitle()
         }
     }
 
@@ -40,13 +40,14 @@ final class FormFieldViewModel<AS: SparkAttributedString>: ObservableObject {
     var isTitleRequired: Bool {
         didSet {
             guard isTitleRequired != oldValue else { return }
-            self.title = self.getTitleWithAsteriskIfNeeded()
+            self.updateTitle()
         }
     }
 
     var colors: FormFieldColors
 
     private var colorUseCase: FormFieldColorsUseCaseable
+    private var titleUseCase: FormFieldTitleUseCaseable
     private var userDefinedTitle: AS?
     private var asterisk: NSAttributedString = NSAttributedString()
 
@@ -57,23 +58,26 @@ final class FormFieldViewModel<AS: SparkAttributedString>: ObservableObject {
         title: AS?,
         description: AS?,
         isTitleRequired: Bool = false,
-        colorUseCase: FormFieldColorsUseCaseable = FormFieldColorsUseCase()
+        colorUseCase: FormFieldColorsUseCaseable = FormFieldColorsUseCase(),
+        titleUseCase: FormFieldTitleUseCaseable = FormFieldTitleUseCase()
     ) {
         self.theme = theme
         self.feedbackState = feedbackState
-        self.userDefinedTitle = title
         self.description = description
         self.isTitleRequired = isTitleRequired
         self.colorUseCase = colorUseCase
+        self.titleUseCase = titleUseCase
         self.colors = colorUseCase.execute(from: theme, feedback: feedbackState)
         self.spacing = self.theme.layout.spacing.small
         self.titleFont = self.theme.typography.body2
         self.descriptionFont = self.theme.typography.caption
         self.titleColor = self.colors.title
         self.descriptionColor = self.colors.description
-
-        self.updateAsterisk()
         self.setTitle(title)
+    }
+
+    private func updateTitle() {
+        self.title = self.titleUseCase.execute(title: self.userDefinedTitle, isTitleRequired: self.isTitleRequired, colors: self.colors, typography: self.theme.typography) as? AS
     }
 
     private func updateColors() {
@@ -91,36 +95,8 @@ final class FormFieldViewModel<AS: SparkAttributedString>: ObservableObject {
         self.spacing = self.theme.layout.spacing.small
     }
 
-    private func updateAsterisk() {
-        self.asterisk = NSAttributedString(
-            string: " *",
-            attributes: [
-                NSAttributedString.Key.foregroundColor: self.colors.asterisk.uiColor,
-                NSAttributedString.Key.font : self.theme.typography.caption.uiFont
-            ]
-        )
-    }
-
     func setTitle(_ title: AS?) {
         self.userDefinedTitle = title
-        self.title = self.getTitleWithAsteriskIfNeeded()
-    }
-
-    private func getTitleWithAsteriskIfNeeded() -> AS? {
-
-        if let attributedString = self.userDefinedTitle as? NSAttributedString {
-            let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
-            if self.isTitleRequired {
-                mutableAttributedString.append(self.asterisk)
-            }
-            return mutableAttributedString as? AS
-
-        } else if var attributedString = self.userDefinedTitle as? AttributedString {
-            if self.isTitleRequired {
-                attributedString.append(AttributedString(self.asterisk))
-            }
-            return attributedString as? AS
-        }
-        return nil
+        self.updateTitle()
     }
 }
