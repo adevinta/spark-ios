@@ -63,26 +63,14 @@ struct ProgressTrackerVerticalView: View {
     }
 
     //MARK: - Private functions
-    private func getAccessibilityTraits(index: Int) -> AccessibilityTraits {
-
-        var accessibilityTraits: AccessibilityTraits = AccessibilityTraits()
-        if self.viewModel.interactionState != .none {
-            _ = accessibilityTraits.insert(.isButton)
-        }
-        if index == self.currentPageIndex {
-            _ = accessibilityTraits.insert(.isSelected)
-        }
-
-        return accessibilityTraits
-    }
-
     @ViewBuilder
     private func verticalLayout() -> some View {
         VStack(alignment: .leading, spacing: self.verticalStackSpacing) {
             ForEach((0..<self.viewModel.content.numberOfPages), id: \.self) { index in
                     self.pageContent(at: index)
                     .frame(maxHeight: .infinity)
-                    .accessibilityAddTraits(self.getAccessibilityTraits(index: index))
+                    .disabled(!self.viewModel.isEnabled(at: index))
+                    .accessibilityAttributes(viewModel: self.viewModel, index:  index)
             }
         }
     }
@@ -92,14 +80,10 @@ struct ProgressTrackerVerticalView: View {
         HStack(alignment: .xAlignment) {
             self.indicator(at: index)
                 .alignmentGuide(.xAlignment) { $0.height / 2 }
-                .accessibilityIdentifier(AccessibilityIdentifier.indicator(forIndex: index))
-                .accessibilityValue("\(index)")
 
             if let label = self.viewModel.content.getAttributedLabel(atIndex: index)  {
                 self.label(label, at: index)
                     .alignmentGuide(.xAlignment) { ($0.height - ($0[.lastTextBaseline] - $0[.firstTextBaseline])) / 2 }
-                    .accessibilityIdentifier(AccessibilityIdentifier.label(forIndex: index))
-                    .accessibilityValue("\(index)")
             }
         }
     }
@@ -136,13 +120,9 @@ struct ProgressTrackerVerticalView: View {
     @ViewBuilder
     private func content(at index: Int) -> some View {
         self.indicator(at: index)
-            .accessibilityIdentifier(AccessibilityIdentifier.indicator(forIndex: index))
-            .accessibilityValue("\(index)")
 
         if let label = self.viewModel.content.getAttributedLabel(atIndex: index)  {
             self.label(label, at: index)
-                .accessibilityIdentifier(AccessibilityIdentifier.label(forIndex: index))
-                .accessibilityValue("\(index)")
         }
     }
 
@@ -172,6 +152,12 @@ struct ProgressTrackerVerticalView: View {
                 }
             }
         }
+    }
+}
+
+private extension View {
+    func accessibilityAttributes(viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>, index: Int) -> some View {
+        return modifier(ProgressTrackerAccessibilityTraitsViewModifier(viewModel: viewModel, index: index))
     }
 }
 
