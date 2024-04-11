@@ -49,7 +49,6 @@ final class FormFieldViewModel<AS: SparkAttributedString>: ObservableObject {
     private var colorUseCase: FormFieldColorsUseCaseable
     private var titleUseCase: FormFieldTitleUseCaseable
     private var userDefinedTitle: AS?
-    private var asterisk: NSAttributedString = NSAttributedString()
 
     // MARK: - Init
     init(
@@ -76,6 +75,11 @@ final class FormFieldViewModel<AS: SparkAttributedString>: ObservableObject {
         self.setTitle(title)
     }
 
+    func setTitle(_ title: AS?) {
+        self.userDefinedTitle = title
+        self.updateTitle()
+    }
+
     private func updateTitle() {
         self.title = self.titleUseCase.execute(title: self.userDefinedTitle, isTitleRequired: self.isTitleRequired, colors: self.colors, typography: self.theme.typography) as? AS
     }
@@ -93,10 +97,5 @@ final class FormFieldViewModel<AS: SparkAttributedString>: ObservableObject {
 
     private func updateSpacing() {
         self.spacing = self.theme.layout.spacing.small
-    }
-
-    func setTitle(_ title: AS?) {
-        self.userDefinedTitle = title
-        self.updateTitle()
     }
 }
