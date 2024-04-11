@@ -11,12 +11,12 @@ import UIKit
 @testable import SparkCore
 
 enum FormfieldScenarioSnapshotTests: String, CaseIterable {
-    case test1
+    case test1 //This will be added after textField
     case test2
     case test3
     case test4
     case test5
-    case test6
+    case test6 //This will be added after textField
     case test7
     case test8
 
@@ -30,6 +30,16 @@ enum FormfieldScenarioSnapshotTests: String, CaseIterable {
         switch self {
         case .test2:
             return self.test2()
+        case .test3:
+            return self.test3()
+        case .test4:
+            return self.test4()
+        case .test5:
+            return self.test5()
+        case .test7:
+            return self.test7()
+        case .test8:
+            return self.test8()
         default:
             return []
         }
@@ -48,7 +58,7 @@ enum FormfieldScenarioSnapshotTests: String, CaseIterable {
     ///  - helperMessage: short
     ///  - isRequired: false,
     ///  - isEnabled: true
-    ///  - modes: all
+    ///  - modes: light
     ///  - sizes (accessibility): default
     private func test2() -> [FormfieldConfigurationSnapshotTests] {
         let feedbackStates = FormFieldFeedbackState.allCases
@@ -64,10 +74,201 @@ enum FormfieldScenarioSnapshotTests: String, CaseIterable {
                     helperMessage: "Your agreement is important.",
                     isRequired: false,
                     isEnabled: true,
-                    modes: Constants.Modes.all,
+                    modes: Constants.Modes.default,
                     sizes: Constants.Sizes.default
                 )
             }
         }
+    }
+
+    /// Test 3
+    ///
+    /// Description: To test label's content resilience
+    ///
+    /// Content:
+    ///  - feedbackState: 'default'
+    ///  - component: single checkbox
+    ///  - label: all
+    ///  - helperMessage: short
+    ///  - isRequired: false,
+    ///  - isEnabled: true
+    ///  - modes: light
+    ///  - sizes (accessibility): default
+    private func test3() -> [FormfieldConfigurationSnapshotTests] {
+        let labels: [String?] = [
+            "Lorem Ipsum",
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            nil
+        ]
+
+        return labels.map { label in
+            return .init(
+                scenario: self,
+                feedbackState: .default,
+                component: .singleCheckbox,
+                label: label,
+                helperMessage: "Your agreement is important.",
+                isRequired: false,
+                isEnabled: true,
+                modes: Constants.Modes.default,
+                sizes: Constants.Sizes.default
+            )
+        }
+    }
+
+    /// Test 4
+    ///
+    /// Description: To test required option
+    ///
+    /// Content:
+    ///  - feedbackState: 'default'
+    ///  - component: single checkbox
+    ///  - label: all
+    ///  - helperMessage: short
+    ///  - isRequired: false,
+    ///  - isEnabled: true
+    ///  - modes: light
+    ///  - sizes (accessibility): default
+    private func test4() -> [FormfieldConfigurationSnapshotTests] {
+        return [.init(
+            scenario: self,
+            feedbackState: .default,
+            component: .radioButtonGroup,
+            label: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            helperMessage: "Your agreement is important.",
+            isRequired: true,
+            isEnabled: true,
+            modes: Constants.Modes.default,
+            sizes: Constants.Sizes.default
+        )]
+    }
+
+    /// Test 5
+    ///
+    /// Description: To test helper text's content resilience
+    ///
+    /// Content:
+    ///  - feedbackState: error
+    ///  - component: checkbox group
+    ///  - label: short
+    ///  - helperMessage: all
+    ///  - isRequired: false,
+    ///  - isEnabled: true
+    ///  - modes: light
+    ///  - sizes (accessibility): default
+    private func test5() -> [FormfieldConfigurationSnapshotTests] {
+        let messages: [String?] = [
+            "Lorem Ipsum",
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            nil
+        ]
+
+        return messages.map { message in
+            return .init(
+                scenario: self,
+                feedbackState: .error,
+                component: .checkboxGroup,
+                label: "Agreement",
+                helperMessage: message,
+                isRequired: false,
+                isEnabled: true,
+                modes: Constants.Modes.default,
+                sizes: Constants.Sizes.default
+            )
+        }
+    }
+
+    /// Test 7
+    ///
+    /// Description: To test disabled state for other components
+    ///
+    /// Content:
+    ///  - feedbackState: 'default'
+    ///  - component: all
+    ///  - label: short
+    ///  - helperMessage: short
+    ///  - isRequired: false,
+    ///  - isEnabled: true
+    ///  - modes: light
+    ///  - sizes (accessibility): default
+    private func test7() -> [FormfieldConfigurationSnapshotTests] {
+        let feedbackStates = FormFieldFeedbackState.allCases
+        let components = FormfieldComponentType.allCases
+
+        return feedbackStates.flatMap { feedbackState in
+            components.map { component in
+                return .init(
+                    scenario: self,
+                    feedbackState: feedbackState,
+                    component: component,
+                    label: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                    helperMessage: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                    isRequired: false,
+                    isEnabled: false,
+                    modes: Constants.Modes.default,
+                    sizes: Constants.Sizes.default
+                )
+            }
+        }
+    }
+
+    /// Test 8
+    ///
+    /// Description: To test dark & light mode
+    ///
+    /// Content:
+    ///  - feedbackState: all
+    ///  - component: single checkbox
+    ///  - label: short
+    ///  - helperMessage: short
+    ///  - isRequired: false,
+    ///  - isEnabled: false
+    ///  - modes: dark
+    ///  - sizes (accessibility): default
+    private func test8() -> [FormfieldConfigurationSnapshotTests] {
+        let feedbackStates = FormFieldFeedbackState.allCases
+
+        return feedbackStates.map { feedbackState in
+            return .init(
+                scenario: self,
+                feedbackState: feedbackState,
+                component: .singleCheckbox,
+                label: "Agreement",
+                helperMessage: "Your agreement is important.",
+                isRequired: false,
+                isEnabled: true,
+                modes: [.dark],
+                sizes: Constants.Sizes.default
+            )
+        }
+    }
+
+    /// Test 9
+    ///
+    /// Description: To test a11y sizes
+    ///
+    /// Content:
+    ///  - feedbackState: error
+    ///  - component: single checkbox
+    ///  - label: short
+    ///  - helperMessage: short
+    ///  - isRequired: false,
+    ///  - isEnabled: false
+    ///  - modes: light
+    ///  - sizes (accessibility): all
+    private func test9() -> [FormfieldConfigurationSnapshotTests] {
+        let feedbackStates = FormFieldFeedbackState.allCases
+
+        return [.init(
+            scenario: self,
+            feedbackState: .error,
+            component: .singleCheckbox,
+            label: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            helperMessage: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            isRequired: true,
+            isEnabled: true,
+            modes: Constants.Modes.default,
+            sizes: Constants.Sizes.all
+        )]
     }
 }

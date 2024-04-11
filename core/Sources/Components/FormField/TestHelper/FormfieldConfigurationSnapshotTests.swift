@@ -17,8 +17,8 @@ struct FormfieldConfigurationSnapshotTests {
     let scenario: FormfieldScenarioSnapshotTests
     let feedbackState: FormFieldFeedbackState
     let component: FormfieldComponentType
-    let label: String
-    let helperMessage: String
+    let label: String?
+    let helperMessage: String?
     let isRequired: Bool
     let isEnabled: Bool
     let modes: [ComponentSnapshotTestMode]
