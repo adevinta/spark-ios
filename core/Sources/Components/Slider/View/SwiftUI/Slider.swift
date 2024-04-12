@@ -105,12 +105,25 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
         .onChange(of: self.isEditing, perform: { value in
             self.onEditingChanged(value)
         })
+        .onChange(of: self.viewModel.value, perform: { value in
+            self.value = value
+        })
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
         .accessibilityElement()
         .accessibilityIdentifier(SliderAccessibilityIdentifier.slider)
         .accessibilityValue(self.getAccessibilityValue())
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .decrement:
+                self.viewModel.decrementValue()
+            case .increment:
+                self.viewModel.incrementValue()
+            @unknown default:
+                break
+            }
+        }
     }
 
     private func moveHandle(to: CGFloat, width: CGFloat) {
@@ -118,14 +131,13 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
         let relativeX = (absoluteX - SliderConstants.handleSize.width / 2) / (width - SliderConstants.handleSize.width)
         let newValue = V(relativeX) * (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound) + self.viewModel.bounds.lowerBound
         self.viewModel.setValue(newValue)
-        self.value = self.viewModel.value
     }
 
     private func getHandleXPosition(frameWidth: CGFloat) -> CGFloat {
         guard self.viewModel.bounds.lowerBound != self.viewModel.bounds.upperBound else {
             return SliderConstants.handleSize.width / 2
         }
-        let value = (max(self.viewModel.bounds.lowerBound, self.viewModel.value) - self.viewModel.bounds.lowerBound) / (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound)
+        let value = (max(self.viewModel.bounds.lowerBound, self.value) - self.viewModel.bounds.lowerBound) / (self.viewModel.bounds.upperBound - self.viewModel.bounds.lowerBound)
         return (frameWidth - SliderConstants.handleSize.width) * CGFloat(value) + SliderConstants.handleSize.width / 2
     }
 
