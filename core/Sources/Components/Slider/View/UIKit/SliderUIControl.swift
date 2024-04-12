@@ -118,6 +118,8 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
         }), for: .valueChanged)
 
         self.setupAccessibility()
+
+        self.addPanGestureToPreventCancelTracking()
     }
 
     required init?(coder: NSCoder) {
