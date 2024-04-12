@@ -22,7 +22,7 @@ struct ProgressTrackerAccessibilityTraitsViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         return content
-            .accessibilityElement(children: .ignore)
+            .accessibilityElement(children: .combine)
             .accessibilityAddTraits(self.getAccessibilityTraits(index: self.index))
             .accessibilityIdentifier(AccessibilityIdentifier.indicator(forIndex: self.index))
             .accessibilityValue("\(self.index)")
