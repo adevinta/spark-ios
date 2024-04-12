@@ -38,7 +38,7 @@ public struct CheckboxGroupView: View {
     ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
     ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    @available(*, deprecated, message: "Please use init without accessibilityIdentifierPrefix. It was gived as a static string.")
+    @available(*, deprecated, message: "Please use init without accessibilityIdentifierPrefix. It was given as a static string.")
     public init(
         title: String? = nil,
         checkedImage: Image,
