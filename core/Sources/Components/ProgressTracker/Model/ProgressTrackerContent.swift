@@ -47,6 +47,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     var showDefaultPageNumber: Bool
     var currentPageIndex: Int {
         didSet {
+            let xx = AttributedString("hello")
             self.currentPageIndex = min(max(self.currentPageIndex, 0), self.numberOfPages - 1)
         }
     }
