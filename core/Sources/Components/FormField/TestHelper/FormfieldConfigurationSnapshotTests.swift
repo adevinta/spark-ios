@@ -31,7 +31,7 @@ struct FormfieldConfigurationSnapshotTests {
             "\(self.scenario.rawValue)",
             "\(self.feedbackState)",
             "IsRequired:\(self.isRequired)",
-            "IsEnabled:\(self.isRequired)",
+            "IsEnabled:\(self.isEnabled)",
             "\(self.component.rawValue)"
         ].joined(separator: "-")
     }

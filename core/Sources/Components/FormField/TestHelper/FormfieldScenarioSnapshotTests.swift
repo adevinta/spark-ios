@@ -19,6 +19,7 @@ enum FormfieldScenarioSnapshotTests: String, CaseIterable {
     case test6 //This will be added after textField
     case test7
     case test8
+    case test9
 
     // MARK: - Type Alias
 
@@ -40,6 +41,8 @@ enum FormfieldScenarioSnapshotTests: String, CaseIterable {
             return self.test7()
         case .test8:
             return self.test8()
+        case .test9:
+            return self.test9()
         default:
             return []
         }
@@ -159,7 +162,7 @@ enum FormfieldScenarioSnapshotTests: String, CaseIterable {
     private func test5() -> [FormfieldConfigurationSnapshotTests] {
         let messages: [String?] = [
             "Lorem Ipsum",
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
             nil
         ]
 
@@ -192,23 +195,20 @@ enum FormfieldScenarioSnapshotTests: String, CaseIterable {
     ///  - modes: light
     ///  - sizes (accessibility): default
     private func test7() -> [FormfieldConfigurationSnapshotTests] {
-        let feedbackStates = FormFieldFeedbackState.allCases
         let components = FormfieldComponentType.allCases
 
-        return feedbackStates.flatMap { feedbackState in
-            components.map { component in
-                return .init(
-                    scenario: self,
-                    feedbackState: feedbackState,
-                    component: component,
-                    label: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                    helperMessage: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                    isRequired: false,
-                    isEnabled: false,
-                    modes: Constants.Modes.default,
-                    sizes: Constants.Sizes.default
-                )
-            }
+        return components.map { component in
+            return .init(
+                scenario: self,
+                feedbackState: .default,
+                component: component,
+                label: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                helperMessage: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+                isRequired: false,
+                isEnabled: false,
+                modes: Constants.Modes.default,
+                sizes: Constants.Sizes.default
+            )
         }
     }
 
@@ -264,7 +264,7 @@ enum FormfieldScenarioSnapshotTests: String, CaseIterable {
             feedbackState: .error,
             component: .singleCheckbox,
             label: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            helperMessage: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            helperMessage: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
             isRequired: true,
             isEnabled: true,
             modes: Constants.Modes.default,

@@ -147,8 +147,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     public var component: Component {
         didSet {
             oldValue.removeFromSuperview()
-            self.component.isAccessibilityElement = true
-            self.stackView.insertArrangedSubview(self.component, at: 1)
+            self.setComponent()
         }
     }
 
@@ -238,7 +237,13 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     private func commonInit() {
         self.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formField
         self.setupViews()
+        self.setComponent()
         self.subscribe()
+    }
+
+    private func setComponent() {
+        self.component.isAccessibilityElement = true
+        self.stackView.insertArrangedSubview(self.component, at: 1)
     }
 
     private func setupViews() {
