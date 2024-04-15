@@ -64,6 +64,8 @@ struct ProgressTrackerHorizontalView: View {
         HStack(alignment: .top, spacing: self.spacing) {
             ForEach((0..<self.viewModel.numberOfPages), id: \.self) { index in
                 let content = self.content(at: index)
+                    .accessibilityAttributes(viewModel: self.viewModel, index:  index)
+                    .disabled(!self.viewModel.isEnabled(at: index))
 
                 if self.viewModel.useFullWidth {
                     content
@@ -107,9 +109,12 @@ struct ProgressTrackerHorizontalView: View {
     @ViewBuilder
     private func content(at index: Int) -> some View {
         VStack(alignment: .center) {
-            self.indicator(at: index)
             if let label = self.viewModel.content.getAttributedLabel(atIndex: index)  {
+                self.indicator(at: index)
                 self.label(label, at: index)
+            } else {
+                self.indicator(at: index)
+                    .accessibilityLabel(self.viewModel.content.getIndicatorAccessibilityLabel(atIndex: index))
             }
         }
     }
@@ -141,6 +146,12 @@ struct ProgressTrackerHorizontalView: View {
                 }
             }
         }
+    }
+}
+
+private extension View {
+    func accessibilityAttributes(viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>, index: Int) -> some View {
+        return modifier(ProgressTrackerAccessibilityTraitsViewModifier(viewModel: viewModel, index: index))
     }
 }
 

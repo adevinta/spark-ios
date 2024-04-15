@@ -96,6 +96,9 @@ public struct ProgressTrackerView: View {
     //MARK: - Body
     public var body: some View {
         self.progressTrackerView
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier(AccessibilityIdentifier.identifier)
+            .accessibilityValue("\(self.currentPageIndex)")
             .isEnabledChanged { isEnabled in
                 self.viewModel.isEnabled = isEnabled
             }
@@ -123,7 +126,6 @@ public struct ProgressTrackerView: View {
             })
             .onEnded({ value in
                 gestureHandler.onEnded(location: value.location)
-                let index = indicators.index(closestTo: value.location)
             })
     }
 
