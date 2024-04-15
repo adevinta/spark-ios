@@ -241,6 +241,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.enableTouch()
         self.addPanGestureToPreventCancelTracking()
         self.isUserInteractionEnabled = false
+        self.accessibilityContainerType = .semanticGroup
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
