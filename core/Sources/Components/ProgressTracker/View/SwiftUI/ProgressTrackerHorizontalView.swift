@@ -109,10 +109,12 @@ struct ProgressTrackerHorizontalView: View {
     @ViewBuilder
     private func content(at index: Int) -> some View {
         VStack(alignment: .center) {
-            self.indicator(at: index)
-
             if let label = self.viewModel.content.getAttributedLabel(atIndex: index)  {
+                self.indicator(at: index)
                 self.label(label, at: index)
+            } else {
+                self.indicator(at: index)
+                    .accessibilityLabel(self.viewModel.content.getIndicatorAccessibilityLabel(atIndex: index))
             }
         }
     }

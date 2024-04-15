@@ -182,4 +182,8 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     func getIndicatorLabel(atIndex index:  Int) -> String? {
         return self.content[index]?.label
     }
+
+    func getIndicatorAccessibilityLabel(atIndex index: Int) -> String {
+        return self.getIndicatorLabel(atIndex: index) ?? "\(index + 1)"
+    }
 }
