@@ -240,6 +240,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.setupSubscriptions()
         self.enableTouch()
         self.isUserInteractionEnabled = false
+        self.accessibilityContainerType = .semanticGroup
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
