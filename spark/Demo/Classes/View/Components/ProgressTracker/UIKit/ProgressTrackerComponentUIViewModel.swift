@@ -234,7 +234,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
     // MARK: - Initialization
     @Published var theme: Theme
     @Published var intent: ProgressTrackerIntent = .basic
-    @Published var orientation: ProgressTrackerOrientation = .vertical
+    @Published var orientation: ProgressTrackerOrientation = .horizontal
     @Published var variant: ProgressTrackerVariant = .outlined
     @Published var size: ProgressTrackerSize
     @Published var interaction: ProgressTrackerInteractionState
