@@ -13,4 +13,6 @@ public enum FormFieldAccessibilityIdentifier {
     // MARK: - Properties
 
     public static let formField = "spark-formfield"
+    public static let formFieldLabel = "spark-formfield-label"
+    public static let formFieldHelperMessage = "spark-formfield-helper-message"
 }

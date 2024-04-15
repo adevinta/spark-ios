@@ -20,6 +20,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         label.backgroundColor = .clear
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formFieldLabel
+        label.isAccessibilityElement = true
         return label
     }()
 
@@ -28,6 +30,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         label.backgroundColor = .clear
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formFieldHelperMessage
+        label.isAccessibilityElement = true
         return label
     }()
 
@@ -235,10 +239,16 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     }
 
     private func commonInit() {
-        self.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formField
         self.setupViews()
         self.setComponent()
         self.subscribe()
+        self.updateAccessibility()
+    }
+
+    private func updateAccessibility() {
+        self.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formField
+        self.isAccessibilityElement = false
+        self.accessibilityContainerType = .semanticGroup
     }
 
     private func setComponent() {
