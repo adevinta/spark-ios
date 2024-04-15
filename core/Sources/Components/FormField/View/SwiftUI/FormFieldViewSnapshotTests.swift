@@ -16,24 +16,42 @@ final class FormfieldViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 
     private let theme: Theme = SparkTheme.shared
 
-    @State private var checkboxGroupItems: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
-        CheckboxGroupItemDefault(title: "Checkbox 2", id: "2", selectionState: .selected, isEnabled: true),
-    ]
-    @State private var selectedID: Int? = 0
-
     // MARK: - Tests
 
     func test() {
         let scenarios = FormfieldScenarioSnapshotTests.allCases
 
+        var _selectedID: Int? = 0
+        lazy var selectedID: Binding<Int?> = {
+            return Binding<Int?>(
+                get: { return _selectedID },
+                set: { newValue in
+                    _selectedID = newValue
+                }
+            )
+        }()
+
+        var _checkboxGroupItems: [any CheckboxGroupItemProtocol] = [
+            CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
+            CheckboxGroupItemDefault(title: "Checkbox 2", id: "2", selectionState: .selected, isEnabled: true),
+        ]
+        lazy var checkboxGroupItems: Binding<[any CheckboxGroupItemProtocol]> = {
+            return Binding<[any CheckboxGroupItemProtocol]>(
+                get: { return _checkboxGroupItems },
+                set: { newValue in
+                    _checkboxGroupItems = newValue
+                }
+            )
+        }()
+
         for scenario in scenarios {
             let configurations = scenario.configuration()
 
             for configuration in configurations {
-                
+
                 @ViewBuilder
                 var component: some View {
+
                     switch configuration.component {
                     case .singleCheckbox:
                         CheckboxView(
@@ -46,7 +64,7 @@ final class FormfieldViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                     case .checkboxGroup:
                         CheckboxGroupView(
                             checkedImage: Image.mock,
-                            items: self.$checkboxGroupItems,
+                            items: checkboxGroupItems,
                             alignment: .left,
                             theme: self.theme,
                             accessibilityIdentifierPrefix: "checkbox-group"
@@ -55,7 +73,7 @@ final class FormfieldViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                         RadioButtonGroupView(
                             theme: self.theme,
                             intent: .accent,
-                            selectedID: self.$selectedID,
+                            selectedID: selectedID,
                             items: [
                                 RadioButtonItem(id: 0, label: "Radio Button 1")
                             ],
@@ -65,7 +83,7 @@ final class FormfieldViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                         RadioButtonGroupView(
                             theme: self.theme,
                             intent: .danger,
-                            selectedID: self.$selectedID,
+                            selectedID: selectedID,
                             items: [
                                 RadioButtonItem(id: 0, label: "Radio Button 1"),
                                 RadioButtonItem(id: 1, label: "Radio Button 2"),
