@@ -47,7 +47,6 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     var showDefaultPageNumber: Bool
     var currentPageIndex: Int {
         didSet {
-            let xx = AttributedString("hello")
             self.currentPageIndex = min(max(self.currentPageIndex, 0), self.numberOfPages - 1)
         }
     }
@@ -180,7 +179,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
     }
 
     /// Return the indicator label at the given index
-    func getIndicatorLabel(atIndex index:  Int) -> String? {
+    func getIndicatorLabel(atIndex index: Int) -> String? {
         return self.content[index]?.label
     }
 

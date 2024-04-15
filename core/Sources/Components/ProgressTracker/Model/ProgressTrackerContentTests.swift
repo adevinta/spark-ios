@@ -216,4 +216,26 @@ final class ProgressTrackerContentTests: XCTestCase {
         // THEN
         XCTAssertFalse(sut.needsUpdateOfLayout(otherComponent: other))
     }
+
+    func test_accessibility_label_with_no_content() {
+        // GIVEN
+        let sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 2, currentPageIndex: 1, showDefaultPageNumber: false)
+
+        // THEN
+        XCTAssertEqual(sut.getIndicatorAccessibilityLabel(atIndex: 0), "1", "Expected label 0 to be 1")
+        XCTAssertEqual(sut.getIndicatorAccessibilityLabel(atIndex: 1), "2", "Expected label 1 to be 2")
+    }
+
+    func test_accessibility_label_with_content() {
+        // GIVEN
+        var sut = ProgressTrackerContent<ProgressTrackerUIIndicatorContent>(numberOfPages: 2, currentPageIndex: 1, showDefaultPageNumber: false)
+
+        // WHEN
+        sut.setIndicatorLabel("A", atIndex: 0)
+        sut.setIndicatorLabel("B", atIndex: 1)
+
+        // THEN
+        XCTAssertEqual(sut.getIndicatorAccessibilityLabel(atIndex: 0), "A", "Expected accessibility label to be A")
+        XCTAssertEqual(sut.getIndicatorAccessibilityLabel(atIndex: 1), "B", "Expected accessibility label to be B")
+    }
 }

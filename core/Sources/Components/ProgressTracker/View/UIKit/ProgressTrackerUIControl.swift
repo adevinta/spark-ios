@@ -133,7 +133,7 @@ public final class ProgressTrackerUIControl: UIControl {
     private lazy var labels = [UILabel]()
     private lazy var hiddenLabels = [UILabel]()
     private lazy var trackViews = [ProgressTrackerTrackUIView]()
-    private lazy var indicatorContainerViews = [UIView]()
+    private lazy var indicatorContainerViews = [UIControl]()
 
     var viewCount = 0
 
@@ -254,7 +254,7 @@ public final class ProgressTrackerUIControl: UIControl {
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let touchHandler = self.interactionState.touchHandler(
             currentPageIndex: self.currentPageIndex,
-            indicatorViews: self.indicatorViews)
+            indicatorViews: self.indicatorContainerViews)
 
         self.touchHandler = touchHandler
         touchHandler.currentPagePublisher.subscribe(in: &self.cancellables) { [weak self] index in
@@ -306,13 +306,14 @@ public final class ProgressTrackerUIControl: UIControl {
     }
 
     // MARK: Private functions
-    private func createContainerViews(numberOfPages: Int) -> [UIView] {
+    private func createContainerViews(numberOfPages: Int) -> [UIControl] {
         guard numberOfPages > 0 else { return [] }
 
         return (0..<numberOfPages).map { _ in
-            let view = UIView()
+            let view = ProgressTrackerAccessibilityUIControl()
             view.translatesAutoresizingMaskIntoConstraints = false
             view.backgroundColor = .clear
+            view.isUserInteractionEnabled = false
             return view
         }
     }
@@ -330,9 +331,10 @@ public final class ProgressTrackerUIControl: UIControl {
             indicator.translatesAutoresizingMaskIntoConstraints = false
             indicator.isEnabled = !self.viewModel.disabledIndices.contains(index)
             indicator.isUserInteractionEnabled = false
-//            indicator.accessibilityIdentifier = AccessibilityIdentifier.indicator(forIndex: index)
-//            indicator.accessibilityValue = "\(index)"
-            indicator.isAccessibilityElement = false
+            indicator.accessibilityIdentifier = AccessibilityIdentifier.indicator(forIndex: index)
+            indicator.accessibilityValue = "\(index)"
+            indicator.isAccessibilityElement = true
+            indicator.accessibilityLabel = content.getIndicatorAccessibilityLabel(atIndex: index)
             return indicator
         }
     }
@@ -354,17 +356,31 @@ public final class ProgressTrackerUIControl: UIControl {
             label.allowsDefaultTighteningForTruncation = true
             label.isUserInteractionEnabled = false
             label.isAccessibilityElement = true
-//            label.accessibilityIdentifier = AccessibilityIdentifier.label(forIndex: index)
-//            label.accessibilityValue = "\(index)"
 
             return label
         }
     }
 
     private func setItemsAccessibilityTraits(disabledIndices: Set<Int>, currentPageIndex: Int) {
-//        for (index, label) in self.labels.enumerated() {
-//            self.setItemAccessibilityTraits(view: label, index: index, disabledIndices: disabledIndices, currentPageIndex: currentPageIndex)
-//        }
+
+        if self.viewModel.content.hasLabel {
+            let buttons = zip(self.indicatorViews, self.labels)
+            for (indicatorContainerView, button) in zip(indicatorContainerViews, buttons) {
+                indicatorContainerView.accessibilityElements = [button.0, button.1]
+                indicatorContainerView.shouldGroupAccessibilityChildren = true
+                indicatorContainerView.isAccessibilityElement = true
+
+                indicatorContainerView.accessibilityLabel = button.1.accessibilityLabel ?? button.0.accessibilityLabel
+            }
+        } else {
+            for (indicatorContainerView, indicatorView) in zip(self.indicatorContainerViews, self.indicatorViews) {
+                indicatorContainerView.accessibilityElements = [indicatorView]
+                indicatorContainerView.shouldGroupAccessibilityChildren = true
+                indicatorContainerView.isAccessibilityElement = true
+
+                indicatorContainerView.accessibilityLabel = indicatorView.accessibilityLabel
+            }
+        }
 
         for (index, indicator) in self.indicatorContainerViews.enumerated() {
             self.setItemAccessibilityTraits(view: indicator, index: index, disabledIndices: disabledIndices, currentPageIndex: currentPageIndex)
@@ -376,7 +392,6 @@ public final class ProgressTrackerUIControl: UIControl {
         view.accessibilityIdentifier = AccessibilityIdentifier.indicator(forIndex: index)
         view.accessibilityValue = "\(index)"
         view.isAccessibilityElement = true
-        view.accessibilityLabel = self.viewModel.content.getAttributedLabel(atIndex: index)?.string ??  self.viewModel.content.getIndicatorLabel(atIndex: index)
 
         if self.interactionState == .none {
             view.accessibilityTraits.remove(.button)
@@ -431,14 +446,7 @@ public final class ProgressTrackerUIControl: UIControl {
         NSLayoutConstraint.deactivate(self.labelSpacingConstraints)
         NSLayoutConstraint.deactivate(self.trackSpacingConstraints)
 
-        self.indicatorViews.removeAllFromSuperView()
-        self.trackViews.removeAllFromSuperView()
-        self.labels.removeAllFromSuperView()
-        self.hiddenLabels.removeAllFromSuperView()
-
         self.subviews.forEach { $0.removeFromSuperview() }
-
-        self.indicatorContainerViews.removeAllFromSuperView()
 
         self.trackSpacingConstraints = []
         self.labelSpacingConstraints = []
@@ -447,7 +455,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.indicatorContainerViews.addToSuperView(self)
 
         self.indicatorViews = self.createIndicatorViews(content: content)
-//        self.indicatorViews.addToSuperView(self)
+
         for (view, subview) in zip(self.indicatorContainerViews, self.indicatorViews) {
             view.addSubview(subview)
         }
@@ -458,7 +466,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.trackViews.addToSuperView(self)
 
         self.labels = self.createLabels(content: content)
-//        self.labels.addToSuperView(self)
+
         for (view, subview) in zip(self.indicatorContainerViews, self.labels) {
             view.addSubview(subview)
         }
@@ -707,10 +715,12 @@ public final class ProgressTrackerUIControl: UIControl {
         for i in 0..<content.numberOfPages {
             self.indicatorViews[i].content = content.pageContent(atIndex: i)
             self.indicatorViews[i].isSelected = (i == content.currentPageIndex)
+            self.indicatorViews[i].accessibilityLabel = content.getIndicatorAccessibilityLabel(atIndex: i)
         }
         if content.hasLabel {
             for i in 0..<content.numberOfPages {
                 self.labels[i].attributedText = content.getAttributedLabel(atIndex: i)
+                self.indicatorContainerViews[i].accessibilityLabel = self.labels[i].text
             }
         }
 
@@ -889,12 +899,6 @@ public final class ProgressTrackerUIControl: UIControl {
 
 // MARK: Private helper extensions
 private extension Collection where Element: UIView {
-    func removeAllFromSuperView() {
-        for view in self {
-            view.removeFromSuperview()
-        }
-    }
-
     func addToSuperView(_ superView: UIView) {
         for view in self {
             superView.addSubview(view)
