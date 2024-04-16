@@ -56,7 +56,6 @@ public final class CheckboxGroupUIView: UIControl {
     private var subscriptions = Set<AnyCancellable>()
     private var items: [any CheckboxGroupItemProtocol]
     private var subject = PassthroughSubject<[any CheckboxGroupItemProtocol], Never>()
-    private var accessibilityIdentifierPrefix: String
 
     @ScaledUIMetric private var spacingLarge: CGFloat
     @ScaledUIMetric private var padding: CGFloat = CheckboxControlUIView.Constants.lineWidthPressed
@@ -142,7 +141,8 @@ public final class CheckboxGroupUIView: UIControl {
     ///   - theme: The Spark-Theme.
     ///   - intent: Current intent of checkbox group
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
-    public init(
+    @available(*, deprecated, message: "Please use init without accessibilityIdentifierPrefix. It was given as a static string.")
+    public convenience init(
         title: String? = nil,
         checkedImage: UIImage,
         items: [any CheckboxGroupItemProtocol],
@@ -152,6 +152,35 @@ public final class CheckboxGroupUIView: UIControl {
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {
+        self.init(
+            title: title,
+            checkedImage: checkedImage,
+            items: items,
+            layout: layout,
+            alignment: alignment,
+            theme: theme,
+            intent: intent
+        )
+    }
+
+    /// Initialize a group of one or multiple checkboxes.
+    /// - Parameters:
+    ///   - title: An optional group title displayed on top of the checkbox group..
+    ///   - checkedImage: The tick-checkbox image for checked-state.
+    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
+    ///   - layout: The layout of the group can be horizontal or vertical.
+    ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - theme: The Spark-Theme.
+    ///   - intent: Current intent of checkbox group
+    public init(
+        title: String? = nil,
+        checkedImage: UIImage,
+        items: [any CheckboxGroupItemProtocol],
+        layout: CheckboxGroupLayout = .vertical,
+        alignment: CheckboxAlignment = .left,
+        theme: Theme,
+        intent: CheckboxIntent = .main
+    ) {
         self.title = title
         self.checkedImage = checkedImage
         self.items = items
@@ -160,7 +189,6 @@ public final class CheckboxGroupUIView: UIControl {
         self.checkboxAlignment = alignment
         self.theme = theme
         self.intent = intent
-        self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
         self.spacingLarge = theme.layout.spacing.large
         self.spacingSmall = theme.layout.spacing.small
         super.init(frame: .zero)
@@ -172,6 +200,7 @@ public final class CheckboxGroupUIView: UIControl {
         self.setupView()
         self.enableTouch()
         self.updateTitle()
+        self.updateAccessibility()
     }
 
     // MARK: - Methods
@@ -183,6 +212,12 @@ public final class CheckboxGroupUIView: UIControl {
         self._spacingLarge.update(traitCollection: self.traitCollection)
         self._spacingSmall.update(traitCollection: self.traitCollection)
         self._padding.update(traitCollection: self.traitCollection)
+    }
+
+    private func updateAccessibility() {
+        self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkboxGroup
+        self.isAccessibilityElement = false
+        self.accessibilityContainerType = .semanticGroup
     }
 
     private func setupItemsStackView() {
@@ -207,9 +242,8 @@ public final class CheckboxGroupUIView: UIControl {
                 selectionState: item.selectionState,
                 alignment: self.alignment
             )
-            let identifier = "\(self.accessibilityIdentifierPrefix).\(item.id)"
+            checkbox.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkboxGroupItem(item.id)
 
-            checkbox.accessibilityIdentifier = identifier
             checkbox.publisher.sink { [weak self] in
                 guard
                     let self,
@@ -230,8 +264,6 @@ public final class CheckboxGroupUIView: UIControl {
     }
 
     private func setupView() {
-
-        self.accessibilityIdentifier =  "\(self.accessibilityIdentifierPrefix).\(CheckboxAccessibilityIdentifier.checkboxGroup)"
 
         self.addSubview(self.titleStackView)
         self.scrollView.addSubview(self.itemsStackView)

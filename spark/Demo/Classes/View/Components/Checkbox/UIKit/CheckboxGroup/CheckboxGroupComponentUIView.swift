@@ -29,8 +29,8 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             viewModel: viewModel,
             componentView: self.componentView
         )
-
         self.componentView.delegate = self
+
         // Setup
         self.setupSubscriptions()
 
@@ -102,8 +102,7 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             items: CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: viewModel.groupType),
             alignment: viewModel.isAlignmentLeft ? .left : .right,
             theme: viewModel.theme,
-            intent: viewModel.intent,
-            accessibilityIdentifierPrefix: "Checkbox"
+            intent: viewModel.intent
         )
     }
 }

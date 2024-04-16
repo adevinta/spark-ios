@@ -38,6 +38,7 @@ public struct CheckboxGroupView: View {
     ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
     ///   - theme: The Spark-Theme.
     ///   - accessibilityIdentifierPrefix: All checkbox-views are prefixed by this identifier followed by the `CheckboxGroupItemProtocol`-identifier.
+    @available(*, deprecated, message: "Please use init without accessibilityIdentifierPrefix. It was given as a static string.")
     public init(
         title: String? = nil,
         checkedImage: Image,
@@ -48,10 +49,37 @@ public struct CheckboxGroupView: View {
         intent: CheckboxIntent = .main,
         accessibilityIdentifierPrefix: String
     ) {
+        self.init(
+            title: title,
+            checkedImage: checkedImage,
+            items: items,
+            layout: layout,
+            alignment: alignment,
+            theme: theme,
+            intent: intent
+        )
+    }
+
+    /// Initialize a group of one or multiple checkboxes.
+    /// - Parameters:
+    ///   - title: An optional group title displayed on top of the checkbox group..
+    ///   - checkedImage: The tick-checkbox image for checked-state.
+    ///   - items: An array containing of multiple `CheckboxGroupItemProtocol`. Each array item is used to render a single checkbox.
+    ///   - layout: The layout of the group can be horizontal or vertical.
+    ///   - checkboxAlignment: The checkbox is positioned on the leading or trailing edge of the view.
+    ///   - theme: The Spark-Theme.
+    public init(
+        title: String? = nil,
+        checkedImage: Image,
+        items: Binding<[any CheckboxGroupItemProtocol]>,
+        layout: CheckboxGroupLayout = .vertical,
+        alignment: CheckboxAlignment,
+        theme: Theme,
+        intent: CheckboxIntent = .main
+    ) {
         let viewModel = CheckboxGroupViewModel(
             title: title,
             checkedImage: checkedImage,
-            accessibilityIdentifierPrefix: accessibilityIdentifierPrefix,
             theme: theme,
             intent: intent,
             alignment: alignment,
@@ -94,7 +122,8 @@ public struct CheckboxGroupView: View {
         .onChange(of: self.itemContents) { newValue in
             self.isScrollableHStack = true
         }
-        .accessibilityIdentifier("\(self.viewModel.accessibilityIdentifierPrefix).\(CheckboxAccessibilityIdentifier.checkboxGroup)")
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkboxGroup)
     }
 
     private func makeHStackView() -> some View {
@@ -156,7 +185,6 @@ public struct CheckboxGroupView: View {
     }
 
     private func checkBoxView(item: Binding<any CheckboxGroupItemProtocol>) -> some View {
-        let identifier = "\(self.viewModel.accessibilityIdentifierPrefix).\(item.id.wrappedValue)"
         return CheckboxView(
             text: item.title.wrappedValue,
             checkedImage: self.viewModel.checkedImage,
@@ -166,7 +194,7 @@ public struct CheckboxGroupView: View {
             isEnabled: item.isEnabled.wrappedValue,
             selectionState: item.selectionState
         )
-        .accessibilityIdentifier(identifier)
+        .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkboxGroupItem(item.id.wrappedValue))
     }
 }
 
