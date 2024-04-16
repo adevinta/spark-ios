@@ -26,6 +26,7 @@ final class TextFieldAddonsComponentUIView: ComponentUIView {
         self.textFieldAddons.textField.rightViewMode = .always
         super.init(viewModel: viewModel, componentView: self.textFieldAddons)
         self.textFieldAddons.textField.placeholder = "Placeholder"
+        self.textFieldAddons.textField.delegate = self
         self.setupSubscriptions()
     }
 
@@ -180,5 +181,12 @@ final class TextFieldAddonsComponentUIView: ComponentUIView {
         button.setTitle(side == .right ? "This is a very long text" : "Add", for: .normal)
         button.isAnimated = false
         return button
+    }
+}
+
+extension TextFieldAddonsComponentUIView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
