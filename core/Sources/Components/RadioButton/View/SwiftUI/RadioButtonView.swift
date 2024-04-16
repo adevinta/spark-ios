@@ -11,8 +11,8 @@ import SwiftUI
 private enum Constants {
     static let pressedLineWidth: CGFloat = 4
     static let lineWidth: CGFloat = 2
-    static let size: CGFloat = 20
-    static let filledSize: CGFloat = 10
+    static let size: CGFloat = 24
+    static let filledSize: CGFloat = 12
 }
 /// RadioButtonView is a single radio button control.
 /// Radio buttons are used for selecting a single value from a selection of values.

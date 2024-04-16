@@ -236,6 +236,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.setupView(content: content, orientation: orientation)
         self.setupSubscriptions()
         self.enableTouch()
+        self.addPanGestureToPreventCancelTracking()
         self.isUserInteractionEnabled = false
     }
 
