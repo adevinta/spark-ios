@@ -9,12 +9,8 @@
 import Combine
 import Foundation
 
-protocol Disableable {
-    func setDisabled(_ disabled: Bool) -> Self
-}
-
 /// A view model for the rating display.
-final class RatingDisplayViewModel: Disableable, ObservableObject {
+final class RatingDisplayViewModel: ObservableObject {
 
     /// The current theme of which colors and sizes are dependent.
     var theme: Theme {
@@ -112,8 +108,8 @@ final class RatingDisplayViewModel: Disableable, ObservableObject {
             state: self.ratingState)
     }
 
-    func setDisabled(_ disabled: Bool) -> Self {
-        self.updateState(isEnabled: !disabled)
+    func isEnabled(_ enabled: Bool) -> Self {
+        self.updateState(isEnabled: enabled)
         return self
     }
 

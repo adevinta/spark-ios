@@ -8,7 +8,9 @@
 
 import SwiftUI
 
+/// A SwiftUI native rating input component.
 public struct RatingInputView: View {
+    // MARK: - Private variables
     @ObservedObject private var viewModel: RatingDisplayViewModel
     @Environment(\.isEnabled) private var isEnabled: Bool
     private var rating: Binding<CGFloat>
@@ -38,12 +40,20 @@ public struct RatingInputView: View {
             count: .five)
     }
 
+    // MARK: - View
     public var body: some View {
-        RatingInputInternalView(viewModel: viewModel.setDisabled(!self.isEnabled), rating: self.rating)
+        RatingInputInternalView(viewModel: viewModel.isEnabled(self.isEnabled), rating: self.rating)
+    }
+
+    // MARK: - Internal functions
+    /// This function is just exposed for testing
+    internal func highlighted(_ isHiglighed: Bool) -> Self {
+        self.viewModel.updateState(isPressed: isHiglighed)
+        return self
     }
 }
 
-/// A SwiftUI native rating input component.
+// MARK: - Internal Rating Input
 struct RatingInputInternalView: View {
 
     // MARK: - Private variables
@@ -56,8 +66,7 @@ struct RatingInputInternalView: View {
     // MARK: - Initialization
     /// Create a rating display view with the following parameters
     /// - Parameters:
-    ///   - theme: The current theme
-    ///   - intent: The intent to define the colors
+    ///   - viewModel: The view model of the view.
     ///   - rating: A binding containg the rating value. This should be a value within the range 0...5
     ///   - configuration: A configuration of the star. A default value is defined.
     init(
@@ -103,13 +112,6 @@ struct RatingInputInternalView: View {
         .frame(width: width, height: size)
         .accessibilityIdentifier(RatingInputAccessibilityIdentifier.identifier)
         .accessibilityValue("\(self.displayRating)")
-    }
-
-    // MARK: - Internal functions
-    /// This function is just exposed for testing
-    internal func highlighted(_ isHiglighed: Bool) -> Self {
-        self.viewModel.updateState(isPressed: isHiglighed)
-        return self
     }
 
     // MARK: - Private functions
