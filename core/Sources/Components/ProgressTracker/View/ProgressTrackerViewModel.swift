@@ -28,7 +28,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
         }
     }
 
-    var isEnabled: Bool = true {
+    private (set) var isEnabled: Bool = true {
         didSet {
             guard self.isEnabled != oldValue else { return }
             self.updateEnabledIndices()
@@ -116,6 +116,12 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
 
     func labelOpacity(isDisabled: Bool) -> CGFloat {
         return isDisabled ? self.theme.dims.dim1 : 1.0
+    }
+
+    @discardableResult
+    func isEnabled(_ isEnabled: Bool) -> Self {
+        self.isEnabled = isEnabled
+        return self
     }
 
     func setIsEnabled(isEnabled: Bool, forIndex index: Int) {

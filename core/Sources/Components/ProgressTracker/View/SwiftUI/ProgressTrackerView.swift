@@ -19,6 +19,7 @@ public struct ProgressTrackerView: View {
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
     @Binding var currentPageIndex: Int
+    @Environment(\.isEnabled) private var isEnabled: Bool
 
     //MARK: - Initialization
     /// Initializer
@@ -99,9 +100,6 @@ public struct ProgressTrackerView: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier(AccessibilityIdentifier.identifier)
             .accessibilityValue("\(self.currentPageIndex)")
-            .isEnabledChanged { isEnabled in
-                self.viewModel.isEnabled = isEnabled
-            }
             .backgroundPreferenceValue(ProgressTrackerSizePreferences.self) { preferences in
                 if self.viewModel.interactionState != .none {
                     GeometryReader { geometry in
@@ -131,10 +129,11 @@ public struct ProgressTrackerView: View {
 
     @ViewBuilder
     private var progressTrackerView: some View {
-        if self.viewModel.orientation == .horizontal {
-            ProgressTrackerHorizontalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: self.viewModel)
+        let viewModel = self.viewModel.isEnabled(self.isEnabled)
+        if viewModel.orientation == .horizontal {
+            ProgressTrackerHorizontalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: viewModel)
         } else {
-            ProgressTrackerVerticalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: self.viewModel)
+            ProgressTrackerVerticalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: viewModel)
         }
     }
 
