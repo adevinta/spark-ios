@@ -17,4 +17,25 @@ final class SingleSliderViewModel<V>: SliderViewModel<V> where V: BinaryFloating
         let newValue = super.getClosestValue(fromValue: value)
         self.value = newValue
     }
+
+    private func getDefaultIncrementValue() -> V {
+        let tenPercent = 10 * (bounds.upperBound - bounds.lowerBound) / 100.0
+        return tenPercent
+    }
+
+    func incrementValue() {
+        if let step {
+            self.setValue(self.value.advanced(by: step))
+        } else {
+            self.setValue(self.value + self.getDefaultIncrementValue())
+        }
+    }
+
+    func decrementValue() {
+        if let step {
+            self.setValue(self.value.advanced(by: -step))
+        } else {
+            self.setValue(self.value - self.getDefaultIncrementValue())
+        }
+    }
 }
