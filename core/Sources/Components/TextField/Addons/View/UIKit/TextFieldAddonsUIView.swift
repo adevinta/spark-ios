@@ -34,7 +34,7 @@ public final class TextFieldAddonsUIView: UIControl {
     private var leadingConstraint: NSLayoutConstraint = NSLayoutConstraint()
     private var trailingConstraint: NSLayoutConstraint = NSLayoutConstraint()
 
-    private var separatorWidth: CGFloat {
+    private var borderWidth: CGFloat {
         return self.viewModel.borderWidth * self.scaleFactor
     }
 
@@ -91,8 +91,9 @@ public final class TextFieldAddonsUIView: UIControl {
         self.addSubview(self.stackView)
 
         self.stackView.translatesAutoresizingMaskIntoConstraints = false
-        self.leadingConstraint = self.stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
-        self.trailingConstraint = self.stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        // Adding constant padding to set borders outline instead of inline
+        self.leadingConstraint = self.stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.borderWidth)
+        self.trailingConstraint = self.stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.borderWidth)
         NSLayoutConstraint.activate([
             self.leadingConstraint,
             self.trailingConstraint,
@@ -106,11 +107,11 @@ public final class TextFieldAddonsUIView: UIControl {
     private func setupSeparators() {
         self.leftAddonContainer.addSubview(self.leftSeparatorView)
         self.leftSeparatorView.translatesAutoresizingMaskIntoConstraints = false
-        self.leftSeparatorWidthConstraint = self.leftSeparatorView.widthAnchor.constraint(equalToConstant: self.separatorWidth)
+        self.leftSeparatorWidthConstraint = self.leftSeparatorView.widthAnchor.constraint(equalToConstant: self.borderWidth)
 
         self.rightAddonContainer.addSubview(self.rightSeparatorView)
         self.rightSeparatorView.translatesAutoresizingMaskIntoConstraints = false
-        self.rightSeparatorWidthConstraint = self.rightSeparatorView.widthAnchor.constraint(equalToConstant: self.separatorWidth)
+        self.rightSeparatorWidthConstraint = self.rightSeparatorView.widthAnchor.constraint(equalToConstant: self.borderWidth)
 
         NSLayoutConstraint.activate([
             self.leftSeparatorWidthConstraint,
@@ -146,6 +147,8 @@ public final class TextFieldAddonsUIView: UIControl {
             guard let self else { return }
             let width = borderWidth * self.scaleFactor
             self.setBorderWidth(width)
+            self.setLeftSpacing(self.viewModel.leftSpacing, borderWidth: width)
+            self.setRightSpacing(self.viewModel.rightSpacing, borderWidth: width)
             self.leftSeparatorWidthConstraint.constant = width
             self.rightSeparatorWidthConstraint.constant = width
         }
@@ -157,13 +160,13 @@ public final class TextFieldAddonsUIView: UIControl {
 
         self.viewModel.$leftSpacing.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] leftSpacing in
             guard let self else { return }
-            self.leadingConstraint.constant = self.leftAddonContainer.isHidden ? leftSpacing : .zero
+            self.setLeftSpacing(leftSpacing, borderWidth: self.borderWidth)
             self.setNeedsLayout()
         }
 
         self.viewModel.$rightSpacing.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] rightSpacing in
             guard let self else { return }
-            self.trailingConstraint.constant = self.rightAddonContainer.isHidden ? -rightSpacing : .zero
+            self.setRightSpacing(rightSpacing, borderWidth: self.borderWidth)
             self.setNeedsLayout()
         }
 
@@ -180,6 +183,14 @@ public final class TextFieldAddonsUIView: UIControl {
         }
     }
 
+    private func setLeftSpacing(_ leftSpacing: CGFloat, borderWidth: CGFloat) {
+        self.leadingConstraint.constant = (self.leftAddonContainer.isHidden ? leftSpacing : .zero) + borderWidth
+    }
+
+    private func setRightSpacing(_ rightSpacing: CGFloat, borderWidth: CGFloat) {
+        self.trailingConstraint.constant = (self.rightAddonContainer.isHidden ? -rightSpacing : .zero) - borderWidth
+    }
+
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -190,10 +201,11 @@ public final class TextFieldAddonsUIView: UIControl {
         guard previousTraitCollection?.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory else { return }
 
         self._scaleFactor.update(traitCollection: self.traitCollection)
-        let width = self.viewModel.borderWidth * self.scaleFactor
-        self.setBorderWidth(width)
-        self.leftSeparatorWidthConstraint.constant = width
-        self.rightSeparatorWidthConstraint.constant = width
+        self.setBorderWidth(self.borderWidth)
+        self.setLeftSpacing(self.viewModel.leftSpacing, borderWidth: self.borderWidth)
+        self.setRightSpacing(self.viewModel.rightSpacing, borderWidth: self.borderWidth)
+        self.leftSeparatorWidthConstraint.constant = self.borderWidth
+        self.rightSeparatorWidthConstraint.constant = self.borderWidth
         self.invalidateIntrinsicContentSize()
     }
 
@@ -210,13 +222,13 @@ public final class TextFieldAddonsUIView: UIControl {
             leftAddon.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 leftAddon.trailingAnchor.constraint(lessThanOrEqualTo: self.leftSeparatorView.leadingAnchor, constant: withPadding ? -self.viewModel.leftSpacing : 0),
-                leftAddon.centerXAnchor.constraint(equalTo: self.leftAddonContainer.centerXAnchor, constant: -self.separatorWidth / 2.0),
+                leftAddon.centerXAnchor.constraint(equalTo: self.leftAddonContainer.centerXAnchor, constant: -self.borderWidth / 2.0),
                 leftAddon.centerYAnchor.constraint(equalTo: self.leftAddonContainer.centerYAnchor)
             ])
         }
         self.leftAddon = leftAddon
         self.leftAddonContainer.isHidden = self.leftAddon == nil
-        self.leadingConstraint.constant = self.leftAddonContainer.isHidden ? self.viewModel.leftSpacing : .zero
+        self.setLeftSpacing(self.viewModel.leftSpacing, borderWidth: self.borderWidth)
     }
 
     /// Set the textfield's right addon
@@ -232,12 +244,12 @@ public final class TextFieldAddonsUIView: UIControl {
             rightAddon.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 rightAddon.leadingAnchor.constraint(greaterThanOrEqualTo: self.rightSeparatorView.trailingAnchor, constant: withPadding ? self.viewModel.rightSpacing : 0),
-                rightAddon.centerXAnchor.constraint(equalTo: self.rightAddonContainer.centerXAnchor, constant: self.separatorWidth / 2.0),
+                rightAddon.centerXAnchor.constraint(equalTo: self.rightAddonContainer.centerXAnchor, constant: self.borderWidth / 2.0),
                 rightAddon.centerYAnchor.constraint(equalTo: self.rightAddonContainer.centerYAnchor)
             ])
         }
         self.rightAddon = rightAddon
         self.rightAddonContainer.isHidden = self.rightAddon == nil
-        self.trailingConstraint.constant = self.rightAddonContainer.isHidden ? -self.viewModel.rightSpacing : .zero
+        self.setRightSpacing(self.viewModel.rightSpacing, borderWidth: self.borderWidth)
     }
 }
