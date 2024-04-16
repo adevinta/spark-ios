@@ -101,7 +101,7 @@ final class TextFieldComponentUIViewController: UIViewController {
             texts: themes.map { $0.title }) { theme in
                 self.themePublisher.theme = theme
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentIntentActionSheet(_ intents: [TextFieldIntent]) {
@@ -110,7 +110,7 @@ final class TextFieldComponentUIViewController: UIViewController {
             texts: intents.map { $0.name }) { intent in
                 self.viewModel.intent = intent
             }
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentViewModeActionSheet(_ viewModes: [UITextField.ViewMode], completion: @escaping (UITextField.ViewMode) -> Void) {
@@ -118,7 +118,7 @@ final class TextFieldComponentUIViewController: UIViewController {
             values: viewModes,
             texts: viewModes.map { $0.description },
             completion: completion)
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 
     private func presentSideViewContentActionSheet(_ contents: [TextFieldSideViewContent], completion: @escaping (TextFieldSideViewContent) -> Void) {
@@ -126,7 +126,7 @@ final class TextFieldComponentUIViewController: UIViewController {
             values: contents,
             texts: contents.map { $0.name },
             completion: completion)
-        self.present(actionSheet, animated: true)
+        self.present(actionSheet, isAnimated: true)
     }
 }
 
