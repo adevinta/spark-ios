@@ -8,8 +8,43 @@
 
 import SwiftUI
 
-/// A SwiftUI native rating input component.
 public struct RatingInputView: View {
+    @ObservedObject private var viewModel: RatingDisplayViewModel
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    private var rating: Binding<CGFloat>
+    private var configuration: StarConfiguration
+    private var intent: RatingIntent
+
+    // MARK: - Initialization
+    /// Create a rating display view with the following parameters
+    /// - Parameters:
+    ///   - theme: The current theme
+    ///   - intent: The intent to define the colors
+    ///   - rating: A binding containg the rating value. This should be a value within the range 0...5
+    ///   - configuration: A configuration of the star. A default value is defined.
+    public init(
+        theme: Theme,
+        intent: RatingIntent,
+        rating: Binding<CGFloat>,
+        configuration: StarConfiguration = .default
+    ) {
+        self.rating = rating
+        self.intent = intent
+        self.configuration = configuration
+        self.viewModel = RatingDisplayViewModel(
+            theme: theme,
+            intent: intent,
+            size: .input,
+            count: .five)
+    }
+
+    public var body: some View {
+        RatingInputInternalView(viewModel: viewModel.setDisabled(!self.isEnabled), rating: self.rating)
+    }
+}
+
+/// A SwiftUI native rating input component.
+struct RatingInputInternalView: View {
 
     // MARK: - Private variables
     @ObservedObject private var viewModel: RatingDisplayViewModel
@@ -25,24 +60,19 @@ public struct RatingInputView: View {
     ///   - intent: The intent to define the colors
     ///   - rating: A binding containg the rating value. This should be a value within the range 0...5
     ///   - configuration: A configuration of the star. A default value is defined.
-    public init(
-        theme: Theme,
-        intent: RatingIntent,
+    init(
+        viewModel: RatingDisplayViewModel,
         rating: Binding<CGFloat>,
         configuration: StarConfiguration = .default
     ) {
         self._rating = rating
         self._displayRating = State(initialValue: rating.wrappedValue)
         self.configuration = configuration
-        self.viewModel = RatingDisplayViewModel(
-            theme: theme,
-            intent: intent,
-            size: .input,
-            count: .five)
+        self.viewModel = viewModel
     }
 
     // MARK: - View
-    public var body: some View {
+    var body: some View {
         let size = self.viewModel.ratingSize.height * self.scaleFactor
         let lineWidth = self.viewModel.ratingSize.borderWidth * self.scaleFactor
         let spacing = self.viewModel.ratingSize.spacing * self.scaleFactor
@@ -66,9 +96,6 @@ public struct RatingInputView: View {
                 )
                 .accessibilityIdentifier("\(RatingInputAccessibilityIdentifier.identifier)-\(index)")
             }
-        }
-        .isEnabledChanged { isEnabled in
-            self.viewModel.updateState(isEnabled: isEnabled)
         }
         .compositingGroup()
         .opacity(colors.opacity)
