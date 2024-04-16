@@ -107,6 +107,7 @@ public struct CheckboxView: View {
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
         }
+        .fixedSize(horizontal: false, vertical: true)
         .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkbox)
         .accessibilityValue(setAccessibilityValue(selectionState: self.viewModel.selectionState))
         .accessibilityRemoveTraits(.isSelected)
