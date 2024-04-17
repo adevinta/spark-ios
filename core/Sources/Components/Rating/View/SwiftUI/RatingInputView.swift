@@ -42,7 +42,7 @@ public struct RatingInputView: View {
 
     // MARK: - View
     public var body: some View {
-        RatingInputInternalView(viewModel: viewModel.isEnabled(self.isEnabled), rating: self.rating)
+        RatingInputInternalView(viewModel: viewModel.updateState(isEnabled: self.isEnabled), rating: self.rating, configuration: self.configuration)
     }
 
     // MARK: - Internal functions
@@ -68,11 +68,11 @@ struct RatingInputInternalView: View {
     /// - Parameters:
     ///   - viewModel: The view model of the view.
     ///   - rating: A binding containg the rating value. This should be a value within the range 0...5
-    ///   - configuration: A configuration of the star. A default value is defined.
+    ///   - configuration: A configuration of the star
     init(
         viewModel: RatingDisplayViewModel,
         rating: Binding<CGFloat>,
-        configuration: StarConfiguration = .default
+        configuration: StarConfiguration
     ) {
         self._rating = rating
         self._displayRating = State(initialValue: rating.wrappedValue)
