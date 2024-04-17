@@ -84,40 +84,24 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
         )
     }
 
-    private func getContentPadding() -> EdgeInsets {
+    private func getTextFieldPadding() -> EdgeInsets {
         return EdgeInsets(
             top: .zero,
-            leading: LeftAddon.self is EmptyView.Type ? self.viewModel.leftSpacing : .zero,
+            leading: self.viewModel.leftSpacing,
             bottom: .zero, 
-            trailing: RightAddon.self is EmptyView.Type ? self.viewModel.rightSpacing : .zero
+            trailing: self.viewModel.rightSpacing
         )
     }
 
     public var body: some View {
         ZStack {
             self.viewModel.backgroundColor.color
-            let leftAddon = leftAddon()
-            let rightAddon = rightAddon()
-            HStack(spacing: self.viewModel.contentSpacing) {
-                if LeftAddon.self is EmptyView.Type == false {
-                    HStack(spacing: 0) {
-                        leftAddon
-                            .padding(getLeftAddonPadding(withPadding: leftAddon.withPadding))
-                        separator()
-                    }
-                    .layoutPriority(leftAddon.layoutPriority)
-                }
+            HStack(spacing: 0) {
+                leftAddonIfNeeded()
                 textField()
-                if RightAddon.self is EmptyView.Type == false {
-                    HStack(spacing: 0) {
-                        separator()
-                        rightAddon
-                            .padding(getRightAddonPadding(withPadding: rightAddon.withPadding))
-                    }
-                    .layoutPriority(leftAddon.layoutPriority)
-                }
+                    .padding(getTextFieldPadding())
+                rightAddonIfNeeded()
             }
-            .padding(getContentPadding())
         }
         .frame(maxHeight: maxHeight)
         .allowsHitTesting(self.viewModel.textFieldViewModel.isUserInteractionEnabled)
@@ -128,9 +112,34 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
     }
 
     @ViewBuilder
+    private func leftAddonIfNeeded() -> some View {
+        // If the content of leftAddon is EmptyView, it will show nothing
+        let leftAddon = self.leftAddon()
+        leftAddon
+            .padding(getLeftAddonPadding(withPadding: leftAddon.withPadding))
+            .overlay(alignment: .trailing) {
+                separator()
+            }
+            .layoutPriority(leftAddon.layoutPriority)
+    }
+
+    @ViewBuilder
+    private func rightAddonIfNeeded() -> some View {
+        // If the content of rightAddon is EmptyView, it will show nothing
+        let rightAddon = self.rightAddon()
+        rightAddon
+            .padding(getRightAddonPadding(withPadding: rightAddon.withPadding))
+            .overlay(alignment: .leading) {
+                separator()
+            }
+            .layoutPriority(rightAddon.layoutPriority)
+    }
+
+    @ViewBuilder
     private func separator() -> some View {
         self.viewModel.textFieldViewModel.borderColor.color
-            .frame(width: self.viewModel.borderWidth * self.scaleFactor)
+            .frame(width: self.viewModel.borderWidth * self.scaleFactor,
+                   height: maxHeight)
     }
 
     @ViewBuilder
