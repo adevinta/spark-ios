@@ -16,7 +16,6 @@ struct FormfieldConfigurationSnapshotTests {
 
     let scenario: FormfieldScenarioSnapshotTests
     let feedbackState: FormFieldFeedbackState
-    let component: FormfieldComponentType
     let label: String?
     let helperMessage: String?
     let isRequired: Bool
@@ -31,15 +30,7 @@ struct FormfieldConfigurationSnapshotTests {
             "\(self.scenario.rawValue)",
             "\(self.feedbackState)",
             "IsRequired:\(self.isRequired)",
-            "IsEnabled:\(self.isEnabled)",
-            "\(self.component.rawValue)"
+            "IsEnabled:\(self.isEnabled)"
         ].joined(separator: "-")
     }
-}
-
-enum FormfieldComponentType: String, CaseIterable {
-    case singleCheckbox
-    case checkboxGroup
-    case singleRadioButton
-    case radioButtonGroup
 }

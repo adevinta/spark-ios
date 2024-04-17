@@ -26,18 +26,8 @@ final class FormFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
             for configuration in configurations {
 
-                let component: UIControl!
-
-                switch configuration.component {
-                case .singleCheckbox:
-                    component = Self.makeSingleCheckbox()
-                case .checkboxGroup:
-                    component = Self.makeVerticalCheckbox()
-                case .singleRadioButton:
-                    component = Self.makeSingleRadioButton()
-                case .radioButtonGroup:
-                    component = Self.makeVerticalRadioButton()
-                }
+                let component = UISwitch()
+                component.setOn(true, animated: false)
 
                 let view = FormFieldUIView(
                     theme: self.theme,
