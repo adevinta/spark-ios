@@ -119,7 +119,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     }
 
     @discardableResult
-    func isEnabled(_ isEnabled: Bool) -> Self {
+    func setIsEnabled(_ isEnabled: Bool) -> Self {
         self.isEnabled = isEnabled
         return self
     }

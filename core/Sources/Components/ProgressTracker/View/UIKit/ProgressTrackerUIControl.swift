@@ -65,7 +65,7 @@ public final class ProgressTrackerUIControl: UIControl {
             return self.viewModel.isEnabled
         }
         set {
-            self.viewModel.isEnabled(newValue)
+            self.viewModel.setIsEnabled(newValue)
             if newValue {
                 self.accessibilityTraits.remove(.notEnabled)
             } else {

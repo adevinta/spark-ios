@@ -129,7 +129,7 @@ public struct ProgressTrackerView: View {
 
     @ViewBuilder
     private var progressTrackerView: some View {
-        let viewModel = self.viewModel.isEnabled(self.isEnabled)
+        let viewModel = self.viewModel.setIsEnabled(self.isEnabled)
         if viewModel.orientation == .horizontal {
             ProgressTrackerHorizontalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: viewModel)
         } else {
