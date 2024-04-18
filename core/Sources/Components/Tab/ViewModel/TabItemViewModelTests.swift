@@ -117,7 +117,7 @@ final class TabItemViewModelTests: XCTestCase {
         .store(in: &self.cancellables)
 
         // When
-        sut.isSelected = true
+        sut.updateState(isSelected: true)
 
         // Then
         wait(for: [expectation], timeout: 0.1)
@@ -133,7 +133,7 @@ final class TabItemViewModelTests: XCTestCase {
         .store(in: &self.cancellables)
 
         // When
-        sut.isSelected = false
+        sut.updateState(isSelected: false)
 
         // Then
         wait(for: [expectation], timeout: 0.1)
@@ -172,7 +172,7 @@ final class TabItemViewModelTests: XCTestCase {
         .store(in: &self.cancellables)
 
         // When
-        sut.isEnabled = false
+        sut.updateState(isEnabled: false)
 
         // Then
         wait(for: [expectation], timeout: 0.1)
@@ -274,6 +274,26 @@ final class TabItemViewModelTests: XCTestCase {
 
         // Then
         wait(for: [expectation], timeout: 0.1)
+    }
+
+    func test_attributes_changed_when_pressed() {
+        // Given
+        let sut = self.sut(size: .md, title: "Hello")
+
+        let expectation = expectation(description: "wait for attributes")
+        expectation.expectedFulfillmentCount = 2
+
+        sut.$tabStateAttributes.sink { attributes in
+            expectation.fulfill()
+        }
+        .store(in: &self.cancellables)
+
+        // When
+        sut.updateState(isPressed: true)
+
+        // Then
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertEqual(self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments?.tabSize, .md)
     }
 }
 

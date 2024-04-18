@@ -47,17 +47,16 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
     }
 
 
-    var isEnabled: Bool {
+    private (set) var isEnabled: Bool {
         get {
             self.tabState.isEnabled
         }
         set {
-            guard self.tabState.isEnabled != newValue else { return }
             self.tabState = self.tabState.update(\.isEnabled, value: newValue)
         }
     }
 
-    var isSelected: Bool {
+    private (set) var isSelected: Bool {
         get {
             self.tabState.isSelected
         }
@@ -116,6 +115,27 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
             tabSize: tabSize,
             hasTitle: content.hasTitle
         )
+    }
+
+    @discardableResult
+    func updateState(isEnabled: Bool) -> Self {
+        guard self.isEnabled != isEnabled else { return self }
+        self.isEnabled = isEnabled
+        return self
+    }
+
+    @discardableResult
+    func updateState(isSelected: Bool) -> Self {
+        guard self.isSelected != isSelected else { return self }
+        self.isSelected = isSelected
+        return self
+    }
+
+    @discardableResult
+    func updateState(isPressed: Bool) -> Self {
+        guard self.isPressed != isPressed else { return self }
+        self.isPressed = isPressed
+        return self
     }
 
     // MARK: - Private functions
