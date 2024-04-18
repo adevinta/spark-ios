@@ -11,18 +11,15 @@ import SwiftUI
 /// A TextField that can be surrounded by left and/or right views
 public struct TextFieldView<LeftView: View, RightView: View>: View {
 
-    @ScaledMetric private var height: CGFloat = 44
-    @ScaledMetric private var scaleFactor: CGFloat = 1.0
-
-    @FocusState private var isFocused: Bool
-    @ObservedObject var viewModel: TextFieldViewModel
-
     private let titleKey: LocalizedStringKey
-    @Binding private var text: String
-    private var type: TextFieldViewType
-
+    private let text: Binding<String>
+    private let type: TextFieldViewType
+    private let viewModel: TextFieldViewModel
     private let leftView: () -> LeftView
     private let rightView: () -> RightView
+
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    @FocusState private var isFocused: Bool
 
     init(titleKey: LocalizedStringKey,
          text: Binding<String>,
@@ -31,7 +28,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
          leftView: @escaping (() -> LeftView),
          rightView: @escaping (() -> RightView)) {
         self.titleKey = titleKey
-        self._text = text
+        self.text = text
         self.viewModel = viewModel
         self.type = type
         self.leftView = leftView
@@ -97,45 +94,16 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
     }
 
     public var body: some View {
-        ZStack {
-            self.viewModel.backgroundColor.color
-            contentViewBuilder()
-                .padding(EdgeInsets(top: .zero, leading: self.viewModel.leftSpacing, bottom: .zero, trailing: self.viewModel.rightSpacing))
-        }
-        .tint(self.viewModel.textColor.color)
-        .isEnabledChanged { isEnabled in
-            self.viewModel.isEnabled = isEnabled
-        }
-        .allowsHitTesting(self.viewModel.isUserInteractionEnabled)
+        TextFieldViewInternal(
+            titleKey: self.titleKey,
+            text: self.text,
+            viewModel: self.viewModel
+                .enabled(self.isEnabled)
+                .focused(self.isFocused),
+            type: self.type,
+            leftView: self.leftView,
+            rightView: self.rightView)
         .focused($isFocused)
-        .onChange(of: isFocused) { newValue in
-            self.viewModel.isFocused = newValue
-        }
-        .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.borderColor)
-        .frame(height: self.height)
-        .opacity(self.viewModel.dim)
     }
 
-    // MARK: - Content
-    @ViewBuilder
-    private func contentViewBuilder() -> some View {
-        HStack(spacing: self.viewModel.contentSpacing) {
-            leftView()
-            Group {
-                switch type {
-                case .secure(let onCommit):
-                    SecureField(titleKey, text: $text, onCommit: onCommit)
-                        .font(self.viewModel.font.font)
-                case .standard(let onEditingChanged, let onCommit):
-                    TextField(titleKey, text: $text, onEditingChanged: onEditingChanged, onCommit: onCommit)
-                        .font(self.viewModel.font.font)
-                }
-            }
-            .textFieldStyle(.plain)
-            .foregroundStyle(self.viewModel.textColor.color)
-            rightView()
-        }
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier(TextFieldAccessibilityIdentifier.view)
-    }
 }

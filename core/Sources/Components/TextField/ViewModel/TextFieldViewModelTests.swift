@@ -619,6 +619,64 @@ final class TextFieldViewModelTests: XCTestCase {
         XCTAssertFalse(self.publishers.font.sinkCalled, "$font should not have been called")
     }
 
+    // MARK: - Enabled()
+    func test_enabled_false() {
+        // GIVEN - Inits from setUp()
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        let viewModel = self.viewModel.enabled(false)
+
+        // THEN
+        XCTAssertIdentical(viewModel, self.viewModel, "Wrong returned viewModel")
+        XCTAssertFalse(viewModel.isEnabled, "isEnabled should be false")
+    }
+
+
+    func test_enabled_true() {
+        // GIVEN - Inits from setUp()
+        self.viewModel.isEnabled = false
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        let viewModel = self.viewModel.enabled(true)
+
+        // THEN
+        XCTAssertIdentical(viewModel, self.viewModel, "Wrong returned viewModel")
+        XCTAssertTrue(viewModel.isEnabled, "isEnabled should be true")
+    }
+
+    // MARK: - Focused()
+    func test_focused_true() {
+        // GIVEN - Inits from setUp()
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        let viewModel = self.viewModel.focused(true)
+
+        // THEN
+        XCTAssertIdentical(viewModel, self.viewModel, "Wrong returned viewModel")
+        XCTAssertTrue(viewModel.isFocused, "isFocused should be true")
+    }
+
+
+    func test_focused_false() {
+        // GIVEN - Inits from setUp()
+        self.viewModel.isFocused = true
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        let viewModel = self.viewModel.focused(false)
+
+        // THEN
+        XCTAssertIdentical(viewModel, self.viewModel, "Wrong returned viewModel")
+        XCTAssertFalse(viewModel.isFocused, "isFocused should be false")
+    }
+
     // MARK: - Utils
     func setupPublishers() {
         self.publishers = .init(

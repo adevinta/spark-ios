@@ -167,4 +167,14 @@ class TextFieldViewModel: ObservableObject, Updateable {
     private func setFont() {
         self.font = self.theme.typography.body1
     }
+
+    func enabled(_ isEnabled: Bool) -> Self {
+        self.isEnabled = isEnabled
+        return self
+    }
+
+    func focused(_ isFocused: Bool) -> Self {
+        self.isFocused = isFocused
+        return self
+    }
 }
