@@ -125,7 +125,7 @@ final class TabViewModelTests: XCTestCase {
             expect.fulfill()
         }
 
-        sut.isEnabled = false
+        sut.setIsEnabled(false)
 
         // Then
         wait(for: [expect], timeout: 0.1)
@@ -152,10 +152,9 @@ final class TabViewModelTests: XCTestCase {
             useCase: self.useCase
         )
 
-        sut.isEnabled = true
+        sut.setIsEnabled(true)
 
         XCTAssertEqual(sut.disabledTabs, [false])
-
     }
 
     func test_disable() {
@@ -178,9 +177,9 @@ final class TabViewModelTests: XCTestCase {
             useCase: self.useCase
         )
 
-        sut.isEnabled = false
+        sut.setIsEnabled(false)
 
-        XCTAssertEqual(sut.disabledTabs, [true])
+        XCTAssertFalse(sut.isTabEnabled(index: 0))
     }
 
     func test_disable_single_tab() {
@@ -206,6 +205,7 @@ final class TabViewModelTests: XCTestCase {
         sut.disableTab(true, index: 0)
 
         XCTAssertEqual(sut.disabledTabs, [true], "Expect tab to be disabled")
-        XCTAssertEqual(sut.isEnabled, false, "Expect tab control not to be enabled")
+        XCTAssertTrue(sut.isEnabled, "Expect tab control be enabled")
+        XCTAssertFalse(sut.isTabEnabled(index: 0), "Expected single tab not to be enabled")
     }
 }
