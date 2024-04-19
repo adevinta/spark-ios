@@ -66,8 +66,7 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.isSelected
         }
         set {
-            guard newValue != self.viewModel.isSelected else { return }
-            self.viewModel.isSelected = newValue
+            self.viewModel.updateState(isSelected: newValue)
         }
     }
 
@@ -242,7 +241,7 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.isPressed
         }
         set {
-            self.viewModel.isPressed = newValue
+            self.viewModel.updateState(isPressed: newValue)
         }
     }
 
@@ -255,8 +254,7 @@ public final class TabItemUIView: UIControl {
             return self.viewModel.isEnabled
         }
         set {
-            guard newValue != self.viewModel.isEnabled else { return }
-            self.viewModel.isEnabled = newValue
+            self.viewModel.updateState(isEnabled: newValue)
         }
     }
 
