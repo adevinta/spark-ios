@@ -67,7 +67,7 @@ struct ProgressTrackerVerticalView: View {
     private func verticalLayout() -> some View {
         VStack(alignment: .leading, spacing: self.verticalStackSpacing) {
             ForEach((0..<self.viewModel.content.numberOfPages), id: \.self) { index in
-                    self.pageContent(at: index)
+                self.pageContent(at: index)
                     .frame(maxHeight: .infinity)
                     .disabled(!self.viewModel.isEnabled(at: index))
                     .accessibilityAttributes(viewModel: self.viewModel, index:  index)
@@ -83,6 +83,7 @@ struct ProgressTrackerVerticalView: View {
 
             if let label = self.viewModel.content.getAttributedLabel(atIndex: index)  {
                 self.label(label, at: index)
+                    .fixedSize(horizontal: false, vertical: true)
                     .alignmentGuide(.xAlignment) { ($0.height - ($0[.lastTextBaseline] - $0[.firstTextBaseline])) / 2 }
             }
         }

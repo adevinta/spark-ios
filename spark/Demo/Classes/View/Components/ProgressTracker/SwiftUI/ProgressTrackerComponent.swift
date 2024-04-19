@@ -196,7 +196,7 @@ struct ProgressTrackerComponent: View {
         }
 
         if self.completedPageIndicator == .selected {
-            let image: Image? = Image(uiImage: DemoIconography.shared.checkmark.uiImage)
+            let image: Image? = DemoIconography.shared.checkmark.image
             view = view.completedIndicatorImage(image)
         } else {
             view = view.completedIndicatorImage(nil)
@@ -236,7 +236,8 @@ struct ProgressTrackerComponent: View {
         if self.label.isEmpty {
             return "\(index)"
         } else {
-            return "\(self.label) \(index)"
+            let label = index % 2 == 0 ? String(self.label.prefix(4)) : self.label
+            return "\(label.trimmingCharacters(in: .whitespaces)) \(index)"
         }
     }
 }

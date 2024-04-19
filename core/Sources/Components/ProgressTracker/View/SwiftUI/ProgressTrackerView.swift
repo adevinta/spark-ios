@@ -100,7 +100,7 @@ public struct ProgressTrackerView: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier(AccessibilityIdentifier.identifier)
             .accessibilityValue("\(self.currentPageIndex)")
-            .backgroundPreferenceValue(ProgressTrackerSizePreferences.self) { preferences in
+            .overlayPreferenceValue(ProgressTrackerSizePreferences.self) { preferences in
                 if self.viewModel.interactionState != .none {
                     GeometryReader { geometry in
                         Color.black.opacity(0.000001)
