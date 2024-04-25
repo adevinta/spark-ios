@@ -56,7 +56,6 @@ public struct IconButtonView: View {
             action: self.action
         ) {
             ButtonImageView(viewModel: self.viewModel)
-                .animation(nil, value: UUID())
         }
     }
 
