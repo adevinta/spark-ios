@@ -120,10 +120,7 @@ public final class ButtonUIView: ButtonMainUIView {
     private let viewModel: ButtonViewModel
 
     private var contentStackViewLeadingConstraint: NSLayoutConstraint?
-    private var contentStackViewTopConstraint: NSLayoutConstraint?
-    private var contentStackViewBottomConstraint: NSLayoutConstraint?
 
-    @ScaledUIMetric private var verticalSpacing: CGFloat = 0
     @ScaledUIMetric private var horizontalSpacing: CGFloat = 0
     @ScaledUIMetric private var horizontalPadding: CGFloat = 0
 
@@ -199,15 +196,15 @@ public final class ButtonUIView: ButtonMainUIView {
         self.contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
         self.contentStackViewLeadingConstraint = self.contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor)
-        self.contentStackViewTopConstraint = self.contentStackView.topAnchor.constraint(equalTo: self.topAnchor)
+        let contentStackViewTopConstraint = self.contentStackView.topAnchor.constraint(equalTo: self.topAnchor)
         let contentStackViewCenterXAnchor = self.contentStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
-        self.contentStackViewBottomConstraint = self.contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        let contentStackViewBottomConstraint = self.contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
 
         NSLayoutConstraint.activate([
             self.contentStackViewLeadingConstraint,
-            self.contentStackViewTopConstraint,
+            contentStackViewTopConstraint,
             contentStackViewCenterXAnchor,
-            self.contentStackViewBottomConstraint,
+            contentStackViewBottomConstraint,
         ].compactMap({ $0 }))
     }
 
@@ -283,12 +280,10 @@ public final class ButtonUIView: ButtonMainUIView {
 
     private func updateSpacings() {
         // Reload spacing only if value changed
-        let verticalSpacing = self._verticalSpacing.wrappedValue
         let horizontalSpacing = self._horizontalSpacing.wrappedValue
         let horizontalPadding = self._horizontalPadding.wrappedValue
 
-        if verticalSpacing != self.contentStackViewTopConstraint?.constant ||
-            horizontalSpacing != self.contentStackViewLeadingConstraint?.constant ||
+        if horizontalSpacing != self.contentStackViewLeadingConstraint?.constant ||
             horizontalPadding != self.contentStackView.spacing {
 
             let isAnimated = self.isAnimated && !self.firstContentStackViewAnimation
@@ -300,8 +295,6 @@ public final class ButtonUIView: ButtonMainUIView {
                 self.firstContentStackViewAnimation = false
 
                 self.contentStackViewLeadingConstraint?.constant = horizontalSpacing
-                self.contentStackViewTopConstraint?.constant = verticalSpacing
-                self.contentStackViewBottomConstraint?.constant = -verticalSpacing
                 self.contentStackView.updateConstraintsIfNeeded()
 
                 self.contentStackView.spacing = horizontalPadding
@@ -312,7 +305,6 @@ public final class ButtonUIView: ButtonMainUIView {
     // MARK: - Data Did Update
 
     private func spacingsDidUpdate(_ spacings: ButtonSpacings) {
-        self.verticalSpacing = spacings.verticalSpacing
         self.horizontalSpacing = spacings.horizontalSpacing
         self.horizontalPadding = spacings.horizontalPadding
 
@@ -383,7 +375,6 @@ public final class ButtonUIView: ButtonMainUIView {
         super.traitCollectionDidChange(previousTraitCollection)
 
         // Update spacings
-        self._verticalSpacing.update(traitCollection: self.traitCollection)
         self._horizontalSpacing.update(traitCollection: self.traitCollection)
         self._horizontalPadding.update(traitCollection: self.traitCollection)
         self.updateSpacings()

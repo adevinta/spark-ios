@@ -15,7 +15,6 @@ public struct ButtonView: View {
 
     @ObservedObject private var viewModel: ButtonSUIViewModel
 
-    @ScaledMetric private var verticalSpacing: CGFloat
     @ScaledMetric private var horizontalSpacing: CGFloat
     @ScaledMetric private var horizontalPadding: CGFloat
 
@@ -53,7 +52,6 @@ public struct ButtonView: View {
 
         // **
         // Scaled Metric
-        self._verticalSpacing = .init(wrappedValue: viewModel.spacings?.verticalSpacing ?? .zero)
         self._horizontalSpacing = .init(wrappedValue: viewModel.spacings?.horizontalSpacing ?? .zero)
         self._horizontalPadding = .init(wrappedValue: viewModel.spacings?.horizontalPadding ?? .zero)
         // **
@@ -67,7 +65,6 @@ public struct ButtonView: View {
         ButtonContainerView(
             viewModel: self.viewModel,
             padding: .init(
-                vertical: self.verticalSpacing,
                 horizontal: self.horizontalSpacing
             ),
             action: self.action
