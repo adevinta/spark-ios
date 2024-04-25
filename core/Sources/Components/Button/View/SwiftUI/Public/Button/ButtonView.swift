@@ -96,8 +96,6 @@ public struct ButtonView: View {
             maxWidth: self.viewModel.maxWidth,
             alignment: self.viewModel.frameAlignment
         )
-        .contentShape(Rectangle())
-        .animation(nil, value: UUID())
     }
 
     @ViewBuilder

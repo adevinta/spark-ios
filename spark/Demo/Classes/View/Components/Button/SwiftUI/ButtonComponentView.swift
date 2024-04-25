@@ -116,7 +116,7 @@ struct ButtonComponentView: View {
                 )
 
                 CheckboxView(
-                    text: "Is animated",
+                    text: "Is selected",
                     checkedImage: DemoIconography.shared.checkmark.image,
                     theme: self.theme,
                     isEnabled: true,
