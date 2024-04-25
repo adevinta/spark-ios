@@ -39,8 +39,7 @@ struct TextFieldViewInternal<LeftView: View, RightView: View>: View {
     var body: some View {
         ZStack {
             self.viewModel.backgroundColor.color
-            contentViewBuilder()
-                .padding(EdgeInsets(top: .zero, leading: self.viewModel.leftSpacing, bottom: .zero, trailing: self.viewModel.rightSpacing))
+            contentView()
         }
         .tint(self.viewModel.textColor.color)
         .allowsHitTesting(self.viewModel.isUserInteractionEnabled)
@@ -51,24 +50,30 @@ struct TextFieldViewInternal<LeftView: View, RightView: View>: View {
 
     // MARK: - Content
     @ViewBuilder
-    private func contentViewBuilder() -> some View {
+    private func contentView() -> some View {
         HStack(spacing: self.viewModel.contentSpacing) {
             leftView()
-            Group {
-                switch type {
-                case .secure(let onCommit):
-                    SecureField(titleKey, text: $text, onCommit: onCommit)
-                        .font(self.viewModel.font.font)
-                case .standard(let onEditingChanged, let onCommit):
-                    TextField(titleKey, text: $text, onEditingChanged: onEditingChanged, onCommit: onCommit)
-                        .font(self.viewModel.font.font)
-                }
-            }
-            .textFieldStyle(.plain)
-            .foregroundStyle(self.viewModel.textColor.color)
+            textField()
             rightView()
         }
-        .accessibilityElement(children: .contain)
+        .padding(EdgeInsets(top: .zero, leading: self.viewModel.leftSpacing, bottom: .zero, trailing: self.viewModel.rightSpacing))
+    }
+
+    // MARK: - TextField
+    @ViewBuilder
+    private func textField() -> some View {
+        Group {
+            switch type {
+            case .secure(let onCommit):
+                SecureField(titleKey, text: $text, onCommit: onCommit)
+                    .font(self.viewModel.font.font)
+            case .standard(let onEditingChanged, let onCommit):
+                TextField(titleKey, text: $text, onEditingChanged: onEditingChanged, onCommit: onCommit)
+                    .font(self.viewModel.font.font)
+            }
+        }
+        .textFieldStyle(.plain)
+        .foregroundStyle(self.viewModel.textColor.color)
         .accessibilityIdentifier(TextFieldAccessibilityIdentifier.view)
     }
 }
