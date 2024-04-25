@@ -12,7 +12,6 @@ struct ButtonSpacings: Equatable {
 
     // MARK: - Properties
 
-    let verticalSpacing: CGFloat
     let horizontalSpacing: CGFloat
     let horizontalPadding: CGFloat
 }

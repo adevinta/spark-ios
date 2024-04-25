@@ -20,7 +20,6 @@ struct ButtonGetSpacingsUseCase: ButtonGetSpacingsUseCaseable {
 
     func execute(spacing: LayoutSpacing) -> ButtonSpacings {
         return .init(
-            verticalSpacing: spacing.medium,
             horizontalSpacing: spacing.large,
             horizontalPadding: spacing.medium
         )
