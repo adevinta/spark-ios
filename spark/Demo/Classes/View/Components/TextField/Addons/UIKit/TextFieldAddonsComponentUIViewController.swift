@@ -1,8 +1,8 @@
 //
-//  TextFieldComponentUIViewController.swift
+//  TextFieldAddonsComponentUIViewController.swift
 //  SparkDemo
 //
-//  Created by louis.borlee on 24/01/2024.
+//  Created by louis.borlee on 14/02/2024.
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
@@ -11,20 +11,20 @@ import Combine
 import SwiftUI
 import SparkCore
 
-final class TextFieldComponentUIViewController: UIViewController {
+final class TextFieldAddonsComponentUIViewController: UIViewController {
 
     // MARK: - Properties
-    let componentView: TextFieldComponentUIView
-    let viewModel: TextFieldComponentUIViewModel
+    let componentView: TextFieldAddonsComponentUIView
+    let viewModel: TextFieldAddonsComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Published Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     // MARK: - Initializer
-    init(viewModel: TextFieldComponentUIViewModel) {
+    init(viewModel: TextFieldAddonsComponentUIViewModel) {
         self.viewModel = viewModel
-        self.componentView = TextFieldComponentUIView(viewModel: viewModel)
+        self.componentView = TextFieldAddonsComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
         self.componentView.viewController = self
     }
@@ -42,7 +42,7 @@ final class TextFieldComponentUIViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
-        self.navigationItem.title = "TextField "
+        self.navigationItem.title = "TextFieldAddons"
         self.setupSubscriptions()
     }
 
@@ -64,24 +64,6 @@ final class TextFieldComponentUIViewController: UIViewController {
             self.presentIntentActionSheet(intents)
         }
 
-        self.viewModel.showClearButtonModeSheet.subscribe(in: &self.cancellables) { viewModes in
-            self.presentViewModeActionSheet(viewModes) { viewMode in
-                self.viewModel.clearButtonMode = viewMode
-            }
-        }
-
-        self.viewModel.showLeftViewModeSheet.subscribe(in: &self.cancellables) { viewModes in
-            self.presentViewModeActionSheet(viewModes) { viewMode in
-                self.viewModel.leftViewMode = viewMode
-            }
-        }
-
-        self.viewModel.showRightViewModeSheet.subscribe(in: &self.cancellables) { viewModes in
-            self.presentViewModeActionSheet(viewModes) { viewMode in
-                self.viewModel.rightViewMode = viewMode
-            }
-        }
-
         self.viewModel.showLeftViewContentSheet.subscribe(in: &self.cancellables) { contents in
             self.presentSideViewContentActionSheet(contents) { content in
                 self.viewModel.leftViewContent = content
@@ -91,6 +73,18 @@ final class TextFieldComponentUIViewController: UIViewController {
         self.viewModel.showRightViewContentSheet.subscribe(in: &self.cancellables) { contents in
             self.presentSideViewContentActionSheet(contents) { content in
                 self.viewModel.rightViewContent = content
+            }
+        }
+
+        self.viewModel.showLeftAddonContentSheet.subscribe(in: &self.cancellables) { contents in
+            self.presentAddonContentActionSheet(contents) { content in
+                self.viewModel.leftAddonContent = content
+            }
+        }
+
+        self.viewModel.showRightAddonContentSheet.subscribe(in: &self.cancellables) { contents in
+            self.presentAddonContentActionSheet(contents) { content in
+                self.viewModel.rightAddonContent = content
             }
         }
     }
@@ -113,14 +107,6 @@ final class TextFieldComponentUIViewController: UIViewController {
         self.present(actionSheet, isAnimated: true)
     }
 
-    private func presentViewModeActionSheet(_ viewModes: [UITextField.ViewMode], completion: @escaping (UITextField.ViewMode) -> Void) {
-        let actionSheet = SparkActionSheet<UITextField.ViewMode>.init(
-            values: viewModes,
-            texts: viewModes.map { $0.description },
-            completion: completion)
-        self.present(actionSheet, isAnimated: true)
-    }
-
     private func presentSideViewContentActionSheet(_ contents: [TextFieldSideViewContent], completion: @escaping (TextFieldSideViewContent) -> Void) {
         let actionSheet = SparkActionSheet<TextFieldSideViewContent>.init(
             values: contents,
@@ -128,25 +114,20 @@ final class TextFieldComponentUIViewController: UIViewController {
             completion: completion)
         self.present(actionSheet, isAnimated: true)
     }
-}
 
-extension TextFieldComponentUIViewController {
-    static func build() -> TextFieldComponentUIViewController {
-        let viewModel = TextFieldComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = TextFieldComponentUIViewController(viewModel: viewModel)
-        return viewController
+    private func presentAddonContentActionSheet(_ contents: [TextFieldAddonContent], completion: @escaping (TextFieldAddonContent) -> Void) {
+        let actionSheet = SparkActionSheet<TextFieldAddonContent>.init(
+            values: contents,
+            texts: contents.map { $0.name },
+            completion: completion)
+        self.present(actionSheet, isAnimated: true)
     }
 }
 
-extension UITextField.ViewMode: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .always: return "always"
-        case .never: return "never"
-        case .unlessEditing: return "unlessEditing"
-        case .whileEditing: return "whileEditing"
-        @unknown default:
-            fatalError()
-        }
+extension TextFieldAddonsComponentUIViewController {
+    static func build() -> TextFieldAddonsComponentUIViewController {
+        let viewModel = TextFieldAddonsComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
+        let viewController = TextFieldAddonsComponentUIViewController(viewModel: viewModel)
+        return viewController
     }
 }
