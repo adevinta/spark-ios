@@ -103,6 +103,7 @@ public final class RatingInputUIView: UIControl {
         super.init(frame: .zero)
         self.setupView()
         self.enableTouch()
+        self.addPanGestureToPreventCancelTracking()
     }
     
     required init?(coder: NSCoder) {

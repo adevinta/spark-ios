@@ -63,7 +63,7 @@ final class SingleSliderViewModelTests: SliderViewModelWithMocksTests {
 
     // MARK: - Set Value
     func test_setValue() {
-        // GIVEN / WHEN - Inits from setUp()
+        // GIVEN - Inits from setUp()
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
@@ -78,7 +78,7 @@ final class SingleSliderViewModelTests: SliderViewModelWithMocksTests {
     }
 
     func test_setValue_under_bounds() {
-        // GIVEN / WHEN - Inits from setUp()
+        // GIVEN - Inits from setUp()
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
@@ -93,7 +93,7 @@ final class SingleSliderViewModelTests: SliderViewModelWithMocksTests {
     }
 
     func test_setValue_over_bounds() {
-        // GIVEN / WHEN - Inits from setUp()
+        // GIVEN - Inits from setUp()
         self.resetUseCases() // Removes execute from init
         self.publishers.reset() // Removes publishes from init
 
@@ -108,7 +108,7 @@ final class SingleSliderViewModelTests: SliderViewModelWithMocksTests {
     }
 
     func test_setValue_closest_value() {
-        // GIVEN / WHEN - Inits from setUp()
+        // GIVEN - Inits from setUp()
         self.getClosestValueUseCase.executeWithValueAndValuesReturnValue = 0.4
         self.getStepValuesInBoundsUseCase.executeWithBoundsAndStepReturnValue = [0, 0.4, 1]
         self.viewModel.step = 0.3
@@ -120,6 +120,144 @@ final class SingleSliderViewModelTests: SliderViewModelWithMocksTests {
 
         // THEN
         XCTAssertEqual(self.singleViewModel.value, 0.4, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    // MARK: - Increment value
+    func test_incrementValue_withoutStep() {
+        // GIVEN - Inits from setUp()
+        self.singleViewModel.setValue(0.5)
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.incrementValue()
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 0.6, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_incrementValue_withoutStep_customBounds() {
+        // GIVEN - Inits from setUp()
+        self.singleViewModel.bounds = 200...800
+        self.singleViewModel.setValue(400)
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.incrementValue()
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 460, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_incrementValue_withoutStep_overBound() {
+        // GIVEN - Inits from setUp()
+        self.singleViewModel.setValue(0.95)
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.incrementValue()
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 1.0, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_incrementValue_withStep() {
+        // GIVEN - Inits from setUp()
+        self.getClosestValueUseCase.executeWithValueAndValuesReturnValue = 0.8
+        self.getStepValuesInBoundsUseCase.executeWithBoundsAndStepReturnValue = [0, 0.3, 0.8, 1.0]
+        self.singleViewModel.setValue(0.5)
+        self.singleViewModel.step = 0.3
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.incrementValue()
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 0.8, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    // MARK: - Decrement value
+    func test_decrementValue_withoutStep() {
+        // GIVEN - Inits from setUp()
+        self.singleViewModel.setValue(0.5)
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.decrementValue()
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 0.4, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_decrementValue_withoutStep_customBounds() {
+        // GIVEN - Inits from setUp()
+        self.singleViewModel.bounds = 200...800
+        self.singleViewModel.setValue(400)
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.decrementValue()
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 340, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_decrementValue_withoutStep_overBound() {
+        // GIVEN - Inits from setUp()
+        self.singleViewModel.setValue(0.05)
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.decrementValue()
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 0.0, "Wrong value")
+
+        // THEN - Publishers
+        XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
+    }
+
+    func test_decrementValue_withStep() {
+        // GIVEN - Inits from setUp()
+        self.getClosestValueUseCase.executeWithValueAndValuesReturnValue = 0.2
+        self.getStepValuesInBoundsUseCase.executeWithBoundsAndStepReturnValue = [0, 0.2, 0.8, 1.0]
+        self.singleViewModel.setValue(0.5)
+        self.singleViewModel.step = 0.3
+        self.resetUseCases() // Removes execute from init
+        self.publishers.reset() // Removes publishes from init
+
+        // WHEN
+        self.singleViewModel.decrementValue()
+
+        // THEN
+        XCTAssertEqual(self.singleViewModel.value, 0.2, "Wrong value")
 
         // THEN - Publishers
         XCTAssertEqual(self.singlePublishers.value.sinkCount, 1, "$value should have been called once")
