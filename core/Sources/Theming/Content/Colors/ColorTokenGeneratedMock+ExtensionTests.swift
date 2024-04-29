@@ -12,12 +12,54 @@ import UIKit
 extension ColorTokenGeneratedMock {
 
     // MARK: - Methods
-    
+
     static func random() -> ColorTokenGeneratedMock {
         let color = ColorTokenGeneratedMock()
         let random = UIColor.random()
         color.underlyingUiColor = random
         color.underlyingColor = Color(random)
+        return color
+    }
+
+    static func red() -> ColorTokenGeneratedMock {
+        let color = ColorTokenGeneratedMock()
+        color.underlyingColor = .red
+        color.underlyingUiColor = .red
+        return color
+    }
+
+    static func blue() -> ColorTokenGeneratedMock {
+        let color = ColorTokenGeneratedMock()
+        color.underlyingColor = .blue
+        color.underlyingUiColor = .blue
+        return color
+    }
+
+    static func green() -> ColorTokenGeneratedMock {
+        let color = ColorTokenGeneratedMock()
+        color.underlyingColor = .green
+        color.underlyingUiColor = .green
+        return color
+    }
+
+    static func orange() -> ColorTokenGeneratedMock {
+        let color = ColorTokenGeneratedMock()
+        color.underlyingColor = .orange
+        color.underlyingUiColor = .orange
+        return color
+    }
+
+    static func yellow() -> ColorTokenGeneratedMock {
+        let color = ColorTokenGeneratedMock()
+        color.underlyingColor = .yellow
+        color.underlyingUiColor = .yellow
+        return color
+    }
+
+    static func purple() -> ColorTokenGeneratedMock {
+        let color = ColorTokenGeneratedMock()
+        color.underlyingColor = .purple
+        color.underlyingUiColor = .purple
         return color
     }
 }
