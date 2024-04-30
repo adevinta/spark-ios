@@ -401,9 +401,9 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         let labelViewTopConstraint = self.textLabel.topAnchor.constraint(
             equalTo: self.toggleView.topAnchor, constant: self.textLabelTopSpacing)
         let toggleViewTopConstraint = self.toggleView.topAnchor.constraint(
-            equalTo: self.safeAreaLayoutGuide.topAnchor, constant: -(self.haloWidth))
+            equalTo: self.topAnchor, constant: -(self.haloWidth))
         let bottomViewConstraint = self.textLabel.bottomAnchor.constraint(
-            lessThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+            lessThanOrEqualTo: self.bottomAnchor, constant: 0)
 
         let labelPositionConstraints = calculatePositionConstraints()
 
@@ -437,12 +437,12 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
                 self.textLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor)
             ]
         } else {
-            let toggleViewTrailingConstraint = self.toggleView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: self.haloWidth)
+            let toggleViewTrailingConstraint = self.toggleView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: self.haloWidth)
             self.toggleViewTrailingConstraint = toggleViewTrailingConstraint
 
             return [
                 toggleViewTrailingConstraint,
-                self.textLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+                self.textLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             ]
         }
     }
