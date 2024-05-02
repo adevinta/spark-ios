@@ -32,6 +32,7 @@ struct FormFieldComponentView: View {
     ]
     @State private var texfieldText: String = ""
     @State private var selectedID: Int? = 0
+    @State private var checkboxSelected: CheckboxSelectionState = .selected
     @State private var rating: CGFloat = 2
 
     // MARK: - View
@@ -95,6 +96,7 @@ struct FormFieldComponentView: View {
                     isTitleRequired: self.isTitleRequired == .selected ? true : false
                 )
                 .disabled(self.isEnabled == .selected ? false : true)
+                .layoutPriority(1)
             }
         )
     }
@@ -144,7 +146,7 @@ struct FormFieldComponentView: View {
                 checkedImage: DemoIconography.shared.checkmark.image,
                 theme: self.theme,
                 intent: .success,
-                selectionState: .constant(.selected)
+                selectionState: self.$checkboxSelected
             )
             .fixedSize(horizontal: false, vertical: true)
 
