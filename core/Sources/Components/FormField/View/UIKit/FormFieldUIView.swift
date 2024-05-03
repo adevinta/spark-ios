@@ -35,7 +35,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         let stackView = UIStackView(arrangedSubviews: [self.titleLabel, self.descriptionLabel])
         stackView.axis = .vertical
         stackView.spacing = self.spacing
-        stackView.alignment = .leading
+        stackView.alignment = .fill
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
