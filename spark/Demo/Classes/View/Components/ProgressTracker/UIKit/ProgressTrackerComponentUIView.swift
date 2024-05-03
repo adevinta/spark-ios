@@ -172,7 +172,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         }
 
         self.viewModel.$useCompletedPageIndicator.subscribe(in: &self.cancellables) { useImage in
-            self.componentView.setCompletedIndicatorImage(useImage ? self.viewModel.checkmarkImage : nil)
+            self.componentView.setCompletedIndicatorImage(useImage ? self.viewModel.checkmarkImage.uiImage : nil)
         }
 
         self.viewModel.$numberOfPages.subscribe(in: &self.cancellables) { numberOfPages in
@@ -223,7 +223,7 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
         self.componentView.showDefaultPageNumber = contentType == .page
         self.componentView.numberOfPages = numberOfPages
 
-        self.componentView.setCompletedIndicatorImage(self.viewModel.checkmarkImage)
+        self.componentView.setCompletedIndicatorImage(self.viewModel.checkmarkImage.uiImage)
 
         switch contentType {
         case .icon:

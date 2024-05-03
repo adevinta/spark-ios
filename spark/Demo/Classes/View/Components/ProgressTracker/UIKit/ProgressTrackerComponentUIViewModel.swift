@@ -229,7 +229,7 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         ]
     }
 
-    lazy var checkmarkImage = UIImage(systemName: "checkmark")
+    lazy var checkmarkImage = DemoIconography.shared.checkmark
 
     // MARK: - Initialization
     @Published var theme: Theme
