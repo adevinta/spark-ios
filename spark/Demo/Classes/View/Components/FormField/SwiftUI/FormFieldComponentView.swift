@@ -21,6 +21,7 @@ struct FormFieldComponentView: View {
     @State private var descriptionStyle: FormFieldTextStyle = .text
     @State private var isEnabled = CheckboxSelectionState.selected
     @State private var isTitleRequired = CheckboxSelectionState.unselected
+    @State private var isTrailingAlignment = CheckboxSelectionState.unselected
 
     @State private var checkboxGroupItems: [any CheckboxGroupItemProtocol] = [
         CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
@@ -83,6 +84,14 @@ struct FormFieldComponentView: View {
                     isEnabled: true,
                     selectionState: self.$isTitleRequired
                 )
+
+                CheckboxView(
+                    text: "Change component alignment",
+                    checkedImage: DemoIconography.shared.checkmark.image,
+                    theme: theme,
+                    isEnabled: true,
+                    selectionState: self.$isTrailingAlignment
+                )
             },
             integration: {
                 FormFieldView(
@@ -144,6 +153,7 @@ struct FormFieldComponentView: View {
             CheckboxView(
                 text: "Hello World",
                 checkedImage: DemoIconography.shared.checkmark.image,
+                alignment: self.isTrailingAlignment == .selected ? .right : .left,
                 theme: self.theme,
                 intent: .success,
                 selectionState: self.$checkboxSelected
@@ -154,7 +164,7 @@ struct FormFieldComponentView: View {
             CheckboxGroupView(
                 checkedImage: DemoIconography.shared.checkmark.image,
                 items: self.$checkboxGroupItems,
-                alignment: .left,
+                alignment: self.isTrailingAlignment == .selected ? .right : .left,
                 theme: self.theme,
                 accessibilityIdentifierPrefix: "checkbox-group"
             )
@@ -164,7 +174,7 @@ struct FormFieldComponentView: View {
                 checkedImage: DemoIconography.shared.checkmark.image,
                 items: self.$checkboxGroupItems,
                 layout: .horizontal,
-                alignment: .left,
+                alignment: self.isTrailingAlignment == .selected ? .right : .left,
                 theme: self.theme,
                 intent: .support,
                 accessibilityIdentifierPrefix: "checkbox-group"
@@ -175,7 +185,7 @@ struct FormFieldComponentView: View {
                 checkedImage: DemoIconography.shared.checkmark.image,
                 items: self.$scrollableCheckboxGroupItems,
                 layout: .horizontal,
-                alignment: .left,
+                alignment: self.isTrailingAlignment == .selected ? .right : .left,
                 theme: self.theme,
                 intent: .support,
                 accessibilityIdentifierPrefix: "checkbox-group"
@@ -188,7 +198,7 @@ struct FormFieldComponentView: View {
                     items: [
                         RadioButtonItem(id: 0, label: "Radio Button 1")
                     ],
-                    labelAlignment: .trailing
+                    labelAlignment: self.isTrailingAlignment == .selected ? .leading : .trailing
                 )
             case .verticalRadioButton:
                 RadioButtonGroupView(
@@ -199,7 +209,7 @@ struct FormFieldComponentView: View {
                         RadioButtonItem(id: 0, label: "Radio Button 1"),
                         RadioButtonItem(id: 1, label: "Radio Button 2"),
                     ],
-                    labelAlignment: .leading
+                    labelAlignment: self.isTrailingAlignment == .selected ? .leading : .trailing
                 )
             case .horizontalRadioButton:
                 RadioButtonGroupView(
@@ -210,7 +220,7 @@ struct FormFieldComponentView: View {
                         RadioButtonItem(id: 0, label: "Radio Button 1"),
                         RadioButtonItem(id: 1, label: "Radio Button 2"),
                     ],
-                    labelAlignment: .trailing,
+                    labelAlignment: self.isTrailingAlignment == .selected ? .leading : .trailing,
                     groupLayout: .horizontal
                 )
             case .textField:

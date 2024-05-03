@@ -130,6 +130,34 @@ final class FormFieldComponentUIView: ComponentUIView {
             guard let self = self else { return }
             self.componentView.isTitleRequired = isTitleRequired
         }
+
+        self.viewModel.$isTrailingAlignment.subscribe(in: &self.cancellables) {  [weak self] isTrailingAlignment in
+            guard let self = self else { return }
+
+            switch self.viewModel.componentStyle {
+            case .singleCheckbox:
+                (self.componentView.component as? CheckboxUIView)?.alignment = isTrailingAlignment ? .right : .left
+            case .verticalCheckbox:
+                (self.componentView.component as? CheckboxGroupUIView)?.alignment = isTrailingAlignment ? .right : .left
+            case .horizontalCheckbox:
+                (self.componentView.component as? CheckboxGroupUIView)?.alignment = isTrailingAlignment ? .right : .left
+            case .horizontalScrollableCheckbox:
+                (self.componentView.component as? CheckboxGroupUIView)?.alignment = isTrailingAlignment ? .right : .left
+            case .singleRadioButton:
+                (self.componentView.component as? RadioButtonUIView<String>)?.labelAlignment = isTrailingAlignment ? .leading : .trailing
+            case .verticalRadioButton:
+                (self.componentView.component as? RadioButtonUIGroupView<String>)?.labelAlignment = isTrailingAlignment ? .leading : .trailing
+            case .horizontalRadioButton:
+                (self.componentView.component as? RadioButtonUIGroupView<String>)?.labelAlignment = isTrailingAlignment ? .leading : .trailing
+            default:
+                break
+            }
+        }
+
+        self.viewModel.$containerViewAlignment.subscribe(in: &self.cancellables) { [weak self] containerViewAlignment in
+            guard let self = self else { return }
+            self.integrationStackViewAlignment = containerViewAlignment ? .fill : .leading
+        }
     }
 
     // MARK: - Create View

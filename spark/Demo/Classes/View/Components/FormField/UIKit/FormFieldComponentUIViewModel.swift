@@ -101,6 +101,21 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.isRequiredChanged(_:))))
     }()
 
+    lazy var alignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Change component alignment",
+            type: .checkbox(title: "", isOn: self.isTrailingAlignment),
+            target: (source: self, action: #selector(self.isAlignmentChanged(_:))))
+    }()
+
+    lazy var containerViewAlignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Fill screen for right alinment",
+            type: .checkbox(title: "", isOn: self.containerViewAlignment),
+            target: (source: self, action: #selector(self.isContainerViewAlignmentChanged))
+        )
+    }()
+
     // MARK: - Default Properties
     var themes = ThemeCellModel.themes
     let text: String = "Agreement"
@@ -130,6 +145,8 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
     @Published var componentStyle: FormFieldComponentStyle
     @Published var isEnabled: Bool
     @Published var isTitleRequired: Bool
+    @Published var isTrailingAlignment: Bool
+    @Published var containerViewAlignment: Bool
 
     init(
         theme: Theme,
@@ -138,7 +155,9 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
         descriptionStyle: FormFieldTextStyle = .text,
         componentStyle: FormFieldComponentStyle = .singleCheckbox,
         isEnabled: Bool = true,
-        isTitleRequired: Bool = false
+        isTitleRequired: Bool = false,
+        isTrailingAlignment: Bool = false,
+        containerViewAlignment: Bool = false
     ) {
         self.theme = theme
         self.feedbackState = feedbackState
@@ -147,6 +166,8 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
         self.componentStyle = componentStyle
         self.isEnabled = isEnabled
         self.isTitleRequired = isTitleRequired
+        self.isTrailingAlignment = isTrailingAlignment
+        self.containerViewAlignment = containerViewAlignment
         super.init(identifier: "FormField")
 
         self.configurationViewModel = .init(itemsViewModel: [
@@ -156,7 +177,9 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             self.descriptionStyleConfigurationItemViewModel,
             self.componentStyleConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
-            self.isRequiredConfigurationItemViewModel
+            self.isRequiredConfigurationItemViewModel,
+            self.alignmentConfigurationItemViewModel,
+            self.containerViewAlignmentConfigurationItemViewModel
         ])
     }
 }
@@ -190,6 +213,14 @@ extension FormFieldComponentUIViewModel {
 
     @objc func isRequiredChanged(_ isSelected: Any?) {
         self.isTitleRequired = isTrue(isSelected)
+    }
+
+    @objc func isAlignmentChanged(_ isSelected: Any?) {
+        self.isTrailingAlignment = isTrue(isSelected)
+    }
+
+    @objc func isContainerViewAlignmentChanged(_ isSelected: Any?) {
+        self.containerViewAlignment = isTrue(isSelected)
     }
 }
 
