@@ -12,7 +12,7 @@ import Foundation
 public enum ProgressTrackerAccessibilityIdentifier {
 
     /// The general identifier for the control
-    public static let identifier = "progress-tracker"
+    public static let identifier = "spark-progress-tracker"
 
     public static let indicator = "\(Self.identifier)-indicator"
 

@@ -12,10 +12,10 @@ import XCTest
 final class ProgressTrackerAccessibilityIdentifierTests: XCTestCase {
 
     func test_indicator_identifier() {
-        XCTAssertEqual(ProgressTrackerAccessibilityIdentifier.indicator(forIndex: 99), "progress-tracker-indicator-99")
+        XCTAssertEqual(ProgressTrackerAccessibilityIdentifier.indicator(forIndex: 99), "spark-progress-tracker-indicator-99")
     }
 
     func test_label_identifier() {
-        XCTAssertEqual(ProgressTrackerAccessibilityIdentifier.label(forIndex: 99), "progress-tracker-label-99")
+        XCTAssertEqual(ProgressTrackerAccessibilityIdentifier.label(forIndex: 99), "spark-progress-tracker-label-99")
     }
 }
