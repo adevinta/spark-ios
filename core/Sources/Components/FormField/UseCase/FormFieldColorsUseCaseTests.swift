@@ -38,13 +38,13 @@ final class FormFieldColorsUseCaseTests: XCTestCase {
                 expectedFormfieldColor = FormFieldColors(
                     title: theme.colors.base.onSurface,
                     description: theme.colors.base.onSurface.opacity(theme.dims.dim1),
-                    asterisk: theme.colors.base.onSurface.opacity(theme.dims.dim3)
+                    asterisk: theme.colors.base.onSurface.opacity(theme.dims.dim1)
                 )
             case .error:
                 expectedFormfieldColor = FormFieldColors(
                     title: theme.colors.base.onSurface,
                     description: theme.colors.feedback.error,
-                    asterisk: theme.colors.base.onSurface.opacity(theme.dims.dim3)
+                    asterisk: theme.colors.base.onSurface.opacity(theme.dims.dim1)
                 )
             }
 
