@@ -1,20 +1,20 @@
 //
 //  TextFieldComponentUIViewController.swift
-//  SparkCore
+//  SparkDemo
 //
-//  Created by louis.borlee on 11/09/2023.
-//  Copyright © 2023 Adevinta. All rights reserved.
+//  Created by louis.borlee on 24/01/2024.
+//  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-import Combine
-import Spark
-import SwiftUI
 import UIKit
+import Combine
+import SwiftUI
 import SparkCore
 
-class TextFieldComponentUIViewController: UIViewController {
+final class TextFieldComponentUIViewController: UIViewController {
 
-    let textFieldComponentUIView: TextFieldComponentUIView
+    // MARK: - Properties
+    let componentView: TextFieldComponentUIView
     let viewModel: TextFieldComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
@@ -24,13 +24,29 @@ class TextFieldComponentUIViewController: UIViewController {
     // MARK: - Initializer
     init(viewModel: TextFieldComponentUIViewModel) {
         self.viewModel = viewModel
-        self.textFieldComponentUIView = TextFieldComponentUIView(viewModel: viewModel)
+        self.componentView = TextFieldComponentUIView(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
+        self.componentView.viewController = self
     }
 
-    // MARK: - Add Publishers
-    private func addPublisher() {
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
+    // MARK: - Lifecycle
+    override func loadView() {
+        view = self.componentView
+    }
+
+    // MARK: - ViewDidLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .systemBackground
+        self.navigationItem.title = "TextField "
+        self.setupSubscriptions()
+    }
+
+    private func setupSubscriptions() {
         self.themePublisher
             .$theme
             .sink { [weak self] theme in
@@ -40,84 +56,44 @@ class TextFieldComponentUIViewController: UIViewController {
             }
             .store(in: &self.cancellables)
 
-        self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
-            self.presentThemeActionSheet(intents)
+        self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { theme in
+            self.presentThemeActionSheet(theme)
         }
 
         self.viewModel.showIntentSheet.subscribe(in: &self.cancellables) { intents in
             self.presentIntentActionSheet(intents)
         }
 
-        self.viewModel.showRightViewModeSheet.subscribe(in: &self.cancellables) { viewMode in
-            self.presentRightViewModeActionSheet(viewMode)
+        self.viewModel.showClearButtonModeSheet.subscribe(in: &self.cancellables) { viewModes in
+            self.presentViewModeActionSheet(viewModes) { viewMode in
+                self.viewModel.clearButtonMode = viewMode
+            }
         }
 
-        self.viewModel.showLeftViewModeSheet.subscribe(in: &self.cancellables) { viewMode in
-            self.presentLeftViewModeActionSheet(viewMode)
+        self.viewModel.showLeftViewModeSheet.subscribe(in: &self.cancellables) { viewModes in
+            self.presentViewModeActionSheet(viewModes) { viewMode in
+                self.viewModel.leftViewMode = viewMode
+            }
         }
 
-        self.viewModel.showLeadingAddOnSheet.subscribe(in: &self.cancellables) { addOnOption in
-            self.presentLeadingAddOnOptionSheet(addOnOption)
+        self.viewModel.showRightViewModeSheet.subscribe(in: &self.cancellables) { viewModes in
+            self.presentViewModeActionSheet(viewModes) { viewMode in
+                self.viewModel.rightViewMode = viewMode
+            }
         }
 
-        self.viewModel.showTrailingAddOnSheet.subscribe(in: &self.cancellables) { addOnOption in
-            self.presentTrailingAddOnOptionSheet(addOnOption)
+        self.viewModel.showLeftViewContentSheet.subscribe(in: &self.cancellables) { contents in
+            self.presentSideViewContentActionSheet(contents) { content in
+                self.viewModel.leftViewContent = content
+            }
         }
 
-        self.viewModel.showClearButtonModeSheet.subscribe(in: &self.cancellables) { viewMode in
-            self.presentClearButtonModeActionSheet(viewMode)
+        self.viewModel.showRightViewContentSheet.subscribe(in: &self.cancellables) { contents in
+            self.presentSideViewContentActionSheet(contents) { content in
+                self.viewModel.rightViewContent = content
+            }
         }
     }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - ViewDidLoad
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setupView()
-        self.view.backgroundColor = .systemBackground
-        self.navigationItem.title = "TextField"
-        self.addPublisher()
-    }
-
-    private func setupView() {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(scrollView)
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-
-        textFieldComponentUIView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(textFieldComponentUIView)
-        NSLayoutConstraint.activate([
-            textFieldComponentUIView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            textFieldComponentUIView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            textFieldComponentUIView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            textFieldComponentUIView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            textFieldComponentUIView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            textFieldComponentUIView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, constant: 1000)
-        ])
-    }
-
-}
-
-extension TextFieldComponentUIViewController {
-
-    static func build() -> TextFieldComponentUIViewController {
-        let viewModel = TextFieldComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = TextFieldComponentUIViewController(viewModel: viewModel)
-        return viewController
-    }
-}
-
-// MARK: - Navigation
-extension TextFieldComponentUIViewController {
 
     private func presentThemeActionSheet(_ themes: [ThemeCellModel]) {
         let actionSheet = SparkActionSheet<Theme>.init(
@@ -137,46 +113,40 @@ extension TextFieldComponentUIViewController {
         self.present(actionSheet, isAnimated: true)
     }
 
-    private func presentLeftViewModeActionSheet(_ viewModes: [ViewMode]) {
-        let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
-                                                          texts: viewModes.map{ $0.name }) { viewMode in
-            self.viewModel.leftViewMode = viewMode
+    private func presentViewModeActionSheet(_ viewModes: [UITextField.ViewMode], completion: @escaping (UITextField.ViewMode) -> Void) {
+        let actionSheet = SparkActionSheet<UITextField.ViewMode>.init(
+            values: viewModes,
+            texts: viewModes.map { $0.description },
+            completion: completion)
+        self.present(actionSheet, isAnimated: true)
+    }
+
+    private func presentSideViewContentActionSheet(_ contents: [TextFieldSideViewContent], completion: @escaping (TextFieldSideViewContent) -> Void) {
+        let actionSheet = SparkActionSheet<TextFieldSideViewContent>.init(
+            values: contents,
+            texts: contents.map { $0.name },
+            completion: completion)
+        self.present(actionSheet, isAnimated: true)
+    }
+}
+
+extension TextFieldComponentUIViewController {
+    static func build() -> TextFieldComponentUIViewController {
+        let viewModel = TextFieldComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
+        let viewController = TextFieldComponentUIViewController(viewModel: viewModel)
+        return viewController
+    }
+}
+
+extension UITextField.ViewMode: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .always: return "always"
+        case .never: return "never"
+        case .unlessEditing: return "unlessEditing"
+        case .whileEditing: return "whileEditing"
+        @unknown default:
+            fatalError()
         }
-        self.present(actionSheet, isAnimated: true)
     }
-
-    private func presentRightViewModeActionSheet(_ viewModes: [ViewMode]) {
-        let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
-                                                          texts: viewModes.map{ $0.name }) { viewMode in
-            self.viewModel.rightViewMode = viewMode
-        }
-        self.present(actionSheet, isAnimated: true)
-    }
-
-    private func presentLeadingAddOnOptionSheet(_ addOnOptions: [AddOnOption]) {
-        let actionSheet = SparkActionSheet<AddOnOption>.init(
-            values: addOnOptions,
-            texts: addOnOptions.map { $0.name }) { addOnOption in
-                self.viewModel.leadingAddOnOption = addOnOption
-            }
-        self.present(actionSheet, isAnimated: true)
-    }
-
-    private func presentTrailingAddOnOptionSheet(_ addOnOptions: [AddOnOption]) {
-        let actionSheet = SparkActionSheet<AddOnOption>.init(
-            values: addOnOptions,
-            texts: addOnOptions.map { $0.name }) { addOnOption in
-                self.viewModel.trailingAddOnOption = addOnOption
-            }
-        self.present(actionSheet, isAnimated: true)
-    }
-
-    private func presentClearButtonModeActionSheet(_ viewModes: [ViewMode]) {
-        let actionSheet = SparkActionSheet<ViewMode>.init(values: viewModes,
-                                                          texts: viewModes.map{ $0.name }) { viewMode in
-            self.viewModel.clearButtonMode = viewMode
-        }
-        self.present(actionSheet, isAnimated: true)
-    }
-
 }
