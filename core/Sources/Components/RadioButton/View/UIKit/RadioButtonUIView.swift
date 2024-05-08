@@ -450,10 +450,10 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     private func calculateToggleViewSpacingConstraint() -> NSLayoutConstraint {
         if self.viewModel.alignment == .trailing {
             return self.toggleView.trailingAnchor.constraint(
-                equalTo: self.textLabel.leadingAnchor, constant: -self.spacing)
+                equalTo: self.textLabel.leadingAnchor, constant: -self.spacing + self.haloWidth)
         } else {
             return self.textLabel.trailingAnchor.constraint(
-                lessThanOrEqualTo: self.toggleView.leadingAnchor, constant: -self.spacing)
+                lessThanOrEqualTo: self.toggleView.leadingAnchor, constant: -self.spacing + self.haloWidth)
         }
     }
 
