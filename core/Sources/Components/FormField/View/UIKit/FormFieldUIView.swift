@@ -20,6 +20,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         label.backgroundColor = .clear
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formFieldLabel
+        label.isAccessibilityElement = true
         return label
     }()
 
@@ -28,6 +30,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
         label.backgroundColor = .clear
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formFieldHelperMessage
+        label.isAccessibilityElement = true
         return label
     }()
 
@@ -147,8 +151,7 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     public var component: Component {
         didSet {
             oldValue.removeFromSuperview()
-            self.component.isAccessibilityElement = true
-            self.stackView.insertArrangedSubview(self.component, at: 1)
+            self.setComponent()
         }
     }
 
@@ -236,9 +239,21 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     }
 
     private func commonInit() {
-        self.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formField
         self.setupViews()
+        self.setComponent()
         self.subscribe()
+        self.updateAccessibility()
+    }
+
+    private func updateAccessibility() {
+        self.accessibilityIdentifier = FormFieldAccessibilityIdentifier.formField
+        self.isAccessibilityElement = false
+        self.accessibilityContainerType = .semanticGroup
+    }
+
+    private func setComponent() {
+        self.component.isAccessibilityElement = true
+        self.stackView.insertArrangedSubview(self.component, at: 1)
     }
 
     private func setupViews() {
