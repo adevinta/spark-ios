@@ -197,7 +197,7 @@ final class ChipViewModelTests: XCTestCase {
         // When
         let newTheme = ThemeGeneratedMock.mocked()
         let typography = TypographyGeneratedMock.mocked()
-        typography.body2 = TypographyFontTokenGeneratedMock.mocked(.title)
+        typography.body1 = TypographyFontTokenGeneratedMock.mocked(.title)
         newTheme.typography = typography
 
         self.sut.set(theme: newTheme)
