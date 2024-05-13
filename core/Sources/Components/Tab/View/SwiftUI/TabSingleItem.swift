@@ -10,30 +10,41 @@ import Foundation
 import SwiftUI
 
 struct TabSingleItem: View {
-    @ObservedObject var viewModel: TabViewModel<TabItemContent>
     let intent: TabIntent
     let content: TabItemContent
     let proxy: ScrollViewProxy
     @Binding var selectedIndex: Int
     let index: Int
 
+    @ObservedObject private var  itemViewModel: TabItemViewModel<TabItemContent>
+
+    init(viewModel: TabViewModel<TabItemContent>, intent: TabIntent, content: TabItemContent, proxy: ScrollViewProxy, selectedIndex: Binding<Int>, index: Int) {
+        self.intent = intent
+        self.content = content
+        self.proxy = proxy
+        self._selectedIndex = selectedIndex
+        self.index = index
+
+        self.itemViewModel = TabItemViewModel(
+            theme: viewModel.theme,
+            intent: intent,
+            tabSize: viewModel.tabSize,
+            content: content,
+            apportionsSegmentWidthsByContent: viewModel.apportionsSegmentWidthsByContent
+        )
+        .updateState(isSelected: selectedIndex.wrappedValue == index)
+        .updateState(isEnabled: viewModel.isTabEnabled(index: index))
+    }
+
     var body: some View {
-        TabItemView(
-            theme: self.viewModel.theme,
-            intent: self.intent,
-            size: self.viewModel.tabSize,
-            content: self.content,
-            apportionsSegmentWidthsByContent: self.viewModel.apportionsSegmentWidthsByContent,
-            isSelected: self.selectedIndex == self.index
-        ) {
-            self.selectedIndex = index
+        TabItemView(viewModel: itemViewModel) {
+            self.selectedIndex = self.index
             withAnimation{
-                self.proxy.scrollTo(content.id)
+                self.proxy.scrollTo(self.content.id)
             }
         }
-        .disabled(self.viewModel.disabledTabs[index])
-        .id(content.id)
+        .disabled(!self.itemViewModel.isEnabled)
+        .id(self.content.id)
         .accessibilityIdentifier("\(TabAccessibilityIdentifier.tabItem)_\(index)")
-
     }
 }

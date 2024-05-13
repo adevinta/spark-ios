@@ -91,7 +91,7 @@ public final class TabUIView: UIControl {
     /// Disable each segement of the tab
     public override var isEnabled: Bool {
         didSet {
-            self.viewModel.isEnabled = self.isEnabled
+            self.viewModel.setIsEnabled(self.isEnabled)
             self.segments.forEach{ $0.isEnabled = self.isEnabled }
         }
     }
