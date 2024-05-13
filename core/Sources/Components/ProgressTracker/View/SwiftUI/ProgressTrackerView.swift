@@ -11,6 +11,7 @@ import SwiftUI
 /// A progress tracker, similar to the UIPageControl
 public struct ProgressTrackerView: View {
     typealias Content = ProgressTrackerContent<ProgressTrackerIndicatorContent>
+    typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
 
     //MARK: - Private properties
     @ObservedObject private var viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
@@ -18,6 +19,7 @@ public struct ProgressTrackerView: View {
     private let variant: ProgressTrackerVariant
     private let size: ProgressTrackerSize
     @Binding var currentPageIndex: Int
+    @Environment(\.isEnabled) private var isEnabled: Bool
 
     //MARK: - Initialization
     /// Initializer
@@ -95,18 +97,75 @@ public struct ProgressTrackerView: View {
     //MARK: - Body
     public var body: some View {
         self.progressTrackerView
-            .isEnabledChanged { isEnabled in
-                self.viewModel.isEnabled = isEnabled
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier(AccessibilityIdentifier.identifier)
+            .accessibilityValue("\(self.currentPageIndex)")
+            .overlayPreferenceValue(ProgressTrackerSizePreferences.self) { preferences in
+                if self.viewModel.interactionState != .none {
+                    GeometryReader { geometry in
+                        Color.black.opacity(0.000001)
+                            .gesture(self.dragGesture(bounds: geometry.frame(in: .local), preferences: preferences))
+                    }
+                }
             }
     }
 
     //MARK: - Private functions
+    private func dragGesture(bounds: CGRect?, preferences: [Int: CGRect]) -> some Gesture {
+
+        let indicators = preferences.sorted { $0.key < $1.key }.map(\.value)
+        let frame = bounds ?? .zero
+
+        let gestureHandler = self.gestureHandler(frame: frame, indicators: indicators)
+
+        return DragGesture(minimumDistance: .zero)
+            .onChanged({ value in
+                gestureHandler.onChanged(location: value.location)
+            })
+            .onEnded({ value in
+                gestureHandler.onEnded(location: value.location)
+            })
+    }
+
     @ViewBuilder
     private var progressTrackerView: some View {
-        if self.viewModel.orientation == .horizontal {
-            ProgressTrackerHorizontalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: self.viewModel)
+        let viewModel = self.viewModel.setIsEnabled(self.isEnabled)
+        if viewModel.orientation == .horizontal {
+            ProgressTrackerHorizontalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: viewModel)
         } else {
-            ProgressTrackerVerticalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: self.viewModel)
+            ProgressTrackerVerticalView(intent: self.intent, variant: self.variant, size: self.size, currentPageIndex: self.$currentPageIndex, viewModel: viewModel)
+        }
+    }
+
+    private func gestureHandler(frame: CGRect, indicators: [CGRect]) -> any ProgressTrackerGestureHandling {
+
+        switch self.viewModel.interactionState {
+        case .none:
+            return ProgressTrackerNoneGestureHandler()
+        case .discrete:
+            return ProgressTrackerDiscreteGestureHandler(
+                currentPageIndex: self._currentPageIndex,
+                currentTouchedPageIndex: self.$viewModel.currentPressedIndicator,
+                indicators: indicators, 
+                frame: frame,
+                disabledIndices: self.viewModel.disabledIndices
+            )
+        case .continuous:
+            return ProgressTrackerContinuousGestureHandler(
+                currentPageIndex: self._currentPageIndex,
+                currentTouchedPageIndex: self.$viewModel.currentPressedIndicator,
+                indicators: indicators, 
+                frame: frame,
+                disabledIndices: self.viewModel.disabledIndices
+            )
+        case .independent:
+            return ProgressTrackerIndependentGestureHandler(
+                currentPageIndex: self._currentPageIndex,
+                currentTouchedPageIndex: self.$viewModel.currentPressedIndicator,
+                indicators: indicators,
+                frame: frame,
+                disabledIndices: self.viewModel.disabledIndices
+            )
         }
     }
 
@@ -193,6 +252,12 @@ public struct ProgressTrackerView: View {
     /// Set if the default page number should be shown
     public func showDefaultPageNumber(_ showPageNumber: Bool) -> Self {
         self.viewModel.showDefaultPageNumber = showPageNumber
+        return self
+    }
+
+    /// Set the current interaction state
+    public func interactionState(_ interactionState: ProgressTrackerInteractionState) -> Self {
+        self.viewModel.interactionState = interactionState
         return self
     }
 }

@@ -264,12 +264,7 @@ private final class Stub: ButtonViewModelStub {
 
         super.init(
             viewModel: viewModel,
-            getSpacingsUseCaseMock: getSpacingsUseCaseMock,
-            getBorderUseCaseMock: ButtonGetBorderUseCaseableGeneratedMock(),
-            getColorsUseCaseMock: ButtonGetColorsUseCaseableGeneratedMock(),
-            getCurrentColorsUseCaseMock: ButtonGetCurrentColorsUseCaseableGeneratedMock(),
-            getSizesUseCaseMock: ButtonGetSizesUseCaseableGeneratedMock(),
-            getStateUseCaseMock: ButtonGetStateUseCaseableGeneratedMock()
+            getSpacingsUseCaseMock: getSpacingsUseCaseMock
         )
     }
 }
