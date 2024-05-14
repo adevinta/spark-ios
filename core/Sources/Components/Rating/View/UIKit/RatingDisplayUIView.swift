@@ -149,6 +149,7 @@ public class RatingDisplayUIView: UIView {
         super.init(frame: .zero)
         self.setupView()
         self.setupSubscriptions()
+        self.setUpAccessibility()
     }
 
     required init?(coder: NSCoder) {
@@ -218,12 +219,22 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
+    private func setUpAccessibility() {
+        self.isAccessibilityElement = true
+        self.updateAccessibilityValue()
+    }
+
+    private func updateAccessibilityValue() {
+        self.accessibilityValue = "\(self.rating.description) / \(self.viewModel.count.rawValue)"
+    }
+
     private func didUpdate(rating: CGFloat) {
         var currentRating = rating
         for view in self.ratingStarViews {
             view.rating = currentRating
             currentRating -= 1
         }
+        self.updateAccessibilityValue()
     }
 
     private func didUpdate(colors: RatingColors) {
