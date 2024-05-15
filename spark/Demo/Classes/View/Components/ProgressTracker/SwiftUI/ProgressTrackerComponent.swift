@@ -25,6 +25,7 @@ struct ProgressTrackerComponent: View {
     @State private var isDisabled = CheckboxSelectionState.unselected
     @State private var completedPageIndicator = CheckboxSelectionState.unselected
     @State private var currentPageIndicator = CheckboxSelectionState.unselected
+    @State private var interaction = ProgressTrackerInteractionState.none
 
     private var numberFormatter: NumberFormatter = {
         let numberFormatter = NumberFormatter()
@@ -65,6 +66,13 @@ struct ProgressTrackerComponent: View {
                     dialogTitle: "Select an orientation",
                     values: ProgressTrackerOrientation.allCases,
                     value: self.$orientation
+                )
+
+                EnumSelector(
+                    title: "Interaction",
+                    dialogTitle: "Select an interaction type",
+                    values: ProgressTrackerInteractionState.allCases,
+                    value: self.$interaction
                 )
 
                 EnumSelector(
@@ -145,6 +153,9 @@ struct ProgressTrackerComponent: View {
                 }
             }
         )
+        .onChange(of: self.currentPageIndex) { index in
+            Console.log("Current page \(index)")
+        }
     }
 
     private func progressTrackerView() -> ProgressTrackerView {
@@ -185,7 +196,8 @@ struct ProgressTrackerComponent: View {
         }
 
         if self.completedPageIndicator == .selected {
-            view = view.completedIndicatorImage(Image(systemName: "checkmark"))
+            let image: Image? = DemoIconography.shared.checkmark.image
+            view = view.completedIndicatorImage(image)
         } else {
             view = view.completedIndicatorImage(nil)
         }
@@ -212,8 +224,9 @@ struct ProgressTrackerComponent: View {
                 let image = Image(uiImage: UIImage.image(at: i))
                 view = view.indicatorImage(image, forIndex: i)
             }
-
         }
+
+        view = view.interactionState(self.interaction)
 
         return view
 
@@ -223,7 +236,8 @@ struct ProgressTrackerComponent: View {
         if self.label.isEmpty {
             return "\(index)"
         } else {
-            return "\(self.label) \(index)"
+            let label = index % 2 == 0 ? String(self.label.prefix(4)) : self.label
+            return "\(label.trimmingCharacters(in: .whitespaces)) \(index)"
         }
     }
 }

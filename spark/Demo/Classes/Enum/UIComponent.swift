@@ -16,6 +16,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
         .iconButton,
         .checkbox,
         .chip,
+        .formField,
         .icon,
         .progressBarIndeterminate,
         .progressBarSingle,
@@ -30,6 +31,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
         .tab,
         .tag,
         .textField,
+        .textFieldAddons,
         .textLink
     ]
 
@@ -39,6 +41,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static let button = UIComponent(rawValue: "Button")
     static let checkbox = UIComponent(rawValue: "Checkbox")
     static let chip = UIComponent(rawValue: "Chip")
+    static let formField = UIComponent(rawValue: "FormField")
     static let icon = UIComponent(rawValue: "Icon")
     static let iconButton = UIComponent(rawValue: "Icon Button")
     static let progressBarIndeterminate = UIComponent(rawValue: "Progress Bar Indeterminate")
@@ -54,5 +57,6 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static let tab = UIComponent(rawValue: "Tab")
     static let tag = UIComponent(rawValue: "Tag")
     static let textField = UIComponent(rawValue: "TextField")
+    static let textFieldAddons = UIComponent(rawValue: "TextFieldAddons")
     static let textLink = UIComponent(rawValue: "TextLink")
 }

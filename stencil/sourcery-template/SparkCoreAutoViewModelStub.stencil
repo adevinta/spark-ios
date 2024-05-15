@@ -36,31 +36,31 @@ class {{ class.name }}Stub {
 
     // MARK: - Published Properties
 
-    {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}
+    {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.definedInTypeName|contains: class.name and variable.attributes["Published"] != nil %}
     let {% call publisherName variable %}: PublisherMock<Published<{% call existentialVariableTypeName variable.typeName %}>.Publisher>
     {% endfor %}
 
     // MARK: Dependencies
 
-    {% for variable in class.allVariables|!definedInExtension where variable.name|contains: "UseCase" %}
+    {% for variable in class.allVariables|!definedInExtension where variable.definedInTypeName|contains: class.name and variable.name|contains: "UseCase" %}
     let {% call useCaseName variable %}: {% call genericTypeName class variable %}
     {% endfor %}
 
     // MARK: - Initialization
 
     init(
-        viewModel: {% call viewModelType class %}{% for variable in class.allVariables|!definedInExtension where variable.name|contains: "UseCase" %}{% if forloop.first %},{% endif %}
+        viewModel: {% call viewModelType class %}{% for variable in class.allVariables|!definedInExtension where variable.definedInTypeName|contains: class.name and variable.name|contains: "UseCase" %}{% if forloop.first %},{% endif %}
         {% call useCaseName variable %}: {% call genericTypeName class variable %}{% if not forloop.last %},{% endif %}{% endfor %}
     ) {
         self.viewModel = viewModel
 
         // UseCases
-        {% for variable in class.allVariables|!definedInExtension where variable.name|contains: "UseCase" %}
+        {% for variable in class.allVariables|!definedInExtension where variable.definedInTypeName|contains: class.name and variable.name|contains: "UseCase" %}
         self.{% call useCaseName variable %} = {% call useCaseName variable %}
         {% endfor %}
 
         // Publishers
-        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}
+        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.definedInTypeName|contains: class.name and variable.attributes["Published"] != nil %}
         self.{% call publisherName variable %} = .init(publisher: viewModel.${{ variable.name }})
         {% endfor %}
     }
@@ -68,7 +68,7 @@ class {{ class.name }}Stub {
     // MARK: - Subscription
 
     func subscribePublishers(on subscriptions: inout Set<AnyCancellable>) {
-        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}
+        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.definedInTypeName|contains: class.name  and variable.attributes["Published"] != nil %}
         self.{% call publisherName variable %}.loadTesting(on: &subscriptions)
         {% endfor %}
     }
@@ -76,11 +76,11 @@ class {{ class.name }}Stub {
     // MARK: - Reset
 
     func resetMockedData() {
-        {% for variable in class.allVariables|!definedInExtension where variable.name|contains: "UseCase" %}{% if forloop.first %}// Clear UseCases Mock{% endif %}
+        {% for variable in class.allVariables|!definedInExtension where variable.definedInTypeName|contains: class.name and variable.name|contains: "UseCase" %}{% if forloop.first %}// Clear UseCases Mock{% endif %}
         self.{% call useCaseName variable %}.reset()
         {% endfor %}
 
-        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.attributes["Published"] != nil %}{% if forloop.first %}// Reset published sink counter{% endif %}
+        {% for variable in class.allVariables|!definedInExtension where variable.readAccess != "private" and variable.definedInTypeName|contains: class.name and variable.attributes["Published"] != nil %}{% if forloop.first %}// Reset published sink counter{% endif %}
         self.{% call publisherName variable %}.reset()
         {% endfor %}
     }
