@@ -357,6 +357,7 @@ extension CheckboxGroupUIView {
 
     private func updateAlignment() {
         self.checkboxes.forEach { $0.alignment = self.alignment }
+        self.layoutIfNeeded()
     }
 
     private func updateIntent() {
