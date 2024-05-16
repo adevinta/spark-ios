@@ -70,6 +70,8 @@ extension ComponentsViewController {
         switch section {
         case .badge:
             viewController = BadgeComponentViewController.build()
+        case .bottomSheet:
+            viewController = BottomSheetPresentingViewController.build()
         case .button:
             viewController = ButtonComponentViewController.build()
         case .iconButton:
