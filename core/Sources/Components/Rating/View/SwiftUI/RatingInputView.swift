@@ -10,13 +10,12 @@ import SwiftUI
 
 /// A SwiftUI native rating input component.
 public struct RatingInputView: View {
-
     // MARK: - Private variables
     @ObservedObject private var viewModel: RatingDisplayViewModel
-    @State private var displayRating: CGFloat
-    @Binding private var rating: CGFloat
-    @ScaledMetric private var scaleFactor: CGFloat = 1.0
-    private let configuration: StarConfiguration
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    private var rating: Binding<CGFloat>
+    private var configuration: StarConfiguration
+    private var intent: RatingIntent
 
     // MARK: - Initialization
     /// Create a rating display view with the following parameters
@@ -31,8 +30,8 @@ public struct RatingInputView: View {
         rating: Binding<CGFloat>,
         configuration: StarConfiguration = .default
     ) {
-        self._rating = rating
-        self._displayRating = State(initialValue: rating.wrappedValue)
+        self.rating = rating
+        self.intent = intent
         self.configuration = configuration
         self.viewModel = RatingDisplayViewModel(
             theme: theme,
@@ -43,6 +42,46 @@ public struct RatingInputView: View {
 
     // MARK: - View
     public var body: some View {
+        RatingInputInternalView(viewModel: viewModel.updateState(isEnabled: self.isEnabled), rating: self.rating, configuration: self.configuration)
+    }
+
+    // MARK: - Internal functions
+    /// This function is just exposed for testing
+    internal func highlighted(_ isHiglighed: Bool) -> Self {
+        self.viewModel.updateState(isPressed: isHiglighed)
+        return self
+    }
+}
+
+// MARK: - Internal Rating Input
+struct RatingInputInternalView: View {
+
+    // MARK: - Private variables
+    @ObservedObject private var viewModel: RatingDisplayViewModel
+    @State private var displayRating: CGFloat
+    @Binding private var rating: CGFloat
+    @ScaledMetric private var scaleFactor: CGFloat = 1.0
+    private let configuration: StarConfiguration
+
+    // MARK: - Initialization
+    /// Create a rating display view with the following parameters
+    /// - Parameters:
+    ///   - viewModel: The view model of the view.
+    ///   - rating: A binding containg the rating value. This should be a value within the range 0...5
+    ///   - configuration: A configuration of the star
+    init(
+        viewModel: RatingDisplayViewModel,
+        rating: Binding<CGFloat>,
+        configuration: StarConfiguration
+    ) {
+        self._rating = rating
+        self._displayRating = State(initialValue: rating.wrappedValue)
+        self.configuration = configuration
+        self.viewModel = viewModel
+    }
+
+    // MARK: - View
+    var body: some View {
         let size = self.viewModel.ratingSize.height * self.scaleFactor
         let lineWidth = self.viewModel.ratingSize.borderWidth * self.scaleFactor
         let spacing = self.viewModel.ratingSize.spacing * self.scaleFactor
@@ -67,22 +106,26 @@ public struct RatingInputView: View {
                 .accessibilityIdentifier("\(RatingInputAccessibilityIdentifier.identifier)-\(index)")
             }
         }
-        .isEnabledChanged { isEnabled in
-            self.viewModel.updateState(isEnabled: isEnabled)
-        }
         .compositingGroup()
         .opacity(colors.opacity)
         .gesture(self.dragGesture(viewRect: viewRect))
         .frame(width: width, height: size)
         .accessibilityIdentifier(RatingInputAccessibilityIdentifier.identifier)
-        .accessibilityValue("\(self.displayRating)")
-    }
-
-    // MARK: - Internal functions
-    /// This function is just exposed for testing
-    internal func highlighted(_ isHiglighed: Bool) -> Self {
-        self.viewModel.updateState(isPressed: isHiglighed)
-        return self
+        .accessibilityElement()
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                guard self.displayRating <= CGFloat(self.viewModel.count.maxIndex) else { break }
+                self.displayRating += 1
+            case .decrement:
+                guard self.displayRating > 1 else { break }
+                self.displayRating -= 1
+            @unknown default:
+                break
+            }
+            self.rating = self.displayRating
+        }
+        .accessibilityValue(self.displayRating.description)
     }
 
     // MARK: - Private functions

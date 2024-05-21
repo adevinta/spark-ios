@@ -24,13 +24,9 @@ final class TabViewModel<Content>: ObservableObject {
     // The whole tab is regarded as enabled, if all tabs are enabled.
     // When set, each tab will be disabled or enabled.
     // To disable a single tab, use the function `disableTab`.
-    var isEnabled: Bool {
-        get {
-            return self.disabledTabs.reduce(true) { return $0 && !$1 }
-        }
-        set {
-            self.tabsAttributes = self.useCase.execute(theme: theme, size: self.tabSize, isEnabled: newValue)
-            self.disabledTabs = self.disabledTabs.map { _ in return !newValue }
+    private (set) var isEnabled: Bool {
+        didSet {
+            self.tabsAttributes = self.useCase.execute(theme: theme, size: self.tabSize, isEnabled: self.isEnabled)
         }
     }
 
@@ -66,12 +62,26 @@ final class TabViewModel<Content>: ObservableObject {
         self.content = content
         self.disabledTabs = content.map{ _ in return false }
         self.tabsAttributes = useCase.execute(theme: theme, size: tabSize, isEnabled: true)
+        self.isEnabled = true
     }
 
     // Disable or enable a single tab.
     func disableTab(_ disabled: Bool, index: Int) {
         guard index < self.content.count else { return }
-        
+        guard self.disabledTabs[index] != disabled else { return }
+
         self.disabledTabs[index] = disabled
+    }
+
+    func isTabEnabled(index: Int) -> Bool {
+        return !self.disabledTabs[index] && self.isEnabled
+    }
+
+    @discardableResult
+    func setIsEnabled(_ isEnabled: Bool) -> Self {
+        guard self.isEnabled != isEnabled else { return self }
+
+        self.isEnabled = isEnabled
+        return self
     }
 }

@@ -90,7 +90,7 @@ class ChipViewModel<Content>: ObservableObject {
         self.spacing = self.theme.layout.spacing.small
         self.padding = self.theme.layout.spacing.medium
         self.borderRadius = self.theme.border.radius.medium
-        self.font = self.theme.typography.body2
+        self.font = self.theme.bodyFont
         self.isIconLeading = alignment.isIconLeading
     }
 
@@ -132,7 +132,7 @@ class ChipViewModel<Content>: ObservableObject {
         self.spacing = self.theme.layout.spacing.small
         self.padding = self.theme.layout.spacing.medium
         self.borderRadius = self.theme.border.radius.medium
-        self.font = self.theme.typography.body2
+        self.font = self.theme.bodyFont
     }
 
     private func variantDidUpdate() {
@@ -141,6 +141,12 @@ class ChipViewModel<Content>: ObservableObject {
 
     private func intentColorsDidUpdate() {
         self.updateColors()
+    }
+}
+
+private extension Theme {
+    var bodyFont: TypographyFontToken {
+        return self.typography.body1
     }
 }
 

@@ -23,7 +23,7 @@ extension EdgeInsets {
     /// - Parameters:
     ///   - vertical: horizontal inset value use to set left and right insets.
     ///   - horizontal: horizontal inset value use to set left and right insets.
-    init(vertical: CGFloat, horizontal: CGFloat) {
+    init(vertical: CGFloat = 0, horizontal: CGFloat = 0) {
         self = .init(top: vertical, leading: horizontal, bottom: vertical, trailing: horizontal)
     }
 }

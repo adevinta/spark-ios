@@ -17,7 +17,7 @@ public protocol Dims {
     var dim5: CGFloat { get }
 }
 
-extension Dims {
+public extension Dims {
     /// None corresponding to 1.0 value
     var none: CGFloat {
         return 1.0
