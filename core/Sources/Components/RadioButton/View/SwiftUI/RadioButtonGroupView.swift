@@ -160,7 +160,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
     }
 
     private func bottomPadding(of item: RadioButtonItem<ID>) -> CGFloat {
-        if item.id == items.last?.id {
+        if self.groupLayout == .horizontal || item.id == items.last?.id {
             return 0
         } else {
             return self.viewModel.spacing
