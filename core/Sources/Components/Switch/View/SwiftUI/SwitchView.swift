@@ -258,19 +258,26 @@ private extension Text {
 
 private extension Image {
 
+    @ViewBuilder
     func applyStyle(
         isForOnImage: Bool,
         viewModel: SwitchViewModel
     ) -> some View {
+        if isForOnImage {
+            self.applyImageStyle(viewModel: viewModel)
+                .opacity(viewModel.toggleDotImagesState?.onImageOpacity ?? 0)
+        } else {
+            self.applyImageStyle(viewModel: viewModel)
+                .opacity(viewModel.toggleDotImagesState?.offImageOpacity ?? 0)
+        }
+    }
+
+    func applyImageStyle(viewModel: SwitchViewModel) -> some View {
         self.resizable()
             .aspectRatio(contentMode: .fit)
             .foregroundColor(viewModel.toggleDotForegroundColorToken?.color)
-            .if(isForOnImage) {
-                $0.opacity(viewModel.toggleDotImagesState?.onImageOpacity ?? 0)
-            } else: {
-                $0.opacity(viewModel.toggleDotImagesState?.offImageOpacity ?? 0)
-            }
             .accessibilityIdentifier(SwitchAccessibilityIdentifier.toggleDotImageView)
+
     }
 }
 
