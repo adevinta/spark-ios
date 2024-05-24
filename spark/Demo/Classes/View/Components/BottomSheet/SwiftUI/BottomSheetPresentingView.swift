@@ -47,6 +47,32 @@ Sample of a SwiftUI bottom sheet with a scroll view.
 🧡
 💙
 """
+private let mediumDescription: String = """
+Sample of a SwiftUI bottom sheet with a long text.
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+💙
+🧡
+"""
 struct BottomSheetPresentingView: View {
     var body: some View {
         if #available(iOS 16.4, *) {
@@ -60,20 +86,34 @@ struct BottomSheetPresentingView: View {
 @available(iOS 16.4, *)
 struct BottomSheetPresentingViewWithHeightDetent: View {
     @State private var showingShortSheet = false
+    @State private var showingMediumSheet = false
     @State private var showingLongSheet = false
     @State private var shortHeight: CGFloat = 100
+    @State private var mediumHeight: CGFloat = 100
 
     var body: some View {
         VStack {
-            Button("Show bottom sheet") {
+            Button("Show bottom sheet with little text") {
                 self.showingShortSheet.toggle()
             }
             .sheet(isPresented: $showingShortSheet) {
-                BottomSheetPresentedView {
+                BottomSheetPresentedView() {
                     self.showingShortSheet.toggle()
                 }
                 .readHeight(self.$shortHeight)
-                .presentationDetents([.height(self.shortHeight), .medium, .large])
+                .presentationDetents([.height(self.shortHeight), .large])
+            }
+            .buttonStyle(.borderedProminent)
+
+            Button("Show bottom sheet with longer text") {
+                self.showingMediumSheet.toggle()
+            }
+            .sheet(isPresented: $showingMediumSheet) {
+                BottomSheetPresentedView(description: mediumDescription) {
+                    self.showingMediumSheet.toggle()
+                }
+                .readHeight(self.$mediumHeight)
+                .presentationDetents([.height(self.mediumHeight), .large])
             }
             .buttonStyle(.borderedProminent)
 

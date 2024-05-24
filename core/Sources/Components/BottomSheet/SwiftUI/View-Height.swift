@@ -17,12 +17,13 @@ struct ViewHeightPreferenceKey: PreferenceKey {
     }
 }
 
-public extension View {
-    /// A view modifier for reading the height of a view. The height will be set in the given binding.
-    func readHeight(_ height: Binding<CGFloat>) -> some View {
-        self
+struct ViewHeightModifier: ViewModifier {
+    let height: Binding<CGFloat>
+    func body(content: Content) -> some View {
+        content
+            .fixedSize(horizontal: true, vertical: true)
             .background(
-                GeometryReader { geometry in
+                GeometryReader{ geometry in
                     Color.clear
                         .preference(key: ViewHeightPreferenceKey.self, value: geometry.size.height)
                 }
@@ -33,4 +34,13 @@ public extension View {
                 }
             }
     }
+}
+
+public extension View {
+    /// A view modifier for reading the height of a view. The height will be set in the given binding.
+    func readHeight(_ height: Binding<CGFloat>) -> some View {
+        self
+            .modifier(ViewHeightModifier(height: height))
+    }
+
 }
