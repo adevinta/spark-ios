@@ -34,16 +34,16 @@ final class BottomSheetPresentingViewController: UIViewController {
 
     private func didPressBottomButton(_ action: UIAction) {
         let controller = BottomSheetDemoUIController()
-        controller.rootView = BottomSheetDemoScrollView()
+        let view = BottomSheetDemoScrollView()
+        controller.rootView = view
         let detents: [UISheetPresentationController.Detent]
         if #available(iOS 16.0, *) {
-            detents = [.medium(), .large(), controller.expandedHeightDetent]
+            detents = [.medium(), .maxHeight(), .expandedHeight(of: view)]
         } else {
             detents = [.medium(), .large()]
         }
         if let sheet = controller.sheetPresentationController {
             sheet.detents = detents
-            //                sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
             if #available(iOS 17.0, *) {
                 sheet.prefersPageSizing = true
@@ -57,16 +57,16 @@ final class BottomSheetPresentingViewController: UIViewController {
 
     private func didPressButton(_ action: UIAction) {
         let controller = BottomSheetDemoUIController()
-        controller.rootView = BottomSheetDemoView()
+        let view = BottomSheetDemoView()
+        controller.rootView = view
         let detents: [UISheetPresentationController.Detent]
         if #available(iOS 16.0, *) {
-            detents = [.medium(), .large(), controller.compressedHeightDetent]
+            detents = [.medium(), .maxHeight(), .compressedHeight(of: view)]
         } else {
             detents = [.medium(), .large()]
         }
         if let sheet = controller.sheetPresentationController {
             sheet.detents = detents
-            //                sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
             if #available(iOS 17.0, *) {
                 sheet.prefersPageSizing = true
