@@ -56,21 +56,43 @@ public struct ProgressBarDoubleView: View {
             trackBackgroundColor: self.viewModel.colors?.trackBackgroundColorToken,
             indicatorView: {
                 // Bottom Indicator
-                RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
-                    .fill(self.viewModel.colors?.bottomIndicatorBackgroundColorToken)
-                    .if(self.viewModel.isValidIndicatorValue(self.bottomValue)) { view in
-                        view.proportionalWidth(from: self.bottomValue)
-                    }
-                    .accessibilityIdentifier(AccessibilityIdentifier.bottomIndicatorView)
+                self.bottomIndicator()
 
                 // Top Indicator
-                RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
-                    .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
-                    .if(self.viewModel.isValidIndicatorValue(self.topValue)) { view in
-                        view.proportionalWidth(from: self.topValue)
-                    }
-                    .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
+                self.topIndicator()
             }
         )
     }
+
+    @ViewBuilder
+    private func bottomIndicator() -> some View {
+        if self.viewModel.isValidIndicatorValue(self.bottomValue) {
+            self.bottomRectangle().proportionalWidth(from: self.bottomValue)
+        } else {
+            self.bottomRectangle()
+        }
+    }
+
+    private func bottomRectangle() -> some View {
+        RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
+            .fill(self.viewModel.colors?.bottomIndicatorBackgroundColorToken)
+            .accessibilityIdentifier(AccessibilityIdentifier.bottomIndicatorView)
+    }
+
+    @ViewBuilder
+    private func topIndicator() -> some View {
+        if self.viewModel.isValidIndicatorValue(self.topValue) {
+            self.topRectangle().proportionalWidth(from: self.topValue)
+        } else {
+            self.topRectangle()
+        }
+    }
+
+    private func topRectangle() -> some View {
+        RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
+            .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
+            .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
+
+    }
+
 }

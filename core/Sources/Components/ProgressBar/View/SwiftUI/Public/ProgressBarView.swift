@@ -51,13 +51,25 @@ public struct ProgressBarView: View {
             trackCornerRadius: self.viewModel.cornerRadius,
             trackBackgroundColor: self.viewModel.colors?.trackBackgroundColorToken,
             indicatorView: {
-                RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
-                    .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
-                    .if(self.viewModel.isValidIndicatorValue(self.value)) { view in
-                        view.proportionalWidth(from: self.value)
-                    }
-                    .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
+                self.indicatorView()
             }
         )
+    }
+
+    @ViewBuilder
+    private func indicatorView() -> some View {
+        if self.viewModel.isValidIndicatorValue(self.value) {
+            self.indicatorRectangle()
+                .proportionalWidth(from: self.value)
+        } else {
+            self.indicatorRectangle()
+        }
+    }
+
+    @ViewBuilder
+    private func indicatorRectangle() -> some View {
+        RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
+            .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
+            .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
     }
 }
