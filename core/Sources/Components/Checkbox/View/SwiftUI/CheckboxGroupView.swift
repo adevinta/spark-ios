@@ -126,7 +126,17 @@ public struct CheckboxGroupView: View {
         .accessibilityIdentifier(CheckboxAccessibilityIdentifier.checkboxGroup)
     }
 
+    @ViewBuilder
     private func makeHStackView() -> some View {
+        if self.isScrollableHStack {
+            self.makeScrollHStackView()
+        } else {
+            self.makeDefaultHStackView()
+        }
+    }
+
+    @ViewBuilder
+    private func makeScrollHStackView() -> some View {
         ScrollView (.horizontal, showsIndicators: false) {
             HStack(alignment: .top, spacing: self.spacingLarge) {
                 self.makeContentView(maxWidth: self.viewWidth)
@@ -143,11 +153,6 @@ public struct CheckboxGroupView: View {
             .padding(checkboxSelectedBorderWidth)
         }
         .padding(-checkboxSelectedBorderWidth)
-        .if(!self.isScrollableHStack) { _ in
-            makeDefaultHStackView()
-        } else: { view in
-            view
-        }
     }
 
     @ViewBuilder
