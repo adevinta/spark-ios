@@ -38,7 +38,7 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             for configuration in configurations {
                 self.selectionState = configuration.selectionState
 
-                let view = CheckboxView(
+                let checkboxView = CheckboxView(
                     text: configuration.text,
                     checkedImage: Image(uiImage: configuration.image),
                     alignment: configuration.alignment,
@@ -48,14 +48,8 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                     selectionState: self._selectionState
                 )
                 .background(Color.systemBackground)
-                .if(configuration.text != "Hello World") { view in
-                    VStack {
-                        view
-                    }
-                    .frame(width: UIScreen.main.bounds.width)
-                } else: { view in
-                    view.fixedSize()
-                }
+
+                let view = self.view(text: configuration.text, checkbox: checkboxView)
 
                 self.assertSnapshot(
                     matching: view,
@@ -65,5 +59,16 @@ final class CheckboxViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
                 )
             }
         }
+    }
+
+    func view(text: String, checkbox: some View) -> AnyView {
+        if text != "Hello World" {
+            let view = VStack { checkbox }
+                .frame(width: UIScreen.main.bounds.width)
+            return AnyView(view)
+        } else {
+            return AnyView(checkbox.fixedSize())
+        }
+
     }
 }
