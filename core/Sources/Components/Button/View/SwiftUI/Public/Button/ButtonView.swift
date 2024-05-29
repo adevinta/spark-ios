@@ -93,6 +93,8 @@ public struct ButtonView: View {
             maxWidth: self.viewModel.maxWidth,
             alignment: self.viewModel.frameAlignment
         )
+        .animation(nil, value: self.viewModel.maxWidth)
+        .animation(nil, value: self.viewModel.frameAlignment)
     }
 
     @ViewBuilder
@@ -107,9 +109,11 @@ public struct ButtonView: View {
                 .foregroundStyle(self.viewModel.currentColors?.titleColor?.color ?? ColorTokenDefault.clear.color)
                 .font(self.viewModel.titleFontToken?.font)
                 .accessibilityIdentifier(ButtonAccessibilityIdentifier.text)
+                .animation(nil, value: text)
         } else if let attributedText = self.viewModel.controlStateText?.attributedText {
             Text(attributedText)
                 .accessibilityIdentifier(ButtonAccessibilityIdentifier.text)
+                .animation(nil, value: attributedText)
         }
     }
 
