@@ -202,15 +202,10 @@ class ComponentUIView: UIView {
             to: self.scrollView,
             insets: .init(top: 0, left: spacing, bottom: 0, right: spacing)
         )
-        let widthConstraint = self.contentStackView.widthAnchor.constraint(
-            equalTo: self.widthAnchor,
-            constant: -spacing * 2
-        )
-        widthConstraint.priority = .init(999)
-        widthConstraint.isActive = true
 
-        // Separation Line View
+        // Width & Separation Line View
         NSLayoutConstraint.activate([
+            self.contentStackView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -spacing * 2),
             self.separationLineView.heightAnchor.constraint(equalToConstant: 1)
         ])
     }
