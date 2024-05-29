@@ -31,7 +31,7 @@ enum TagContent: CaseIterable {
     var text: String {
         switch self {
         case .attributedText, .iconAndAttributedText:
-            return "This is a AT Tag"
+            return "This is an AT Tag"
         case .longText, .longAttributedText, .iconAndLongText, .iconAndLongAttributedText:
             return "This is a Tag with a very very very very very long long long long width"
         default:
