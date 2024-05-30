@@ -126,25 +126,19 @@ public struct CheckboxView: View {
 
     @ViewBuilder 
     private var checkboxView: some View {
-        let tintColor = self.viewModel.colors.tintColor.color
+        if self.selectionState == .selected {
+            self.checkbox().accessibilityAddTraits(.isSelected)
+        } else {
+            self.checkbox()
+        }
+    }
+
+    @ViewBuilder
+    private func checkbox() -> some View {
         let iconColor = self.viewModel.colors.iconColor.color
-        let borderColor = self.viewModel.colors.borderColor.color
+
         ZStack {
-            RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
-                .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
-                    $0.fill(tintColor)
-                } else: {
-                    $0.strokeBorder(borderColor, lineWidth: self.checkboxBorderWidth)
-                }
-                .frame(width: self.checkboxSize, height: self.checkboxSize)
-                .if(self.isPressed && self.viewModel.isEnabled) {
-                    $0.overlay(
-                        RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
-                            .inset(by: -self.checkboxSelectedBorderWidth / 2)
-                            .stroke(self.viewModel.colors.pressedBorderColor.color, lineWidth: self.checkboxSelectedBorderWidth)
-                            .animation(.easeInOut(duration: 0.1), value: self.isPressed)
-                    )
-                }
+            self.stateFullCheckboxRectangle()
 
             switch self.selectionState {
             case .selected:
@@ -164,6 +158,35 @@ public struct CheckboxView: View {
         }
         .id(Identifier.checkbox.rawValue)
         .matchedGeometryEffect(id: Identifier.checkbox.rawValue, in: self.namespace)
+    }
+
+    @ViewBuilder
+    private func stateFullCheckboxRectangle() -> some View {
+        if self.isPressed && self.viewModel.isEnabled {
+            self.checkboxRectangle()
+                .overlay(
+                    RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
+                        .inset(by: -self.checkboxSelectedBorderWidth / 2)
+                        .stroke(self.viewModel.colors.pressedBorderColor.color, lineWidth: self.checkboxSelectedBorderWidth)
+                        .animation(.easeInOut(duration: 0.1), value: self.isPressed)
+                )
+        } else {
+            self.checkboxRectangle()
+        }
+    }
+
+    @ViewBuilder
+    private func checkboxRectangle() -> some View {
+        let tintColor = self.viewModel.colors.tintColor.color
+        let borderColor = self.viewModel.colors.borderColor.color
+
+        RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
+            .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
+                $0.fill(tintColor)
+            } else: {
+                $0.strokeBorder(borderColor, lineWidth: self.checkboxBorderWidth)
+            }
+            .frame(width: self.checkboxSize, height: self.checkboxSize)
     }
 
     @ViewBuilder 
