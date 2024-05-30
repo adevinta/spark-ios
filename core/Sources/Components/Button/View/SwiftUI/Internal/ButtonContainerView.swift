@@ -62,7 +62,6 @@ struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel &
                     radius: self.borderRadius,
                     colorToken: self.viewModel.currentColors?.borderColor ?? ColorTokenDefault.clear
                 )
-                .animation(nil, value: UUID())
         }
         .buttonStyle(PressedButtonStyle(
             isPressed: self.$isPressed
