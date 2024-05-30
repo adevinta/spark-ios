@@ -29,8 +29,8 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             viewModel: viewModel,
             componentView: self.componentView
         )
-
         self.componentView.delegate = self
+
         // Setup
         self.setupSubscriptions()
 
@@ -81,6 +81,11 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             self.componentView.title = showGroupTitle ? viewModel.title : ""
         }
 
+        self.viewModel.$isEnabled.subscribe(in: &self.cancellables) { [weak self] isEnabled in
+            guard let self = self else { return }
+            self.componentView.isEnabled = isEnabled
+        }
+
         self.viewModel.$groupType.subscribe(in: &self.cancellables) { [weak self] type in
             guard let self = self else { return }
             self.viewModel.groupTypeConfigurationItemViewModel.buttonTitle = type.name
@@ -102,8 +107,7 @@ final class CheckboxGroupComponentUIView: ComponentUIView {
             items: CheckboxGroupComponentUIViewModel.makeCheckboxGroupItems(type: viewModel.groupType),
             alignment: viewModel.isAlignmentLeft ? .left : .right,
             theme: viewModel.theme,
-            intent: viewModel.intent,
-            accessibilityIdentifierPrefix: "Checkbox"
+            intent: viewModel.intent
         )
     }
 }
