@@ -121,26 +121,36 @@ public struct ChipView: View {
 
     // MARK: - View
     public var body: some View {
+        if (self.action == nil) {
+            self.borderedChipView().buttonStyle(NoButtonStyle())
+        } else {
+            self.borderedChipView().buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isPressed))
+        }
+    }
+
+    @ViewBuilder 
+    private func borderedChipView() -> some View {
+        if self.viewModel.isBordered {
+            self.chipView().chipBorder(width: self.borderWidth,
+                            radius: self.borderRadius,
+                            dashLength: self.borderDashLength(),
+                            colorToken: self.viewModel.colors.border)
+        } else {
+            self.chipView()
+        }
+    }
+
+    @ViewBuilder
+    private func chipView() -> some View {
         Button(action: self.action ?? {}) {
             self.content()
         }
         .frame(height: self.height)
         .background(self.viewModel.colors.background.color)
-        .if(self.viewModel.isBordered) { view in
-            view.chipBorder(width: self.borderWidth,
-                            radius: self.borderRadius,
-                            dashLength: self.borderDashLength(),
-                            colorToken: self.viewModel.colors.border)
-        }
         .opacity(self.viewModel.colors.opacity)
         .cornerRadius(self.borderRadius)
         .isEnabledChanged { isEnabled in
             self.viewModel.isEnabled = isEnabled
-        }
-        .if(self.action == nil) { content in
-            content.buttonStyle(NoButtonStyle())
-        } else: { content in
-            content.buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isPressed))
         }
         .accessibilityIdentifier(ChipAccessibilityIdentifier.identifier)
     }
