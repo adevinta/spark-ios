@@ -48,6 +48,10 @@ struct ComponentsView: View {
                 }
             }
 
+            Button("FormField") {
+                self.navigateToView(FormFieldComponentView())
+            }
+
             Button("Icon") {
                 self.navigateToView(IconComponentView())
             }
@@ -99,6 +103,14 @@ struct ComponentsView: View {
 
                 Button("Tag") {
                     self.navigateToView(TagComponentView())
+                }
+
+                Button("TextField") {
+                    self.navigateToView(TextFieldComponentView())
+                }
+
+                Button("TextFieldAddons") {
+                    self.navigateToView(TextFieldAddonsComponentView())
                 }
 
                 Button("TextLink") {

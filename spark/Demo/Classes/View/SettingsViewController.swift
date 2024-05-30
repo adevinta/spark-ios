@@ -66,13 +66,10 @@ extension SettingsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let section = Row.allCases[indexPath.row]
-        var viewController: UIViewController!
         switch section {
         case .appearance:
             self.presentAppearanceSheet()
         }
-        guard viewController != nil else { return }
-        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

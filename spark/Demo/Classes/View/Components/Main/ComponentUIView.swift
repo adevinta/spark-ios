@@ -265,7 +265,7 @@ class ComponentUIView: UIView {
             texts: spaceContainerTypes.map { $0.name }) { type in
                 self.viewModel.spaceContainerType = type
             }
-        viewController.present(actionSheet, animated: true)
+        viewController.present(actionSheet, isAnimated: true)
     }
 
     // MARK: - Action

@@ -28,103 +28,152 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 
     // MARK: - Tests
     func test_tab_icon_and_title_and_badge() throws {
+        //GIVEN
+        let viewModel: TabItemViewModel<TabItemContent> =
+            .init(
+                theme: theme,
+                intent: .main,
+                content: .init(
+                    icon: Image(systemName: "paperplane"),
+                    title: "Label")
+        )
 
         let sut = TabItemView(
-            theme: self.theme,
-            intent: .main,
-            content: .init(
-                icon: Image(systemName: "paperplane"),
-                title: "Label")) {}
+            viewModel: viewModel, tapAction: {})
             .apportionsSegmentWidthsByContent(false)
             .badge(self.badge)
             .background(.systemBackground)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
+        //THEN
+        assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.medium])
     }
 
     func test_selected_tab_with_intent_main() throws {
-        let sut = TabItemView(
-            theme: self.theme,
-            intent: .main,
-            content: .init(title: "Label")) {}
+        //GIVEN
+        let viewModel: TabItemViewModel<TabItemContent> =
+            .init(
+                theme: theme,
+                intent: .main,
+                content: .init(title: "Label")
+        )
+
+        let sut = TabItemView(viewModel: viewModel, tapAction: {})
             .apportionsSegmentWidthsByContent(true)
             .selected(true)
             .background(.systemBackground)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
+        //THEN
+        assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.medium])
     }
 
     func test_with_badge_only() throws {
+        //GIVEN
+        let viewModel: TabItemViewModel<TabItemContent> =
+            .init(
+                theme: theme,
+                intent: .main,
+                content: .init()
+        )
 
-        let sut = TabItemView(
-            theme: self.theme,
-            intent: .main,
-            content: .init()) {}
+        let sut = TabItemView(viewModel: viewModel, tapAction: {})
             .apportionsSegmentWidthsByContent(true)
             .badge(self.badge)
             .selected(true)
             .background(.systemBackground)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
+        //THEN
+        assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.medium])
     }
 
     func test_with_label_only() throws {
-        let sut = TabItemView(
-            theme: self.theme,
-            intent: .main,
-            content: .init(title: "Label")) {}
+        //GIVEN
+        let viewModel: TabItemViewModel<TabItemContent> =
+            .init(
+                theme: theme,
+                intent: .main,
+                content: .init(title: "Label")
+        )
+
+        let sut = TabItemView(viewModel: viewModel, tapAction: {})
             .apportionsSegmentWidthsByContent(true)
             .background(.systemBackground)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+        //THEN
+        assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.small, .medium, .large, .extraLarge])
     }
 
     func test_with_icon_only() throws {
+        //GIVEN
+        let viewModel: TabItemViewModel<TabItemContent> =
+            .init(
+                theme: theme,
+                intent: .main,
+                content: .init(icon: Image(systemName: "paperplane"))
+        )
+
         let sut = TabItemView(
-            theme: self.theme,
-            intent: .main,
-            content: .init(icon: Image(systemName: "paperplane"))) {}
+            viewModel: viewModel, tapAction: {})
             .apportionsSegmentWidthsByContent(true)
             .background(.systemBackground)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.medium])
+        //THEN
+        assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.medium])
     }
 
     func test_with_label_and_badge() throws {
-        let sut = TabItemView(
-            theme: self.theme,
-            intent: .basic,
-            content: .init(title: "Label")) {}
+        //GIVEN
+        let viewModel: TabItemViewModel<TabItemContent> =
+            .init(
+                theme: theme,
+                intent: .basic,
+                content: .init(title: "Label")
+        )
+
+        let sut = TabItemView(viewModel: viewModel, tapAction: {})
             .apportionsSegmentWidthsByContent(true)
             .badge(self.badge)
             .selected(true)
             .background(.systemBackground)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.small, .medium, .large, .extraLarge])
+        //THEN
+        assertSnapshot(matching: sut, modes: [.dark, .light], sizes: [.small, .medium, .large, .extraLarge])
     }
 
     func test_with_icon_and_label() throws {
-        let sut = TabItemView(
-            theme: self.theme,
-            intent: .basic,
-            content: .init(
-                icon: Image(systemName: "paperplane"),
-                title: "Label")) {}
+        //GIVEN
+        let viewModel: TabItemViewModel<TabItemContent> =
+            .init(
+                theme: theme,
+                intent: .basic,
+                content: .init(
+                    icon: Image(systemName: "paperplane"),
+                    title: "Label")
+        )
+
+        let sut = TabItemView(viewModel: viewModel, tapAction: {})
             .apportionsSegmentWidthsByContent(false)
             .background(.systemBackground)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.large])
+        //THEN
+        assertSnapshot(matching: sut, modes: [.dark, .light], sizes: [.large])
     }
 
     func test_with_icon_and_badge() throws {
-        let sut = TabItemView(
-            theme: self.theme,
-            intent: .basic,
-            content: .init(icon: Image(systemName: "paperplane"))) {}
+        //GIVEN
+        let viewModel: TabItemViewModel<TabItemContent> =
+            .init(
+                theme: theme,
+                intent: .basic,
+                content: .init(
+                    icon: Image(systemName: "paperplane"))
+        )
+
+        let sut = TabItemView(viewModel: viewModel, tapAction: {})
             .apportionsSegmentWidthsByContent(true)
             .badge(self.badge)
             .background(.systemBackground)
 
-        assertSnapshotInDarkAndLight(matching: sut, sizes: [.extraSmall])
+        //THEN
+        assertSnapshot(matching: sut, modes: [.dark, .light], sizes: [.extraSmall])
     }
 }

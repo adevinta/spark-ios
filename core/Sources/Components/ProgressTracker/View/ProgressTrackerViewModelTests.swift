@@ -155,7 +155,7 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         }
 
         // WHEN
-        sut.isEnabled = false
+        sut.setIsEnabled(false)
 
         // THEN
         XCTAssertEqual(sut.disabledIndices.count, 4, "Expected all indices to be disabled")
@@ -170,7 +170,7 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         let sut = sut(orientation: .vertical, numberOfPages: 4)
 
         // WHEN
-        sut.isEnabled = false
+        sut.setIsEnabled(false)
         sut.setIsEnabled(isEnabled: true, forIndex: 0)
 
         // THEN
@@ -193,8 +193,8 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         let sut = sut(orientation: .vertical, numberOfPages: 4)
 
         // WHEN
-        sut.isEnabled = false
-        sut.isEnabled = true
+        sut.setIsEnabled(false)
+        sut.setIsEnabled(true)
 
         // THEN
         XCTAssertEqual(sut.disabledIndices.count, 0)

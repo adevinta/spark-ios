@@ -335,21 +335,18 @@ public final class TagUIView: UIView {
     }
 
     private func reloadTextLabel() {
+        self.reloadTextStyle()
         if let attributedText = self.attributedText {
             self.textLabel.attributedText = attributedText
         } else {
             self.textLabel.text = self.text
-            self.reloadTextStyle()
         }
         self.textLabel.isHidden = (self.text == nil && self.attributedText == nil)
     }
 
     private func reloadTextStyle() {
-        // Change the style only if the text is displayed and not the attributedText
-        if self._attributedText == nil {
-            self.textLabel.font = self.theme.typography.captionHighlight.uiFont
-            self.textLabel.textColor = self.colors.foregroundColor.uiColor
-        }
+        self.textLabel.font = self.theme.typography.captionHighlight.uiFont
+        self.textLabel.textColor = self.colors.foregroundColor.uiColor
     }
 
     private func reloadUIFromTheme() {
@@ -364,7 +361,7 @@ public final class TagUIView: UIView {
         self.setMasksToBounds(true)
 
         // Subviews
-        self.reloadTextStyle()
+        self.reloadTextLabel()
     }
 
     private func reloadUIFromColors() {
@@ -374,7 +371,7 @@ public final class TagUIView: UIView {
 
         // Subviews
         self.iconImageView.tintColor = self.colors.foregroundColor.uiColor
-        self.reloadTextStyle()
+        self.reloadTextLabel()
     }
 
     private func reloadUIFromSize() {

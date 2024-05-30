@@ -217,6 +217,7 @@ public final class ChipUIView: UIControl {
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.insetsLayoutMarginsFromSafeArea = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -449,11 +450,11 @@ public final class ChipUIView: UIControl {
         ]
 
         let stackConstraints = [
-            self.stackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-            self.stackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+            self.stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             heightConstraint,
-            self.stackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            self.stackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
+            self.stackView.topAnchor.constraint(equalTo: self.topAnchor),
+            self.stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ]
 
         NSLayoutConstraint.activate(stackConstraints)

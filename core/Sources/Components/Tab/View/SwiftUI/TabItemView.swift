@@ -9,7 +9,7 @@
 import SwiftUI
 
 /// A single tab item used on the tab view.
-public struct TabItemView: View {
+struct TabItemView: View {
 
     // MARK: - Private Variables
     @ObservedObject private var viewModel: TabItemViewModel<TabItemContent>
@@ -39,36 +39,9 @@ public struct TabItemView: View {
     // MARK: Initialization
     /// Initializer
     /// - Parameters:
-    /// - theme: The current theme.
-    /// - intent: The intent, the default is `basic`.
-    /// - size: The tab size, the default is `md`.
-    /// - content: The content of the tab.
-    /// - apportionsSegmentWidthsByContent: Determins if the tab is to be as wide as it's content, or equally spaced.
+    /// - viewModel: The view model of the tab item.
     /// - tapAction: the action triggered by tapping on the tab.
-    public init(
-        theme: Theme,
-        intent: TabIntent = .basic,
-        size: TabSize = .md,
-        content: TabItemContent,
-        apportionsSegmentWidthsByContent: Bool = false,
-        isSelected: Bool = false,
-        tapAction: @escaping () -> Void
-    ) {
-        let viewModel = TabItemViewModel(
-            theme: theme,
-            intent: intent,
-            tabSize: size,
-            content: content,
-            apportionsSegmentWidthsByContent: apportionsSegmentWidthsByContent
-        )
-        viewModel.isSelected = isSelected
-
-        self.init(viewModel: viewModel,
-                  tapAction: tapAction
-        )
-    }
-
-    internal init(
+    init(
         viewModel: TabItemViewModel<TabItemContent>,
         tapAction: @escaping () -> Void
     ) {
@@ -77,7 +50,7 @@ public struct TabItemView: View {
    }
 
     // MARK: - View
-    public var body: some View {
+    var body: some View {
         Button(
             action: {
                 self.tapAction()
@@ -89,9 +62,6 @@ public struct TabItemView: View {
             })
         .opacity(self.viewModel.tabStateAttributes.colors.opacity)
         .buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isPressed, animationDuration: 0.1))
-        .isEnabledChanged { isEnabled in
-            self.viewModel.isEnabled = isEnabled
-        }
     }
 
     // MARK: Private Functions
@@ -162,7 +132,7 @@ public struct TabItemView: View {
 
     /// Set the tab as selected
     public func selected(_ selected: Bool) -> Self {
-        self.viewModel.isSelected = selected
+        self.viewModel.updateState(isSelected: selected)
         return self
     }
 }

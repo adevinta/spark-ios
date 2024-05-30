@@ -52,19 +52,20 @@ struct ButtonContainerView<ContainerView: View, ViewModel: ButtonMainViewModel &
     var body: some View {
         Button(action: self.action) {
             self.contentView()
+                .padding(self.padding)
+                .frame(height: self.height)
+                .frame(minWidth: self.height)
+                .background(self.viewModel.currentColors?.backgroundColor.color ?? .clear)
+                .contentShape(Rectangle())
+                .border(
+                    width: self.borderWidth,
+                    radius: self.borderRadius,
+                    colorToken: self.viewModel.currentColors?.borderColor ?? ColorTokenDefault.clear
+                )
         }
         .buttonStyle(PressedButtonStyle(
             isPressed: self.$isPressed
         ))
-        .padding(self.padding)
-        .frame(height: self.height)
-        .frame(minWidth: self.height)
-        .background(self.viewModel.currentColors?.backgroundColor.color ?? .clear)
-        .border(
-            width: self.borderWidth,
-            radius: self.borderRadius,
-            colorToken: self.viewModel.currentColors?.borderColor ?? ColorTokenDefault.clear
-        )
         .compositingGroup()
         .disabled(self.viewModel.state?.isUserInteractionEnabled == false)
         .opacity(self.viewModel.state?.opacity ?? .zero)

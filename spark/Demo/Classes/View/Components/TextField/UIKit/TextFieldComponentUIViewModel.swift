@@ -2,152 +2,219 @@
 //  TextFieldComponentUIViewModel.swift
 //  SparkDemo
 //
-//  Created by Quentin.richard on 14/09/2023.
-//  Copyright © 2023 Adevinta. All rights reserved.
+//  Created by louis.borlee on 24/01/2024.
+//  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-import Combine
-import Spark
-import SparkCore
 import UIKit
+import Combine
+import SparkCore
 
-final class TextFieldComponentUIViewModel: ObservableObject {
+final class TextFieldComponentUIViewModel: ComponentUIViewModel, ObservableObject {
+
+    @Published var theme: Theme
+    @Published var intent: TextFieldIntent
+    @Published var isEnabled: Bool = true
+    @Published var isUserInteractionEnabled: Bool = true
+    @Published var leftViewMode: UITextField.ViewMode = .always
+    @Published var rightViewMode: UITextField.ViewMode = .always
+    @Published var leftViewContent: TextFieldSideViewContent = .none
+    @Published var rightViewContent: TextFieldSideViewContent = .none
+    @Published var clearButtonMode: UITextField.ViewMode = .always
+
     // MARK: - Published Properties
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
-        showThemeSheetSubject
+        self.showThemeSheetSubject
             .eraseToAnyPublisher()
     }
-
     var showIntentSheet: AnyPublisher<[TextFieldIntent], Never> {
-        showIntentSheetSubject
+        self.showIntentSheetSubject
             .eraseToAnyPublisher()
     }
-
-    var showRightViewModeSheet: AnyPublisher<[ViewMode], Never> {
-        showRightViewModeSheetSubject
+    var showClearButtonModeSheet: AnyPublisher<[UITextField.ViewMode], Never> {
+        self.showClearButtonModeSheetSubject
             .eraseToAnyPublisher()
     }
-
-    var showLeftViewModeSheet: AnyPublisher<[ViewMode], Never> {
-        showLeftViewModeSheetSubject
+    var showLeftViewModeSheet: AnyPublisher<[UITextField.ViewMode], Never> {
+        self.showLeftViewModeSheetSubject
             .eraseToAnyPublisher()
     }
-
-    var showLeadingAddOnSheet: AnyPublisher<[AddOnOption], Never> {
-        showLeadingAddOnSheetSubject
+    var showRightViewModeSheet: AnyPublisher<[UITextField.ViewMode], Never> {
+        self.showRightViewModeSheetSubject
             .eraseToAnyPublisher()
     }
-
-    var showTrailingAddOnSheet: AnyPublisher<[AddOnOption], Never> {
-        showTrailingAddOnSheetSubject
+    var showLeftViewContentSheet: AnyPublisher<[TextFieldSideViewContent], Never> {
+        self.showLeftViewContentSheetSubject
             .eraseToAnyPublisher()
     }
-
-    var showClearButtonModeSheet: AnyPublisher<[ViewMode], Never> {
-        showClearButtonModeSheetSubject
+    var showRightViewContentSheet: AnyPublisher<[TextFieldSideViewContent], Never> {
+        self.showRightViewContentSheetSubject
+            .eraseToAnyPublisher()
+    }
+    var refreshLayout: AnyPublisher<Void, Never> {
+        self.refreshLayoutSubject
             .eraseToAnyPublisher()
     }
 
     let themes = ThemeCellModel.themes
 
-    // MARK: - Private Properties
+    lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Theme",
+            type: .button,
+            target: (source: self, action: #selector(self.presentThemeSheet))
+        )
+    }()
+
+    lazy var intentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "Intent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentIntentSheet))
+        )
+    }()
+
+    lazy var isEnabledConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "IsEnabled",
+            type: .toggle(isOn: self.isEnabled),
+            target: (source: self, action: #selector(self.toggleIsEnabled))
+        )
+    }()
+
+    lazy var isUserInteractionEnabledConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "IsUserInteractionEnabled",
+            type: .toggle(isOn: self.isUserInteractionEnabled),
+            target: (source: self, action: #selector(self.toggleIsUserInteractionEnabled))
+        )
+    }()
+
+    lazy var clearButtonModeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "ClearButtonMode",
+            type: .button,
+            target: (source: self, action: #selector(self.presentClearButtonMode))
+        )
+    }()
+
+    lazy var leftViewModeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "LeftViewMode",
+            type: .button,
+            target: (source: self, action: #selector(self.presentLeftViewMode))
+        )
+    }()
+    lazy var rightViewModeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "RightViewMode",
+            type: .button,
+            target: (source: self, action: #selector(self.presentRightViewMode))
+        )
+    }()
+
+    lazy var leftViewContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "LeftViewContent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentLeftViewContent))
+        )
+    }()
+    lazy var rightViewContentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "RightViewContent",
+            type: .button,
+            target: (source: self, action: #selector(self.presentRightViewContent))
+        )
+    }()
+    lazy var refreshLayoutConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "RefreshLayout",
+            type: .button,
+            target: (source: self, #selector(self.triggerLayoutRefresh))
+        )
+    }()
+
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showIntentSheetSubject: PassthroughSubject<[TextFieldIntent], Never> = .init()
-    private var showLeftViewModeSheetSubject: PassthroughSubject<[ViewMode], Never> = .init()
-    private var showRightViewModeSheetSubject: PassthroughSubject<[ViewMode], Never> = .init()
-    private var showLeadingAddOnSheetSubject: PassthroughSubject<[AddOnOption], Never> = .init()
-    private var showTrailingAddOnSheetSubject: PassthroughSubject<[AddOnOption], Never> = .init()
-    private var showClearButtonModeSheetSubject: PassthroughSubject<[ViewMode], Never> = .init()
-
-    // MARK: - Initialization
-    @Published var theme: Theme
-    @Published var intent: TextFieldIntent
-    @Published var leftViewMode: ViewMode
-    @Published var rightViewMode: ViewMode
-    @Published var leadingAddOnOption: AddOnOption
-    @Published var trailingAddOnOption: AddOnOption
-    @Published var clearButtonMode: ViewMode
-    @Published var text: String?
-    @Published var icon: UIImage?
-    @Published var component: UIView?
-    @Published var action: (()->Void)?
+    private var showClearButtonModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
+    private var showLeftViewModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
+    private var showRightViewModeSheetSubject: PassthroughSubject<[UITextField.ViewMode], Never> = .init()
+    private var showLeftViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
+    private var showRightViewContentSheetSubject: PassthroughSubject<[TextFieldSideViewContent], Never> = .init()
+    private var refreshLayoutSubject: PassthroughSubject<Void, Never> = .init()
 
     init(
         theme: Theme,
-        intent: TextFieldIntent = .neutral,
-        leftViewMode: ViewMode = .never,
-        rigthViewMode: ViewMode = .never,
-        leadingAddOnOption: AddOnOption = .none,
-        trailingAddOnOption: AddOnOption = .none,
-        clearButtonMode: ViewMode = .never,
-        text: String? = "Label",
-        icon: UIImage? = UIImage(imageLiteralResourceName: "alert"),
-        component: UIView? = nil,
-        action: (()->Void)? = nil
+        intent: TextFieldIntent = .neutral
     ) {
         self.theme = theme
         self.intent = intent
-        self.text = text
-        self.icon = icon
-        self.component = component
-        self.action = action
-        self.leftViewMode = leftViewMode
-        self.rightViewMode = rigthViewMode
-        self.leadingAddOnOption = leadingAddOnOption
-        self.trailingAddOnOption = trailingAddOnOption
-        self.clearButtonMode = clearButtonMode
+        super.init(identifier: "TextField")
+        self.refreshLayoutConfigurationItemViewModel.buttonTitle = "Refresh layout"
     }
-}
 
-// MARK: - Navigation
-extension TextFieldComponentUIViewModel {
+    override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
+        return [
+            self.themeConfigurationItemViewModel,
+            self.intentConfigurationItemViewModel,
+            self.isEnabledConfigurationItemViewModel,
+            self.isUserInteractionEnabledConfigurationItemViewModel,
+            self.clearButtonModeConfigurationItemViewModel,
+            self.leftViewModeConfigurationItemViewModel,
+            self.rightViewModeConfigurationItemViewModel,
+            self.leftViewContentConfigurationItemViewModel,
+            self.rightViewContentConfigurationItemViewModel,
+            self.refreshLayoutConfigurationItemViewModel
+        ]
+    }
 
     @objc func presentThemeSheet() {
-        self.showThemeSheetSubject.send(themes)
+        self.showThemeSheetSubject.send(self.themes)
     }
 
     @objc func presentIntentSheet() {
         self.showIntentSheetSubject.send(TextFieldIntent.allCases)
     }
 
-    @objc func presentLeftViewModeSheet() {
-        self.showLeftViewModeSheetSubject.send(ViewMode.allCases)
+    @objc func toggleIsEnabled() {
+        self.isEnabled.toggle()
     }
 
-    @objc func presentRightViewModeSheet() {
-        self.showRightViewModeSheetSubject.send(ViewMode.allCases)
+    @objc func toggleIsUserInteractionEnabled() {
+        self.isUserInteractionEnabled.toggle()
     }
 
-    @objc func presentLeadingAddOnSheet() {
-        self.showLeadingAddOnSheetSubject.send(AddOnOption.allCases)
+    @objc func presentClearButtonMode() {
+        self.showClearButtonModeSheetSubject.send(UITextField.ViewMode.allCases)
     }
 
-    @objc func presentTrailingAddOnSheet() {
-        self.showTrailingAddOnSheetSubject.send(AddOnOption.allCases)
+    @objc func presentLeftViewMode() {
+        self.showLeftViewModeSheetSubject.send(UITextField.ViewMode.allCases)
     }
 
-    @objc func buttonTapped(_ sender: UIButton) {
-        sender.imageView?.transform = sender.imageView?.transform.rotated(by: CGFloat(Double.pi / 2)) ?? CGAffineTransform()
+    @objc func presentRightViewMode() {
+        self.showRightViewModeSheetSubject.send(UITextField.ViewMode.allCases)
     }
 
-    @objc func presetClearButtonModeSheet() {
-        self.showClearButtonModeSheetSubject.send(ViewMode.allCases)
+    @objc func presentLeftViewContent() {
+        self.showLeftViewContentSheetSubject.send(TextFieldSideViewContent.allCases)
+    }
+
+    @objc func presentRightViewContent() {
+        self.showRightViewContentSheetSubject.send(TextFieldSideViewContent.allCases)
+    }
+
+    @objc func triggerLayoutRefresh() {
+        self.refreshLayoutSubject.send()
     }
 }
 
-public enum ViewMode: Int, CaseIterable {
-    case never = 0
-
-    case whileEditing = 1
-
-    case unlessEditing = 2
-
-    case always = 3
-}
-
-public enum AddOnOption: CaseIterable {
-    case none
-    case button
-    case shortText
-    case longText
+extension UITextField.ViewMode: CaseIterable {
+    public static var allCases: [UITextField.ViewMode] = [
+        .never,
+        .whileEditing,
+        .unlessEditing,
+        .always
+    ]
 }

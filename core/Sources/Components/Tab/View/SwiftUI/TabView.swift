@@ -13,6 +13,7 @@ public struct TabView: View {
     private let intent: TabIntent
     @ObservedObject private var viewModel: TabViewModel<TabItemContent>
     @Binding private var selectedIndex: Int
+    @Environment(\.isEnabled) private var isEnabled: Bool
 
     // MARK: - Initialization
     /// Initializer
@@ -79,10 +80,12 @@ public struct TabView: View {
 
     // MARK: - View
     public var body: some View {
-        if self.viewModel.apportionsSegmentWidthsByContent {
-            TabApportionsSizeView(viewModel: self.viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
+        let viewModel = self.viewModel.setIsEnabled(self.isEnabled)
+        
+        if viewModel.apportionsSegmentWidthsByContent {
+            TabApportionsSizeView(viewModel: viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
         } else {
-            TabEqualSizeView(viewModel: self.viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
+            TabEqualSizeView(viewModel: viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
         }
     }
 

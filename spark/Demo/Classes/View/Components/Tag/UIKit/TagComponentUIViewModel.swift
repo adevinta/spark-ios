@@ -92,13 +92,11 @@ final class TagComponentUIViewModel: ComponentUIViewModel {
     let image: UIImage = UIImage(named: "alert") ?? UIImage()
 
     func attributeText(_ text: String) -> NSAttributedString {
-        let attributeString = NSMutableAttributedString(
-            string: text,
-            attributes: [
-                .font: UIFont.boldSystemFont(ofSize: 14),
-                .foregroundColor: UIColor.red
-            ]
-        )
+        let attributeString = NSMutableAttributedString(string: text)
+        let range = NSRange(location: text.count / 3, length: text.count / 3)
+
+        attributeString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 14), range: range)
+        attributeString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.red, range: range)
         return attributeString
     }
 

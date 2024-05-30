@@ -11,7 +11,7 @@ import Foundation
 
 /// A view model for the rating display.
 final class RatingDisplayViewModel: ObservableObject {
-    
+
     /// The current theme of which colors and sizes are dependent.
     var theme: Theme {
         didSet {
@@ -98,14 +98,17 @@ final class RatingDisplayViewModel: ObservableObject {
             state: self.ratingState)
     }
 
-    func updateState(isEnabled: Bool) {
-        guard self.ratingState.isEnabled != isEnabled else { return }
+    @discardableResult
+    func updateState(isEnabled: Bool) -> Self {
+        guard self.ratingState.isEnabled != isEnabled else { return self }
 
         self.ratingState.isEnabled = isEnabled
         self.colors = self.colorsUseCase.execute(
             theme: self.theme,
             intent: self.intent,
             state: self.ratingState)
+
+        return self
     }
 
     // MARK: - Private functions

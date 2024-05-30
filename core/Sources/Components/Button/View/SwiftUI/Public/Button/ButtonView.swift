@@ -15,7 +15,6 @@ public struct ButtonView: View {
 
     @ObservedObject private var viewModel: ButtonSUIViewModel
 
-    @ScaledMetric private var verticalSpacing: CGFloat
     @ScaledMetric private var horizontalSpacing: CGFloat
     @ScaledMetric private var horizontalPadding: CGFloat
 
@@ -53,7 +52,6 @@ public struct ButtonView: View {
 
         // **
         // Scaled Metric
-        self._verticalSpacing = .init(wrappedValue: viewModel.spacings?.verticalSpacing ?? .zero)
         self._horizontalSpacing = .init(wrappedValue: viewModel.spacings?.horizontalSpacing ?? .zero)
         self._horizontalPadding = .init(wrappedValue: viewModel.spacings?.horizontalPadding ?? .zero)
         // **
@@ -67,7 +65,6 @@ public struct ButtonView: View {
         ButtonContainerView(
             viewModel: self.viewModel,
             padding: .init(
-                vertical: self.verticalSpacing,
                 horizontal: self.horizontalSpacing
             ),
             action: self.action
@@ -96,8 +93,8 @@ public struct ButtonView: View {
             maxWidth: self.viewModel.maxWidth,
             alignment: self.viewModel.frameAlignment
         )
-        .contentShape(Rectangle())
-        .animation(nil, value: UUID())
+        .animation(nil, value: self.viewModel.maxWidth)
+        .animation(nil, value: self.viewModel.frameAlignment)
     }
 
     @ViewBuilder
@@ -112,9 +109,11 @@ public struct ButtonView: View {
                 .foregroundStyle(self.viewModel.currentColors?.titleColor?.color ?? ColorTokenDefault.clear.color)
                 .font(self.viewModel.titleFontToken?.font)
                 .accessibilityIdentifier(ButtonAccessibilityIdentifier.text)
+                .animation(nil, value: text)
         } else if let attributedText = self.viewModel.controlStateText?.attributedText {
             Text(attributedText)
                 .accessibilityIdentifier(ButtonAccessibilityIdentifier.text)
+                .animation(nil, value: attributedText)
         }
     }
 

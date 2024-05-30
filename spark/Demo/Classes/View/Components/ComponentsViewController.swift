@@ -82,6 +82,8 @@ extension ComponentsViewController {
             )
         case .chip:
             viewController = ChipComponentViewController.build()
+        case .formField:
+            viewController = FormFieldComponentUIViewController.build()
         case .icon:
             viewController = IconComponentUIViewController.build()
         case .progressBarIndeterminate:
@@ -110,6 +112,8 @@ extension ComponentsViewController {
             viewController = TagComponentUIViewController.build()
         case .textField:
             viewController = TextFieldComponentUIViewController.build()
+        case .textFieldAddons:
+            viewController = TextFieldAddonsComponentUIViewController.build()
         case .textLink:
             viewController = TextLinkComponentUIViewController.build()
         default:
