@@ -90,6 +90,8 @@ public final class TextFieldAddonsUIView: UIControl {
         self.clipsToBounds = true
         self.addSubview(self.stackView)
 
+        self.textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+
         self.stackView.translatesAutoresizingMaskIntoConstraints = false
         // Adding constant padding to set borders outline instead of inline
         self.leadingConstraint = self.stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.borderWidth)
@@ -221,9 +223,10 @@ public final class TextFieldAddonsUIView: UIControl {
         }
         if let leftAddon {
             self.leftAddonContainer.addSubview(leftAddon)
+            leftAddon.setContentHuggingPriority(.defaultHigh, for: .horizontal)
             leftAddon.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                leftAddon.trailingAnchor.constraint(lessThanOrEqualTo: self.leftSeparatorView.leadingAnchor, constant: withPadding ? -self.viewModel.leftSpacing : 0),
+                leftAddon.trailingAnchor.constraint(equalTo: self.leftSeparatorView.leadingAnchor, constant: withPadding ? -self.viewModel.leftSpacing : 0),
                 leftAddon.centerXAnchor.constraint(equalTo: self.leftAddonContainer.centerXAnchor, constant: -self.borderWidth / 2.0),
                 leftAddon.centerYAnchor.constraint(equalTo: self.leftAddonContainer.centerYAnchor)
             ])
@@ -235,7 +238,7 @@ public final class TextFieldAddonsUIView: UIControl {
 
     /// Set the textfield's right addon
     /// - Parameters:
-    ///   - leftAddon: the view to be set as rightAddon
+    ///   - rightAddon: the view to be set as rightAddon
     ///   - withPadding: adds a padding on the addon if `true`, default is `false`
     public func setRightAddon(_ rightAddon: UIView? = nil, withPadding: Bool = false) {
         if let oldValue = self.rightAddon, oldValue.isDescendant(of: self.rightAddonContainer) {
@@ -243,9 +246,10 @@ public final class TextFieldAddonsUIView: UIControl {
         }
         if let rightAddon {
             self.rightAddonContainer.addSubview(rightAddon)
+            rightAddon.setContentHuggingPriority(.defaultHigh, for: .horizontal)
             rightAddon.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                rightAddon.leadingAnchor.constraint(greaterThanOrEqualTo: self.rightSeparatorView.trailingAnchor, constant: withPadding ? self.viewModel.rightSpacing : 0),
+                rightAddon.leadingAnchor.constraint(equalTo: self.rightSeparatorView.trailingAnchor, constant: withPadding ? self.viewModel.rightSpacing : 0),
                 rightAddon.centerXAnchor.constraint(equalTo: self.rightAddonContainer.centerXAnchor, constant: self.borderWidth / 2.0),
                 rightAddon.centerYAnchor.constraint(equalTo: self.rightAddonContainer.centerYAnchor)
             ])
