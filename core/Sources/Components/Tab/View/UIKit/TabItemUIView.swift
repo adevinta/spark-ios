@@ -68,10 +68,9 @@ public final class TabItemUIView: UIControl {
         set {
             if newValue {
                 self.accessibilityTraits.insert(.selected)
-            }else {
+            } else {
                 self.accessibilityTraits.remove(.selected)
             }
-            guard newValue != self.viewModel.isSelected else { return }
             self.viewModel.updateState(isSelected: newValue)
         }
     }
@@ -253,11 +252,10 @@ public final class TabItemUIView: UIControl {
         set {
             if newValue {
                 self.accessibilityTraits.remove(.notEnabled)
-            }else {
+            } else {
                 self.accessibilityTraits.insert(.notEnabled)
             }
-            guard newValue != self.viewModel.isEnabled else { return }
-            self.viewModel.isEnabled = newValue
+            self.viewModel.updateState(isEnabled: newValue)
         }
     }
 
