@@ -76,4 +76,12 @@ struct TextFieldViewInternal<LeftView: View, RightView: View>: View {
         .foregroundStyle(self.viewModel.textColor.color)
         .accessibilityIdentifier(TextFieldAccessibilityIdentifier.view)
     }
+
+    func update(isEnabled: Bool, isFocused: Bool) -> some View {
+        DispatchQueue.main.async {
+            self.viewModel.isEnabled = isEnabled
+            self.viewModel.isFocused = isFocused
+        }
+        return self
+    }
 }
