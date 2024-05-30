@@ -102,6 +102,8 @@ public final class TextFieldAddonsUIView: UIControl {
         ])
 
         self.setupSeparators()
+        self.setLeftAddon(nil)
+        self.setRightAddon(nil)
     }
 
     private func setupSeparators() {
