@@ -324,6 +324,10 @@ public final class TextLinkUIView: UIControl {
         self.isAccessibilityElement = true
         self.accessibilityLabel = self.viewModel.text
         self.accessibilityTraits.insert(.link)
+        if self.image != nil {
+            self.accessibilityContainerType = .semanticGroup
+            self.accessibilityTraits.insert(.image)
+        }
     }
 
     // MARK: - Update UI
@@ -331,6 +335,13 @@ public final class TextLinkUIView: UIControl {
     private func updateImage() {
         self.imageContentStackView.isHidden = self.image == nil
         self.imageView.image = self.image
+        if self.image == nil {
+            self.accessibilityTraits.remove(.image)
+            self.accessibilityContainerType = .none
+        } else {
+            self.accessibilityTraits.insert(.image)
+            self.accessibilityContainerType = .semanticGroup
+        }
     }
 
     private func updateContentStackViewSpacing() {
