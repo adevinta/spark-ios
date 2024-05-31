@@ -91,7 +91,6 @@ public struct ProgressBarDoubleView: View {
     private func topRectangle() -> some View {
         RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
             .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
-            .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
 
     }
 

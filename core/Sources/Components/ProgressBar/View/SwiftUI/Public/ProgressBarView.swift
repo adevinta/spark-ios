@@ -54,6 +54,7 @@ public struct ProgressBarView: View {
                 self.indicatorView()
             }
         )
+        .accessibilityValue("\(Int(round(self.value * 100)))%")
     }
 
     @ViewBuilder
@@ -70,6 +71,5 @@ public struct ProgressBarView: View {
     private func indicatorRectangle() -> some View {
         RoundedRectangle(cornerRadius: self.viewModel.cornerRadius ?? 0)
             .fill(self.viewModel.colors?.indicatorBackgroundColorToken)
-            .accessibilityIdentifier(AccessibilityIdentifier.indicatorView)
     }
 }

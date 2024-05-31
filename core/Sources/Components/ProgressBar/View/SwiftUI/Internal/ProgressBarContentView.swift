@@ -45,12 +45,11 @@ struct ProgressBarContentView<IndicatorView: View>: View {
             // Track
             RoundedRectangle(cornerRadius: self.trackCornerRadius ?? 0)
                 .fill(self.trackBackgroundColor)
-                .accessibilityIdentifier(AccessibilityIdentifier.trackView)
 
             // Indicator view integration
             self.indicatorView()
         }
         .frame(height: self.height)
-        .accessibilityIdentifier(AccessibilityIdentifier.contentView)
+        .accessibilityIdentifier(AccessibilityIdentifier.progressBar)
     }
 }
