@@ -14,8 +14,9 @@ import SwiftUI
 /// The extra component is always the last component in the view.
 public struct ChipView: View {
 
-    private enum Constants {
+    enum Constants {
         static let verticalPadding: CGFloat = 6.25
+        static let maxWidth: CGFloat = 240.0
     }
 
     @ObservedObject private var viewModel: ChipViewModel<ChipContent>
@@ -153,6 +154,8 @@ public struct ChipView: View {
             self.viewModel.isEnabled = isEnabled
         }
         .accessibilityIdentifier(ChipAccessibilityIdentifier.identifier)
+        .frame(maxWidth: Constants.maxWidth)
+        .fixedSize()
     }
 
     private func borderDashLength() -> CGFloat? {

@@ -24,10 +24,9 @@ struct ChipComponentView: View {
     @State private var withComponent = CheckboxSelectionState.unselected
     @State private var isEnabled = CheckboxSelectionState.selected
     @State private var isSelected = CheckboxSelectionState.unselected
-
     @State private var showingAlert = false
+    @State private var label: String = "Label"
 
-    private let label = "Label"
     private let icon = Image("alert")
 
     // MARK: - View
@@ -88,6 +87,11 @@ struct ChipComponentView: View {
                     isEnabled: true,
                     selectionState: self.$withComponent
                 )
+
+                HStack {
+                    Text("Label:").bold()
+                    TextField("Label", text: self.$label)
+                }
 
                 CheckboxView(
                     text: "Is Enabled",

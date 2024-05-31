@@ -156,7 +156,8 @@ public final class ChipUIView: UIControl {
 
             let spacings = max(0, self.stackView.arrangedSubviews.filter(\.isNotHidden).count - 1)
 
-            return width + (CGFloat(spacings) * self.spacing) + (self.padding * 2.0)
+            let givenWidth = width + (CGFloat(spacings) * self.spacing) + (self.padding * 2.0)
+            return min(givenWidth, ChipView.Constants.maxWidth)
         }()
 
         return CGSize(width: width, height: self.height)
@@ -450,6 +451,7 @@ public final class ChipUIView: UIControl {
         ]
 
         let stackConstraints = [
+            self.widthAnchor.constraint(lessThanOrEqualToConstant: ChipView.Constants.maxWidth),
             self.stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             self.stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             heightConstraint,
