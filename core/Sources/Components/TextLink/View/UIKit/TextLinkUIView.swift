@@ -321,7 +321,7 @@ public final class TextLinkUIView: UIControl {
 
     // MARK: - Accessibility
     private func setupAccessibility() {
-        self.isAccessibilityElement = UIAccessibility.isVoiceOverRunning
+        self.isAccessibilityElement = true
         self.accessibilityLabel = self.viewModel.text
         self.accessibilityTraits.insert(.link)
     }
