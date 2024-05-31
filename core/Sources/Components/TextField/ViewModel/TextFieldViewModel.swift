@@ -10,7 +10,7 @@ import UIKit
 import SwiftUI
 import Combine
 
-class TextFieldViewModel: ObservableObject, Updateable {
+class TextFieldViewModel: ObservableObject {
 
     // Colors
     @Published private(set) var textColor: any ColorToken
@@ -166,15 +166,5 @@ class TextFieldViewModel: ObservableObject, Updateable {
 
     private func setFont() {
         self.font = self.theme.typography.body1
-    }
-
-    func enabled(_ isEnabled: Bool) -> Self {
-        self.isEnabled = isEnabled
-        return self
-    }
-
-    func focused(_ isFocused: Bool) -> Self {
-        self.isFocused = isFocused
-        return self
     }
 }
