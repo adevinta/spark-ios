@@ -90,7 +90,7 @@ public final class TextLinkUIView: UIControl {
         }
         set {
             self.viewModel.text = newValue
-            self.accessibilityLabel = newValue
+            self.accessibilityLabelManager.internalValue = newValue
         }
     }
 
