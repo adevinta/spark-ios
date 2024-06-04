@@ -252,7 +252,6 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
     }
 
     private func setComponent() {
-        self.component.isAccessibilityElement = true
         self.stackView.insertArrangedSubview(self.component, at: 1)
     }
 
