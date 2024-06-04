@@ -9,6 +9,8 @@
 import Combine
 import SwiftUI
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The `CheckboxUIView`renders a single checkbox using UIKit.
 public final class CheckboxUIView: UIControl {

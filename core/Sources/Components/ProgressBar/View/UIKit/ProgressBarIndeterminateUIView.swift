@@ -8,6 +8,8 @@
 
 import UIKit
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The UIKit version for the progress bar indeterminate.
 public final class ProgressBarIndeterminateUIView: ProgressBarMainUIView {

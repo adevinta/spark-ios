@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import Spark
+@_spi(SI_SPI) import SparkCommon
 
 struct DimItemView: View {
 

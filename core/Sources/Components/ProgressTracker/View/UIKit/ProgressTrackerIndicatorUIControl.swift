@@ -9,6 +9,8 @@
 import Combine
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The round small indicator on the progress tracker
 final class ProgressTrackerIndicatorUIControl: UIControl {

@@ -5,8 +5,9 @@
 //  Created by robin.lemaire on 10/03/2023.
 //
 
-import Spark
+@_spi(SI_SPI) import SparkCommon
 import SwiftUI
+import Spark
 
 struct ColorSectionView: View {
 

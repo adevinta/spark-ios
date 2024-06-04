@@ -8,8 +8,8 @@
 
 import UIKit
 import Combine
-import SparkCore
 import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class ButtonComponentUIView: ComponentUIView {
 
@@ -233,7 +233,6 @@ final class ButtonComponentUIView: ComponentUIView {
         case .highlighted: return UIImage(named: "close")
         case .disabled: return UIImage(named: "check")
         case .selected: return UIImage(named: "alert")
-        @unknown default: return nil
         }
     }
 
@@ -243,7 +242,6 @@ final class ButtonComponentUIView: ComponentUIView {
         case .highlighted: return "My Highlighted"
         case .disabled: return "My Disabled"
         case .selected: return "My Selected"
-        @unknown default: return nil
         }
     }
 

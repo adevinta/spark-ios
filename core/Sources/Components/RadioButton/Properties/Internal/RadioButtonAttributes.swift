@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 struct RadioButtonAttributes: Equatable {
     let colors: RadioButtonColors

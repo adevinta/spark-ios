@@ -9,6 +9,8 @@
 import Combine
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// A rating input for setting a rating value.
 /// There are three possibilities to receive the changed value:

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SparkCore
 import Spark
 
 public class SparkThemePublisher: ObservableObject {

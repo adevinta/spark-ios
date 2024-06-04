@@ -7,10 +7,10 @@
 //
 
 import Combine
-import Spark
 import SwiftUI
 import UIKit
-import SparkCore
+import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class ButtonComponentViewController: UIViewController {
 

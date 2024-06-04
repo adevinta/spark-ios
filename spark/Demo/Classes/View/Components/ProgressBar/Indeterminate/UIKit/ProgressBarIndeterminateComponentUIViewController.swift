@@ -7,10 +7,11 @@
 //
 
 import Combine
+@_spi(SI_SPI) import SparkCommon
 import Spark
-import SparkCore
 import SwiftUI
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 final class ProgressBarIndeterminateComponentUIViewController: UIViewController {
 

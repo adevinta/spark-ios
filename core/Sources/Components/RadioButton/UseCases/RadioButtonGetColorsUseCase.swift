@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import SparkTheming
 
 // sourcery: AutoMockable
 protocol RadioButtonGetColorsUseCaseable {
@@ -49,7 +49,8 @@ struct RadioButtonGetColorsUseCase: RadioButtonGetColorsUseCaseable {
 }
 
 // MARK: - Private Extensions
-private extension SparkCore.Colors {
+
+private extension Colors {
     func buttonColor(
         intent: RadioButtonIntent,
         isSelected: Bool) -> any ColorToken {

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SparkTheming
 
 /// The RadioButtonGroupViewModel is a view model used by the ``RadioButtonView`` to handle theming logic and state changes.
 final class RadioButtonGroupViewModel<Content>: ObservableObject {

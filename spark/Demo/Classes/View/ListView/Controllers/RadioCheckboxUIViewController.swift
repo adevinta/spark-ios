@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import SparkCore
 import Combine
+import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class RadioCheckboxUIViewController: UIViewController {
 

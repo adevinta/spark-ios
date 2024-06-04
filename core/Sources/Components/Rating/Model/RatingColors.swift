@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 struct RatingColors: Equatable {
     var fillColor: any ColorToken

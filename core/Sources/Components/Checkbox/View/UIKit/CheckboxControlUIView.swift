@@ -8,6 +8,7 @@
 
 import SwiftUI
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 class CheckboxControlUIView: UIView {
 

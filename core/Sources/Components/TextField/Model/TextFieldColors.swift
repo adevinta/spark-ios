@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 struct TextFieldColors: Equatable {
     let text: any ColorToken

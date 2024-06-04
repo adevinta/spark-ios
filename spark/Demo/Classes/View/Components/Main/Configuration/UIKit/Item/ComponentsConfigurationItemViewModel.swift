@@ -7,7 +7,7 @@
 //
 
 import Combine
-import SparkCore
+import Spark
 import UIKit
 
 final class ComponentsConfigurationItemUIViewModel {

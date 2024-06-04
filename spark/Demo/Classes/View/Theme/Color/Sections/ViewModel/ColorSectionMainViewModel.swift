@@ -5,7 +5,7 @@
 //  Created by robin.lemaire on 01/03/2023.
 //
 
-import SparkCore
+import Spark
 
 struct ColorSectionMainViewModel: ColorSectionViewModelable {
 

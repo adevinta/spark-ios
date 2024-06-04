@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct StarCellConfiguration: ComponentConfiguration {
     var theme: Theme

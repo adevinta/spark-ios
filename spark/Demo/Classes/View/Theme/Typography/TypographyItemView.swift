@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import SparkCore
+import Spark
 
 struct TypographyItemView: View {
 

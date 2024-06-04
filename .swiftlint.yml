@@ -2,7 +2,6 @@ included:
     - SparkCore
     - SparkCoreTests
     - Spark
-    - SparkTests
 
 # Enabled rules for CI linting
 only_rules:

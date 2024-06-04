@@ -7,6 +7,8 @@
 //
 
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// This ButtonMainViewModel view contains all communs properties and rules for all buttons viewModel.
 // sourcery: AutoPublisherTest, AutoViewModelStub

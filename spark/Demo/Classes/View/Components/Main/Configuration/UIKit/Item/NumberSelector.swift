@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 /// A control to select a number withing a given range
 final class NumberSelector: UIControl {

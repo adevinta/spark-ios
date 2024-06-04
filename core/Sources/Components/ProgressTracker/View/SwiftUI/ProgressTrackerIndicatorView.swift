@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SparkTheming
 
 /// The indicator view is the round indicator which may contain text (max 2 characters) or an image.
 struct ProgressTrackerIndicatorView: View {

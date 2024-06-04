@@ -7,6 +7,7 @@
 //
 
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 /// Contents of the tab:
 /// - icon: The icon of the tab item

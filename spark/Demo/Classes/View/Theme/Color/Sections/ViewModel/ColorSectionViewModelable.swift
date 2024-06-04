@@ -5,7 +5,7 @@
 //  Created by robin.lemaire on 13/03/2023.
 //
 
-import SparkCore
+import Spark
 import Foundation
 
 protocol ColorSectionViewModelable: Hashable {

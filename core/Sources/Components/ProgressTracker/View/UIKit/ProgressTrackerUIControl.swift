@@ -9,6 +9,8 @@
 import Combine
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// A progress tracker, similar to the UIPageControl
 public final class ProgressTrackerUIControl: UIControl {

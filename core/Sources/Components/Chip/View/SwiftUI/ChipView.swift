@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// ChipView.
 /// A chip view may contain an icon, a title and a further view of type AnyView.

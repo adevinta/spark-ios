@@ -9,6 +9,8 @@
 import UIKit
 import Combine
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The UIKit version for the progress bar double.
 public final class ProgressBarDoubleUIView: ProgressBarMainUIView {

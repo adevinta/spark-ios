@@ -9,6 +9,7 @@
 import UIKit
 import Combine
 import SwiftUI
+import SparkTheming
 
 /// **BadgeViewModel** is a view model that is required for
 /// configuring ``BadgeView`` and changing it's properties.

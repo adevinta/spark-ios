@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SparkCore
+import Spark
 import SwiftUI
 
 struct TypographyItemViewModel: Hashable {

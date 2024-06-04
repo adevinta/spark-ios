@@ -6,7 +6,7 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-import Foundation
+import SparkTheming
 
 /// A use case to calculate the outlined colors of the progress tracker indicator
 struct ProgressTrackerGetOutlinedColorsUseCase: ProgressTrackerGetVariantColorsUseCaseable {

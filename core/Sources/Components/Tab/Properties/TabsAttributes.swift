@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 /// Specific attributes of the tab control.
 /// - lineHeight: The height of the bottom line.

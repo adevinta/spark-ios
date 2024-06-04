@@ -9,6 +9,8 @@
 import UIKit
 import Combine
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The UIKit version for the text link.
 public final class TextLinkUIView: UIControl {

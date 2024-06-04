@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 final class SwitchButtonCell: UITableViewCell, Configurable {
 

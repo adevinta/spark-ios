@@ -7,6 +7,9 @@
 //
 
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonTesting
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 import XCTest
 
 struct IconButtonConfigurationSnapshotTests {

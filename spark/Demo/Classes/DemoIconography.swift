@@ -6,9 +6,9 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Spark
+@_spi(SI_SPI) import SparkCommon
 import SwiftUI
-import SparkCore
+import Spark
 
 struct DemoIconography {
     // MARK: - Shared

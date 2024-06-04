@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@_spi(SI_SPI) import SparkCommon
 
 /// Heights of a tab item.
 /// - separatorLineHeight: The height of the bottom line.

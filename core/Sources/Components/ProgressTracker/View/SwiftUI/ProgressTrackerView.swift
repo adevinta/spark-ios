@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SparkTheming
 
 /// A progress tracker, similar to the UIPageControl
 public struct ProgressTrackerView: View {

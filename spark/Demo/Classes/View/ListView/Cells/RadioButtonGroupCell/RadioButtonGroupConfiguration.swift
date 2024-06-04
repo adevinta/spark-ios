@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct RadioButtonGroupConfiguration: ComponentConfiguration {
     var theme: Theme

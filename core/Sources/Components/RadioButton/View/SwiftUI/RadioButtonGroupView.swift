@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// RadioButtonGroupView is a radio button group control which renders a list of ``RadioButtonView``.
 ///

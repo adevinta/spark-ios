@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@_spi(SI_SPI) import SparkCommon
 
 struct RadioButtonGroupContent: Updateable {
     var title: String?

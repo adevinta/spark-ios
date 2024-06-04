@@ -7,6 +7,8 @@
 //
 
 import Foundation
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 // sourcery: AutoMockable
 protocol TabGetStateAttributesUseCasable {

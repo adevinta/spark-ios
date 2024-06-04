@@ -7,8 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
 import Spark
-import SparkCore
 
 struct TextLinkComponentView: View {
 

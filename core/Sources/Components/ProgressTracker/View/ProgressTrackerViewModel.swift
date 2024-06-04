@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SparkTheming
 
 /// A view model for a Progress Tracker.
 final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentIndicating>: ObservableObject where ComponentContent: Equatable {

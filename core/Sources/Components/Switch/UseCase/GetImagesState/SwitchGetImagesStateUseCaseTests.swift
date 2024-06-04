@@ -9,6 +9,8 @@
 import XCTest
 import SwiftUI
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonTesting
 
 final class SwitchGetImagesStateUseCaseTests: XCTestCase {
 

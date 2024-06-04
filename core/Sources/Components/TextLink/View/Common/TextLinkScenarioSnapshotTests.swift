@@ -9,6 +9,9 @@
 @testable import SparkCore
 import UIKit
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
+@_spi(SI_SPI) import SparkCommonTesting
 
 enum TextLinkScenarioSnapshotTests: String, CaseIterable {
     case test1

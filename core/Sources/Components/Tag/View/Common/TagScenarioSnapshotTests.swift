@@ -9,6 +9,7 @@
 @testable import SparkCore
 import UIKit
 import SwiftUI
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 enum TagScenarioSnapshotTests: String, CaseIterable {
     case test1

@@ -8,6 +8,7 @@
 
 @testable import SparkCore
 import XCTest
+import SparkThemingTesting
 
 final class TabGetFontUseCaseTests: XCTestCase {
 

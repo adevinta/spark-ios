@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 protocol RadioButtonGetAttributesUseCaseable {
     func execute(theme: Theme,

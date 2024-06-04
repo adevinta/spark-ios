@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Spark
 
 struct Component<Configuration: View, Integration: View>: View {
 

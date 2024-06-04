@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import SparkTheming
+
 /// All Button Colors from a theme, variant and intents
 struct ButtonColors {
 

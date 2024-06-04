@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SparkTheming
 
 /// SpinnerView is a single indeterminate spinner.
 /// The spinner can have a size of `small` or `medium` and have different intents which determine the color of the spinner.

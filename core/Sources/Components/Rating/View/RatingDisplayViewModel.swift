@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import SparkTheming
 
 /// A view model for the rating display.
 final class RatingDisplayViewModel: ObservableObject {

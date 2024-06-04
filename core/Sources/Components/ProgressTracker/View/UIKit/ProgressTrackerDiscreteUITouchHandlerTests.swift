@@ -8,8 +8,8 @@
 
 import Combine
 import XCTest
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
 
 final class ProgressTrackerDiscreteUITouchHandlerTests: XCTestCase {
 

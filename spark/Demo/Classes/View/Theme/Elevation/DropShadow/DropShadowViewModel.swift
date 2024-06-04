@@ -6,8 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SparkCore
 import Spark
+@_spi(SI_SPI) import SparkCommon
 
 struct DropShadowViewModel {
 

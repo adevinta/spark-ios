@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import SparkTheming
 
 /// Attributes available for the states of the tab:
 /// - spacings: Spacings of the tab item.

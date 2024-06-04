@@ -7,9 +7,8 @@
 //
 
 import XCTest
-import XCTest
-
 @testable import SparkCore
+import SparkTheme
 
 final class TagColorsTests: XCTestCase {
 

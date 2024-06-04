@@ -8,6 +8,8 @@
 
 import UIKit
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// A Spark TextField that can be surrounded by left and/or right addons
 public final class TextFieldAddonsUIView: UIControl {

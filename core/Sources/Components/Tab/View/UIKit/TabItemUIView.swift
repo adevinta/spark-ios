@@ -9,6 +9,8 @@
 import Combine
 import SwiftUI
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// A single component of the tabs view.
 /// The standard tab item consists of an icon, label and a badge.

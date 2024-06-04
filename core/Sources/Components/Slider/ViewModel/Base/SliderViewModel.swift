@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 class SliderViewModel<V>: ObservableObject where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint  {
 

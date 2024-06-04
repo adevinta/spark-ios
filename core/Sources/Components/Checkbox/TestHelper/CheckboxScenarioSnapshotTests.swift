@@ -7,8 +7,8 @@
 //
 
 import UIKit
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 enum CheckboxScenarioSnapshotTests: String, CaseIterable {
     case test1

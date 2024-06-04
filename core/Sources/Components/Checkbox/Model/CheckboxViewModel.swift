@@ -9,6 +9,8 @@
 import Combine
 import SwiftUI
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 final class CheckboxViewModel: ObservableObject {
     

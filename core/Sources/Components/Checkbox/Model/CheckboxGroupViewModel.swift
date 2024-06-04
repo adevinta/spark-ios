@@ -9,6 +9,7 @@
 import Combine
 import SwiftUI
 import UIKit
+import SparkTheming
 
 final class CheckboxGroupViewModel: ObservableObject {
 

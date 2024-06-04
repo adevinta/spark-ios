@@ -8,8 +8,8 @@
 
 import SwiftUI
 import XCTest
-
 @testable import SparkCore
+import SparkThemingTesting
 
 final class ChipGetColorsUseCaseTests: XCTestCase {
 

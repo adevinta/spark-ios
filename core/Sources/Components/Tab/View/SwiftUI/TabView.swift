@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// TabView is the similar to a SegmentControl
 public struct TabView: View {

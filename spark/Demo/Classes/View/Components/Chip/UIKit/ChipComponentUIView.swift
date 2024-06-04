@@ -8,8 +8,8 @@
 
 import UIKit
 import Combine
-import SparkCore
 import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class ChipComponentUIView: ComponentUIView {
 

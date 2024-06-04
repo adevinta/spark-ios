@@ -9,6 +9,8 @@
 import XCTest
 import Combine
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonTesting
+import SparkThemingTesting
 
 class SliderViewModelWithMocksTests: XCTestCase {
     let intent = SliderIntent.info

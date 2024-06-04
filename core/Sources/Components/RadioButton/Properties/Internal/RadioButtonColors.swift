@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import SparkTheming
 
 /// Colors available to the radio button:
 /// - Button: this is the outline color of the unselected/selected radio button

@@ -8,6 +8,8 @@
 
 import SwiftUI
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint {
 

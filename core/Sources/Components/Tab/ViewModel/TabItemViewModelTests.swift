@@ -8,6 +8,7 @@
 
 import Combine
 @testable import SparkCore
+import SparkThemingTesting
 import XCTest
 
 final class TabItemViewModelTests: XCTestCase {

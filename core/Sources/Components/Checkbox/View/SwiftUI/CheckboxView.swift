@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The `CheckboxView`renders a single checkbox.
 public struct CheckboxView: View {

@@ -7,6 +7,9 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
+
 /// The RadioButtonViewModel is a view model used by the ``RadioButtonView`` to handle theming logic and state changes.
 final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: ObservableObject {
     // MARK: - Injected Properties

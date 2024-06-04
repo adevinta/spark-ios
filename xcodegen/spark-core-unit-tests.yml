@@ -2,6 +2,14 @@ name: Spark
 include:
   - spark-core.yml
 
+packages:
+  SparkCommon:
+    url: https://github.com/adevinta/spark-ios-common
+    branch: main
+  SparkTheming:
+    url: https://github.com/adevinta/spark-ios-theming
+    branch: main
+
 targetTemplates:
   SparkCoreUnitTestsTemplate:
     type: bundle.unit-test
@@ -24,12 +32,15 @@ targetTemplates:
       - path: ../spark/Sources/Resources
         excludes:
         - "**/*Tests*.swift"
-      - path: ../spark/Sources/Theming
-        excludes:
-        - "**/*Tests*.swift"
 
     dependencies:
       - target: SparkCore
+      - package: SparkCommon
+        product: SparkCommonTesting
+      - package: SparkTheming
+        product: SparkThemingTesting
+      - package: SparkTheming
+        product: SparkTheme
 
 targets:
   SparkCoreUnitTests:

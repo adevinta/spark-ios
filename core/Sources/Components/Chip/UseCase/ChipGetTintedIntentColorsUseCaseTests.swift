@@ -7,8 +7,9 @@
 //
 
 import XCTest
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+import SparkThemingTesting
 
 final class ChipGetTintedIntentColorsUseCaseTests: XCTestCase {
 

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SparkCore
+import Spark
 
 struct DropShadowItemViewModel: Identifiable {
 

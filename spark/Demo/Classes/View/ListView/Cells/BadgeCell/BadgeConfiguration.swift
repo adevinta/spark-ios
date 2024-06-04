@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct BadgeConfiguration: ComponentConfiguration {
     var theme: Theme

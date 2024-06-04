@@ -7,11 +7,10 @@
 //
 
 import XCTest
-
 import Combine
 import XCTest
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
 
 final class ProgressTrackerContinuousUITouchHandlerTests: XCTestCase {
 

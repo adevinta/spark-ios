@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@_spi(SI_SPI) import SparkCommon
 
 /// The possible states of the progress tracker
 struct ProgressTrackerState: Updateable, Equatable {

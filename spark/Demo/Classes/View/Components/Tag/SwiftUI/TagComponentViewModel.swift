@@ -6,8 +6,9 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SparkCore
+import Spark
 import SwiftUI
+import Spark
 
 struct TagComponentViewModel: Hashable {
 

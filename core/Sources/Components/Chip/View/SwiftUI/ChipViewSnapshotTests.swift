@@ -9,8 +9,10 @@
 import XCTest
 import SwiftUI
 import SnapshotTesting
-
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 @testable import SparkCore
+import SparkTheme
 
 final class ChipViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 

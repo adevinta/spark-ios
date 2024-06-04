@@ -10,9 +10,9 @@
 
 
 import Combine
-import SparkCore
 import Spark
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 final class IconComponentUIView: UIView {
 

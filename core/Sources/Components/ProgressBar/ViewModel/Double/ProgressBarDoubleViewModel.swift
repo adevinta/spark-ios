@@ -6,6 +6,9 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
+
 final class ProgressBarDoubleViewModel: ProgressBarMainViewModel<ProgressBarDoubleGetColorsUseCase> {
 
     // MARK: - Initialization

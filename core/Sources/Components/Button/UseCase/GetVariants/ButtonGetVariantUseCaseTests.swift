@@ -9,6 +9,7 @@
 import XCTest
 import SwiftUI
 @testable import SparkCore
+import SparkThemingTesting
 
 /// Base class for variant tests.
 class ButtonVariantUseCaseTests: XCTestCase {

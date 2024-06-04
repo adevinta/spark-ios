@@ -9,6 +9,8 @@
 import XCTest
 import SwiftUI
 import SnapshotTesting
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
+import SparkTheme
 
 @testable import SparkCore
 

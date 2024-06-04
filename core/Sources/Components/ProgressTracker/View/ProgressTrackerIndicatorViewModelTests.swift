@@ -8,8 +8,8 @@
 
 import Combine
 import XCTest
-
 @testable import SparkCore
+import SparkThemingTesting
 
 final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
 

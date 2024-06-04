@@ -7,8 +7,8 @@
 //
 
 import Combine
+@_spi(SI_SPI) import SparkCommon
 import Spark
-import SparkCore
 import UIKit
 
 final class FormFieldComponentUIViewModel: ComponentUIViewModel {

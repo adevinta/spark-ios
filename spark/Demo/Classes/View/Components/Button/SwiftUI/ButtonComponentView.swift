@@ -7,8 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
 import Spark
-import SparkCore
 
 struct ButtonComponentView: View {
 
@@ -194,7 +194,6 @@ private extension ButtonView {
                 case .highlighted: image = Image("close")
                 case .disabled: image = Image("check")
                 case .selected: image = Image("alert")
-                @unknown default: break
                 }
             }
 
@@ -221,7 +220,6 @@ private extension ButtonView {
             case .highlighted: title = "My Highlighted"
             case .disabled: title = "My Disabled"
             case .selected: title = "My Selected"
-            @unknown default: break
             }
 
             if content.containsAttributedText, let title {

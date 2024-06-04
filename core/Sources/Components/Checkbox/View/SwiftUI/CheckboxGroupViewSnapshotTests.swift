@@ -9,6 +9,9 @@
 import SwiftUI
 
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
+import SparkTheme
 
 final class CheckboxGroupViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 

@@ -8,6 +8,8 @@
 
 import UIKit
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import Spark
 
 class ComponentUIView: UIView {
 

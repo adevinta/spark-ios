@@ -9,6 +9,8 @@
 import UIKit
 import Combine
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 // TODO: Add Pressed state (rounded rect)
 

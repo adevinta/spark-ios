@@ -8,6 +8,8 @@
 
 import Combine
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// ChipUIView is a control which can act like a button, if an action is attached to it, or it can act like a label.
 public final class ChipUIView: UIControl {

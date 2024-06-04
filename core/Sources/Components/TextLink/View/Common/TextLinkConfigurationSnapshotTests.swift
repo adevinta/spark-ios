@@ -6,8 +6,10 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-@testable import SparkCore
 import XCTest
+@testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 struct TextLinkConfigurationSnapshotTests {
 

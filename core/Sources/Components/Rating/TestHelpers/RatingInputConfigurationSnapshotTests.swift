@@ -8,8 +8,8 @@
 
 import Foundation
 import UIKit
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 struct RatingInputConfigurationSnapshotTests {
 

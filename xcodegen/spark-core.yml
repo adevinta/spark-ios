@@ -2,6 +2,14 @@ name: Spark
 include:
   - spark-shared.yml
 
+packages:
+  SparkCommon:
+    url: https://github.com/adevinta/spark-ios-common
+    branch: main
+  SparkTheming:
+    url: https://github.com/adevinta/spark-ios-theming
+    branch: main
+
 targetTemplates:
   SparkCoreTemplate:
     platform: iOS
@@ -20,6 +28,9 @@ targetTemplates:
       - path: ../core/Sources
         excludes:
         - "**/*Tests.swift"
+    dependencies:
+      - package: SparkCommon
+      - package: SparkTheming
     postCompileScripts:
       - script: ./scripts/swiftlint.sh
         name: SwiftLint

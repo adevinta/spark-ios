@@ -8,6 +8,8 @@
 
 import Combine
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 public final class IconUIView: UIView {
 

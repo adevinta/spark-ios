@@ -7,6 +7,7 @@
 //
 
 @testable import SparkCore
+import SparkThemingTesting
 
 extension ProgressBarDoubleColors {
 

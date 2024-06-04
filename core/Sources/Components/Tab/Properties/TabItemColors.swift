@@ -7,6 +7,8 @@
 //
 
 import Foundation
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// Colors of the tab item:
 /// - label: defines the color of the text and the tint color of the icon

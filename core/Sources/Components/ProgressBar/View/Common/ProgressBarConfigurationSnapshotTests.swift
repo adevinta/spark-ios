@@ -7,6 +7,7 @@
 //
 
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 import XCTest
 
 struct ProgressBarConfigurationSnapshotTests<Intent: CaseIterable> {

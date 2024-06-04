@@ -8,6 +8,8 @@
 
 import Foundation
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 // sourcery: AutoMockable
 protocol BadgeGetSizeAttributesUseCaseable {

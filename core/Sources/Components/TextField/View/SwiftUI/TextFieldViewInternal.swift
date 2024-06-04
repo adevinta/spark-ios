@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 struct TextFieldViewInternal<LeftView: View, RightView: View>: View {
 

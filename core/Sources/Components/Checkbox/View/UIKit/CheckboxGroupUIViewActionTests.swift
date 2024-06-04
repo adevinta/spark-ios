@@ -8,8 +8,10 @@
 
 import Combine
 import XCTest
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonTesting
+import SparkTheme
 
 final class CheckboxGroupUIViewActionTests: TestCase {
     // MARK: Private Properties

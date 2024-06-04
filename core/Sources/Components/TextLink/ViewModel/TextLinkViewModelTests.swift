@@ -8,6 +8,8 @@
 
 import XCTest
 @testable import SparkCore
+import SparkThemingTesting
+@_spi(SI_SPI) import SparkCommon
 import Combine
 
 final class TextLinkViewModelTests: XCTestCase {

@@ -7,6 +7,7 @@
 //
 
 @testable import SparkCore
+import SparkThemingTesting
 import SwiftUI
 import XCTest
 

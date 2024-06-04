@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 /// A view model for the Progress Tracker Track
 final class ProgressTrackerTrackViewModel: ObservableObject {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@_spi(SI_SPI) import SparkCommon
 
 /// `TabState` determines the current state of the tab.
 struct TabState: Equatable, Updateable {

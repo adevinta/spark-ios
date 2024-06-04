@@ -8,6 +8,8 @@
 
 import Combine
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// This ButtonMainUIView view contains all communs subviews (imageView), rules, styles, constraints, ... for all buttons.
 /// This view doesn't have a public init.

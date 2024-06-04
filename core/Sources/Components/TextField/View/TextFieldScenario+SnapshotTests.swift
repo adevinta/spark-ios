@@ -8,6 +8,7 @@
 
 import Foundation
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 import UIKit
 
 struct TextFieldScenario: CustomStringConvertible {

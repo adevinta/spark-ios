@@ -5,8 +5,8 @@
 //  Created by robin.lemaire on 13/03/2023.
 //
 
+@_spi(SI_SPI) import SparkCommon
 import Spark
-import SparkCore
 
 enum ColorSectionType: CaseIterable {
     case main

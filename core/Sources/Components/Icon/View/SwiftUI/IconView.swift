@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SparkTheming
 
 public struct IconView: View {
 

@@ -7,6 +7,8 @@
 //
 
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 // sourcery: AutoPublisherTest, AutoViewModelStub
 // sourcery: titleFontToken = "Identical"

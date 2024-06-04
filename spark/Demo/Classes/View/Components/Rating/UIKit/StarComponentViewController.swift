@@ -7,10 +7,11 @@
 //
 
 import Combine
-import Spark
+@_spi(SI_SPI) import SparkCommon
 import SwiftUI
 import UIKit
-import SparkCore
+import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class StarComponentViewController: UIViewController {
 

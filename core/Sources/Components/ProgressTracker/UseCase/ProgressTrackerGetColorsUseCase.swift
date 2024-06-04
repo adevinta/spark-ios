@@ -6,7 +6,7 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-import Foundation
+import SparkTheming
 
 // sourcery: AutoMockable
 protocol ProgressTrackerGetColorsUseCaseable {

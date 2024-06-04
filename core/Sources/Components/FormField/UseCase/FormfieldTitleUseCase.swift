@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SparkTheming
 
 // sourcery: AutoMockable
 protocol FormFieldTitleUseCaseable {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@_spi(SI_SPI) import SparkCommon
 
 /// Spacings defined in the progress tracker
 struct ProgressTrackerSpacing: Updateable, Equatable {

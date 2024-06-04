@@ -7,8 +7,8 @@
 //
 
 import Combine
-import Spark
-@testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@testable import Spark
 import UIKit
 
 final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {

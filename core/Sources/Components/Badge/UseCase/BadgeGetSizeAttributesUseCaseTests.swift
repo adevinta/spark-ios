@@ -7,6 +7,8 @@
 //
 
 @testable import SparkCore
+import SparkThemingTesting
+@_spi(SI_SPI) import SparkCommon
 import XCTest
 
 final class BadgeGetSizeAttributesUseCaseTests: XCTestCase {

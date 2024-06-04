@@ -7,6 +7,10 @@
 //
 
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
+@_spi(SI_SPI) import SparkCommonTesting
+import SparkTheme
 import UIKit
 import SwiftUI
 

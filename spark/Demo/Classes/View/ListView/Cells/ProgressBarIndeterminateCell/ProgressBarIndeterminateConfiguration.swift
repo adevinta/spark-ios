@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct ProgressBarIndeterminateConfiguration: ComponentConfiguration {
     var theme: Theme

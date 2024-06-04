@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct SwitchButtonConfiguration: ComponentConfiguration {
     var theme: Theme

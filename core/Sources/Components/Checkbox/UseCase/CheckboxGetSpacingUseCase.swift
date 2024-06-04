@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 protocol CheckboxGetSpacingUseCaseable {
     func execute(layoutSpacing: LayoutSpacing, alignment: CheckboxAlignment) -> CGFloat

@@ -11,7 +11,8 @@ import Combine
 import Spark
 import SwiftUI
 import UIKit
-@testable import SparkCore
+@testable import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class ProgressTrackerComponentUIViewController: UIViewController {
 

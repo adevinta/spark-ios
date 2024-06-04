@@ -7,8 +7,8 @@
 //
 
 import XCTest
-
 @testable import SparkCore
+import SparkThemingTesting
 
 final class CheckboxGetSpacingUseCaseTests: XCTestCase {
 

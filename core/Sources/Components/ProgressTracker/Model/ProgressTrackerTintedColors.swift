@@ -6,8 +6,7 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-import Foundation
-
+import SparkTheming
 
 /// Colors defined by a tinted progress tracker indicator
 struct ProgressTrackerTintedColors {

@@ -9,7 +9,6 @@
 import UIKit
 import SwiftUI
 import Spark
-import SparkCore
 import Combine
 
 final class SparkTabbarController: UITabBarController {

@@ -7,6 +7,7 @@
 //
 
 @testable import SparkCore
+import SparkTheme
 import XCTest
 
 final class ProgressBarColorsTests: XCTestCase {

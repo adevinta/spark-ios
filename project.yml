@@ -14,10 +14,6 @@ targetTemplates:
       testTargets:
         - name: SparkCoreUnitTests
         - name: SparkCoreSnapshotTests
-      environmentVariables:
-        - variable: SNAPSHOT_REFERENCE_DIR
-          value: "$(SRCROOT)/spark-ios-snapshots"
-          isEnabled: true
       gatherCoverageData: true
 
 targets:

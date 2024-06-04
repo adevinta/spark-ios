@@ -7,8 +7,8 @@
 //
 
 import SwiftUI
-import SparkCore
 import Spark
+@_spi(SI_SPI) import SparkCommon
 
 struct ThemeView: View {
 

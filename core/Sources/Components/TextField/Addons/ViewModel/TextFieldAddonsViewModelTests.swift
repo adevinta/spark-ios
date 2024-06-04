@@ -10,6 +10,9 @@ import XCTest
 import SwiftUI
 import Combine
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonTesting
+import SparkThemingTesting
 
 final class TextFieldAddonsViewModelTests: XCTestCase {
     private var theme: ThemeGeneratedMock!

@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import SparkTheming
+
 // sourcery: AutoMockable
 protocol TagGetContentColorsUseCaseable {
     func execute(intent: TagIntent,

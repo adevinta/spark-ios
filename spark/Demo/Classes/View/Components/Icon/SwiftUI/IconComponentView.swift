@@ -8,7 +8,6 @@
 
 import SwiftUI
 import Spark
-import SparkCore
 
 struct IconComponentView: View {
 

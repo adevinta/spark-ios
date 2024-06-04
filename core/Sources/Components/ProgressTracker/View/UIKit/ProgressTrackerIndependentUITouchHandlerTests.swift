@@ -6,11 +6,10 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-
 import Combine
 import XCTest
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
 
 final class ProgressTrackerIndependentUITouchHandlerTests: XCTestCase {
 

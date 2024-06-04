@@ -11,6 +11,8 @@ import Combine
 import UIKit
 import SwiftUI
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonTesting
+import SparkThemingTesting
 
 final class TextFieldViewModelTests: XCTestCase {
 

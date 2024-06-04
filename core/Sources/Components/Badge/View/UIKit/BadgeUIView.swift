@@ -8,6 +8,8 @@
 
 import Combine
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// This is the UIKit version for the ``BadgeView``
 public class BadgeUIView: UIView {

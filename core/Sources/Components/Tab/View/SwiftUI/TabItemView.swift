@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
 
 /// A single tab item used on the tab view.
 struct TabItemView: View {

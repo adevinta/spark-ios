@@ -8,8 +8,9 @@
 
 import Combine
 import Foundation
-import SparkCore
 import UIKit
+import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class RadioButtonComponentUIView: ComponentUIView {
     // MARK: - Components

@@ -9,6 +9,7 @@
 import XCTest
 import Combine
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonTesting
 
 final class SingleSliderViewModelTests: SliderViewModelWithMocksTests {
     var singleViewModel: SingleSliderViewModel<Float>!

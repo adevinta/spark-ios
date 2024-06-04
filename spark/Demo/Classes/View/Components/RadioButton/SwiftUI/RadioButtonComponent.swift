@@ -8,8 +8,8 @@
 
 import Foundation
 
+@_spi(SI_SPI) import SparkCommon
 import Spark
-import SparkCore
 import SwiftUI
 
 struct RadioButtonComponent: View {

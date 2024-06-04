@@ -9,6 +9,9 @@
 import XCTest
 import SnapshotTesting
 @testable import SparkCore
+import SparkTheme
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 import SwiftUI
 
 final class TextLinkViewSnapshotTests: SwiftUIComponentSnapshotTestCase {

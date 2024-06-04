@@ -9,8 +9,10 @@
 import XCTest
 import SnapshotTesting
 import SwiftUI
-
+import SparkTheme
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
+@_spi(SI_SPI) import SparkCommon
 
 final class SwitchViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 

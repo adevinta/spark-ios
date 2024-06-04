@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 /// Structure that is used for configuring border of ``BadgeView``
 ///

@@ -8,7 +8,7 @@
 
 import UIKit
 import Combine
-import SparkCore
+import Spark
 
 final class TextFieldAddonsComponentUIViewModel: ComponentUIViewModel, ObservableObject {
 

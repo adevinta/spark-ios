@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 // sourcery: AutoMockable, AutoMockTest
 protocol TextLinkGetAttributedStringUseCaseable {

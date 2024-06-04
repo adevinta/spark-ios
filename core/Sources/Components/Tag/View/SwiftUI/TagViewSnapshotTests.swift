@@ -9,8 +9,10 @@
 import XCTest
 import SwiftUI
 import SnapshotTesting
-
 @testable import SparkCore
+import SparkTheme
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 

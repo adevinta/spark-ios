@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SparkTheming
 
 /// A view model for a single Progress Tracker Indicator 
 final class ProgressTrackerIndicatorViewModel<ComponentContent: ProgressTrackerContentIndicating>: ObservableObject {

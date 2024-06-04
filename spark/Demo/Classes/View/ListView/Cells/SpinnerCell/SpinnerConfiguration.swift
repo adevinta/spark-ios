@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct SpinnerConfiguration: ComponentConfiguration {
     var theme: Theme

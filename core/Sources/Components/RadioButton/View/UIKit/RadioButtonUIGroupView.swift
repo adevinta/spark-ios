@@ -9,6 +9,8 @@
 import Combine
 import UIKit
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// RadioButtonGroupView embodies a radio button group and handles
 public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStringConvertible>: UIControl {

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct ChipConfiguration: ComponentConfiguration {
     var theme: Theme

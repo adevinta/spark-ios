@@ -7,6 +7,9 @@
 //
 
 @testable import SparkCore
+import SparkTheme
+@_spi(SI_SPI) import SparkCommonTesting
+@_spi(SI_SPI) import SparkCommon
 import XCTest
 
 final class ChipUIViewTests: TestCase {

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SparkTheming
 
 /// A progress tracker with a horizontal layout
 struct ProgressTrackerVerticalView: View {

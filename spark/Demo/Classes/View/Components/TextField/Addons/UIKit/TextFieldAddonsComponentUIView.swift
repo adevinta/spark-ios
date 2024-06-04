@@ -8,7 +8,8 @@
 
 import Combine
 import UIKit
-import SparkCore
+import Spark
+@_spi(SI_SPI) import SparkCommon
 
 // swiftlint:disable no_debugging_method
 final class TextFieldAddonsComponentUIView: ComponentUIView {

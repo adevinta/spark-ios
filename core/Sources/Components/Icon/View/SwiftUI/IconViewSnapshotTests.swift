@@ -9,8 +9,9 @@
 import XCTest
 import SwiftUI
 import SnapshotTesting
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
+import SparkTheme
 
 final class IconViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 

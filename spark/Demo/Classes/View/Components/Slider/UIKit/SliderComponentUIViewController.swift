@@ -8,9 +8,9 @@
 
 import Combine
 import Spark
-import SparkCore
 import SwiftUI
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 // swiftlint:disable no_debugging_method
 final class SliderComponentUIViewController: UIViewController {

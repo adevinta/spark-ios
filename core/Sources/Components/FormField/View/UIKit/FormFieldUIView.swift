@@ -9,6 +9,8 @@
 import Combine
 import SwiftUI
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The `FormFieldUIView`renders a component with title and subtitle using UIKit.
 public final class FormFieldUIView<Component: UIControl>: UIControl {

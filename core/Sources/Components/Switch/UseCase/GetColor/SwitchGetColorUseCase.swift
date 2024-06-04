@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import SparkTheming
+
 // sourcery: AutoMockable
 protocol SwitchGetColorUseCaseable {
     func execute(intent: SwitchIntent,

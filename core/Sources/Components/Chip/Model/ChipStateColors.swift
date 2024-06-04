@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 /// The colors definie a chip
 struct ChipStateColors {

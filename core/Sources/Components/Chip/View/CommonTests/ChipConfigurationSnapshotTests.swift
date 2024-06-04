@@ -8,6 +8,8 @@
 
 import UIKit
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 struct ChipConfigurationSnapshotTests {
 

@@ -8,7 +8,8 @@
 
 import Combine
 import UIKit
-
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// `TabItemViewModel` is the view model for both the SwiftUI `TabItemView` as well as the UIKit `TabItemUIView`.
 /// The view model is responsible for returning the varying attributes to the views, i.e. colors and attributes. These are determined by the theme, intent, tabState, content and tabGetStateAttributesUseCase.

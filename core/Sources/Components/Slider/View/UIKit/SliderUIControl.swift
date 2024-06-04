@@ -8,6 +8,8 @@
 
 import UIKit
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint {
 

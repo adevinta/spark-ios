@@ -8,6 +8,8 @@
 
 import Foundation
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 final class TextFieldAddonsViewModel: ObservableObject, Updateable {
 

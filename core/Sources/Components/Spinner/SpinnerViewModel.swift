@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import SparkTheming
 
 /// `SpinnerViewModel` is the view model for both the SwiftUI `SpinnerView` as well as the UIKit `SpinnerUIView`.
 /// The view model is responsible for returning the varying attributes to the views, i.e. colors and size. These are determined by the theme, intent and spinnerSize.

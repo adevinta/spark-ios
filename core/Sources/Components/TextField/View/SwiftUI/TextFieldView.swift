@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SparkTheming
 
 /// A TextField that can be surrounded by left and/or right views
 public struct TextFieldView<LeftView: View, RightView: View>: View {

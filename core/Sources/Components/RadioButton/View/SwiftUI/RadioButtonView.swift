@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 private enum Constants {
     static let pressedLineWidth: CGFloat = 4

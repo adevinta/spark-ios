@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import SparkCore
+import Spark
 
 // swiftlint:disable no_debugging_method
 struct TextFieldAddonsComponentView: View {

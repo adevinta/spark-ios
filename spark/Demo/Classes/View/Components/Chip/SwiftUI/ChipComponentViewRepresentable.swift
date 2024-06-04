@@ -8,7 +8,6 @@
 
 import Combine
 import Spark
-import SparkCore
 import SwiftUI
 
 struct ChipComponentViewRepresentable: View {

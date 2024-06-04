@@ -8,7 +8,6 @@
 
 import Combine
 import Spark
-import SparkCore
 import UIKit
 
 final class SwitchComponentUIViewModel: ComponentUIViewModel {

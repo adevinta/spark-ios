@@ -8,8 +8,11 @@
 
 import Combine
 import XCTest
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommonTesting
+import SparkTheme
+import SparkThemingTesting
 
 final class TabItemUIViewTests: TestCase {
 

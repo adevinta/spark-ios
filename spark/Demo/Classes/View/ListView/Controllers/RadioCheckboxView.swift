@@ -6,8 +6,8 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
+@_spi(SI_SPI) import SparkCommon
 import Spark
-import SparkCore
 import SwiftUI
 
 struct RadioCheckboxView: View {

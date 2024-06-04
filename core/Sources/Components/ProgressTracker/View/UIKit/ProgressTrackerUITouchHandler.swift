@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 /// Touch handling for the progress tracker.
 /// There are four different typs of touch handler:

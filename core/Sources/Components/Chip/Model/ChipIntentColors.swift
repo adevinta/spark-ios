@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import Foundation
+import SparkTheming
 
 /// The intent colors a chip can have
 struct ChipIntentColors {

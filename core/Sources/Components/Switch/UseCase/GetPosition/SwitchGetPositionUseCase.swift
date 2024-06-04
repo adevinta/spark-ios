@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 // sourcery: AutoMockable
 protocol SwitchGetPositionUseCaseable {

@@ -9,6 +9,8 @@
 import UIKit
 
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
+import SparkTheme
 
 final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 

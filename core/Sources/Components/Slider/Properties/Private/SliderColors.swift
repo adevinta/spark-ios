@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SparkTheming
 
 struct SliderColors: Equatable {
     let track: any ColorToken

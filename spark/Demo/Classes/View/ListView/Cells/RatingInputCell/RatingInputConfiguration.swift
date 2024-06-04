@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct RatingInputConfiguration: ComponentConfiguration {
     var theme: Theme

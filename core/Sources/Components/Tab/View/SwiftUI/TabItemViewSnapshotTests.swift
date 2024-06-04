@@ -8,8 +8,9 @@
 
 import SwiftUI
 import XCTest
-
 @testable import SparkCore
+import SparkTheme
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     // MARK: - Properties

@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 import SwiftUI
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 enum RatingDisplayScenarioSnapshotTests: String, CaseIterable {
     case test1

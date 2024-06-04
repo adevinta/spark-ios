@@ -6,6 +6,8 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
+import SparkTheming
+
 struct TextLinkTypographies: Equatable {
 
     // MARK: - Properties

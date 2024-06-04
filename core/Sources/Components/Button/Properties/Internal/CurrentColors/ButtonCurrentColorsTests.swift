@@ -9,6 +9,7 @@
 import XCTest
 
 @testable import SparkCore
+import SparkTheme
 
 final class ButtonCurrentColorsTests: XCTestCase {
 

@@ -7,6 +7,7 @@
 //
 
 import Combine
+import SparkTheming
 
 final class TabViewModel<Content>: ObservableObject {
 

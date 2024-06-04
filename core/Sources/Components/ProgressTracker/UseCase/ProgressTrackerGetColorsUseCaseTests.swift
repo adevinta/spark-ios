@@ -8,8 +8,8 @@
 
 import Foundation
 import XCTest
-
 @testable import SparkCore
+import SparkThemingTesting
 
 final class ProgressTrackerGetColorsUseCaseTests: XCTestCase {
 

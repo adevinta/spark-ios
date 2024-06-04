@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct TabConfiguration: ComponentConfiguration {
     var theme: Theme

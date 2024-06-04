@@ -9,6 +9,8 @@
 
 import SwiftUI
 import Foundation
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 public struct IconButtonView: View {
 

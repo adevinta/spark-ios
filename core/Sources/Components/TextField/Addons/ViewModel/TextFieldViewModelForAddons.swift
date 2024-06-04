@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import SparkTheming
 
 final class TextFieldViewModelForAddons: TextFieldViewModel {
 

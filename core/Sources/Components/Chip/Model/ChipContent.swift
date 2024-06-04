@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
 
 public struct ChipContent: Updateable {
     public var title: String?

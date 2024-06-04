@@ -8,8 +8,9 @@
 
 import UIKit
 import Combine
-@testable import SparkCore
+@testable import Spark
 import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class ProgressTrackerComponentUIView: ComponentUIView {
 

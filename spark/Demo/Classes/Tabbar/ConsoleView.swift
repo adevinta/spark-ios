@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 final class Console {
     static var publisher: some Publisher<String, Never> {

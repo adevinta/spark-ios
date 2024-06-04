@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SparkTheming
 
 final class TagViewModel: ObservableObject {
 

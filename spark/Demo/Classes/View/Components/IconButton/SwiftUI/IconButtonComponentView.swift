@@ -7,8 +7,8 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
 import Spark
-import SparkCore
 
 struct IconButtonComponentView: View {
 
@@ -163,7 +163,6 @@ private extension IconButtonView {
                 case .highlighted: image = Image("close")
                 case .disabled: image = Image("check")
                 case .selected: image = Image("alert")
-                @unknown default: break
                 }
             }
 

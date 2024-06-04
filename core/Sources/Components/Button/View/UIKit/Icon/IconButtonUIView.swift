@@ -8,6 +8,8 @@
 
 import Combine
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The UIKit version for the icon button.
 public final class IconButtonUIView: ButtonMainUIView {

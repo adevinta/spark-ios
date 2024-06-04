@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SparkTheming
 
 /// The track view is the small divider line between the indicators
 struct ProgressTrackerTrackView: View {

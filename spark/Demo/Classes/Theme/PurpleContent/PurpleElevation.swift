@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftUI
-import SparkCore
+import Spark
 
 struct PurpleElevation: Elevation {
     let dropShadow: ElevationDropShadows & ElevationShadow = PurpleDropShadow()

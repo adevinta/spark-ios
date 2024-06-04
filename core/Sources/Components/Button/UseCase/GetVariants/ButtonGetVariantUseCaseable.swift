@@ -6,7 +6,7 @@
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
-import SwiftUI
+import SparkTheming
 
 // sourcery: AutoMockable, AutoMockTest
 protocol ButtonGetVariantUseCaseable {

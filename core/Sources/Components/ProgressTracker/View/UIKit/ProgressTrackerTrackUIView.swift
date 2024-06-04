@@ -9,6 +9,8 @@
 import Combine
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 // The small track between indicators in the Progress Tracker
 final class ProgressTrackerTrackUIView: UIView {

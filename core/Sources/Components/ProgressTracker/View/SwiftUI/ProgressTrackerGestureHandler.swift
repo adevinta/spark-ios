@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
 
 // MARK: - Protocol
 /// Touch handlers of the swiftui progress tracker

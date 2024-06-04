@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SparkCore
+import Spark
 
 public struct PurpleTheme: Theme {
 

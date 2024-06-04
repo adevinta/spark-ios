@@ -9,7 +9,8 @@
 import UIKit
 import Combine
 import SwiftUI
-import SparkCore
+import Spark
+@_spi(SI_SPI) import SparkCommon
 
 final class TextFieldAddonsComponentUIViewController: UIViewController {
 

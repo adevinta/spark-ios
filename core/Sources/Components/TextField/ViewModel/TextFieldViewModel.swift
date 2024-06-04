@@ -9,6 +9,8 @@
 import UIKit
 import SwiftUI
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 class TextFieldViewModel: ObservableObject, Updateable {
 

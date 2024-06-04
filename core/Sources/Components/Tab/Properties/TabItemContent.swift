@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
 
 public protocol TitleContaining {
     var hasTitle: Bool { get }

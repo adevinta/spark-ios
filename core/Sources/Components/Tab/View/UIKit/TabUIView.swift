@@ -9,6 +9,8 @@
 import Combine
 import Foundation
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 public final class TabUIView: UIControl {
 

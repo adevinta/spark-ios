@@ -6,7 +6,7 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-import Foundation
+import SparkTheming
 
 /// A model cotaining the colors of the progress tracker indicator
 struct ProgressTrackerColors: Equatable {

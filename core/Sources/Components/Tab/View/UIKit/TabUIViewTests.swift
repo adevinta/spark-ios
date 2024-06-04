@@ -8,8 +8,9 @@
 
 import Combine
 import XCTest
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommon
+import SparkTheme
 
 final class TabUIViewTests: XCTestCase {
     var sut: TabUIView!

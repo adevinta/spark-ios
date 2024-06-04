@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SparkCore
+import Spark
 
 struct CheckboxGroupConfiguration: ComponentConfiguration {
     var theme: Theme

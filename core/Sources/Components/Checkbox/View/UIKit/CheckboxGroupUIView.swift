@@ -9,6 +9,8 @@
 import Combine
 import SwiftUI
 import UIKit
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 /// The `CheckboxGroupUIView` renders a group containing of multiple`CheckboxUIView`-views. It supports a title, different layout and positioning options.
 public final class CheckboxGroupUIView: UIControl {

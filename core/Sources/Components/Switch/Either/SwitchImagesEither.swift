@@ -8,5 +8,6 @@
 
 import UIKit
 import SwiftUI
+@_spi(SI_SPI) import SparkCommon
 
 typealias SwitchImagesEither = Either<SwitchUIImages, SwitchImages>

@@ -8,8 +8,9 @@
 
 import UIKit
 import Combine
-import SparkCore
 import Spark
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkCommon
 
 final class StarComponentUIView: ComponentUIView {
 

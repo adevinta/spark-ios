@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 import Foundation
+import SparkTheming
 
 /// A use case to calculate the colors of a chip depending on the theme, variant and intent
 // sourcery: AutoMockable

@@ -8,7 +8,7 @@
 
 import Combine
 import UIKit
-import SparkCore
+import Spark
 
 final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject, UITableViewDataSource {
 

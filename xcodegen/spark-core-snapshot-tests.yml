@@ -3,9 +3,12 @@ include:
   - spark-core.yml
 
 packages:
-  SnapshotTesting:
-    url: https://github.com/pointfreeco/swift-snapshot-testing
-    from: 1.11.0
+  SparkCommon:
+    url: https://github.com/adevinta/spark-ios-common
+    branch: main
+  SparkTheming:
+    url: https://github.com/adevinta/spark-ios-theming
+    branch: main
 
 targetTemplates:
   SparkCoreSnapshotTestsTemplate:
@@ -26,13 +29,17 @@ targetTemplates:
       - path: ../spark/Sources/Resources
         excludes:
         - "**/*Tests*.swift"
-      - path: ../spark/Sources/Theming
-        excludes:
-        - "**/*Tests*.swift"
 
     dependencies:
       - target: SparkCore
-      - package: SnapshotTesting
+      - package: SparkCommon
+        product: SparkCommonTesting
+      - package: SparkCommon
+        product: SparkCommonSnapshotTesting
+      - package: SparkTheming
+        product: SparkTheme
+      - package: SparkTheming
+        product: SparkThemingTesting
 
 targets:
   SparkCoreSnapshotTests:

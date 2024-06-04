@@ -11,7 +11,7 @@ import Foundation
 import Combine
 import Foundation
 import UIKit
-import SparkCore
+import Spark
 
 final class StarComponentUIViewModel: ComponentUIViewModel {
 

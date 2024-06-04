@@ -10,6 +10,8 @@ import Combine
 import SwiftUI
 import XCTest
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonTesting
+import SparkThemingTesting
 
 final class FormFieldViewModelTests: XCTestCase {
 

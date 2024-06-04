@@ -8,6 +8,8 @@
 
 import SwiftUI
 import Combine
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 
 public struct ProgressBarIndeterminateView: View {
 

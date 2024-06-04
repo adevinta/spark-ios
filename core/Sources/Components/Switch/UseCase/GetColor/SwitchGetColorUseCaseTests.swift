@@ -9,6 +9,7 @@
 import XCTest
 import SwiftUI
 @testable import SparkCore
+import SparkThemingTesting
 
 final class SwitchGetColorUseCaseTests: XCTestCase {
 

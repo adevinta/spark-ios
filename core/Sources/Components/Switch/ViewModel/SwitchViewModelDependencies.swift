@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@_spi(SI_SPI) import SparkCommon
 
 // sourcery: AutoMockable
 protocol SwitchViewModelDependenciesProtocol {

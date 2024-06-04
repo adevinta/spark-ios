@@ -7,6 +7,7 @@
 //
 
 import UIKit
+@_spi(SI_SPI) import SparkCommon
 
 /// This ProgressMainBar view contains all communs subviews (track & indicator), styles, constraints, ... for all progress bars.
 /// This view doesn't have a public init.

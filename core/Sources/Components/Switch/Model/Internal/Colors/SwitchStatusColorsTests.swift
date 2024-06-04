@@ -7,8 +7,8 @@
 //
 
 import XCTest
-
 @testable import SparkCore
+import SparkTheme
 
 final class SwitchStatusColorsTests: XCTestCase {
 

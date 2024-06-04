@@ -6,8 +6,8 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 import UIKit
-
 @testable import SparkCore
+@_spi(SI_SPI) import SparkCommonSnapshotTesting
 
 enum CheckboxGroupScenarioSnapshotTests: String, CaseIterable {
     case test1
