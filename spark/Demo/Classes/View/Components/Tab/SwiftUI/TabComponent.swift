@@ -143,19 +143,6 @@ struct TabComponent: View {
                 .disabled(self.allDisabled == .selected)
             }
         )
-        .onChange(of: self.numberOfTabs) { _ in
-            self.redraw()
-        }
-        .onChange(of: self.stateVals) { _ in
-            self.redraw()
-        }
-    }
-
-    func redraw() {
-        self.equalSize.toggle()
-        DispatchQueue.main.async {
-            self.equalSize.toggle()
-        }
     }
 
     func badge() -> BadgeView? {
