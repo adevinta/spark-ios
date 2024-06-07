@@ -348,6 +348,12 @@ public final class ChipUIView: UIControl {
         }
     }
 
+    // MARK: - Control functions
+     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+         super.touchesCancelled(touches, with: event)
+         self.viewModel.isPressed = false
+     }
+
     //MARK: - Private functions
     /// Update all colors used
     private func setChipColors(_ chipColors: ChipStateColors) {
