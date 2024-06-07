@@ -180,13 +180,16 @@ public struct CheckboxView: View {
         let tintColor = self.viewModel.colors.tintColor.color
         let borderColor = self.viewModel.colors.borderColor.color
 
-        RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
-            .if(self.selectionState == .selected || self.selectionState == .indeterminate) {
-                $0.fill(tintColor)
-            } else: {
-                $0.strokeBorder(borderColor, lineWidth: self.checkboxBorderWidth)
-            }
-            .frame(width: self.checkboxSize, height: self.checkboxSize)
+        if self.selectionState == .selected || self.selectionState == .indeterminate {
+            RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
+                .fill(tintColor)
+                .frame(width: self.checkboxSize, height: self.checkboxSize)
+
+        } else {
+            RoundedRectangle(cornerRadius: self.checkboxBorderRadius)
+                .strokeBorder(borderColor, lineWidth: self.checkboxBorderWidth)
+                .frame(width: self.checkboxSize, height: self.checkboxSize)
+        }
     }
 
     @ViewBuilder 
