@@ -42,5 +42,6 @@ final class ChipCell: UITableViewCell, Configurable {
         self.component.isSelected = configuration.isSelected
         self.component.text = configuration.title
         self.component.icon = configuration.icon
+        self.component.action = {}
     }
 }
