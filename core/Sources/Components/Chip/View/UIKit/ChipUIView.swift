@@ -333,6 +333,10 @@ public final class ChipUIView: UIControl {
 
         self.updateLayoutMargins()
         self.updateBorder()
+
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.viewModel.updateColors()
+        }
     }
 
     required init?(coder: NSCoder) {
