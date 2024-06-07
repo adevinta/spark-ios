@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class BottomSheetPresentingView: UIView {
+final class BottomSheetPresentingUIView: UIView {
 
     // MARK: - UI Elements
     let presentSheetButton: UIButton = {

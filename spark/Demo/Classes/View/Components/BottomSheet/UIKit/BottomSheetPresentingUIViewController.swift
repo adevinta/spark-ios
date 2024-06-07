@@ -9,12 +9,12 @@
 import UIKit
 import SparkCore
 
-final class BottomSheetPresentingViewController: UIViewController {
+final class BottomSheetPresentingUIViewController: UIViewController {
 
 
     // MARK: - Computed Properties
 
-    lazy var rootView = BottomSheetPresentingView()
+    lazy var rootView = BottomSheetPresentingUIView()
 
     // MARK: - Lifecycle
 
@@ -80,9 +80,9 @@ final class BottomSheetPresentingViewController: UIViewController {
 }
 
 // MARK: - Builder
-extension BottomSheetPresentingViewController {
+extension BottomSheetPresentingUIViewController {
 
-    static func build() -> BottomSheetPresentingViewController {
-        return BottomSheetPresentingViewController()
+    static func build() -> BottomSheetPresentingUIViewController {
+        return BottomSheetPresentingUIViewController()
     }
 }

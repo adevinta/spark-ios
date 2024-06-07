@@ -71,7 +71,7 @@ extension ComponentsViewController {
         case .badge:
             viewController = BadgeComponentViewController.build()
         case .bottomSheet:
-            viewController = BottomSheetPresentingViewController.build()
+            viewController = BottomSheetPresentingUIViewController.build()
         case .button:
             viewController = ButtonComponentViewController.build()
         case .iconButton:
