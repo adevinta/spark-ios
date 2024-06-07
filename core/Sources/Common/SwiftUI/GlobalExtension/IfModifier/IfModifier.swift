@@ -9,6 +9,7 @@
 import SwiftUI
 
 extension View {
+    @available(*, deprecated, message: "Will be removed soon")
     func `if`<Content: View>(_ conditional: Bool, content: (Self) -> Content) -> some View {
         if conditional {
             return AnyView(content(self))
