@@ -120,12 +120,12 @@ class ChipViewModel<Content>: ObservableObject {
         self.isIconLeading = alignment.isIconLeading
     }
 
-    // MARK: - Private functions
-    private func updateColors() {
+    func updateColors() {
         let state = ChipState(isEnabled: self.isEnabled, isPressed: self.isPressed, isSelected: self.isSelected)
         self.colors = self.useCase.execute(theme: self.theme, variant: self.variant, intent: self.intent, state: state)
     }
 
+    // MARK: - Private functions
     private func themeDidUpdate() {
         self.updateColors()
 

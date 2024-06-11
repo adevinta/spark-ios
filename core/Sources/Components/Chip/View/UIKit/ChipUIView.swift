@@ -333,6 +333,10 @@ public final class ChipUIView: UIControl {
 
         self.updateLayoutMargins()
         self.updateBorder()
+
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.viewModel.updateColors()
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -347,6 +351,12 @@ public final class ChipUIView: UIControl {
             self.addDashedBorder(borderColor: self.viewModel.colors.border)
         }
     }
+
+    // MARK: - Control functions
+     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+         super.touchesCancelled(touches, with: event)
+         self.viewModel.isPressed = false
+     }
 
     //MARK: - Private functions
     /// Update all colors used

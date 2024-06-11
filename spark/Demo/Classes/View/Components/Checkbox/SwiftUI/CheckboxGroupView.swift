@@ -108,8 +108,7 @@ struct CheckboxGroupListView: View {
                     layout: self.layout == .selected ? .vertical : .horizontal,
                     alignment: self.alignment,
                     theme: self.theme,
-                    intent: self.intent,
-                    accessibilityIdentifierPrefix: "checkbox-group"
+                    intent: self.intent
                 )
                 .onChange(of: self.groupType) { newValue in
                     self.items = self.setItems(groupType: newValue)

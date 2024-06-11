@@ -255,9 +255,7 @@ public final class TextLinkUIView: UIControl {
         self.addSubview(self.contentStackView)
 
         // Accessibility
-        self.accessibilityTraits = [.button]
         self.accessibilityIdentifier = TextLinkAccessibilityIdentifier.view
-        self.isAccessibilityElement = true
 
         // View properties
         self.backgroundColor = .clear
@@ -268,6 +266,9 @@ public final class TextLinkUIView: UIControl {
 
         // Setup gesture
         self.enableTouch()
+
+        // Setup accessibility
+        self.setupAccessibility()
 
         // Setup subscriptions
         self.setupSubscriptions()
@@ -318,11 +319,29 @@ public final class TextLinkUIView: UIControl {
         self.imageView.widthAnchor.constraint(equalTo: self.imageView.heightAnchor).isActive = true
     }
 
+    // MARK: - Accessibility
+    private func setupAccessibility() {
+        self.isAccessibilityElement = true
+        self.accessibilityLabel = self.viewModel.text
+        self.accessibilityTraits.insert(.link)
+        if self.image != nil {
+            self.accessibilityContainerType = .semanticGroup
+            self.accessibilityTraits.insert(.image)
+        }
+    }
+
     // MARK: - Update UI
 
     private func updateImage() {
         self.imageContentStackView.isHidden = self.image == nil
         self.imageView.image = self.image
+        if self.image == nil {
+            self.accessibilityTraits.remove(.image)
+            self.accessibilityContainerType = .none
+        } else {
+            self.accessibilityTraits.insert(.image)
+            self.accessibilityContainerType = .semanticGroup
+        }
     }
 
     private func updateContentStackViewSpacing() {

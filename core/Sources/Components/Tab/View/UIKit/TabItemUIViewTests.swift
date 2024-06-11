@@ -141,7 +141,7 @@ final class TabItemUIViewTests: TestCase {
         }
 
         // When
-        self.sut.isHighlighted = true
+        self.sut.touchesBegan(Set<UITouch>(), with: nil)
 
         // Then
         waitForExpectations(timeout: 1)
@@ -174,7 +174,7 @@ final class TabItemUIViewTests: TestCase {
         }
 
         // When
-        self.sut.isHighlighted = false
+        self.sut.touchesEnded(Set<UITouch>(), with: nil)
 
         // Then
         waitForExpectations(timeout: 1)

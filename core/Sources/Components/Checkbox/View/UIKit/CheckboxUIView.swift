@@ -259,8 +259,6 @@ public final class CheckboxUIView: UIControl {
     }
 
     private func commonInit() {
-        self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkbox
-        
         self.setupViews()
         self.enableTouch()
         self.subscribe()
@@ -340,11 +338,13 @@ public final class CheckboxUIView: UIControl {
         self.viewModel.$opacity.subscribe(in: &self.cancellables) { [weak self] opacity in
             guard let self else { return }
             self.layer.opacity = Float(opacity)
+            self.setAccessibilityEnable()
         }
 
         self.viewModel.$selectionState.subscribe(in: &self.cancellables) { [weak self] selectionState in
             guard let self else { return }
             self.controlView.selectionState = selectionState
+            self.setAccessibilityValue(state: selectionState)
         }
 
         self.viewModel.$alignment.subscribe(in: &self.cancellables) { [weak self] alignment in
@@ -358,6 +358,7 @@ public final class CheckboxUIView: UIControl {
             self.textLabel.isHidden = labelHidden
             self.textLabel.font = self.viewModel.font.uiFont
             self.textLabel.attributedText = text.leftValue
+            self.setAccessibilityLabel(text.leftValue?.string)
         }
 
         self.viewModel.$checkedImage.subscribe(in: &self.cancellables) { [weak self] icon in
@@ -382,7 +383,36 @@ public final class CheckboxUIView: UIControl {
 private extension CheckboxUIView {
 
     private func updateAccessibility() {
-        self.accessibilityLabel = self.textLabel.text
+        self.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkbox
+        self.isAccessibilityElement = true
+        self.accessibilityTraits.insert(.button)
+        self.accessibilityTraits.remove(.selected)
+        self.setAccessibilityLabel(self.textLabel.text)
+        self.setAccessibilityValue(state: self.selectionState)
+        self.setAccessibilityEnable()
+    }
+
+    private func setAccessibilityLabel(_ label: String?) {
+        self.accessibilityLabel = label
+    }
+
+    private func setAccessibilityValue(state: CheckboxSelectionState) {
+        switch state {
+        case .selected:
+            self.accessibilityValue = CheckboxAccessibilityValue.checked
+        case .indeterminate:
+            self.accessibilityValue = CheckboxAccessibilityValue.indeterminate
+        case .unselected:
+            self.accessibilityValue = CheckboxAccessibilityValue.unchecked
+        }
+    }
+
+    private func setAccessibilityEnable() {
+        if self.isEnabled {
+            self.accessibilityTraits.remove(.notEnabled)
+        } else {
+            self.accessibilityTraits.insert(.notEnabled)
+        }
     }
 
     private func updateTheme(colors: CheckboxColors) {

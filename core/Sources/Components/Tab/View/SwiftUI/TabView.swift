@@ -11,7 +11,8 @@ import SwiftUI
 /// TabView is the similar to a SegmentControl
 public struct TabView: View {
     private let intent: TabIntent
-    @ObservedObject private var viewModel: TabViewModel<TabItemContent>
+    private var viewModel: TabViewModel<TabItemContent>
+    @ObservedObject private var containerViewModel = TabContainerViewModel()
     @Binding private var selectedIndex: Int
     @Environment(\.isEnabled) private var isEnabled: Bool
 
@@ -71,7 +72,6 @@ public struct TabView: View {
         self._selectedIndex = selectedIndex
         let viewModel = TabViewModel(
             theme: theme,
-            apportionsSegmentWidthsByContent: false,
             content: content, 
             tabSize: tabSize
         )
@@ -82,7 +82,7 @@ public struct TabView: View {
     public var body: some View {
         let viewModel = self.viewModel.setIsEnabled(self.isEnabled)
         
-        if viewModel.apportionsSegmentWidthsByContent {
+        if self.containerViewModel.apportionsSegmentWidthsByContent {
             TabApportionsSizeView(viewModel: viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
         } else {
             TabEqualSizeView(viewModel: viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
@@ -92,6 +92,7 @@ public struct TabView: View {
     // MARK: - Public view modifiers
     /// Indicates whether the control attempts to adjust segment widths based on their content widths.
     public func apportionsSegmentWidthsByContent(_ value: Bool) -> Self {
+        self.containerViewModel.apportionsSegmentWidthsByContent = value
         self.viewModel.apportionsSegmentWidthsByContent = value
         return self
     }

@@ -54,7 +54,7 @@ final class RadioButtonGetColorsUseCaseTests: XCTestCase {
         // Given
         let colors = self.theme.colors
         let expectedColors = RadioButtonColors(
-            button: colors.feedback.error,
+            button: colors.base.outline,
             label: colors.base.onBackground,
             halo: colors.feedback.errorContainer,
             fill: ColorTokenDefault.clear,
@@ -96,7 +96,7 @@ final class RadioButtonGetColorsUseCaseTests: XCTestCase {
         // Given
         let colors = self.theme.colors
         let expectedColors = RadioButtonColors(
-            button: colors.feedback.alert,
+            button: colors.base.outline,
             label: colors.base.onBackground,
             halo: colors.feedback.alertContainer,
             fill: ColorTokenDefault.clear,
@@ -117,7 +117,7 @@ final class RadioButtonGetColorsUseCaseTests: XCTestCase {
         // Given
         let colors = self.theme.colors
         let expectedColors = RadioButtonColors(
-            button: colors.feedback.success,
+            button: colors.base.outline,
             label: colors.base.onBackground,
             halo: colors.feedback.successContainer,
             fill: ColorTokenDefault.clear,
