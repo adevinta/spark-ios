@@ -51,6 +51,12 @@ public final class TextEditorUIView: UITextView {
         }
     }
 
+    public override var text: String! {
+        didSet {
+            self.hidePlaceHolder(!self.text.isEmpty)
+        }
+    }
+
     /// The textfield's current intent.
     public var isEnabled: Bool {
         get {
@@ -58,6 +64,7 @@ public final class TextEditorUIView: UITextView {
         }
         set {
             self.viewModel.isEnabled = newValue
+            self.isUserInteractionEnabled = newValue
         }
     }
 
@@ -67,6 +74,8 @@ public final class TextEditorUIView: UITextView {
         }
         set {
             self.viewModel.isReadOnly = newValue
+            self.isEditable = !newValue
+            self.isSelectable = !newValue
         }
     }
 
@@ -120,12 +129,21 @@ public final class TextEditorUIView: UITextView {
     }
 
     private func setupView() {
-        self.accessibilityIdentifier = TextEditorAccessibilityIdentifier.view
-        self.adjustsFontForContentSizeCategory = true
-        self.showsHorizontalScrollIndicator = false
 
+
+        self.setupAccessibility()
+        self.setupTextViewAttributes()
         self.subscribeToViewModel()
         self.setupLayout()
+    }
+
+    private func setupAccessibility() {
+        self.accessibilityIdentifier = TextEditorAccessibilityIdentifier.view
+    }
+
+    private func setupTextViewAttributes() {
+        self.adjustsFontForContentSizeCategory = true
+        self.showsHorizontalScrollIndicator = false
     }
 
     private func setupLayout() {
@@ -139,9 +157,7 @@ public final class TextEditorUIView: UITextView {
             right: self.horizontalSpacing
         )
 
-        
         self.addSubview(self.placeHolderLabel)
-        self.hidePlaceHolder(!self.text.isEmpty)
 
         NSLayoutConstraint.activate([
             /// Self
@@ -149,12 +165,12 @@ public final class TextEditorUIView: UITextView {
             self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.minWidth),
 
             /// Placeholder Label
-            self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding),
-            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing),
-            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing),
-            self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.placeHolderLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -2 * self.borderWidth),
-            self.placeHolderLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor)
+//            self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding),
+//            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing),
+//            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing),
+//            self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+//            self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor),
+//            self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: self.defaultSystemVerticalPadding)
         ])
     }
 
@@ -239,6 +255,12 @@ public final class TextEditorUIView: UITextView {
 
     private func hidePlaceHolder(_ value: Bool) {
         self.placeHolderLabel.isHidden = value
+        self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding).isActive = !value
+        self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing).isActive = !value
+        self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing).isActive = !value
+        self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = !value
+//        self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor).isActive = !value
+        self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: self.defaultSystemVerticalPadding).isActive = !value
     }
 }
 
