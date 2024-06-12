@@ -12,42 +12,38 @@ import Combine
 /// Spark TextEditorUIView, subclasses UITextView
 public final class TextEditorUIView: UITextView {
 
-    private let viewModel: TextEditorViewModel
-    private var cancellables = Set<AnyCancellable>()
-
+    // Private Variables
     @ScaledUIMetric private var minHeight: CGFloat = 44
     @ScaledUIMetric private var minWidth: CGFloat = 280
     @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 8
     @ScaledUIMetric private var horizontalSpacing: CGFloat
     @ScaledUIMetric private var borderWidth: CGFloat
 
-    /// The textfield's current theme.
-    public var theme: Theme {
-        get {
-            return self.viewModel.theme
-        }
-        set {
-            self.viewModel.theme = newValue
-        }
-    }
+    private let viewModel: TextEditorViewModel
+    private var cancellables = Set<AnyCancellable>()
+    private var placeHolderLabelYAnchor: NSLayoutConstraint?
 
-    /// The textfield's current intent.
-    public var intent: TextEditorIntent {
-        get {
-            return self.viewModel.intent
-        }
-        set {
-            self.viewModel.intent = newValue
-        }
-    }
+    private lazy var placeHolderLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = false
+        return label
+    }()
 
-    /// The textfield's current intent.
-    public var placeHolder: String? {
-        get {
-            return self.placeHolderLabel.text
-        }
+    private weak var _delegate: UITextViewDelegate?
+
+    // Public Variables
+
+    /// The texteditor's custom delegate.
+    public override var delegate: UITextViewDelegate? {
         set {
-            self.placeHolderLabel.text = newValue
+            self._delegate = newValue
+        }
+        get {
+            return self._delegate
         }
     }
 
@@ -57,7 +53,45 @@ public final class TextEditorUIView: UITextView {
         }
     }
 
-    /// The textfield's current intent.
+    /// The texteditor's isScrollEnabled. To grow textview according to text, set this parameter as an false.
+    public override var isScrollEnabled: Bool {
+        didSet {
+            self.placeHolderLabelYAnchor?.isActive = !self.isScrollEnabled
+        }
+    }
+
+    /// The texteditor's current theme.
+    public var theme: Theme {
+        get {
+            return self.viewModel.theme
+        }
+        set {
+            self.viewModel.theme = newValue
+        }
+    }
+
+    /// The texteditor's current intent.
+    public var intent: TextEditorIntent {
+        get {
+            return self.viewModel.intent
+        }
+        set {
+            self.viewModel.intent = newValue
+        }
+    }
+
+    /// The texteditor's current placeholder.
+    public var placeHolder: String? {
+        get {
+            return self.placeHolderLabel.text
+        }
+        set {
+            self.placeHolderLabel.text = newValue
+            self.hidePlaceHolder(!self.text.isEmpty)
+        }
+    }
+
+    /// The texteditor's userInteractionEnabled.
     public var isEnabled: Bool {
         get {
             return self.viewModel.isEnabled
@@ -68,6 +102,7 @@ public final class TextEditorUIView: UITextView {
         }
     }
 
+    /// The texteditor's read only mode.
     public var isReadOnly: Bool {
         get {
             return self.viewModel.isReadOnly
@@ -79,30 +114,10 @@ public final class TextEditorUIView: UITextView {
         }
     }
 
-    private weak var _delegate: UITextViewDelegate?
-
-    public override var delegate: UITextViewDelegate? {
-            set {
-                self._delegate = newValue
-            }
-            get {
-                return self._delegate
-            }
-        }
-
-    private lazy var placeHolderLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
     /// TextEditorUIView initializer
     /// - Parameters:
-    ///   - theme: The textfield's current theme
-    ///   - intent: The textfield's current intent
+    ///   - theme: The texteditors's current theme
+    ///   - intent: The texteditors's current intent
     public init(
         theme: Theme,
         intent: TextEditorIntent
@@ -129,8 +144,6 @@ public final class TextEditorUIView: UITextView {
     }
 
     private func setupView() {
-
-
         self.setupAccessibility()
         self.setupTextViewAttributes()
         self.subscribeToViewModel()
@@ -160,20 +173,10 @@ public final class TextEditorUIView: UITextView {
         self.addSubview(self.placeHolderLabel)
 
         NSLayoutConstraint.activate([
-            /// Self
             self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight),
-            self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.minWidth),
-
-            /// Placeholder Label
-//            self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding),
-//            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing),
-//            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing),
-//            self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-//            self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor),
-//            self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: self.defaultSystemVerticalPadding)
+            self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.minWidth)
         ])
     }
-
 
     private func subscribeToViewModel() {
         self.viewModel.$textColor.removeDuplicates(by: { lhs, rhs in
@@ -255,12 +258,18 @@ public final class TextEditorUIView: UITextView {
 
     private func hidePlaceHolder(_ value: Bool) {
         self.placeHolderLabel.isHidden = value
+        self.accessibilityLabel = value ? self.text : self.placeHolder
+
         self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding).isActive = !value
         self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing).isActive = !value
         self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing).isActive = !value
         self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = !value
-//        self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor).isActive = !value
         self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: self.defaultSystemVerticalPadding).isActive = !value
+
+        if  self.placeHolderLabelYAnchor == nil {
+            self.placeHolderLabelYAnchor = self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
+        }
+        self.placeHolderLabelYAnchor?.isActive = !value && !self.isScrollEnabled
     }
 }
 

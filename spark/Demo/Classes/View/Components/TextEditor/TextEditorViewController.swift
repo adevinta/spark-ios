@@ -16,16 +16,8 @@ final class TextEditorViewController: UIViewController, UIGestureRecognizerDeleg
             theme: SparkTheme.shared,
             intent: .neutral
         )
-//        view.text = "It is a long established It is a long established"
-//        view.isEditable = false
-//        view.isSelectable = false
-        view.isScrollEnabled = true
-//        view.isReadOnly = true
-        view.text = "It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established"
-        view.placeHolder = "It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established It is a long established"
-
-
-        view.translatesAutoresizingMaskIntoConstraints = false
+        view.placeHolder = "It is a long established"
+        view.isScrollEnabled = false
         return view
     }()
 
@@ -43,8 +35,7 @@ final class TextEditorViewController: UIViewController, UIGestureRecognizerDeleg
         NSLayoutConstraint.activate([
             self.textEditor.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
             self.textEditor.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            self.textEditor.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-            self.textEditor.heightAnchor.constraint(equalToConstant: 70)
+            self.textEditor.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20)
         ])
     }
 
