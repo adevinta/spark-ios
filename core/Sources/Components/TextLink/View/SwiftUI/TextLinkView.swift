@@ -71,12 +71,23 @@ public struct TextLinkView: View {
     // MARK: - View
 
     public var body: some View {
+        if self.image == nil {
+            self.buttonContent()
+        } else {
+            self.buttonContent()
+                .accessibilityAddTraits(.isImage)
+        }
+    }
+
+    @ViewBuilder
+    private func buttonContent() -> some View {
         Button(action: self.action) {
             self.content()
         }
         .buttonStyle(PressedButtonStyle(isPressed: self.$viewModel.isHighlighted))
         .accessibilityIdentifier(TextLinkAccessibilityIdentifier.view)
-        .accessibilityAddTraits(.isButton)
+        .accessibilityRemoveTraits(.isButton)
+        .accessibilityAddTraits(.isLink)
     }
 
     // MARK: - View Builder

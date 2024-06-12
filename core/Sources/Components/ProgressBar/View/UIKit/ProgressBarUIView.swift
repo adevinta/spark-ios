@@ -12,7 +12,7 @@ import SwiftUI
 
 /// The UIKit version for the progress bar.
 public final class ProgressBarUIView: ProgressBarMainUIView {
-    
+
     // MARK: - Public Properties
 
     /// The spark theme of the progress bar.
@@ -49,11 +49,8 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
     /// note: Value **MUST** be into 0 (for 0 %) and 1 (for 100%)
     public var value: CGFloat = 0 {
         didSet {
-            self.updateWidthConstraints(
-                &self.indicatorWidthConstraint,
-                multiplier: self.value,
-                view: self.indicatorView
-            )
+            guard self.value != oldValue else { return }
+            self.didUpdateValue()
         }
     }
 
@@ -87,6 +84,15 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
+    private func didUpdateValue() {
+        self.accessibilityValue = "\(Int(self.value * 100.0))%"
+        self.updateWidthConstraints(
+            &self.indicatorWidthConstraint,
+            multiplier: self.value,
+            view: self.indicatorView
+        )
+    }
+
     // MARK: - View setup
 
     override func setupView() {
@@ -97,6 +103,8 @@ public final class ProgressBarUIView: ProgressBarMainUIView {
 
         // Load view model
         self.viewModel.load()
+
+        self.didUpdateValue()
     }
 
     // MARK: - Subscribe

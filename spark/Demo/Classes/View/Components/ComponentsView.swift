@@ -26,6 +26,9 @@ struct ComponentsView: View {
                 Button("Badge") {
                     self.navigateToView(BadgeComponentView())
                 }
+                Button("Bottom Sheet") {
+                    self.navigateToView(BottomSheetPresentingView())
+                }
                 Button("Button") {
                     self.navigateToView(ButtonComponentView())
                 }

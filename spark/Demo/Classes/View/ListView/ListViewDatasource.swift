@@ -268,9 +268,14 @@ extension ListViewDataSource {
 
     /// Chip
     func createChipConfigurations() -> [ChipConfiguration] {
-        [ChipConfiguration(theme: SparkTheme.shared, intent: .main, variant: .dashed, alignment: .leadingIcon, isEnabled: true, isSelected: false, title: "This is", icon: UIImage(systemName: "calendar")),
-         ChipConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, alignment: .trailingIcon, isEnabled: false, isSelected: false, title: "A chip", icon: UIImage(systemName: "arrowshape.left") ),
-         ChipConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, alignment: .leadingIcon, isEnabled: true, isSelected: true, title: "Hello", icon: nil)]
+        [
+            ChipConfiguration(theme: SparkTheme.shared, intent: .main, variant: .dashed, alignment: .leadingIcon, isEnabled: true, isSelected: false, title: "Main", icon: UIImage(systemName: "calendar")),
+            ChipConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, alignment: .leadingIcon, isEnabled: true, isSelected: false, title: "Basic Enabled", icon: nil),
+            ChipConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, alignment: .leadingIcon, isEnabled: true, isSelected: true, title: "Basic Enabled Selected", icon: nil),
+            ChipConfiguration(theme: SparkTheme.shared, intent: .basic, variant: .outlined, alignment: .trailingIcon, isEnabled: false, isSelected: false, title: "Basic Disabled", icon: UIImage(systemName: "arrowshape.left") ),
+            ChipConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, alignment: .leadingIcon, isEnabled: true, isSelected: false, title: "Success", icon: nil),
+            ChipConfiguration(theme: SparkTheme.shared, intent: .success, variant: .tinted, alignment: .leadingIcon, isEnabled: true, isSelected: true, title: "Success Selected", icon: nil)
+        ]
     }
 
     /// Icon

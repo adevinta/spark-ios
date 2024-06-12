@@ -17,7 +17,6 @@ final class CheckboxGroupViewModel: ObservableObject {
     @Published var checkedImage: Image
     @Published var layout: CheckboxGroupLayout
     @Published var spacing: LayoutSpacing
-    @Published var accessibilityIdentifierPrefix: String
     @Published var titleFont: TypographyFontToken
     @Published var titleColor: any ColorToken
     @Published var intent: CheckboxIntent
@@ -28,7 +27,6 @@ final class CheckboxGroupViewModel: ObservableObject {
     init(
         title: String?,
         checkedImage: Image,
-        accessibilityIdentifierPrefix: String,
         theme: Theme,
         intent: CheckboxIntent = .main,
         alignment: CheckboxAlignment = .left,
@@ -43,7 +41,6 @@ final class CheckboxGroupViewModel: ObservableObject {
         self.spacing = theme.layout.spacing
         self.titleFont = theme.typography.subhead
         self.titleColor = theme.colors.base.onSurface
-        self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
     }
 
     func calculateSingleCheckboxWidth(string: String?) -> CGFloat {
