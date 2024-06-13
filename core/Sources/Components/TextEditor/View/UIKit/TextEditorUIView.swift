@@ -13,14 +13,15 @@ import Combine
 public final class TextEditorUIView: UITextView {
 
     // Private Variables
-    @ScaledUIMetric private var minHeight: CGFloat = 44
-    @ScaledUIMetric private var minWidth: CGFloat = 280
+    private var minHeight: CGFloat = 44
+    private var minWidth: CGFloat = 280
     @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 8
     @ScaledUIMetric private var horizontalSpacing: CGFloat
     @ScaledUIMetric private var borderWidth: CGFloat
 
     private let viewModel: TextEditorViewModel
     private var cancellables = Set<AnyCancellable>()
+    private var placeHolderConstarints: [NSLayoutConstraint]?
     private var placeHolderLabelYAnchor: NSLayoutConstraint?
 
     private lazy var placeHolderLabel: UILabel = {
@@ -30,6 +31,7 @@ public final class TextEditorUIView: UITextView {
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isAccessibilityElement = false
+        label.isHidden = true
         return label
     }()
 
@@ -171,6 +173,14 @@ public final class TextEditorUIView: UITextView {
         )
 
         self.addSubview(self.placeHolderLabel)
+        self.placeHolderConstarints = [
+            self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding),
+            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing),
+            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing),
+            self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: self.defaultSystemVerticalPadding)
+        ]
+        self.placeHolderLabelYAnchor = self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
 
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight),
@@ -248,8 +258,6 @@ public final class TextEditorUIView: UITextView {
 
         guard previousTraitCollection?.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory else { return }
 
-        self._minHeight.update(traitCollection: self.traitCollection)
-        self._minWidth.update(traitCollection: self.traitCollection)
         self._borderWidth.update(traitCollection: self.traitCollection)
         self._horizontalSpacing.update(traitCollection: self.traitCollection)
         self._defaultSystemVerticalPadding.update(traitCollection: self.traitCollection)
@@ -257,18 +265,11 @@ public final class TextEditorUIView: UITextView {
     }
 
     private func hidePlaceHolder(_ value: Bool) {
+        guard self.placeHolderLabel.isHidden != value else { return }
         self.placeHolderLabel.isHidden = value
         self.accessibilityLabel = value ? self.text : self.placeHolder
 
-        self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding).isActive = !value
-        self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing).isActive = !value
-        self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing).isActive = !value
-        self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = !value
-        self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: self.defaultSystemVerticalPadding).isActive = !value
-
-        if  self.placeHolderLabelYAnchor == nil {
-            self.placeHolderLabelYAnchor = self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
-        }
+        self.placeHolderConstarints?.forEach { $0.isActive = !value }
         self.placeHolderLabelYAnchor?.isActive = !value && !self.isScrollEnabled
     }
 }
