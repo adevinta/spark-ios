@@ -36,8 +36,6 @@ final class TextEditorComponentUIView: ComponentUIView, UIGestureRecognizerDeleg
         tap.delegate = self
         addGestureRecognizer(tap)
 
-        self.componentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 40).isActive = true
-
         self.setupSubscriptions()
     }
 
