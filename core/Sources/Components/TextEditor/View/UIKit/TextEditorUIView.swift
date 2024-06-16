@@ -58,7 +58,7 @@ public final class TextEditorUIView: UITextView {
     public override var isScrollEnabled: Bool {
         didSet {
             self.placeHolderLabelYAnchor?.isActive = !self.isScrollEnabled
-            self.sizeToFit()
+            self.setNeedsUpdateConstraints()
         }
     }
 
