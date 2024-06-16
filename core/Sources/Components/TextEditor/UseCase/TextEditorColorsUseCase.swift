@@ -31,7 +31,7 @@ struct TextEditorColorsUseCase: TextEditorColorsUseCasable {
         let background: any ColorToken
 
         if !isEnabled || isReadonly {
-            let dim = isReadonly ? theme.dims.dim3 : theme.dims.none
+            let dim = isReadonly ? theme.dims.none : theme.dims.dim3
             text = theme.colors.base.onSurface.opacity(dim)
             border = theme.colors.base.onSurface.opacity(theme.dims.dim3)
             background = theme.colors.base.onSurface.opacity(theme.dims.dim5)

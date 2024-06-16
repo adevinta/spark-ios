@@ -16,8 +16,7 @@ public final class TextEditorUIView: UITextView {
     private var minHeight: CGFloat = 44
     private var minWidth: CGFloat = 280
     @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 8
-    @ScaledUIMetric private var horizontalSpacing: CGFloat
-    @ScaledUIMetric private var borderWidth: CGFloat
+    @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
     private let viewModel: TextEditorViewModel
     private var cancellables = Set<AnyCancellable>()
@@ -59,6 +58,7 @@ public final class TextEditorUIView: UITextView {
     public override var isScrollEnabled: Bool {
         didSet {
             self.placeHolderLabelYAnchor?.isActive = !self.isScrollEnabled
+            self.sizeToFit()
         }
     }
 
@@ -129,8 +129,6 @@ public final class TextEditorUIView: UITextView {
             intent: intent
         )
         self.viewModel = viewModel
-        self.horizontalSpacing = viewModel.horizontalSpacing
-        self.borderWidth = viewModel.borderWidth
 
         super.init(
             frame: .zero,
@@ -167,18 +165,18 @@ public final class TextEditorUIView: UITextView {
         self.textContainer.lineFragmentPadding = 0
         self.textContainerInset = UIEdgeInsets(
             top: self.defaultSystemVerticalPadding,
-            left: self.horizontalSpacing,
+            left: self.viewModel.horizontalSpacing,
             bottom: self.defaultSystemVerticalPadding,
-            right: self.horizontalSpacing
+            right: self.viewModel.horizontalSpacing
         )
 
         self.addSubview(self.placeHolderLabel)
         self.placeHolderConstarints = [
             self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding),
-            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.horizontalSpacing),
-            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.horizontalSpacing),
-            self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: self.defaultSystemVerticalPadding)
+            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.viewModel.horizontalSpacing),
+            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.viewModel.horizontalSpacing),
+            self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -self.viewModel.horizontalSpacing*2),
+            self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: -self.defaultSystemVerticalPadding)
         ]
         self.placeHolderLabelYAnchor = self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
 
@@ -186,6 +184,14 @@ public final class TextEditorUIView: UITextView {
             self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight),
             self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.minWidth)
         ])
+    }
+
+    private func hidePlaceHolder(_ value: Bool) {
+        guard self.placeHolderLabel.isHidden != value else { return }
+        self.placeHolderLabel.isHidden = value
+        self.accessibilityLabel = value ? self.text : self.placeHolder
+        self.placeHolderConstarints?.forEach { $0.isActive = !value }
+        self.placeHolderLabelYAnchor?.isActive = !value && !self.isScrollEnabled
     }
 
     private func subscribeToViewModel() {
@@ -220,7 +226,7 @@ public final class TextEditorUIView: UITextView {
 
         self.viewModel.$borderWidth.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] borderWidth in
             guard let self else { return }
-            self.setBorderWidth(self.borderWidth)
+            self.setBorderWidth(borderWidth * self.scaleFactor)
         }
 
         self.viewModel.$borderRadius.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] borderRadius in
@@ -230,7 +236,6 @@ public final class TextEditorUIView: UITextView {
 
         self.viewModel.$horizontalSpacing.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] spacing in
             guard let self else { return }
-            self.horizontalSpacing = spacing
             self.setNeedsLayout()
         }
 
@@ -256,21 +261,15 @@ public final class TextEditorUIView: UITextView {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.setBorderColor(from: self.viewModel.borderColor)
+        }
+
         guard previousTraitCollection?.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory else { return }
 
-        self._borderWidth.update(traitCollection: self.traitCollection)
-        self._horizontalSpacing.update(traitCollection: self.traitCollection)
+        self._scaleFactor.update(traitCollection: self.traitCollection)
         self._defaultSystemVerticalPadding.update(traitCollection: self.traitCollection)
-        self.setBorderWidth(self.borderWidth)
-    }
-
-    private func hidePlaceHolder(_ value: Bool) {
-        guard self.placeHolderLabel.isHidden != value else { return }
-        self.placeHolderLabel.isHidden = value
-        self.accessibilityLabel = value ? self.text : self.placeHolder
-
-        self.placeHolderConstarints?.forEach { $0.isActive = !value }
-        self.placeHolderLabelYAnchor?.isActive = !value && !self.isScrollEnabled
+        self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
     }
 }
 

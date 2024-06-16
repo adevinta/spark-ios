@@ -112,7 +112,7 @@ class TextEditorViewModel: ObservableObject {
         self.font = theme.typography.body1
     }
 
-    func setColors() {
+    private func setColors() {
         // Colors
         let colors = self.getColorsUseCase.execute(
             theme: self.theme,
@@ -127,7 +127,7 @@ class TextEditorViewModel: ObservableObject {
         self.backgroundColor = colors.background
     }
 
-    func setBorderLayout() {
+    private func setBorderLayout() {
         let borderLayout = self.getBorderUseCase.execute(
             theme: self.theme,
             intent: self.intent,
@@ -137,7 +137,7 @@ class TextEditorViewModel: ObservableObject {
         self.borderRadius = borderLayout.radius
     }
 
-    func setSpacings() {
+    private func setSpacings() {
         self.horizontalSpacing = theme.layout.spacing.large
     }
 

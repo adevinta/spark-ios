@@ -35,7 +35,9 @@ final class TextEditorComponentUIView: ComponentUIView, UIGestureRecognizerDeleg
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.viewDidTapped))
         tap.delegate = self
         addGestureRecognizer(tap)
-        self.componentView.translatesAutoresizingMaskIntoConstraints = false
+
+        self.componentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 40).isActive = true
+
         self.setupSubscriptions()
     }
 

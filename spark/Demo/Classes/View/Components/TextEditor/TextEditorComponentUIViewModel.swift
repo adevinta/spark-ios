@@ -127,11 +127,11 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
     init(
         theme: Theme,
         intent: TextEditorIntent = .neutral,
-        text: TextEditorContent = .none,
-        placeholder: TextEditorContent = .medium,
+        text: TextEditorContent = .medium,
+        placeholder: TextEditorContent = .short,
         isEnabled: Bool = true,
         isReadonly: Bool = false,
-        isDynamicHeight: Bool = false
+        isDynamicHeight: Bool = true
     ) {
         self.theme = theme
         self.intent = intent
