@@ -22,6 +22,8 @@ public final class TextEditorUIView: UITextView {
     private var cancellables = Set<AnyCancellable>()
     private var placeHolderConstarints: [NSLayoutConstraint]?
     private var placeHolderLabelYAnchor: NSLayoutConstraint?
+    private var placeHolderLabelXAnchor: NSLayoutConstraint?
+    private var placeholderLabelWidthAnchor: NSLayoutConstraint?
 
     private lazy var placeHolderLabel: UILabel = {
         let label = UILabel()
@@ -58,6 +60,8 @@ public final class TextEditorUIView: UITextView {
     public override var isScrollEnabled: Bool {
         didSet {
             self.placeHolderLabelYAnchor?.isActive = !self.isScrollEnabled
+            self.placeHolderLabelXAnchor?.isActive = !self.isScrollEnabled
+            self.placeholderLabelWidthAnchor?.isActive = self.isScrollEnabled
             self.setNeedsUpdateConstraints()
         }
     }
@@ -175,10 +179,11 @@ public final class TextEditorUIView: UITextView {
             self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding),
             self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.viewModel.horizontalSpacing),
             self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.viewModel.horizontalSpacing),
-            self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -self.viewModel.horizontalSpacing*2),
             self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: -self.defaultSystemVerticalPadding)
         ]
         self.placeHolderLabelYAnchor = self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
+        self.placeHolderLabelXAnchor = self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+        self.placeholderLabelWidthAnchor = self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -2 * self.viewModel.horizontalSpacing)
 
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight),
@@ -192,6 +197,8 @@ public final class TextEditorUIView: UITextView {
         self.accessibilityLabel = value ? self.text : self.placeHolder
         self.placeHolderConstarints?.forEach { $0.isActive = !value }
         self.placeHolderLabelYAnchor?.isActive = !value && !self.isScrollEnabled
+        self.placeHolderLabelXAnchor?.isActive = !value && !self.isScrollEnabled
+        self.placeholderLabelWidthAnchor?.isActive = !value && self.isScrollEnabled
     }
 
     private func subscribeToViewModel() {
