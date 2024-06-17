@@ -1,0 +1,50 @@
+//
+//  TextEditorBorderUseCaseTest.swift
+//  SparkCoreUnitTests
+//
+//  Created by alican.aycil on 17.06.24.
+//  Copyright © 2024 Adevinta. All rights reserved.
+//
+
+import XCTest
+@testable import SparkCore
+
+final class TextEditorBorderUseCaseTests: XCTestCase {
+
+    private let theme = ThemeGeneratedMock.mocked()
+
+    func test_Enabled() {
+        TextEditorIntent.allCases.forEach {
+
+            let texteditorBorders = TextEditorBordersUseCase().execute(theme: theme, intent: $0, isFocused: false)
+
+            let borderWidth: CGFloat
+
+            if $0 == .neutral {
+                borderWidth = theme.border.width.small
+            } else {
+                borderWidth = theme.border.width.medium
+            }
+
+
+            let expectedBorders = TextEditorBorders (
+                radius: theme.border.radius.large,
+                width: borderWidth
+            )
+            XCTAssertEqual(texteditorBorders, expectedBorders, "Wrong border width")
+        }
+    }
+
+
+    func test_Focused() {
+        TextEditorIntent.allCases.forEach {
+            let texteditorBorders = TextEditorBordersUseCase().execute(theme: theme, intent: $0, isFocused: true)
+
+            let expectedBorders = TextEditorBorders (
+                radius: theme.border.radius.large,
+                width:  theme.border.width.medium
+            )
+            XCTAssertEqual(texteditorBorders, expectedBorders, "Wrong border width")
+        }
+    }
+}
