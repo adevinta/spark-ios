@@ -106,6 +106,13 @@ final class TextEditorComponentUIView: ComponentUIView, UIGestureRecognizerDeleg
             guard let self = self else { return }
             self.componentView.isScrollEnabled = !isDynamicHeight
         }
+
+        self.viewModel.$isStaticSizes.subscribe(in: &self.cancellables) {  [weak self] isStaticSizes in
+            guard let self = self else { return }
+            self.componentView.widthAnchor.constraint(equalToConstant: 300).isActive = isStaticSizes
+            self.componentView.heightAnchor.constraint(equalToConstant: 100).isActive = isStaticSizes
+            self.componentView.isScrollEnabled = isStaticSizes ? true : !self.viewModel.isDynamicHeight
+        }
     }
 
     static private func makeTextEditorView(_ viewModel: TextEditorComponentUIViewModel) -> TextEditorUIView {

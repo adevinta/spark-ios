@@ -94,6 +94,13 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.dynamicHeightChanged(_:))))
     }()
 
+    lazy var sizesConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+        return .init(
+            name: "IsStaticSizes",
+            type: .checkbox(title: "", isOn: self.isStaticSizes),
+            target: (source: self, action: #selector(self.staticSizesChanged(_:))))
+    }()
+
     // MARK: - Methods
 
     override func configurationItemsViewModel() -> [ComponentsConfigurationItemUIViewModel] {
@@ -104,7 +111,8 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
             self.placeholderConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.readonlyConfigurationItemViewModel,
-            self.dynamicHeightConfigurationItemViewModel
+            self.dynamicHeightConfigurationItemViewModel,
+            self.sizesConfigurationItemViewModel
         ]
     }
 
@@ -123,6 +131,7 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
     @Published var isEnabled: Bool
     @Published var isReadonly: Bool
     @Published var isDynamicHeight: Bool
+    @Published var isStaticSizes: Bool
 
     init(
         theme: Theme,
@@ -131,7 +140,8 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
         placeholder: TextEditorContent = .short,
         isEnabled: Bool = true,
         isReadonly: Bool = false,
-        isDynamicHeight: Bool = true
+        isDynamicHeight: Bool = true,
+        isStaticSizes: Bool = false
     ) {
         self.theme = theme
         self.intent = intent
@@ -140,6 +150,7 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
         self.isEnabled = isEnabled
         self.isReadonly = isReadonly
         self.isDynamicHeight = isDynamicHeight
+        self.isStaticSizes = isStaticSizes
 
         super.init(identifier: "TextEditor")
     }
@@ -175,6 +186,10 @@ extension TextEditorComponentUIViewModel {
     @objc func dynamicHeightChanged(_ isSelected: Any?) {
         self.isDynamicHeight = isTrue(isSelected)
     }
+
+    @objc func staticSizesChanged(_ isSelected: Any?) {
+        self.isStaticSizes = isTrue(isSelected)
+    }
 }
 
 enum TextEditorContent: CaseIterable {
@@ -182,16 +197,4 @@ enum TextEditorContent: CaseIterable {
     case short
     case medium
     case long
-}
-
-enum TextEditorWidthSize: CaseIterable {
-    case `default`
-    case statics
-    case extend
-}
-
-enum TextEditorHeightSize: CaseIterable {
-    case `default`
-    case statics
-    case flexiable
 }
