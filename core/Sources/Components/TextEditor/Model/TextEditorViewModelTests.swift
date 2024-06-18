@@ -108,6 +108,6 @@ final class TextEditorViewModelTests: XCTestCase {
         // When
         viewModel.theme = self.theme
 
-        await fulfillment(of: [expectation], timeout: 3.0)
+        await fulfillment(of: [expectation])
     }
 }
