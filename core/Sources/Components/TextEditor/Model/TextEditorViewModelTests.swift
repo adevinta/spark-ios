@@ -11,7 +11,7 @@ import SwiftUI
 import XCTest
 @testable import SparkCore
 
-final class TextEditorViewModelTest: XCTestCase {
+final class TextEditorViewModelTests: XCTestCase {
 
     var theme: ThemeGeneratedMock!
     var cancellable = Set<AnyCancellable>()
