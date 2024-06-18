@@ -1,8 +1,8 @@
 //
-//  TextEditorBorderUseCaseTest.swift
+//  TexEditBorderUseCase.swift
 //  SparkCoreUnitTests
 //
-//  Created by alican.aycil on 17.06.24.
+//  Created by alican.aycil on 18.06.24.
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
