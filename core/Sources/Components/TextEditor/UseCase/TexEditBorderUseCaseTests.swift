@@ -14,13 +14,13 @@ final class TextEditorBorderUseCaseTests: XCTestCase {
     private let theme = ThemeGeneratedMock.mocked()
 
     func test_Enabled() {
-        TextEditorIntent.allCases.forEach {
+        TextEditorIntent.allCases.forEach { intent in
 
-            let texteditorBorders = TextEditorBordersUseCase().execute(theme: theme, intent: $0, isFocused: false)
+            let texteditorBorders = TextEditorBordersUseCase().execute(theme: theme, intent: intent, isFocused: false)
 
             let borderWidth: CGFloat
 
-            if $0 == .neutral {
+            if intent == .neutral {
                 borderWidth = theme.border.width.small
             } else {
                 borderWidth = theme.border.width.medium
