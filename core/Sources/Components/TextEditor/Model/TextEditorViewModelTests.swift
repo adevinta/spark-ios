@@ -51,63 +51,61 @@ final class TextEditorViewModelTests: XCTestCase {
             intent: .neutral
         )
 
-        var isTextColorCallCount = 0
-        var isPlaceholderColorCallCount = 0
-        var isBackgroundColorCallCount = 0
-        var isBorderColorCallCount = 0
-        var isBorderWidthCallCount = 0
-        var isBorderRadiusCallCount = 0
-        var isFontCallCount = 0
-        var isSpaceCallCount = 0
+        let textColorPublisherMock: PublisherMock<Published<ColorToken>.Publisher> = .init(publisher: viewModel.$textColor)
+        let placeholderColorPublisherMock: PublisherMock<Published<ColorToken>.Publisher> = .init(publisher: viewModel.$placeholderColor)
+        let backgroundColorPublisherMock: PublisherMock<Published<ColorToken>.Publisher> = .init(publisher: viewModel.$backgroundColor)
+        let borderColorPublisherMock: PublisherMock<Published<ColorToken>.Publisher> = .init(publisher: viewModel.$borderColor)
+        let borderWidthPublisherMock: PublisherMock<Published<CGFloat>.Publisher> = .init(publisher: viewModel.$borderWidth)
+        let borderRadiusPublisherMock: PublisherMock<Published<CGFloat>.Publisher> = .init(publisher: viewModel.$borderRadius)
+        let fontPublisherMock: PublisherMock<Published<TypographyFontToken>.Publisher> = .init(publisher: viewModel.$font)
+        let spacePublisherMock: PublisherMock<Published<CGFloat>.Publisher> = .init(publisher: viewModel.$horizontalSpacing)
 
-        let predicate = NSPredicate { _, _ in
-            return isTextColorCallCount == 2 &&
-            isPlaceholderColorCallCount == 2 &&
-            isBackgroundColorCallCount == 2 &&
-            isBorderColorCallCount == 2 &&
-            isBorderWidthCallCount == 2 &&
-            isBorderRadiusCallCount == 2 &&
-            isFontCallCount == 2 &&
-            isSpaceCallCount == 2
-        }
-
-        let expectation = expectation(for: predicate, evaluatedWith: self)
-
-        viewModel.$textColor.sink { _ in
-            isTextColorCallCount += 1
-        }.store(in: &cancellable)
-
-        viewModel.$placeholderColor.sink { _ in
-            isPlaceholderColorCallCount += 1
-        }.store(in: &cancellable)
-
-        viewModel.$backgroundColor.sink { _ in
-            isBackgroundColorCallCount += 1
-        }.store(in: &cancellable)
-
-        viewModel.$borderColor.sink { _ in
-            isBorderColorCallCount += 1
-        }.store(in: &cancellable)
-
-        viewModel.$borderWidth.sink { _ in
-            isBorderWidthCallCount += 1
-        }.store(in: &cancellable)
-
-        viewModel.$borderRadius.sink { _ in
-            isBorderRadiusCallCount += 1
-        }.store(in: &cancellable)
-
-        viewModel.$horizontalSpacing.sink { _ in
-            isSpaceCallCount += 1
-        }.store(in: &cancellable)
-
-        viewModel.$font.sink { _ in
-            isFontCallCount += 1
-        }.store(in: &cancellable)
+        textColorPublisherMock.loadTesting(on: &cancellable)
+        placeholderColorPublisherMock.loadTesting(on: &cancellable)
+        backgroundColorPublisherMock.loadTesting(on: &cancellable)
+        borderColorPublisherMock.loadTesting(on: &cancellable)
+        borderWidthPublisherMock.loadTesting(on: &cancellable)
+        borderRadiusPublisherMock.loadTesting(on: &cancellable)
+        fontPublisherMock.loadTesting(on: &cancellable)
+        spacePublisherMock.loadTesting(on: &cancellable)
 
         // When
         viewModel.theme = self.theme
 
-        await fulfillment(of: [expectation])
+        // Then
+        XCTAssertPublisherSinkCountEqual(
+            on: textColorPublisherMock,
+            2
+        )
+
+        XCTAssertPublisherSinkCountEqual(
+            on: placeholderColorPublisherMock,
+            2
+        )
+
+        XCTAssertPublisherSinkCountEqual(
+            on: borderColorPublisherMock,
+            2
+        )
+
+        XCTAssertPublisherSinkCountEqual(
+            on: borderWidthPublisherMock,
+            2
+        )
+
+        XCTAssertPublisherSinkCountEqual(
+            on: borderRadiusPublisherMock,
+            2
+        )
+
+        XCTAssertPublisherSinkCountEqual(
+            on: fontPublisherMock,
+            2
+        )
+
+        XCTAssertPublisherSinkCountEqual(
+            on: spacePublisherMock,
+            2
+        )
     }
 }
