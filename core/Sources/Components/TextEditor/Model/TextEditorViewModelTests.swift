@@ -71,7 +71,7 @@ final class TextEditorViewModelTests: XCTestCase {
             isSpaceCallCount == 2
         }
 
-        let expectation = expectation(for: predicate, evaluatedWith: viewModel)
+        let expectation = expectation(for: predicate, evaluatedWith: self)
 
         viewModel.$textColor.sink { _ in
             isTextColorCallCount += 1
