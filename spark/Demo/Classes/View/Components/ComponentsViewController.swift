@@ -114,6 +114,8 @@ extension ComponentsViewController {
             viewController = TagComponentUIViewController.build()
         case .textField:
             viewController = TextFieldComponentUIViewController.build()
+        case .textEditor:
+            viewController = TextEditorComponentViewController.build()
         case .textFieldAddons:
             viewController = TextFieldAddonsComponentUIViewController.build()
         case .textLink:
