@@ -161,7 +161,7 @@ public final class TextFieldAddonsUIView: UIControl {
 
         self.viewModel.$borderRadius.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] borderRadius in
             guard let self else { return }
-            self.setCornerRadius(borderRadius)
+            self.setCornerRadius(borderRadius * self.scaleFactor)
         }
 
         self.viewModel.$leftSpacing.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] leftSpacing in
@@ -221,6 +221,7 @@ public final class TextFieldAddonsUIView: UIControl {
         guard previousTraitCollection?.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory else { return }
 
         self._scaleFactor.update(traitCollection: self.traitCollection)
+        self.setCornerRadius(self.viewModel.borderRadius * self.scaleFactor)
         self.setBorderWidthAndRefreshAddonsXCenter(self.borderWidth)
         self.setLeftSpacing(self.viewModel.leftSpacing, borderWidth: self.borderWidth)
         self.setRightSpacing(self.viewModel.rightSpacing, borderWidth: self.borderWidth)
