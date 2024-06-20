@@ -43,7 +43,11 @@ struct TextFieldViewInternal<LeftView: View, RightView: View>: View {
         }
         .tint(self.viewModel.textColor.color)
         .allowsHitTesting(self.viewModel.isUserInteractionEnabled)
-        .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.borderColor)
+        .border(
+            width: self.viewModel.borderWidth * self.scaleFactor,
+            radius: self.viewModel.borderRadius * self.scaleFactor,
+            colorToken: self.viewModel.borderColor
+        )
         .frame(height: self.height)
         .opacity(self.viewModel.dim)
     }
