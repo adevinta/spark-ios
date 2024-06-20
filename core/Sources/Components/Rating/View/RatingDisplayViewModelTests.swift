@@ -34,7 +34,6 @@ final class RatingDisplayViewModelTests: XCTestCase {
 
         self.sizeUseCase.executeWithSpacingAndSizeReturnValue = RatingSizeAttributes(borderWidth: 2.0, height: 20, spacing: 8)
 
-
         self.sut = RatingDisplayViewModel(
             theme: self.theme,
             intent: .main,

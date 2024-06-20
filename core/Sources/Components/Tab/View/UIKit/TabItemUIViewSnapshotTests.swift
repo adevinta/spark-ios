@@ -22,6 +22,7 @@ final class TabItemUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
         super.setUp()
 
         self.badge = BadgeUIView(theme: theme, intent: .danger, isBorderVisible: false)
+        // swiftlint:disable force_unwrapping
         self.image = UIImage(systemName: "trash")!
     }
 

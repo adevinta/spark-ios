@@ -23,7 +23,7 @@ extension Array where Element == CGRect {
         let distances = self.map{ rect in
             rect.center.distance(to: location)
         }
-        let nearest = distances.enumerated().min { (left, right) in
+        let nearest = distances.enumerated().min { left, right in
             return left.element < right.element
         }
         return nearest?.offset

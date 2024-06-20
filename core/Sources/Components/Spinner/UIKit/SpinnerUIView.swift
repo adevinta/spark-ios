@@ -110,7 +110,7 @@ public final class SpinnerUIView: UIView {
         let center = rect.width / 2
         let centerPoint = CGPoint(x: center, y: center)
 
-        let spinnerArc = UIBezierPath.arc(arcCenter: centerPoint, radius: (rect.width - self.strokeWidth)/2 )
+        let spinnerArc = UIBezierPath.arc(arcCenter: centerPoint, radius: (rect.width - self.strokeWidth) / 2 )
         spinnerArc.lineWidth = self.strokeWidth
         ctx.setStrokeColor(self.viewModel.intentColor.uiColor.cgColor)
         spinnerArc.stroke()
@@ -137,8 +137,8 @@ public final class SpinnerUIView: UIView {
 
     private func animate() {
         self.layer.removeAllAnimations()
-        
-        let fullRotation = CABasicAnimation(keyPath:  "transform.rotation.z")
+
+        let fullRotation = CABasicAnimation(keyPath: "transform.rotation.z")
         fullRotation.fromValue = 0
         fullRotation.toValue = 2 * CGFloat.pi
         fullRotation.duration = self.viewModel.duration
@@ -155,5 +155,4 @@ private extension UIBezierPath {
         return UIBezierPath(arcCenter: arcCenter, radius: radius, startAngle: 0, endAngle: CGFloat.pi, clockwise: true)
     }
 }
-
 

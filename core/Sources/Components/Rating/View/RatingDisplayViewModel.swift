@@ -66,7 +66,6 @@ final class RatingDisplayViewModel: ObservableObject {
     private let colorsUseCase: RatingGetColorsUseCaseable
     private let sizeUseCase: RatingSizeAttributesUseCaseable
 
-
     // MARK: Initializer
     init(theme: Theme,
          intent: RatingIntent,

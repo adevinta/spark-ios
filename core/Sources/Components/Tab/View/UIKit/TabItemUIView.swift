@@ -114,10 +114,8 @@ public final class TabItemUIView: UIControl {
         imageView.isUserInteractionEnabled = false
         imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
 
-        imageView.setContentCompressionResistancePriority(.required,
-                                                      for: .horizontal)
-        imageView.setContentCompressionResistancePriority(.required,
-                                                      for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
         return imageView
     }()
 
@@ -271,7 +269,7 @@ public final class TabItemUIView: UIControl {
         }
 
         if let badge = self.badge, self.isNotHidden {
-            itemsWidth += badge.intrinsicContentSize.width == UIView.noIntrinsicMetric ? self.height: badge.intrinsicContentSize.width
+            itemsWidth += badge.intrinsicContentSize.width == UIView.noIntrinsicMetric ? self.height : badge.intrinsicContentSize.width
         }
 
         let numberOfSpacings = max(self.stackView.arrangedSubviews.filter(\.isNotHidden).count - (Constants.numberOfSpacerViews + 1), 0)
@@ -279,9 +277,7 @@ public final class TabItemUIView: UIControl {
 
         let totalWidth = self.paddingHorizontal + (itemsWidth + spacingsWidth) + self.paddingHorizontal
 
-        let size = CGSize(width: totalWidth, height: self.height)
-
-        return size
+        return CGSize(width: totalWidth, height: self.height)
     }
 
     /// An optional action which can be set. The action will be invoked when the tab is tapped.

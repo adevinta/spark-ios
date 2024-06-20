@@ -53,11 +53,11 @@ final class ChipComponentViewController: UIViewController {
 
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
@@ -87,8 +87,7 @@ extension ChipComponentViewController {
 
     static func build() -> ChipComponentViewController {
         let viewModel = ChipComponentUIViewModel(theme: SparkThemePublisher.shared.theme, intent: .support, variant: .outlined)
-        let viewController = ChipComponentViewController(viewModel: viewModel)
-        return viewController
+        return ChipComponentViewController(viewModel: viewModel)
     }
 }
 

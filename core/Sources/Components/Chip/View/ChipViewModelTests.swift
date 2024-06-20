@@ -49,9 +49,10 @@ final class ChipViewModelTests: XCTestCase {
         let updateExpectation = expectation(description: "Colors and border status updated")
         updateExpectation.expectedFulfillmentCount = 2
 
-        self.sut.$colors.sink { _ in
+        self.sut.$colors.sink(receiveValue: { _ in
             updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         self.sut.set(variant: .dashed)
@@ -66,14 +67,15 @@ final class ChipViewModelTests: XCTestCase {
         updateExpectation.expectedFulfillmentCount = 2
 
         let publishers = Publishers.Zip4(self.sut.$padding,
-                        self.sut.$spacing,
-                        self.sut.$borderRadius,
-                        self.sut.$font)
+                                         self.sut.$spacing,
+                                         self.sut.$borderRadius,
+                                         self.sut.$font)
 
         Publishers.Zip(self.sut.$colors, publishers)
-            .sink { _ in
-            updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+            .sink(receiveValue: { _ in
+                updateExpectation.fulfill()
+            })
+            .store(in: &self.subscriptions)
 
         // When
         self.sut.set(theme: ThemeGeneratedMock.mocked())
@@ -87,9 +89,10 @@ final class ChipViewModelTests: XCTestCase {
         let updateExpectation = expectation(description: "Colors updated")
         updateExpectation.expectedFulfillmentCount = 2
 
-        self.sut.$colors.sink { _ in
+        self.sut.$colors.sink(receiveValue: { _ in
             updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         self.sut.set(intent: .alert)
@@ -105,10 +108,11 @@ final class ChipViewModelTests: XCTestCase {
 
         var spacings = [CGFloat]()
 
-        self.sut.$spacing.sink { spacing in
+        self.sut.$spacing.sink(receiveValue: { spacing in
             updateExpectation.fulfill()
             spacings.append(spacing)
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         let newTheme = ThemeGeneratedMock.mocked()
@@ -133,10 +137,11 @@ final class ChipViewModelTests: XCTestCase {
 
         var paddings = [CGFloat]()
 
-        self.sut.$padding.sink { padding in
+        self.sut.$padding.sink(receiveValue: { padding in
             updateExpectation.fulfill()
             paddings.append(padding)
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         let newTheme = ThemeGeneratedMock.mocked()
@@ -161,10 +166,11 @@ final class ChipViewModelTests: XCTestCase {
 
         var borderRadii = [CGFloat]()
 
-        self.sut.$borderRadius.sink { radius in
+        self.sut.$borderRadius.sink(receiveValue: { radius in
             updateExpectation.fulfill()
             borderRadii.append(radius)
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         let newTheme = ThemeGeneratedMock.mocked()
@@ -189,10 +195,11 @@ final class ChipViewModelTests: XCTestCase {
 
         var fonts = [TypographyFontToken]()
 
-        self.sut.$font.sink { font in
+        self.sut.$font.sink(receiveValue: { font in
             updateExpectation.fulfill()
             fonts.append(font)
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         let newTheme = ThemeGeneratedMock.mocked()
@@ -213,9 +220,10 @@ final class ChipViewModelTests: XCTestCase {
         let updateExpectation = expectation(description: "Colors updated")
         updateExpectation.expectedFulfillmentCount = 2
 
-        self.sut.$colors.sink { font in
+        self.sut.$colors.sink(receiveValue: { font in
             updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         let newTheme = ThemeGeneratedMock.mocked()
@@ -240,7 +248,7 @@ final class ChipViewModelTests: XCTestCase {
     func test_not_bordered() throws {
         // When
         self.sut.set(variant: .tinted)
-        
+
         // Then
         XCTAssertEqual(self.sut.isBordered, false)
     }
@@ -254,5 +262,4 @@ final class ChipViewModelTests: XCTestCase {
             XCTAssertEqual(self.sut.isBordered, true)
         }
     }
-
 }

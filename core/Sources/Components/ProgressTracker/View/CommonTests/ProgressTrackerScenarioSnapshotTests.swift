@@ -75,7 +75,7 @@ enum ProgressTrackerScenarioSnapshotTests: String, CaseIterable {
                 variant: .outlined,
                 state: .normal,
                 contentType: .icon,
-                size: .medium, 
+                size: .medium,
                 orientation: .horizontal,
                 labels: [],
                 modes: Constants.Modes.all,

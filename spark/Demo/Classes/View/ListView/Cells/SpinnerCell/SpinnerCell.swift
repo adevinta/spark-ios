@@ -15,10 +15,9 @@ final class SpinnerCell: UITableViewCell, Configurable {
     typealias Component = SpinnerUIView
 
     lazy var component: SpinnerUIView = {
-        let view = SpinnerUIView(
+        return SpinnerUIView(
             theme: SparkTheme.shared
         )
-        return view
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

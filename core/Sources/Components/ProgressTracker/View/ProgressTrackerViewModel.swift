@@ -70,7 +70,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     @Published var labelColor: any ColorToken
     @Published var interactionState: ProgressTrackerInteractionState = .none
 
-    @Published var currentPressedIndicator: Int? = nil
+    @Published var currentPressedIndicator: Int?
 
     // MARK: Private properties
     private var spacingUseCase: ProgressTrackerGetSpacingsUseCaseable
@@ -78,7 +78,7 @@ final class ProgressTrackerViewModel<ComponentContent: ProgressTrackerContentInd
     // MARK: - Initialization
     init(theme: Theme,
          orientation: ProgressTrackerOrientation,
-         content:  ProgressTrackerContent<ComponentContent>,
+         content: ProgressTrackerContent<ComponentContent>,
          spacingUseCase: ProgressTrackerGetSpacingsUseCaseable = ProgressTrackerGetSpacingsUseCase()
     ) {
         self.orientation = orientation

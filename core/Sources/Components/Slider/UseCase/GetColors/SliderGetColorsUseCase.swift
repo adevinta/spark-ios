@@ -15,7 +15,7 @@ protocol SliderGetColorsUseCasable {
 }
 
 final class SliderGetColorsUseCase: SliderGetColorsUseCasable {
-    func execute(theme: Theme, 
+    func execute(theme: Theme,
                  intent: SliderIntent) -> SliderColors {
         let colors = theme.colors
         let dims = theme.dims

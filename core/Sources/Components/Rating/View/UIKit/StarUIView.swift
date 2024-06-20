@@ -30,7 +30,7 @@ public final class StarUIView: UIView {
             self.configuration.numberOfVertices = newValue
         }
     }
-    
+
     /// The vertex size determins how deep the inner angle of the star is.
     /// This value is a percentage of the radius and should be in the range [0...1].
     public var vertexSize: CGFloat {
@@ -52,7 +52,6 @@ public final class StarUIView: UIView {
             self.configuration.cornerRadiusSize = newValue
         }
     }
-
 
     /// The fill mode.
     /// The fill mode determines how to round the rating value to fill the star.
@@ -91,7 +90,7 @@ public final class StarUIView: UIView {
             self.setNeedsDisplay()
         }
     }
-    
+
     public var configuration: StarConfiguration {
         didSet {
             guard self.configuration != oldValue else { return }
@@ -118,7 +117,7 @@ public final class StarUIView: UIView {
 
     // MARK: - Initializer
     /// Create a StarUIView with the following parameters
-    /// 
+    ///
     /// - Parameters:
     /// - rating: the value of the rating. This should be a number in the range [0...1]
     /// - fillMode: the fill mode of the start. The star will be filled according to the rating and the fillMode.
@@ -213,7 +212,7 @@ public final class StarUIView: UIView {
 
     // MARK: Internal functions
     internal func cacheKey(rect: CGRect) -> NSString {
-        let key = [Self.self, 
+        let key = [Self.self,
                    self.numberOfVertices,
                    self.normalizedRating,
                    self.lineWidth,

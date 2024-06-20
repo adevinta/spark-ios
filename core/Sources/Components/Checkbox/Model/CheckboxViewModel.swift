@@ -11,7 +11,7 @@ import SwiftUI
 import UIKit
 
 final class CheckboxViewModel: ObservableObject {
-    
+
     // MARK: - Internal properties
     @Published var text: Either<NSAttributedString?, String?>
     @Published var checkedImage: Either<UIImage, Image>
@@ -21,7 +21,7 @@ final class CheckboxViewModel: ObservableObject {
             self.updateSpacing()
         }
     }
-    
+
     @Published var selectionState: CheckboxSelectionState
     @Published var opacity: CGFloat
     @Published var spacing: CGFloat
@@ -97,7 +97,7 @@ final class CheckboxViewModel: ObservableObject {
     private func updateOpacity() {
         self.opacity = self.isEnabled ? self.theme.dims.none : self.theme.dims.dim3
     }
-    
+
     private func updateSpacing() {
         self.spacing = spacingUseCase.execute(layoutSpacing: self.theme.layout.spacing, alignment: self.alignment)
     }

@@ -9,7 +9,7 @@
 public struct ElevationDropShadowsDefault: ElevationDropShadows {
 
     // MARK: - Properties
-    
+
     public let small: ElevationShadow
     public let medium: ElevationShadow
     public let large: ElevationShadow

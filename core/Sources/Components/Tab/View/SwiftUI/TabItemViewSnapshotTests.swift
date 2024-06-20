@@ -18,7 +18,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     var badge: BadgeView!
 
     // MARK: - Setup
-    
+
     override func setUp() {
         super.setUp()
 
@@ -28,7 +28,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 
     // MARK: - Tests
     func test_tab_icon_and_title_and_badge() throws {
-        //GIVEN
+        // GIVEN
         let viewModel: TabItemViewModel<TabItemContent> =
             .init(
                 theme: theme,
@@ -44,12 +44,12 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .badge(self.badge)
             .background(.systemBackground)
 
-        //THEN
+        // THEN
         assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.medium])
     }
 
     func test_selected_tab_with_intent_main() throws {
-        //GIVEN
+        // GIVEN
         let viewModel: TabItemViewModel<TabItemContent> =
             .init(
                 theme: theme,
@@ -62,12 +62,12 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .selected(true)
             .background(.systemBackground)
 
-        //THEN
+        // THEN
         assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.medium])
     }
 
     func test_with_badge_only() throws {
-        //GIVEN
+        // GIVEN
         let viewModel: TabItemViewModel<TabItemContent> =
             .init(
                 theme: theme,
@@ -81,12 +81,12 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .selected(true)
             .background(.systemBackground)
 
-        //THEN
+        // THEN
         assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.medium])
     }
 
     func test_with_label_only() throws {
-        //GIVEN
+        // GIVEN
         let viewModel: TabItemViewModel<TabItemContent> =
             .init(
                 theme: theme,
@@ -98,12 +98,12 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .apportionsSegmentWidthsByContent(true)
             .background(.systemBackground)
 
-        //THEN
+        // THEN
         assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.small, .medium, .large, .extraLarge])
     }
 
     func test_with_icon_only() throws {
-        //GIVEN
+        // GIVEN
         let viewModel: TabItemViewModel<TabItemContent> =
             .init(
                 theme: theme,
@@ -116,12 +116,12 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .apportionsSegmentWidthsByContent(true)
             .background(.systemBackground)
 
-        //THEN
+        // THEN
         assertSnapshot(matching: sut, modes: [.light, .dark], sizes: [.medium])
     }
 
     func test_with_label_and_badge() throws {
-        //GIVEN
+        // GIVEN
         let viewModel: TabItemViewModel<TabItemContent> =
             .init(
                 theme: theme,
@@ -135,12 +135,12 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .selected(true)
             .background(.systemBackground)
 
-        //THEN
+        // THEN
         assertSnapshot(matching: sut, modes: [.dark, .light], sizes: [.small, .medium, .large, .extraLarge])
     }
 
     func test_with_icon_and_label() throws {
-        //GIVEN
+        // GIVEN
         let viewModel: TabItemViewModel<TabItemContent> =
             .init(
                 theme: theme,
@@ -154,12 +154,12 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .apportionsSegmentWidthsByContent(false)
             .background(.systemBackground)
 
-        //THEN
+        // THEN
         assertSnapshot(matching: sut, modes: [.dark, .light], sizes: [.large])
     }
 
     func test_with_icon_and_badge() throws {
-        //GIVEN
+        // GIVEN
         let viewModel: TabItemViewModel<TabItemContent> =
             .init(
                 theme: theme,
@@ -173,7 +173,7 @@ final class TabItemViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
             .badge(self.badge)
             .background(.systemBackground)
 
-        //THEN
+        // THEN
         assertSnapshot(matching: sut, modes: [.dark, .light], sizes: [.extraSmall])
     }
 }

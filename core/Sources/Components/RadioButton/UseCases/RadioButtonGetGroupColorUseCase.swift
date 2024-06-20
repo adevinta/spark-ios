@@ -23,7 +23,7 @@ struct RadioButtonGetGroupColorUseCase: RadioButtonGetGroupColorUseCaseable {
     /// Return the color token corresponding to the state
     func execute(colors: Colors, intent: RadioButtonIntent) -> any ColorToken {
         switch intent {
-        case .basic: 
+        case .basic:
             return colors.basic.basic
         case .support:
             return colors.support.support

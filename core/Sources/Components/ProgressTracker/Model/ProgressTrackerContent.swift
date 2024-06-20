@@ -51,7 +51,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
         }
     }
     var preferredIndicatorImage: ComponentContent.ImageType?
-    var preferredCurrentPageIndicatorImage:  ComponentContent.ImageType?
+    var preferredCurrentPageIndicatorImage: ComponentContent.ImageType?
     var completedPageIndicatorImage: ComponentContent.ImageType?
     private var content = [Int: ComponentContent]()
     private var currentPageIndicator = [Int: ComponentContent.ImageType]()
@@ -64,7 +64,7 @@ struct ProgressTrackerContent<ComponentContent: ProgressTrackerContentIndicating
 
     /// The number of labels
     var numberOfLabels: Int {
-        return labels.values.reduce(0) { (partialResult, value) in
+        return labels.values.reduce(0) { partialResult, value in
             return partialResult + 1
         }
     }

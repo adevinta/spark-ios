@@ -51,11 +51,11 @@ public final class CheckboxUIView: UIControl {
     private var checkboxSelectionStateSubject = PassthroughSubject<CheckboxSelectionState, Never>()
     @ScaledUIMetric private var checkboxSize: CGFloat = CheckboxControlUIView.Constants.size
     @ScaledUIMetric private var spacing: CGFloat
-    
+
     private var checkboxSizeConstraint: NSLayoutConstraint?
     private var textObserver: NSKeyValueObservation?
     private var attributedTextObserver: NSKeyValueObservation?
-    
+
     // MARK: - Public properties.
 
     /// Changes to the checbox state are published to the publisher.
@@ -159,8 +159,7 @@ public final class CheckboxUIView: UIControl {
         set {
             if newValue == true {
                 self.selectionState = .selected
-            }
-            else {
+            } else {
                 self.selectionState = .unselected
             }
         }
@@ -266,7 +265,7 @@ public final class CheckboxUIView: UIControl {
         self.addActions()
         self.addObservers()
     }
-    
+
     // MARK: - Methods
     private func addActions() {
         let toggleAction = UIAction { [weak self] _ in
@@ -284,7 +283,7 @@ public final class CheckboxUIView: UIControl {
     }
 
     private func addObservers() {
-        self.textObserver = textLabel.observe(\UILabel.text, options: [.new, .old]) { [weak self] (label, observedChange) in
+        self.textObserver = textLabel.observe(\UILabel.text, options: [.new, .old]) { [weak self] label, observedChange in
             if let newText = observedChange.newValue,
                let oldText = observedChange.oldValue,
                newText != oldText {
@@ -292,7 +291,7 @@ public final class CheckboxUIView: UIControl {
             }
         }
 
-        self.attributedTextObserver = textLabel.observe(\UILabel.attributedText, options: [.new, .old]) { [weak self] (label, observedChange) in
+        self.attributedTextObserver = textLabel.observe(\UILabel.attributedText, options: [.new, .old]) { [weak self] label, observedChange in
             if let newText = observedChange.newValue,
                let oldText = observedChange.oldValue,
                newText != oldText {
@@ -365,7 +364,7 @@ public final class CheckboxUIView: UIControl {
             guard let self else { return }
             self.controlView.selectionIcon = icon.leftValue
         }
-        
+
         self.viewModel.$spacing.subscribe(in: &self.cancellables) { [weak self] spacing in
             guard let self = self else { return }
             self._spacing.wrappedValue = spacing

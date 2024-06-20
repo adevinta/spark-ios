@@ -53,7 +53,7 @@ struct TabGetStateAttributesUseCase: TabGetStateAttributesUseCasable {
     ) -> TabStateAttributes {
 
         let size = hasTitle ? tabSize : TabSize.md
-        
+
         let font = self.getFontUseCase.execute(typography: theme.typography, size: size)
 
         let spacings = TabItemSpacings(

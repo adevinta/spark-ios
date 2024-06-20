@@ -119,7 +119,7 @@ enum ChipScenarioSnapshotTests: String, CaseIterable {
                     intent: .main,
                     variant: variant,
                     icon: .mock(isSwiftUIComponent: isSwiftUIComponent),
-                    text: "Label", 
+                    text: "Label",
                     badge: nil,
                     state: state,
                     modes: Constants.Modes.default,

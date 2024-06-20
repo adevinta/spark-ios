@@ -37,12 +37,11 @@ final class RatingInputComponentUIView: ComponentUIView {
     }
 
     private static func makeRatingInputView(viewModel: RatingInputComponentUIViewModel) -> RatingInputUIView {
-        let view = RatingInputUIView(
+        return RatingInputUIView(
             theme: viewModel.theme,
             intent: viewModel.intent,
             rating: viewModel.rating
         )
-        return view
     }
 
     private func setupSubscriptions() {

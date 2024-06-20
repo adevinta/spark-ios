@@ -92,7 +92,7 @@ enum ButtonScenarioSnapshotTests: String, CaseIterable {
         return alignments.map { alignment -> ButtonConfigurationSnapshotTests in
                 .init(
                     scenario: self,
-                    alignment: alignment, 
+                    alignment: alignment,
                     content: .titleAndImage(
                         "My Title",
                         .mock(isSwiftUIComponent: isSwiftUIComponent)

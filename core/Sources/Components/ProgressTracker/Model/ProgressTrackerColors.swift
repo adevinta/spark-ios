@@ -17,6 +17,6 @@ struct ProgressTrackerColors: Equatable {
     static func == (lhs: ProgressTrackerColors, rhs: ProgressTrackerColors) -> Bool {
         return lhs.background.equals(rhs.background) &&
         lhs.outline.equals(rhs.outline) &&
-        lhs.content.equals(rhs.content) 
+        lhs.content.equals(rhs.content)
     }
 }

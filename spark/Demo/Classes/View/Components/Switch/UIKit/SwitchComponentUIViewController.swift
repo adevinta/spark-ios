@@ -53,11 +53,11 @@ final class SwitchComponentUIViewController: UIViewController {
 
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { theme in
@@ -83,8 +83,7 @@ extension SwitchComponentUIViewController {
 
     static func build() -> SwitchComponentUIViewController {
         let viewModel = SwitchComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = SwitchComponentUIViewController(viewModel: viewModel)
-        return viewController
+        return SwitchComponentUIViewController(viewModel: viewModel)
     }
 }
 

@@ -13,7 +13,7 @@ protocol SliderGetClosestValueUseCasable {
 }
 
 final class SliderGetClosestValueUseCase: SliderGetClosestValueUseCasable {
-    func execute<V>(value: V, in values: [V]) -> V where V : BinaryFloatingPoint {
+    func execute<V>(value: V, in values: [V]) -> V where V: BinaryFloatingPoint {
         guard let closestValue = values.min(by: {
             return abs($0 - value) <= abs($1 - value)
         }) else { return value }

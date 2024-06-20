@@ -19,7 +19,7 @@ struct ProgressTrackerTrackView: View {
         return self.scaleFactor * ProgressTrackerConstants.trackSize
     }
 
-    //MARK: - Initialization
+    // MARK: - Initialization
     init(theme: Theme,
          intent: ProgressTrackerIntent,
          orientation: ProgressTrackerOrientation) {
@@ -27,7 +27,7 @@ struct ProgressTrackerTrackView: View {
         self.viewModel = ProgressTrackerTrackViewModel(theme: theme, intent: intent)
     }
 
-    //MARK: - Body
+    // MARK: - Body
     var body: some View {
         if self.orientation == .horizontal {
             self.line()
@@ -47,7 +47,7 @@ struct ProgressTrackerTrackView: View {
             .opacity(self.viewModel.opacity)
     }
 
-    //MARK: - View Modifiers
+    // MARK: - View Modifiers
     func disabled(_ isDisabled: Bool) -> some View {
         self.viewModel.isEnabled = !isDisabled
         return self

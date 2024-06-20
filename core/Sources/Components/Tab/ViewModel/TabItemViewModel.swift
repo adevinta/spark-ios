@@ -9,7 +9,6 @@
 import Combine
 import UIKit
 
-
 /// `TabItemViewModel` is the view model for both the SwiftUI `TabItemView` as well as the UIKit `TabItemUIView`.
 /// The view model is responsible for returning the varying attributes to the views, i.e. colors and attributes. These are determined by the theme, intent, tabState, content and tabGetStateAttributesUseCase.
 /// When the theme, intent, states or contents change the new values are calculated and published.
@@ -22,9 +21,9 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
             self.updateStateAttributes()
         }
     }
-    
+
     private let tabGetStateAttributesUseCase: TabGetStateAttributesUseCasable
-    
+
     // MARK: Properties
     var theme: Theme {
         didSet {
@@ -45,7 +44,6 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
             self.updateStateAttributes()
         }
     }
-
 
     private (set) var isEnabled: Bool {
         get {
@@ -82,7 +80,7 @@ final class TabItemViewModel<Content>: ObservableObject where Content: TitleCont
             self.updateStateAttributes()
         }
     }
-    
+
     // MARK: Init
     /// Init
     /// Parameters:

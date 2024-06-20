@@ -114,7 +114,7 @@ final class IconViewModelTests: XCTestCase {
             self.getColorUseCase.executeWithIntentAndColorsCallsCount = 0
 
             // THEN
-            
+
             XCTAssertEqual(self.sut.intent, iconIntent, "Icon intent doesn't match the given intent")
             self.testGetColorUseCaseExecute(
                 expectedCallsCount: 0
@@ -161,9 +161,10 @@ final class IconViewModelTests: XCTestCase {
             getColorUseCase: self.getColorUseCase
         )
 
-        self.sut.$color.sink { _ in
+        self.sut.$color.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // WHEN
         self.sut.set(intent: .support)
@@ -183,9 +184,10 @@ final class IconViewModelTests: XCTestCase {
             getColorUseCase: self.getColorUseCase
         )
 
-        self.sut.$size.sink { _ in
+        self.sut.$size.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // WHEN
         self.sut.set(size: .extraLarge)
@@ -222,14 +224,14 @@ final class IconViewModelTests: XCTestCase {
     }
 
     private func randomizeIntentAndRemoveCurrent(_ currentIntent: IconIntent) -> IconIntent {
-        let filteredIntents = IconIntent.allCases.filter({ $0 != currentIntent })
+        let filteredIntents = IconIntent.allCases.filter { $0 != currentIntent }
         let randomIndex = Int.random(in: 0...filteredIntents.count - 1)
 
         return filteredIntents[randomIndex]
     }
 
     private func randomizeSizeAndRemoveCurrent(_ currentSize: IconSize) -> IconSize {
-        let filteredSizes = IconSize.allCases.filter({ $0 != currentSize })
+        let filteredSizes = IconSize.allCases.filter { $0 != currentSize }
         let randomIndex = Int.random(in: 0...filteredSizes.count - 1)
 
         return filteredSizes[randomIndex]

@@ -211,7 +211,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         labelPosition: RadioButtonLabelPosition = .right
     ) {
         let viewModel = RadioButtonViewModel(
-            theme: theme, 
+            theme: theme,
             intent: groupState.intent,
             id: id,
             label: .left(label),
@@ -324,7 +324,6 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
         toggleViewLeadingConstraint?.constant = -self.haloWidth
         toggleViewTrailingConstraint?.constant = self.haloWidth
     }
-
 
     // MARK: - Private Functions
 
@@ -480,7 +479,7 @@ public final class RadioButtonUIView<ID: Equatable & CustomStringConvertible>: U
     }
 }
 
-//MARK: - Private Helpers
+// MARK: - Private Helpers
 
 private extension UILabel {
     static var standard: UILabel {

@@ -61,7 +61,7 @@ class ButtonViewModel: ButtonMainViewModel {
 
     override func updateAll() {
         super.updateAll()
-        
+
         self.alignmentDidUpdate()
         self.spacingsDidUpdate()
         self.titleFontDidUpdate()

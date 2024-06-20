@@ -144,7 +144,6 @@ final class ProgressTrackerTrackViewModelTests: XCTestCase {
         wait(for: [expect], timeout: 1)
     }
 
-
     private func sut(
         intent: ProgressTrackerIntent = .basic,
         isEnabled: Bool = true) -> ProgressTrackerTrackViewModel {

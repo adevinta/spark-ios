@@ -88,7 +88,7 @@ public struct TextFieldAddons<LeftView: View, RightView: View, LeftAddon: View, 
         return EdgeInsets(
             top: .zero,
             leading: self.viewModel.leftSpacing,
-            bottom: .zero, 
+            bottom: .zero,
             trailing: self.viewModel.rightSpacing
         )
     }

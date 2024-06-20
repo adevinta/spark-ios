@@ -133,14 +133,16 @@ public final class TextFieldAddonsUIView: UIControl {
     private func subscribeToViewModel() {
         self.viewModel.$backgroundColor.removeDuplicates(by: { lhs, rhs in
             lhs.equals(rhs)
-        }).subscribe(in: &self.cancellables) { [weak self] backgroundColor in
+        })
+        .subscribe(in: &self.cancellables) { [weak self] backgroundColor in
             guard let self else { return }
             self.backgroundColor = backgroundColor.uiColor
         }
 
         self.viewModel.textFieldViewModel.$borderColor.removeDuplicates(by: { lhs, rhs in
             lhs.equals(rhs)
-        }).subscribe(in: &self.cancellables) { [weak self] borderColor in
+        })
+        .subscribe(in: &self.cancellables) { [weak self] borderColor in
             guard let self else { return }
             self.setBorderColor(from: borderColor)
             self.leftSeparatorView.backgroundColor = borderColor.uiColor

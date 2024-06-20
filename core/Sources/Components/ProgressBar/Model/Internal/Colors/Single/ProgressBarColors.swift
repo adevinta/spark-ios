@@ -7,7 +7,7 @@
 //
 
 struct ProgressBarColors: ProgressBarMainColors {
-    
+
     // MARK: - Properties
 
     let trackBackgroundColorToken: any ColorToken

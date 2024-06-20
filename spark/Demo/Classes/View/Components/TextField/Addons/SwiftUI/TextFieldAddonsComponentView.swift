@@ -167,7 +167,6 @@ struct TextFieldAddonsComponentView: View {
         }
     }
 
-
     @ViewBuilder
     private func createImage(side: ContentSide) -> some View {
         let imageName = side == .right ? "delete.left" : "command"

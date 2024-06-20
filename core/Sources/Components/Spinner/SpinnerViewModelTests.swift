@@ -31,7 +31,7 @@ final class SpinnerViewModelTests: XCTestCase {
         let sut = sut(intent: .main, spinnerSize: .small)
         let expect = expectation(description: "All publishers should have published")
 
-        Publishers.Zip(sut.$intentColor, sut.$size).subscribe(in: &self.subscriptions) { (colorToken, size) in
+        Publishers.Zip(sut.$intentColor, sut.$size).subscribe(in: &self.subscriptions) { colorToken, size in
 
             XCTAssertEqual(colorToken.color, Color.red)
             XCTAssertEqual(size, SpinnerViewModel.Constants.Size.small)

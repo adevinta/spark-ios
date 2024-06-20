@@ -54,7 +54,7 @@ final class ProgressBarIndeterminateViewModel: ProgressBarMainViewModel<Progress
 
     override func updateAll() {
         super.updateAll()
-        
+
         self.isAnimatedDidUpdate()
     }
 

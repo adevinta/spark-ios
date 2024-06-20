@@ -13,7 +13,7 @@ struct TabState: Equatable, Updateable {
     var isEnabled: Bool
     var isPressed: Bool
     var isSelected: Bool
-    
+
     init(
         isEnabled: Bool = true,
         isPressed: Bool = false,

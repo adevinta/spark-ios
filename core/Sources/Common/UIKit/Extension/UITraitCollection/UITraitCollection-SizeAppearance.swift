@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 extension UITraitCollection {
     func hasDifferentSizeCategory(comparedTo traitCollection: UITraitCollection?) -> Bool {
         self.preferredContentSizeCategory != traitCollection?.preferredContentSizeCategory

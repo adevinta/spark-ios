@@ -47,7 +47,7 @@ final class RadioButtonViewModel<ID: Equatable & CustomStringConvertible>: Obser
                   label: label,
                   selectedID: selectedID,
                   alignment: alignment,
-                  useCase:RadioButtonGetAttributesUseCase())
+                  useCase: RadioButtonGetAttributesUseCase())
     }
 
     init(theme: Theme,

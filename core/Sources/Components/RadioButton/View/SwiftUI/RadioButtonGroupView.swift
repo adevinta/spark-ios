@@ -28,7 +28,7 @@ import SwiftUI
 ///       ]
 ///    }
 ///  ```
-public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConvertible> : View {
+public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConvertible>: View {
 
     // MARK: - Injected properties
 
@@ -148,7 +148,7 @@ public struct RadioButtonGroupView<ID: Equatable & Hashable & CustomStringConver
         ForEach(self.items, id: \.id) { item in
             RadioButtonView(
                 theme: self.viewModel.theme,
-                intent: self.viewModel.intent, 
+                intent: self.viewModel.intent,
                 id: item.id,
                 label: item.label,
                 selectedID: self.selectedID,

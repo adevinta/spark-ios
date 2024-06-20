@@ -16,5 +16,5 @@ public protocol TabUIViewDelegate: AnyObject {
     /// - index: the index of the segement that is selected.
     /// - sender: the sender of the action.
     /// - note: This is equivalent to setting the action on the TabUIView `addAction(pressedAction, for: .valueChanged)`
-    func segmentSelected(index: Int, sender: TabUIView) 
+    func segmentSelected(index: Int, sender: TabUIView)
 }

@@ -11,6 +11,7 @@ import SwiftUI
 import XCTest
 @testable import SparkCore
 
+// swiftlint:disable force_unwrapping
 final class CheckboxViewModelTests: XCTestCase {
 
     var theme: ThemeGeneratedMock!
@@ -98,10 +99,11 @@ final class CheckboxViewModelTests: XCTestCase {
 
         let expectation = expectation(description: "Colors are updates")
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             isColorsUpdated = true
             expectation.fulfill()
-        }.store(in: &cancellable)
+        })
+        .store(in: &cancellable)
 
         await fulfillment(of: [expectation], timeout: 2.0)
 
@@ -123,7 +125,8 @@ final class CheckboxViewModelTests: XCTestCase {
         return CheckboxViewModel(
             text: attributeText == nil ? .left(NSAttributedString("Text")) : .left(attributeText!),
             checkedImage: .left(self.checkedImage),
-            theme: self.theme, isEnabled: isEnabled,
+            theme: self.theme,
+            isEnabled: isEnabled,
             selectionState: .unselected
         )
     }

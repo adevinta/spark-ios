@@ -55,7 +55,6 @@ class CheckboxControlUIView: UIView {
         }
     }
 
-
     // MARK: - Private Properties.
     @ScaledUIMetric private var cornerRadius: CGFloat = Constants.cornerRadius
     @ScaledUIMetric private var cornerRadiusPressed: CGFloat = Constants.cornerRadiusPressed
@@ -105,8 +104,8 @@ class CheckboxControlUIView: UIView {
         view.frame = CGRect(
             x: -self.lineWidthPressed,
             y: -self.lineWidthPressed,
-            width: self.controlSize + 2*self.lineWidthPressed,
-            height: self.controlSize + 2*self.lineWidthPressed
+            width: self.controlSize + 2 * self.lineWidthPressed,
+            height: self.controlSize + 2 * self.lineWidthPressed
         )
         view.layer.borderWidth = self.lineWidthPressed
         view.layer.borderColor = self.colors.pressedBorderColor.uiColor.cgColor
@@ -115,7 +114,7 @@ class CheckboxControlUIView: UIView {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
+
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
             let traitCollection = self.traitCollection
             self._cornerRadius.update(traitCollection: traitCollection)
@@ -151,7 +150,7 @@ class CheckboxControlUIView: UIView {
         if self.isHighlighted {
             let path = UIBezierPath(roundedRect: rect, cornerRadius: self.cornerRadius)
             let color = self.colors.pressedBorderColor.uiColor
-            path.lineWidth = self.lineWidth/2
+            path.lineWidth = self.lineWidth / 2
             color.setStroke()
             ctx.setStrokeColor(color.cgColor)
             path.stroke()
@@ -159,7 +158,7 @@ class CheckboxControlUIView: UIView {
 
         switch self.selectionState {
         case .unselected:
-            let strokeRectangle = rect.insetBy(dx: self.lineWidth/2, dy: self.lineWidth/2)
+            let strokeRectangle = rect.insetBy(dx: self.lineWidth / 2, dy: self.lineWidth / 2)
             let strokePath = UIBezierPath(roundedRect: strokeRectangle, cornerRadius: self.cornerRadius)
             let strokeColor = self.colors.borderColor.uiColor
             strokePath.lineWidth = self.lineWidth

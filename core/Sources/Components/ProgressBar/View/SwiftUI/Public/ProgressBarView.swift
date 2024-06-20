@@ -9,20 +9,20 @@
 import SwiftUI
 
 public struct ProgressBarView: View {
-    
+
     // MARK: - Type alias
-    
+
     private typealias AccessibilityIdentifier = ProgressBarAccessibilityIdentifier
     private typealias Constants = ProgressBarConstants
-    
+
     // MARK: - Properties
-    
+
     @ObservedObject var viewModel: ProgressBarViewModel
-    
+
     private let value: CGFloat
-    
+
     // MARK: - Initialization
-    
+
     /// Initialize a new progress bar view
     /// - Parameters:
     ///   - theme: The spark theme of the progress bar.
@@ -43,9 +43,9 @@ public struct ProgressBarView: View {
         )
         self.value = value
     }
-    
+
     // MARK: - View
-    
+
     public var body: some View {
         ProgressBarContentView(
             trackCornerRadius: self.viewModel.cornerRadius,

@@ -11,12 +11,12 @@ import Foundation
 extension CGRect {
     /// Returns the center of the x-coordinate of the rect
     var centerX: CGFloat {
-        return (self.minX + self.maxX)/2
+        return (self.minX + self.maxX) / 2
     }
 
     /// Returns the center of the y-coordinate of the rect
     var centerY: CGFloat {
-        return (self.minY + self.maxY)/2
+        return (self.minY + self.maxY) / 2
     }
 
     /// The center point of the rect

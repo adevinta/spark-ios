@@ -22,10 +22,9 @@ public struct CheckboxGroupView: View {
     @ScaledMetric private var spacingSmall: CGFloat
     @ScaledMetric private var spacingLarge: CGFloat
     @ScaledMetric private var checkboxSelectedBorderWidth: CGFloat
-    
+
     @State private var viewWidth: CGFloat = 0
     @State private var isScrollableHStack: Bool = true
-
 
     // MARK: - Initialization
 

@@ -11,7 +11,7 @@ import SwiftUI
 /// This is SwiftUI badge view to show notifications count
 ///
 /// Badge border and offsets of it's text are **@ScaledMetric** variables and alligned to user's **Accessibility**
-/// 
+///
 /// **Example**
 /// This example shows how to create view with horizontal alignment of Badge
 /// ```swift

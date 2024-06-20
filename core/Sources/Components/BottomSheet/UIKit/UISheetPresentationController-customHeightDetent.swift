@@ -22,11 +22,9 @@ public extension UISheetPresentationController.Detent {
     @available(iOS 16.0, *)
     static func expandedHeight(of view: UIView) -> UISheetPresentationController.Detent {
         return .custom { context in
-            let height = min(
+            return min(
                 view.systemLayoutSizeFitting(UIView.layoutFittingExpandedSize).height,
                 context.maximumDetentValue - 1)
-
-            return height
         }
     }
 
@@ -43,11 +41,9 @@ public extension UISheetPresentationController.Detent {
     @available(iOS 16.0, *)
     static func compressedHeight(of view: UIView) -> UISheetPresentationController.Detent {
         return .custom { context in
-            let height = min(
+            return min(
                 view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height,
                 context.maximumDetentValue - 1)
-
-            return height
         }
     }
 

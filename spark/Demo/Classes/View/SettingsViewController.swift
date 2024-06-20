@@ -28,11 +28,10 @@ final class SettingsViewController: UICollectionViewController {
             cell.accessories = [.disclosureIndicator(options: .init(tintColor: .systemGray3))]
         }
         /// CollectionView diffable data source
-        let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
+        return DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             return collectionView.dequeueConfiguredReusableCell(
                             using: cellRegistration, for: indexPath, item: itemIdentifier)
         }
-        return dataSource
     }()
 
     // MARK: - ViewDidLoad

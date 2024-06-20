@@ -801,9 +801,9 @@ private final class Stub: ButtonMainViewModelStub {
         for frameworkType: FrameworkType = .uiKit,
         type: ButtonType = .button,
         intent: ButtonIntent = .main,
-        variant: ButtonVariant  = .tinted,
-        size: ButtonSize  = .medium,
-        shape: ButtonShape  = .rounded
+        variant: ButtonVariant = .tinted,
+        size: ButtonSize = .medium,
+        shape: ButtonShape = .rounded
     ) {
         // **
         // Use Cases

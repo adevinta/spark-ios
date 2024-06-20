@@ -6,7 +6,6 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-
 import Combine
 import XCTest
 
@@ -19,7 +18,7 @@ final class ProgressTrackerIndependentUITouchHandlerTests: XCTestCase {
     var sut: ProgressTrackerIndependentUITouchHandler!
     var cancellables = Set<AnyCancellable>()
 
-    //MARK: - Setup
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
         self.controls = (0...4)
@@ -86,7 +85,7 @@ final class ProgressTrackerIndependentUITouchHandlerTests: XCTestCase {
         self.sut.beginTracking(location: CGPoint(x: 51, y: 10))
 
         // WHEN
-        self.sut.continueTracking(location: CGPoint(x: 301, y:10))
+        self.sut.continueTracking(location: CGPoint(x: 301, y: 10))
 
         // THEN
         XCTAssertEqual(self.sut.trackingPageIndex, 1)
@@ -98,7 +97,7 @@ final class ProgressTrackerIndependentUITouchHandlerTests: XCTestCase {
         self.sut.beginTracking(location: CGPoint(x: 51, y: 10))
 
         // WHEN
-        self.sut.continueTracking(location: CGPoint(x: 101, y:10))
+        self.sut.continueTracking(location: CGPoint(x: 101, y: 10))
 
         // THEN
         XCTAssertEqual(self.sut.trackingPageIndex, 1)
@@ -108,10 +107,10 @@ final class ProgressTrackerIndependentUITouchHandlerTests: XCTestCase {
         // GIVEN
         self.sut.currentPageIndex = 2
         self.sut.beginTracking(location: CGPoint(x: 51, y: 10))
-        self.sut.continueTracking(location: CGPoint(x: 101, y:10))
+        self.sut.continueTracking(location: CGPoint(x: 101, y: 10))
 
         // WHEN
-        self.sut.continueTracking(location: CGPoint(x: 1, y:10))
+        self.sut.continueTracking(location: CGPoint(x: 1, y: 10))
 
         // THEN
         XCTAssertEqual(self.sut.trackingPageIndex, 1)
@@ -127,7 +126,7 @@ final class ProgressTrackerIndependentUITouchHandlerTests: XCTestCase {
             expect.fulfill()
         }
         // WHEN
-        self.sut.endTracking(location: CGPoint(x: 251, y:10))
+        self.sut.endTracking(location: CGPoint(x: 251, y: 10))
 
         // THEN
         wait(for: [expect])
@@ -146,7 +145,7 @@ final class ProgressTrackerIndependentUITouchHandlerTests: XCTestCase {
             expect.fulfill()
         }
         // WHEN
-        self.sut.endTracking(location: CGPoint(x: 251, y:10))
+        self.sut.endTracking(location: CGPoint(x: 251, y: 10))
 
         // THEN
         wait(for: [expect], timeout: 0.01)

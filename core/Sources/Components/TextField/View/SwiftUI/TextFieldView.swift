@@ -61,7 +61,7 @@ public struct TextFieldView<LeftView: View, RightView: View>: View {
             rightView: rightView
         )
     }
-    
+
     /// TextFieldView initializer
     /// - Parameters:
     ///   - titleKey: The textfield's current placeholder

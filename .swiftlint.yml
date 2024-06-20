@@ -1,10 +1,8 @@
-included:
-    - SparkCore
-    - SparkCoreTests
-    - Spark
-    - SparkTests
+excluded:
+  - "**/*.generated.swift"
 
 # Enabled rules for CI linting
+# List of all the rules: https://realm.github.io/SwiftLint/rule-directory.html
 only_rules:
  - colon
  - comment_spacing
@@ -18,6 +16,7 @@ only_rules:
  - private_subject
  - unneeded_parentheses_in_closure_argument
  - multiline_arguments
+ - multiline_parameters
  - lower_acl_than_parent
  - syntactic_sugar
  - unneeded_break_in_switch
@@ -27,10 +26,19 @@ only_rules:
  - statement_position
  - explicit_self
  - empty_count
+ - empty_string
  - force_cast
  - force_try
  - force_unwrapping
  - empty_collection_literal
+ - vertical_whitespace
+ - direct_return
+ # - file_name
+ - file_name_no_space
+ # - file_header
+ # - missing_docs
+ - toggle_bool
+ - yoda_condition
 
 # Rules triggering ERROR
 

@@ -56,14 +56,13 @@ final class FormFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
     }
 
     static func makeSingleCheckbox() -> UIControl {
-        let view = CheckboxUIView(
+        return CheckboxUIView(
             theme: SparkTheme.shared,
             text: "Hello World",
             checkedImage: UIImage.mock,
             selectionState: .unselected,
             alignment: .left
         )
-        return view
     }
 
     static func makeVerticalCheckbox() -> UIControl {
@@ -82,18 +81,17 @@ final class FormFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
     }
 
     static func makeSingleRadioButton() -> UIControl {
-        let view = RadioButtonUIView(
+        return RadioButtonUIView(
             theme: SparkTheme.shared,
             intent: .info,
             id: "radiobutton",
             label: NSAttributedString(string: "Hello World"),
             isSelected: true
         )
-        return view
     }
 
     static func makeVerticalRadioButton() -> UIControl {
-        let view = RadioButtonUIGroupView(
+        return RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             intent: .danger,
             selectedID: "radiobutton",
@@ -103,7 +101,6 @@ final class FormFieldUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
             ],
             groupLayout: .vertical
         )
-        return view
     }
 }
 

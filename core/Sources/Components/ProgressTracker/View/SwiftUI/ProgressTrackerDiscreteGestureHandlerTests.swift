@@ -20,7 +20,7 @@ final class ProgressTrackerDiscreteGestureHandlerTests: XCTestCase {
         set: { self._currentPageIndex = $0 }
     )
 
-    private var _currentTouchedPageIndex: Int? = nil
+    private var _currentTouchedPageIndex: Int?
 
     lazy var currentTouchedPageIndex = Binding<Int?>(
         get: { return self._currentTouchedPageIndex },

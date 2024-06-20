@@ -15,7 +15,7 @@ final class CheckboxCell: UITableViewCell, Configurable {
     typealias Component = CheckboxUIView
 
     lazy var component: CheckboxUIView = {
-        let view = CheckboxUIView(
+        return CheckboxUIView(
             theme: SparkTheme.shared,
             text: "Checkbox",
             checkedImage: DemoIconography.shared.checkmark.uiImage,
@@ -23,7 +23,6 @@ final class CheckboxCell: UITableViewCell, Configurable {
             selectionState: .selected,
             alignment: .left
         )
-        return view
     }()
 
     var stackViewAlignment: UIStackView.Alignment {

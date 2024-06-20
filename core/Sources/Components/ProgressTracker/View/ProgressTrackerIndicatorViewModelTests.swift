@@ -52,9 +52,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.theme = self.theme
@@ -69,9 +70,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered twice")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.intent = .danger
@@ -86,9 +88,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered once")
         expectation.expectedFulfillmentCount = 1
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.intent = .basic
@@ -103,9 +106,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered twice")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.variant = .tinted
@@ -120,9 +124,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered once")
         expectation.expectedFulfillmentCount = 1
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.variant = .outlined
@@ -137,9 +142,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered twice")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.state = .pressed
@@ -154,9 +160,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered once")
         expectation.expectedFulfillmentCount = 1
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.state = .pressed
@@ -171,9 +178,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered twice")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.set(selected: true)
@@ -188,9 +196,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered twice")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.set(enabled: false)
@@ -205,9 +214,10 @@ final class ProgressTrackerIndicatorViewModelTests: XCTestCase {
         let expectation = expectation(description: "Expect colors to have been triggered twice")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$colors.sink { _ in
+        sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // When
         sut.set(highlighted: true)

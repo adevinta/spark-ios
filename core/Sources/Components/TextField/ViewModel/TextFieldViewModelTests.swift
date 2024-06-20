@@ -243,7 +243,7 @@ final class TextFieldViewModelTests: XCTestCase {
         // THEN - Colors
         XCTAssertEqual(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledCallsCount, 1, "getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabled should have been called once")
         let getColorsReceivedArguments = try XCTUnwrap(self.getColorsUseCase.executeWithThemeAndIntentAndIsFocusedAndIsEnabledAndIsUserInteractionEnabledReceivedArguments, "Couldn't unwrap getColorsReceivedArguments")
-        XCTAssertEqual(getColorsReceivedArguments.intent , .neutral, "Wrong getColorsReceivedArguments.intent")
+        XCTAssertEqual(getColorsReceivedArguments.intent, .neutral, "Wrong getColorsReceivedArguments.intent")
         XCTAssertTrue(self.viewModel.textColor.equals(newExpectedColors.text), "Wrong textColor")
         XCTAssertTrue(self.viewModel.placeholderColor.equals(newExpectedColors.placeholder), "Wrong placeholderColor")
         XCTAssertTrue(self.viewModel.borderColor.equals(newExpectedColors.border), "Wrong borderColor")

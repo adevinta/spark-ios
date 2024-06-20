@@ -72,7 +72,6 @@ final class BottomSheetDemoView: UIView, DidTapButtonable {
         }
     }
 
-
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)

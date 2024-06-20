@@ -126,7 +126,6 @@ final class SliderComponentUIViewModel: ComponentUIViewModel, ObservableObject {
         ]
     }
 
-
     // MARK: - Initialization
     @Published var theme: Theme
     @Published var intent: SliderIntent

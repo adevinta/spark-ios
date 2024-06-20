@@ -19,8 +19,7 @@ final class SingleSliderViewModel<V>: SliderViewModel<V> where V: BinaryFloating
     }
 
     private func getDefaultIncrementValue() -> V {
-        let tenPercent = 10 * (bounds.upperBound - bounds.lowerBound) / 100.0
-        return tenPercent
+        return 10 * (bounds.upperBound - bounds.lowerBound) / 100.0
     }
 
     func incrementValue() {

@@ -32,7 +32,8 @@ class ProgressTrackerGestureHandler: ProgressTrackerGestureHandling {
     let frame: CGRect
     let disabledIndeces: Set<Int>
 
-    init(currentPageIndex: Binding<Int>, currentTouchedPageIndex: Binding<Int?>, 
+    init(currentPageIndex: Binding<Int>,
+         currentTouchedPageIndex: Binding<Int?>,
          indicators: [CGRect],
          frame: CGRect,
          disabledIndices: Set<Int>
@@ -59,14 +60,14 @@ final class ProgressTrackerIndependentGestureHandler: ProgressTrackerGestureHand
         }
 
         let index = self.indicators.index(closestTo: location)
-        if let index, 
+        if let index,
             self.currentTouchedPageIndex == nil,
            !self.disabledIndeces.contains(index)
         {
             self.currentTouchedPageIndex = index
         }
     }
-    
+
     override func onEnded(location: CGPoint) {
         guard self.frame.contains(location) else {
             self.currentTouchedPageIndex = nil
@@ -79,7 +80,7 @@ final class ProgressTrackerIndependentGestureHandler: ProgressTrackerGestureHand
         self.currentPageIndex = currentTouchedPageIndex
         self.currentTouchedPageIndex = nil
     }
-    
+
     override func onCancelled() {
         self.currentTouchedPageIndex = nil
     }
@@ -114,7 +115,7 @@ final class ProgressTrackerDiscreteGestureHandler: ProgressTrackerGestureHandler
             self.currentTouchedPageIndex = currentPressedPageIndex
         }
     }
-    
+
     override func onEnded(location: CGPoint) {
         guard self.frame.contains(location) else {
             self.currentTouchedPageIndex = nil
@@ -126,7 +127,7 @@ final class ProgressTrackerDiscreteGestureHandler: ProgressTrackerGestureHandler
         self.currentPageIndex = currentTouchedPageIndex
         self.currentTouchedPageIndex = nil
     }
-    
+
     override func onCancelled() {
         self.currentTouchedPageIndex = nil
     }

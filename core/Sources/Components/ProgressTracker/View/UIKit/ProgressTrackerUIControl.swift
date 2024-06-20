@@ -252,7 +252,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
-    //MARK: - Handle touch events
+    // MARK: - Handle touch events
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let touchHandler = self.interactionState.touchHandler(
             currentPageIndex: self.currentPageIndex,
@@ -291,7 +291,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.touchHandler = nil
     }
 
-    //MARK: Touch handling actions
+    // MARK: Touch handling actions
     private func updateCurrentPageTrackingIndex(_ index: Int) {
         self.cancelHighlighted()
 
@@ -301,7 +301,7 @@ public final class ProgressTrackerUIControl: UIControl {
         self.sendActions(for: .valueChanged)
     }
 
-    //MARK: - Private functions
+    // MARK: - Private functions
     private func cancelHighlighted() {
         guard let index = self.touchHandler?.trackingPageIndex else { return }
         self.indicatorViews[safe: index]?.isHighlighted = false
@@ -341,7 +341,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
     }
 
-    //MARK: - View creation
+    // MARK: - View creation
     private func createLabels(content: Content) ->
     [UILabel] {
         guard content.hasLabel else { return [] }
@@ -436,14 +436,14 @@ public final class ProgressTrackerUIControl: UIControl {
                 theme: self.theme,
                 intent: self.intent,
                 orientation: orientation)
-            view.isEnabled = !self.viewModel.disabledIndices.contains(index+1)
+            view.isEnabled = !self.viewModel.disabledIndices.contains(index + 1)
             view.isUserInteractionEnabled = false
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }
     }
 
-    //MARK: - View setup
+    // MARK: - View setup
     private func setupIndicatorsAndLabels(content: Content, orientation: ProgressTrackerOrientation) {
         NSLayoutConstraint.deactivate(self.labelSpacingConstraints)
         NSLayoutConstraint.deactivate(self.trackSpacingConstraints)
@@ -577,7 +577,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
 
         for i in 1..<numberOfPages {
-            let trackView = self.trackViews[i-1]
+            let trackView = self.trackViews[i - 1]
             let trackLeadingSpacing = trackView.leadingAnchor.constraint(equalTo: precedingView.trailingAnchor, constant: self.trackSpacing)
             constraints.append(trackLeadingSpacing)
             self.trackSpacingConstraints.append(trackLeadingSpacing)
@@ -590,7 +590,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
 
         for i in 1..<self.trackViews.count {
-            let trackWidthConstraint = self.trackViews[i].widthAnchor.constraint(equalTo: self.trackViews[i-1].widthAnchor)
+            let trackWidthConstraint = self.trackViews[i].widthAnchor.constraint(equalTo: self.trackViews[i - 1].widthAnchor)
             trackWidthConstraint.priority = .init(rawValue: 200)
             constraints.append(trackWidthConstraint)
         }
@@ -609,11 +609,11 @@ public final class ProgressTrackerUIControl: UIControl {
                 constraints.append(self.labels[i].bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor))
             }
             for i in 1..<numberOfPages {
-                let labelTrailingConstraint = self.labels[i].leadingAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].trailingAnchor, constant: self.labelSpacing)
+                let labelTrailingConstraint = self.labels[i].leadingAnchor.constraint(greaterThanOrEqualTo: self.labels[i - 1].trailingAnchor, constant: self.labelSpacing)
                 self.labelSpacingConstraints.append(labelTrailingConstraint)
                 constraints.append(labelTrailingConstraint)
 
-                let labelWidthAnchor = self.labels[i].widthAnchor.constraint(equalTo: self.labels[i-1].widthAnchor)
+                let labelWidthAnchor = self.labels[i].widthAnchor.constraint(equalTo: self.labels[i - 1].widthAnchor)
                 labelWidthAnchor.priority = .defaultLow
                 constraints.append(labelWidthAnchor)
             }
@@ -659,7 +659,7 @@ public final class ProgressTrackerUIControl: UIControl {
         constraints.append(precedingView.leadingAnchor.constraint(equalTo: self.leadingAnchor))
 
         for i in 1..<numberOfPages {
-            let trackView = self.trackViews[i-1]
+            let trackView = self.trackViews[i - 1]
             let trackTopSpacing = trackView.topAnchor.constraint(equalTo: precedingView.bottomAnchor, constant: self.trackSpacing)
             constraints.append(trackTopSpacing)
             self.trackSpacingConstraints.append(trackTopSpacing)
@@ -672,7 +672,7 @@ public final class ProgressTrackerUIControl: UIControl {
         }
 
         for i in 1..<self.trackViews.count {
-            let trackHeightConstraint = self.trackViews[i].heightAnchor.constraint(equalTo: self.trackViews[i-1].heightAnchor)
+            let trackHeightConstraint = self.trackViews[i].heightAnchor.constraint(equalTo: self.trackViews[i - 1].heightAnchor)
             trackHeightConstraint.priority = .init(rawValue: 200)
             constraints.append(trackHeightConstraint)
         }
@@ -683,7 +683,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 self.labels[i].textAlignment = .left
                 constraints.append(self.indicatorViews[i].centerYAnchor.constraint(equalTo: self.hiddenLabels[i].centerYAnchor))
                 constraints.append(self.indicatorViews[i].trailingAnchor.constraint(equalTo: self.hiddenLabels[i].leadingAnchor))
-                constraints.append(self.labels[i].topAnchor.constraint(equalTo:  self.hiddenLabels[i].topAnchor))
+                constraints.append(self.labels[i].topAnchor.constraint(equalTo: self.hiddenLabels[i].topAnchor))
 
                 let labelLeadingConstraint = self.labels[i].leadingAnchor.constraint(equalTo: self.indicatorViews[i].trailingAnchor, constant: self.labelSpacing)
                 constraints.append(labelLeadingConstraint)
@@ -691,7 +691,7 @@ public final class ProgressTrackerUIControl: UIControl {
                 constraints.append(self.labels[i].trailingAnchor.constraint(equalTo: self.trailingAnchor))
             }
             for i in 1..<numberOfPages {
-                let labelBottomConstraint = self.labels[i].topAnchor.constraint(greaterThanOrEqualTo: self.labels[i-1].bottomAnchor, constant: self.labelSpacing)
+                let labelBottomConstraint = self.labels[i].topAnchor.constraint(greaterThanOrEqualTo: self.labels[i - 1].bottomAnchor, constant: self.labelSpacing)
                 self.labelSpacingConstraints.append(labelBottomConstraint)
                 constraints.append(labelBottomConstraint)
             }
@@ -711,7 +711,7 @@ public final class ProgressTrackerUIControl: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //MARK: - Private view modifiers
+    // MARK: - Private view modifiers
     private func updateView(content: ProgressTrackerUIControl.Content) {
         self.accessibilityValue = "\(content.currentPageIndex)"
         for i in 0..<content.numberOfPages {
@@ -728,7 +728,7 @@ public final class ProgressTrackerUIControl: UIControl {
 
         self.setItemsAccessibilityTraits(disabledIndices: self.viewModel.disabledIndices, currentPageIndex: content.currentPageIndex)
     }
-    
+
     private func didUpdate(content: Content) {
         if self.viewModel.content.needsUpdateOfLayout(otherComponent: content) {
             self.setupView(content: content, orientation: self.viewModel.orientation)
@@ -798,7 +798,7 @@ public final class ProgressTrackerUIControl: UIControl {
             view.isEnabled = !disabledIndices.contains(index)
         }
         for (index, view) in self.trackViews.enumerated() {
-            view.isEnabled = !disabledIndices.contains(index+1)
+            view.isEnabled = !disabledIndices.contains(index + 1)
         }
 
         self.setItemsAccessibilityTraits(disabledIndices: disabledIndices, currentPageIndex: self.viewModel.currentPageIndex)

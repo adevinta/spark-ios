@@ -72,7 +72,7 @@ public struct TabView: View {
         self._selectedIndex = selectedIndex
         let viewModel = TabViewModel(
             theme: theme,
-            content: content, 
+            content: content,
             tabSize: tabSize
         )
         self.viewModel = viewModel
@@ -81,7 +81,7 @@ public struct TabView: View {
     // MARK: - View
     public var body: some View {
         let viewModel = self.viewModel.setIsEnabled(self.isEnabled)
-        
+
         if self.containerViewModel.apportionsSegmentWidthsByContent {
             TabApportionsSizeView(viewModel: viewModel, intent: self.intent, selectedIndex: self.$selectedIndex)
         } else {

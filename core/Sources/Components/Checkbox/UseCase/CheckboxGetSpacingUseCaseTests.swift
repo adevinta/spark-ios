@@ -14,21 +14,21 @@ final class CheckboxGetSpacingUseCaseTests: XCTestCase {
 
     var sut: CheckboxGetSpacingUseCase!
     var layoutSpacing: LayoutSpacingGeneratedMock!
-    
+
     override func setUp()  {
         self.layoutSpacing = LayoutSpacingGeneratedMock.mocked()
         self.sut = CheckboxGetSpacingUseCase()
     }
-    
+
     func test_left_alignment_spacing() {
         let spacing = sut.execute(layoutSpacing: self.layoutSpacing, alignment: .left)
-        
+
         XCTAssertEqual(spacing, self.layoutSpacing.medium)
     }
 
     func test_right_alignment_spacing() {
         let spacing = sut.execute(layoutSpacing: self.layoutSpacing, alignment: .right)
-        
+
         XCTAssertEqual(spacing, self.layoutSpacing.xxxLarge)
     }
 }

@@ -319,7 +319,7 @@ final class TextLinkViewModelTests: XCTestCase {
             givenIsContentDidUpdate: givenIsDifferentNewValue
         )
     }
-    
+
     func test_set_textHighlightRange_with_different_new_value() {
         self.testSetTextHighlightRange(
             givenIsDifferentNewValue: true
@@ -386,7 +386,7 @@ final class TextLinkViewModelTests: XCTestCase {
         let newValue = givenIsDifferentNewValue ? .accent : defaultValue
 
         let stub = Stub(
-            frameworkType: .swiftUI, 
+            frameworkType: .swiftUI,
             intent: defaultValue
         )
         let viewModel = stub.viewModel
@@ -791,7 +791,7 @@ private final class Stub: TextLinkViewModelStub {
         )
 
         super.init(
-            viewModel: viewModel, 
+            viewModel: viewModel,
             getColorUseCaseMock: getColorUseCaseMock,
             getTypographiesUseCaseMock: getTypographiesUseCaseMock,
             getAttributedStringUseCaseMock: getAttributedStringUseCaseMock,

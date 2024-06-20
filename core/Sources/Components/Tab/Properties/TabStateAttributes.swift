@@ -14,7 +14,7 @@ import Foundation
 /// - opacity: The opacity of the tab item.
 /// - separatorLineHeight: The lineHeight of the tab item.
 struct TabStateAttributes: Equatable {
-    
+
     let spacings: TabItemSpacings
     let colors: TabItemColors
     let heights: TabItemHeights

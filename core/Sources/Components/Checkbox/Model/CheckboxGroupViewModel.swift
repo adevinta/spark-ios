@@ -48,8 +48,7 @@ final class CheckboxGroupViewModel: ObservableObject {
         let textWidth: CGFloat = string?.widthOfString(usingFont: font) ?? 0
         let spacing: CGFloat = CheckboxGetSpacingUseCase().execute(layoutSpacing: self.theme.layout.spacing, alignment: self.alignment)
         let checkboxControlSize: CGFloat = CheckboxView.Constants.checkboxSize
-        let width: CGFloat = checkboxControlSize + spacing + textWidth
-        return width
+        return checkboxControlSize + spacing + textWidth as CGFloat
     }
 }
 

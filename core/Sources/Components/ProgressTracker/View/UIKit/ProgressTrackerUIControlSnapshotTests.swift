@@ -52,7 +52,7 @@ final class ProgressTrackerUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 case .icon: view.setPreferredIndicatorImage(UIImage(systemName: "lock.circle"))
                 case .text:
                     for i in 0..<5 {
-                        view.setIndicatorLabel("A\(i+1)", forIndex: i)
+                        view.setIndicatorLabel("A\(i + 1)", forIndex: i)
                     }
                 case .empty:
                     view.showDefaultPageNumber = false

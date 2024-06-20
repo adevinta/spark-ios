@@ -67,8 +67,7 @@ extension StarComponentViewController {
 
     static func build() -> StarComponentViewController {
         let viewModel = StarComponentUIViewModel()
-        let viewController = StarComponentViewController(viewModel: viewModel)
-        return viewController
+        return StarComponentViewController(viewModel: viewModel)
     }
 }
 

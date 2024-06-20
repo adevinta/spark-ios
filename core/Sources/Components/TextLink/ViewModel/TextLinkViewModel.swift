@@ -160,7 +160,7 @@ class TextLinkViewModel: ObservableObject {
 
     private func contentDidUpdate(forceToReload: Bool = false) {
         let color = self.getColorUseCase.execute(
-            intent: self.intent, 
+            intent: self.intent,
             isHighlighted: self.isHighlighted,
             colors: self.theme.colors
         )

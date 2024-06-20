@@ -106,7 +106,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         }
     }
 
-    /// The current selected ID. 
+    /// The current selected ID.
     public var selectedID: ID? {
         didSet {
             self.updateRadioButtonStates()
@@ -308,7 +308,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         self.radioButtonViews[safe: index]?.attributedText = title
     }
 
-    public func addRadioButton(_ item: RadioButtonUIItem<ID>,  atIndex index: Int = Int.max) {
+    public func addRadioButton(_ item: RadioButtonUIItem<ID>, atIndex index: Int = Int.max) {
 
         var items = self.items
         if index < items.count {
@@ -365,9 +365,9 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
     }
 
     private func createRadioButtonViews(
-        items: [RadioButtonUIItem<ID>]) -> [RadioButtonUIView<ID>] 
+        items: [RadioButtonUIItem<ID>]) -> [RadioButtonUIView<ID>]
     {
-        let radioButtonViews = items.map {
+        return items.map {
             let radioButtonView = RadioButtonUIView(
                 theme: self.theme,
                 intent: self.viewModel.intent,
@@ -387,7 +387,6 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
 
             return radioButtonView
         }
-        return radioButtonViews
     }
 
     private func setupConstraints() {
@@ -431,7 +430,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             previousLayoutTopAnchor = radioButtonView.bottomAnchor
         }
 
-        if self.supplementaryText !=  nil {
+        if self.supplementaryText != nil {
             constraints.append(self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor))
             constraints.append(self.supplementaryLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor))
             let topConstraint = self.supplementaryLabel.topAnchor.constraint(equalTo: previousLayoutTopAnchor, constant: self.labelSpacing)
@@ -484,7 +483,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
         var bottomAnchor: NSLayoutYAxisAnchor = self.bottomAnchor
         var labelSpacing: CGFloat = 0
 
-        if self.supplementaryText !=  nil {
+        if self.supplementaryText != nil {
             bottomAnchor = self.supplementaryLabel.topAnchor
             labelSpacing = self.labelSpacing
             constraints.append(self.supplementaryLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor))
@@ -552,7 +551,7 @@ public final class RadioButtonUIGroupView<ID: Equatable & Hashable & CustomStrin
             self.updateConstraints()
         }
     }
-    
+
     private func updateRadioButtonStates() {
         for radioButtonView in self.radioButtonViews {
             radioButtonView.toggleNeedsRedisplay()

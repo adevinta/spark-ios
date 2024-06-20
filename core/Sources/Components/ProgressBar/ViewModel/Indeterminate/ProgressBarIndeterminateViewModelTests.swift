@@ -27,7 +27,7 @@ final class ProgressBarIndeterminateViewModelTests: XCTestCase {
     }
 
     // MARK: - Init Tests
-    
+
     func test_properties_on_init_when_frameworkType_is_UIKit_and_isAnimating_is_false() {
         self.testPropertiesOnInit(
             givenFrameworkType: .uiKit
@@ -231,7 +231,7 @@ final class ProgressBarIndeterminateViewModelTests: XCTestCase {
         // THEN
         // **
         // Published properties
-        
+
         // Animation type
         ProgressBarIndeterminateViewModelPublisherTest.XCTAssert(
             animationType: stub.animationTypePublisherMock,

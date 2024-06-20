@@ -12,7 +12,7 @@ import Foundation
 
 extension ChipState {
     static let all: [ChipState] =
-    [   
+    [
         .init(isEnabled: true, isPressed: false, isSelected: true),
         .init(isEnabled: false, isPressed: false, isSelected: true),
         .init(isEnabled: false, isPressed: false, isSelected: false),

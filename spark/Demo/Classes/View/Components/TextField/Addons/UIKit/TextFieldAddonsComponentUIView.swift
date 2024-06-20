@@ -155,13 +155,12 @@ final class TextFieldAddonsComponentUIView: ComponentUIView {
     }
 
     private func createIcon(side: TextFieldContentSide) -> IconUIView {
-        let icon = IconUIView(
+        return IconUIView(
             iconImage: .init(systemName: side == .left ? "power" : "eject.circle.fill"),
             theme: self.viewModel.theme,
             intent: .support,
             size: .extraLarge
         )
-        return icon
     }
 
     private func createText(side: TextFieldContentSide) -> UILabel {

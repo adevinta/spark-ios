@@ -92,13 +92,13 @@ private extension SwitchGetColorUseCaseTests {
     ) throws {
         // GIVEN
         let useCase = SwitchGetColorUseCase()
-        
+
         // WHEN
         let colorToken = useCase.execute(
             intent: givenIntent,
             colors: self.colorsMock
         )
-        
+
         // THEN
         XCTAssertIdentical(colorToken as? ColorTokenGeneratedMock,
                            expectedColorToken as? ColorTokenGeneratedMock,

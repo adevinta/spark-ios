@@ -34,7 +34,7 @@ public struct SwitchView: View {
     ///   - theme: The spark theme of the switch.
     ///   - intent: The intent of the switch.
     ///   - alignment: The alignment of the switch.
-    ///   - isOn: The Binding value of the switch.   
+    ///   - isOn: The Binding value of the switch.
     public init(
         theme: any Theme,
         intent: SwitchIntent,

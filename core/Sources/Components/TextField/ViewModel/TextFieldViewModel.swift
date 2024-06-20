@@ -146,7 +146,7 @@ class TextFieldViewModel: ObservableObject {
     func setBorderLayout() {
         let borderLayout = self.getBorderLayoutUseCase.execute(
             theme: self.theme,
-            borderStyle: self.borderStyle, //.none
+            borderStyle: self.borderStyle, // .none
             isFocused: self.isFocused
         )
         self.borderWidth = borderLayout.width

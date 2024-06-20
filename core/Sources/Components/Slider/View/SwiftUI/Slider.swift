@@ -90,13 +90,13 @@ public struct Slider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloa
             }
             .gesture(
                 DragGesture(minimumDistance: .zero)
-                    .onChanged({ value in
+                    .onChanged { value in
                         self.isEditing = true
                         self.moveHandle(to: value.location.x, width: geometry.size.width)
-                    })
-                    .onEnded({ value in
+                    }
+                    .onEnded { value in
                         self.isEditing = false
-                    })
+                    }
             )
         })
         .compositingGroup()

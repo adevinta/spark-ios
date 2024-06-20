@@ -16,9 +16,9 @@ extension Publisher where Failure == Never {
         action: @escaping (Self.Output) -> Void ) where S: Scheduler {
             self
                 .receive(on: scheduler)
-                .sink { value in
+                .sink(receiveValue: { value in
                     action(value)
-                }
+                })
                 .store(in: &subscriptions)
     }
 }

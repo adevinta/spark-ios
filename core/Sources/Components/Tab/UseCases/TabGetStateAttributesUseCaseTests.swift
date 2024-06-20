@@ -10,7 +10,7 @@
 import XCTest
 
 final class TabGetStateAttributesUseCaseTests: XCTestCase {
-    
+
     // MARK: - Private properties
     private var sut: TabGetStateAttributesUseCase!
     private var theme: ThemeGeneratedMock!
@@ -18,7 +18,7 @@ final class TabGetStateAttributesUseCaseTests: XCTestCase {
     private var getFontUseCase: TabGetFontUseCaseableGeneratedMock!
     private var spacings: TabItemSpacings!
     private var colors: TabItemColors!
-    
+
     // MARK: - Setup
     override func setUp() {
         super.setUp()
@@ -43,7 +43,7 @@ final class TabGetStateAttributesUseCaseTests: XCTestCase {
 
         self.getFontUseCase.executeWithTypographyAndSizeReturnValue = self.theme.typography.body2
     }
-    
+
     // MARK: - Tests
     func test_selected() {
         let mockedColor = ColorTokenGeneratedMock(uiColor: .black)
@@ -74,7 +74,7 @@ final class TabGetStateAttributesUseCaseTests: XCTestCase {
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
-    
+
     func test_enabled() {
         let stateAttribute = sut.execute(
             theme: self.theme,
@@ -98,7 +98,7 @@ final class TabGetStateAttributesUseCaseTests: XCTestCase {
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
-    
+
     func test_pressed() {
         let stateAttribute = sut.execute(
             theme: self.theme,
@@ -128,7 +128,7 @@ final class TabGetStateAttributesUseCaseTests: XCTestCase {
         )
         XCTAssertEqual(stateAttribute, expectedAttribute)
     }
-    
+
     func test_disabled() {
         let stateAttribute = sut.execute(
             theme: self.theme,
@@ -137,7 +137,6 @@ final class TabGetStateAttributesUseCaseTests: XCTestCase {
             tabSize: .xs,
             hasTitle: true
         )
-
 
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
@@ -163,7 +162,6 @@ final class TabGetStateAttributesUseCaseTests: XCTestCase {
             hasTitle: false
         )
 
-
         let expectedHeights = TabItemHeights(
             separatorLineHeight: self.theme.border.width.small,
             itemHeight: 40,
@@ -184,15 +182,15 @@ private extension TabState {
     static var enabled: TabState {
         return .init()
     }
-    
+
     static var selected: TabState {
         return .init(isSelected: true)
     }
-    
+
     static var pressed: TabState {
         return .init(isPressed: true)
     }
-    
+
     static var disabled: TabState {
         return .init(isEnabled: false)
     }

@@ -212,35 +212,35 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
         // Colors
         self.viewModel.$color
             .receive(on: RunLoop.main)
-            .sink { [weak self] color in
+            .sink(receiveValue: { [weak self] color in
                 self?.button?.setTitleColor(color, for: .normal)
                 self?.toggle?.onTintColor = color
-            }
+            })
             .store(in: &self.subscriptions)
 
         // Button Title
         self.viewModel.$buttonTitle
             .receive(on: RunLoop.main)
-            .sink { [weak self] buttonTitle in
+            .sink(receiveValue: { [weak self] buttonTitle in
                 self?.button?.setTitle(buttonTitle, for: .normal)
-            }
+            })
             .store(in: &self.subscriptions)
 
         // Toggle isOn
         self.viewModel.$isOn
             .receive(on: RunLoop.main)
-            .sink { [weak self] isOn in
+            .sink(receiveValue: { [weak self] isOn in
                 guard let isOn = isOn else { return }
                 self?.toggle?.isOn = isOn
-            }
+            })
             .store(in: &self.subscriptions)
 
         // Label Text
         self.viewModel.$labelText
             .receive(on: RunLoop.main)
-            .sink { [weak self] text in
+            .sink(receiveValue: { [weak self] text in
                 self?.valueLabel.text = text
-            }
+            })
             .store(in: &self.subscriptions)
     }
 }

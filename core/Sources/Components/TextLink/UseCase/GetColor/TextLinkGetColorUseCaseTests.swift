@@ -18,7 +18,7 @@ final class TextLinkGetColorUseCaseTests: XCTestCase {
         // GIVEN
         let useCase = TextLinkGetColorUseCase()
         let colorsMock = ColorsGeneratedMock.mocked()
-        
+
         let givenIntents = TextLinkIntent.allCases
 
         // WHEN

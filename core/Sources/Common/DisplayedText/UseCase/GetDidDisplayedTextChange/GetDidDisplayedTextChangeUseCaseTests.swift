@@ -147,7 +147,7 @@ final class GetDidDisplayedTextChangeUseCaseTests: XCTestCase {
         // THEN
         XCTAssertFalse(isChanged)
     }
-    
+
     // MARK: - Tests Execute with attributed text
 
     func test_execute_when_currentAttributedText_is_equal_to_newAttributedText_and_displayedTextType_is_none() {

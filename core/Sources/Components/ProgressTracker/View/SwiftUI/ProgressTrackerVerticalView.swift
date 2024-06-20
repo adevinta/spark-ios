@@ -36,7 +36,7 @@ struct ProgressTrackerVerticalView: View {
         return self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
     }
 
-    //MARK: - Initialization
+    // MARK: - Initialization
     init(
         intent: ProgressTrackerIntent,
         variant: ProgressTrackerVariant,
@@ -51,7 +51,7 @@ struct ProgressTrackerVerticalView: View {
         self._currentPageIndex = currentPageIndex
     }
 
-    //MARK: - Body
+    // MARK: - Body
     var body: some View {
         ZStack(alignment: .topLeading) {
             self.verticalLayout()
@@ -62,7 +62,7 @@ struct ProgressTrackerVerticalView: View {
         }
     }
 
-    //MARK: - Private functions
+    // MARK: - Private functions
     @ViewBuilder
     private func verticalLayout() -> some View {
         VStack(alignment: .leading, spacing: self.verticalStackSpacing) {
@@ -70,7 +70,7 @@ struct ProgressTrackerVerticalView: View {
                 self.pageContent(at: index)
                     .frame(maxHeight: .infinity)
                     .disabled(!self.viewModel.isEnabled(at: index))
-                    .accessibilityAttributes(viewModel: self.viewModel, index:  index)
+                    .accessibilityAttributes(viewModel: self.viewModel, index: index)
             }
         }
     }
@@ -100,7 +100,7 @@ struct ProgressTrackerVerticalView: View {
                         .disabled(!self.viewModel.isEnabled(at: key))
                         .frame(height: height)
                         .offset(
-                            x: rect.width/2,
+                            x: rect.width / 2,
                             y: previousRect.maxY + trackSpacing
                         )
                 } else {
@@ -164,7 +164,7 @@ private extension View {
 
 /// Alignment guide for the label and the indicator. The first line of the label is to be aligned centrally with the indicator.
 private extension VerticalAlignment {
-    private enum XAlignment : AlignmentID {
+    private enum XAlignment: AlignmentID {
         static func defaultValue(in dimension: ViewDimensions) -> CGFloat {
             return dimension[VerticalAlignment.top]
         }

@@ -106,7 +106,7 @@ class ButtonMainViewModel: ObservableObject {
         self.variant = variant
         self.size = size
         self.shape = shape
-        
+
         self.getBorderUseCase = getBorderUseCase
         self.getColorsUseCase = getColorsUseCase
         self.getCurrentColorsUseCase = getCurrentColorsUseCase

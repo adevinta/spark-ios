@@ -25,7 +25,7 @@ final class SliderCreateValuesFromStepsUseCase: SliderCreateValuesFromStepsUseCa
         guard from < to else { throw SliderCreateValuesFromStepsUseCasableError.invalidRange }
         guard steps > .zero,
               steps <= (to - from) else { throw SliderCreateValuesFromStepsUseCasableError.invalidStep }
-        
+
         var values = Array(stride(from: from, through: to, by: steps))
         // Last value should be added when `to` % `step` is > 0
         if values.contains(to) == false {

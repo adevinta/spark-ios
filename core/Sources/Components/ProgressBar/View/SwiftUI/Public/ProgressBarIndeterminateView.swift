@@ -106,6 +106,7 @@ public struct ProgressBarIndeterminateView: View {
             every: Constants.Animation.duration,
             on: .main,
             in: .common
-        ).autoconnect()
+        )
+        .autoconnect()
     }
 }

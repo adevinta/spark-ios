@@ -15,13 +15,12 @@ final class ChipCell: UITableViewCell, Configurable {
     typealias Component = ChipUIView
 
     lazy var component: ChipUIView = {
-        let view = ChipUIView(
+        return ChipUIView(
             theme: SparkTheme.shared,
             intent: .basic,
             variant: .outlined,
             label: "No Title"
         )
-        return view
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

@@ -275,7 +275,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             self.viewModel.$title,
             self.viewModel.$titleFont,
             self.viewModel.$titleColor
-        ).subscribe(in: &self.cancellables) { [weak self] title, font, color in
+        )
+        .subscribe(in: &self.cancellables) { [weak self] title, font, color in
             guard let self else { return }
             let labelHidden: Bool = (title?.string ?? "").isEmpty
             self.titleLabel.isHidden = labelHidden
@@ -288,7 +289,8 @@ public final class FormFieldUIView<Component: UIControl>: UIControl {
             self.viewModel.$description,
             self.viewModel.$descriptionFont,
             self.viewModel.$descriptionColor
-        ).subscribe(in: &self.cancellables) { [weak self] title, font, color in
+        )
+        .subscribe(in: &self.cancellables) { [weak self] title, font, color in
             guard let self else { return }
             let labelHidden: Bool = (title?.string ?? "").isEmpty
             self.descriptionLabel.isHidden = labelHidden

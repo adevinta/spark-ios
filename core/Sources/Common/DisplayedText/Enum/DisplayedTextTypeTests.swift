@@ -16,10 +16,10 @@ final class DisplayedTextTypeTests: XCTestCase {
     func test_containsText_when_type_is_none() {
         // GIVEN
         let type: DisplayedTextType = .none
-        
+
         // WHEN
         let containsText = type.containsText
-        
+
         // THEN
         XCTAssertFalse(containsText)
     }

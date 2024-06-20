@@ -46,7 +46,7 @@ final class StarComponentUIView: ComponentUIView {
             vertexSize: viewModel.vertexSize,
             cornerRadiusSize: viewModel.cornerRadiusSize)
 
-        let view = StarUIView(
+        return StarUIView(
             rating: viewModel.rating,
             fillMode: viewModel.fillMode,
             lineWidth: CGFloat(viewModel.lineWidth),
@@ -54,8 +54,6 @@ final class StarComponentUIView: ComponentUIView {
             fillColor: viewModel.fillColor.uiColor,
             configuration: configuration
         )
-
-        return view
     }
 
     private func setupSubscriptions() {

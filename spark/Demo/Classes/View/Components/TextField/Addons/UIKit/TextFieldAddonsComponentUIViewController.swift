@@ -49,11 +49,11 @@ final class TextFieldAddonsComponentUIViewController: UIViewController {
     private func setupSubscriptions() {
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { theme in
@@ -127,7 +127,6 @@ final class TextFieldAddonsComponentUIViewController: UIViewController {
 extension TextFieldAddonsComponentUIViewController {
     static func build() -> TextFieldAddonsComponentUIViewController {
         let viewModel = TextFieldAddonsComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = TextFieldAddonsComponentUIViewController(viewModel: viewModel)
-        return viewController
+        return TextFieldAddonsComponentUIViewController(viewModel: viewModel)
     }
 }

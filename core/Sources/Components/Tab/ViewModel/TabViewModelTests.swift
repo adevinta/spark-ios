@@ -36,13 +36,13 @@ final class TabViewModelTests: XCTestCase {
             backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
         )
 
-        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+        let content: [TabItemContent] = [.init(icon: nil, title: "Title")]
         self.useCase.executeWithThemeAndSizeAndIsEnabledReturnValue = expectedAttributes
 
         let sut = TabViewModel(
             theme: self.theme,
             apportionsSegmentWidthsByContent: false,
-            content: content, 
+            content: content,
             tabSize: .md,
             useCase: self.useCase
         )
@@ -70,14 +70,14 @@ final class TabViewModelTests: XCTestCase {
             lineColor: ColorTokenGeneratedMock(uiColor: .red),
             backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
         )
-        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+        let content: [TabItemContent] = [.init(icon: nil, title: "Title")]
 
         self.useCase.executeWithThemeAndSizeAndIsEnabledReturnValue = expectedAttributes
 
         let sut = TabViewModel(
             theme: self.theme,
             apportionsSegmentWidthsByContent: false,
-            content: content, 
+            content: content,
             tabSize: .md,
             useCase: self.useCase
         )
@@ -102,18 +102,18 @@ final class TabViewModelTests: XCTestCase {
         expect.expectedFulfillmentCount = 2
 
         let expectedAttributes = TabsAttributes(
-            lineHeight: 1, 
+            lineHeight: 1,
             itemHeight: 40.0,
             lineColor: ColorTokenGeneratedMock(uiColor: .red),
             backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
         )
-        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+        let content: [TabItemContent] = [.init(icon: nil, title: "Title")]
         self.useCase.executeWithThemeAndSizeAndIsEnabledReturnValue = expectedAttributes
 
         let sut = TabViewModel(
             theme: self.theme,
             apportionsSegmentWidthsByContent: false,
-            content: content, 
+            content: content,
             tabSize: .md,
             useCase: self.useCase
         )
@@ -133,10 +133,10 @@ final class TabViewModelTests: XCTestCase {
     }
 
     func test_enable() {
-        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+        let content: [TabItemContent] = [.init(icon: nil, title: "Title")]
 
         let expectedAttributes = TabsAttributes(
-            lineHeight: 1, 
+            lineHeight: 1,
             itemHeight: 40.0,
             lineColor: ColorTokenGeneratedMock(uiColor: .red),
             backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
@@ -147,7 +147,7 @@ final class TabViewModelTests: XCTestCase {
         let sut = TabViewModel(
             theme: self.theme,
             apportionsSegmentWidthsByContent: false,
-            content: content, 
+            content: content,
             tabSize: .md,
             useCase: self.useCase
         )
@@ -158,10 +158,10 @@ final class TabViewModelTests: XCTestCase {
     }
 
     func test_disable() {
-        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+        let content: [TabItemContent] = [.init(icon: nil, title: "Title")]
 
         let expectedAttributes = TabsAttributes(
-            lineHeight: 1, 
+            lineHeight: 1,
             itemHeight: 40.0,
             lineColor: ColorTokenGeneratedMock(uiColor: .red),
             backgroundColor: ColorTokenGeneratedMock(uiColor: .blue)
@@ -172,7 +172,7 @@ final class TabViewModelTests: XCTestCase {
         let sut = TabViewModel(
             theme: self.theme,
             apportionsSegmentWidthsByContent: false,
-            content: content, 
+            content: content,
             tabSize: .md,
             useCase: self.useCase
         )
@@ -183,7 +183,7 @@ final class TabViewModelTests: XCTestCase {
     }
 
     func test_disable_single_tab() {
-        let content: [TabItemContent]  = [.init(icon: nil, title: "Title")]
+        let content: [TabItemContent] = [.init(icon: nil, title: "Title")]
 
         let expectedAttributes = TabsAttributes(
             lineHeight: 1,

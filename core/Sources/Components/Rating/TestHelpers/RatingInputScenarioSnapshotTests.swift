@@ -13,7 +13,7 @@ import SwiftUI
 @testable import SparkCore
 
 enum RatingInputScenarioSnapshotTests: String, CaseIterable {
-    
+
     case test1
     case test2
     case test3
@@ -22,7 +22,6 @@ enum RatingInputScenarioSnapshotTests: String, CaseIterable {
 
     typealias Constants = ComponentSnapshotTestConstants
 
-    
     // MARK: - Configurations
     func configuration(isSwiftUIComponent: Bool) -> [RatingInputConfigurationSnapshotTests] {
         switch self {

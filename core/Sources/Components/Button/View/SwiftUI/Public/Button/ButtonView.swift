@@ -30,7 +30,7 @@ public struct ButtonView: View {
     ///   - size: The size of the button.
     ///   - shape: The shape of the button.
     ///   - alignment: The alignment of the button.
-    ///   - action: The action of the button.   
+    ///   - action: The action of the button.
     public init(
         theme: Theme,
         intent: ButtonIntent,

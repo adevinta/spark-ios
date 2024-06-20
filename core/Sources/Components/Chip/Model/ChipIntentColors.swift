@@ -12,7 +12,7 @@ import Foundation
 struct ChipIntentColors {
 
     // MARK: - Properties
-    
+
     let border: any ColorToken
     let text: any ColorToken
     let selectedText: any ColorToken

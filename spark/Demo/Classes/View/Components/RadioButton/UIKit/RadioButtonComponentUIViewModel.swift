@@ -152,7 +152,6 @@ final class RadioButtonComponentUIViewModel: ComponentUIViewModel {
         super.init(identifier: "RadioButton")
     }
 
-
     func attributedLabel(at index: Int) -> NSAttributedString {
         if self.showLongLabel {
             return self.longTitleAttributed(at: index)

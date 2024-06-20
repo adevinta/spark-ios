@@ -68,7 +68,7 @@ public struct CheckboxGroupItemDefault: CheckboxGroupItemProtocol, Hashable {
         self.isEnabled = isEnabled
         self.state = isEnabled ? .enabled : .disabled
     }
-    
+
     public static func == (lhs: CheckboxGroupItemDefault, rhs: CheckboxGroupItemDefault) -> Bool {
         lhs.id == rhs.id
     }

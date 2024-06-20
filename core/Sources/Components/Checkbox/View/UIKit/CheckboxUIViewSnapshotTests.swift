@@ -23,7 +23,7 @@ final class CheckboxUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
         for scenario in scenarios {
             let configurations = scenario.configuration()
-            
+
             for configuration in configurations {
 
                 let view = CheckboxUIView(

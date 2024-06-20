@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public enum BadgeAccessibilityIdentifier {
 
     // MARK: - Properties

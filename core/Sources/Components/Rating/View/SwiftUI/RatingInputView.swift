@@ -131,7 +131,7 @@ struct RatingInputInternalView: View {
     // MARK: - Private functions
     private func dragGesture(viewRect: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0.0)
-            .onChanged({ value in
+            .onChanged { value in
                 if let index = viewRect.pointIndex(of: value.location, horizontalSlices: self.viewModel.count.rawValue) {
                     self.displayRating = CGFloat(index + 1)
                     self.viewModel.updateState(isPressed: true)
@@ -139,8 +139,8 @@ struct RatingInputInternalView: View {
                     self.displayRating = self._rating.wrappedValue
                     self.viewModel.updateState(isPressed: false)
                 }
-            })
-            .onEnded({ value in
+            }
+            .onEnded { value in
                 if let index = viewRect.pointIndex(of: value.location, horizontalSlices: self.viewModel.count.rawValue) {
                     self.rating = CGFloat(index + 1)
                     self.displayRating = CGFloat(index + 1)
@@ -148,7 +148,7 @@ struct RatingInputInternalView: View {
                     self.displayRating = self._rating.wrappedValue
                 }
                 self.viewModel.updateState(isPressed: false)
-            })
+            }
     }
 }
 

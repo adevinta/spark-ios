@@ -60,11 +60,11 @@ final class ProgressBarComponentUIViewController: UIViewController {
 
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.subscriptions)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.subscriptions) { intents in
@@ -86,8 +86,7 @@ extension ProgressBarComponentUIViewController {
 
     static func build() -> ProgressBarComponentUIViewController {
         let viewModel = ProgressBarComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = ProgressBarComponentUIViewController(viewModel: viewModel)
-        return viewController
+        return ProgressBarComponentUIViewController(viewModel: viewModel)
     }
 }
 

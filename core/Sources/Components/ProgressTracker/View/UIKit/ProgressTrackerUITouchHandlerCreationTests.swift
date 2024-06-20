@@ -13,7 +13,7 @@ import XCTest
 final class ProgressTrackerUITouchHandlerCreationTests: XCTestCase {
     var controls: [UIControl]!
 
-    //MARK: - Setup
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
         self.controls = (0...4)
@@ -23,7 +23,7 @@ final class ProgressTrackerUITouchHandlerCreationTests: XCTestCase {
             .map(UIControl.init(frame:))
     }
 
-    //MARK: - Tests
+    // MARK: - Tests
     func test_setup_none() {
         let sut = ProgressTrackerInteractionState.none.touchHandler(currentPageIndex: 0, indicatorViews: self.controls)
 

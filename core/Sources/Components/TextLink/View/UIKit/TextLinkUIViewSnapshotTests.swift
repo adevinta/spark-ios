@@ -43,7 +43,7 @@ final class TextLinkUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
                 self.assertSnapshot(
                     matching: view,
                     modes: configuration.modes,
-                    sizes: configuration.sizes, 
+                    sizes: configuration.sizes,
                     testName: configuration.testName()
                 )
             }

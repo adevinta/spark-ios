@@ -77,9 +77,9 @@ final class SparkTabbarController: UITabBarController {
         self.themePublisher
             .$theme
             .eraseToAnyPublisher()
-            .sink { theme in
-            self.tabBar.tintColor = theme.colors.main.main.uiColor
-        }
-        .store(in: &cancellables)
+            .sink(receiveValue: { theme in
+                self.tabBar.tintColor = theme.colors.main.main.uiColor
+            })
+            .store(in: &cancellables)
     }
 }

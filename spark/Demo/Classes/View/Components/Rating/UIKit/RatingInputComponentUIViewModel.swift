@@ -54,7 +54,6 @@ final class RatingInputComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.disableChanged(_:))))
     }()
 
-
     var showThemeSheet: AnyPublisher<[ThemeCellModel], Never> {
         showThemeSheetSubject
             .eraseToAnyPublisher()

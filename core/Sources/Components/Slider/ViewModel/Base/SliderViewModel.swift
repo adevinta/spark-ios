@@ -45,15 +45,15 @@ class SliderViewModel<V>: ObservableObject where V: BinaryFloatingPoint, V.Strid
     }
     var isContinuous = true
 
-    //TODO: var numberOfSteps
+    // TODO: var numberOfSteps
 
-    var step: V.Stride? = nil {
+    var step: V.Stride? {
         didSet {
             guard self.step != oldValue else { return }
             self.setStepValues()
         }
     }
-    private(set) var stepValues: [V]? = nil
+    private(set) var stepValues: [V]?
 
     // MARK: - Published Colors
     @Published var trackColor: any ColorToken

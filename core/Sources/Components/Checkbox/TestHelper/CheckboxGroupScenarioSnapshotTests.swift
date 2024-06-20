@@ -181,7 +181,7 @@ enum CheckboxGroupScenarioSnapshotTests: String, CaseIterable {
             }
         }
     }
-    
+
     /// Test 5
     ///
     /// Description: To test a11y sizes

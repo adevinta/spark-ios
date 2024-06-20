@@ -53,11 +53,11 @@ final class TabComponentUIViewController: UIViewController {
 
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { themes in
@@ -80,8 +80,7 @@ extension TabComponentUIViewController {
 
     static func build() -> TabComponentUIViewController {
         let viewModel = TabComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = TabComponentUIViewController(viewModel: viewModel)
-        return viewController
+        return TabComponentUIViewController(viewModel: viewModel)
     }
 }
 

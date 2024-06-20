@@ -20,7 +20,7 @@ extension ColorsSupportGeneratedMock {
 
         mock.underlyingSupportVariant = ColorTokenGeneratedMock.random()
         mock.underlyingOnSupportVariant = ColorTokenGeneratedMock.random()
-        
+
         mock.underlyingSupportContainer = ColorTokenGeneratedMock.random()
         mock.underlyingOnSupportContainer = ColorTokenGeneratedMock.random()
 

@@ -15,9 +15,10 @@ final class CheckboxGroupUIViewActionTests: TestCase {
     // MARK: Private Properties
     private var theme: Theme!
     private var subscriptions: Set<AnyCancellable>!
+    // swiftlint:disable weak_delegate
     private var delegate: CheckboxGroupUIViewDelegateGeneratedMock!
     private var items: [any CheckboxGroupItemProtocol] = [
-        CheckboxGroupItemDefault(title: "Apple", id: "1", selectionState:  .selected, isEnabled: true),
+        CheckboxGroupItemDefault(title: "Apple", id: "1", selectionState: .selected, isEnabled: true),
         CheckboxGroupItemDefault(title: "Cake", id: "2", selectionState: .indeterminate, isEnabled: true),
         CheckboxGroupItemDefault(title: "Fish", id: "3", selectionState: .unselected, isEnabled: true),
         CheckboxGroupItemDefault(title: "Fruit", id: "4", selectionState: .unselected, isEnabled: true),
@@ -40,10 +41,11 @@ final class CheckboxGroupUIViewActionTests: TestCase {
 
         var selectionState: CheckboxSelectionState = .indeterminate
 
-        sut.publisher.sink { items in
+        sut.publisher.sink(receiveValue: { items in
             selectionState = items[0].selectionState
             exp.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         sut.checkboxes[0].sendActions(for: .touchUpInside)
 

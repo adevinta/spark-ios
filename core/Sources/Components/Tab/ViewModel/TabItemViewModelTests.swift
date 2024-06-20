@@ -11,20 +11,20 @@ import Combine
 import XCTest
 
 final class TabItemViewModelTests: XCTestCase {
-    
+
     // MARK: - Private properties
     private var theme: ThemeGeneratedMock!
     private var tabGetStateAttributesUseCase: TabGetStateAttributesUseCasableGeneratedMock!
     private var cancellables = Set<AnyCancellable>()
     private var spacings: TabItemSpacings!
     private var colors: TabItemColors!
-    
+
     // MARK: - Setup
     override func setUp() {
         super.setUp()
         self.theme = ThemeGeneratedMock.mocked()
         tabGetStateAttributesUseCase = TabGetStateAttributesUseCasableGeneratedMock()
-        
+
         self.spacings = TabItemSpacings(
             verticalEdge: self.theme.layout.spacing.medium,
             horizontalEdge: self.theme.layout.spacing.large,
@@ -48,7 +48,7 @@ final class TabItemViewModelTests: XCTestCase {
             font: theme.typography.body1
         )
     }
-    
+
     // MARK: - Tests
     func test_initialization() {
         // Given
@@ -63,7 +63,7 @@ final class TabItemViewModelTests: XCTestCase {
         XCTAssertFalse(sut.isPressed, "sut's isPressed parameter should be false")
         XCTAssertTrue(sut.isEnabled, "sut's isDisabled parameter should be false")
     }
-    
+
     func test_usecase_is_executed_on_initialization() {
         // Given
         _ = self.sut(intent: .support)
@@ -74,7 +74,7 @@ final class TabItemViewModelTests: XCTestCase {
         XCTAssertEqual(arguments?.intent, .support, "sut intent should be support")
         XCTAssertEqual(arguments?.state, TabState(), "sut state should be TabState that has default parameters")
     }
-    
+
     func test_published_attributes_on_initialization() {
         // Given
         let sut = self.sut()
@@ -90,30 +90,30 @@ final class TabItemViewModelTests: XCTestCase {
             heights: expectedHeights,
             font: self.theme.typography.body1
         )
-        
+
         let expectation = expectation(description: "wait for attributes")
         var givenAttributes: TabStateAttributes?
 
         // When
-        sut.$tabStateAttributes.sink { attributes in
+        sut.$tabStateAttributes.sink(receiveValue: { attributes in
             givenAttributes = attributes
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // Then
         wait(for: [expectation], timeout: 0.1)
         XCTAssertEqual(givenAttributes, expectedAttributes)
     }
-    
+
     func test_published_attributes_on_change() {
         // Given
         let sut = self.sut()
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
-        sut.$tabStateAttributes.sink { _ in
+        sut.$tabStateAttributes.sink(receiveValue: { _ in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -122,14 +122,14 @@ final class TabItemViewModelTests: XCTestCase {
         // Then
         wait(for: [expectation], timeout: 0.1)
     }
-    
+
     func test_attributes_not_published() {
         // Given
         let sut = self.sut()
         let expectation = expectation(description: "wait for attributes")
-        sut.$tabStateAttributes.sink { _ in
+        sut.$tabStateAttributes.sink(receiveValue: { _ in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -138,15 +138,15 @@ final class TabItemViewModelTests: XCTestCase {
         // Then
         wait(for: [expectation], timeout: 0.1)
     }
-    
+
     func test_published_is_pressed_on_change() {
         // Given
         let sut = self.sut()
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
-        sut.$tabStateAttributes.sink { _ in
+        sut.$tabStateAttributes.sink(receiveValue: { _ in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -155,20 +155,20 @@ final class TabItemViewModelTests: XCTestCase {
         // Then
         wait(for: [expectation], timeout: 0.1)
     }
-    
+
     func test_published_is_disable_on_change() {
         // Given
         let sut = self.sut()
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
         var counter = 0
-        sut.$tabStateAttributes.sink { _ in
+        sut.$tabStateAttributes.sink(receiveValue: { _ in
             counter += 1
             let arguments = self.tabGetStateAttributesUseCase.executeWithThemeAndIntentAndStateAndTabSizeAndHasTitleReceivedArguments
 
             XCTAssertEqual(arguments?.state.isEnabled, counter == 1)
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -185,9 +185,9 @@ final class TabItemViewModelTests: XCTestCase {
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$tabStateAttributes.sink { attributes in
+        sut.$tabStateAttributes.sink(receiveValue: { attributes in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -205,9 +205,9 @@ final class TabItemViewModelTests: XCTestCase {
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 1
 
-        sut.$tabStateAttributes.sink { attributes in
+        sut.$tabStateAttributes.sink(receiveValue: { attributes in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -225,9 +225,9 @@ final class TabItemViewModelTests: XCTestCase {
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$tabStateAttributes.sink { attributes in
+        sut.$tabStateAttributes.sink(receiveValue: { attributes in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -237,7 +237,6 @@ final class TabItemViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 0.1)
     }
 
-
     func test_when_intent_changes_then_attributes_published() {
         // Given
         let sut = self.sut(intent: .main, title: "Label")
@@ -245,9 +244,9 @@ final class TabItemViewModelTests: XCTestCase {
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$tabStateAttributes.sink { attributes in
+        sut.$tabStateAttributes.sink(receiveValue: { attributes in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -264,9 +263,9 @@ final class TabItemViewModelTests: XCTestCase {
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 1
 
-        sut.$tabStateAttributes.sink { attributes in
+        sut.$tabStateAttributes.sink(receiveValue: { attributes in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -283,9 +282,9 @@ final class TabItemViewModelTests: XCTestCase {
         let expectation = expectation(description: "wait for attributes")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$tabStateAttributes.sink { attributes in
+        sut.$tabStateAttributes.sink(receiveValue: { attributes in
             expectation.fulfill()
-        }
+        })
         .store(in: &self.cancellables)
 
         // When
@@ -299,7 +298,7 @@ final class TabItemViewModelTests: XCTestCase {
 
 // MARK: - Helper
 private extension TabItemViewModelTests {
-    
+
     func sut(
         intent: TabIntent = .main,
         size: TabSize = .md,

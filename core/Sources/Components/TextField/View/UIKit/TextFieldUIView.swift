@@ -113,7 +113,8 @@ public final class TextFieldUIView: UITextField {
     private func subscribeToViewModel() {
         self.viewModel.$textColor.removeDuplicates(by: { lhs, rhs in
             lhs.equals(rhs)
-        }).subscribe(in: &self.cancellables) { [weak self] textColor in
+        })
+        .subscribe(in: &self.cancellables) { [weak self] textColor in
             guard let self else { return }
             self.textColor = textColor.uiColor
             self.tintColor = textColor.uiColor
@@ -121,21 +122,24 @@ public final class TextFieldUIView: UITextField {
 
         self.viewModel.$backgroundColor.removeDuplicates(by: { lhs, rhs in
             lhs.equals(rhs)
-        }).subscribe(in: &self.cancellables) { [weak self] backgroundColor in
+        })
+        .subscribe(in: &self.cancellables) { [weak self] backgroundColor in
             guard let self else { return }
             self.backgroundColor = backgroundColor.uiColor
         }
 
         self.viewModel.$borderColor.removeDuplicates(by: { lhs, rhs in
             lhs.equals(rhs)
-        }).subscribe(in: &self.cancellables) { [weak self] borderColor in
+        })
+        .subscribe(in: &self.cancellables) { [weak self] borderColor in
             guard let self else { return }
             self.setBorderColor(from: borderColor)
         }
 
         self.viewModel.$placeholderColor.removeDuplicates(by: { lhs, rhs in
             lhs.equals(rhs)
-        }).subscribe(in: &self.cancellables) { [weak self] placeholderColor in
+        })
+        .subscribe(in: &self.cancellables) { [weak self] placeholderColor in
             guard let self else { return }
             self.setPlaceholder(self.placeholder, foregroundColor: placeholderColor, font: self.viewModel.font)
         }

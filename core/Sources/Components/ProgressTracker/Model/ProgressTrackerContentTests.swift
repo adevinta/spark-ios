@@ -10,6 +10,7 @@ import XCTest
 
 @testable import SparkCore
 
+// swiftlint:disable force_unwrapping
 final class ProgressTrackerContentTests: XCTestCase {
 
     // MARK: - Tests
@@ -19,8 +20,7 @@ final class ProgressTrackerContentTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(sut.pageContent(atIndex: 0).label, "1", "Expected label to be 1")
-        XCTAssertEqual(sut.pageContent(atIndex: 1).label
-            , "2", "Expected label to be 1")
+        XCTAssertEqual(sut.pageContent(atIndex: 1).label, "2", "Expected label to be 1")
     }
 
     func test_uses_no_label()  {

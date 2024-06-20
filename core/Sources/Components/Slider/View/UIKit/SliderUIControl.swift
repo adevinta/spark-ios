@@ -141,7 +141,7 @@ public final class SliderUIControl<V>: UIControl where V: BinaryFloatingPoint, V
 
     public override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         self.viewModel.resetBoundsIfNeeded()
 
         self.indicatorView.center.y = self.frame.height / 2

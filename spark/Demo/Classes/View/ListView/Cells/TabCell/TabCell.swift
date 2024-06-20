@@ -15,13 +15,12 @@ final class TabCell: UITableViewCell, Configurable {
     typealias Component = TabUIView
 
     lazy var component: TabUIView = {
-        let view = TabUIView(
+        return TabUIView(
             theme: SparkTheme.shared,
             intent: .main,
             tabSize: .md,
             content: []
         )
-        return view
     }()
 
     var badge: BadgeUIView {

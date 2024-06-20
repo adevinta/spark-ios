@@ -11,6 +11,7 @@ import Combine
 import SwiftUI
 import XCTest
 
+// swiftlint:disable force_unwrapping
 final class ScaledUIMetricTests: XCTestCase {
 
     // MARK: - Properties

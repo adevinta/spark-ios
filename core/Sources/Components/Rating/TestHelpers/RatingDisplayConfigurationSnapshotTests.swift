@@ -24,7 +24,7 @@ struct RatingDisplayConfigurationSnapshotTests {
 
     let modes: [ComponentSnapshotTestMode]
     let sizes: [UIContentSizeCategory]
-    
+
     // MARK: - Getter
 
     func testName() -> String {

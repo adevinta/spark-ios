@@ -187,7 +187,7 @@ final class TabItemUIViewTests: TestCase {
             touchDownExpectation.fulfill()
         }
         let actionExpectation = expectation(description: "Class action sent")
-        
+
         self.sut.action = UIAction{ _ in
             actionExpectation.fulfill()
         }

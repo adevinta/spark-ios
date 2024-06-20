@@ -24,7 +24,6 @@ final class ProgressTrackerComponentUIViewModel: ComponentUIViewModel {
         case none
     }
 
-
     // MARK: - Items Properties
     lazy var themeConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
