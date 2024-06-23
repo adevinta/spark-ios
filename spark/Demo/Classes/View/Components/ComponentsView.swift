@@ -108,6 +108,10 @@ struct ComponentsView: View {
                     self.navigateToView(TagComponentView())
                 }
 
+                Button("TextEditor") {
+                    self.navigateToView(TextEditorComponentView())
+                }
+
                 Button("TextField") {
                     self.navigateToView(TextFieldComponentView())
                 }
