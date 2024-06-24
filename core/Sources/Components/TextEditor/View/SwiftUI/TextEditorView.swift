@@ -81,7 +81,6 @@ public struct TextEditorView: View {
         .accessibilityIdentifier(TextEditorAccessibilityIdentifier.view)
         .accessibilityLabel(self.placeholder ?? "")
         .accessibilityValue(self.text)
-        .accessibilityHidden(false)
     }
 
     @ViewBuilder
