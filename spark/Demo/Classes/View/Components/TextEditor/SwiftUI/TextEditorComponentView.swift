@@ -61,7 +61,6 @@ struct TextEditorComponentView: View {
                     placeholder: self.$placeholder
                 )
                 .isReadOnly(self.isReadOnlyState == .selected)
-                .frame(width: 300, height: 100)
                 .onChange(of: self.textType) { type in
                     self.text = self.contentType(type)
                 }

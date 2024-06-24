@@ -97,7 +97,7 @@ public struct TextEditorView: View {
         ScrollView {
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
-                    Text(self.placeholder ?? "")
+                    Text((!(self.placeholder ?? "").isEmpty && self.text.isEmpty && !self.viewModel.isFocused) ? self.placeholder! : self.$text.wrappedValue)
                         .font(self.viewModel.font.font)
                         .foregroundStyle(self.viewModel.placeholderColor.color)
                         .frame(maxWidth: .infinity, alignment: .leading)
