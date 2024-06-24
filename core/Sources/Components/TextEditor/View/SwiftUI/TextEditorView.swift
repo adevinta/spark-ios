@@ -22,6 +22,10 @@ public struct TextEditorView: View {
     @Binding private var placeholder: String?
     @FocusState private var isFocused: Bool
 
+    private var isPlaceholderHidden: Bool {
+        return !(self.placeholder ?? "").isEmpty && self.text.isEmpty && !self.viewModel.isFocused
+    }
+
     public init(
         theme: Theme,
         intent: TextEditorIntent = .neutral,
@@ -89,7 +93,7 @@ public struct TextEditorView: View {
                     trailing: self.viewModel.horizontalSpacing
                 )
             )
-            .opacity((!(self.placeholder ?? "").isEmpty && self.text.isEmpty && !self.viewModel.isFocused) ? 0 : 1)
+            .opacity(self.isPlaceholderHidden ? 0 : 1)
     }
 
     @ViewBuilder
@@ -97,11 +101,11 @@ public struct TextEditorView: View {
         ScrollView {
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
-                    Text((!(self.placeholder ?? "").isEmpty && self.text.isEmpty && !self.viewModel.isFocused) ? self.placeholder! : self.$text.wrappedValue)
+                    Text(self.isPlaceholderHidden ? self.placeholder! : self.$text.wrappedValue)
                         .font(self.viewModel.font.font)
                         .foregroundStyle(self.viewModel.placeholderColor.color)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .opacity((!(self.placeholder ?? "").isEmpty && self.text.isEmpty && !self.viewModel.isFocused) ? 1 : 0)
+                        .opacity(self.isPlaceholderHidden ? 1 : 0)
                     Spacer(minLength: 0)
                 }
                 Spacer(minLength: 0)

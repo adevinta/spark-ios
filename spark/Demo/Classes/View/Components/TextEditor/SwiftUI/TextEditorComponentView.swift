@@ -20,6 +20,7 @@ struct TextEditorComponentView: View {
     @State private var placeholderType: TextEditorContent = .short
     @State private var isEnabledState: CheckboxSelectionState = .selected
     @State private var isReadOnlyState: CheckboxSelectionState = .unselected
+    @State private var isStaticSize: CheckboxSelectionState = .unselected
     @FocusState private var isFocused: Bool
 
     var body: some View {
@@ -52,9 +53,11 @@ struct TextEditorComponentView: View {
                 Checkbox(title: "IsEnabled", selectionState: $isEnabledState)
 
                 Checkbox(title: "IsReadOnly", selectionState: $isReadOnlyState)
+
+                Checkbox(title: "IsStaticSize", selectionState: $isStaticSize)
             },
             integration: {
-                TextEditorView(
+                let textEditor = TextEditorView(
                     theme: self.theme,
                     intent: self.intent,
                     text: self.$text,
@@ -69,6 +72,13 @@ struct TextEditorComponentView: View {
                 }
                 .focused(self.$isFocused)
                 .disabled(self.isEnabledState == .unselected)
+
+                if self.isStaticSize == .selected {
+                    textEditor
+                        .frame(width: 300, height: 100)
+                } else {
+                    textEditor
+                }
             }
         ).onTapGesture {
             self.isFocused = false
