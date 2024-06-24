@@ -12,8 +12,8 @@ public struct TextEditorView: View {
 
     @ScaledMetric private var minHeight: CGFloat = 44
     @ScaledMetric private var minWidth: CGFloat = 280
-    @ScaledMetric private var defaultTexEditorVerticalPadding: CGFloat = 9.5
-    @ScaledMetric private var defaultTexEditorHorizontalPadding: CGFloat = 5.5
+    @ScaledMetric private var defaultTexEditorVerticalPadding: CGFloat = 9
+    @ScaledMetric private var defaultTexEditorHorizontalPadding: CGFloat = 5
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
 
     @ObservedObject private var viewModel: TextEditorViewModel
