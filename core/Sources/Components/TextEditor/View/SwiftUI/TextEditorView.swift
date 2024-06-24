@@ -77,7 +77,11 @@ public struct TextEditorView: View {
         .onTapGesture {
             self.isFocused = true
         }
-        .accessibilityIdentifier(TextFieldAccessibilityIdentifier.view)
+        .accessibilityElement()
+        .accessibilityIdentifier(TextEditorAccessibilityIdentifier.view)
+        .accessibilityLabel(self.placeholder ?? "")
+        .accessibilityValue(self.text)
+        .accessibilityHidden(false)
     }
 
     @ViewBuilder
@@ -94,6 +98,8 @@ public struct TextEditorView: View {
                 )
             )
             .opacity(self.isPlaceholderHidden ? 0 : 1)
+            .accessibilityHidden(true)
+
     }
 
     @ViewBuilder
@@ -106,6 +112,7 @@ public struct TextEditorView: View {
                         .foregroundStyle(self.viewModel.placeholderColor.color)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .opacity(self.isPlaceholderHidden ? 1 : 0)
+                        .accessibilityHidden(true)
                     Spacer(minLength: 0)
                 }
                 Spacer(minLength: 0)
