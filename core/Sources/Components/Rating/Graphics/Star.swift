@@ -41,15 +41,15 @@ final class Star: CGPathShape {
         self.insets = UIEdgeInsets(top: rect.minY, left: rect.minX, bottom: rect.maxY, right: rect.maxX)
 
         // the size of each angle step
-        let angleStep = ((.pi * 2)  / CGFloat(self.numberOfVertices))
+        let angleStep = ((.pi * 2) / CGFloat(self.numberOfVertices))
 
-        let initialOffset: CGFloat = -.pi/2
+        let initialOffset: CGFloat = -.pi / 2
 
         // the start angle, the first star vertex is to start at the top, therefore the -90° rotation.
         var angle: CGFloat = angleStep + initialOffset
 
         var centerPoint = CGPoint(x: rect.midX, y: rect.midY)
-        let fullRadius = (min(rect.width, rect.height)/2)
+        let fullRadius = (min(rect.width, rect.height) / 2)
         let cornerRadius = self.cornerRadiusSize * fullRadius
         let radius = fullRadius - cornerRadius
 
@@ -81,13 +81,13 @@ final class Star: CGPathShape {
         // draw the star
         for i in 1...self.numberOfVertices {
             let outerPoint1 = CGPoint(
-                x: centerPoint.x + (radius + cornerRadius) * cos(angle - arcAngle/2),
-                y: centerPoint.y + (radius + cornerRadius) * sin(angle - arcAngle/2)
+                x: centerPoint.x + (radius + cornerRadius) * cos(angle - arcAngle / 2),
+                y: centerPoint.y + (radius + cornerRadius) * sin(angle - arcAngle / 2)
             )
 
             let outerPoint2 = CGPoint(
-                x: centerPoint.x + (radius + cornerRadius) * cos(angle + arcAngle/2),
-                y: centerPoint.y + (radius + cornerRadius) * sin(angle + arcAngle/2)
+                x: centerPoint.x + (radius + cornerRadius) * cos(angle + arcAngle / 2),
+                y: centerPoint.y + (radius + cornerRadius) * sin(angle + arcAngle / 2)
             )
 
             let tangentPoint = CGPoint(
@@ -101,8 +101,8 @@ final class Star: CGPathShape {
             )
 
             let innerPoint = CGPoint(
-                x: centerPoint.x + (radius * self.vertexSize) * cos(angle + angleStep/2),
-                y: centerPoint.y + (radius * self.vertexSize) * sin(angle + angleStep/2)
+                x: centerPoint.x + (radius * self.vertexSize) * cos(angle + angleStep / 2),
+                y: centerPoint.y + (radius * self.vertexSize) * sin(angle + angleStep / 2)
             )
 
             if i == 1 {

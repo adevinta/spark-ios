@@ -15,7 +15,7 @@ final class BadgeCell: UITableViewCell, Configurable {
     typealias Component = BadgeUIView
 
     lazy var component: BadgeUIView = {
-        let view = BadgeUIView(
+        return BadgeUIView(
             theme: SparkThemePublisher.shared.theme,
             intent: .main,
             size: .medium,
@@ -23,7 +23,6 @@ final class BadgeCell: UITableViewCell, Configurable {
             format: .default,
             isBorderVisible: false
         )
-        return view
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

@@ -30,11 +30,11 @@ struct TabItemColors: Equatable, Updateable {
         self.background = background
         self.opacity = opacity
     }
-    
+
     static func == (lhs: TabItemColors, rhs: TabItemColors) -> Bool {
         return colorsEqual(lhs.label, rhs.label) && colorsEqual(lhs.line, rhs.line) && colorsEqual(lhs.background, rhs.background) && lhs.opacity == rhs.opacity
     }
-    
+
     private static func colorsEqual(_ lhs: any ColorToken, _ rhs: any ColorToken) -> Bool {
         return lhs.color == rhs.color && lhs.uiColor == rhs.uiColor
     }

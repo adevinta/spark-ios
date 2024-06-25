@@ -223,7 +223,8 @@ final class ProgressBarMainViewModelTests: XCTestCase {
         // **
 
         // Use Cases
-        ProgressBarMainGetColorsUseCaseableMockTest.XCTAssert( stub.getColorsUseCaseMock,
+        ProgressBarMainGetColorsUseCaseableMockTest.XCTAssert(
+            stub.getColorsUseCaseMock,
             expectedNumberOfCalls: 1,
             givenIntent: intentMock,
             givenColors: newTheme.colors as? ColorsGeneratedMock,

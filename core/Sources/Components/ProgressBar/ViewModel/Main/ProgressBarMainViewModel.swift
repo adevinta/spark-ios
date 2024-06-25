@@ -13,7 +13,7 @@ import SwiftUI
 class ProgressBarMainViewModel<
     GetColorsUseCase: ProgressBarMainGetColorsUseCaseable
 >: ObservableObject {
-    
+
     // MARK: - Properties
 
     private let frameworkType: FrameworkType

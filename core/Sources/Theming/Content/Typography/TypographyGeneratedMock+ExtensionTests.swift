@@ -39,7 +39,7 @@ extension TypographyGeneratedMock {
         typography.subhead = TypographyFontTokenGeneratedMock.mocked(.subheadline)
 
         typography.callout = TypographyFontTokenGeneratedMock.mocked(.callout)
-        
+
         return typography
     }
 }

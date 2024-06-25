@@ -41,7 +41,6 @@ final class TabsGetAttributesUseCaseTests: XCTestCase {
 
         let attributes = self.sut.execute(theme: self.theme, size: .md, isEnabled: true)
 
-
         XCTAssertEqual(attributes, expectedAttributes)
     }
 

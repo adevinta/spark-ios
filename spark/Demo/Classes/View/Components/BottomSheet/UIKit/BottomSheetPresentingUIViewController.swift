@@ -11,7 +11,6 @@ import SparkCore
 
 final class BottomSheetPresentingUIViewController: UIViewController {
 
-
     // MARK: - Computed Properties
 
     lazy var rootView = BottomSheetPresentingUIView()

@@ -36,7 +36,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.main.main.opacity(opacity),
             selectedBackground: colors.main.mainContainer
         )
-            
+
         case .support: return .init(
             border: colors.support.support,
             text: colors.support.support,
@@ -45,7 +45,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.support.support.opacity(opacity),
             selectedBackground: colors.support.supportContainer
         )
-            
+
         case .surface: return .init(
             border: colors.base.surface,
             text: colors.base.surface,
@@ -54,7 +54,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.base.surface.opacity(opacity),
             selectedBackground: colors.base.surface
         )
-            
+
         case .neutral: return .init(
             border: colors.feedback.neutral,
             text: colors.feedback.neutral,
@@ -63,7 +63,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.feedback.neutral.opacity(opacity),
             selectedBackground: colors.feedback.neutralContainer
         )
-            
+
         case .info: return .init(
             border: colors.feedback.info,
             text: colors.feedback.info,
@@ -72,7 +72,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.feedback.info.opacity(opacity),
             selectedBackground: colors.feedback.infoContainer
         )
-            
+
         case .success: return .init(
             border: colors.feedback.success,
             text: colors.feedback.success,
@@ -81,7 +81,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.feedback.success.opacity(opacity),
             selectedBackground: colors.feedback.successContainer
         )
-            
+
         case .alert: return .init(
             border: colors.feedback.alert,
             text: colors.feedback.onAlertContainer,
@@ -90,7 +90,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.feedback.alert.opacity(opacity),
             selectedBackground: colors.feedback.alertContainer
         )
-            
+
         case .danger: return .init(
             border: colors.feedback.error,
             text: colors.feedback.error,
@@ -99,7 +99,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.feedback.error.opacity(opacity),
             selectedBackground: colors.feedback.errorContainer
         )
-            
+
         case .accent: return .init(
             border: colors.accent.accent,
             text: colors.accent.accent,
@@ -108,7 +108,7 @@ struct ChipGetOutlinedIntentColorsUseCase: ChipGetIntentColorsUseCasable {
             pressedBackground: colors.accent.accent.opacity(opacity),
             selectedBackground: colors.accent.accentContainer
         )
-            
+
         case .basic: return .init(
             border: colors.basic.basic,
             text: colors.basic.basic,

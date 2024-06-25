@@ -11,5 +11,5 @@ import Foundation
 /// Constant definition for the extra padding used in a radio button, to ensure the touch area is large enough.
 enum RadioButtonConstants {
 
-    public static let radioButtonPadding: CGFloat = 8
+    static let radioButtonPadding: CGFloat = 8
 }

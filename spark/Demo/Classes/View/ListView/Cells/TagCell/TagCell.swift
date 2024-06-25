@@ -15,13 +15,12 @@ final class TagCell: UITableViewCell, Configurable {
     typealias Component = TagUIView
 
     lazy var component: TagUIView = {
-        let view = TagUIView(
+        return TagUIView(
             theme: SparkTheme.shared,
             intent: .main,
             variant: .filled,
             text: "Tag"
         )
-        return view
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

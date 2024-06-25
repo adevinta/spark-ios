@@ -23,7 +23,7 @@ struct IconGetColorUseCase: IconGetColorUseCaseable {
             return colors.accent.accent
         case .basic:
             return colors.basic.basic
-        case .alert :
+        case .alert:
             return colors.feedback.alert
         case .error:
             return colors.feedback.error

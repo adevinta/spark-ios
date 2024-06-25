@@ -75,22 +75,22 @@ final class RadioButtonToggleUIView: UIView {
         let centerPoint = CGPoint(x: center, y: center)
 
         if self.isPressed {
-            let haloPath = UIBezierPath.circle(arcCenter: centerPoint, radius: (rect.width/2 - haloWidth/2))
+            let haloPath = UIBezierPath.circle(arcCenter: centerPoint, radius: (rect.width / 2 - haloWidth / 2))
             haloPath.lineWidth = haloWidth
             ctx.setStrokeColor(haloColor.cgColor)
             haloPath.stroke()
         }
-        
-        let innerBorderWidth = (rect.width - haloWidth*2) / 10
-        let toggleWidth = rect.width - (haloWidth*2)
-        let togglePath = UIBezierPath.circle(arcCenter: centerPoint, radius: (toggleWidth/2 - innerBorderWidth/2))
+
+        let innerBorderWidth = (rect.width - haloWidth * 2) / 10
+        let toggleWidth = rect.width - (haloWidth * 2)
+        let togglePath = UIBezierPath.circle(arcCenter: centerPoint, radius: (toggleWidth / 2 - innerBorderWidth / 2))
         togglePath.lineWidth = innerBorderWidth
         ctx.setStrokeColor(buttonColor.cgColor)
         togglePath.stroke()
-        
+
         if fillColor != .clear {
-            let fillSize = (rect.width - haloWidth*2) / 2
-            let fillPath = UIBezierPath.circle(arcCenter: centerPoint, radius: fillSize/2)
+            let fillSize = (rect.width - haloWidth * 2) / 2
+            let fillPath = UIBezierPath.circle(arcCenter: centerPoint, radius: fillSize / 2)
 
             ctx.setFillColor(fillColor.cgColor)
             fillPath.fill()

@@ -34,7 +34,7 @@ public struct TextLinkView: View {
     ///   - textHighlightRange: The optional range to specify the highlighted part of the text link.
     ///   - intent: The intent of the text link.
     ///   - typography: The typography of the text link.
-    ///   - variant: The variant of the text link.   
+    ///   - variant: The variant of the text link.
     ///   - image: The optional image of the text link.
     ///   - alignment: The alignment image of the text link.
     ///   - action: The action of the text link when the user tap on the component.

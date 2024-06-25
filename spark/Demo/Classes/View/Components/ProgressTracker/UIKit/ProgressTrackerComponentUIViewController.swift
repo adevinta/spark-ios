@@ -6,7 +6,6 @@
 //  Copyright © 2024 Adevinta. All rights reserved.
 //
 
-
 import Combine
 import Spark
 import SwiftUI
@@ -54,11 +53,11 @@ final class ProgressTrackerComponentUIViewController: UIViewController {
 
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
@@ -96,8 +95,7 @@ extension ProgressTrackerComponentUIViewController {
 
     static func build() -> ProgressTrackerComponentUIViewController {
         let viewModel = ProgressTrackerComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = ProgressTrackerComponentUIViewController(viewModel: viewModel)
-        return viewController
+        return ProgressTrackerComponentUIViewController(viewModel: viewModel)
     }
 }
 

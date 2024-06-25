@@ -106,12 +106,12 @@ public final class RatingInputUIView: UIControl {
         self.addPanGestureToPreventCancelTracking()
         self.setupAccessibility()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    //MARK: - Handle touch events
+
+    // MARK: - Handle touch events
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         return self.handleTouch(touch, with: event)
     }

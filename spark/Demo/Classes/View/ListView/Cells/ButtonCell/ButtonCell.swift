@@ -15,7 +15,7 @@ final class ButtonCell: UITableViewCell, Configurable {
     typealias Component = ButtonUIView
 
     lazy var component: ButtonUIView = {
-        let view = ButtonUIView(
+        return ButtonUIView(
             theme: SparkTheme.shared,
             intent: .main,
             variant: .filled,
@@ -23,7 +23,6 @@ final class ButtonCell: UITableViewCell, Configurable {
             shape: .rounded,
             alignment: .leadingImage
         )
-        return view
     }()
 
     var attributeString: NSAttributedString {

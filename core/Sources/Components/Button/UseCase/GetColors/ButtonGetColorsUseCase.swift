@@ -62,7 +62,7 @@ struct ButtonGetColorsUseCase: ButtonGetColorsUseCaseable {
         case .tinted:
             useCase = self.getTintedUseCase
         }
-        
+
         return useCase.execute(
             intent: intent,
             colors: colors,

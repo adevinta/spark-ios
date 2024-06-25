@@ -9,6 +9,7 @@
 import Foundation
 @testable import SparkCore
 
+// swiftlint:disable force_cast
 final class SliderGetStepValuesInBoundsUseCasableMock<U>: SparkCore.SliderGetStepValuesInBoundsUseCasable where U: BinaryFloatingPoint, U.Stride: BinaryFloatingPoint {
 
     // MARK: - Initialization
@@ -16,7 +17,6 @@ final class SliderGetStepValuesInBoundsUseCasableMock<U>: SparkCore.SliderGetSte
     init() {}
 
     // MARK: - execute<V>
-
 
     var executeWithBoundsAndStepCallsCount = 0
     var executeWithBoundsAndStepCalled: Bool {
@@ -29,13 +29,13 @@ final class SliderGetStepValuesInBoundsUseCasableMock<U>: SparkCore.SliderGetSte
 
     func execute<V>(bounds: ClosedRange<V>, step: V.Stride) -> [V] where V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint {
         guard let castedBounds = bounds as? ClosedRange<U>,
-              let castedStep = step as? U.Stride else { 
+              let castedStep = step as? U.Stride else {
             fatalError("\(U.self) is not equal to \(V.self)")
         }
         executeWithBoundsAndStepCallsCount += 1
         executeWithBoundsAndStepReceivedArguments = (bounds: castedBounds, step: castedStep)
         executeWithBoundsAndStepReceivedInvocations.append((bounds: castedBounds, step: castedStep))
-        return (_executeWithBoundsAndStep.map({  $0(castedBounds, castedStep) }) ?? executeWithBoundsAndStepReturnValue) as! [V]
+        return (_executeWithBoundsAndStep.map{ $0(castedBounds, castedStep) } ?? executeWithBoundsAndStepReturnValue) as! [V]
     }
 
     // MARK: Reset

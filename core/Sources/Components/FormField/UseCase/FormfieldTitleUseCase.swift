@@ -21,7 +21,7 @@ struct FormFieldTitleUseCase: FormFieldTitleUseCaseable {
             string: " *",
             attributes: [
                 NSAttributedString.Key.foregroundColor: colors.asterisk.uiColor,
-                NSAttributedString.Key.font : typography.caption.uiFont
+                NSAttributedString.Key.font: typography.caption.uiFont
             ]
         )
 

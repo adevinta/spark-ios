@@ -24,7 +24,7 @@ struct ChipStateColors {
         self.foreground = foreground
         self.opacity = opacity
     }
-    
+
 }
 
 extension ChipStateColors: Equatable {

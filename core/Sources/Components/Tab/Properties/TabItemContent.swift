@@ -15,7 +15,7 @@ public protocol TitleContaining {
 /// The content of a tab item.
 public struct TabItemContent: TitleContaining, Equatable, Updateable {
     public static func == (lhs: TabItemContent, rhs: TabItemContent) -> Bool {
-        return lhs.id == rhs.id 
+        return lhs.id == rhs.id
     }
 
     /// A unique id of each tab item

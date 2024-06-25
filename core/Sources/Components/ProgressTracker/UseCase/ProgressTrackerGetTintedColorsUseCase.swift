@@ -117,7 +117,7 @@ struct ProgressTrackerGetTintedColorsUseCase: ProgressTrackerGetVariantColorsUse
 
     private func enabledColors(colors: Colors, intent: ProgressTrackerIntent) -> ProgressTrackerTintedColors {
         switch intent {
-        case .accent: 
+        case .accent:
             return .init(
                 background: colors.accent.accentContainer,
                 content: colors.accent.onAccentContainer)

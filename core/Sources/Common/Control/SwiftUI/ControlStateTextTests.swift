@@ -63,7 +63,7 @@ final class ControlStateTextTests: XCTestCase {
         )
 
         // WHEN
-        
+
         // Check when a text is nil for an another state,
         // The text text for the normal state should be returned
 

@@ -103,7 +103,7 @@ class ProgressTrackerUITouchHandler: ProgressTrackerUITouchHandling {
 
     /// Tracking has finished.
     func endTracking(location: CGPoint) {
-        if self.indicatorViews.index(closestTo: location) != self.currentPageIndex, 
+        if self.indicatorViews.index(closestTo: location) != self.currentPageIndex,
             let index = self.trackingPageIndex,
            self.indicatorViews[safe: index]?.isEnabled == true
         {
@@ -121,8 +121,7 @@ class ProgressTrackerUITouchHandler: ProgressTrackerUITouchHandling {
     /// Return the index of the indicator closest the current page
     fileprivate func trackingIndex(closestTo location: CGPoint) -> Int? {
         if let index = self.indicatorViews.index(closestTo: location), index != self.currentPageIndex {
-            let trackingPageIndex = index < self.currentPageIndex ? max(0, self.currentPageIndex - 1) : min(self.numberOfPages - 1, self.currentPageIndex + 1)
-            return trackingPageIndex
+            return index < self.currentPageIndex ? max(0, self.currentPageIndex - 1) : min(self.numberOfPages - 1, self.currentPageIndex + 1)
         }
         return nil
     }
@@ -131,16 +130,16 @@ class ProgressTrackerUITouchHandler: ProgressTrackerUITouchHandling {
 /// The `none` touch handler ignores all touch events
 final class ProgressTrackerNoneUITouchHandler: ProgressTrackerUITouchHandling {
     var trackingPageIndex: Int?
-    
+
     private var voidSubject = PassthroughSubject<Int, Never>()
     var currentPagePublisher: any Publisher<Int, Never> {
         return self.voidSubject
     }
 
     func beginTracking(location: CGPoint) {}
-    
+
     func continueTracking(location: CGPoint) {}
-    
+
     func endTracking(location: CGPoint) {}
 }
 
@@ -215,9 +214,7 @@ final class ProgressTrackerContinuousUITouchHandler: ProgressTrackerUITouchHandl
               index != trackingPageIndex else
         { return nil }
 
-        let nextTrackingPageIndex = index < trackingPageIndex ? max(0, trackingPageIndex - 1) : min(self.numberOfPages - 1, trackingPageIndex + 1)
-
-        return nextTrackingPageIndex
+        return index < trackingPageIndex ? max(0, trackingPageIndex - 1) : min(self.numberOfPages - 1, trackingPageIndex + 1)
     }
 
 }

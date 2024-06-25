@@ -19,7 +19,7 @@ open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
     private typealias Helpers = ComponentSnapshotTestHelpers
 
     // MARK: - Snapshot Testing
-    
+
     func assertSnapshot(
         matching view: @autoclosure () -> some View,
         named name: String? = nil,
@@ -33,11 +33,11 @@ open class SwiftUIComponentSnapshotTestCase: SnapshotTestCase {
     ) {
         for mode in modes {
             for size in sizes {
+                let sizeCategory = ContentSizeCategory(size) ?? .extraSmall
+                let view = view().environment(\.sizeCategory, sizeCategory)
+                .background(Color.gray)
                 sparkAssertSnapshot(
-                    matching: view().environment(
-                        \.sizeCategory,
-                         ContentSizeCategory(size) ?? .extraSmall
-                    ).background(Color.gray),
+                    matching: view,
                     as: .image(
                         precision: Constants.imagePrecision,
                         perceptualPrecision: Constants.imagePerceptualPrecision,

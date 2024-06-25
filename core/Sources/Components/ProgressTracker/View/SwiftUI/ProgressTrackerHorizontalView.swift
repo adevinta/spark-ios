@@ -32,7 +32,7 @@ struct ProgressTrackerHorizontalView: View {
         return self.viewModel.spacings.trackIndicatorSpacing * self.scaleFactor
     }
 
-    //MARK: - Initialization
+    // MARK: - Initialization
     init(
         intent: ProgressTrackerIntent,
         variant: ProgressTrackerVariant,
@@ -47,7 +47,7 @@ struct ProgressTrackerHorizontalView: View {
         self._currentPageIndex = currentPageIndex
     }
 
-    //MARK: - Body
+    // MARK: - Body
     var body: some View {
         ZStack(alignment: .topLeading) {
             self.horizontalLayout()
@@ -58,13 +58,13 @@ struct ProgressTrackerHorizontalView: View {
         }
     }
 
-    //MARK: - Private functions
+    // MARK: - Private functions
     @ViewBuilder
     private func horizontalLayout() -> some View {
         HStack(alignment: .top, spacing: self.spacing) {
             ForEach((0..<self.viewModel.numberOfPages), id: \.self) { index in
                 let content = self.content(at: index)
-                    .accessibilityAttributes(viewModel: self.viewModel, index:  index)
+                    .accessibilityAttributes(viewModel: self.viewModel, index: index)
                     .disabled(!self.viewModel.isEnabled(at: index))
 
                 if self.viewModel.useFullWidth {
@@ -89,7 +89,7 @@ struct ProgressTrackerHorizontalView: View {
                         .frame(width: width)
                         .offset(
                             x: previousRect.maxX + trackSpacing,
-                            y: (rect.height/2) + rect.minY
+                            y: (rect.height / 2) + rect.minY
                         )
                 } else {
                     EmptyView()

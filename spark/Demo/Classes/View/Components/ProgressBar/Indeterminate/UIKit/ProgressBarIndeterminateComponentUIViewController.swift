@@ -60,11 +60,11 @@ final class ProgressBarIndeterminateComponentUIViewController: UIViewController 
 
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.subscriptions)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.subscriptions) { intents in
@@ -86,8 +86,7 @@ extension ProgressBarIndeterminateComponentUIViewController {
 
     static func build() -> ProgressBarIndeterminateComponentUIViewController {
         let viewModel = ProgressBarIndeterminateComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = ProgressBarIndeterminateComponentUIViewController(viewModel: viewModel)
-        return viewController
+        return ProgressBarIndeterminateComponentUIViewController(viewModel: viewModel)
     }
 }
 

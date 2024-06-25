@@ -42,7 +42,7 @@ public struct CheckboxView: View {
     @ObservedObject var viewModel: CheckboxViewModel
 
     // MARK: - Private Properties
-    
+
     @Namespace private var namespace
 
     @ScaledMetric var checkboxSize: CGFloat = Constants.checkboxSize
@@ -124,7 +124,7 @@ public struct CheckboxView: View {
         }
     }
 
-    @ViewBuilder 
+    @ViewBuilder
     private var checkboxView: some View {
         if self.selectionState == .selected {
             self.checkbox().accessibilityAddTraits(.isSelected)
@@ -192,7 +192,7 @@ public struct CheckboxView: View {
         }
     }
 
-    @ViewBuilder 
+    @ViewBuilder
     private var contentView: some View {
         HStack(spacing: 0) {
             switch self.viewModel.alignment {

@@ -68,7 +68,6 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             }
             return UITableViewCell()
 
-
         /// Icon
         case let iconConfiguration as IconConfiguration:
             if let cell = tableView.dequeueReusableCell(withIdentifier: IconCell.reuseIdentifier, for: indexPath) as? IconCell {

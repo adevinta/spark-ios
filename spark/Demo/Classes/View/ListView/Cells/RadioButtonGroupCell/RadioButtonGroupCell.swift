@@ -37,7 +37,7 @@ final class RadioButtonGroupCell: UITableViewCell, Configurable {
             RadioButtonUIItem<Int>.init(id: 1, label: "This is an example of a multi-line text which is very long and in which the user should read all the information."),
             RadioButtonUIItem<Int>.init(id: 2, label: self.attributeString)
         ]
-        let view = RadioButtonUIGroupView(
+        return RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             intent: .main,
             selectedID: 0,
@@ -45,7 +45,6 @@ final class RadioButtonGroupCell: UITableViewCell, Configurable {
             labelAlignment: .trailing,
             groupLayout: .vertical
         )
-        return view
     }()
 
     var stackViewAlignment: UIStackView.Alignment {

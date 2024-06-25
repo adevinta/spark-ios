@@ -12,7 +12,7 @@ import XCTest
 
 final class IconUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
 
-    //MARK: Tests
+    // MARK: Tests
     func test_icon_intent() {
         for intent in IconIntent.allCases {
             let iconView = IconUIView(

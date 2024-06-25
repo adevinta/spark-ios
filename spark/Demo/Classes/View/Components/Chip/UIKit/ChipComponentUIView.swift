@@ -34,11 +34,10 @@ final class ChipComponentUIView: ComponentUIView {
     }
 
     private static func makeChipView(viewModel: ChipComponentUIViewModel) -> ChipUIView {
-        let chipView = ChipUIView(theme: viewModel.theme,
-                                  intent: viewModel.intent,
-                                  variant: viewModel.variant,
-                                  label: viewModel.title ?? "No Title")
-        return chipView
+        return ChipUIView(theme: viewModel.theme,
+                          intent: viewModel.intent,
+                          variant: viewModel.variant,
+                          label: viewModel.title ?? "No Title")
 
     }
 
@@ -53,7 +52,6 @@ final class ChipComponentUIView: ComponentUIView {
 
             self.componentView.theme = theme
         }
-
 
         self.viewModel.$variant.subscribe(in: &self.cancellables) { [weak self] variant in
             guard let self = self else { return }

@@ -22,7 +22,7 @@ struct ProgressTrackerIndicatorView: View {
         return self.scaleFactor * ProgressTrackerConstants.borderWidth
     }
 
-    //MARK: - Initialization
+    // MARK: - Initialization
     init(
         theme: Theme,
         intent: ProgressTrackerIntent,
@@ -41,8 +41,8 @@ struct ProgressTrackerIndicatorView: View {
 
             self.viewModel = viewModel
     }
-    
-    //MARK: - Body
+
+    // MARK: - Body
     var body: some View {
         ZStack(alignment: .center) {
 
@@ -77,7 +77,7 @@ struct ProgressTrackerIndicatorView: View {
         .opacity(self.viewModel.opacity)
     }
 
-    //MARK: Modifiers
+    // MARK: Modifiers
     func highlighted(_ isHighlighted: Bool) -> Self {
         self.viewModel.set(highlighted: isHighlighted)
         return self

@@ -17,7 +17,7 @@ final class ButtonGetSpacingsUseCaseTests: XCTestCase {
     func test_execute() {
         // GIVEN
         let spacingMock = LayoutSpacingGeneratedMock.mocked()
-        
+
         let useCase = ButtonGetSpacingsUseCase()
 
         // WHEN

@@ -13,7 +13,7 @@ import SwiftUI
 final class ProgressBarIndeterminateAnimationTypeTests: XCTestCase {
 
     // MARK: - Tests
-    
+
     func test_next() throws {
         // GIVEN
         let items: [(

@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 
-
 /// TabApportionsSizeView is the similar to a SegmentControl with apportionsSegmentWidthsByContent == true.
 struct TabApportionsSizeView: View {
     private let intent: TabIntent
@@ -34,7 +33,7 @@ struct TabApportionsSizeView: View {
     /// - viewModel: the current view model
     /// - intent: the tab intent.
     /// - selectedIndex: Binding of the index of the current selected tab.
-    public init(viewModel: TabViewModel<TabItemContent>,
+    init(viewModel: TabViewModel<TabItemContent>,
                 intent: TabIntent,
                 selectedIndex: Binding<Int>
     ) {
@@ -80,7 +79,7 @@ struct TabApportionsSizeView: View {
     private func tabItems() -> some View {
         ScrollViewReader { proxy in
             HStack(spacing: 0) {
-                ForEach(Array(self.viewModel.content.enumerated()), id: \.element.id) { (index, content) in
+                ForEach(Array(self.viewModel.content.enumerated()), id: \.element.id) { index, content in
                     self.tabItem(index: index, content: content, proxy: proxy)
                 }
                 Spacer()
@@ -99,7 +98,7 @@ struct TabApportionsSizeView: View {
             content: content,
             proxy: proxy,
             selectedIndex: self.$selectedIndex,
-            index: index)        
+            index: index)
         .background {
                 GeometryReader { geometry in
                     Color.clear

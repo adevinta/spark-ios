@@ -28,23 +28,23 @@ struct TextLinkGetColorUseCase: TextLinkGetColorUseCaseable {
         case .accent:
             return isHighlighted ? colors.states.accentPressed : colors.accent.accent
         case .alert:
-            return isHighlighted ? colors.states.alertPressed: colors.feedback.alert
+            return isHighlighted ? colors.states.alertPressed : colors.feedback.alert
         case .basic:
-            return isHighlighted ? colors.states.basicPressed: colors.basic.basic
+            return isHighlighted ? colors.states.basicPressed : colors.basic.basic
         case .danger:
-            return isHighlighted ? colors.states.errorPressed: colors.feedback.error
+            return isHighlighted ? colors.states.errorPressed : colors.feedback.error
         case .info:
-            return isHighlighted ? colors.states.infoPressed: colors.feedback.info
+            return isHighlighted ? colors.states.infoPressed : colors.feedback.info
         case .main:
-            return isHighlighted ? colors.states.mainPressed: colors.main.main
+            return isHighlighted ? colors.states.mainPressed : colors.main.main
         case .neutral:
-            return isHighlighted ? colors.states.neutralPressed: colors.feedback.neutral
+            return isHighlighted ? colors.states.neutralPressed : colors.feedback.neutral
         case .onSurface:
             return colors.base.onSurface
         case .success:
-            return isHighlighted ? colors.states.successPressed: colors.feedback.success
+            return isHighlighted ? colors.states.successPressed : colors.feedback.success
         case .support:
-            return isHighlighted ? colors.states.supportPressed: colors.support.support
+            return isHighlighted ? colors.states.supportPressed : colors.support.support
         }
     }
 }

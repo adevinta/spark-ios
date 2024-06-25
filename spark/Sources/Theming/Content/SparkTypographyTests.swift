@@ -36,7 +36,6 @@ final class SparkTypographyTests: XCTestCase {
         }
     }
 
-
     private func getTypographyFontTokens(from object: Any) -> [SparkCore.TypographyFontToken] {
         let mirror = Mirror(reflecting: object)
         return mirror.children.compactMap { (label: String?, value: Any) in

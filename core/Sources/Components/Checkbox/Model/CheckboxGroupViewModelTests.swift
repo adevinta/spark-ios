@@ -69,7 +69,7 @@ final class CheckboxGroupViewModelTests: XCTestCase {
         let spacing: CGFloat = checkboxViewModel.spacing
         let checkboxControlSize: CGFloat = CheckboxView.Constants.checkboxSize
         let font: UIFont = checkboxViewModel.font.uiFont
-        let fontAttributes: [NSAttributedString.Key: Any]  = [NSAttributedString.Key.font: font]
+        let fontAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: font]
         let textSize: CGSize? = (string as? NSString)?.size(withAttributes: fontAttributes)
         let textWidth: CGFloat = textSize?.width ?? 0
         return  checkboxControlSize + spacing + textWidth
@@ -80,7 +80,7 @@ private extension Theme where Self == ThemeGeneratedMock {
     static var mock: Self {
         let theme = ThemeGeneratedMock()
 
-        theme.colors =  ColorsGeneratedMock.mocked()
+        theme.colors = ColorsGeneratedMock.mocked()
         theme.layout = LayoutGeneratedMock.mocked()
         theme.dims = DimsGeneratedMock.mocked()
         theme.border = BorderGeneratedMock.mocked()

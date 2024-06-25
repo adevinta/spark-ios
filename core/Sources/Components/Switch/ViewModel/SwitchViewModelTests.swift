@@ -1110,7 +1110,7 @@ private extension SwitchViewModelTests {
         numberOfCalls: Int,
         givenIsOn: Bool? = nil
     ) {
-        let givenStatusAndStateColors =  [
+        let givenStatusAndStateColors = [
             stub.colorsMock.toggleBackgroundColors,
             stub.colorsMock.toggleDotForegroundColors
         ]
@@ -1574,7 +1574,7 @@ private final class Stub {
             alignment: alignment,
             intent: intent,
             isEnabled: isEnabled,
-            images:  imagesEither,
+            images: imagesEither,
             text: text,
             attributedText: attributedTextEither,
             dependencies: dependenciesMock

@@ -56,11 +56,11 @@ final class SliderComponentUIViewController: UIViewController {
     private func addPublisher() {
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
@@ -82,8 +82,7 @@ extension SliderComponentUIViewController {
 
     static func build() -> SliderComponentUIViewController {
         let viewModel = SliderComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = SliderComponentUIViewController(viewModel: viewModel)
-        return viewController
+        return SliderComponentUIViewController(viewModel: viewModel)
     }
 }
 

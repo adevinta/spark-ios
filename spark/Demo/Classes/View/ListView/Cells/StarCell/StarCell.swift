@@ -20,7 +20,7 @@ final class StarCell: UITableViewCell, Configurable {
             vertexSize: CGFloat(0.65),
             cornerRadiusSize: CGFloat(0.15)
         )
-        let view = StarUIView(
+        return StarUIView(
             rating: CGFloat(0.5),
             fillMode: StarFillMode.half,
             lineWidth: 2,
@@ -28,7 +28,6 @@ final class StarCell: UITableViewCell, Configurable {
             fillColor: UIColor.lightGray,
             configuration: configuration
         )
-        return view
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

@@ -19,7 +19,7 @@ public enum TextLinkTypography: CaseIterable {
     case headline1
     /// Use the **headline2** typography
     case headline2
-    
+
     /// Use the **subhead** typography
     case subhead
 

@@ -18,7 +18,7 @@ final class ProgressTrackerDiscreteUITouchHandlerTests: XCTestCase {
     var sut: ProgressTrackerDiscreteUITouchHandler!
     var cancellables = Set<AnyCancellable>()
 
-    //MARK: - Setup
+    // MARK: - Setup
     override func setUp() {
         super.setUp()
         self.controls = (0...4)
@@ -85,7 +85,7 @@ final class ProgressTrackerDiscreteUITouchHandlerTests: XCTestCase {
         self.sut.beginTracking(location: CGPoint(x: 51, y: 10))
 
         // WHEN
-        self.sut.continueTracking(location: CGPoint(x: 301, y:10))
+        self.sut.continueTracking(location: CGPoint(x: 301, y: 10))
 
         // THEN
         XCTAssertEqual(self.sut.trackingPageIndex, 1)
@@ -97,7 +97,7 @@ final class ProgressTrackerDiscreteUITouchHandlerTests: XCTestCase {
         self.sut.beginTracking(location: CGPoint(x: 51, y: 10))
 
         // WHEN
-        self.sut.continueTracking(location: CGPoint(x: 101, y:10))
+        self.sut.continueTracking(location: CGPoint(x: 101, y: 10))
 
         // THEN
         XCTAssertNil(self.sut.trackingPageIndex)
@@ -107,10 +107,10 @@ final class ProgressTrackerDiscreteUITouchHandlerTests: XCTestCase {
         // GIVEN
         self.sut.currentPageIndex = 2
         self.sut.beginTracking(location: CGPoint(x: 51, y: 10))
-        self.sut.continueTracking(location: CGPoint(x: 101, y:10))
+        self.sut.continueTracking(location: CGPoint(x: 101, y: 10))
 
         // WHEN
-        self.sut.continueTracking(location: CGPoint(x: 1, y:10))
+        self.sut.continueTracking(location: CGPoint(x: 1, y: 10))
 
         // THEN
         XCTAssertEqual(self.sut.trackingPageIndex, 1)
@@ -126,11 +126,11 @@ final class ProgressTrackerDiscreteUITouchHandlerTests: XCTestCase {
             expect.fulfill()
         }
         // WHEN
-        self.sut.endTracking(location: CGPoint(x: 251, y:10))
+        self.sut.endTracking(location: CGPoint(x: 251, y: 10))
 
         // THEN
         wait(for: [expect])
-        
+
         XCTAssertNil(self.sut.trackingPageIndex)
     }
 
@@ -145,7 +145,7 @@ final class ProgressTrackerDiscreteUITouchHandlerTests: XCTestCase {
             expect.fulfill()
         }
         // WHEN
-        self.sut.endTracking(location: CGPoint(x: 251, y:10))
+        self.sut.endTracking(location: CGPoint(x: 251, y: 10))
 
         // THEN
         wait(for: [expect], timeout: 0.01)

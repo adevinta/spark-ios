@@ -22,7 +22,7 @@ final class CGLayerCache: CGLayerCaching {
     func object(forKey key: NSString) -> CGLayer? {
         return Self.cache.object(forKey: key)
     }
-    
+
     func setObject(_ layer: CGLayer, forKey key: NSString) {
         Self.cache.setObject(layer, forKey: key)
     }

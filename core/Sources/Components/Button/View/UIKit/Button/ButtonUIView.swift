@@ -22,7 +22,7 @@ public final class ButtonUIView: ButtonMainUIView {
         let stackView = UIStackView(
             arrangedSubviews:
                 [
-                    
+
                     self.imageContentView,
                     self.titleLabel
                 ]
@@ -205,7 +205,7 @@ public final class ButtonUIView: ButtonMainUIView {
             contentStackViewTopConstraint,
             contentStackViewCenterXAnchor,
             contentStackViewBottomConstraint,
-        ].compactMap({ $0 }))
+        ].compactMap { $0 })
     }
 
     private func setupImageContentViewConstraints() {
@@ -322,7 +322,7 @@ public final class ButtonUIView: ButtonMainUIView {
     internal override func isImageOnStateViewDidUpdate(_ isImage: Bool) {
         super.isImageOnStateViewDidUpdate(isImage)
 
-        self.imageContentView.isHidden =  !isImage
+        self.imageContentView.isHidden = !isImage
     }
 
     private func updateAccessibilityLabel() {

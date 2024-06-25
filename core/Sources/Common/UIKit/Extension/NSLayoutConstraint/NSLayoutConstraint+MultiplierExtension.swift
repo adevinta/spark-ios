@@ -9,7 +9,7 @@
 import UIKit
 
 extension NSLayoutConstraint {
-    
+
     /// There is no native possibility to update the multiplier
     /// So we need to recreate the constraint with the new multiplier
     static func updateMultiplier(

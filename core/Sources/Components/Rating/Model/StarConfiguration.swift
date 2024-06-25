@@ -23,12 +23,12 @@ public struct StarConfiguration: Equatable, Sendable {
         public static let vertexSize = CGFloat(0.65)
         public static let cornerRadiusSize = CGFloat(0.15)
     }
-    
+
     public static let `default` = StarConfiguration(
         numberOfVertices: Defaults.numberOfVertices,
         vertexSize: Defaults.vertexSize,
         cornerRadiusSize: Defaults.cornerRadiusSize)
-    
+
     public init(numberOfVertices: Int,
          vertexSize: CGFloat,
          cornerRadiusSize: CGFloat) {

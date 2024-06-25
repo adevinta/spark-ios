@@ -51,7 +51,6 @@ extension NSLayoutConstraint {
             constraints.append(from.trailingAnchor.constraint(equalTo: to.trailingAnchor, constant: -insets.right))
         }
 
-
         return constraints
     }
 

@@ -11,7 +11,7 @@ protocol GetDidDisplayedTextChangeUseCaseable {
     func execute(currentText: String?,
                  newText: String?,
                  displayedTextType: DisplayedTextType) -> Bool
-    
+
     func execute(currentAttributedText: AttributedStringEither?,
                  newAttributedText: AttributedStringEither?,
                  displayedTextType: DisplayedTextType) -> Bool

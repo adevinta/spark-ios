@@ -9,7 +9,7 @@
 import UIKit
 
 /// ScaledUIMetric is a property wrapper for UIKit. It scales values according to the current trait collection content size and behaves similar to the @`ScaledMetric`-property wrapper for SwiftUI.
-@propertyWrapper struct ScaledUIMetric<Value> where Value : BinaryFloatingPoint {
+@propertyWrapper struct ScaledUIMetric<Value> where Value: BinaryFloatingPoint {
     // MARK: - Properties
 
     /// Returns the scaled value for the `baseValue` according to the trait collection. When setting this property a new baseValue is set.

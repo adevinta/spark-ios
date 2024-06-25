@@ -39,7 +39,7 @@ struct TabEqualSizeView: View {
     /// - selectedIndex: A binding with the selected index.
     /// - tab size: the default value is `md`.
     /// - An array of tuples of image and string.
-    
+
     init(viewModel: TabViewModel<TabItemContent>,
          intent: TabIntent,
          selectedIndex: Binding<Int>
@@ -50,7 +50,7 @@ struct TabEqualSizeView: View {
     }
 
     // MARK: - View
-    public var body: some View {
+    var body: some View {
         ZStack(alignment: .bottom) {
             GeometryReader { geometry in
                 VStack(alignment: .trailing) {
@@ -89,7 +89,7 @@ struct TabEqualSizeView: View {
     private func tabItems() -> some View {
         ScrollViewReader { proxy in
             HStack(spacing: 0) {
-                ForEach(Array(self.viewModel.content.enumerated()), id: \.element.id) { (index, content) in
+                ForEach(Array(self.viewModel.content.enumerated()), id: \.element.id) { index, content in
                     self.tabItem(index: index, content: content, proxy: proxy)
                         .frame(minWidth: self.minItemWidth)
                 }

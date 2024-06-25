@@ -51,11 +51,11 @@ final class FormFieldComponentUIViewController: UIViewController {
 
         self.themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
@@ -85,8 +85,7 @@ extension FormFieldComponentUIViewController {
 
     static func build() -> FormFieldComponentUIViewController {
         let viewModel = FormFieldComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = FormFieldComponentUIViewController(viewModel: viewModel)
-        return viewController
+        return FormFieldComponentUIViewController(viewModel: viewModel)
     }
 }
 

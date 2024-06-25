@@ -30,7 +30,7 @@ struct SwitchGetPositionUseCase: SwitchGetPositionUseCaseable {
         case .left:
             horizontalSpacing = spacing.medium
             isToggleOnLeft = true
-            
+
         case .right:
             horizontalSpacing = spacing.xxxLarge
             isToggleOnLeft = false

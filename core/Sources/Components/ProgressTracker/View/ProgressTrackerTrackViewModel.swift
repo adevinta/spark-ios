@@ -10,7 +10,7 @@ import Foundation
 
 /// A view model for the Progress Tracker Track
 final class ProgressTrackerTrackViewModel: ObservableObject {
-    
+
     var theme: Theme {
         didSet {
             self.updateLineColor()

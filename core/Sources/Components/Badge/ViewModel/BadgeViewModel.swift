@@ -29,7 +29,7 @@ import SwiftUI
 final class BadgeViewModel: ObservableObject {
 
     // MARK: - Badge Configuration Public Properties
-    var value: Int? = nil {
+    var value: Int? {
         didSet {
             self.updateText()
         }

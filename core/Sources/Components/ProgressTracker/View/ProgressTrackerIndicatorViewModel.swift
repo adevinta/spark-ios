@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-/// A view model for a single Progress Tracker Indicator 
+/// A view model for a single Progress Tracker Indicator
 final class ProgressTrackerIndicatorViewModel<ComponentContent: ProgressTrackerContentIndicating>: ObservableObject {
 
     var theme: Theme {

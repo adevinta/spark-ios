@@ -79,11 +79,11 @@ final class FormFieldViewModelTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         var isTitleUpdated = false
 
-
-        viewModel.$title.sink { title in
+        viewModel.$title.sink(receiveValue: { title in
             isTitleUpdated = title?.string.contains("*") ?? false
             expectation.fulfill()
-        }.store(in: &cancellable)
+        })
+        .store(in: &cancellable)
 
         // When
         viewModel.isTitleRequired = true
@@ -120,7 +120,7 @@ final class FormFieldViewModelTests: XCTestCase {
             description: NSAttributedString("Description"),
             isTitleRequired: false
         )
-        
+
         // When
         viewModel.feedbackState = .error
 

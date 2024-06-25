@@ -59,7 +59,7 @@ enum CheckboxScenarioSnapshotTests: String, CaseIterable {
                 selectionState: .selected,
                 state: .enabled,
                 alignment: .left,
-                text: "Hello World", 
+                text: "Hello World",
                 image: UIImage.mock,
                 modes: Constants.Modes.all,
                 sizes: Constants.Sizes.default

@@ -252,8 +252,7 @@ final class TagViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.text,
                        newText,
                        "Wrong text value")
-        XCTAssertNil(viewModel.attributedText,
-                       "Wrong attributedText value")
+        XCTAssertNil(viewModel.attributedText, "Wrong attributedText value")
     }
 
     func test_setAttributedText() {
@@ -273,7 +272,6 @@ final class TagViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.attributedText,
                        newAttributedText,
                        "Wrong attributedText value")
-        XCTAssertNil(viewModel.text,
-                       "Wrong text value")
+        XCTAssertNil(viewModel.text, "Wrong text value")
     }
 }

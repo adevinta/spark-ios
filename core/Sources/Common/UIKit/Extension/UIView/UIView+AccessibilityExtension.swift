@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIView {
-    
+
     /// Insert or remove the trait on the current accessibilityTraits
     func accessibilityTraits(manage trait: UIAccessibilityTraits, insert: Bool) {
         if insert {

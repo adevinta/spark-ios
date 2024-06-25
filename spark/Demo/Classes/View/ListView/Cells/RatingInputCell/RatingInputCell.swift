@@ -15,11 +15,10 @@ final class RatingInputCell: UITableViewCell, Configurable {
     typealias Component = RatingInputUIView
 
     lazy var component: RatingInputUIView = {
-        let view = RatingInputUIView(
+        return RatingInputUIView(
             theme: SparkTheme.shared,
             intent: .main
         )
-        return view
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

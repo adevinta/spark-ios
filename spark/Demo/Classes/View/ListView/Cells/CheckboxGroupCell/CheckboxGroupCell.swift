@@ -23,7 +23,7 @@ final class CheckboxGroupCell: UITableViewCell, Configurable {
             CheckboxGroupItemDefault(title: "Text", id: "1", selectionState: .selected, isEnabled: true)
         ]
 
-        let view = CheckboxGroupUIView(
+        return CheckboxGroupUIView(
             checkedImage: DemoIconography.shared.checkmark.uiImage,
             items: items,
             alignment: .left,
@@ -31,7 +31,6 @@ final class CheckboxGroupCell: UITableViewCell, Configurable {
             intent: .main,
             accessibilityIdentifierPrefix: "CheckboxGroup"
         )
-        return view
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

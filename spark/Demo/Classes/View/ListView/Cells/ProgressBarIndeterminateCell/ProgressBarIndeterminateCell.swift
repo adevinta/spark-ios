@@ -15,12 +15,11 @@ final class ProgressBarIndeterminateCell: UITableViewCell, Configurable {
     typealias Component = ProgressBarIndeterminateUIView
 
     lazy var component: ProgressBarIndeterminateUIView = {
-        let view = ProgressBarIndeterminateUIView(
+        return ProgressBarIndeterminateUIView(
             theme: SparkTheme.shared,
             intent: .main,
             shape: .square
         )
-        return view
     }()
 
     var stackViewAlignment: UIStackView.Alignment {

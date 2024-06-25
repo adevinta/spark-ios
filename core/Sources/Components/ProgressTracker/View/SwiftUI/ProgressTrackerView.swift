@@ -13,7 +13,7 @@ public struct ProgressTrackerView: View {
     typealias Content = ProgressTrackerContent<ProgressTrackerIndicatorContent>
     typealias AccessibilityIdentifier = ProgressTrackerAccessibilityIdentifier
 
-    //MARK: - Private properties
+    // MARK: - Private properties
     @ObservedObject private var viewModel: ProgressTrackerViewModel<ProgressTrackerIndicatorContent>
     private let intent: ProgressTrackerIntent
     private let variant: ProgressTrackerVariant
@@ -21,7 +21,7 @@ public struct ProgressTrackerView: View {
     @Binding var currentPageIndex: Int
     @Environment(\.isEnabled) private var isEnabled: Bool
 
-    //MARK: - Initialization
+    // MARK: - Initialization
     /// Initializer
     /// - Parameters:
     ///  - theme: the general theme
@@ -94,7 +94,7 @@ public struct ProgressTrackerView: View {
         self._currentPageIndex = currentPageIndex
     }
 
-    //MARK: - Body
+    // MARK: - Body
     public var body: some View {
         self.progressTrackerView
             .accessibilityElement(children: .contain)
@@ -110,7 +110,7 @@ public struct ProgressTrackerView: View {
             }
     }
 
-    //MARK: - Private functions
+    // MARK: - Private functions
     private func dragGesture(bounds: CGRect?, preferences: [Int: CGRect]) -> some Gesture {
 
         let indicators = preferences.sorted { $0.key < $1.key }.map(\.value)
@@ -119,12 +119,12 @@ public struct ProgressTrackerView: View {
         let gestureHandler = self.gestureHandler(frame: frame, indicators: indicators)
 
         return DragGesture(minimumDistance: .zero)
-            .onChanged({ value in
+            .onChanged { value in
                 gestureHandler.onChanged(location: value.location)
-            })
-            .onEnded({ value in
+            }
+            .onEnded { value in
                 gestureHandler.onEnded(location: value.location)
-            })
+            }
     }
 
     @ViewBuilder
@@ -146,7 +146,7 @@ public struct ProgressTrackerView: View {
             return ProgressTrackerDiscreteGestureHandler(
                 currentPageIndex: self._currentPageIndex,
                 currentTouchedPageIndex: self.$viewModel.currentPressedIndicator,
-                indicators: indicators, 
+                indicators: indicators,
                 frame: frame,
                 disabledIndices: self.viewModel.disabledIndices
             )
@@ -154,7 +154,7 @@ public struct ProgressTrackerView: View {
             return ProgressTrackerContinuousGestureHandler(
                 currentPageIndex: self._currentPageIndex,
                 currentTouchedPageIndex: self.$viewModel.currentPressedIndicator,
-                indicators: indicators, 
+                indicators: indicators,
                 frame: frame,
                 disabledIndices: self.viewModel.disabledIndices
             )

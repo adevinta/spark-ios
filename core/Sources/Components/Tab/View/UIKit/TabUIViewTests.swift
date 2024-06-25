@@ -11,6 +11,7 @@ import XCTest
 
 @testable import SparkCore
 
+// swiftlint:disable force_unwrapping
 final class TabUIViewTests: XCTestCase {
     var sut: TabUIView!
     var subscriptions = Set<AnyCancellable>()
@@ -96,10 +97,11 @@ final class TabUIViewTests: XCTestCase {
         // Given
         let expect = expectation(description: "Expect publisher to publish new selected tab")
         var tabTapped = 0
-        self.sut.publisher.sink { selectedTab in
+        self.sut.publisher.sink(receiveValue: { selectedTab in
             tabTapped = selectedTab
             expect.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         self.sut.segments[2].sendActions(for: .touchUpInside)
@@ -114,9 +116,10 @@ final class TabUIViewTests: XCTestCase {
         let expect = expectation(description: "Expect publisher not to be called")
         expect.isInverted = true
 
-        self.sut.publisher.sink { (selectedTab: Int) in
+        self.sut.publisher.sink(receiveValue: { (selectedTab: Int) in
             expect.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         self.sut.selectedSegmentIndex = 2

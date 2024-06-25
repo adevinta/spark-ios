@@ -9,6 +9,7 @@
 import XCTest
 
 /// `TestCaseTracker` is used to keep the track of the current test suite. It creates a sub-directory for the current test case classname for snapshot-images.
+// swiftlint:disable force_unwrapping
 final class SnapshotTestCaseTracker: NSObject, XCTestObservation {
     // MARK: - Shared instance
 

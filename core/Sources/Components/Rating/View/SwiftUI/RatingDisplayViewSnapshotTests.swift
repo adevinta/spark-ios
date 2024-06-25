@@ -8,7 +8,6 @@
 
 import XCTest
 
-
 import UIKit
 
 @testable import SparkCore

@@ -40,7 +40,7 @@ struct ProgressBarContentView<IndicatorView: View>: View {
 
     // MARK: - View
 
-    public var body: some View {
+    var body: some View {
         ZStack() {
             // Track
             RoundedRectangle(cornerRadius: self.trackCornerRadius ?? 0)

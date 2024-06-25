@@ -11,22 +11,22 @@ import SwiftUI
 @testable import SparkCore
 
 final class ControlPropertyStatesTests: XCTestCase {
-    
+
     // MARK: - Value for States - Tests
-    
+
     func test_value_for_all_states_when_value_is_set() {
         // GIVEN
         let expectedValue = "Value"
-        
+
         let states = ControlState.allCases
-        
+
         for state in states {
             let states = ControlPropertyStates<String>()
             states.setValue(expectedValue, for: state)
-            
+
             // WHEN
             let value = states.value(for: state)
-            
+
             // THEN
             XCTAssertEqual(
                 value,
@@ -35,18 +35,18 @@ final class ControlPropertyStatesTests: XCTestCase {
             )
         }
     }
-    
+
     func test_value_for_all_states_when_value_is_nil() {
         // GIVEN
         let states = ControlState.allCases
-        
+
         for state in states {
             let states = ControlPropertyStates<String>()
             states.setValue(nil, for: state)
-            
+
             // WHEN
             let value = states.value(for: state)
-            
+
             // THEN
             XCTAssertNil(
                 value,
@@ -54,9 +54,9 @@ final class ControlPropertyStatesTests: XCTestCase {
             )
         }
     }
-    
+
     // MARK: - Value for Status - Tests
-    
+
     func test_all_values_when_status_isHighlighted() {
         // GIVEN
         let normalStateValue = "normal"
@@ -116,7 +116,7 @@ final class ControlPropertyStatesTests: XCTestCase {
         )
         // **
     }
-    
+
     func test_all_values_when_status_isDisabled() {
         // GIVEN
         let normalStateValue = "normal"

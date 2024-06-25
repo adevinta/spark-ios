@@ -14,7 +14,7 @@ extension CGFloat {
     /// we add this the scaled metric multiplier value.
     /// This value must be multiplied with you want to make dynamic (width, height, padding, ...)
     /// - note: - Please use this value only for @ScaledMetric on SwiftUI
-    /// 
+    ///
     /// **Example**
     /// This example shows how to create view this multiplier on SwiftUI View
     /// ```swift

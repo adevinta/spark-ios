@@ -58,9 +58,11 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         let expectation = expectation(description: "Wait for spacing & font change")
         expectation.expectedFulfillmentCount = 2
 
-        Publishers.Zip(sut.$spacings, sut.$font).sink { _ in
-            expectation.fulfill()
-        }.store(in: &self.cancellables)
+        Publishers.Zip(sut.$spacings, sut.$font)
+            .sink(receiveValue: { _ in
+                expectation.fulfill()
+            })
+            .store(in: &self.cancellables)
 
         // WHEN
         sut.theme = ThemeGeneratedMock.mocked()
@@ -75,9 +77,10 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         let expectation = expectation(description: "Wait for spacings to be change")
         expectation.expectedFulfillmentCount = 2
 
-        sut.$spacings.sink { _ in
+        sut.$spacings.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.cancellables)
+        })
+        .store(in: &self.cancellables)
 
         // WHEN
         sut.orientation = .horizontal
@@ -174,7 +177,7 @@ final class ProgressTrackerViewModelTests: XCTestCase {
         sut.setIsEnabled(isEnabled: true, forIndex: 0)
 
         // THEN
-        XCTAssertEqual(sut.disabledIndices, Set(arrayLiteral: 1,2,3))
+        XCTAssertEqual(sut.disabledIndices, Set(arrayLiteral: 1, 2, 3))
     }
 
     func test_set_disabled_single_item() {

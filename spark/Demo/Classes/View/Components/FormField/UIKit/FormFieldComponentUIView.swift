@@ -207,14 +207,13 @@ final class FormFieldComponentUIView: ComponentUIView {
     }
 
     static func makeSingleCheckbox() -> UIControl {
-        let view = CheckboxUIView(
+        return CheckboxUIView(
             theme: SparkTheme.shared,
             text: "Hello World",
             checkedImage: DemoIconography.shared.checkmark.uiImage,
             selectionState: .unselected,
             alignment: .left
         )
-        return view
     }
 
     static func makeVerticalCheckbox() -> UIControl {
@@ -262,18 +261,17 @@ final class FormFieldComponentUIView: ComponentUIView {
     }
 
     static func makeSingleRadioButton() -> UIControl {
-        let view = RadioButtonUIView(
+        return RadioButtonUIView(
             theme: SparkTheme.shared,
             intent: .info,
             id: "radiobutton",
             label: NSAttributedString(string: "Hello World"),
             isSelected: true
         )
-        return view
     }
 
     static func makeVerticalRadioButton() -> UIControl {
-        let view = RadioButtonUIGroupView(
+        return RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             intent: .danger,
             selectedID: "radiobutton",
@@ -283,11 +281,10 @@ final class FormFieldComponentUIView: ComponentUIView {
             ],
             groupLayout: .vertical
         )
-        return view
     }
 
     static func makeHorizontalRadioButton() -> UIControl {
-        let view = RadioButtonUIGroupView(
+        return RadioButtonUIGroupView(
             theme: SparkTheme.shared,
             intent: .support,
             selectedID: "radiobutton",
@@ -297,7 +294,6 @@ final class FormFieldComponentUIView: ComponentUIView {
             ],
             groupLayout: .horizontal
         )
-        return view
     }
 
     static func makeTextField() -> UIControl {
@@ -319,11 +315,10 @@ final class FormFieldComponentUIView: ComponentUIView {
     }
 
     static func makeRatingInput() -> UIControl {
-        let view = RatingInputUIView(
+        return RatingInputUIView(
             theme: SparkTheme.shared,
             intent: .main,
             rating: 2.0
         )
-        return view
     }
 }

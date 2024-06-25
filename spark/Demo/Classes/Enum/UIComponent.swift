@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static var allCases: [UIComponent] = [
         .badge,

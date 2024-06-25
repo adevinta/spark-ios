@@ -14,7 +14,7 @@ public struct TextFieldAddon<Content: View>: View {
     let withPadding: Bool
     let layoutPriority: Double
     private let content: () -> Content
-    
+
     /// TextFieldAddon initializer
     /// - Parameters:
     ///   - withPadding: Add addon padding if `true`, default is `false`

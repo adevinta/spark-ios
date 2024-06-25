@@ -21,7 +21,6 @@ final class ProgressTrackerComponentUIView: ComponentUIView {
     private let widthConstraint: NSLayoutConstraint
     private let heightConstraint: NSLayoutConstraint
 
-
     // MARK: - Initializer
     init(viewModel: ProgressTrackerComponentUIViewModel) {
         self.viewModel = viewModel

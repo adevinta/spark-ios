@@ -53,11 +53,11 @@ final class ButtonComponentViewController: UIViewController {
 
         themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
@@ -111,8 +111,7 @@ extension ButtonComponentViewController {
 
     static func build() -> ButtonComponentViewController {
         let viewModel = ButtonComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = ButtonComponentViewController(viewModel: viewModel)
-        return viewController
+        return ButtonComponentViewController(viewModel: viewModel)
     }
 }
 

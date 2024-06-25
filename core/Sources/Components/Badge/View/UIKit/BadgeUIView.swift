@@ -161,10 +161,8 @@ public class BadgeUIView: UIView {
 
     private func setupBadgeText() {
         self.addSubview(textLabel)
-        self.textLabel.setContentCompressionResistancePriority(.required,
-                                                           for: .vertical)
-        self.textLabel.setContentCompressionResistancePriority(.required,
-                                                           for: .horizontal)
+        self.textLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        self.textLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         self.textLabel.accessibilityIdentifier = BadgeAccessibilityIdentifier.text
         self.textLabel.adjustsFontForContentSizeCategory = true
         self.textLabel.textAlignment = .center
@@ -240,7 +238,7 @@ public class BadgeUIView: UIView {
 
     /// Remove constraints from the view the badge was attached onto
     public func detach() {
-        self.attachConstraints.compactMap({ $0 }).forEach {
+        self.attachConstraints.compactMap { $0 }.forEach {
             self.removeConstraint($0)
         }
     }
@@ -267,7 +265,7 @@ public class BadgeUIView: UIView {
                 equalTo: view.centerYAnchor)
         }
 
-        NSLayoutConstraint.activate(self.attachConstraints.compactMap({ $0 }))
+        NSLayoutConstraint.activate(self.attachConstraints.compactMap { $0 })
     }
 }
 
@@ -392,14 +390,12 @@ extension BadgeUIView {
 public extension BadgeUIView {
     func setLabelContentCompressionResistancePriority(_ priority: UILayoutPriority,
                                                       for axis: NSLayoutConstraint.Axis) {
-        self.textLabel.setContentCompressionResistancePriority(priority,
-                                                           for: axis)
+        self.textLabel.setContentCompressionResistancePriority(priority, for: axis)
     }
 
     func setLabelContentHuggingPriority(_ priority: UILayoutPriority,
                                         for axis: NSLayoutConstraint.Axis) {
-        self.textLabel.setContentHuggingPriority(priority,
-                                             for: axis)
+        self.textLabel.setContentHuggingPriority(priority, for: axis)
     }
 }
 

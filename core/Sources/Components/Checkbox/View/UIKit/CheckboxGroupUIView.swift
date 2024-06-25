@@ -236,7 +236,7 @@ public final class CheckboxGroupUIView: UIControl {
 
     private func setupItemsStackView() {
         self.updateLayout()
-        
+
         for item in self.items {
 
             var content: Either<NSAttributedString?, String?>
@@ -244,7 +244,7 @@ public final class CheckboxGroupUIView: UIControl {
             if let text = item.title {
                 content = .left(NSAttributedString(string: text))
             } else {
-              content = .left(item.attributedTitle)
+                content = .left(item.attributedTitle)
             }
 
             let checkbox = CheckboxUIView(
@@ -258,7 +258,7 @@ public final class CheckboxGroupUIView: UIControl {
             )
             checkbox.accessibilityIdentifier = CheckboxAccessibilityIdentifier.checkboxGroupItem(item.id)
 
-            checkbox.publisher.sink { [weak self] in
+            checkbox.publisher.sink(receiveValue: { [weak self] in
                 guard
                     let self,
                     let index = self.items.firstIndex(where: { $0.id == item.id})
@@ -270,7 +270,7 @@ public final class CheckboxGroupUIView: UIControl {
                 self.delegate?.checkboxGroup(self, didChangeSelection: self.items)
                 self.subject.send(self.items)
                 self.sendActions(for: .valueChanged)
-            }
+            })
             .store(in: &self.subscriptions)
 
             self.itemsStackView.addArrangedSubview(checkbox)
@@ -304,7 +304,7 @@ public final class CheckboxGroupUIView: UIControl {
 
             self.spacingView.heightAnchor.constraint(equalToConstant: self.spacingSmall),
 
-            self.itemsStackView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor, constant: -2*self.padding),
+            self.itemsStackView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor, constant: -2 * self.padding),
             constraint,
 
             self.scrollView.topAnchor.constraint(equalTo: self.titleStackView.bottomAnchor, constant: -self.padding),
@@ -315,7 +315,7 @@ public final class CheckboxGroupUIView: UIControl {
     }
 }
 
-//MARK: - Updates
+// MARK: - Updates
 extension CheckboxGroupUIView {
 
     public func updateItems(_ items: [any CheckboxGroupItemProtocol]) {
@@ -338,7 +338,7 @@ extension CheckboxGroupUIView {
     private func updateTitle() {
         if let title = self.title, !title.isEmpty  {
             self.titleLabel.text = title
-            self.spacingView.isHidden =  false
+            self.spacingView.isHidden = false
             self.titleLabel.isHidden = false
         } else {
             self.spacingView.isHidden = true

@@ -76,7 +76,8 @@ final class RadioButtonViewModelTests: XCTestCase {
 
         sut.$colors.sink(receiveValue: { _ in
             expectation.fulfill()
-        }).store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         sut.set(selected: true)
@@ -94,9 +95,11 @@ final class RadioButtonViewModelTests: XCTestCase {
 
         let publishers = Publishers.Zip4(sut.$opacity, sut.$spacing, sut.$font, sut.$colors)
 
-        Publishers.Zip(publishers, sut.$colors).sink { _ in
-            expectation.fulfill()
-        }.store(in: &self.subscriptions)
+        Publishers.Zip(publishers, sut.$colors)
+            .sink(receiveValue: { _ in
+                expectation.fulfill()
+            })
+            .store(in: &self.subscriptions)
 
         // When
         sut.set(theme: ThemeGeneratedMock.mocked())
@@ -111,9 +114,11 @@ final class RadioButtonViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Changes to state publishes value changes.")
         expectation.expectedFulfillmentCount = 2
 
-        Publishers.Zip(sut.$isDisabled, sut.$colors).sink { _ in
-            expectation.fulfill()
-        }.store(in: &self.subscriptions)
+        Publishers.Zip(sut.$isDisabled, sut.$colors)
+            .sink(receiveValue: { _ in
+                expectation.fulfill()
+            })
+            .store(in: &self.subscriptions)
 
         // When
         sut.set(enabled: false)
@@ -130,10 +135,11 @@ final class RadioButtonViewModelTests: XCTestCase {
 
         var spacings = [CGFloat]()
 
-        sut.$spacing.sink { spacing in
+        sut.$spacing.sink(receiveValue: { spacing in
             spacings.append(spacing)
             expectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         sut.set(alignment: .leading)

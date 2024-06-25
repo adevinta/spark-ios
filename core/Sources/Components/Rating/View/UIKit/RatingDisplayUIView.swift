@@ -22,7 +22,7 @@ public class RatingDisplayUIView: UIView {
         stackView.distribution = .fillEqually
         return stackView
     }()
-    
+
     private let viewModel: RatingDisplayViewModel
     private let fillMode: StarFillMode
     private var sizeConstraints = [NSLayoutConstraint]()
@@ -62,7 +62,7 @@ public class RatingDisplayUIView: UIView {
             self.viewModel.theme = newValue
         }
     }
-    
+
     /// The intent for defining the color.
     public var intent: RatingIntent {
         get {
@@ -72,7 +72,7 @@ public class RatingDisplayUIView: UIView {
             self.viewModel.intent = newValue
         }
     }
-    
+
     /// The size of the rating stars.
     /// Possible sizes `small`, `medium` and `input`.
     public var size: RatingDisplaySize {
@@ -103,7 +103,7 @@ public class RatingDisplayUIView: UIView {
         }
     }
 
-    internal var ratingStarViews : [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
+    internal var ratingStarViews: [StarUIView] { self.stackView.arrangedSubviews.compactMap { view in
             return view as? StarUIView
         }
     }
@@ -114,7 +114,6 @@ public class RatingDisplayUIView: UIView {
     @ScaledUIMetric private var spacing: CGFloat
 
     // MARK: - Initialization
-
 
     /// Create a rating display view with the following parameters
     /// - Parameters:
@@ -185,7 +184,7 @@ public class RatingDisplayUIView: UIView {
             )
             currentRating -= 1
 
-            star.accessibilityIdentifier = "\(RatingDisplayAccessibilityIdentifier.identifier)-\(i+1)"
+            star.accessibilityIdentifier = "\(RatingDisplayAccessibilityIdentifier.identifier)-\(i + 1)"
 
             self.sizeConstraints.append(star.widthAnchor.constraint(equalToConstant: self.ratingSize))
             self.sizeConstraints.append(star.heightAnchor.constraint(equalToConstant: self.ratingSize))

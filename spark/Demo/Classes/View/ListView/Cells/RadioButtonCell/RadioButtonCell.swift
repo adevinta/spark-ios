@@ -15,14 +15,13 @@ final class RadioButtonCell: UITableViewCell, Configurable {
     typealias Component = RadioButtonUIView
 
     lazy var component: RadioButtonUIView = {
-        let view = RadioButtonUIView(
+        return RadioButtonUIView(
             theme: SparkTheme.shared,
             intent: .main,
             id: 99,
             label: NSAttributedString(string: "Sample of toggle on radio button"),
             isSelected: true
         )
-        return view
     }()
 
     var stackViewAlignment: UIStackView.Alignment {

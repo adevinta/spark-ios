@@ -15,13 +15,12 @@ final class IconCell: UITableViewCell, Configurable {
     typealias Component = IconUIView
 
     lazy var component: IconUIView = {
-        let view = IconUIView(
+        return IconUIView(
             iconImage: UIImage(systemName: "lock.circle") ?? UIImage(),
             theme: SparkTheme.shared,
             intent: .main,
             size: .medium
         )
-        return view
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

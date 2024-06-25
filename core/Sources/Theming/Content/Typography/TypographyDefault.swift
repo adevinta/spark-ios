@@ -88,7 +88,7 @@ public struct TypographyFontTokenDefault: TypographyFontToken {
         let textStyle = UIFont.TextStyle(from: self.fontTextStyle)
         return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: font)
     }
-    
+
     public var font: Font {
         let textStyle = Font.TextStyle(from: self.fontTextStyle)
         return Font.custom(self.fontName,

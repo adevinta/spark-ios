@@ -17,7 +17,7 @@ import Foundation
 public enum StarFillMode {
     case full
     case half
-    case fraction(_ :CGFloat)
+    case fraction(_: CGFloat)
     case exact
 
     // MARK: - Public functions

@@ -14,7 +14,7 @@ extension ColorsBaseGeneratedMock {
 
     static func mocked() -> ColorsBaseGeneratedMock {
         let mock = ColorsBaseGeneratedMock()
-        
+
         mock.underlyingBackground = ColorTokenGeneratedMock.random()
         mock.underlyingOnBackground = ColorTokenGeneratedMock.random()
         mock.underlyingBackgroundVariant = ColorTokenGeneratedMock.random()

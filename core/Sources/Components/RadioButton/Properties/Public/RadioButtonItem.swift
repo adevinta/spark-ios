@@ -11,12 +11,12 @@ import Foundation
 /// A simple struct for defining radio buttons using the ``RadioButtonGroupView``.
 public struct RadioButtonItem<ID: Equatable & Hashable> {
 
-    //MARK: - Properties
+    // MARK: - Properties
 
     public let id: ID
     public let label: String
 
-    //MARK: - Initialization
+    // MARK: - Initialization
     /// Parameters:
     /// - id: A unique ID bound to a generic type which has the constraints that it need be ``Equatable`` & ``Hashable``.
     /// - label: The label of the radio button

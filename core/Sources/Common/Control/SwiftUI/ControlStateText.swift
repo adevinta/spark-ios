@@ -43,7 +43,7 @@ final class ControlStateText: ObservableObject {
     /// Set the attributed text for a state.
     /// - parameter text: new attributed text
     /// - parameter state: state of the attributed text
-    /// - parameter status: the status of the parent control 
+    /// - parameter status: the status of the parent control
     func setAttributedText(
         _ attributedText: AttributedString?,
         for state: ControlState,

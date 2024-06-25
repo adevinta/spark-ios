@@ -106,9 +106,10 @@ final class BadgeViewModelTests: XCTestCase {
 
         let allPublishers = Publishers.Zip(publishers, sut.$textFont)
 
-        allPublishers.sink { _ in
+        allPublishers.sink(receiveValue: { _ in
             updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         sut.theme = ThemeGeneratedMock.mocked()
@@ -127,9 +128,10 @@ final class BadgeViewModelTests: XCTestCase {
                                          sut.$badgeHeight,
                                          sut.$offset)
 
-        publishers.sink { _ in
+        publishers.sink(receiveValue: { _ in
             updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         sut.size = .small
@@ -144,12 +146,12 @@ final class BadgeViewModelTests: XCTestCase {
         let updateExpectation = expectation(description: "Attributes updated")
         updateExpectation.expectedFulfillmentCount = 2
 
-        let publishers = Publishers.Zip(sut.$textColor,
-                                         sut.$backgroundColor)
+        let publishers = Publishers.Zip(sut.$textColor, sut.$backgroundColor)
 
-        publishers.sink { _ in
+        publishers.sink(receiveValue: { _ in
             updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         sut.intent = .alert
@@ -164,9 +166,10 @@ final class BadgeViewModelTests: XCTestCase {
         let updateExpectation = expectation(description: "Attributes updated")
         updateExpectation.expectedFulfillmentCount = 2
 
-        sut.$text.sink { _ in
+        sut.$text.sink(receiveValue: { _ in
             updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         sut.value = 99
@@ -181,9 +184,10 @@ final class BadgeViewModelTests: XCTestCase {
         let updateExpectation = expectation(description: "Attributes updated")
         updateExpectation.expectedFulfillmentCount = 2
 
-        sut.$text.sink { _ in
+        sut.$text.sink(receiveValue: { _ in
             updateExpectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         // When
         sut.format = .overflowCounter(maxValue: 99)
@@ -194,7 +198,7 @@ final class BadgeViewModelTests: XCTestCase {
 
     // MARK: - Private functions
     private func randomizeIntentAndExceptingCurrent(_ currentIntentType: BadgeIntentType) -> BadgeIntentType {
-        let filteredIntentTypes = BadgeIntentType.allCases.filter({ $0 != currentIntentType })
+        let filteredIntentTypes = BadgeIntentType.allCases.filter { $0 != currentIntentType }
         let randomIndex = Int.random(in: 0...filteredIntentTypes.count - 1)
 
         return filteredIntentTypes[randomIndex]

@@ -15,7 +15,7 @@ final class SwitchButtonCell: UITableViewCell, Configurable {
     typealias Component = SwitchUIView
 
     lazy var component: SwitchUIView = {
-        let view = SwitchUIView(
+        return SwitchUIView(
             theme: SparkTheme.shared,
             isOn: true,
             alignment: .left,
@@ -27,7 +27,6 @@ final class SwitchButtonCell: UITableViewCell, Configurable {
             ),
             text: "Text"
         )
-        return view
     }()
 
     var attributeString: NSAttributedString {

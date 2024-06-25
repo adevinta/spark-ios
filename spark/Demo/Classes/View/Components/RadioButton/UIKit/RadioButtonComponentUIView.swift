@@ -49,7 +49,6 @@ final class RadioButtonComponentUIView: ComponentUIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     // MARK: - Subscribe
     private func setupSubscriptions() {
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in

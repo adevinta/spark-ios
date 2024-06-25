@@ -39,7 +39,6 @@ final class TabComponentUIView: ComponentUIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     // MARK: - Subscribe
     private func setupSubscriptions() {
         self.viewModel.$theme.subscribe(in: &self.cancellables) { [weak self] theme in
@@ -150,13 +149,11 @@ final class TabComponentUIView: ComponentUIView {
 
     // MARK: - Private construction helper
     static private func makeTabView(_ viewModel: TabComponentUIViewModel) -> TabUIView {
-        let tabView = TabUIView(
+        return TabUIView(
             theme: viewModel.theme,
             intent: viewModel.intent,
             tabSize: viewModel.size,
             content: viewModel.content)
-
-        return tabView
     }
 }
 

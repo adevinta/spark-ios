@@ -86,10 +86,8 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
         imageView.isUserInteractionEnabled = false
         imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
 
-        imageView.setContentCompressionResistancePriority(.required,
-                                                      for: .horizontal)
-        imageView.setContentCompressionResistancePriority(.required,
-                                                      for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
 
         return imageView
     }()
@@ -183,7 +181,7 @@ final class ProgressTrackerIndicatorUIControl: UIControl {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: Private functions
     private func setupView() {
         self.addSubviewSizedEqually(self.indicatorView)

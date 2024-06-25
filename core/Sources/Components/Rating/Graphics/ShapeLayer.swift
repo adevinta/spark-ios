@@ -58,7 +58,7 @@ final class ShapeLayer {
         graphicsContext.setStrokeColor(self.strokeColor)
         graphicsContext.drawPath(using: .stroke)
 
-        let insets = self.shape.insets.withHorizontalPadding(self.strokeWidth/2.0)
+        let insets = self.shape.insets.withHorizontalPadding(self.strokeWidth / 2.0)
         let maskWidth = CGFloat((insets.right - insets.left) * fillPercentage)
 
         let maskHeight = rect.height

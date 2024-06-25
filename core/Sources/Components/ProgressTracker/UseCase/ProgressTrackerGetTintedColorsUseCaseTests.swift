@@ -63,7 +63,6 @@ final class ProgressTrackerGetTintedColorsUseCaseTests: XCTestCase {
         }
     }
 
-
     func test_colors_disabled() {
         // GIVEN
 

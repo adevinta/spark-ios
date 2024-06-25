@@ -25,7 +25,7 @@ final class RadioButtonGroupViewModel<Content>: ObservableObject {
     // MARK: - Internal Properties
     var theme: any Theme {
         didSet {
-            self.sublabelFont =   self.theme.typography.caption
+            self.sublabelFont = self.theme.typography.caption
             self.titleFont = self.theme.typography.subhead
             self.titleColor = self.theme.colors.base.onSurface
             self.sublabelColor = useCase.execute(colors: self.theme.colors, intent: self.intent)

@@ -15,7 +15,7 @@ protocol BadgeGetIntentColorsUseCaseable {
 }
 
 final class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
-    
+
     // MARK: - Methods
 
     func execute(intentType: BadgeIntentType,
@@ -77,7 +77,7 @@ final class BadgeGetIntentColorsUseCase: BadgeGetIntentColorsUseCaseable {
                 borderColor: surfaceColor,
                 foregroundColor: colors.feedback.onSuccess
             )
-        
+
         }
     }
 }

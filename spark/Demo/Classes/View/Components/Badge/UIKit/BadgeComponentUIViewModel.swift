@@ -49,7 +49,6 @@ final class BadgeComponentUIViewModel: ObservableObject {
     private var showSizeSheetSubject: PassthroughSubject<[BadgeSize], Never> = .init()
     private var showFormatSheetSubject: PassthroughSubject<[String], Never> = .init()
 
-
     // MARK: - Initializer
     init(theme: Theme) {
         self.theme = theme

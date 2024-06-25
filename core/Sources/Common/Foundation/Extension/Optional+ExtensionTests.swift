@@ -50,7 +50,7 @@ final class OptionalExtensionTests: XCTestCase {
 
     func test_nil_array() {
         // GIVEN
-        let array: Array<Int>? = nil
+        let array: [Int]? = nil
 
         // WHEN
         let isEmptyOrNil = array.isEmptyOrNil
@@ -61,7 +61,7 @@ final class OptionalExtensionTests: XCTestCase {
 
     func test_empty_array() {
         // GIVEN
-        let array: Array<Int>? = []
+        let array: [Int]? = []
 
         // WHEN
         let isEmptyOrNil = array.isEmptyOrNil
@@ -72,7 +72,7 @@ final class OptionalExtensionTests: XCTestCase {
 
     func test_array() {
         // GIVEN
-        let array: Array<Int>? = [10, 22, 3]
+        let array: [Int]? = [10, 22, 3]
 
         // WHEN
         let isEmptyOrNil = array.isEmptyOrNil

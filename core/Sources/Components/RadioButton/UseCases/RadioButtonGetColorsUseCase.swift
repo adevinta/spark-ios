@@ -81,7 +81,7 @@ private extension SparkCore.Colors {
 
     func surfaceColor(intent: RadioButtonIntent) -> any ColorToken {
         switch intent {
-        case .basic: 
+        case .basic:
             return self.basic.onBasic
         case .support:
             return self.support.onSupport

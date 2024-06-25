@@ -58,7 +58,7 @@ enum IconButtonScenarioSnapshotTests: String, CaseIterable {
         let intents = ButtonIntent.allCases
 
         return intents.compactMap { intent -> IconButtonConfigurationSnapshotTests? in
-            guard let image =  ImageEither.mock(
+            guard let image = ImageEither.mock(
                 isSwiftUIComponent: isSwiftUIComponent,
                 for: .normal
             ) else {
@@ -92,7 +92,7 @@ enum IconButtonScenarioSnapshotTests: String, CaseIterable {
         let shapes = ButtonShape.allCases
 
         return shapes.compactMap { shape -> IconButtonConfigurationSnapshotTests? in
-            guard let image =  ImageEither.mock(
+            guard let image = ImageEither.mock(
                 isSwiftUIComponent: isSwiftUIComponent,
                 for: .normal
             ) else {
@@ -126,7 +126,7 @@ enum IconButtonScenarioSnapshotTests: String, CaseIterable {
         let sizes = ButtonSize.allCases
 
         return sizes.compactMap { size -> IconButtonConfigurationSnapshotTests? in
-            guard let image =  ImageEither.mock(
+            guard let image = ImageEither.mock(
                 isSwiftUIComponent: isSwiftUIComponent,
                 for: .normal
             ) else {
@@ -160,7 +160,7 @@ enum IconButtonScenarioSnapshotTests: String, CaseIterable {
         let variants = ButtonVariant.allCases
 
         return variants.compactMap { variant -> IconButtonConfigurationSnapshotTests? in
-            guard let image =  ImageEither.mock(
+            guard let image = ImageEither.mock(
                 isSwiftUIComponent: isSwiftUIComponent,
                 for: .normal
             ) else {

@@ -51,11 +51,11 @@ final class BadgeComponentViewController: UIViewController {
 
         themePublisher
             .$theme
-            .sink { [weak self] theme in
+            .sink(receiveValue: { [weak self] theme in
                 guard let self = self else { return }
                 self.viewModel.theme = theme
                 self.navigationController?.navigationBar.tintColor = theme.colors.main.main.uiColor
-            }
+            })
             .store(in: &self.cancellables)
 
         self.viewModel.showThemeSheet.subscribe(in: &self.cancellables) { intents in
@@ -81,8 +81,7 @@ extension BadgeComponentViewController {
 
     static func build() -> BadgeComponentViewController {
         let viewModel = BadgeComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        let viewController = BadgeComponentViewController(viewModel: viewModel)
-        return viewController
+        return BadgeComponentViewController(viewModel: viewModel)
     }
 }
 

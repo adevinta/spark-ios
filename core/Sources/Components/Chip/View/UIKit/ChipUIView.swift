@@ -16,7 +16,7 @@ public final class ChipUIView: UIControl {
         static let touchAreaTolerance: CGFloat = 100
     }
 
-    //MARK: - Public properties
+    // MARK: - Public properties
     /// An optional icon on the Chip. The icon is always rendered to the left of the text
     public var icon: UIImage? {
         set {
@@ -162,7 +162,7 @@ public final class ChipUIView: UIControl {
         return CGSize(width: width, height: self.height)
     }
 
-    //MARK: - Private properties
+    // MARK: - Private properties
 
     var hasAction: Bool {
         return self.allControlEvents == .touchUpInside
@@ -226,10 +226,10 @@ public final class ChipUIView: UIControl {
     private var heightConstraint: NSLayoutConstraint?
     private var subscriptions = Set<AnyCancellable>()
 
-    //MARK: - Initializers
+    // MARK: - Initializers
 
     /// Initializer of a chip containing only an icon.
-    /// 
+    ///
     /// - Parameters:
     ///   - theme: The theme.
     ///   - intent: The intent of the chip, e.g. main, support
@@ -287,7 +287,7 @@ public final class ChipUIView: UIControl {
                   intent: intent,
                   variant: variant,
                   alignment: alignment,
-                  optionalLabel: label ,
+                  optionalLabel: label,
                   optionalIconImage: iconImage)
     }
 
@@ -358,7 +358,7 @@ public final class ChipUIView: UIControl {
          self.viewModel.isPressed = false
      }
 
-    //MARK: - Private functions
+    // MARK: - Private functions
     /// Update all colors used
     private func setChipColors(_ chipColors: ChipStateColors) {
         self.stackView.backgroundColor = chipColors.background.uiColor
@@ -390,7 +390,7 @@ public final class ChipUIView: UIControl {
         self._borderWidth.update(traitCollection: self.traitCollection)
         self._dashLength.update(traitCollection: self.traitCollection)
     }
-    
+
     private func setupView() {
         self.translatesAutoresizingMaskIntoConstraints = false
 
@@ -497,7 +497,7 @@ public final class ChipUIView: UIControl {
             self.padding = padding
             self.updateLayoutMargins()
         }
-        
+
         self.viewModel.$borderRadius.subscribe(in: &self.subscriptions) { [weak self] borderRadius in
             guard let self else { return }
             self.borderRadius = borderRadius

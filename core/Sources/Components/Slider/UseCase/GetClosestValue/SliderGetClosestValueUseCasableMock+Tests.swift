@@ -9,15 +9,14 @@
 import Foundation
 @testable import SparkCore
 
+// swiftlint:disable force_cast
 final class SliderGetClosestValueUseCasableMock<U>: SparkCore.SliderGetClosestValueUseCasable where U: BinaryFloatingPoint {
-
 
     // MARK: - Initialization
 
     init() {}
 
     // MARK: - execute<V>
-
 
     var executeWithValueAndValuesCallsCount = 0
     var executeWithValueAndValuesCalled: Bool {
@@ -36,7 +35,7 @@ final class SliderGetClosestValueUseCasableMock<U>: SparkCore.SliderGetClosestVa
         executeWithValueAndValuesCallsCount += 1
         executeWithValueAndValuesReceivedArguments = (value: castedValue, values: castedValues)
         executeWithValueAndValuesReceivedInvocations.append((value: castedValue, values: castedValues))
-        return (_executeWithValueAndValues.map({  $0(castedValue, castedValues) }) ?? executeWithValueAndValuesReturnValue) as! V
+        return (_executeWithValueAndValues.map{ $0(castedValue, castedValues) } ?? executeWithValueAndValuesReturnValue) as! V
     }
 
     // MARK: Reset

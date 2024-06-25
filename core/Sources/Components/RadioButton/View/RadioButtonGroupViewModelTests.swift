@@ -15,7 +15,7 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
     var subscriptions = Set<AnyCancellable>()
 
     // MARK: - Tests
-    public func test_expect_all_values_published_on_setup() {
+    func test_expect_all_values_published_on_setup() {
         // Given
         let sut = sut(intent: .basic)
         let expectation = expectation(description: "Wait for subscriptions to be published")
@@ -26,14 +26,15 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
             Publishers.Zip(sut.$spacing, sut.$labelSpacing)
         )
 
-        publisher.sink { _ in
+        publisher.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         wait(for: [expectation], timeout: 0.1)
     }
 
-    public func test_theme_change() {
+    func test_theme_change() {
         // Given
         let sut = sut(intent: .basic)
         let expectation = expectation(description: "Wait for subscriptions to be published")
@@ -44,25 +45,26 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
             Publishers.Zip(sut.$spacing, sut.$labelSpacing)
         )
 
-        publisher.sink { _ in
+        publisher.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         sut.theme = ThemeGeneratedMock.mocked()
 
         wait(for: [expectation], timeout: 0.1)
     }
 
-    public func test_intent_change() {
+    func test_intent_change() {
         // Given
         let sut = sut(intent: .basic)
         let expectation = expectation(description: "Wait for sublabel color to be published")
         expectation.expectedFulfillmentCount = 2
 
-
-        sut.$sublabelColor.sink { _ in
+        sut.$sublabelColor.sink(receiveValue: { _ in
             expectation.fulfill()
-        }.store(in: &self.subscriptions)
+        })
+        .store(in: &self.subscriptions)
 
         sut.intent = .alert
 
@@ -75,13 +77,11 @@ final class RadioButtonGroupViewModelTests: XCTestCase {
         useCase.executeWithColorsAndIntentReturnValue = ColorTokenGeneratedMock.random()
         let theme = ThemeGeneratedMock.mocked()
 
-        let sut = RadioButtonGroupViewModel(
+        return RadioButtonGroupViewModel(
             theme: theme,
             intent: intent,
             content: (),
             useCase: useCase
         )
-
-        return sut
     }
 }
