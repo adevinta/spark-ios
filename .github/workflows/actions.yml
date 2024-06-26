@@ -1,0 +1,10 @@
+name: lint-build
+on:
+  pull_request:
+    types: [ opened, edited, synchronize ]
+
+jobs:
+  linter:
+    uses: adevinta/spark-ios-common/.github/workflows/linter.yml@main
+  buildAndTest:
+    uses: adevinta/spark-ios/.github/workflows/buildDemo.yml@main
