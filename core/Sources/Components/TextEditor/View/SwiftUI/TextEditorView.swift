@@ -75,7 +75,9 @@ public struct TextEditorView: View {
             self.viewModel.isEnabled = isEnabled
         }
         .onTapGesture {
-            self.isFocused = true
+            if !self.viewModel.isReadOnly {
+                self.isFocused = true
+            }
         }
         .accessibilityElement()
         .accessibilityIdentifier(TextEditorAccessibilityIdentifier.view)
@@ -93,10 +95,10 @@ public struct TextEditorView: View {
                     top: .zero,
                     leading: self.viewModel.horizontalSpacing - self.defaultTexEditorHorizontalPadding,
                     bottom: .zero,
-                    trailing: self.viewModel.horizontalSpacing
+                    trailing: self.viewModel.horizontalSpacing - self.defaultTexEditorHorizontalPadding
                 )
             )
-            .opacity(self.isPlaceholderHidden ? 0 : 1)
+            .opacity(self.isPlaceholderHidden || self.viewModel.isReadOnly ? 0 : 1)
             .accessibilityHidden(true)
 
     }
@@ -106,11 +108,11 @@ public struct TextEditorView: View {
         ScrollView {
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
-                    Text(self.isPlaceholderHidden ? self.placeholder! : self.$text.wrappedValue)
+                    Text(self.isPlaceholderHidden && !self.viewModel.isReadOnly ? self.placeholder! : self.$text.wrappedValue)
                         .font(self.viewModel.font.font)
-                        .foregroundStyle(self.viewModel.placeholderColor.color)
+                        .foregroundStyle(self.viewModel.isReadOnly ? self.viewModel.textColor.color : self.viewModel.placeholderColor.color)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .opacity(self.isPlaceholderHidden ? 1 : 0)
+                        .opacity(self.isPlaceholderHidden || self.viewModel.isReadOnly ? 1 : 0)
                         .accessibilityHidden(true)
                     Spacer(minLength: 0)
                 }
