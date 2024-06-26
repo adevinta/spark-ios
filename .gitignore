@@ -93,16 +93,13 @@ iOSInjectionProject/
 .DS_Store
 
 #xcodeproj
-Spark.xcodeproj
+*.xcodeproj
 
 #fastlane
 fastlane/README.md
 
 #output folder
 out
-
-#snapshots
-spark-ios-snapshots
 
 #plists
 *.plist
@@ -111,5 +108,14 @@ spark-ios-snapshots
 #sourcery
 *Generated/
 
+# SPM
+.swiftpm/
+Package.resolved
+
+# Other
 vendor/
 *.lock
+
+
+# SwiftLint Remote Config Cache
+.swiftlint/RemoteConfigCache
