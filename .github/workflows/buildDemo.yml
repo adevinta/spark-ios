@@ -30,9 +30,9 @@ jobs:
       run: |
         xcodebuild -scheme ${{ env.app_name }} -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15 pro,OS=17.5' build
     - name: Upload xcresult file
-      uses: actions/upload-artifact@v4
-      if: ${{ failure() }}
-      with:
-        name: ${{ env.app_name }}-${{ github.run_number }}.xcresult
-        path: ${{ env.app_name }}.xcresult
-        retention-days: 15
+          uses: actions/upload-artifact@v4
+          if: ${{ failure() }}
+          with:
+            name: ${{ env.app_name }}-${{ github.run_number }}.xcresult
+            path: ${{ env.app_name }}.xcresult
+            retention-days: 15
