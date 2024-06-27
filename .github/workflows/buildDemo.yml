@@ -18,7 +18,7 @@ jobs:
     - name: Run xcodegen
       uses: xavierLowmiller/xcodegen-action@1.2.2
       with:
-        spec: project-ci.yml
+        spec: project.yml
         version: '2.41.0'
     - name: Build
       run: |
