@@ -1,7 +1,37 @@
 # Spark-iOS
 ## Introduction
-Spark is [Adevinta’s](https://www.adevinta.com/) iOS Design System.
+Spark is [Adevinta’s](https://www.adevinta.com/) iOS (UIKit and SwiftUI) Design System.
 Its mission is to provide an easy to use, customizable UI experience for consumers.
+
+## Packages
+
+Spark for iOS is a multi-repositories solution.
+
+You can plug and play the entire Spark iOS by importing the *SparkCore* package.
+
+You can also use only one or more packages.
+
+**SparkCore** contains the following packages:
+- [Common](https://github.com/adevinta/spark-ios-common.git)
+- [Theming](https://github.com/adevinta/spark-ios-theming.git)
+- [Badge](https://github.com/adevinta/spark-ios-component-badge.git)
+- [BottomSheet](https://github.com/adevinta/spark-ios-component-bottom-sheet.git)
+- [Button](https://github.com/adevinta/spark-ios-component-button.git)
+- [Checkbox](https://github.com/adevinta/spark-ios-component-checkbox.git)
+- [Chip](https://github.com/adevinta/spark-ios-component-chip.git)
+- [FormField](https://github.com/adevinta/spark-ios-component-form-field.git)
+- [Icon](https://github.com/adevinta/spark-ios-component-icon.git)
+- [ProgressBar](https://github.com/adevinta/spark-ios-component-progress-bar.git)
+- [ProgressTracker](https://github.com/adevinta/spark-ios-component-progress-tracker.git)
+- [RadioButton](https://github.com/adevinta/spark-ios-component-radio-button.git)
+- [Rating](https://github.com/adevinta/spark-ios-component-rating.git)
+- [Slider](https://github.com/adevinta/spark-ios-component-slider.git)
+- [Spinner](https://github.com/adevinta/spark-ios-component-spinner.git)
+- [Switch](https://github.com/adevinta/spark-ios-component-switch.git)
+- [Tab](https://github.com/adevinta/spark-ios-component-tab.git)
+- [Tag](https://github.com/adevinta/spark-ios-component-tag.git)
+- [TextField](https://github.com/adevinta/spark-ios-component-text-field.git)
+- [TextLink](https://github.com/adevinta/spark-ios-component-text-link.git)
 
 ## More Details In Wiki
 [Spark Wiki Page](https://github.com/adevinta/spark-ios/wiki)
@@ -10,10 +40,10 @@ Also, you can find design specifications and tech information for supported plat
 
 ## Getting Started
 ### Installation 
-Carthage: `github "adevinta/spark-ios" == 0.6.1`
+- SPM (*Swift Package Manager*): `https://github.com/adevinta/spark-ios.git`, named ```SparkCore```.
 
 #### Plug & Play 
-If you want the easy-to-use Spark, a Plug & Play solution containing a single Theme is provided and ready to be used. For that, import Spark.xcframework
+If you want the easy-to-use Spark, a Plug & Play solution containing a single Theme is provided and ready to be used. For that, import SparkCore.
 It's also possible to create your [own theme](https://github.com/adevinta/spark-ios/wiki/Theming#your-own-theming)
 
 ## Contributing
