@@ -1,26 +1,52 @@
 name: Spark
-include:
-  - xcodegen/spark-shared.yml
-  - xcodegen/spark-core.yml
-  - xcodegen/spark-core-unit-tests.yml
-  - xcodegen/spark-core-snapshot-tests.yml
-  - xcodegen/spark.yml
+
+configs:
+  Debug: debug
+  Release: release
+
+options:
+  createIntermediateGroups: true
+  defaultConfig: Release
+  groupSortPosition: top
+  deploymentTarget:
+    iOS: 15.0
+  useBaseInternationalization: false
+  postGenCommand: sh .postGenCommand.sh
+
+packages:
+  SparkCore:
+    path: .Demo/..
 
 targetTemplates:
-  SparkCoreSchemeTemplate:
-    templates:
-      - SparkCoreTemplate
-    scheme:
-      testTargets:
-        - name: SparkCoreUnitTests
-        - name: SparkCoreSnapshotTests
-      environmentVariables:
-        - variable: SNAPSHOT_REFERENCE_DIR
-          value: "$(SRCROOT)/spark-ios-snapshots"
-          isEnabled: true
-      gatherCoverageData: true
+  SparkDemoTemplate:
+    type: application
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo"
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    info:
+      path: .Demo/Info.plist
+      properties:
+        UILaunchScreen: []
+
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+    sources:
+      - path: .Demo
+    dependencies:
+      - package: SparkCore
+        product: SparkCore
+      - package: SparkCore
+        product: SparkCoreTesting
 
 targets:
-  SparkCore:
+  SparkDemo:
     templates:
-      - SparkCoreSchemeTemplate
+      - SparkDemoTemplate
