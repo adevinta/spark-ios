@@ -15,7 +15,7 @@ struct TextEditorComponentView: View {
     @State private var theme: Theme = SparkThemePublisher.shared.theme
     @State private var intent: TextEditorIntent = .neutral
     @State var text: String = ""
-    @State var placeholder: String? = "What is Lorem Ipsum?"
+    @State var placeholder: String = "What is Lorem Ipsum?"
     @State private var textType: TextEditorContent = .none
     @State private var placeholderType: TextEditorContent = .short
     @State private var isEnabledState: CheckboxSelectionState = .selected
@@ -58,10 +58,10 @@ struct TextEditorComponentView: View {
             },
             integration: {
                 let textEditor = TextEditorView(
-                    theme: self.theme,
-                    intent: self.intent,
+                    self.placeholder,
                     text: self.$text,
-                    placeholder: self.placeholder
+                    theme: self.theme,
+                    intent: self.intent
                 )
                 .isReadOnly(self.isReadOnlyState == .selected)
                 .onChange(of: self.textType) { type in

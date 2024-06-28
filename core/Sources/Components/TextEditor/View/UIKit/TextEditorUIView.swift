@@ -14,7 +14,6 @@ public final class TextEditorUIView: UITextView {
 
     // Private Variables
     private var minHeight: CGFloat = 44
-    private var minWidth: CGFloat = 280
     @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 8
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
@@ -185,10 +184,7 @@ public final class TextEditorUIView: UITextView {
         self.placeHolderLabelXAnchor = self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         self.placeholderLabelWidthAnchor = self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -2 * self.viewModel.horizontalSpacing)
 
-        NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight),
-            self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.minWidth)
-        ])
+        self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight).isActive = true
     }
 
     private func hidePlaceHolder(_ value: Bool) {

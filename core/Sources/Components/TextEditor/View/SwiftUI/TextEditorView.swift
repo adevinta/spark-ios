@@ -11,7 +11,6 @@ import SwiftUI
 public struct TextEditorView: View {
 
     @ScaledMetric private var minHeight: CGFloat = 44
-    @ScaledMetric private var minWidth: CGFloat = 280
     @ScaledMetric private var defaultTexEditorVerticalPadding: CGFloat = 9
     @ScaledMetric private var defaultTexEditorHorizontalPadding: CGFloat = 5
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
@@ -19,18 +18,18 @@ public struct TextEditorView: View {
     @ObservedObject private var viewModel: TextEditorViewModel
 
     @Binding private var text: String
-    private var placeholder: String?
+    private var titleKey: String
     @FocusState private var isFocused: Bool
 
     private var isPlaceholderHidden: Bool {
-        return !(self.placeholder ?? "").isEmpty && self.text.isEmpty && !self.viewModel.isFocused
+        return !self.titleKey.isEmpty && self.text.isEmpty && !self.viewModel.isFocused
     }
 
     public init(
-        theme: Theme,
-        intent: TextEditorIntent = .neutral,
+        _ titleKey: String = "",
         text: Binding<String>,
-        placeholder: String?
+        theme: Theme,
+        intent: TextEditorIntent = .neutral
     ) {
         let viewModel = TextEditorViewModel(
             theme: theme,
@@ -38,7 +37,7 @@ public struct TextEditorView: View {
         )
         self.viewModel = viewModel
         self._text = text
-        self.placeholder = placeholder
+        self.titleKey = titleKey
     }
 
     public var body: some View {
@@ -63,7 +62,7 @@ public struct TextEditorView: View {
                     }
             }
         }
-        .frame(minWidth: self.minWidth, minHeight: self.minHeight)
+        .frame(minHeight: self.minHeight)
         .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.borderColor)
         .tint(self.viewModel.textColor.color)
         .allowsHitTesting(self.viewModel.isEnabled)
@@ -81,7 +80,7 @@ public struct TextEditorView: View {
         }
         .accessibilityElement()
         .accessibilityIdentifier(TextEditorAccessibilityIdentifier.view)
-        .accessibilityLabel(self.placeholder ?? "")
+        .accessibilityLabel(self.titleKey)
         .accessibilityValue(self.text)
     }
 
@@ -108,7 +107,7 @@ public struct TextEditorView: View {
         ScrollView {
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
-                    Text(self.isPlaceholderHidden && !self.viewModel.isReadOnly ? self.placeholder! : self.$text.wrappedValue)
+                    Text(self.isPlaceholderHidden && !self.viewModel.isReadOnly ? self.titleKey : self.$text.wrappedValue)
                         .font(self.viewModel.font.font)
                         .foregroundStyle(self.viewModel.isReadOnly ? self.viewModel.textColor.color : self.viewModel.placeholderColor.color)
                         .frame(maxWidth: .infinity, alignment: .leading)
