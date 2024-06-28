@@ -61,13 +61,15 @@ struct TextEditorComponentView: View {
                     theme: self.theme,
                     intent: self.intent,
                     text: self.$text,
-                    placeholder: self.$placeholder
+                    placeholder: self.placeholder
                 )
                 .isReadOnly(self.isReadOnlyState == .selected)
                 .onChange(of: self.textType) { type in
+                    self.isFocused = false
                     self.text = self.contentType(type)
                 }
                 .onChange(of: self.placeholderType) { type in
+                    self.isFocused = false
                     self.placeholder = self.contentType(type)
                 }
                 .focused(self.$isFocused)

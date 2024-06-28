@@ -19,7 +19,7 @@ public struct TextEditorView: View {
     @ObservedObject private var viewModel: TextEditorViewModel
 
     @Binding private var text: String
-    @Binding private var placeholder: String?
+    private var placeholder: String?
     @FocusState private var isFocused: Bool
 
     private var isPlaceholderHidden: Bool {
@@ -30,7 +30,7 @@ public struct TextEditorView: View {
         theme: Theme,
         intent: TextEditorIntent = .neutral,
         text: Binding<String>,
-        placeholder: Binding<String?>
+        placeholder: String?
     ) {
         let viewModel = TextEditorViewModel(
             theme: theme,
@@ -38,7 +38,7 @@ public struct TextEditorView: View {
         )
         self.viewModel = viewModel
         self._text = text
-        self._placeholder = placeholder
+        self.placeholder = placeholder
     }
 
     public var body: some View {
