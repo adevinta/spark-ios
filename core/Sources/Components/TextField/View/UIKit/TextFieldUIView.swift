@@ -151,7 +151,7 @@ public final class TextFieldUIView: UITextField {
 
         self.viewModel.$borderRadius.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] borderRadius in
             guard let self else { return }
-            self.setCornerRadius(borderRadius)
+            self.setCornerRadius(borderRadius * self.scaleFactor)
         }
 
         self.viewModel.$leftSpacing.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] dim in
@@ -276,6 +276,7 @@ public final class TextFieldUIView: UITextField {
 
         self._height.update(traitCollection: self.traitCollection)
         self._scaleFactor.update(traitCollection: self.traitCollection)
+        self.setCornerRadius(self.viewModel.borderRadius * self.scaleFactor)
         self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
         self.invalidateIntrinsicContentSize()
     }
