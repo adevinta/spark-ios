@@ -59,6 +59,12 @@ struct ComponentsView: View {
                 self.navigateToView(IconComponentView())
             }
 
+            if #available(iOS 16.4, *) {
+                Button("Popover") {
+                    self.navigateToView(PopoverDemoView())
+                }
+            }
+
             Group {
                 Button("Progress Bar - Indeterminate") {
                     self.navigateToView(ProgressBarIndeterminateComponentView())

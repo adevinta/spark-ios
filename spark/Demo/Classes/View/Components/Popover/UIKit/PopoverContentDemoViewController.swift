@@ -13,7 +13,7 @@ final class PopoverContentDemoViewController: UIViewController {
 
     let label: UILabel = {
         let label = UILabel()
-        label.text = "This is a label that should be multiline, depending on the content size. It has a lessThanOrEqualToConstant: 300 constraint"
+        label.text = "This is a label that should be multiline, depending on the content size. This is a label that should be multiline, depending on the content size."
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
