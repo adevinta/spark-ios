@@ -13,7 +13,7 @@ import Combine
 public final class TextEditorUIView: UITextView {
 
     // Private Variables
-    private var minHeight: CGFloat = 44
+    @ScaledUIMetric private var minHeight: CGFloat = 44
     @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 8
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
@@ -272,6 +272,7 @@ public final class TextEditorUIView: UITextView {
 
         self._scaleFactor.update(traitCollection: self.traitCollection)
         self._defaultSystemVerticalPadding.update(traitCollection: self.traitCollection)
+        self._minHeight.update(traitCollection: self.traitCollection)
         self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
     }
 }
