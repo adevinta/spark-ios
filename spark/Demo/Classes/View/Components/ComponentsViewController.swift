@@ -87,6 +87,8 @@ extension ComponentsViewController {
             viewController = FormFieldComponentUIViewController.build()
         case .icon:
             viewController = IconComponentUIViewController.build()
+        case .popover:
+            viewController = PopoverPresentingUIViewController.build()
         case .progressBarIndeterminate:
             viewController = ProgressBarIndeterminateComponentUIViewController.build()
         case .progressBarSingle:
