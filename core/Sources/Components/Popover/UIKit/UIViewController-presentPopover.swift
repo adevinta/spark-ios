@@ -9,7 +9,7 @@
 import UIKit
 
 public extension UIViewController {
-    
+
     /// Presents a Spark Popover modally.
     /// - Parameters:
     ///   - popoverViewControllerToPresent: The Spark Popover to display over the current view controller’s content

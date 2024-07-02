@@ -30,7 +30,7 @@ public final class PopoverViewController: UIViewController, UIPopoverPresentatio
         PopoverBackgroundConfiguration.arrowSize = self.viewModel.arrowSize
         self.popoverPresentationController?.popoverBackgroundViewClass = PopoverBackgroundView.self
     }
-    
+
     /// PopoverViewController initializer
     /// - Parameters:
     ///   - contentViewController: The viewController that will be embedded in the popover: it should have a .clear background, no padding and have a well defined preferredContentSize for the popover to calculate its size properly

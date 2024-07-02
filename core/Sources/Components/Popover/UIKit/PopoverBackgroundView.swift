@@ -106,7 +106,6 @@ final class PopoverBackgroundView: UIPopoverBackgroundView {
             }
         default:
             self.previouslyModifiedConstraint = nil
-            break
         }
 
         self.arrowShape?.removeFromSuperlayer()
@@ -137,8 +136,7 @@ final class PopoverBackgroundView: UIPopoverBackgroundView {
         let minTipY = self.cornerRadius + arrowHeight
 
         // Bounded value between min and max tip y
-        let tipY = max(minTipY, min(estimatedTipY, maxTipY))
-        return tipY
+        return max(minTipY, min(estimatedTipY, maxTipY))
     }
 
     private func getLeftArrowPath() -> CGPath {
@@ -146,7 +144,7 @@ final class PopoverBackgroundView: UIPopoverBackgroundView {
 
         let tipY = self.getTipY(arrowHeight: arrowHeight)
 
-        let tip = CGPoint(x: 0, y:  tipY)
+        let tip = CGPoint(x: 0, y: tipY)
         let topRightCorner = tip.applying(.init(translationX: arrowHeight, y: -arrowHeight))
         let bottomRightCorner = tip.applying(.init(translationX: arrowHeight, y: arrowHeight))
 
@@ -172,8 +170,7 @@ final class PopoverBackgroundView: UIPopoverBackgroundView {
         let minTipX = self.cornerRadius + arrowHeight
 
         // Bounded value between min and max tip x
-        let tipX = max(minTipX, min(estimatedTipX, maxTipX))
-        return tipX
+        return max(minTipX, min(estimatedTipX, maxTipX))
     }
 
     private func getUpArrowPath() -> CGPath {
