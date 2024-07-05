@@ -21,8 +21,12 @@ public struct TextEditorView: View {
     private var titleKey: String
     @FocusState private var isFocused: Bool
 
-    private var isPlaceholderHidden: Bool {
+    private var isPlaceholderTextHidden: Bool {
         return !self.titleKey.isEmpty && self.text.isEmpty && !self.viewModel.isFocused
+    }
+
+    private var isPlaceholderHidden: Bool {
+        return self.isPlaceholderTextHidden || self.viewModel.isReadOnly
     }
 
     public init(
@@ -97,7 +101,7 @@ public struct TextEditorView: View {
                     trailing: self.viewModel.horizontalSpacing - self.defaultTexEditorHorizontalPadding
                 )
             )
-            .opacity(self.isPlaceholderHidden || self.viewModel.isReadOnly ? 0 : 1)
+            .opacity(self.isPlaceholderHidden ? 0 : 1)
             .accessibilityHidden(true)
 
     }
@@ -107,11 +111,11 @@ public struct TextEditorView: View {
         ScrollView {
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
-                    Text(self.isPlaceholderHidden && !self.viewModel.isReadOnly ? self.titleKey : self.$text.wrappedValue)
+                    Text(self.isPlaceholderTextHidden ? self.titleKey : self.$text.wrappedValue)
                         .font(self.viewModel.font.font)
-                        .foregroundStyle(self.viewModel.isReadOnly ? self.viewModel.textColor.color : self.viewModel.placeholderColor.color)
+                        .foregroundStyle(self.isPlaceholderTextHidden ? self.viewModel.placeholderColor.color : self.viewModel.textColor.color)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .opacity(self.isPlaceholderHidden || self.viewModel.isReadOnly ? 1 : 0)
+                        .opacity(self.isPlaceholderHidden ? 1 : 0)
                         .accessibilityHidden(true)
                     Spacer(minLength: 0)
                 }
