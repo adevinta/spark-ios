@@ -22,7 +22,7 @@ public struct TextEditorView: View {
     @FocusState private var isFocused: Bool
 
     private var isPlaceholderTextHidden: Bool {
-        return !self.titleKey.isEmpty && self.text.isEmpty && !self.viewModel.isFocused
+        return !self.titleKey.isEmpty && self.text.isEmpty
     }
 
     private var isPlaceholderHidden: Bool {
@@ -101,7 +101,7 @@ public struct TextEditorView: View {
                     trailing: self.viewModel.horizontalSpacing - self.defaultTexEditorHorizontalPadding
                 )
             )
-            .opacity(self.isPlaceholderHidden ? 0 : 1)
+            .opacity(!self.isPlaceholderHidden || self.isFocused ? 1 : 0)
             .accessibilityHidden(true)
 
     }
