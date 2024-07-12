@@ -9,70 +9,70 @@
 import SwiftUI
 
 private let longDescription: String = """
-Sample of a SwiftUI bottom sheet with a scroll view.
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-"""
+ SwiftUI bottom sheet with a scroll view.
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ """
 private let mediumDescription: String = """
-Sample of a SwiftUI bottom sheet with a long text.
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-💙
-🧡
-"""
+ SwiftUI bottom sheet with a medium text. The text should wrap to a new line
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ 💙
+ 🧡
+ """
 struct BottomSheetPresentingView: View {
     var body: some View {
         if #available(iOS 16.4, *) {
@@ -101,7 +101,7 @@ struct BottomSheetPresentingViewWithHeightDetent: View {
                     self.showingShortSheet.toggle()
                 }
                 .readHeight(self.$shortHeight)
-                .presentationDetents([.height(self.shortHeight), .large])
+                .presentationDetents([.height(self.shortHeight), .medium])
             }
             .buttonStyle(.borderedProminent)
 
@@ -113,7 +113,7 @@ struct BottomSheetPresentingViewWithHeightDetent: View {
                     self.showingMediumSheet.toggle()
                 }
                 .readHeight(self.$mediumHeight)
-                .presentationDetents([.height(self.mediumHeight), .large])
+                .presentationDetents([.height(self.mediumHeight), .maxHeight])
             }
             .buttonStyle(.borderedProminent)
 
@@ -121,13 +121,13 @@ struct BottomSheetPresentingViewWithHeightDetent: View {
                 self.showingLongSheet.toggle()
             }
             .sheet(isPresented: $showingLongSheet) {
-                    ScrollView {
-                        BottomSheetPresentedView(description: longDescription) {
-                            self.showingLongSheet.toggle()
-                        }
+                ScrollView {
+                    BottomSheetPresentedView(description: longDescription) {
+                        self.showingLongSheet.toggle()
                     }
-                    .scrollIndicators(.visible)
-                .presentationDetents([.medium, .large])
+                }
+                .scrollIndicators(.visible)
+                .presentationDetents([.medium, .maxHeight])
             }
             .buttonStyle(.borderedProminent)
         }

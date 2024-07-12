@@ -10,9 +10,9 @@ import SwiftUI
 
 struct BottomSheetPresentedView: View {
     var description: String = """
-Sample of a SwiftUI bottom sheet with little text.
-🧡💙
-"""
+     SwiftUI bottom sheet with little text.
+     🧡💙
+     """
     var dismiss: () -> Void
 
     var body: some View {
@@ -29,9 +29,7 @@ Sample of a SwiftUI bottom sheet with little text.
             }
             .buttonStyle(.borderedProminent)
         }
-        .frame(maxWidth: .infinity)
-        .background(alignment: .top) {
-            Image("BottomSheet")
-        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.green)
     }
 }

@@ -21,7 +21,7 @@ struct ViewHeightModifier: ViewModifier {
     let height: Binding<CGFloat>
     func body(content: Content) -> some View {
         content
-            .fixedSize(horizontal: true, vertical: true)
+            .fixedSize(horizontal: false, vertical: true)
             .background(
                 GeometryReader{ geometry in
                     Color.clear
