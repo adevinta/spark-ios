@@ -104,6 +104,9 @@ public final class TextEditorUIView: UITextView {
         set {
             self.viewModel.isEnabled = newValue
             self.isUserInteractionEnabled = newValue
+            if !isEnabled {
+               _ = self.resignFirstResponder()
+            }
         }
     }
 
