@@ -18,18 +18,9 @@ final class TextEditorBorderUseCaseTests: XCTestCase {
 
             let texteditorBorders = TextEditorBordersUseCase().execute(theme: theme, intent: intent, isFocused: false)
 
-            let borderWidth: CGFloat
-
-            if intent == .neutral {
-                borderWidth = theme.border.width.small
-            } else {
-                borderWidth = theme.border.width.medium
-            }
-
-
             let expectedBorders = TextEditorBorders (
                 radius: theme.border.radius.large,
-                width: borderWidth
+                width: theme.border.width.small
             )
             XCTAssertEqual(texteditorBorders, expectedBorders, "Wrong border width")
         }
