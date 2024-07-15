@@ -8,6 +8,10 @@
 
 import SwiftUI
 
+enum Field: Hashable {
+        case text
+}
+
 public struct TextEditorView: View {
 
     @ScaledMetric private var minHeight: CGFloat = 44
@@ -19,10 +23,16 @@ public struct TextEditorView: View {
 
     @Binding private var text: String
     private var titleKey: String
-    @FocusState private var isFocused: Bool
+    @FocusState private var focusedField: Field?
+    @Environment(\.isEnabled) private var isEnabled
+    @State private var textEditorEnabled: Bool = true
+
+    private var isPlaceholderTextHidden: Bool {
+        return !self.titleKey.isEmpty && self.text.isEmpty
+    }
 
     private var isPlaceholderHidden: Bool {
-        return !self.titleKey.isEmpty && self.text.isEmpty && !self.viewModel.isFocused
+        return self.isPlaceholderTextHidden || self.viewModel.isReadOnly
     }
 
     public init(
@@ -66,16 +76,27 @@ public struct TextEditorView: View {
         .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.borderColor)
         .tint(self.viewModel.textColor.color)
         .allowsHitTesting(self.viewModel.isEnabled)
-        .focused(self.$isFocused)
-        .onChange(of: self.isFocused) { value in
-            self.viewModel.isFocused = value
+        .focused(self.$focusedField, equals: .text)
+        .onChange(of: self.focusedField) { focusedField in
+            self.viewModel.isFocused = focusedField == .text
         }
-        .isEnabledChanged { isEnabled in
+        .isEnabled(self.isEnabled) { isEnabled in
             self.viewModel.isEnabled = isEnabled
+        }
+        .onChange(of: self.viewModel.isEnabled) { isEnabled in
+            if !isEnabled {
+                self.focusedField = nil
+            }
+            self.textEditorEnabled = isEnabled
+        }
+        .onChange(of: self.viewModel.isReadOnly) { isReadOnly in
+            if isReadOnly {
+                self.focusedField = nil
+            }
         }
         .onTapGesture {
             if !self.viewModel.isReadOnly {
-                self.isFocused = true
+                self.focusedField = .text
             }
         }
         .accessibilityElement()
@@ -97,9 +118,9 @@ public struct TextEditorView: View {
                     trailing: self.viewModel.horizontalSpacing - self.defaultTexEditorHorizontalPadding
                 )
             )
-            .opacity(self.isPlaceholderHidden || self.viewModel.isReadOnly ? 0 : 1)
+            .opacity(!self.isPlaceholderHidden || self.viewModel.isFocused ? 1 : 0)
             .accessibilityHidden(true)
-
+            .environment(\.isEnabled, self.textEditorEnabled)
     }
 
     @ViewBuilder
@@ -107,11 +128,11 @@ public struct TextEditorView: View {
         ScrollView {
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
-                    Text(self.isPlaceholderHidden && !self.viewModel.isReadOnly ? self.titleKey : self.$text.wrappedValue)
+                    Text(self.isPlaceholderTextHidden ? self.titleKey : self.$text.wrappedValue)
                         .font(self.viewModel.font.font)
-                        .foregroundStyle(self.viewModel.isReadOnly ? self.viewModel.textColor.color : self.viewModel.placeholderColor.color)
+                        .foregroundStyle(self.isPlaceholderTextHidden ? self.viewModel.placeholderColor.color : self.viewModel.textColor.color)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .opacity(self.isPlaceholderHidden || self.viewModel.isReadOnly ? 1 : 0)
+                        .opacity(self.isPlaceholderHidden ? 1 : 0)
                         .accessibilityHidden(true)
                     Spacer(minLength: 0)
                 }
@@ -131,5 +152,14 @@ public struct TextEditorView: View {
     public func isReadOnly(_ value: Bool) -> some View {
         self.viewModel.isReadOnly = value
         return self
+    }
+}
+
+private extension View {
+    func isEnabled(_ value: Bool, complition: @escaping (Bool) -> Void) -> some View {
+        DispatchQueue.main.async {
+            complition(value)
+        }
+        return self.disabled(!value)
     }
 }

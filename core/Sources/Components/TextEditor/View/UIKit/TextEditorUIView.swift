@@ -17,7 +17,7 @@ public final class TextEditorUIView: UITextView {
     @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 8
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
-    private let viewModel: TextEditorViewModel
+    private var viewModel: TextEditorViewModel!
     private var cancellables = Set<AnyCancellable>()
     private var placeHolderConstarints: [NSLayoutConstraint]?
     private var placeHolderLabelYAnchor: NSLayoutConstraint?
@@ -45,7 +45,7 @@ public final class TextEditorUIView: UITextView {
             self._delegate = newValue
         }
         get {
-            return self._delegate
+            return super.delegate
         }
     }
 
@@ -104,6 +104,9 @@ public final class TextEditorUIView: UITextView {
         set {
             self.viewModel.isEnabled = newValue
             self.isUserInteractionEnabled = newValue
+            if !isEnabled {
+               _ = self.resignFirstResponder()
+            }
         }
     }
 
@@ -293,7 +296,7 @@ extension TextEditorUIView: UITextViewDelegate {
     }
 
     public func textViewDidBeginEditing(_ textView: UITextView) {
-        self.hidePlaceHolder(true)
+        self.hidePlaceHolder(!textView.text.isEmpty)
         self._delegate?.textViewDidBeginEditing?(textView)
     }
 
