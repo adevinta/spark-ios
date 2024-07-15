@@ -32,9 +32,6 @@ struct ComponentsView: View {
                 Button("Button") {
                     self.navigateToView(ButtonComponentView())
                 }
-                Button("Icon Button") {
-                    self.navigateToView(IconButtonComponentView())
-                }
             }
 
             Group {
@@ -57,6 +54,15 @@ struct ComponentsView: View {
 
             Button("Icon") {
                 self.navigateToView(IconComponentView())
+            }
+
+            if #available(iOS 16.4, *) {
+                Button("Popover") {
+                    self.navigateToView(PopoverDemoView())
+                }
+            } else {
+                Text("Popover: unavailable below iOS version 16.4")
+                    .foregroundStyle(.red)
             }
 
             Group {
