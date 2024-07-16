@@ -6,6 +6,8 @@
  The goal of the script is to replace the external component package (spark-ios-component-XYZ repository) to the local (from ../ folder).
  */
 
+// swiftlint:disable all
+
 import Foundation
 
 if CommandLine.argc < 2 {
