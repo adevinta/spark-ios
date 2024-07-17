@@ -171,21 +171,21 @@ public final class TextEditorUIView: UITextView {
         self.textContainer.lineFragmentPadding = 0
         self.textContainerInset = UIEdgeInsets(
             top: self.defaultSystemVerticalPadding,
-            left: self.viewModel.horizontalSpacing,
+            left: self.viewModel.horizontalSpacing * self.scaleFactor,
             bottom: self.defaultSystemVerticalPadding,
-            right: self.viewModel.horizontalSpacing
+            right: self.viewModel.horizontalSpacing * self.scaleFactor
         )
 
         self.addSubview(self.placeHolderLabel)
         self.placeHolderConstarints = [
             self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding),
-            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.viewModel.horizontalSpacing),
-            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.viewModel.horizontalSpacing),
+            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.viewModel.horizontalSpacing * self.scaleFactor),
+            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.viewModel.horizontalSpacing * self.scaleFactor),
             self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: -self.defaultSystemVerticalPadding)
         ]
         self.placeHolderLabelYAnchor = self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
         self.placeHolderLabelXAnchor = self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
-        self.placeholderLabelWidthAnchor = self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -2 * self.viewModel.horizontalSpacing)
+        self.placeholderLabelWidthAnchor = self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -2 * self.viewModel.horizontalSpacing * self.scaleFactor)
 
         self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight).isActive = true
     }

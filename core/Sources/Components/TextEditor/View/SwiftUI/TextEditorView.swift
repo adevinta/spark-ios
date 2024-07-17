@@ -10,13 +10,15 @@ import SwiftUI
 
 enum Field: Hashable {
         case text
+        case none
 }
 
 public struct TextEditorView: View {
 
     @ScaledMetric private var minHeight: CGFloat = 44
-    @ScaledMetric private var defaultTexEditorVerticalPadding: CGFloat = 9
-    @ScaledMetric private var defaultTexEditorHorizontalPadding: CGFloat = 5
+    private var defaultTexEditorTopPadding: CGFloat = 8
+    private var defaultTexEditorBottomPadding: CGFloat = 9
+    private var defaultTexEditorHorizontalPadding: CGFloat = 5
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
 
     @ObservedObject private var viewModel: TextEditorViewModel
@@ -32,7 +34,11 @@ public struct TextEditorView: View {
     }
 
     private var isPlaceholderHidden: Bool {
-        return self.isPlaceholderTextHidden || self.viewModel.isReadOnly
+        if #available(iOS 16.0, *) {
+            return self.isPlaceholderTextHidden || self.viewModel.isReadOnly
+        } else {
+            return self.isPlaceholderTextHidden || self.viewModel.isReadOnly || !self.isEnabled
+        }
     }
 
     public init(
@@ -62,18 +68,11 @@ public struct TextEditorView: View {
                     .scrollIndicators(.never)
             } else {
                 self.placeHolderView()
-                    .onAppear {
-                        UIScrollView.appearance().showsVerticalScrollIndicator = false
-                    }
                 self.textEditorView()
-                    .onAppear {
-                        UITextView.appearance().backgroundColor = .clear
-                        UITextView.appearance().showsVerticalScrollIndicator = false
-                    }
             }
         }
         .frame(minHeight: self.minHeight)
-        .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius, colorToken: self.viewModel.borderColor)
+        .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius * self.scaleFactor, colorToken: self.viewModel.borderColor)
         .tint(self.viewModel.textColor.color)
         .allowsHitTesting(self.viewModel.isEnabled)
         .focused(self.$focusedField, equals: .text)
@@ -112,10 +111,10 @@ public struct TextEditorView: View {
             .foregroundStyle(self.viewModel.textColor.color)
             .padding(
                 EdgeInsets(
-                    top: .zero,
-                    leading: self.viewModel.horizontalSpacing - self.defaultTexEditorHorizontalPadding,
-                    bottom: .zero,
-                    trailing: self.viewModel.horizontalSpacing - self.defaultTexEditorHorizontalPadding
+                    top: .zero + self.scaleFactor,
+                    leading: (self.viewModel.horizontalSpacing * self.scaleFactor - self.defaultTexEditorHorizontalPadding),
+                    bottom: .zero + self.scaleFactor,
+                    trailing: (self.viewModel.horizontalSpacing * self.scaleFactor - self.defaultTexEditorHorizontalPadding)
                 )
             )
             .opacity(!self.isPlaceholderHidden || self.viewModel.isFocused ? 1 : 0)
@@ -131,21 +130,21 @@ public struct TextEditorView: View {
                     Text(self.isPlaceholderTextHidden ? self.titleKey : self.$text.wrappedValue)
                         .font(self.viewModel.font.font)
                         .foregroundStyle(self.isPlaceholderTextHidden ? self.viewModel.placeholderColor.color : self.viewModel.textColor.color)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(
+                            EdgeInsets(
+                                top: self.defaultTexEditorTopPadding + self.scaleFactor,
+                                leading: self.viewModel.horizontalSpacing * self.scaleFactor,
+                                bottom: self.defaultTexEditorBottomPadding + self.scaleFactor,
+                                trailing: self.viewModel.horizontalSpacing * self.scaleFactor
+                            )
+                        )
                         .opacity(self.isPlaceholderHidden ? 1 : 0)
                         .accessibilityHidden(true)
+
                     Spacer(minLength: 0)
                 }
                 Spacer(minLength: 0)
             }
-            .padding(
-                EdgeInsets(
-                    top: self.defaultTexEditorVerticalPadding,
-                    leading: self.viewModel.horizontalSpacing,
-                    bottom: self.defaultTexEditorVerticalPadding,
-                    trailing: self.viewModel.horizontalSpacing
-                )
-            )
         }
     }
 
