@@ -59,6 +59,15 @@ struct ComponentsView: View {
                 self.navigateToView(IconComponentView())
             }
 
+            if #available(iOS 16.4, *) {
+                Button("Popover") {
+                    self.navigateToView(PopoverDemoView())
+                }
+            } else {
+                Text("Popover: unavailable below iOS version 16.4")
+                    .foregroundStyle(.red)
+            }
+
             Group {
                 Button("Progress Bar - Indeterminate") {
                     self.navigateToView(ProgressBarIndeterminateComponentView())
