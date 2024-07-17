@@ -118,7 +118,6 @@ public final class TextEditorUIView: UITextView {
         set {
             self.viewModel.isReadOnly = newValue
             self.isEditable = !newValue
-//            self.isSelectable = !newValue
         }
     }
 
