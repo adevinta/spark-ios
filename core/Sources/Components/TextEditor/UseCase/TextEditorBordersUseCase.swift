@@ -20,13 +20,7 @@ final class TextEditorBordersUseCase: TextEditorBordersUseCasable {
         isFocused: Bool) -> TextEditorBorders {
 
         let radious = theme.border.radius.large
-        let width: CGFloat
-
-        if intent == .neutral, !isFocused {
-            width = theme.border.width.small
-        } else {
-            width = theme.border.width.medium
-        }
+        let width = isFocused ? theme.border.width.medium : theme.border.width.small
 
         return .init(
             radius: radious,
