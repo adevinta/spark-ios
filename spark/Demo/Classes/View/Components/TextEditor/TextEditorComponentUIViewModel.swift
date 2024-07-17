@@ -87,13 +87,6 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.readonlyChanged(_:))))
     }()
 
-    lazy var dynamicHeightConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "IsDynamicHeight",
-            type: .checkbox(title: "", isOn: self.isDynamicHeight),
-            target: (source: self, action: #selector(self.dynamicHeightChanged(_:))))
-    }()
-
     lazy var sizesConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
             name: "IsStaticSizes",
@@ -111,7 +104,6 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
             self.placeholderConfigurationItemViewModel,
             self.disableConfigurationItemViewModel,
             self.readonlyConfigurationItemViewModel,
-            self.dynamicHeightConfigurationItemViewModel,
             self.sizesConfigurationItemViewModel
         ]
     }
@@ -130,7 +122,6 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
     @Published var placeholder: TextEditorContent
     @Published var isEnabled: Bool
     @Published var isReadonly: Bool
-    @Published var isDynamicHeight: Bool
     @Published var isStaticSizes: Bool
 
     init(
@@ -149,7 +140,6 @@ final class TextEditorComponentUIViewModel: ComponentUIViewModel {
         self.placeholder = placeholder
         self.isEnabled = isEnabled
         self.isReadonly = isReadonly
-        self.isDynamicHeight = isDynamicHeight
         self.isStaticSizes = isStaticSizes
 
         super.init(identifier: "TextEditor")
@@ -181,10 +171,6 @@ extension TextEditorComponentUIViewModel {
 
     @objc func readonlyChanged(_ isSelected: Any?) {
         self.isReadonly = isTrue(isSelected)
-    }
-
-    @objc func dynamicHeightChanged(_ isSelected: Any?) {
-        self.isDynamicHeight = isTrue(isSelected)
     }
 
     @objc func staticSizesChanged(_ isSelected: Any?) {
