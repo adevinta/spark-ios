@@ -128,8 +128,10 @@ public struct TextEditorView: View {
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
                     Text(self.isPlaceholderTextHidden ? self.titleKey : self.$text.wrappedValue)
+                        .textSelected(self.viewModel.isReadOnly)
                         .font(self.viewModel.font.font)
                         .foregroundStyle(self.isPlaceholderTextHidden ? self.viewModel.placeholderColor.color : self.viewModel.textColor.color)
+
                         .padding(
                             EdgeInsets(
                                 top: self.defaultTexEditorTopPadding + self.scaleFactor,
@@ -155,10 +157,20 @@ public struct TextEditorView: View {
 }
 
 private extension View {
+
     func isEnabled(_ value: Bool, complition: @escaping (Bool) -> Void) -> some View {
         DispatchQueue.main.async {
             complition(value)
         }
         return self.disabled(!value)
+    }
+
+    @ViewBuilder
+    func textSelected(_ isEnabled: Bool) -> some View {
+        if isEnabled {
+            self.textSelection(.enabled)
+        } else {
+            self.textSelection(.disabled)
+        }
     }
 }
