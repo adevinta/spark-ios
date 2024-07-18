@@ -13,11 +13,10 @@ import Combine
 public final class TextEditorUIView: UITextView {
 
     // Private Variables
-    @ScaledUIMetric private var minHeight: CGFloat = 44
-    @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 8
+    @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 10
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
-    private let viewModel: TextEditorViewModel
+    private var viewModel: TextEditorViewModel!
     private var cancellables = Set<AnyCancellable>()
     private var placeHolderConstarints: [NSLayoutConstraint]?
     private var placeHolderLabelYAnchor: NSLayoutConstraint?
@@ -45,7 +44,7 @@ public final class TextEditorUIView: UITextView {
             self._delegate = newValue
         }
         get {
-            return self._delegate
+            return super.delegate
         }
     }
 
@@ -104,6 +103,9 @@ public final class TextEditorUIView: UITextView {
         set {
             self.viewModel.isEnabled = newValue
             self.isUserInteractionEnabled = newValue
+            if !isEnabled {
+               _ = self.resignFirstResponder()
+            }
         }
     }
 
@@ -115,7 +117,6 @@ public final class TextEditorUIView: UITextView {
         set {
             self.viewModel.isReadOnly = newValue
             self.isEditable = !newValue
-            self.isSelectable = !newValue
         }
     }
 
@@ -168,23 +169,21 @@ public final class TextEditorUIView: UITextView {
         self.textContainer.lineFragmentPadding = 0
         self.textContainerInset = UIEdgeInsets(
             top: self.defaultSystemVerticalPadding,
-            left: self.viewModel.horizontalSpacing,
+            left: self.viewModel.horizontalSpacing * self.scaleFactor,
             bottom: self.defaultSystemVerticalPadding,
-            right: self.viewModel.horizontalSpacing
+            right: self.viewModel.horizontalSpacing * self.scaleFactor
         )
 
         self.addSubview(self.placeHolderLabel)
         self.placeHolderConstarints = [
             self.placeHolderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: self.defaultSystemVerticalPadding),
-            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.viewModel.horizontalSpacing),
-            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.viewModel.horizontalSpacing),
+            self.placeHolderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.viewModel.horizontalSpacing * self.scaleFactor),
+            self.placeHolderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -self.viewModel.horizontalSpacing * self.scaleFactor),
             self.placeHolderLabel.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor, constant: -self.defaultSystemVerticalPadding)
         ]
         self.placeHolderLabelYAnchor = self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
         self.placeHolderLabelXAnchor = self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
-        self.placeholderLabelWidthAnchor = self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -2 * self.viewModel.horizontalSpacing)
-
-        self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight).isActive = true
+        self.placeholderLabelWidthAnchor = self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -2 * self.viewModel.horizontalSpacing * self.scaleFactor)
     }
 
     private func hidePlaceHolder(_ value: Bool) {
@@ -234,7 +233,7 @@ public final class TextEditorUIView: UITextView {
 
         self.viewModel.$borderRadius.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] borderRadius in
             guard let self else { return }
-            self.setCornerRadius(borderRadius)
+            self.setCornerRadius(borderRadius * self.scaleFactor)
         }
 
         self.viewModel.$horizontalSpacing.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] spacing in
@@ -272,7 +271,6 @@ public final class TextEditorUIView: UITextView {
 
         self._scaleFactor.update(traitCollection: self.traitCollection)
         self._defaultSystemVerticalPadding.update(traitCollection: self.traitCollection)
-        self._minHeight.update(traitCollection: self.traitCollection)
         self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
     }
 }
@@ -293,7 +291,7 @@ extension TextEditorUIView: UITextViewDelegate {
     }
 
     public func textViewDidBeginEditing(_ textView: UITextView) {
-        self.hidePlaceHolder(true)
+        self.hidePlaceHolder(!textView.text.isEmpty)
         self._delegate?.textViewDidBeginEditing?(textView)
     }
 

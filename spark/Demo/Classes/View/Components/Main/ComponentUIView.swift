@@ -70,7 +70,7 @@ class ComponentUIView: UIView {
         return label
     }()
 
-    lazy var componentStackView: UIStackView = {
+    private lazy var componentHStack: UIStackView = {
         let horizontalStackView = UIStackView(
             arrangedSubviews: [
                 self.componentLeftSpaceView,
@@ -80,11 +80,15 @@ class ComponentUIView: UIView {
         )
         horizontalStackView.spacing = 16
         horizontalStackView.axis = .horizontal
+        return horizontalStackView
+    }()
+
+    lazy var componentStackView: UIStackView = {
 
         let verticalStackView = UIStackView(
             arrangedSubviews: [
                 self.componentTopSpaceView,
-                horizontalStackView,
+                componentHStack,
                 self.componentBottomSpaceView
             ]
         )
@@ -94,7 +98,7 @@ class ComponentUIView: UIView {
         return verticalStackView
     }()
 
-    private let componentView: UIView
+    private var componentView: UIView
 
     lazy var componentLeftSpaceView: UIView = {
         let view = UIView()
@@ -232,6 +236,12 @@ class ComponentUIView: UIView {
         self.componentView.layoutIfNeeded()
         self.componentView.contentMode = .scaleToFill
         self.componentView.sizeToFit()
+    }
+
+    func updateComponentView(_ view: UIView) {
+        self.componentView.removeFromSuperview()
+        self.componentView = view
+        self.componentHStack.insertArrangedSubview(self.componentView, at: 1)
     }
 
     // MARK: - Subscribe

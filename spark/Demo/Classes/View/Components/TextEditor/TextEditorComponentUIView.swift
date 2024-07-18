@@ -14,7 +14,7 @@ import UIKit
 final class TextEditorComponentUIView: ComponentUIView, UIGestureRecognizerDelegate {
 
     // MARK: - Components
-    private let componentView: TextEditorUIView
+    private var componentView: TextEditorUIView
 
     // MARK: - Properties
 
@@ -65,31 +65,13 @@ final class TextEditorComponentUIView: ComponentUIView, UIGestureRecognizerDeleg
         self.viewModel.$text.subscribe(in: &self.cancellables) { [weak self] type in
             guard let self = self else { return }
             self.viewModel.textConfigurationItemViewModel.buttonTitle = type.name
-            switch type {
-            case .none:
-                self.componentView.text = ""
-            case .short:
-                self.componentView.text = "What is Lorem Ipsum?"
-            case .medium:
-                self.componentView.text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            case .long:
-                self.componentView.text = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English."
-            }
+            self.componentView.text = Self.setText(type: type)
         }
 
         self.viewModel.$placeholder.subscribe(in: &self.cancellables) { [weak self] type in
             guard let self = self else { return }
             self.viewModel.placeholderConfigurationItemViewModel.buttonTitle = type.name
-            switch type {
-            case .none:
-                self.componentView.placeHolder = ""
-            case .short:
-                self.componentView.placeHolder = "What is Lorem Ipsum?"
-            case .medium:
-                self.componentView.placeHolder = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            case .long:
-                self.componentView.placeHolder = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English."
-            }
+            self.componentView.placeHolder = Self.setText(type: type)
         }
 
         self.viewModel.$isEnabled.subscribe(in: &self.cancellables) {  [weak self] isEnabled in
@@ -102,24 +84,41 @@ final class TextEditorComponentUIView: ComponentUIView, UIGestureRecognizerDeleg
             self.componentView.isReadOnly = isReadonly
         }
 
-        self.viewModel.$isDynamicHeight.subscribe(in: &self.cancellables) {  [weak self] isDynamicHeight in
-            guard let self = self else { return }
-            self.componentView.isScrollEnabled = !isDynamicHeight
-        }
-
         self.viewModel.$isStaticSizes.subscribe(in: &self.cancellables) {  [weak self] isStaticSizes in
             guard let self = self else { return }
+            self.componentView = Self.makeTextEditorView(self.viewModel)
+            self.updateComponentView(self.componentView)
             self.componentView.widthAnchor.constraint(equalToConstant: 300).isActive = isStaticSizes
             self.componentView.heightAnchor.constraint(equalToConstant: 100).isActive = isStaticSizes
-            self.componentView.isScrollEnabled = isStaticSizes ? true : !self.viewModel.isDynamicHeight
+            self.componentView.isScrollEnabled = isStaticSizes
         }
+
     }
 
     static private func makeTextEditorView(_ viewModel: TextEditorComponentUIViewModel) -> TextEditorUIView {
-        return  TextEditorUIView(
+        let view = TextEditorUIView(
             theme: viewModel.theme,
             intent: viewModel.intent
         )
+        view.text = TextEditorComponentUIView.setText(type: viewModel.text)
+        view.placeHolder = TextEditorComponentUIView.setText(type: viewModel.placeholder)
+        view.isEnabled = viewModel.isEnabled
+        view.isReadOnly = viewModel.isReadonly
+        view.isScrollEnabled = viewModel.isStaticSizes
+        return view
+    }
+
+    static private func setText(type: TextEditorContent) -> String {
+        switch type {
+        case .none:
+            return ""
+        case .short:
+            return "What is Lorem Ipsum?"
+        case .medium:
+            return "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        case .long:
+            return "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English."
+        }
     }
 
     @objc private func viewDidTapped() {
