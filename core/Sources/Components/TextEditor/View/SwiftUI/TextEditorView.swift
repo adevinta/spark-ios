@@ -10,12 +10,10 @@ import SwiftUI
 
 enum Field: Hashable {
         case text
-        case none
 }
 
 public struct TextEditorView: View {
 
-    @ScaledMetric private var minHeight: CGFloat = 44
     private var defaultTexEditorTopPadding: CGFloat = 8
     private var defaultTexEditorBottomPadding: CGFloat = 9
     private var defaultTexEditorHorizontalPadding: CGFloat = 5
@@ -71,7 +69,6 @@ public struct TextEditorView: View {
                 self.textEditorView()
             }
         }
-        .frame(minHeight: self.minHeight)
         .border(width: self.viewModel.borderWidth * self.scaleFactor, radius: self.viewModel.borderRadius * self.scaleFactor, colorToken: self.viewModel.borderColor)
         .tint(self.viewModel.textColor.color)
         .allowsHitTesting(self.viewModel.isEnabled)

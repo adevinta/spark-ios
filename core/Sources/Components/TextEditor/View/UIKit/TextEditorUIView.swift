@@ -13,8 +13,7 @@ import Combine
 public final class TextEditorUIView: UITextView {
 
     // Private Variables
-    @ScaledUIMetric private var minHeight: CGFloat = 44
-    @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 8
+    @ScaledUIMetric private var defaultSystemVerticalPadding: CGFloat = 10
     @ScaledUIMetric private var scaleFactor: CGFloat = 1.0
 
     private var viewModel: TextEditorViewModel!
@@ -185,8 +184,6 @@ public final class TextEditorUIView: UITextView {
         self.placeHolderLabelYAnchor = self.placeHolderLabel.centerYAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
         self.placeHolderLabelXAnchor = self.placeHolderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         self.placeholderLabelWidthAnchor = self.placeHolderLabel.widthAnchor.constraint(lessThanOrEqualTo: self.textInputView.widthAnchor, constant: -2 * self.viewModel.horizontalSpacing * self.scaleFactor)
-
-        self.heightAnchor.constraint(greaterThanOrEqualToConstant: self.minHeight).isActive = true
     }
 
     private func hidePlaceHolder(_ value: Bool) {
@@ -236,7 +233,7 @@ public final class TextEditorUIView: UITextView {
 
         self.viewModel.$borderRadius.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] borderRadius in
             guard let self else { return }
-            self.setCornerRadius(borderRadius)
+            self.setCornerRadius(borderRadius * self.scaleFactor)
         }
 
         self.viewModel.$horizontalSpacing.removeDuplicates().subscribe(in: &self.cancellables) { [weak self] spacing in
@@ -274,7 +271,6 @@ public final class TextEditorUIView: UITextView {
 
         self._scaleFactor.update(traitCollection: self.traitCollection)
         self._defaultSystemVerticalPadding.update(traitCollection: self.traitCollection)
-        self._minHeight.update(traitCollection: self.traitCollection)
         self.setBorderWidth(self.viewModel.borderWidth * self.scaleFactor)
     }
 }
