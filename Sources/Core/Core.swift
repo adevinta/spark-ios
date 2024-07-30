@@ -10,6 +10,7 @@
 @_exported import SparkChip
 @_exported import SparkFormField
 @_exported import SparkIcon
+@_exported import SparkPopover
 @_exported import SparkProgressBar
 @_exported import SparkProgressTracker
 @_exported import SparkRadioButton
