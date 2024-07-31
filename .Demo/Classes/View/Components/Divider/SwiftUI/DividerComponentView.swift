@@ -67,7 +67,9 @@ struct DividerComponentView: View {
                     intent: intent,
                     axis: axis,
                     alignment: alignment,
-                    text: Text(text)
+                    text: {
+                        Text(text)
+                    }
                 )
             } else {
                 DividerView(
