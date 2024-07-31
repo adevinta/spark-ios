@@ -51,6 +51,10 @@ struct ComponentsView: View {
                 }
             }
 
+            Button("Divider") {
+                self.navigateToView(DividerComponentView())
+            }
+
             Button("FormField") {
                 self.navigateToView(FormFieldComponentView())
             }

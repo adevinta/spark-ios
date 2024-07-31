@@ -57,6 +57,11 @@ let package = Package(
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
+            // url: "https://github.com/adevinta/spark-ios-component-divider.git",
+            path: "../spark-ios-component-divider"
+            // /*version*/ "0.0.1"..."999.999.999"
+        ),
+        .package(
             url: "https://github.com/adevinta/spark-ios-component-form-field.git",
             // path: "../spark-ios-component-form-field"
             /*version*/ "0.0.1"..."999.999.999"
@@ -160,6 +165,10 @@ let package = Package(
                 .product(
                     name: "SparkChip",
                     package: "spark-ios-component-chip"
+                ),
+                .product(
+                    name: "SparkDivider",
+                    package: "spark-ios-component-divider"
                 ),
                 .product(
                     name: "SparkFormField",
