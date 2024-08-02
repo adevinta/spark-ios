@@ -16,6 +16,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
         .iconButton,
         .checkbox,
         .chip,
+        .divider,
         .formField,
         .icon,
         .popover,
@@ -43,6 +44,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static let button = UIComponent(rawValue: "Button")
     static let checkbox = UIComponent(rawValue: "Checkbox")
     static let chip = UIComponent(rawValue: "Chip")
+    static let divider = UIComponent(rawValue: "Divider")
     static let formField = UIComponent(rawValue: "FormField")
     static let icon = UIComponent(rawValue: "Icon")
     static let iconButton = UIComponent(rawValue: "Icon Button")

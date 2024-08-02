@@ -8,6 +8,7 @@
 @_exported import SparkButton
 @_exported import SparkCheckbox
 @_exported import SparkChip
+@_exported import SparkDivider
 @_exported import SparkFormField
 @_exported import SparkIcon
 @_exported import SparkPopover

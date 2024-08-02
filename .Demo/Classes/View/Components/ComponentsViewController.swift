@@ -83,6 +83,8 @@ extension ComponentsViewController {
             )
         case .chip:
             viewController = ChipComponentViewController.build()
+        case .divider:
+            viewController = DividerComponentUIViewController.build()
         case .formField:
             viewController = FormFieldComponentUIViewController.build()
         case .icon:
