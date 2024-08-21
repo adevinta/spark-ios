@@ -88,5 +88,12 @@ extension ComponentVersionViewController {
     enum Row: CaseIterable {
         case uikit
         case swiftui
+
+        var name: String {
+            switch self {
+            case .uikit: "UIKit"
+            case .swiftui: "SwiftUI"
+            }
+        }
     }
 }

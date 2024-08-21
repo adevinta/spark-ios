@@ -1,5 +1,5 @@
 //
-//  SwitchButtonCell.swift
+//  SwitchCell.swift
 //  SparkDemo
 //
 //  Created by alican.aycil on 19.12.23.
@@ -9,9 +9,9 @@
 import UIKit
 import SparkCore
 
-final class SwitchButtonCell: UITableViewCell, Configurable {
+final class SwitchCell: UITableViewCell, Configurable {
 
-    typealias CellConfigartion = SwitchButtonConfiguration
+    typealias CellConfigartion = SwitchConfiguration
     typealias Component = SwitchUIView
 
     lazy var component: SwitchUIView = {

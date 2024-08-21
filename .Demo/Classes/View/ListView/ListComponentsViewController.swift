@@ -117,8 +117,8 @@ extension ListComponentsViewController {
             return ListViewController<SpinnerCell, SpinnerConfiguration>()
         case .star:
             return ListViewController<StarCell, StarCellConfiguration>()
-        case .switchButton:
-            return ListViewController<SwitchButtonCell, SwitchButtonConfiguration>()
+        case .switch:
+            return ListViewController<SwitchCell, SwitchConfiguration>()
         case .tab:
             return ListViewController<TabCell, TabConfiguration>()
         case .tag:

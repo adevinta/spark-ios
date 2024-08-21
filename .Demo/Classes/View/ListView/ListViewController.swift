@@ -74,8 +74,8 @@ final class ListViewController<Cell: Configurable, Configuration: ComponentConfi
         case is StarCell.Type:
             self.tableView.register(StarCell.self, forCellReuseIdentifier: StarCell.reuseIdentifier)
 
-        case is SwitchButtonCell.Type:
-            self.tableView.register(SwitchButtonCell.self, forCellReuseIdentifier: SwitchButtonCell.reuseIdentifier)
+        case is SwitchCell.Type:
+            self.tableView.register(SwitchCell.self, forCellReuseIdentifier: SwitchCell.reuseIdentifier)
 
         case is TabCell.Type:
             self.tableView.register(TabCell.self, forCellReuseIdentifier: TabCell.reuseIdentifier)

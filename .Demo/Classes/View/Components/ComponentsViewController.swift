@@ -109,7 +109,7 @@ extension ComponentsViewController {
             viewController = SpinnerComponentUIViewController.build()
         case .star:
             viewController = StarComponentViewController.build()
-        case .switchButton:
+        case .switch:
             viewController = SwitchComponentUIViewController.build()
         case .tab:
             viewController = TabComponentUIViewController.build()
