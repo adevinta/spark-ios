@@ -11,7 +11,7 @@ import SparkDivider
 
 struct DividerComponentView: View {
 
-    private let theme = SparkTheme()
+    private let theme = SparkTheme.shared
 
     @State private var text: String = "Text"
     @State private var intent: DividerIntent = .outline
@@ -73,7 +73,7 @@ struct DividerComponentView: View {
                 )
             } else {
                 DividerView(
-                    theme: SparkTheme(),
+                    theme: SparkTheme.shared,
                     intent: intent,
                     axis: axis,
                     alignment: alignment

@@ -14,5 +14,5 @@ public class SparkThemePublisher: ObservableObject {
 
     private init() {}
 
-    @Published public var theme: Theme = SparkTheme()
+    @Published public var theme: Theme = SparkTheme.shared
 }

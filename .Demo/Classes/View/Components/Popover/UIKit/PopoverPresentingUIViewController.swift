@@ -12,7 +12,7 @@ import SparkPopover
 
 final class PopoverPresentingUIViewController: UIViewController {
 
-    private let theme = SparkTheme()
+    private let theme = SparkTheme.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +47,7 @@ final class PopoverPresentingUIViewController: UIViewController {
         if let presentedViewController {
             presentedViewController.dismiss(animated: true)
         } else {
-            let theme = SparkTheme()
+            let theme = SparkTheme.shared
             let popoverViewController = PopoverViewController(contentViewController: PopoverContentDemoViewController(theme: theme, intent: intent), theme: theme, intent: intent, showArrow: showArrow)
             self.presentPopover(popoverViewController, sourceView: sourceView)
         }
