@@ -17,8 +17,7 @@ struct ThemeCellModel: Equatable, Hashable {
     // MARK: - Public Properties
     static var themes: [ThemeCellModel] = [
         .init(title: "Spark", theme: SparkTheme.shared),
-        .init(title: "Spark Pro", theme: SparkProTheme.shared),
-        .init(title: "Spark Sky", theme: SkyTheme())
+        .init(title: "Sky", theme: SkyTheme())
     ]
 
     // MARK: - Initialize

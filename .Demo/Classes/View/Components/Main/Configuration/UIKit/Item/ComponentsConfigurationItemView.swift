@@ -27,7 +27,7 @@ final class ComponentsConfigurationItemUIViewModelView: UIView {
             UIView()
         ].compactMap { $0 })
         stackView.axis = .horizontal
-        stackView.spacing = 10
+        stackView.spacing = 4
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
