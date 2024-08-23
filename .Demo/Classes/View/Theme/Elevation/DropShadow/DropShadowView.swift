@@ -22,7 +22,11 @@ struct DropShadowView: View {
 
     var body: some View {
         ForEach(viewModel.itemViewModels(for: self.theme), id: \.id) { itemViewModel in
-            DropShadowItemView(itemViewModel: itemViewModel)
+            DropShadowItemView(
+                itemViewModel: itemViewModel,
+                backgroundColor: self.theme.colors.main.main.color
+            )
+            .listRowBackground(self.theme.colors.base.surface.color)
         }
     }
 }
@@ -30,6 +34,7 @@ struct DropShadowView: View {
 struct DropShadowItemView: View {
 
     let itemViewModel: DropShadowItemViewModel
+    let backgroundColor: Color
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -40,7 +45,7 @@ struct DropShadowItemView: View {
                 .foregroundColor(.gray)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
-            Color.blue
+            self.backgroundColor
                 .frame(height: 50)
                 .cornerRadius(5)
                 .shadow(itemViewModel.shadow)
