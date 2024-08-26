@@ -9,9 +9,9 @@
 import SparkCore
 
 struct SkyBorder: Border {
-    
+
     // MARK: - Properties
-    
+
     let width: BorderWidth = BorderWidthDefault(
         small: 2,
         medium: 3
