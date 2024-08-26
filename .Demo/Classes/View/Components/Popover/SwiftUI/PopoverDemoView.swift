@@ -13,7 +13,7 @@ import SparkPopover
 @available(iOS 16.4, *)
 struct PopoverDemoView: View {
 
-    private let theme = SparkTheme()
+    private let theme = SparkTheme.shared
 
     var body: some View {
         ForEach(PopoverIntent.allCases, id: \.self) { intent in
@@ -36,7 +36,7 @@ struct PopoverDemoItem: View {
         }
         .tint(colors.background.color)
         .foregroundStyle(colors.foreground.color)
-        .popover(theme: SparkTheme(), intent: intent, isPresented: $isPresented) { colors in
+        .popover(theme: SparkTheme.shared, intent: intent, isPresented: $isPresented) { colors in
             Text("This is a label that should be multiline, depending on the content size. This is a label that should be multiline, depending on the content size.")
                 .foregroundStyle(colors.foreground.color)
                 .frame(width: 300)
