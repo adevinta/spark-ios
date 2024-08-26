@@ -141,9 +141,9 @@ final class ListViewDataSource<Configuration: ComponentConfiguration>: NSObject,
             return UITableViewCell()
 
         /// Switch Button
-        case let switchButtonConfiguration as SwitchButtonConfiguration:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: SwitchButtonCell.reuseIdentifier, for: indexPath) as? SwitchButtonCell {
-                cell.configureCell(configuration: switchButtonConfiguration)
+        case let switchConfiguration as SwitchConfiguration:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: SwitchCell.reuseIdentifier, for: indexPath) as? SwitchCell {
+                cell.configureCell(configuration: switchConfiguration)
                 return cell
             }
             return UITableViewCell()
@@ -218,8 +218,8 @@ extension ListViewDataSource {
         case is StarCellConfiguration.Type:
             data = self.createStarConfigurations()
 
-        case is SwitchButtonConfiguration.Type:
-            data = self.createSwitchButtonConfigurations()
+        case is SwitchConfiguration.Type:
+            data = self.createSwitchConfigurations()
 
         case is TabConfiguration.Type:
             data = self.createTabConfigurations()
@@ -341,10 +341,10 @@ extension ListViewDataSource {
     }
 
     /// Switch Button
-    func createSwitchButtonConfigurations() -> [SwitchButtonConfiguration] {
-        [SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .left, textContent: .text, isOn: true, isEnabled: true),
-         SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .right, textContent: .multilineText, isOn: false, isEnabled: true),
-         SwitchButtonConfiguration(theme: SparkTheme.shared, intent: .success, alignment: .left, textContent: .attributedText, isOn: true, isEnabled: false)
+    func createSwitchConfigurations() -> [SwitchConfiguration] {
+        [SwitchConfiguration(theme: SparkTheme.shared, intent: .main, alignment: .left, textContent: .text, isOn: true, isEnabled: true),
+         SwitchConfiguration(theme: SparkTheme.shared, intent: .basic, alignment: .right, textContent: .multilineText, isOn: false, isEnabled: true),
+         SwitchConfiguration(theme: SparkTheme.shared, intent: .success, alignment: .left, textContent: .attributedText, isOn: true, isEnabled: false)
         ]
     }
 

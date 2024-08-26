@@ -1,5 +1,5 @@
 //
-//  SwitchButtonConfiguration.swift
+//  SwitchConfiguration.swift
 //  SparkDemo
 //
 //  Created by alican.aycil on 19.12.23.
@@ -9,7 +9,7 @@
 import UIKit
 import SparkCore
 
-struct SwitchButtonConfiguration: ComponentConfiguration {
+struct SwitchConfiguration: ComponentConfiguration {
     var theme: Theme
     var intent: SwitchIntent
     var alignment: SwitchAlignment

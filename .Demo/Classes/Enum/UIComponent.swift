@@ -29,7 +29,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
         .slider,
         .spinner,
         .star,
-        .switchButton,
+        .switch,
         .tab,
         .tag,
         .textField,
@@ -58,7 +58,7 @@ struct UIComponent: RawRepresentable, CaseIterable, Equatable {
     static let slider = UIComponent(rawValue: "Slider")
     static let spinner = UIComponent(rawValue: "Spinner")
     static let star = UIComponent(rawValue: "Star")
-    static let switchButton = UIComponent(rawValue: "Switch Button")
+    static let `switch` = UIComponent(rawValue: "Switch")
     static let tab = UIComponent(rawValue: "Tab")
     static let tag = UIComponent(rawValue: "Tag")
     static let textField = UIComponent(rawValue: "TextField")
