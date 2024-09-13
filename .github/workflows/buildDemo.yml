@@ -53,5 +53,5 @@ jobs:
         with:
           name: SparkMainDemo.app
           path: |
-            spark-ios/${{ env.xcodebuild_derivedData }}Build/Products/Debug-iphonesimulator/SparkMainDemo.app
+            spark-ios/${{ env.xcodebuild_derivedData }}Build/Products/Debug-iphonesimulator/${{ env.app_name }}.app
           retention-days: 15
