@@ -106,9 +106,9 @@ final class IconButtonComponentViewController: UIViewController {
 
 extension IconButtonComponentViewController {
 
-    static func build() -> IconButtonComponentViewController {
+    static func build() -> IconButtonComponentViewController2 {
         let viewModel = IconButtonComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        return IconButtonComponentViewController(viewModel: viewModel)
+        return IconButtonComponentViewController2()
     }
 }
 

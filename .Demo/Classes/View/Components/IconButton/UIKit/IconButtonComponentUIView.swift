@@ -11,6 +11,294 @@ import Combine
 import SparkCore
 @_spi(SI_SPI) import SparkCommon
 
+final class IconButtonComponentViewController2: UIViewController {
+
+    private lazy var contentStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [
+            self.loadButton,
+            self.buttonsStackView,
+            UIView()
+        ])
+        view.axis = .vertical
+        view.spacing = 30
+        view.alignment = .leading
+        return view
+    }()
+
+    private lazy var loadButton: UIButton = {
+        let view = UIButton(type: .custom)
+        view.setTitle("Stop", for: .selected)
+        view.setTitle("Start", for: .normal)
+        view.addAction(.init(handler: { _ in
+            self.isAnimated.toggle()
+            view.isSelected = self.isAnimated
+        }), for: .touchUpInside)
+        view.setTitleColor(.systemBlue, for: .normal)
+        return view
+    }()
+
+    private lazy var buttonsStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [
+            self.buttonViewStackView,
+            self.button2ViewStackView
+        ])
+        view.axis = .vertical
+        view.spacing = 24
+        return view
+    }()
+
+    private lazy var buttonViewStackView: UIStackView = {
+        self.buttonViewStackView(
+            self.buttonView,
+            iconButtonView: self.iconButtonView,
+            title: "Infinite"
+        )
+    }()
+
+    private lazy var buttonView: ButtonUIView = {
+        let view = ButtonUIView(
+            theme: SparkTheme.shared,
+            intent: .main,
+            variant: .filled,
+            size: .medium,
+            shape: .rounded,
+            alignment: .leadingImage
+        )
+        view.setImage(self.image, for: .normal)
+        view.setTitle("My Text", for: .normal)
+        return view
+    }()
+
+    private lazy var iconButtonView: IconButtonUIView = {
+        let view = IconButtonUIView(
+            theme: SparkTheme.shared,
+            intent: .support,
+            variant: .filled,
+            size: .medium,
+            shape: .rounded
+        )
+        view.setImage(self.image, for: .normal)
+        return view
+    }()
+
+    private lazy var button2ViewStackView: UIStackView = {
+        self.buttonViewStackView(
+            self.button2View,
+            iconButtonView: self.iconButton2View,
+            title: "Limit (3)"
+        )
+    }()
+
+    private lazy var button2View: ButtonUIView = {
+        let view = ButtonUIView(
+            theme: SparkTheme.shared,
+            intent: .success,
+            variant: .outlined,
+            size: .medium,
+            shape: .rounded,
+            alignment: .leadingImage
+        )
+        view.setImage(self.image, for: .normal)
+        view.setTitle("My Text", for: .normal)
+        return view
+    }()
+
+    private lazy var iconButton2View: IconButtonUIView = {
+        let view = IconButtonUIView(
+            theme: SparkTheme.shared,
+            intent: .danger,
+            variant: .filled,
+            size: .medium,
+            shape: .rounded
+        )
+        view.setImage(self.image, for: .normal)
+        return view
+    }()
+
+    private func buttonViewStackView(_ buttonView: UIView, iconButtonView: UIView, title: String) -> UIStackView {
+        let label = UILabel()
+        label.text = title
+
+        let view = UIStackView(arrangedSubviews: [
+            label,
+            iconButtonView,
+            buttonView
+        ])
+        view.axis = .horizontal
+        view.spacing = 12
+        return view
+    }
+
+    private var image = UIImage(systemName: "bell")
+
+    private var isAnimated: Bool = false {
+        didSet {
+            if self.isAnimated {
+                self.animation.start()
+                self.animation3.start(with: 3)
+            } else {
+                self.animation.stop()
+                self.animation3.stop()
+            }
+        }
+    }
+
+    private lazy var animation: SparkAnimation = {
+        RotateWithDampingAnimation(
+            from: self.buttonView.imageView,
+            self.iconButtonView.imageView
+        )
+    }()
+    private lazy var animation3: SparkAnimation = {
+        RotateWithDampingAnimation(
+            from: self.button2View,
+            self.iconButton2View
+        )
+    }()
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Lifecycle
+
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.view.addSubview(self.contentStackView)
+        self.view.backgroundColor = .systemBackground
+
+        self.contentStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.contentStackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.contentStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            self.contentStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.contentStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+    }
+}
+
+// TODO: move into an another repository
+
+public protocol SparkAnimation {
+    // TODO: add completion when animation is finished
+    init(from views: UIView...)
+    func start()
+    func start(with limit: Int)
+    func stop()
+}
+
+public final class RotateWithDampingAnimation: SparkAnimation {
+
+    private var views: [UIView]? // TODO: must be a weak
+    private var inProgress: Bool = true
+    private var counter: Int = 0
+    private var limit: Int?
+
+    public init(from views: UIView...) {
+        self.views = views
+    }
+
+    public func start() {
+        self.resetCounter()
+        self.inProgress = true
+        self.load()
+    }
+
+    public func start(with limit: Int) {
+        self.counter = 0
+        self.limit = limit
+        self.inProgress = true
+        self.load()
+    }
+
+    private func load() {
+        guard let views else { return }
+        var limitIsOver = false
+        if let limit {
+            limitIsOver = self.counter >= limit
+        }
+
+        guard self.inProgress, !limitIsOver else { return }
+        UIView.animate(
+            withDuration: 0.1,
+            delay: 1.0,
+            animations: {
+                for view in views {
+                    view.transform = .init(rotationAngle: Double.pi * 0.075)
+                }
+            }, completion: { [weak self] _ in
+                guard let self else { return }
+                UIView.animate(
+                    withDuration: 2.0,
+                    delay: .zero,
+                    usingSpringWithDamping: 0.1,
+                    initialSpringVelocity: 0,
+                    options: .curveEaseInOut,
+                    animations: {
+                        for view in views {
+                            view.transform = CGAffineTransformIdentity
+                        }
+                    }, completion: { [weak self] _ in
+                        guard let self else { return }
+                        self.counter += 1
+                        if self.inProgress {
+                            self.load()
+                        }
+                    }
+                )
+            }
+        )
+    }
+
+    public func stop() {
+        self.resetCounter()
+        self.inProgress = false
+        for view in self.views ?? [] {
+            view.layer.removeAllAnimations()
+        }
+    }
+
+    private func resetCounter() {
+        self.counter = 0
+        self.limit = nil
+    }
+}
+
+extension UIView {
+
+    func startAnimation(_ animation: SparkAnimation) {
+        animation.start()
+    }
+
+    func stopAnimation(_ animation: SparkAnimation) {
+        animation.stop()
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 final class IconButtonComponentUIView: ComponentUIView {
 
     // MARK: - Components
