@@ -10,6 +10,86 @@ import SwiftUI
 @_spi(SI_SPI) import SparkCommon
 import SparkCore
 
+struct IconButtonComponentView2: View {
+
+    // MARK: - Properties
+
+    @State private var theme: Theme = SparkThemePublisher.shared.theme
+    @State private var intent: ButtonIntent = .main
+    @State private var variant: ButtonVariant = .filled
+    @State private var size: ButtonSize = .medium
+    @State private var shape: ButtonShape = .rounded
+    private let contentNormal: IconButtonContentDefault = .image
+
+    // MARK: - View
+
+    var body: some View {
+        IconButtonView(
+            theme: self.theme,
+            intent: self.intent,
+            variant: self.variant,
+            size: self.size,
+            shape: self.shape,
+            action: {
+            })
+        // Images
+        .addImage(self.contentNormal, state: .normal)
+        .rotateWithDampingAnimation()
+    }
+}
+
+private struct RotateWithDampingAnimationModifier: ViewModifier {
+
+    // MARK: - Properties
+
+    private let rotation: CGFloat = 15
+    @State private var animated: Bool = true
+
+    // MARK: - Content
+    func body(content: Content) -> some View {
+        content
+            .rotationEffect(
+                .degrees(animated ? self.rotation : -self.rotation)
+            )
+            .animation(
+                .interpolatingSpring(stiffness: 400, damping: 4),
+                value: animated
+            )
+            .rotationEffect(
+                .degrees(animated ? -self.rotation : self.rotation)
+            )
+            .animation(.easeOut, value: animated)
+            .onAppear() {
+                self.animated.toggle()
+            }
+            .onChange(of: self.animated) { _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+                    self.animated.toggle()
+                })
+            }
+    }
+}
+
+// MARK: - View extension
+extension View {
+
+    func rotateWithDampingAnimation() -> some View {
+        self.modifier(RotateWithDampingAnimationModifier())
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 struct IconButtonComponentView: View {
 
     // MARK: - Properties
@@ -159,7 +239,8 @@ private extension IconButtonView {
             var image: Image?
             if content == .image {
                 switch state {
-                case .normal: image = Image("arrow")
+//                case .normal: image = Image("arrow")
+                case .normal: image = Image(systemName: "bell")
                 case .highlighted: image = Image("close")
                 case .disabled: image = Image("check")
                 case .selected: image = Image("alert")
