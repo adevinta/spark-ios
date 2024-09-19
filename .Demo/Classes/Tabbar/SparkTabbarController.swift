@@ -35,18 +35,16 @@ public final class SparkTabbarController: UITabBarController {
     }()
 
     /// Third Tab
-    private lazy var listViewController: UIViewController = {
-        let layout = ComponentsViewController.makeLayout()
-        let viewController = UINavigationController(rootViewController: ListComponentsViewController(collectionViewLayout: layout))
-        viewController.tabBarItem = UITabBarItem(title: "List", image: UIImage(systemName: "list.bullet.rectangle"), tag: 0)
+    private lazy var uiKitViewController: UIViewController = {
+        let viewController = UIHostingController(rootView: NewComponentsView(isUIKit: true))
+        viewController.tabBarItem = UITabBarItem(title: "UIKit", image: UIImage(systemName: "u.circle"), tag: 0)
         return viewController
     }()
 
     /// Fourth Tab
-    private lazy var settingsViewController: UIViewController = {
-        var layout = SettingsViewController.makeLayout()
-        let viewController = UINavigationController(rootViewController: SettingsViewController(collectionViewLayout: layout))
-        viewController.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gear"), tag: 0)
+    private lazy var swiftUIViewController: UIViewController = {
+        let viewController = UIHostingController(rootView: NewComponentsView(isUIKit: false))
+        viewController.tabBarItem = UITabBarItem(title: "SwiftUI", image: UIImage(systemName: "s.circle"), tag: 0)
         return viewController
     }()
 
@@ -67,8 +65,8 @@ public final class SparkTabbarController: UITabBarController {
         viewControllers = [
             self.themeViewController,
             self.componentVersionViewController,
-            self.listViewController,
-            self.settingsViewController
+            self.uiKitViewController,
+            self.swiftUIViewController
         ]
     }
 

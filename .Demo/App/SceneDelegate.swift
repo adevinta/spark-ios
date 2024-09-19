@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import SwiftUI
+import SparkSnackbar
+import SparkButton
+import SparkTheming
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -16,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
 
         let window = UIWindow(windowScene: windowScene)
+        SparkConfiguration.load()
         window.rootViewController = SparkTabbarController()
         self.window = window
         window.makeKeyAndVisible()
