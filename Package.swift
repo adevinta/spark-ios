@@ -97,6 +97,11 @@ let package = Package(
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
+            url: "https://github.com/adevinta/spark-ios-component-snackbar.git",
+            // path: "../spark-ios-component-snackbar"
+            /*version*/ "0.0.1"..."999.999.999"
+        ),
+        .package(
             url: "https://github.com/adevinta/spark-ios-component-slider.git",
             // path: "../spark-ios-component-slider"
             /*version*/ "0.0.1"..."999.999.999"
@@ -197,6 +202,10 @@ let package = Package(
                 .product(
                     name: "SparkRating",
                     package: "spark-ios-component-rating"
+                ),
+                .product(
+                    name: "SparkSnackbar",
+                    package: "spark-ios-component-snackbar"
                 ),
                 .product(
                     name: "SparkSlider",
