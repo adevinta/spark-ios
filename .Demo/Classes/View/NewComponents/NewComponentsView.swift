@@ -39,24 +39,24 @@ extension Components {
     func viewController() -> some View {
         switch self {
         case .snackbar:
-            return HostingView(viewController: .init(nibName: nil, bundle: nil))
+            return HostingView(viewController: { SnackbarDemoUIView() })
         }
     }
 
     private struct HostingView<ViewController: UIViewController>: UIViewControllerRepresentable {
 
-        private let viewController: UIViewControllerType
+        private var viewController: () -> UIViewControllerType
 
-        init(viewController: UIViewControllerType) {
+        init(viewController: @escaping () -> UIViewControllerType) {
             self.viewController = viewController
-            self.viewController.view.backgroundColor = .systemBackground
         }
 
         func makeUIViewController(context: Context) -> ViewController {
-            return self.viewController
+            return self.viewController()
         }
 
-        func updateUIViewController(_ uiViewController: ViewController, context: Context) {}
+        func updateUIViewController(_ uiViewController: ViewController, context: Context) {
+        }
     }
 }
 
