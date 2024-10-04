@@ -57,7 +57,7 @@ final class OptionalEnumSelectorView<Enum>: UIView, ObservableObject where Enum:
                     }
                 )
             )
-            self.presenter?.present(alertController, animated: true)
+            self.presenter?.present(alertController, isAnimated: true)
         }), for: .touchUpInside)
 
         let stackView = UIStackView(arrangedSubviews: [label, self.button])
