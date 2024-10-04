@@ -91,10 +91,6 @@ final class SnackbarDemoUIView: UIViewController {
 
     private var cancellables = Set<AnyCancellable>()
 
-    deinit {
-        print("Deinit \(self)")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
@@ -111,6 +107,7 @@ final class SnackbarDemoUIView: UIViewController {
         self.setupLeftPaddingConfiguration()
         self.setupRightPaddingConfiguration()
         self.setupLabelLineNumberConfiguration()
+        self.setupFullWithConfiguration()
         self.setupLabelTextFieldConfiguration()
         self.setupButtonTextFieldConfiguration()
     }
@@ -222,10 +219,6 @@ extension SnackbarDemoUIView {
     private func addButton() {
         let button = self.snackbar.addButton()
         button.setTitle(self.buttonTextField.text, for: .normal)
-        button.addAction(.init(handler: { [weak self] _ in
-            guard let self else { return }
-            self.snackbarWidthConstraint.isActive.toggle()
-        }), for: .touchUpInside)
     }
 }
 
@@ -372,6 +365,22 @@ extension SnackbarDemoUIView {
         checkbox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
             guard let self else { return }
             self.snackbar.label.numberOfLines = state == .selected ? 0 : 1
+        }
+        self.verticalStackView.addArrangedSubview(checkbox)
+    }
+
+    private func setupFullWithConfiguration() {
+        let checkbox = CheckboxUIView(
+            theme: self.theme,
+            intent: .basic,
+            text: "Is full width",
+            checkedImage: .init(systemName: "checkmark")?.withRenderingMode(.alwaysTemplate) ?? UIImage(),
+            selectionState: .unselected,
+            alignment: .left
+        )
+        checkbox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
+            guard let self else { return }
+            self.snackbarWidthConstraint.isActive.toggle()
         }
         self.verticalStackView.addArrangedSubview(checkbox)
     }
