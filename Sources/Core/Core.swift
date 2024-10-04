@@ -22,5 +22,5 @@
 @_exported import SparkSwitch
 @_exported import SparkTab
 @_exported import SparkTag
-@_exported import SparkTextField
+@_exported import SparkTextInput
 @_exported import SparkTextLink
