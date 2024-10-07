@@ -16,6 +16,7 @@
 @_exported import SparkProgressTracker
 @_exported import SparkRadioButton
 @_exported import SparkRating
+@_exported import SparkSnackbar
 @_exported import SparkSlider
 @_exported import SparkSpinner
 @_exported import SparkSwitch

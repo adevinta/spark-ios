@@ -98,7 +98,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/adevinta/spark-ios-component-snackbar.git",
-            // path: "../spark-ios-component-snackbar"
+            //path: "../spark-ios-component-snackbar"
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
