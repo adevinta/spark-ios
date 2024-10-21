@@ -35,6 +35,7 @@ final class RadioButtonComponentUIView: ComponentUIView {
         let stackView = UIStackView(arrangedSubviews: [componentView, singleComponentView])
         stackView.axis = NSLayoutConstraint.Axis.vertical
         stackView.spacing = 20
+        stackView.alignment = .leading
 
         self.stackView = stackView
 

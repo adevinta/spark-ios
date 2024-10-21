@@ -27,11 +27,11 @@ struct RadioButtonComponent: View {
     @State var isDisabled = CheckboxSelectionState.unselected
     @State var longLabel = CheckboxSelectionState.unselected
     @State var numberOfItems = 3
-    @State var selectedID: Int? = 1
+    @State var selectedID: Int? = 0
 
     var items: [RadioButtonItem<Int>] {
         return (1...self.numberOfItems).map { index in
-            RadioButtonItem(id: index, label: self.label(index: index))
+            RadioButtonItem(id: index - 1, label: self.label(index: index))
         }
     }
 
