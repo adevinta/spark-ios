@@ -58,7 +58,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/adevinta/spark-ios-component-divider.git",
-//            path: "../spark-ios-component-divider"
+            // path: "../spark-ios-component-divider"
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
@@ -73,7 +73,7 @@ let package = Package(
         ),
         .package(
              url: "https://github.com/adevinta/spark-ios-component-popover.git",
-//            path: "../spark-ios-component-popover"
+            // path: "../spark-ios-component-popover"
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
@@ -98,7 +98,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/adevinta/spark-ios-component-snackbar.git",
-            //path: "../spark-ios-component-snackbar"
+            // path: "../spark-ios-component-snackbar"
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(

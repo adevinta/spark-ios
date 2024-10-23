@@ -36,10 +36,13 @@ struct NewComponentsView: View {
 
 // MARK: - UIKit
 extension Components {
+    @ViewBuilder
     func viewController() -> some View {
         switch self {
         case .snackbar:
-            return HostingView(viewController: { SnackbarDemoUIView() })
+            HostingView(viewController: { SnackbarDemoUIView() })
+        case .snackbarPresentation:
+            HostingView(viewController: { SnackbarPresentationDemoUIView() })
         }
     }
 
@@ -66,6 +69,8 @@ extension Components {
         switch self {
         case .snackbar:
             SnackbarDemoView()
+        case .snackbarPresentation:
+            EmptyView()
         }
     }
 }
