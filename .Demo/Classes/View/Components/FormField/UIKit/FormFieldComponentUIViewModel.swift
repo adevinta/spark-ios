@@ -29,13 +29,8 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             .eraseToAnyPublisher()
     }
 
-    var showDescriptionSheet: AnyPublisher<[FormFieldTextStyle], Never> {
-        showDescriptionStyleSheetSubject
-            .eraseToAnyPublisher()
-    }
-
-    var showComponentSheet: AnyPublisher<[FormFieldComponentStyle], Never> {
-        showComponentStyleSheetSubject
+    var showHelperSheet: AnyPublisher<[FormFieldTextStyle], Never> {
+        showHelperStyleSheetSubject
             .eraseToAnyPublisher()
     }
 
@@ -43,7 +38,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
     private var showThemeSheetSubject: PassthroughSubject<[ThemeCellModel], Never> = .init()
     private var showFeedbackStateSheetSubject: PassthroughSubject<[FormFieldFeedbackState], Never> = .init()
     private var showTitleStyleSheetSubject: PassthroughSubject<[FormFieldTextStyle], Never> = .init()
-    private var showDescriptionStyleSheetSubject: PassthroughSubject<[FormFieldTextStyle], Never> = .init()
+    private var showHelperStyleSheetSubject: PassthroughSubject<[FormFieldTextStyle], Never> = .init()
     private var showComponentStyleSheetSubject: PassthroughSubject<[FormFieldComponentStyle], Never> = .init()
 
     // MARK: - Items Properties
@@ -71,27 +66,12 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
         )
     }()
 
-    lazy var descriptionStyleConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var helperStyleConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Description Style",
+            name: "Helper Style",
             type: .button,
-            target: (source: self, action: #selector(self.presentDescriptionStyleSheet))
+            target: (source: self, action: #selector(self.presentHelperStyleSheet))
         )
-    }()
-
-    lazy var componentStyleConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Component Style",
-            type: .button,
-            target: (source: self, action: #selector(self.presentComponentStyleSheet))
-        )
-    }()
-
-    lazy var disableConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
-        return .init(
-            name: "Enable",
-            type: .checkbox(title: "", isOn: self.isEnabled),
-            target: (source: self, action: #selector(self.enabledChanged(_:))))
     }()
 
     lazy var isRequiredConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -101,11 +81,11 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             target: (source: self, action: #selector(self.isRequiredChanged(_:))))
     }()
 
-    lazy var alignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
+    lazy var isSecondaryHelperConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Change component alignment",
-            type: .checkbox(title: "", isOn: self.isTrailingAlignment),
-            target: (source: self, action: #selector(self.isAlignmentChanged(_:))))
+            name: "Is Secondary Helper",
+            type: .checkbox(title: "", isOn: self.isSecondaryHelper),
+            target: (source: self, action: #selector(self.isSecondaryHelperChanged(_:))))
     }()
 
     lazy var containerViewAlignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
@@ -119,7 +99,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
     // MARK: - Default Properties
     var themes = ThemeCellModel.themes
     let text: String = "Agreement"
-    let descriptionText = "Your agreement is important to us."
+    let helperText = "Your agreement is important to us."
     let multilineText: String = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
     var attributeText: NSAttributedString {
         let attributeString = NSMutableAttributedString(
@@ -141,32 +121,26 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
     @Published var theme: Theme
     @Published var feedbackState: FormFieldFeedbackState
     @Published var titleStyle: FormFieldTextStyle
-    @Published var descriptionStyle: FormFieldTextStyle
-    @Published var componentStyle: FormFieldComponentStyle
-    @Published var isEnabled: Bool
+    @Published var helperStyle: FormFieldTextStyle
     @Published var isTitleRequired: Bool
-    @Published var isTrailingAlignment: Bool
+    @Published var isSecondaryHelper: Bool
     @Published var containerViewAlignment: Bool
 
     init(
         theme: Theme,
         feedbackState: FormFieldFeedbackState = .default,
         titleStyle: FormFieldTextStyle = .text,
-        descriptionStyle: FormFieldTextStyle = .text,
-        componentStyle: FormFieldComponentStyle = .singleCheckbox,
-        isEnabled: Bool = true,
+        helperStyle: FormFieldTextStyle = .text,
         isTitleRequired: Bool = false,
-        isTrailingAlignment: Bool = false,
+        isSecondaryHelper: Bool = false,
         containerViewAlignment: Bool = false
     ) {
         self.theme = theme
         self.feedbackState = feedbackState
         self.titleStyle = titleStyle
-        self.descriptionStyle = descriptionStyle
-        self.componentStyle = componentStyle
-        self.isEnabled = isEnabled
+        self.helperStyle = helperStyle
         self.isTitleRequired = isTitleRequired
-        self.isTrailingAlignment = isTrailingAlignment
+        self.isSecondaryHelper = isSecondaryHelper
         self.containerViewAlignment = containerViewAlignment
         super.init(identifier: "FormField")
 
@@ -174,11 +148,9 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
             self.themeConfigurationItemViewModel,
             self.feedbackStateConfigurationItemViewModel,
             self.titleStyleConfigurationItemViewModel,
-            self.descriptionStyleConfigurationItemViewModel,
-            self.componentStyleConfigurationItemViewModel,
-            self.disableConfigurationItemViewModel,
+            self.helperStyleConfigurationItemViewModel,
             self.isRequiredConfigurationItemViewModel,
-            self.alignmentConfigurationItemViewModel,
+            self.isSecondaryHelperConfigurationItemViewModel,
             self.containerViewAlignmentConfigurationItemViewModel
         ])
     }
@@ -199,24 +171,20 @@ extension FormFieldComponentUIViewModel {
         self.showTitleStyleSheetSubject.send(FormFieldTextStyle.allCases)
     }
 
-    @objc func presentDescriptionStyleSheet() {
-        self.showDescriptionStyleSheetSubject.send(FormFieldTextStyle.allCases)
+    @objc func presentHelperStyleSheet() {
+        self.showHelperStyleSheetSubject.send(FormFieldTextStyle.allCases)
     }
 
     @objc func presentComponentStyleSheet() {
         self.showComponentStyleSheetSubject.send(FormFieldComponentStyle.allCases)
     }
 
-    @objc func enabledChanged(_ isSelected: Any?) {
-        self.isEnabled = isTrue(isSelected)
-    }
-
     @objc func isRequiredChanged(_ isSelected: Any?) {
         self.isTitleRequired = isTrue(isSelected)
     }
 
-    @objc func isAlignmentChanged(_ isSelected: Any?) {
-        self.isTrailingAlignment = isTrue(isSelected)
+    @objc func isSecondaryHelperChanged(_ isSecondaryHelper: Any?) {
+        self.isSecondaryHelper = isTrue(isSecondaryHelper)
     }
 
     @objc func isContainerViewAlignmentChanged(_ isSelected: Any?) {
@@ -230,18 +198,4 @@ enum FormFieldTextStyle: CaseIterable {
     case multilineText
     case attributeText
     case none
-}
-
-enum FormFieldComponentStyle: CaseIterable {
-    case basic
-    case singleCheckbox
-    case verticalCheckbox
-    case horizontalCheckbox
-    case horizontalScrollableCheckbox
-    case singleRadioButton
-    case verticalRadioButton
-    case horizontalRadioButton
-    case textField
-    case addOnTextField
-    case ratingInput
 }
