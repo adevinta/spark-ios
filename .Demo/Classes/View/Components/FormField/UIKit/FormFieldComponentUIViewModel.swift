@@ -90,7 +90,7 @@ final class FormFieldComponentUIViewModel: ComponentUIViewModel {
 
     lazy var containerViewAlignmentConfigurationItemViewModel: ComponentsConfigurationItemUIViewModel = {
         return .init(
-            name: "Fill screen for right alinment",
+            name: "Fill screen for right alignment",
             type: .checkbox(title: "", isOn: self.containerViewAlignment),
             target: (source: self, action: #selector(self.isContainerViewAlignmentChanged))
         )

@@ -132,6 +132,9 @@ extension FormFieldUIView {
     func setCounterIfPossible(on text: String?, limit: Int?) {
         if let view = self as? FormFieldUIView<TextFieldUIView> {
             view.setCounter(on: text, limit: limit)
+            guard let limit else { return }
+
+            view.secondaryHelperLabel.accessibilityLabel = "\(text?.count ?? 0) caractères sur \(limit)"
         }
     }
 }
