@@ -151,11 +151,10 @@ final class FormFieldsViewController: UICollectionViewController {
     }
 
     static func makeTextField() -> TextFieldUIView {
-        let view = TextFieldUIView(
+        return TextFieldUIView(
             theme: SparkTheme.shared,
             intent: .alert
         )
-        return view
     }
 
     static func makeAddOnTextField() -> TextFieldUIView {
