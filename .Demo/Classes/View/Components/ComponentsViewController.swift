@@ -86,7 +86,8 @@ extension ComponentsViewController {
         case .divider:
             viewController = DividerComponentUIViewController.build()
         case .formField:
-            viewController = FormFieldComponentUIViewController.build()
+            let layout = FormFieldsViewController.makeLayout()
+            viewController = FormFieldsViewController(collectionViewLayout: layout)
         case .icon:
             viewController = IconComponentUIViewController.build()
         case .popover:

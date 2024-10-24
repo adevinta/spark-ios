@@ -18,7 +18,7 @@ struct FormFieldComponentView: View {
     @State private var feedbackState: FormFieldFeedbackState = .default
     @State private var componentStyle: FormFieldComponentStyle = .singleCheckbox
     @State private var titleStyle: FormFieldTextStyle = .text
-    @State private var descriptionStyle: FormFieldTextStyle = .text
+    @State private var helperStyle: FormFieldTextStyle = .text
     @State private var isEnabled = CheckboxSelectionState.selected
     @State private var isTitleRequired = CheckboxSelectionState.unselected
     @State private var isTrailingAlignment = CheckboxSelectionState.unselected
@@ -58,14 +58,14 @@ struct FormFieldComponentView: View {
                     value: self.$titleStyle)
 
                 EnumSelector(
-                    title: "Description Style",
-                    dialogTitle: "Select an Description Style",
+                    title: "Helper Style",
+                    dialogTitle: "Select an Helper Style",
                     values: FormFieldTextStyle.allCases,
-                    value: self.$descriptionStyle)
+                    value: self.$helperStyle)
 
                 EnumSelector(
                     title: "Component Style",
-                    dialogTitle: "Select an Description Style",
+                    dialogTitle: "Select an Helper Style",
                     values: FormFieldComponentStyle.allCases,
                     value: self.$componentStyle)
 
@@ -101,7 +101,7 @@ struct FormFieldComponentView: View {
                     },
                     feedbackState: self.feedbackState,
                     attributedTitle: self.setText(isTitle: true, textStyle: self.titleStyle),
-                    attributedDescription: self.setText(isTitle: false, textStyle: self.descriptionStyle),
+                    attributedHelper: self.setText(isTitle: false, textStyle: self.helperStyle),
                     isTitleRequired: self.isTitleRequired == .selected ? true : false
                 )
                 .disabled(self.isEnabled == .selected ? false : true)

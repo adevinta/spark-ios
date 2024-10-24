@@ -12,20 +12,23 @@ import SwiftUI
 import UIKit
 @_spi(SI_SPI) import SparkCommon
 
-final class FormFieldComponentUIViewController: UIViewController {
+final class FormFieldComponentUIViewController<S: UIView>: UIViewController {
 
     // MARK: - Published Properties
     @ObservedObject private var themePublisher = SparkThemePublisher.shared
 
     // MARK: - Properties
-    let componentView: FormFieldComponentUIView
+    let componentView: FormFieldComponentUIView<S>
     let viewModel: FormFieldComponentUIViewModel
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Initializer
-    init(viewModel: FormFieldComponentUIViewModel) {
+    init(
+        view: FormFieldComponentUIView<S>,
+        viewModel: FormFieldComponentUIViewModel
+    ) {
         self.viewModel = viewModel
-        self.componentView = FormFieldComponentUIView(viewModel: viewModel)
+        self.componentView = view
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -70,22 +73,9 @@ final class FormFieldComponentUIViewController: UIViewController {
             self.presentTitleStyleActionSheet(titles)
         }
 
-        self.viewModel.showDescriptionSheet.subscribe(in: &self.cancellables) { descriptions in
-            self.presentDescriptionStyleActionSheet(descriptions)
+        self.viewModel.showHelperSheet.subscribe(in: &self.cancellables) { helpers in
+            self.presentHelperStyleActionSheet(helpers)
         }
-
-        self.viewModel.showComponentSheet.subscribe(in: &self.cancellables) { components in
-            self.presentComponentStyleActionSheet(components)
-        }
-    }
-}
-
-// MARK: - Builder
-extension FormFieldComponentUIViewController {
-
-    static func build() -> FormFieldComponentUIViewController {
-        let viewModel = FormFieldComponentUIViewModel(theme: SparkThemePublisher.shared.theme)
-        return FormFieldComponentUIViewController(viewModel: viewModel)
     }
 }
 
@@ -119,20 +109,11 @@ extension FormFieldComponentUIViewController {
         self.present(actionSheet, isAnimated: true)
     }
 
-    private func presentDescriptionStyleActionSheet(_ textStyles: [FormFieldTextStyle]) {
+    private func presentHelperStyleActionSheet(_ textStyles: [FormFieldTextStyle]) {
         let actionSheet = SparkActionSheet<FormFieldTextStyle>.init(
             values: textStyles,
             texts: textStyles.map { $0.name }) { textStyle in
-                self.viewModel.descriptionStyle = textStyle
-            }
-        self.present(actionSheet, isAnimated: true)
-    }
-
-    private func presentComponentStyleActionSheet(_ componentStyles: [FormFieldComponentStyle]) {
-        let actionSheet = SparkActionSheet<FormFieldComponentStyle>.init(
-            values: componentStyles,
-            texts: componentStyles.map { $0.name }) { componentStyle in
-                self.viewModel.componentStyle = componentStyle
+                self.viewModel.helperStyle = textStyle
             }
         self.present(actionSheet, isAnimated: true)
     }
