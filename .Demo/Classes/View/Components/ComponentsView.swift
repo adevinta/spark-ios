@@ -121,6 +121,12 @@ struct ComponentsView: View {
                     self.navigateToView(TagComponentView())
                 }
 
+                if #available(iOS 16.0, *) {
+                    Button("TextEditor") {
+                        self.navigateToView(TextEditorComponentView())
+                    }
+                }
+
                 Button("TextField") {
                     self.navigateToView(TextFieldComponentView())
                 }
