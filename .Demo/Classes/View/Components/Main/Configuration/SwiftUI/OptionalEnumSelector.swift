@@ -21,7 +21,7 @@ struct OptionalEnumSelector<Value>: View where Value: CaseIterable & Hashable {
     @State private var isPresented = false
 
     var body: some View {
-        HStack() {
+        HStack {
             Text("\(title): ").bold()
             Button(self.nameFormatter(value)) {
                 self.isPresented = true

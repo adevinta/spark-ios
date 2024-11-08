@@ -70,7 +70,7 @@ extension Components {
         case .snackbar:
             SnackbarDemoView()
         case .snackbarPresentation:
-            EmptyView()
+            SnackbarPresentationDemoView()
         }
     }
 }

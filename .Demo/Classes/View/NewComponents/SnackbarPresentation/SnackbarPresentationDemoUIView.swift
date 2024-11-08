@@ -147,7 +147,7 @@ final class SnackbarPresentationDemoUIView: UIViewController {
                 default: break
                 }
             }), for: .editingChanged)
-            textField.widthAnchor.constraint(greaterThanOrEqualToConstant:  150).isActive = true
+            textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 150).isActive = true
         }
 
         let hstack = UIStackView(arrangedSubviews: [leftTextField, rightTextField])
