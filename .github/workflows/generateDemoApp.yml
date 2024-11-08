@@ -1,6 +1,9 @@
 name: build-demo-app-from-main
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0-4" # At 00:00 on every day-of-week from Sunday through Thursday
 
 env:
   app_name: SparkDemo
@@ -44,7 +47,7 @@ jobs:
         with:
           name: ${{ env.app_name }}-${{ github.run_number }}.xcresult
           path: ${{ env.app_name }}.xcresult
-          retention-days: 15
+          retention-days: 1
 
       - name: Upload demo app file
         uses: actions/upload-artifact@v4
@@ -54,4 +57,4 @@ jobs:
           name: SparkMainDemo.app
           path: |
             ${{ env.xcodebuild_derivedData }}Build/Products/Debug-iphonesimulator/${{ env.app_name }}.app
-          retention-days: 15
+          retention-days: 1
