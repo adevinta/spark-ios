@@ -19,67 +19,61 @@ struct IconButtonComponentView2: View {
     @State private var variant: ButtonVariant = .filled
     @State private var size: ButtonSize = .medium
     @State private var shape: ButtonShape = .rounded
+    @State private var animationType: SparkAnimationType?
     private let contentNormal: IconButtonContentDefault = .image
 
     // MARK: - View
 
     var body: some View {
-        IconButtonView(
-            theme: self.theme,
-            intent: self.intent,
-            variant: self.variant,
-            size: self.size,
-            shape: self.shape,
-            action: {
-            })
-        // Images
-        .addImage(self.contentNormal, state: .normal)
-        .rotateWithDampingAnimation()
-    }
-}
-
-private struct RotateWithDampingAnimationModifier: ViewModifier {
-
-    // MARK: - Properties
-
-    private let rotation: CGFloat = 15
-    @State private var animated: Bool = true
-
-    // MARK: - Content
-    func body(content: Content) -> some View {
-        content
-            .rotationEffect(
-                .degrees(animated ? self.rotation : -self.rotation)
-            )
-            .animation(
-                .interpolatingSpring(stiffness: 400, damping: 4),
-                value: animated
-            )
-            .rotationEffect(
-                .degrees(animated ? -self.rotation : self.rotation)
-            )
-            .animation(.easeOut, value: animated)
-            .onAppear() {
-                self.animated.toggle()
-            }
-            .onChange(of: self.animated) { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-                    self.animated.toggle()
+        VStack {
+            IconButtonView(
+                theme: self.theme,
+                intent: self.intent,
+                variant: self.variant,
+                size: self.size,
+                shape: self.shape,
+                action: {
+                    self.animationType = self.animationType == .none ? .bell : .none
                 })
-            }
+            // Images
+            .addImage(self.contentNormal, state: .normal)
+            .animate(for: .bell)
+
+            ViewMock()
+                .animation(self.animationType)
+                .padding(12)
+                .background(.gray)
+        }
     }
 }
 
-// MARK: - View extension
-extension View {
+struct ViewMock: View {
+    @Environment(\.animationType) var animationType
 
-    func rotateWithDampingAnimation() -> some View {
-        self.modifier(RotateWithDampingAnimationModifier())
+    var body: some View {
+        VStack {
+            Text("Hello")
+                .background(.blue)
+            IconButtonMock()
+                .animation(self.animationType)
+        }
     }
 }
 
 
+struct IconButtonMock: View {
+    @Environment(\.animationType) var animationType
 
+    var body: some View {
+        VStack {
+            Text("Hello")
+                .background(.yellow)
+            Text("YOU")
+                .background(.red)
+                .animate(for: self.animationType)
+        }
+    }
+}
 
 
 

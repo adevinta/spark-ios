@@ -134,11 +134,29 @@ final class IconButtonComponentViewController2: UIViewController {
     private var isAnimated: Bool = false {
         didSet {
             if self.isAnimated {
-                self.animation.start()
-                self.animation3.start(with: 3)
+                UIView.sparkAnimate(
+                    withType: .bell,
+                    on: self.buttonView.imageView,
+                    delay: 2,
+                    repeat: true,
+                    completion: { _ in
+                        self.loadButton.alpha = 1
+                        print("LOGROB Animation finished")
+                    })
+
+//                UIView.animate(withDuration: 2, delay: 2, options: .repeat, animations: {
+//                    self.loadButton.alpha = 0
+//                }, completion: { _ in
+//                    self.loadButton.alpha = 1
+//                    print("LOGROB Animation finished")
+//                })
+
+
+//                self.animation.start()
+//                self.animation3.start(with: 3)
             } else {
-                self.animation.stop()
-                self.animation3.stop()
+//                self.animation.stop()
+//                self.animation3.stop()
             }
         }
     }
@@ -184,101 +202,7 @@ final class IconButtonComponentViewController2: UIViewController {
 
 // TODO: move into an another repository
 
-public protocol SparkAnimation {
-    // TODO: add completion when animation is finished
-    init(from views: UIView...)
-    func start()
-    func start(with limit: Int)
-    func stop()
-}
 
-public final class RotateWithDampingAnimation: SparkAnimation {
-
-    private var views: [UIView]? // TODO: must be a weak
-    private var inProgress: Bool = true
-    private var counter: Int = 0
-    private var limit: Int?
-
-    public init(from views: UIView...) {
-        self.views = views
-    }
-
-    public func start() {
-        self.resetCounter()
-        self.inProgress = true
-        self.load()
-    }
-
-    public func start(with limit: Int) {
-        self.counter = 0
-        self.limit = limit
-        self.inProgress = true
-        self.load()
-    }
-
-    private func load() {
-        guard let views else { return }
-        var limitIsOver = false
-        if let limit {
-            limitIsOver = self.counter >= limit
-        }
-
-        guard self.inProgress, !limitIsOver else { return }
-        UIView.animate(
-            withDuration: 0.1,
-            delay: 1.0,
-            animations: {
-                for view in views {
-                    view.transform = .init(rotationAngle: Double.pi * 0.075)
-                }
-            }, completion: { [weak self] _ in
-                guard let self else { return }
-                UIView.animate(
-                    withDuration: 2.0,
-                    delay: .zero,
-                    usingSpringWithDamping: 0.1,
-                    initialSpringVelocity: 0,
-                    options: .curveEaseInOut,
-                    animations: {
-                        for view in views {
-                            view.transform = CGAffineTransformIdentity
-                        }
-                    }, completion: { [weak self] _ in
-                        guard let self else { return }
-                        self.counter += 1
-                        if self.inProgress {
-                            self.load()
-                        }
-                    }
-                )
-            }
-        )
-    }
-
-    public func stop() {
-        self.resetCounter()
-        self.inProgress = false
-        for view in self.views ?? [] {
-            view.layer.removeAllAnimations()
-        }
-    }
-
-    private func resetCounter() {
-        self.counter = 0
-        self.limit = nil
-    }
-}
-
-extension UIView {
-
-    func startAnimation(_ animation: SparkAnimation) {
-        animation.start()
-    }
-
-    func stopAnimation(_ animation: SparkAnimation) {
-        animation.stop()
-    }
-}
 
 
 
