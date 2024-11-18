@@ -74,7 +74,7 @@ extension ComponentsViewController {
         case .button:
             viewController = ButtonComponentViewController.build()
         case .iconButton:
-            viewController = IconButtonComponentViewController.build()
+            viewController = TestAnimationViewController()
         case .checkbox:
             viewController = UIHostingController(
                 rootView: ComponentsCheckboxListView(

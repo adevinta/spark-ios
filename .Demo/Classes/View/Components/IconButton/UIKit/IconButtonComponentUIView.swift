@@ -134,15 +134,14 @@ final class IconButtonComponentViewController2: UIViewController {
     private var isAnimated: Bool = false {
         didSet {
             if self.isAnimated {
-                UIView.sparkAnimate(
-                    withType: .bell,
-                    on: self.buttonView.imageView,
-                    delay: 2,
-                    repeat: true,
-                    completion: { _ in
-                        self.loadButton.alpha = 1
-                        print("LOGROB Animation finished")
-                    })
+//                UIView.sparkAnimate(
+//                    withType: .bell,
+//                    on: self.buttonView.imageView,
+//                    delay: 2,
+//                    repeat: true,
+//                    completion: { _ in
+//                        print("LOGROB Animation finished")
+//                    })
 
 //                UIView.animate(withDuration: 2, delay: 2, options: .repeat, animations: {
 //                    self.loadButton.alpha = 0
@@ -197,6 +196,10 @@ final class IconButtonComponentViewController2: UIViewController {
             self.contentStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
             self.contentStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
+    }
+
+    deinit {
+        print("LOGROB DEINIT VC")
     }
 }
 

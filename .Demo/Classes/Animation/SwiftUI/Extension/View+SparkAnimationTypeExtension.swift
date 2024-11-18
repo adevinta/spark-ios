@@ -1,5 +1,5 @@
 //
-//  SparkAnimationType+ViewExtension.swift
+//  View+SparkAnimationTypeExtension.swift
 //  SparkDemo
 //
 //  Created by robin.lemaire on 15/11/2024.
