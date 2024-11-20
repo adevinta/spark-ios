@@ -58,7 +58,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/adevinta/spark-ios-component-divider.git",
-//            path: "../spark-ios-component-divider"
+            // path: "../spark-ios-component-divider"
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
@@ -72,8 +72,8 @@ let package = Package(
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
-             url: "https://github.com/adevinta/spark-ios-component-popover.git",
-//            path: "../spark-ios-component-popover"
+            url: "https://github.com/adevinta/spark-ios-component-popover.git",
+            // path: "../spark-ios-component-popover"
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
@@ -127,8 +127,8 @@ let package = Package(
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
-            url: "https://github.com/adevinta/spark-ios-component-text-field.git",
-            // path: "../spark-ios-component-text-field"
+            url: "https://github.com/adevinta/spark-ios-component-text-input.git",
+            // path: "../spark-ios-component-text-input"
             /*version*/ "0.0.1"..."999.999.999"
         ),
         .package(
@@ -228,8 +228,8 @@ let package = Package(
                     package: "spark-ios-component-tag"
                 ),
                 .product(
-                    name: "SparkTextField",
-                    package: "spark-ios-component-text-field"
+                    name: "SparkTextInput",
+                    package: "spark-ios-component-text-input"
                 ),
                 .product(
                     name: "SparkTextLink",
