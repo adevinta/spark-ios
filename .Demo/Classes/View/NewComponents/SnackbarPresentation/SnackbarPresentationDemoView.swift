@@ -10,6 +10,7 @@ import SwiftUI
 @_spi(SI_SPI) import SparkCommon
 import SparkCore
 
+// swiftlint:disable no_debugging_method
 struct SnackbarPresentationDemoView: View {
 
     @State private var isPresented = false

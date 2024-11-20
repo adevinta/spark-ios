@@ -11,7 +11,6 @@ import UIKit
 import SparkCore
 @_spi(SI_SPI) import SparkCommon
 
-// swiftlint:disable no_debugging_method
 final class TextFieldComponentUIView: ComponentUIView {
 
     private let viewModel: TextFieldComponentUIViewModel
@@ -30,6 +29,7 @@ final class TextFieldComponentUIView: ComponentUIView {
 
         self.textField.placeholder = "Placeholder"
         self.textField.delegate = self
+
         self.setupSubscriptions()
     }
 

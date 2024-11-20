@@ -12,6 +12,7 @@ import Combine
 @_spi(SI_SPI) import SparkCommon
 import SparkCore
 
+// swiftlint:disable no_debugging_method
 final class SnackbarPresentationDemoUIView: UIViewController {
 
     private let scrollView = UIScrollView()
