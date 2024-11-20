@@ -191,8 +191,7 @@ final class RadioButtonComponentUIView: ComponentUIView {
 
     // MARK: - Private construction helper
     static private func makeRadioButtonView(_ viewModel: RadioButtonComponentUIViewModel) -> RadioButtonUIGroupView<Int> {
-
-        let component = RadioButtonUIGroupView(
+        return .init(
             theme: viewModel.theme,
             intent: viewModel.intent,
             selectedID: viewModel.selectedRadioButton,
@@ -200,10 +199,6 @@ final class RadioButtonComponentUIView: ComponentUIView {
             labelAlignment: viewModel.labelAlignment,
             groupLayout: viewModel.axis
         )
-
-        component.title = "Radio Button Group (UIKit)"
-        component.supplementaryText = "Radio Button Group Supplementary Text"
-        return component
     }
 
     static private func makeSingleRadioButtonView(_ viewModel: RadioButtonComponentUIViewModel) -> RadioButtonUIView<Int> {
