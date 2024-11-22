@@ -10,80 +10,6 @@ import SwiftUI
 @_spi(SI_SPI) import SparkCommon
 import SparkCore
 
-struct IconButtonComponentView2: View {
-
-    // MARK: - Properties
-
-    @State private var theme: Theme = SparkThemePublisher.shared.theme
-    @State private var intent: ButtonIntent = .main
-    @State private var variant: ButtonVariant = .filled
-    @State private var size: ButtonSize = .medium
-    @State private var shape: ButtonShape = .rounded
-    @State private var animationType: SparkAnimationType?
-    private let contentNormal: IconButtonContentDefault = .image
-
-    // MARK: - View
-
-    var body: some View {
-        VStack {
-            IconButtonView(
-                theme: self.theme,
-                intent: self.intent,
-                variant: self.variant,
-                size: self.size,
-                shape: self.shape,
-                action: {
-                    self.animationType = self.animationType == .none ? .bell : .none
-                })
-            // Images
-            .addImage(self.contentNormal, state: .normal)
-            .animate(for: .bell)
-
-            ViewMock()
-                .animation(self.animationType)
-                .padding(12)
-                .background(.gray)
-        }
-    }
-}
-
-struct ViewMock: View {
-    @Environment(\.animationType) var animationType
-
-    var body: some View {
-        VStack {
-            Text("Hello")
-                .background(.blue)
-            IconButtonMock()
-                .animation(self.animationType)
-        }
-    }
-}
-
-
-struct IconButtonMock: View {
-    @Environment(\.animationType) var animationType
-
-    var body: some View {
-        VStack {
-            Text("Hello")
-                .background(.yellow)
-            Text("YOU")
-                .background(.red)
-                .animate(for: self.animationType)
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-
 struct IconButtonComponentView: View {
 
     // MARK: - Properties
@@ -233,8 +159,7 @@ private extension IconButtonView {
             var image: Image?
             if content == .image {
                 switch state {
-//                case .normal: image = Image("arrow")
-                case .normal: image = Image(systemName: "bell")
+                case .normal: image = Image("arrow")
                 case .highlighted: image = Image("close")
                 case .disabled: image = Image("check")
                 case .selected: image = Image("alert")

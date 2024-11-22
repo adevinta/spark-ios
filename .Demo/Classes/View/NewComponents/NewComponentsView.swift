@@ -10,26 +10,52 @@ import SwiftUI
 
 struct NewComponentsView: View {
 
+    @State var selectedFeature: Components?
     let isUIKit: Bool
+
+
     var body: some View {
-        NavigationView {
-            List(Components.allCases, id: \.self) { component in
-                NavigationLink {
+        if #available(iOS 16.0, *) {
+            NavigationSplitView {
+                List(Components.allCases, selection: self.$selectedFeature) { component in
+                    Text(component.name)
+                        .tag(component)
+                }
+                    .navigationTitle("\(isUIKit ? "UIKit" : "SwiftUI")")
+            } detail: {
+                if let selectedFeature {
                     Group {
                         if self.isUIKit {
-                            component.viewController()
+                            selectedFeature.viewController()
                         } else {
-                            component.view()
+                            selectedFeature.view()
                         }
                     }
-                    .navigationTitle(component.name)
+                    .navigationTitle(selectedFeature.name)
                     .navigationBarTitleDisplayMode(.inline)
-                } label: {
-                    Text(component.name.capitalizingFirstLetter)
+                } else {
+                    EmptyView()
                 }
-
             }
-            .navigationTitle("\(isUIKit ? "UIKit" : "SwiftUI")")
+        } else {
+            NavigationView {
+                List(Components.allCases, id: \.self) { component in
+                    NavigationLink {
+                        Group {
+                            if self.isUIKit {
+                                component.viewController()
+                            } else {
+                                component.view()
+                            }
+                        }
+                        .navigationTitle(component.name)
+                        .navigationBarTitleDisplayMode(.inline)
+                    } label: {
+                        Text(component.name.capitalizingFirstLetter)
+                    }
+                }
+                .navigationTitle("\(isUIKit ? "UIKit" : "SwiftUI")")
+            }
         }
     }
 }
@@ -38,12 +64,30 @@ struct NewComponentsView: View {
 extension Components {
     @ViewBuilder
     func viewController() -> some View {
-        switch self {
+        let viewController = switch self {
+        case .animation:
+            AnimationDemoUIViewController()
         case .snackbar:
             HostingView(viewController: { SnackbarDemoUIView() })
         case .snackbarPresentation:
             HostingView(viewController: { SnackbarPresentationDemoUIView() })
+            SnackbarDemoUIView()
         }
+
+        return AZ(viewController: viewController)
+    }
+
+    private struct AZ<ViewController: UIViewController>: UIViewControllerRepresentable {
+        let viewController: ViewController
+
+        func makeUIViewController(context: Context) -> ViewController {
+            return self.viewController
+        }
+        
+        func updateUIViewController(_ uiViewController: ViewController, context: Context) {
+        }
+        
+        typealias UIViewControllerType = ViewController
     }
 
     private struct HostingView<ViewController: UIViewController>: UIViewControllerRepresentable {
@@ -67,6 +111,8 @@ extension Components {
 extension Components {
     @ViewBuilder func view() -> some View {
         switch self {
+        case .animation:
+            AnimationDemoView()
         case .snackbar:
             SnackbarDemoView()
         case .snackbarPresentation:

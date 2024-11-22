@@ -8,7 +8,14 @@
 
 import Foundation
 
-enum Components: CaseIterable {
+enum Components: String, CaseIterable, Identifiable {
+    case animation
     case snackbar
     case snackbarPresentation
+
+    // MARK: - Properties
+
+    var id: String {
+        return self.rawValue
+    }
 }

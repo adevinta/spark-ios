@@ -13,7 +13,7 @@ internal extension UIView {
     class func bellAnimation(
         on views: [UIView],
         delay: TimeInterval,
-        repeat: Bool,
+        repeat: SparkAnimationRepeat,
         completion: ((Bool) -> Void)?
     ) {
         // Load the animations for all subviews
@@ -27,14 +27,14 @@ internal extension UIView {
     }
 
     private func animate(
-        isFirstAnimation: Bool = true,
+        count: Int = 0,
         delay: TimeInterval,
-        repeat: Bool,
+        repeat: SparkAnimationRepeat,
         completion: ((Bool) -> Void)?
     ) {
         UIView.animate(
             withDuration: 0.1,
-            delay: isFirstAnimation ? delay : 2.0,
+            delay: count == 0 ? delay : 2.0,
             animations: { [weak self] in
                 self?.transform = .init(rotationAngle: Double.pi * 0.075)
             }, completion: { [weak self] result1 in
@@ -50,9 +50,10 @@ internal extension UIView {
                     }, completion: { [weak self] result2 in
                         guard result2 else { return }
                         // Restart the animation if needed
-                        if `repeat` {
+                        let count = count + 1
+                        if `repeat`.canContinue(count: count) {
                             self?.animate(
-                                isFirstAnimation: false,
+                                count: count,
                                 delay: delay,
                                 repeat: `repeat`,
                                 completion: completion

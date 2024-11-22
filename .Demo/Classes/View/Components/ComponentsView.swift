@@ -33,7 +33,7 @@ struct ComponentsView: View {
                     self.navigateToView(ButtonComponentView())
                 }
                 Button("Icon Button") {
-                    self.navigateToView(IconButtonComponentView2())
+                    self.navigateToView(IconButtonComponentView())
                 }
             }
 
