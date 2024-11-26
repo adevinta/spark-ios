@@ -36,7 +36,7 @@ internal extension UIView {
             withDuration: 0.1,
             delay: count == 0 ? delay : 2.0,
             animations: { [weak self] in
-                self?.transform = .init(rotationAngle: Double.pi * 0.075)
+                self?.transform = .init(rotationAngle: -BellConstants.rotationInDegress.degreesToRadians)
             }, completion: { [weak self] result1 in
                 guard result1 else { return }
                 UIView.animate(
