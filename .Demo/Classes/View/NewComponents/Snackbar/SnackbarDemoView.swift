@@ -38,6 +38,7 @@ struct SnackbarDemoView: View {
                         modifiedSnackbar(snackbarWithButton())
                         modifiedSnackbar(snackbarWithCustomView())
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
                 paddingConfiguration()
             }
