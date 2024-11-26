@@ -359,7 +359,7 @@ extension SnackbarDemoUIView {
             intent: .basic,
             text: "Is multiline",
             checkedImage: .init(systemName: "checkmark")?.withRenderingMode(.alwaysTemplate) ?? UIImage(),
-            selectionState: .unselected,
+            selectionState: .selected,
             alignment: .left
         )
         checkbox.publisher.subscribe(in: &self.cancellables) { [weak self] state in
