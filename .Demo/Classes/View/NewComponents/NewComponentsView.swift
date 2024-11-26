@@ -68,16 +68,15 @@ extension Components {
         case .animation:
             AnimationDemoUIViewController()
         case .snackbar:
-            HostingView(viewController: { SnackbarDemoUIView() })
-        case .snackbarPresentation:
-            HostingView(viewController: { SnackbarPresentationDemoUIView() })
             SnackbarDemoUIView()
+        case .snackbarPresentation:
+            SnackbarPresentationDemoUIView()
         }
 
-        return AZ(viewController: viewController)
+        HostingView(viewController: viewController)
     }
 
-    private struct AZ<ViewController: UIViewController>: UIViewControllerRepresentable {
+    private struct HostingView<ViewController: UIViewController>: UIViewControllerRepresentable {
         let viewController: ViewController
 
         func makeUIViewController(context: Context) -> ViewController {
@@ -88,22 +87,6 @@ extension Components {
         }
         
         typealias UIViewControllerType = ViewController
-    }
-
-    private struct HostingView<ViewController: UIViewController>: UIViewControllerRepresentable {
-
-        private var viewController: () -> UIViewControllerType
-
-        init(viewController: @escaping () -> UIViewControllerType) {
-            self.viewController = viewController
-        }
-
-        func makeUIViewController(context: Context) -> ViewController {
-            return self.viewController()
-        }
-
-        func updateUIViewController(_ uiViewController: ViewController, context: Context) {
-        }
     }
 }
 
