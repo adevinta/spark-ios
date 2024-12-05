@@ -19,6 +19,7 @@
 @_exported import SparkSnackbar
 @_exported import SparkSlider
 @_exported import SparkSpinner
+@_exported import SparkStepper
 @_exported import SparkSwitch
 @_exported import SparkTab
 @_exported import SparkTag

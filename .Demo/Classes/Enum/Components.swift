@@ -11,4 +11,5 @@ import Foundation
 enum Components: CaseIterable {
     case snackbar
     case snackbarPresentation
+    case stepper
 }
