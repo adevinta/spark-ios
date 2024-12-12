@@ -88,6 +88,11 @@ private struct AnimationView: View {
                     shape: .rounded,
                     action: { })
                 .image(self.image, for: .normal)
+                .animate(
+                    for: self.animationType,
+                    repeat: self.option.repeat) {
+                        self.animationType = nil
+                    }
 
                 Spacer()
             }
