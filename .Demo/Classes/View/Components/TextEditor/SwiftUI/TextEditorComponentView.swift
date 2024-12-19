@@ -72,18 +72,20 @@ struct TextEditorComponentView: View {
                 }
             },
             integration: {
-//                TextEditorView(
-//                    self.contentType(self.placeholderType),
-//                    text: self.$text,
-//                    theme: self.theme,
-//                    intent: self.intent
-//                )
-//                .disabled(self.isEnabledState == .unselected)
-//                .frame(
-//                    type: self.heightType,
-//                    value: self.heightValue,
-//                    scaleFactor: self.scaleFactor
-//                )
+                VStack {
+                    TextEditorView(
+                        self.contentType(self.placeholderType),
+                        text: self.$text,
+                        theme: self.theme,
+                        intent: self.intent
+                    )
+                    .disabled(self.isEnabledState == .unselected)
+                    .frame(
+                        type: self.heightType,
+                        value: self.heightValue,
+                        scaleFactor: self.scaleFactor
+                    )
+                }
             }
         )
     }
