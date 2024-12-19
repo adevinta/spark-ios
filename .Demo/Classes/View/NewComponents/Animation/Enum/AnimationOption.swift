@@ -17,7 +17,7 @@ enum AnimationOption: CaseIterable, Hashable {
 
     var `repeat`: SparkAnimationRepeat {
         return switch self {
-        case .once: .once
+        case .once: .none
         case .limited: .limited(3)
         case .unlimited: .unlimited
         }

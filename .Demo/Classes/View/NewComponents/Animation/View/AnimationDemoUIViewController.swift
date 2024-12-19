@@ -54,6 +54,15 @@ final class AnimationDemoUIViewController: UIViewController {
         self.setupConstraints()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Reset all animations views
+        for animationView in self.contentStackView.arrangedSubviews.compactMap({ $0 as? AnimationUIView }) {
+            animationView.reset()
+        }
+    }
+
     // MARK: - Constraints
 
     private func setupConstraints() {
@@ -132,7 +141,7 @@ private final class AnimationUIView: UIView {
             view.isEnabled = false
 
             UIView.animate(
-                withType: .bell,
+                type: .bell,
                 on: [
                     self.iconView,
                     self.iconButton,
@@ -237,5 +246,11 @@ private final class AnimationUIView: UIView {
             from: self.contentStackView,
             to: self
         )
+    }
+
+    // MARK: - Action
+
+    func reset() {
+        self.startButton.isEnabled = true
     }
 }

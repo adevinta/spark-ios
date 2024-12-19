@@ -36,7 +36,7 @@ private struct AnimationView: View {
 
     private let image = Image(systemName: "bell")
     @State private var option: AnimationOption
-    @State private var animationType: SparkAnimationType?
+    @State private var play: Bool = false
 
     // MARK: - Initialization
 
@@ -61,10 +61,10 @@ private struct AnimationView: View {
                     shape: .rounded,
                     alignment: .leadingImage
                 ) {
-                    self.animationType = .bell
+                    self.play = true
                 }
                 .title("Start", for: .normal)
-                .disabled(self.animationType != nil)
+                .disabled(self.play)
             }
 
             HStack(alignment: .center, spacing: 20) {
@@ -75,9 +75,10 @@ private struct AnimationView: View {
                     iconImage: self.image
                 )
                 .animate(
-                    for: self.animationType,
+                    type: .bell,
+                    play: self.play,
                     repeat: self.option.repeat) {
-                        self.animationType = nil
+                        self.play = false
                     }
 
                 IconButtonView(
@@ -89,9 +90,10 @@ private struct AnimationView: View {
                     action: { })
                 .image(self.image, for: .normal)
                 .animate(
-                    for: self.animationType,
+                    type: .bell,
+                    play: self.play,
                     repeat: self.option.repeat) {
-                        self.animationType = nil
+                        self.play = false
                     }
 
                 Spacer()
@@ -103,41 +105,6 @@ private struct AnimationView: View {
         }
     }
 }
-
-// TODO: keep somewhere before remove
-
-//struct ViewMock: View {
-//    @Environment(\.animationType) var animationType
-//
-//    var body: some View {
-//        VStack {
-//            Text("Hello")
-//                .background(.blue)
-//            IconButtonMock()
-//                .animation(self.animationType)
-//        }
-//    }
-//}
-//
-//
-//struct IconButtonMock: View {
-//    @Environment(\.animationType) var animationType
-//
-//    var body: some View {
-//        VStack {
-//            Text("Hello")
-//                .background(.yellow)
-//            Text("YOU")
-//                .background(.red)
-//                .animate(
-//                    for: self.animationType,
-//                    delay: <#T##TimeInterval#>,
-//                    completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>,
-//                    repeat: <#T##SparkAnimationRepeat#>
-//                )
-//        }
-//    }
-//}
 
 // MARK: - Preview
 
