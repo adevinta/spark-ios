@@ -44,7 +44,8 @@ extension Components {
         case .snackbarPresentation:
             HostingView(viewController: { SnackbarPresentationDemoUIView() })
         case .stepper:
-            HostingView(viewController: { StepperDemoUIView() }) }
+            EmptyView()
+        }
     }
 
     private struct HostingView<ViewController: UIViewController>: UIViewControllerRepresentable {
@@ -73,7 +74,7 @@ extension Components {
         case .snackbarPresentation:
             SnackbarPresentationDemoView()
         case .stepper:
-            StepperDemoView(value: 5)
+            StepperDemoView(value: 0)
         }
     }
 }
