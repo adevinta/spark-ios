@@ -20,4 +20,13 @@ enum FormFieldComponentStyle: String, CaseIterable {
     case textField
     case addOnTextField
     case ratingInput
+
+    // MARK: - Properties
+
+    var isTextInput: Bool {
+        switch self {
+        case .textField, .addOnTextField: true
+        default: false
+        }
+    }
 }

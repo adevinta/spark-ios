@@ -31,9 +31,46 @@ struct TextEditorComponentView: View {
 
     @ScaledMetric private var scaleFactor: CGFloat = 1.0
 
+    @FocusState private var focusedTextfield: FocusField?
+
+    enum FocusField: Hashable {
+        case textfield3, textfield4
+    }
+
+
+    var charactersCount: Int {
+        self.text.count
+    }
+
     // MARK: - View
 
     var body: some View {
+//        ScrollView {
+//            VStack {
+//
+//                ContentView()
+//
+//                TextEditorView(
+//                    "azdazdazdzadazdazd",
+//                    text: self.$text,
+//                    theme: self.theme,
+//                    intent: self.intent
+//                )
+////                .readHeight(self.text)
+//                .focused($focusedTextfield, equals: .textfield3)
+//                .disabled(self.isEnabledState == .unselected)
+//                .frame(
+//                    type: self.heightType,
+//                    value: self.heightValue,
+//                    scaleFactor: self.scaleFactor
+//                )
+//
+//                Text("azazdazd \(self.charactersCount)")
+//
+//                Spacer()
+//            }
+//        }
+
         Component(
             name: "TextEditor",
             configuration: {
@@ -72,18 +109,20 @@ struct TextEditorComponentView: View {
                 }
             },
             integration: {
-//                TextEditorView(
-//                    self.contentType(self.placeholderType),
-//                    text: self.$text,
-//                    theme: self.theme,
-//                    intent: self.intent
-//                )
-//                .disabled(self.isEnabledState == .unselected)
-//                .frame(
-//                    type: self.heightType,
-//                    value: self.heightValue,
-//                    scaleFactor: self.scaleFactor
-//                )
+                VStack {
+                    TextEditorView(
+                        self.contentType(self.placeholderType),
+                        text: self.$text,
+                        theme: self.theme,
+                        intent: self.intent
+                    )
+                    .disabled(self.isEnabledState == .unselected)
+                    .frame(
+                        type: self.heightType,
+                        value: self.heightValue,
+                        scaleFactor: self.scaleFactor
+                    )
+                }
             }
         )
     }
@@ -132,6 +171,71 @@ private enum HeightType: CaseIterable {
         switch self {
         case .none: false
         case .fixed, .minimum: true
+        }
+    }
+}
+
+
+private struct MyTextField: View {
+
+    @FocusState private var isFocused: Bool
+
+    let title: String
+    @Binding var text: String
+
+    init(_ title: String, text: Binding<String>) {
+        self.title = title
+        self._text = text
+    }
+
+    var body: some View {
+        TextField(title, text: $text)
+            .focused($isFocused) // important !
+            .padding()
+            .overlay(
+                RoundedRectangle(
+                    cornerRadius: 10.0, style: .continuous
+                )
+                .stroke(isFocused ? .green : .gray, lineWidth: isFocused ? 3 : 1)
+            )
+            .accentColor(Color(uiColor: .red))
+    }
+}
+
+
+private struct ContentView: View {
+
+    @FocusState private var focusedTextfield: FocusField?
+
+    enum FocusField: Hashable {
+        case textfield1, textfield2
+    }
+
+    @State private var input1 = "Hi"
+    @State private var input2 = "Hi2"
+
+    var body: some View {
+        VStack(spacing: 16) {
+            MyTextField("hello", text: $input1)
+                .focused($focusedTextfield, equals: .textfield1)
+
+            Text("Count \(self.input1.count)")
+
+            MyTextField("hello", text: $input2)
+                .focused($focusedTextfield, equals: .textfield2)
+
+            Text("Count \(self.input2.count)")
+
+            // test for changing focus
+            Button("Field 1") { focusedTextfield = .textfield1}
+            Button("Field 2") { focusedTextfield = .textfield2}
+
+        }
+        .padding()
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                focusedTextfield = .textfield1
+            }
         }
     }
 }

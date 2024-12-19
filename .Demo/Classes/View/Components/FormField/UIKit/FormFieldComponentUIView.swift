@@ -112,15 +112,24 @@ final class FormFieldComponentUIView<S: UIView>: ComponentUIView {
     }
 
     private func setupTextFieldActions() {
-        if let textField = self.componentView.component as? TextFieldUIView {
-            textField.addAction(.init(handler: { [weak self] _ in
-                guard let self else { return }
-                self.textCounter = textField.text
-                self.componentView.setCounterIfPossible(
-                    on: self.textCounter,
-                    limit: self.viewModel.isSecondaryHelper ? 100 : nil
-                )
+        func action(inputText: String?) {
+            self.textCounter = inputText
+            self.componentView.setCounterIfPossible(
+                on: inputText,
+                limit: self.viewModel.isSecondaryHelper ? 100 : nil
+            )
+        }
+
+        switch self.componentView.component {
+        case let textInput as TextFieldUIView:
+            textInput.addAction(.init(handler: { _ in
+                action(inputText: textInput.text)
             }), for: .editingChanged)
+        case let view as TextFieldAddonsUIView:
+            view.textField.addAction(.init(handler: { _ in
+                action(inputText: view.textField.text)
+            }), for: .editingChanged)
+        default: break
         }
     }
 }
@@ -130,11 +139,21 @@ final class FormFieldComponentUIView<S: UIView>: ComponentUIView {
 extension FormFieldUIView {
 
     func setCounterIfPossible(on text: String?, limit: Int?) {
-        if let view = self as? FormFieldUIView<TextFieldUIView> {
-            view.setCounter(on: text, limit: limit)
-            guard let limit else { return }
+        let counterChanged: Bool
 
-            view.secondaryHelperLabel.accessibilityLabel = "\(text?.count ?? 0) caractères sur \(limit)"
+        switch self {
+        case let view as FormFieldUIView<TextFieldUIView>:
+            view.setCounter(on: text, limit: limit)
+            counterChanged = true
+        case let view as FormFieldUIView<TextFieldAddonsUIView>:
+            view.setCounter(on: text, limit: limit)
+            counterChanged = true
+        default:
+            counterChanged = false
+        }
+
+        if counterChanged, let limit {
+            self.secondaryHelperLabel.accessibilityLabel = "\(text?.count ?? 0) caractères sur \(limit)"
         }
     }
 }

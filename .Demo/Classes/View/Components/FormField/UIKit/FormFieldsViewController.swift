@@ -150,6 +150,13 @@ final class FormFieldsViewController: UICollectionViewController {
         )
     }
 
+    static func makeTextEditor() -> TextEditorUIView {
+        return TextEditorUIView(
+            theme: SparkTheme.shared,
+            intent: .alert
+        )
+    }
+
     static func makeTextField() -> TextFieldUIView {
         return TextFieldUIView(
             theme: SparkTheme.shared,
@@ -157,13 +164,11 @@ final class FormFieldsViewController: UICollectionViewController {
         )
     }
 
-    static func makeAddOnTextField() -> TextFieldUIView {
-        let view = TextFieldUIView(
+    static func makeAddOnTextField() -> TextFieldAddonsUIView {
+        return TextFieldAddonsUIView(
             theme: SparkTheme.shared,
             intent: .alert
         )
-        view.text = "I couldn't add addOnTextField. It is not UIControl for now"
-        return view
     }
 
     static func makeRatingInput() -> RatingInputUIView {

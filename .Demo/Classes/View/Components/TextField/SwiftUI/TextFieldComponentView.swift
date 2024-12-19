@@ -27,7 +27,7 @@ struct TextFieldComponentView: View {
     @State private var isShowingLeftAlert: Bool = false
     @State private var isShowingRightAlert: Bool = false
 
-    @State var text: String = "Hello"
+    @State var text: String = ""
 
     var body: some View {
         Component(

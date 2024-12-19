@@ -22,6 +22,7 @@ struct FormFieldComponentView: View {
     @State private var isEnabled = CheckboxSelectionState.selected
     @State private var isTitleRequired = CheckboxSelectionState.unselected
     @State private var isTrailingAlignment = CheckboxSelectionState.unselected
+    @State private var isSecondaryHelper = CheckboxSelectionState.unselected
 
     @State private var checkboxGroupItems: [any CheckboxGroupItemProtocol] = [
         CheckboxGroupItemDefault(title: "Checkbox 1", id: "1", selectionState: .unselected, isEnabled: true),
@@ -92,6 +93,16 @@ struct FormFieldComponentView: View {
                     isEnabled: true,
                     selectionState: self.$isTrailingAlignment
                 )
+
+                if self.componentStyle.isTextInput {
+                    CheckboxView(
+                        text: "Is Secondary Helper",
+                        checkedImage: DemoIconography.shared.checkmark.image,
+                        theme: theme,
+                        isEnabled: true,
+                        selectionState: self.$isSecondaryHelper
+                    )
+                }
             },
             integration: {
                 FormFieldView(
@@ -104,6 +115,16 @@ struct FormFieldComponentView: View {
                     attributedHelper: self.setText(isTitle: false, textStyle: self.helperStyle),
                     isTitleRequired: self.isTitleRequired == .selected ? true : false
                 )
+                .counterIfPossible(on: self.texfieldText, limit: 100, show: self.isSecondaryHelper == .selected)
+                .titleAccessibility(.init(
+                    label: "The label of the title",
+                    value: "The value of the title",
+                    inputLabels: ["The inputLabels 1 of the title", "The inputLabels 2 of the title"],
+                    hint: "The hint of the title",
+                    action: .init(name: "The action of the title", handler: {
+                        print("[LOGSPARK] The title action is fired !")
+                    })
+                ))
                 .disabled(self.isEnabled == .selected ? false : true)
                 .layoutPriority(1)
             }
@@ -224,17 +245,42 @@ struct FormFieldComponentView: View {
                     groupLayout: .horizontal
                 )
             case .textField:
-                TextField("Component is not ready yet", text: self.$texfieldText)
-                    .textFieldStyle(.roundedBorder)
+            if #available(iOS 16.0, *) {
+                TextEditorView(
+                    "Your username",
+                    text: self.$texfieldText,
+                    theme: self.theme,
+                    intent: .neutral
+                )
+            } else {
+                // Fallback on earlier versions
+                EmptyView()
+            }
             case .addOnTextField:
-                TextField("Component is not ready yet", text: self.$texfieldText)
-                    .textFieldStyle(.roundedBorder)
+            TextFieldView(
+                    "Your username",
+                    text: self.$texfieldText,
+                    theme: self.theme,
+                    intent: .neutral,
+                    isReadOnly: false
+                )
             case .ratingInput:
                 RatingInputView(
                     theme: self.theme,
                     intent: .main,
                     rating: self.$rating
                 )
+        }
+    }
+}
+
+private extension FormFieldView {
+
+    func counterIfPossible(on text: String, limit: Int?, show: Bool) -> Self {
+        if show {
+            self.counter(on: text, limit: limit)
+        } else {
+            self
         }
     }
 }
