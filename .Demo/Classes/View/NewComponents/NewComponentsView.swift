@@ -44,7 +44,7 @@ extension Components {
         case .snackbarPresentation:
             HostingView(viewController: { SnackbarPresentationDemoUIView() })
         case .stepper:
-            EmptyView()
+            HostingView(viewController: { StepperDemoUIView() })
         }
     }
 
