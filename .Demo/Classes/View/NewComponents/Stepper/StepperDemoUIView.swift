@@ -103,6 +103,7 @@ final class StepperDemoUIView: UIViewController {
         self.setupButtonIntentConfiguration()
         self.setupButtonVariantConfiguration()
         self.setupIsContinuousConfiguration()
+        self.setupAutorepeatConfiguration()
         self.setupValueTextFieldConfiguration()
         self.setupStepTextFieldConfiguration()
         self.setupBoundsTextFieldsConfiguration()
@@ -204,11 +205,27 @@ final class StepperDemoUIView: UIViewController {
             isEnabled: true,
             text: "Is continuous"
         )
-        isContinuousSwitchConfiguration.isOnChangedPublisher.subscribe(in: &self.cancellables) { newValue in
-            self.stepper.isContinuous = newValue
+        isContinuousSwitchConfiguration.isOnChangedPublisher.subscribe(in: &self.cancellables) { isOn in
+            self.stepper.isContinuous = isOn
         }
         self.verticalStackView.addArrangedSubview(isContinuousSwitchConfiguration)
         self.verticalStackView.setCustomSpacing(20, after: isContinuousSwitchConfiguration)
+    }
+
+    private func setupAutorepeatConfiguration() {
+        let autorepeatSwitchConfiguration = SwitchUIView(
+            theme: self.theme,
+            isOn: true,
+            alignment: .left,
+            intent: .basic,
+            isEnabled: true,
+            text: "Autorepeat"
+        )
+        autorepeatSwitchConfiguration.isOnChangedPublisher.subscribe(in: &self.cancellables) { isOn in
+            self.stepper.autoRepeat = isOn
+        }
+        self.verticalStackView.addArrangedSubview(autorepeatSwitchConfiguration)
+        self.verticalStackView.setCustomSpacing(20, after: autorepeatSwitchConfiguration)
     }
 
     private func setupValueTextFieldConfiguration() {
