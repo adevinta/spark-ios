@@ -102,6 +102,7 @@ final class StepperDemoUIView: UIViewController {
         self.setupFormatConfiguration()
         self.setupButtonIntentConfiguration()
         self.setupButtonVariantConfiguration()
+        self.setupIsContinuousConfiguration()
         self.setupValueTextFieldConfiguration()
         self.setupStepTextFieldConfiguration()
         self.setupBoundsTextFieldsConfiguration()
@@ -194,6 +195,22 @@ final class StepperDemoUIView: UIViewController {
         self.verticalStackView.addArrangedSubview(buttonVariantConfiguration)
     }
 
+    private func setupIsContinuousConfiguration() {
+        let isContinuousSwitchConfiguration = SwitchUIView(
+            theme: self.theme,
+            isOn: true,
+            alignment: .left,
+            intent: .basic,
+            isEnabled: true,
+            text: "Is continuous"
+        )
+        isContinuousSwitchConfiguration.isOnChangedPublisher.subscribe(in: &self.cancellables) { newValue in
+            self.stepper.isContinuous = newValue
+        }
+        self.verticalStackView.addArrangedSubview(isContinuousSwitchConfiguration)
+        self.verticalStackView.setCustomSpacing(20, after: isContinuousSwitchConfiguration)
+    }
+
     private func setupValueTextFieldConfiguration() {
         self.valueTextField.addAction(.init(handler: { _ in
             self.setValue()
@@ -232,6 +249,10 @@ final class StepperDemoUIView: UIViewController {
 
     private func setupStepper() {
         self.verticalStackView.addArrangedSubview(self.stepper)
+
+        self.stepper.valuePublisher.subscribe(in: &self.cancellables) { newValue in
+            print("New value: \(newValue)")
+        }
     }
 
     private func setValue() {
