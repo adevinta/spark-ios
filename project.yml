@@ -9,7 +9,7 @@ options:
   defaultConfig: Release
   groupSortPosition: top
   deploymentTarget:
-    iOS: 15.0
+    iOS: 16.0
   useBaseInternationalization: false
   postGenCommand: sh .postGenCommand.sh
 
@@ -23,21 +23,18 @@ targetTemplates:
     platform: iOS
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: "com.adevinta.spark.demo"
+        PRODUCT_BUNDLE_IDENTIFIER: "com.lbc.spark.demo"
         SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
         SUPPORTS_MACCATALYST: NO
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
     info:
-      path: .Demo/Info.plist
+      path: spark/Demo/Info.plist
       properties:
         UILaunchScreen: []
 
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
-          UISceneConfigurations:
-            UIWindowSceneSessionRoleApplication:
-              - UISceneConfigurationName: Default Configuration
-                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+          UISceneConfigurations: {}
     sources:
       - path: .Demo
     dependencies:
