@@ -38,7 +38,6 @@ struct TextFieldComponentView: View {
     private func component(for configuration: Binding<TextFieldConfiguration>) -> some View {
         let wrapped = configuration.wrappedValue
 
-        // TODO: left and right side are not updated !!!
         return TextFieldView(
             LocalizedStringKey(wrapped.placeholder),
             text: configuration.text,
@@ -125,30 +124,33 @@ private struct SideView: View {
 
     // MARK: - Properties
 
-    let configuration: TextFieldConfiguration
+    let sideViewContent: TextFieldSideViewContent
+    let theme: Theme
     let side: TextFieldContentSide
 
     @State private var isShowingAlert: Bool = false
+
+    // MARK: - Initialization
+
+    init(configuration: TextFieldConfiguration, side: TextFieldContentSide) {
+        self.sideViewContent = side == .left ? configuration.leftViewContent : configuration.rightViewContent
+        self.theme = configuration.theme.value
+        self.side = side
+    }
 
     // MARK: - View
 
     var body: some View {
         HStack {
-            let content = self.side == .left ? self.configuration.leftViewContent : self.configuration.rightViewContent
-            switch content {
-            case .none: EmptyView()
+            switch self.sideViewContent {
+            case .none:
+                EmptyView()
             case .button:
                 self.createButton()
             case .text:
                 self.createText()
             case .image:
                 self.createImage()
-            case .all:
-                HStack(spacing: 6) {
-                    self.createButton()
-                    self.createImage()
-                    self.createText()
-                }
             }
         }
     }
@@ -159,13 +161,13 @@ private struct SideView: View {
     }
 
     private func createText() -> some View {
-        Text("\(self.side.name) text")
+        Text(self.side.name)
             .foregroundStyle(self.side == .left ? Color.orange : Color.teal)
     }
 
     private func createButton() -> some View {
         ButtonView(
-            theme: self.configuration.theme.value,
+            theme: self.theme,
             intent: self.side == .left ? .danger : .alert,
             variant: .filled,
             size: .small,

@@ -13,5 +13,4 @@ enum TextFieldSideViewContent: String, CaseIterable {
     case button
     case image
     case text
-    case all
 }

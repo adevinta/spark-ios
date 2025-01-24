@@ -24,6 +24,7 @@ class TextEditorConfiguration: ComponentConfiguration {
 
         self.isEnabled.showConfiguration = true
         self.height.showConfiguration = true
+        self.height.maxText = "80" // Default value
         self.accessibilityLabel.showConfiguration = true
     }
 }
