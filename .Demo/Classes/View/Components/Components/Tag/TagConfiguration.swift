@@ -14,15 +14,21 @@ class TagConfiguration: ComponentConfiguration {
     
     var intent: TagIntent = .random
     var variant: TagVariant = .random
-    var text: String = "My Tag"
+    var text = "My Tag"
     var icon: Iconography?
-    var isAttributedText: Bool = false
+    var isAttributedText = false
 
     // MARK: - Initialization
 
     required init() {
         super.init()
 
-        self.isAccessibilityLabel = true
+        self.accessibilityLabel.showConfiguration = true
+    }
+
+    // MARK: - Getter
+
+    override func isInvertedBackground() -> Bool {
+        self.intent == .surface
     }
 }

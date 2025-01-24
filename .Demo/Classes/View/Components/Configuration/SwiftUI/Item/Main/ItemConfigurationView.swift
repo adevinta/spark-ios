@@ -33,7 +33,7 @@ struct ItemConfigurationView<Item: View>: View {
     var body: some View {
         HStack(alignment: .center, spacing: self.spacing) {
             if let name {
-                Text("\(name.capitalized) : ").bold()
+                Text("\(name.capitalized)").bold()
             }
 
             self.item()

@@ -24,11 +24,27 @@ extension Image {
     init(_ iconography: Iconography) {
         self.init(iconography.rawValue)
     }
+
+    init?(_ iconography: Iconography?) {
+        guard let iconography else {
+            return nil
+        }
+
+        self.init(iconography)
+    }
 }
 
 extension UIImage {
 
     convenience init(_ iconography: Iconography) {
         self.init(named: iconography.rawValue)!
+    }
+
+    convenience init?(_ iconography: Iconography?) {
+        guard let iconography else {
+            return nil
+        }
+
+        self.init(iconography)
     }
 }

@@ -15,15 +15,14 @@ struct TagComponentView: View {
     // MARK: - Properties
 
     @State private var configurations: [TagConfiguration] = [.init()]
-    @State private var presentConfigurationID: String?
 
     // MARK: - View
 
     var body: some View {
-        ComponentListView(
+        ComponentDisplayView(
             configurations: self.configurations,
             componentView: { configuration in
-                self.component(for: configuration)
+                self.component(for: configuration.wrappedValue)
             },
             configurationView: { configuration in
                 self.configurationView(for: configuration)
@@ -42,6 +41,7 @@ struct TagComponentView: View {
         .demoText(configuration)
         .demoIcon(configuration)
         .demoAccessibilityLabel(configuration)
+        .demoBackground(configuration)
     }
 
     // MARK: - Configuration
@@ -85,7 +85,7 @@ struct TagComponentView: View {
     }
 }
 
-// MARK: - TagView Extension
+// MARK: - Extension
 
 private extension TagView {
 
@@ -109,7 +109,7 @@ private extension TagView {
     }
 
     func demoAccessibilityLabel(_ configuration: TagConfiguration) -> some View {
-        let label = configuration.accessibilityLabel
+        let label = configuration.accessibilityLabel.value
         return self.accessibility(
             identifier: "Tag Identifier",
             label: label.isEmpty ? nil : label

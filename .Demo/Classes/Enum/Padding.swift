@@ -20,12 +20,6 @@ enum Padding: CGFloat {
 
 extension View {
 
-    /// Add a border to the current view.
-    /// - Parameters:
-    ///   - width: The border width.
-    ///   - radius: The border radius.
-    ///   - colorToken: The color token of the border.
-    /// - Returns: Current View.
     func padding(
         _ edges: Edge.Set = .all,
         _ padding: Padding
@@ -40,18 +34,8 @@ struct PaddingViewModifier: ViewModifier {
 
     // MARK: - Properties
 
-    private let edges: Edge.Set
-    private let padding: Padding
-
-    // MARK: - Initialization
-
-    public init(
-        edges: Edge.Set,
-        padding: Padding
-    ) {
-        self.edges = edges
-        self.padding = padding
-    }
+    let edges: Edge.Set
+    let padding: Padding
 
     // MARK: - View
 

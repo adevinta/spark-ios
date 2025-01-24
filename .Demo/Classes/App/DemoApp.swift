@@ -24,6 +24,8 @@ struct DemoApp: App {
 
     var body: some Scene {
         WindowGroup {
+            // TODO: put Main in public with parameter: the themes.
+            // TODO: with that, we can use the app in SparkKit with the LBC theme
             MainView()
         }
     }

@@ -36,7 +36,10 @@ struct ComponentsView: View {
     }
 
     private enum Component: String, CaseIterable, Hashable {
+        case textEditor
+        case textField
         case tag
+        case textLink
 
         static func allCases(for framework: Framework) -> [Self] {
             switch framework {
@@ -63,15 +66,27 @@ struct ComponentsView: View {
                     EmptyView()
 
                 case .swiftUI:
-                    switch component {
-                    case .tag:
-                         TagComponentView()
-                            .navigationBarTitle(component.name)
-
-                    }
+                    self.swiftUIComponent(component)
+                        .navigationBarTitle(component.name)
                 }
             })
             .navigationBarTitle(self.framework.name + " Components")
+        }
+    }
+
+    // MARK: - SwiftUI Components
+
+    @ViewBuilder
+    private func swiftUIComponent(_ component: Component) -> some View {
+        switch component {
+        case .textEditor:
+            TextEditorComponentView()
+        case .textField:
+            TextFieldComponentView()
+        case .tag:
+             TagComponentView()
+        case .textLink:
+            TextLinkComponentView()
         }
     }
 }

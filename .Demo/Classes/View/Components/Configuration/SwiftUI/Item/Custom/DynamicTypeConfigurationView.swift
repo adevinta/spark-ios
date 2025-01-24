@@ -21,23 +21,28 @@ struct DynamicTypeConfigurationView: View {
     // MARK: - View
 
     var body: some View {
-        HStack(spacing: .small) {
-            Text("A")
-                .dynamicTypeSize(.small)
+        VStack(spacing: Spacing.none) {
+            Text(self.selectedValue.name + self.selectedValue.info)
+                .font(.footnote)
 
-            SliderConfigurationView(
-                name: nil,
-                selectedValue: Binding<Double>(
-                    get: { Double(self.values.firstIndex(of: self.selectedValue) ?? 0) },
-                    set: { index in
-                        self.selectedValue = self.values[Int(index)]
-                    }),
-                range: 0...Double(self.values.count-1),
-                step: 1
-            )
+            HStack(spacing: .small) {
+                Text("A")
+                    .dynamicTypeSize(.small)
 
-            Text("A")
-                .dynamicTypeSize(.large)
+                SliderConfigurationView(
+                    name: nil,
+                    selectedValue: Binding<Double>(
+                        get: { Double(self.values.firstIndex(of: self.selectedValue) ?? 0) },
+                        set: { index in
+                            self.selectedValue = self.values[Int(index)]
+                        }),
+                    range: 0...Double(self.values.count-1),
+                    step: 1
+                )
+
+                Text("A")
+                    .dynamicTypeSize(.large)
+            }
         }
     }
 }
