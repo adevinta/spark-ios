@@ -2,6 +2,10 @@
 # Macos runner info : https://github.com/actions/runner-images/tree/main/images/macos
 # Local Documentation : https://github.com/leboncoin/spark-ios/blob/main/docs/WORKFLOW_BUILD_AND_TEST.md
 
+
+# TODO: Build the Demo too !
+
+
 name: build-and-test
 on:
   workflow_dispatch

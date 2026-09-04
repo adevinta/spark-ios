@@ -1,0 +1,76 @@
+# Local Documentation : https://github.com/leboncoin/spark-ios/blob/main/docs/WORKFLOW_RELEASE_CHANGELOG_UPDATE.md
+
+name: '📝 Release changelog update'
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  swift_version: "6.2"
+
+jobs:
+  update-changelog:
+    runs-on: macos-26
+    steps:
+      - name: Set Swift Version
+        uses: swift-actions/setup-swift@v2.4.0
+        with:
+          swift-version: ${{ env.swift_version }}
+
+      - name: Get swift version
+        run: swift --version
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_SPARK || secrets.GITHUB_TOKEN }}
+
+      - name: Create branch for changelog update
+        run: |
+          git config user.name 'spark-ui-bot'
+          git config user.email 'spark-ui-bot@users.noreply.github.com'
+          BRANCH_NAME="chore/update-changelog-${{ github.event.release.tag_name }}"
+          git checkout -b "$BRANCH_NAME"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Update CHANGELOG.md
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          BODY="${{ github.event.release.body }}"
+          swift .script/update-changelog.swift "$TAG" "$BODY"
+
+      - name: Commit and push changes
+        run: |
+          git add CHANGELOG.md
+          if ! git diff --cached --quiet --exit-code ;
+          then
+            git commit -m "chore(changelog) 📝 Update CHANGELOG.md for release ${{ github.event.release.tag_name }}"
+            git push origin "$BRANCH_NAME"
+            echo "::notice::CHANGELOG updated for release ${{ github.event.release.tag_name }}"
+          else
+            echo "::notice::No changes to commit"
+            exit 0
+          fi
+
+      - name: Create Pull Request
+        run: |
+          PR_TITLE="chore(changelog): Update CHANGELOG.md for release ${{ github.event.release.tag_name }}"
+          PR_BODY="This PR updates the CHANGELOG.md file with the release notes from version ${{ github.event.release.tag_name }}.
+
+          **⚠️ Important:** Please use the \`/spark-changelog\` skill to improve the content before merging.
+
+          Release: ${{ github.event.release.html_url }}"
+
+          gh pr create \
+            --title "$PR_TITLE" \
+            --body "$PR_BODY" \
+            --base main \
+            --head "$BRANCH_NAME"
+        env:
+          GH_TOKEN: ${{ secrets.PAT_SPARK || secrets.GITHUB_TOKEN }}

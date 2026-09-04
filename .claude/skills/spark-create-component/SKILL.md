@@ -125,6 +125,27 @@ After all replacements:
 - [ ] Read `README.md` to confirm no placeholders remain
 - [ ] Search for any remaining placeholder strings
 
+### Step 9: Update Import.swift
+
+Update the main Spark module to export the new component:
+
+**File:** `spark-ios/Spark/Sources/Core/Import.swift`
+
+- [ ] Read the Import.swift file to see the current list of imports
+- [ ] Add `@_exported import SparkComponent{ComponentName}` to the file
+- [ ] Insert the new import in alphabetical order among the other component imports
+- [ ] Ensure the import follows the format: `@_exported import SparkComponent{ComponentName}` (with comment syntax as shown in the file)
+
+**Example:**
+```
+@_exported import SparkCommon
+@_exported import SparkComponentAvatar
+@_exported import SparkComponentBadge
+@_exported import SparkComponentButton
+...
+@_exported import SparkTheming
+```
+
 ## Placeholder Details
 
 Pay careful attention to underscores:
@@ -171,6 +192,7 @@ Before finishing:
 - [ ] `Documentation.md` has all fields filled (no "TODO")
 - [ ] Anatomy image renamed and in correct location
 - [ ] Component directory structure matches template
+- [ ] `Import.swift` updated with new component export
 - [ ] No errors reported during execution
 
 ## Final Output

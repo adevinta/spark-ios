@@ -71,20 +71,19 @@ Build, test, and development commands are documented in the [Makefile documentat
 
 ### GitHub Actions
 
-Continuous integration and deployment workflows:
-- [Build and Test Workflow](docs/WORKFLOW_BUILD_AND_TEST.md) - Automated building and testing
-- [Deploy DocC to GitHub Pages](docs/WORKFLOW_DEPLOY_DOCC_PAGE.md) - Documentation deployment
-- [PR Icon Updates](docs/WORKFLOW_PR_ICON_UPDATES.md) - Automated icon processing
+[Workflows Documentation](docs/WORKFLOWS.md) - Continuous integration and deployment workflows
 
 ### Scripts
 
-Utility scripts for code generation and asset management:
-- [Generate Iconography Assets](docs/SCRIPT_GENERATE_ICONOGRAPHY_ASSETS.md) - Process and organize icon assets
-- [Generate Iconography Codebase](docs/SCRIPT_GENERATE_ICONOGRAPHY_CODEBASE.md) - Generate type-safe Swift code for icons
+[Scripts Documentation](docs/SCRIPTS.md) - Utility scripts for code generation and asset management
 
 ### Configurations
 
-- [Spark Tokens Bridge Setup](docs/SPARK_TOKENS_BRIDGE_SETUP.md) - Setup and configuration for the Spark tokens bridge
+[Spark Tokens Bridge Setup](docs/SPARK_TOKENS_BRIDGE_SETUP.md) - Setup and configuration for the Spark tokens bridge
+
+### Claude Skills
+
+[Claude Skills Documentation](docs/CLAUDE_SKILLS.md) - Comprehensive guide to all available Claude Code skills for component development
 
 
 ## Contributing
